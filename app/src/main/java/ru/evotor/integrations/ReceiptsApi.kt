@@ -10,57 +10,57 @@ class ReceiptsApi {
 
     companion object {
 
-        const val AUTHORITY = "ru.evotor.receipt"
+        @JvmField val AUTHORITY = "ru.evotor.receipt"
 
-        val BASE_URI = Uri.parse("content://$AUTHORITY")
+        @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
     }
 
     object Description {
 
-        const val PATH_RECEIPT_DESCRIPTION = "information"
+        @JvmField val PATH_RECEIPT_DESCRIPTION = "information"
 
-        val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_DESCRIPTION)
+        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_DESCRIPTION)
 
-        const val ROW_ID = "_id"
-        const val ROW_UUID = "uuid"
-        const val ROW_DISCOUNT = "discount"
+        @JvmField val ROW_ID = "_id"
+        @JvmField val ROW_UUID = "uuid"
+        @JvmField val ROW_DISCOUNT = "discount"
 
     }
 
     object Positions {
 
-        const val PATH_RECEIPT_POSITIONS = "positions"
+        @JvmField val PATH_RECEIPT_POSITIONS = "positions"
 
-        val URI_RECEIPT_POSITIONS = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
+        @JvmField val URI_RECEIPT_POSITIONS = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
 
-        const val ROW_ID = "_id"
-        const val ROW_UUID = "uuid"
-        const val ROW_TYPE = "type"
-        const val ROW_CODE = "code"
-        const val ROW_MEASURE = "measure"
-        const val ROW_PRICE = "price"
-        const val ROW_QUANTITY = "quantity"
-        const val ROW_MARK = "mark"
-        const val ROW_NAME = "name"
+        @JvmField val ROW_ID = "_id"
+        @JvmField val ROW_UUID = "uuid"
+        @JvmField val ROW_TYPE = "type"
+        @JvmField val ROW_CODE = "code"
+        @JvmField val ROW_MEASURE = "measure"
+        @JvmField val ROW_PRICE = "price"
+        @JvmField val ROW_QUANTITY = "quantity"
+        @JvmField val ROW_MARK = "mark"
+        @JvmField val ROW_NAME = "name"
     }
 
     object Payments {
 
-        const val PATH_RECEIPT_PAYMENTS = "payments"
+        @JvmField val PATH_RECEIPT_PAYMENTS = "payments"
 
-        val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_PAYMENTS)
+        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_PAYMENTS)
 
-        const val ROW_ID = "_id"
-        const val ROW_UUID = "uuid"
-        const val ROW_SUM = "sum"
-        const val ROW_TYPE = "type"
-        const val ROW_RRN = "rrn"
-        const val ROW_PIN_PAD_UUID = "pin_pad_uuid"
+        @JvmField val ROW_ID = "_id"
+        @JvmField val ROW_UUID = "uuid"
+        @JvmField val ROW_SUM = "sum"
+        @JvmField val ROW_TYPE = "type"
+        @JvmField val ROW_RRN = "rrn"
+        @JvmField val ROW_PIN_PAD_UUID = "pin_pad_uuid"
 
         object Type {
-            const val TYPE_CASH = 0
-            const val TYPE_CARD = 1
+            @JvmField val TYPE_CASH = 0
+            @JvmField val TYPE_CARD = 1
         }
 
     }
