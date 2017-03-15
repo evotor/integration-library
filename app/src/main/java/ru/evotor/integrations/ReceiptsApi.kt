@@ -32,7 +32,7 @@ class ReceiptsApi {
 
         @JvmStatic val PATH_RECEIPT_POSITIONS = "positions"
 
-        @JvmStatic val URI_RECEIPT_POSITIONS = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
+        @JvmStatic val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
 
         @JvmStatic val ROW_ID = "_id"
         @JvmStatic val ROW_UUID = "uuid"
