@@ -1,7 +1,9 @@
 package ru.evotor.integrations.inventory
 
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
+import org.json.JSONObject
 import java.math.BigDecimal
 
 /**
@@ -34,4 +36,34 @@ object InventoryApi {
         return null
     }
 
+    fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
+        val result = ArrayList<ProductExtra>()
+        context.contentResolver
+                .query(ProductExtraTable.URI, null, "${ProductExtraTable.ROW_PRODUCT_UUID} = ?", arrayOf(productUuid), null)
+                ?.let { cursor ->
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                result.add(createProductExtra(cursor))
+                            } while (cursor.moveToNext());
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } finally {
+                        cursor.close()
+                    }
+                }
+        return result
+    }
+
+    fun createProductExtra(cursor: Cursor): ProductExtra {
+        return ProductExtra(
+                uuid = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_UUID)),
+                name = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_NAME)),
+                commodityUUID = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_PRODUCT_UUID)),
+                fieldUUID = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_FIELD_UUID)),
+                fieldValue = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_FIELD_VALUE)),
+                data = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_DATA))
+        )
+    }
 }
