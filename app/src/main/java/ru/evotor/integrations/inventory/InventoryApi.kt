@@ -4,6 +4,10 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import org.json.JSONObject
+import ru.evotor.integrations.inventory.field.DictionaryField
+import ru.evotor.integrations.inventory.field.Field
+import ru.evotor.integrations.inventory.field.FieldTable
+import ru.evotor.integrations.inventory.field.TextField
 import java.math.BigDecimal
 
 /**
@@ -66,4 +70,69 @@ object InventoryApi {
                 data = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_DATA))
         )
     }
+
+    fun getField(context: Context, fieldUuid: String): Field? {
+        context.contentResolver
+                .query(FieldTable.URI, null, "${FieldTable.ROW_FIELD_UUID} = ?", arrayOf(fieldUuid), null)
+                ?.let { cursor ->
+                    try {
+                        if (cursor.moveToFirst()) {
+                            return createField(cursor)
+                        } else {
+                            return null
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } finally {
+                        cursor.close()
+                    }
+                }
+
+        return null
+    }
+
+    fun createField(cursor: Cursor): Field? {
+        val name = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_NAME))
+        val fieldUUID = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_FIELD_UUID))
+        val title = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_TITLE))
+        val specificData = JSONObject(cursor.getString(cursor.getColumnIndex(FieldTable.ROW_SPECIFIC_DATA)))
+
+
+        when (cursor.getInt(cursor.getColumnIndex(FieldTable.ROW_TYPE))) {
+            FieldTable.TYPE_DICTIONARY -> {
+                val items = ArrayList<DictionaryField.Item>()
+                val jsonItems = specificData.optJSONArray("items")
+                (0 until jsonItems.length())
+                        .map { jsonItems.getJSONObject(it) }
+                        .mapTo(items) {
+                            DictionaryField.Item(
+                                    title = it.optString("title"),
+                                    value = it.opt("value"),
+                                    data = it.opt("data")
+                            )
+                        }
+
+                return DictionaryField(
+                        name = name,
+                        fieldUUID = fieldUUID,
+                        title = title,
+                        type = Field.Type.DICTIONARY_FIELD,
+                        items = items,
+                        multiple = specificData.optBoolean("multiple")
+
+                )
+            }
+            FieldTable.TYPE_TEXT_FIELD -> {
+                return TextField(
+                        name = name,
+                        fieldUUID = fieldUUID,
+                        title = title,
+                        type = Field.Type.DICTIONARY_FIELD,
+                        data = specificData.optString("data")
+                )
+            }
+            else -> return null
+        }
+    }
+
 }
