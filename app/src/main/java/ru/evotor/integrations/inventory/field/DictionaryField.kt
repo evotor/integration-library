@@ -6,7 +6,7 @@ class DictionaryField(
         title: String?,
         type: Type,
         val multiple: Boolean,
-        val items: List<Item>
+        val items: Array<Item>
 ) : Field(
         name,
         fieldUUID,

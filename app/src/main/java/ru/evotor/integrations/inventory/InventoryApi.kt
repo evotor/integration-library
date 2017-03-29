@@ -60,7 +60,7 @@ object InventoryApi {
         return result
     }
 
-    fun createProductExtra(cursor: Cursor): ProductExtra {
+    private fun createProductExtra(cursor: Cursor): ProductExtra {
         return ProductExtra(
                 uuid = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_UUID)),
                 name = cursor.getString(cursor.getColumnIndex(ProductExtraTable.ROW_NAME)),
@@ -91,7 +91,7 @@ object InventoryApi {
         return null
     }
 
-    fun createField(cursor: Cursor): Field? {
+    private fun createField(cursor: Cursor): Field? {
         val name = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_NAME))
         val fieldUUID = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_FIELD_UUID))
         val title = cursor.getString(cursor.getColumnIndex(FieldTable.ROW_TITLE))
@@ -100,11 +100,10 @@ object InventoryApi {
 
         when (cursor.getInt(cursor.getColumnIndex(FieldTable.ROW_TYPE))) {
             FieldTable.TYPE_DICTIONARY -> {
-                val items = ArrayList<DictionaryField.Item>()
                 val jsonItems = specificData.optJSONArray("items")
-                (0 until jsonItems.length())
+                val items = (0 until jsonItems.length())
                         .map { jsonItems.getJSONObject(it) }
-                        .mapTo(items) {
+                        .map {
                             DictionaryField.Item(
                                     title = it.optString("title"),
                                     value = it.opt("value"),
@@ -117,7 +116,7 @@ object InventoryApi {
                         fieldUUID = fieldUUID,
                         title = title,
                         type = Field.Type.DICTIONARY_FIELD,
-                        items = items,
+                        items = items.toTypedArray(),
                         multiple = specificData.optBoolean("multiple")
 
                 )
