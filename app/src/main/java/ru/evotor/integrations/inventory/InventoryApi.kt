@@ -115,7 +115,6 @@ object InventoryApi {
                         name = name,
                         fieldUUID = fieldUUID,
                         title = title,
-                        type = Field.Type.DICTIONARY_FIELD,
                         items = items.toTypedArray(),
                         multiple = specificData.optBoolean("multiple")
 
@@ -126,7 +125,6 @@ object InventoryApi {
                         name = name,
                         fieldUUID = fieldUUID,
                         title = title,
-                        type = Field.Type.DICTIONARY_FIELD,
                         data = specificData.optString("data")
                 )
             }
