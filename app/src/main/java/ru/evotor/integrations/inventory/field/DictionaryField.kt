@@ -4,14 +4,13 @@ class DictionaryField(
         name: String?,
         fieldUUID: String,
         title: String?,
-        type: Type,
         val multiple: Boolean,
         val items: Array<Item>
 ) : Field(
         name,
         fieldUUID,
         title,
-        type
+        Type.DICTIONARY_FIELD
 ) {
     class Item(
             val title: String,
