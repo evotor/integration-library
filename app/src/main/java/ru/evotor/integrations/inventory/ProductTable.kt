@@ -8,9 +8,9 @@ import android.net.Uri
 object ProductTable {
     @JvmField val URI = Uri.withAppendedPath(InventoryApi.BASE_URI, "Commodity")
 
-    @JvmField val ROW_UUID = "UUID"
-    @JvmField val ROW_NAME = "NAME"
-    @JvmField val ROW_DESCRIPTION = "DESCRIPTION"
-    @JvmField val ROW_PRICE_OUT = "PRICE_OUT"
-    @JvmField val ROW_QUANTITY = "QUANTITY"
+    const val ROW_UUID = "UUID"
+    const val ROW_NAME = "NAME"
+    const val ROW_DESCRIPTION = "DESCRIPTION"
+    const val ROW_PRICE_OUT = "PRICE_OUT"
+    const val ROW_QUANTITY = "QUANTITY"
 }

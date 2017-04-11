@@ -22,6 +22,7 @@ abstract class ReceiptOperation {
 
     companion object {
 
+        @JvmStatic
         fun fromBundle(bundle: Bundle): ReceiptOperation {
             when (bundle.getString("operationType")) {
                 "addPosition" -> return AddPosition.fromBundle(bundle)
@@ -45,6 +46,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): AddPosition = AddPosition(bundle.getString("uuid"), bundle.getString("code"))
         }
     }
@@ -56,6 +58,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): RemovePosition = RemovePosition(bundle.getString("uuid"))
         }
     }
@@ -67,6 +70,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): AddExtraDataToReceipt = AddExtraDataToReceipt(bundle.getBundle("extraData"))
         }
     }
@@ -78,6 +82,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): ApplyReceiptDiscount = ApplyReceiptDiscount(bundle.getDouble("discount"))
         }
     }
@@ -91,6 +96,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): ApplyPositionDiscount = ApplyPositionDiscount(bundle.getString("uuid"), bundle.getDouble("discount"))
         }
     }
@@ -103,6 +109,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): AddExtraDataToPosition = AddExtraDataToPosition(bundle.getString("uuid"), bundle.getBundle("extraData"))
         }
     }
@@ -131,6 +138,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle): CreatePrintGroup = CreatePrintGroup(
                     printGroupApiObject = when (bundle.getString("printGroupType")) {
                         "fiscal" -> PrintGroupApiObject.FiscalReceipt(uuid = bundle.getString("printGroupUuid"))
@@ -157,6 +165,7 @@ abstract class ReceiptOperation {
         }
 
         companion object {
+            @JvmStatic
             fun fromBundle(bundle: Bundle) = AddPrintGroupForPosition(bundle.getString("positionUuid"), bundle.getString("printGroupUuid"))
         }
     }
