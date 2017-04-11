@@ -9,10 +9,10 @@ import android.net.Uri
 object ProductExtraTable {
     @JvmField val URI = Uri.withAppendedPath(InventoryApi.BASE_URI, "CommodityExtra")
 
-    @JvmField val ROW_UUID = "UUID"
-    @JvmField val ROW_NAME = "NAME"
-    @JvmField val ROW_PRODUCT_UUID = "COMMODITY_UUID"
-    @JvmField val ROW_FIELD_UUID = "FIELD_UUID"
-    @JvmField val ROW_FIELD_VALUE = "FIELD_VALUE"
-    @JvmField val ROW_DATA = "DATA"
+    const val ROW_UUID = "UUID"
+    const val ROW_NAME = "NAME"
+    const val ROW_PRODUCT_UUID = "COMMODITY_UUID"
+    const val ROW_FIELD_UUID = "FIELD_UUID"
+    const val ROW_FIELD_VALUE = "FIELD_VALUE"
+    const val ROW_DATA = "DATA"
 }

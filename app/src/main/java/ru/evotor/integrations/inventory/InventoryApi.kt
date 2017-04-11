@@ -18,6 +18,7 @@ import java.math.BigDecimal
 object InventoryApi {
     @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
 
+    @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): Product? {
         context.contentResolver
                 .query(Uri.withAppendedPath(ProductTable.URI, uuid), null, null, null, null)
@@ -40,6 +41,7 @@ object InventoryApi {
         return null
     }
 
+    @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
         val result = ArrayList<ProductExtra>()
         context.contentResolver
@@ -71,6 +73,7 @@ object InventoryApi {
         )
     }
 
+    @JvmStatic
     fun getField(context: Context, fieldUuid: String): Field? {
         context.contentResolver
                 .query(FieldTable.URI, null, "${FieldTable.ROW_FIELD_UUID} = ?", arrayOf(fieldUuid), null)
