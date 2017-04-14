@@ -61,13 +61,7 @@ public class DeviceServiceConnector {
 
         DeviceServiceConnector.context = appContext;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                printerService.initConnection(context, force);
-            }
-        }).start();
-
+        printerService.startInitConnection(context, force);
     }
 
 
@@ -75,13 +69,7 @@ public class DeviceServiceConnector {
         if (context == null) {
             return;
         }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                printerService.deInitConnection();
-            }
-        }).start();
+        printerService.startDeinitConnection();
     }
 
     public static void processException(Exception exc) throws DeviceServiceException {
