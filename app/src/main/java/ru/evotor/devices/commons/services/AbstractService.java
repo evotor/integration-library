@@ -10,7 +10,9 @@ public abstract class AbstractService {
 
     protected Context context;
 
-    protected abstract void initConnection(Context appContext, boolean force);
+    protected abstract void startInitConnection(Context appContext, boolean force);
+
+    protected abstract void startDeinitConnection();
 
     protected abstract Boolean getServiceConnected();
 
@@ -26,7 +28,7 @@ public abstract class AbstractService {
         Boolean connected = this.getServiceConnected();
 
         if (connected == null || !connected) {
-            this.initConnection(context, false);
+            this.startInitConnection(context, false);
         }
 
         while ((connected = this.getServiceConnected()) == null) {

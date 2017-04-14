@@ -41,7 +41,7 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
         public void onServiceDisconnected(ComponentName name) {
             service = null;
             serviceConnected = false;
-            initConnection(context, false);
+            startInitConnection(context, false);
             for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
                 connectionWrapper.onPrinterServiceDisconnected();
             }
@@ -56,36 +56,45 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
         return serviceConnected;
     }
 
-    public void initConnection(Context appContext, boolean force) {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+    @Override
+    public void startInitConnection(final Context appContext, final boolean force) {
+        new Thread() {
+            @Override
+            public void run() {
+                if (appContext == null) {
+                    return;
+                }
 
-        if (appContext == null) {
-            return;
-        }
-        context = appContext;
-        if (service == null || force) {
-            Intent pr = new Intent(ACTION_PRINTER_SERVICE);
-            pr.setPackage(TARGET_PACKAGE);
-            pr.setClassName(TARGET_PACKAGE, TARGET_CLASS_NAME);
-            serviceConnected = null;
-            boolean serviceBound = context.bindService(pr, serviceConnection, Service.BIND_AUTO_CREATE);
-            if (!serviceBound) {
-                serviceConnected = false;
+                context = appContext;
+                if (service == null || force) {
+                    Intent pr = new Intent(ACTION_PRINTER_SERVICE);
+                    pr.setPackage(TARGET_PACKAGE);
+                    pr.setClassName(TARGET_PACKAGE, TARGET_CLASS_NAME);
+                    serviceConnected = null;
+                    boolean serviceBound = context.bindService(pr, serviceConnection, Service.BIND_AUTO_CREATE);
+                    if (!serviceBound) {
+                        serviceConnected = false;
+                    }
+                }
             }
-        }
+        }.start();
     }
 
-    public void deInitConnection() {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
-
-        if (context == null) {
-            return;
-        }
-        context.unbindService(serviceConnection);
-        service = null;
-        for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
-            connectionWrapper.onPrinterServiceDisconnected();
-        }
+    @Override
+    public void startDeinitConnection() {
+        new Thread() {
+            @Override
+            public void run() {
+                if (context == null) {
+                    return;
+                }
+                context.unbindService(serviceConnection);
+                service = null;
+                for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
+                    connectionWrapper.onPrinterServiceDisconnected();
+                }
+            }
+        }.start();
     }
 
     public int getAllowableSymbolsLineLength(int deviceId) throws DeviceServiceException {
