@@ -3,7 +3,7 @@
 
 # __1.1. SDK для принтера Эвотор__
 _Содержание:_  
-1.1.1.  [Подключение библиотеки для работы с оборудованием к своему проекту.](#1011)  
+1.1.1. [Подключение библиотеки для работы с оборудованием к своему проекту.](#1011)  
 1.1.2. [Инициализация класса ru.evotor.devices.commons.DeviceServiceConnector](#1012).  
 1.1.3. [Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.](#1013)  
 1.1.4. [Передача данных в печать.  ](#1014)  
@@ -33,12 +33,32 @@ dependencies {
 ```
 <a name="1012"></a>
 ### 1.1.2. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`  
-Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который был подставлен в подключенную на прошлом шаге библиотеку. Проинициализирйте его при запуске приложения или старте `activity`:  
+Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который был подставлен в подключенную на прошлом шаге библиотеку. Проинициализирйте его в `onCreate` вашего `Application` при запуске приложения или старте `activity`:  
 ```  
-DeviceServiceConnector.initConnections(getApplicationContext());
+DeviceServiceConnector.startInitConnections(getApplicationContext());
 ```
+Инициация класса начнется ассинхронно, что бы не держать "вызывающий" поток в течение всего времени подключения. В случае, если есть необходимость выполнить какой-то код сразу после установки соединения, воспользуйтесь методом `addConnectionWrapper`, что бы получить событие об успешном подключении.
+
 <a name="1013"></a>
 ### 1.1.3. Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.  
+
+> `DeviceServiceConnector.getPrinterService()` никогда не должно принимтаь значение `NULL`
+
+В случае перебоев с подключением к сервису оборудования, драйвер драйвер должен пробовать переподключиться, что бы вернуть объект для работы с сервисом.  
+
+В случае невозможности подключиться, будет возвращаться `ru.evotor.devices.commons.exception.ServiceNotConnectedException`.  
+
+Все методы у `DeviceServiceConnector.getPrinterService()` нужно выполнять **не в главном потоке приложения**, так как все операции с удаленным сервисом могут занимать длительное время.  
+
+Все методы в `DeviceServiceConnector.getPrinterService()` могут вернуть исключение - наследник `ru.evotor.devices.commons.exception.DeviceServiceException`.  
+```
+try {
+		DeviceServiceConnector.getPrinterService().printDocument(DEFAULT_DEVICE_INDEX_UNSET, new PrinterDocument(new   PrintableText("Первая строка")));
+    } catch (DeviceServiceException exc) {
+		DeviceServiceConnector.processException(exc);
+	}
+```
+
 * В ответ на вызов метода  `DeviceServiceConnector.getPrinterService()` вернется объект `ru.evotor.devices.commons.IPrinterService`.  
 * В свою очередь у объекта `ru.evotor.devices.commons.IPrinterService` вызвать методы:  
   * `int getAllowableSymbolsLineLength(int deviceId)` - возвращает количество печатных символов, которые помещаются на 1 строке;
