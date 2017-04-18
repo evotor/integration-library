@@ -3,6 +3,6 @@
 	Разделы проекта:
 
   1. Разработка приложений.  
-  1.1. [SDK для принтера Эвотор](https://github.com/evotor/integration-library/blob/master/Read_me_files/README_printer.md#1011)  
-
-	###### Более подробную информацию по разрабатке своих решений для бизнеса на платформе Эвотор, Вы можете найти на нашем сайте для разработчиков: https://developer.evotor.ru/
+  1.1. [SDK для принтера Эвотор](https://github.com/evotor/integration-library/blob/master/Read_me_files/README_printer.md#1011)
+  
+###### Более подробную информацию по разрабатке своих решений для бизнеса на платформе Эвотор, Вы можете найти на нашем сайте для разработчиков: https://developer.evotor.ru/
