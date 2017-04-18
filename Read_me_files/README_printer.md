@@ -1,4 +1,4 @@
-[Главная страница](https://github.com/draudr/integration-library/blob/master/README.md) SSDK для принтера Эвотор
+[Главная страница](https://github.com/evotor/integration-library/blob/master/README.md) SSDK для принтера Эвотор
 
 
 # __1.1. SDK для принтера Эвотор__
