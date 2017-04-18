@@ -28,7 +28,7 @@ allprojects {
 
 ```
 dependencies {
-    compile com.github.evotor:integration-library:v0.1.1
+compile 'com.github.evotor:integration-library:v0.1.1'
 }
 ```
 <a name="1012"></a>
