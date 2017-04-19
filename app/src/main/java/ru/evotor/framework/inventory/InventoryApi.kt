@@ -1,13 +1,13 @@
-package ru.evotor.integrations.inventory
+package ru.evotor.framework.inventory
 
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import org.json.JSONObject
-import ru.evotor.integrations.inventory.field.DictionaryField
-import ru.evotor.integrations.inventory.field.Field
-import ru.evotor.integrations.inventory.field.FieldTable
-import ru.evotor.integrations.inventory.field.TextField
+import ru.evotor.framework.inventory.field.DictionaryField
+import ru.evotor.framework.inventory.field.Field
+import ru.evotor.framework.inventory.field.FieldTable
+import ru.evotor.framework.inventory.field.TextField
 import java.math.BigDecimal
 
 /**

@@ -1,4 +1,4 @@
-package ru.evotor.integrations.inventory.field
+package ru.evotor.framework.inventory.field
 
 class DictionaryField(
         name: String?,

@@ -1,4 +1,4 @@
-package ru.evotor.integrations.inventory
+package ru.evotor.framework.inventory
 
 /**
  * Created by a.kuznetsov on 26/03/2017.

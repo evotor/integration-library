@@ -1,4 +1,4 @@
-package ru.evotor.integrations.users
+package ru.evotor.framework.users
 
 import android.net.Uri
 

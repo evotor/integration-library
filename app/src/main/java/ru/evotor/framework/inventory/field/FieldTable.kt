@@ -1,7 +1,7 @@
-package ru.evotor.integrations.inventory.field
+package ru.evotor.framework.inventory.field
 
 import android.net.Uri
-import ru.evotor.integrations.inventory.InventoryApi
+import ru.evotor.framework.inventory.InventoryApi
 
 /**
  * Created by a.kuznetsov on 26/03/2017.

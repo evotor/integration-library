@@ -1,4 +1,4 @@
-package ru.evotor.integrations.inventory
+package ru.evotor.framework.inventory
 
 import java.math.BigDecimal
 

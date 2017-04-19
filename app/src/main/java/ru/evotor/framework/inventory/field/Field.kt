@@ -1,4 +1,4 @@
-package ru.evotor.integrations.inventory.field
+package ru.evotor.framework.inventory.field
 
 abstract class Field(
         val name: String?,
