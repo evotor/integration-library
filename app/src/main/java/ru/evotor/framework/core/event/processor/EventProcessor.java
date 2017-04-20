@@ -35,7 +35,7 @@ public abstract class EventProcessor {
         return event;
     }
 
-    final class Callback {
+    public final class Callback {
         private IIntegrationManagerResponse response;
 
         private Callback(IIntegrationManagerResponse response) {
