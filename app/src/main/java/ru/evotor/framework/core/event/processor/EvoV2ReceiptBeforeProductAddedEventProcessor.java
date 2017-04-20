@@ -10,7 +10,7 @@ import ru.evotor.framework.core.event.EvoV2ReceiptBeforeProductAddedEvent;
 
 public abstract class EvoV2ReceiptBeforeProductAddedEventProcessor extends EventProcessor {
     public EvoV2ReceiptBeforeProductAddedEventProcessor() {
-        super("evo.v2.receipt.beforeProductAdded");
+        super(EvoV2ReceiptBeforeProductAddedEvent.NAME);
     }
 
     @Override

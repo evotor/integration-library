@@ -9,6 +9,7 @@ import ru.evotor.framework.receipt.Position;
  */
 
 public class EvoV2ReceiptBeforeProductAddedEvent {
+    public static final String NAME = "evo.v2.receipt.beforeProductAdded";
     private static final String KEY_POSITION = "position";
 
     public static EvoV2ReceiptBeforeProductAddedEvent create(Bundle bundle) {
