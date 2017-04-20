@@ -19,7 +19,7 @@ public class EvoV2ReceiptBeforeProductAddedEvent {
 
     private Position position;
 
-    private EvoV2ReceiptBeforeProductAddedEvent(Position position) {
+    public EvoV2ReceiptBeforeProductAddedEvent(Position position) {
         this.position = position;
     }
 
