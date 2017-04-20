@@ -22,6 +22,12 @@ public class EvoV2ReceiptBeforeProductAddedEvent {
         this.position = position;
     }
 
+    public Bundle toBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putBundle(KEY_POSITION, PositionMapper.toBundle(position));
+        return bundle;
+    }
+
     public Position getPosition() {
         return position;
     }

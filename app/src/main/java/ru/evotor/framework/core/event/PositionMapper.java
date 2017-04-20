@@ -29,6 +29,19 @@ public final class PositionMapper {
         );
     }
 
+    public static Bundle toBundle(Position position) {
+        if (position == null) {
+            return null;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_PRODUCT_UUID, position.getProductUuid());
+        bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
+        bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());
+        bundle.putString(KEY_NAME, position.getName());
+
+        return bundle;
+    }
+
     private PositionMapper() {
     }
 
