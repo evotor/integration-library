@@ -1,7 +1,8 @@
-package ru.evotor.framework.core.event;
+package ru.evotor.framework.core.action.event;
 
 import android.os.Bundle;
 
+import ru.evotor.framework.core.action.datamapper.PositionMapper;
 import ru.evotor.framework.receipt.Position;
 
 /**

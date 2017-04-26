@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.event;
+package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 

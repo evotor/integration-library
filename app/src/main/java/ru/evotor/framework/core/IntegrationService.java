@@ -8,7 +8,7 @@ import android.os.RemoteException;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import ru.evotor.framework.core.event.processor.EventProcessor;
+import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
  * Created by a.kuznetsov on 19/04/2017.
@@ -18,24 +18,24 @@ public class IntegrationService extends Service {
     private final IIntegrationManager.Stub binder = new IIntegrationManager.Stub() {
         @Override
         public void call(IIntegrationManagerResponse response, String action, Bundle bundle) throws RemoteException {
-            EventProcessor eventProcessor = processors.get(action);
-            if (eventProcessor != null) {
-                eventProcessor.process(response, bundle);
+            ActionProcessor processor = processors.get(action);
+            if (processor != null) {
+                processor.process(response, bundle);
             }
         }
     };
 
-    private ConcurrentHashMap<String, EventProcessor> processors = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, ActionProcessor> processors = new ConcurrentHashMap<>();
 
     @Override
     public IBinder onBind(Intent intent) {
         return binder.asBinder();
     }
 
-    protected final void registerEventProcessor(EventProcessor eventProcessor) {
-        if (eventProcessor == null) {
-            throw new IllegalArgumentException("eventProcessor can't be null");
+    protected final void registerProcessor(ActionProcessor processor) {
+        if (processor == null) {
+            throw new IllegalArgumentException("processor can't be null");
         }
-        processors.put(eventProcessor.getEvent(), eventProcessor);
+        processors.put(processor.getAction(), processor);
     }
 }

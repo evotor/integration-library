@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.event.processor;
+package ru.evotor.framework.core.action.processor;
 
 
 import android.content.Intent;
@@ -13,16 +13,16 @@ import ru.evotor.framework.core.IntegrationResponse;
  * Created by a.kuznetsov on 19/04/2017.
  */
 
-public abstract class EventProcessor {
+public abstract class ActionProcessor {
 
-    private String event;
+    private String action;
 
-    public EventProcessor(String event) {
-        if (event == null) {
-            throw new IllegalArgumentException("event can't be null");
+    public ActionProcessor(String action) {
+        if (action == null) {
+            throw new IllegalArgumentException("action can't be null");
         }
 
-        this.event = event;
+        this.action = action;
     }
 
     public void process(IIntegrationManagerResponse response, Bundle bundle) {
@@ -31,8 +31,8 @@ public abstract class EventProcessor {
 
     public abstract void process(Bundle bundle, Callback callback);
 
-    public String getEvent() {
-        return event;
+    public String getAction() {
+        return action;
     }
 
     public final class Callback {
