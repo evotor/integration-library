@@ -3,7 +3,6 @@ package ru.evotor.framework.core.action.command;
 import android.os.Bundle;
 
 import ru.evotor.framework.core.action.datamapper.PositionMapper;
-import ru.evotor.framework.core.action.event.EvoV2ReceiptBeforeProductAddedEvent;
 import ru.evotor.framework.receipt.Position;
 
 /**
@@ -15,9 +14,9 @@ public class AddProductCommand {
     public static final String NAME = "evo.v2.receipt.sell.addProduct";
     private static final String KEY_POSITION = "position";
 
-    public static EvoV2ReceiptBeforeProductAddedEvent create(Bundle bundle) {
+    public static AddProductCommand create(Bundle bundle) {
         Position position = PositionMapper.from(bundle.getBundle(KEY_POSITION));
-        return new EvoV2ReceiptBeforeProductAddedEvent(position);
+        return new AddProductCommand(position);
     }
 
     private Position position;
