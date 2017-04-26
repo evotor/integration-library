@@ -14,5 +14,7 @@ public interface IntegrationManager {
     String KEY_SKIP = "skip";
     String KEY_DATA = "data";
 
+    public IntegrationManagerFuture call(final String action, final Bundle data, ICanStartActivity activity, IntegrationManagerCallback callback, Handler handler);
+
     public IntegrationManagerFuture call(final String action, final Bundle data, Activity activity, IntegrationManagerCallback callback, Handler handler);
 }

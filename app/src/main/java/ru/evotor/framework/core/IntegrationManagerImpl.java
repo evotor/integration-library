@@ -44,8 +44,26 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
-    public IntegrationManagerFuture call(final String action, final Bundle data, Activity activity, IntegrationManagerCallback callback, Handler handler) {
-        final ImsTask future = new ImsTask(activity, handler, callback, action, data);
+    public IntegrationManagerFuture call(final String action, final Bundle data, final Activity activity, IntegrationManagerCallback callback, Handler handler) {
+
+        return call(action,
+                data,
+                new ICanStartActivity() {
+
+                    @Override
+                    public void startActivity(Intent intent) {
+                        activity.startActivity(intent);
+                    }
+                },
+                callback,
+                handler
+        );
+    }
+
+    @Override
+    public IntegrationManagerFuture call(final String action, final Bundle data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
+
+        final ImsTask future = new ImsTask(activityStarter, handler, callback, action, data);
         new Thread() {
             @Override
             public void run() {
@@ -83,11 +101,11 @@ public class IntegrationManagerImpl implements IntegrationManager {
     private class ImsTask extends FutureTask<IntegrationManagerFuture.Result> implements IntegrationManagerFuture {
         final Handler mHandler;
         final IntegrationManagerCallback mCallback;
-        final Activity mActivity;
+        final ICanStartActivity mActivityStarter;
         final String mAction;
         final Bundle mData;
 
-        public ImsTask(Activity activity, Handler handler, IntegrationManagerCallback callback, String action, Bundle data) {
+        public ImsTask(ICanStartActivity activityStarter, Handler handler, IntegrationManagerCallback callback, String action, Bundle data) {
             super(new Callable<Result>() {
                 @Override
                 public Result call() throws Exception {
@@ -97,7 +115,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
             mHandler = handler;
             mCallback = callback;
-            mActivity = activity;
+            mActivityStarter = activityStarter;
             mAction = action;
             mData = data;
         }
@@ -251,10 +269,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
             @Override
             public void onResult(Bundle bundle) {
                 Intent intent = bundle.getParcelable(KEY_INTENT);
-                if (intent != null && mActivity != null) {
+                if (intent != null && mActivityStarter != null) {
                     // since the user provided an Activity we will silently start intents
                     // that we see
-                    mActivity.startActivity(intent);
+                    mActivityStarter.startActivity(intent);
                     // leave the Future running to wait for the real response to this request
                 } else if (bundle.getBoolean("retry")) {
                     try {
