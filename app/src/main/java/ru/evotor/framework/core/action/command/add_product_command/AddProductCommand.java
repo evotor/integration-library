@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command;
+package ru.evotor.framework.core.action.command.add_product_command;
 
 import android.os.Bundle;
 
@@ -19,7 +19,7 @@ public class AddProductCommand {
         return new AddProductCommand(position);
     }
 
-    private Position position;
+    private final Position position;
 
     public AddProductCommand(Position position) {
         this.position = position;

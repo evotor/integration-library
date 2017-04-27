@@ -56,5 +56,12 @@ public abstract class ActionProcessor {
             result.putBundle(IntegrationManager.KEY_DATA, bundle);
             response.onResult(result);
         }
+
+        public final void skip() throws RemoteException {
+            Bundle result = new Bundle();
+            result.putBoolean(IntegrationManager.KEY_SKIP, true);
+
+            response.onResult(result);
+        }
     }
 }
