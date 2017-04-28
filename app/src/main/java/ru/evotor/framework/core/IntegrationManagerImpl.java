@@ -111,7 +111,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
         public final IntegrationManagerFuture start() {
             try {
-                doWork(new Response(mComponentName));
+                doWork(new Response());
             } catch (RemoteException e) {
                 setException(e);
             }
@@ -241,12 +241,6 @@ public class IntegrationManagerImpl implements IntegrationManager {
          * Handles the responses from the IntegrationManager
          */
         private class Response extends IIntegrationManagerResponse.Stub {
-
-            private final ComponentName currentComponentName;
-
-            Response(ComponentName currentComponentName) {
-                this.currentComponentName = currentComponentName;
-            }
 
             @Override
             public void onResult(Bundle bundle) {

@@ -18,16 +18,16 @@ public abstract class AddPositionCommandProcessor extends ActionProcessor {
 
     @Override
     public void process(Bundle bundle, Callback callback) {
-        call(AddPositionCommand.create(bundle), new AddProductCommandProcessorCallback(callback));
+        call(AddPositionCommand.create(bundle), new AddPositionCommandProcessorCallback(callback));
     }
 
-    public abstract void call(AddPositionCommand command, AddProductCommandProcessorCallback callback);
+    public abstract void call(AddPositionCommand command, AddPositionCommandProcessorCallback callback);
 
-    public class AddProductCommandProcessorCallback {
+    public class AddPositionCommandProcessorCallback {
 
         private final Callback callback;
 
-        AddProductCommandProcessorCallback(Callback callback) {
+        AddPositionCommandProcessorCallback(Callback callback) {
             this.callback = callback;
         }
 

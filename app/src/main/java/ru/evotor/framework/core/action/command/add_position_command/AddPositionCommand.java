@@ -11,7 +11,7 @@ import ru.evotor.framework.receipt.Position;
 
 public class AddPositionCommand {
 
-    public static final String NAME = "evo.v2.receipt.sell.addProduct";
+    public static final String NAME = "evo.v2.receipt.sell.addPosition";
     private static final String KEY_POSITION = "position";
 
     public static AddPositionCommand create(Bundle bundle) {
