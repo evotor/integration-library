@@ -1,4 +1,24 @@
 
+
+В build.gradle проекта добавьте ссылку на репозиторий jitpack:
+
+```
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+в модуле `build.gradle` добавьте зависимость и укажите точную версию (текущая: v0.2.0):
+
+```
+dependencies {
+compile 'com.github.evotor:integration-library:v0.2.0'
+}
+```
+
 В этом проекте описаны все необходимые интерфейсы, константы и пр., необходимые для работы с оборудованием на смарт-терминале Эвотор.
 	Разделы проекта:
 
