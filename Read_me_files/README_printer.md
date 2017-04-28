@@ -3,44 +3,22 @@
 
 # __1.1. SDK для принтера Эвотор__
 _Содержание:_  
-1.1.1. [Подключение библиотеки для работы с оборудованием к своему проекту.](#1011)  
-1.1.2. [Инициализация класса ru.evotor.devices.commons.DeviceServiceConnector.](#1012)  
-1.1.3. [Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.](#1013)  
-1.1.4. [Передача данных в печать.](#1014)  
-1.1.5. [Пример кода печати.](#1015)  
+1.1.1. [Инициализация класса ru.evotor.devices.commons.DeviceServiceConnector.](#1011)  
+1.1.2. [Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.](#1012)  
+1.1.3. [Передача данных в печать.](#1013)  
+1.1.4. [Пример кода печати.](#1014)  
 
 
 <a name="1011"></a>
-### 1.1.1. Подключение библиотеки для работы с оборудованием к своему проекту.
-
-Для этого в build.gradle проекта добавьте ссылку на репозиторий jitpack:
-
-```
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-в модуле `build.gradle` добавьте зависимость и укажите точную версию (текущая: v0.1.1):
-
-```
-dependencies {
-compile 'com.github.evotor:integration-library:v0.1.1'
-}
-```
-<a name="1012"></a>
-### 1.1.2. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`.  
+### 1.1.1. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`.  
 Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который содержится в библиотеке, подключенной на прошлом шаге. Проинициализирйте его в `onCreate` вашего `Application` или старте `activity`:  
 ```  
 DeviceServiceConnector.startInitConnections(getApplicationContext());
 ```
 Инициация класса начнется ассинхронно, что бы не держать "вызывающий" поток в течение всего времени подключения. В случае, если есть необходимость выполнить какой-то код сразу после установки соединения, воспользуйтесь методом `addConnectionWrapper`, чтобы получить событие об успешном подключении.
 
-<a name="1013"></a>
-### 1.1.3. Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.  
+<a name="1012"></a>
+### 1.1.2. Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.  
 
 * В ответ на вызов метода  `DeviceServiceConnector.getPrinterService()` вернется объект `ru.evotor.devices.commons.IPrinterService`.
  * `DeviceServiceConnector.getPrinterService()` никогда не будет `null`  
@@ -59,8 +37,8 @@ DeviceServiceConnector.startInitConnections(getApplicationContext());
 
 > __На данный момент печатать можно только на встроенной в СТ2 ККМ, поэтому вместо номера устройства всегда следует передавать константу `ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX`.__  
 
-<a name="1014"></a>
-### 1.1.4. Передача данных в печать.  
+<a name="1013"></a>
+### 1.1.3. Передача данных в печать.  
 Для печати Вам необходимо воспользоваться методом:
 ```
 printDocument(int deviceId, in PrinterDocument printerDocument);
@@ -82,8 +60,8 @@ DeviceServiceConnector.getPrinterService().printDocument(
             new PrintableImage(bitmap1)
     ));
 ```
-<a name="1015"></a>
-### 1.1.5. Пример кода печати.  
+<a name="1014"></a>
+### 1.1.4. Пример кода печати.  
 
 ```
 try {
