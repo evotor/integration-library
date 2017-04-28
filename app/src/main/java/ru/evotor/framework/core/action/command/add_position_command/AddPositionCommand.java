@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command.add_product_command;
+package ru.evotor.framework.core.action.command.add_position_command;
 
 import android.os.Bundle;
 
@@ -9,19 +9,19 @@ import ru.evotor.framework.receipt.Position;
  * Created by a.kuznetsov on 26/04/2017.
  */
 
-public class AddProductCommand {
+public class AddPositionCommand {
 
     public static final String NAME = "evo.v2.receipt.sell.addProduct";
     private static final String KEY_POSITION = "position";
 
-    public static AddProductCommand create(Bundle bundle) {
+    public static AddPositionCommand create(Bundle bundle) {
         Position position = PositionMapper.from(bundle.getBundle(KEY_POSITION));
-        return new AddProductCommand(position);
+        return new AddPositionCommand(position);
     }
 
     private final Position position;
 
-    public AddProductCommand(Position position) {
+    public AddPositionCommand(Position position) {
         this.position = position;
     }
 

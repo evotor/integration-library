@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command.add_product_command;
+package ru.evotor.framework.core.action.command.add_position_command;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,17 +10,18 @@ import ru.evotor.framework.core.action.processor.ActionProcessor;
  * Created by a.kuznetsov on 19/04/2017.
  */
 
-public abstract class AddProductCommandProcessor extends ActionProcessor {
-    public AddProductCommandProcessor() {
-        super(AddProductCommand.NAME);
+public abstract class AddPositionCommandProcessor extends ActionProcessor {
+
+    public AddPositionCommandProcessor() {
+        super(AddPositionCommand.NAME);
     }
 
     @Override
     public void process(Bundle bundle, Callback callback) {
-        call(AddProductCommand.create(bundle), new AddProductCommandProcessorCallback(callback));
+        call(AddPositionCommand.create(bundle), new AddProductCommandProcessorCallback(callback));
     }
 
-    public abstract void call(AddProductCommand command, AddProductCommandProcessorCallback callback);
+    public abstract void call(AddPositionCommand command, AddProductCommandProcessorCallback callback);
 
     public class AddProductCommandProcessorCallback {
 
@@ -32,6 +33,10 @@ public abstract class AddProductCommandProcessor extends ActionProcessor {
 
         public void startActivity(Intent intent) throws RemoteException {
             callback.startActivity(intent);
+        }
+
+        public void onResult(AddPositionCommandResult result) throws RemoteException {
+            callback.onResult(result.toBundle());
         }
 
         public void finish() throws RemoteException {

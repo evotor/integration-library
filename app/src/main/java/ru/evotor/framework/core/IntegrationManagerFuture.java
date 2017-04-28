@@ -30,8 +30,9 @@ public interface IntegrationManagerFuture {
         }
 
         public enum Type {
-            INTERMEDIATE,
-            FINISH
+            OK,
+            SKIP,
+            ERROR
         }
     }
 }

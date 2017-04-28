@@ -1,6 +1,6 @@
 package ru.evotor.framework.core;
 
-import android.app.Activity;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -14,7 +14,12 @@ public interface IntegrationManager {
     String KEY_SKIP = "skip";
     String KEY_DATA = "data";
 
-    public IntegrationManagerFuture call(final String action, final Bundle data, ICanStartActivity activity, IntegrationManagerCallback callback, Handler handler);
+    public IntegrationManagerFuture call(
+            String action,
+            ComponentName componentName,
+            Bundle data,
+            ICanStartActivity activity,
+            IntegrationManagerCallback callback,
+            Handler handler);
 
-    public IntegrationManagerFuture call(final String action, final Bundle data, Activity activity, IntegrationManagerCallback callback, Handler handler);
 }

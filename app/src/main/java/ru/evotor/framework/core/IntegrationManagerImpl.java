@@ -1,6 +1,5 @@
 package ru.evotor.framework.core;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -44,26 +43,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
-    public IntegrationManagerFuture call(final String action, final Bundle data, final Activity activity, IntegrationManagerCallback callback, Handler handler) {
-
-        return call(action,
-                data,
-                new ICanStartActivity() {
-
-                    @Override
-                    public void startActivity(Intent intent) {
-                        activity.startActivity(intent);
-                    }
-                },
-                callback,
-                handler
-        );
-    }
-
-    @Override
-    public IntegrationManagerFuture call(final String action, final Bundle data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
-
-        final ImsTask future = new ImsTask(activityStarter, handler, callback, action, data);
+    public IntegrationManagerFuture call(String action, ComponentName componentName, Bundle data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
+        final ImsTask future = new ImsTask(activityStarter, handler, callback, action, componentName, data);
         new Thread() {
             @Override
             public void run() {
@@ -103,9 +84,16 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final IntegrationManagerCallback mCallback;
         final ICanStartActivity mActivityStarter;
         final String mAction;
+        final ComponentName mComponentName;
         final Bundle mData;
 
-        public ImsTask(ICanStartActivity activityStarter, Handler handler, IntegrationManagerCallback callback, String action, Bundle data) {
+        public ImsTask(
+                ICanStartActivity activityStarter,
+                Handler handler,
+                IntegrationManagerCallback callback,
+                String action,
+                ComponentName componentName,
+                Bundle data) {
             super(new Callable<Result>() {
                 @Override
                 public Result call() throws Exception {
@@ -117,18 +105,13 @@ public class IntegrationManagerImpl implements IntegrationManager {
             mCallback = callback;
             mActivityStarter = activityStarter;
             mAction = action;
+            mComponentName = componentName;
             mData = data;
         }
 
         public final IntegrationManagerFuture start() {
             try {
-                List<ComponentName> componentNames = convertImplicitIntentToExplicitIntent(new Intent(mAction), context);
-
-                if (componentNames == null || componentNames.isEmpty()) {
-                    new Response(null, componentNames).skip();
-                } else {
-                    doWork(new Response(componentNames.get(0), componentNames.subList(1, componentNames.size())));
-                }
+                doWork(new Response(mComponentName));
             } catch (RemoteException e) {
                 setException(e);
             }
@@ -258,12 +241,11 @@ public class IntegrationManagerImpl implements IntegrationManager {
          * Handles the responses from the IntegrationManager
          */
         private class Response extends IIntegrationManagerResponse.Stub {
-            private ComponentName componentName;
-            private List<ComponentName> componentNames;
 
-            Response(ComponentName componentName, List<ComponentName> componentNames) {
-                this.componentName = componentName;
-                this.componentNames = componentNames;
+            private final ComponentName currentComponentName;
+
+            Response(ComponentName currentComponentName) {
+                this.currentComponentName = currentComponentName;
             }
 
             @Override
@@ -283,7 +265,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 } else if (bundle.getBoolean(KEY_SKIP)) {
                     skip();
                 } else {
-                    set(new Result(Result.Type.INTERMEDIATE, bundle.getBundle(KEY_DATA)));
+                    set(new Result(Result.Type.OK, bundle.getBundle(KEY_DATA)));
                 }
             }
 
@@ -294,27 +276,19 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
 
             void skip() {
-                if (componentNames == null || componentNames.isEmpty()) {
-                    set(new Result(Result.Type.FINISH, null));
-                } else {
-                    try {
-                        doWork(new Response(componentNames.get(0), componentNames.subList(1, componentNames.size())));
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                set(new Result(Result.Type.SKIP, null));
             }
 
             public ComponentName getComponentName() {
-                return componentName;
+                return mComponentName;
             }
         }
 
     }
 
-    private static List<ComponentName> convertImplicitIntentToExplicitIntent(Intent implicitIntent, Context context) {
+    public static List<ComponentName> convertImplicitIntentToExplicitIntent(String action, Context context) {
         PackageManager pm = context.getPackageManager();
-        List<ResolveInfo> resolveInfoList = pm.queryIntentServices(implicitIntent, 0);
+        List<ResolveInfo> resolveInfoList = pm.queryIntentServices(new Intent(action), 0);
         List<ComponentName> intentList = new ArrayList<>();
 
         if (resolveInfoList == null || resolveInfoList.isEmpty()) {
