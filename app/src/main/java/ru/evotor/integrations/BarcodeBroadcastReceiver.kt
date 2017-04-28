@@ -24,13 +24,13 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
 
-        @JvmStatic
+        @JvmField
         public val ACTION_SCANNED = "ru.evotor.devices.ScannedCode"
 
-        @JvmStatic
+        @JvmField
         public val EXTRA_SCANNED_CODE = "ScannedCode"
 
-        @JvmStatic
+        @JvmField
         public val BARCODE_INTENT_FILTER = IntentFilter(ACTION_SCANNED)
     }
 
