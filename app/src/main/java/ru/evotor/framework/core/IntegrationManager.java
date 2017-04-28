@@ -9,6 +9,7 @@ import android.os.Handler;
  */
 
 public interface IntegrationManager {
+    String KEY_INTENT_DATA = "intentData";
     String KEY_INTEGRATION_RESPONSE = "integrationResponse";
     String KEY_INTENT = "intent";
     String KEY_SKIP = "skip";

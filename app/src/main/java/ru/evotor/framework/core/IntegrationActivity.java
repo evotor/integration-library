@@ -32,11 +32,14 @@ public abstract class IntegrationActivity extends Activity {
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        mIntegrationResponse =
-                getIntent().getParcelableExtra(IntegrationManager.KEY_INTEGRATION_RESPONSE);
+        Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
+        if (bundle != null) {
+            mIntegrationResponse = bundle
+                    .getParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE);
 
-        if (mIntegrationResponse != null) {
-            mIntegrationResponse.onRequestContinued();
+            if (mIntegrationResponse != null) {
+                mIntegrationResponse.onRequestContinued();
+            }
         }
     }
 
