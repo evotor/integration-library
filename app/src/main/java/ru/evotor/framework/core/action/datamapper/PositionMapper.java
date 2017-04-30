@@ -5,7 +5,6 @@ import android.os.Bundle;
 import java.math.BigDecimal;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.inventory.Measure;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.Position;
 
@@ -17,11 +16,12 @@ public final class PositionMapper {
     private static final String KEY_UUID = "uuid";
     private static final String KEY_PRODUCT_UUID = "productUuid";
     private static final String KEY_PRODUCT_TYPE = "productType";
-    private static final String KEY_MEASURE = "measure";
     private static final String KEY_PRICE = "price";
     private static final String KEY_PRICE_WITH_DISCOUNT_POSITION = "priceWithDiscountPosition";
     private static final String KEY_QUANTITY = "quantity";
     private static final String KEY_NAME = "name";
+    private static final String KEY_MEASURE_NAME = "measureName";
+    private static final String KEY_MEASURE_PRECISION = "measurePrecision";
     private static final String KEY_BARCODE = "barcode";
     private static final String KEY_MARK = "mark";
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
@@ -34,7 +34,8 @@ public final class PositionMapper {
         String productUuid = bundle.getString(KEY_PRODUCT_UUID);
         ProductType productType = Utils.safeValueOf(ProductType.class, bundle.getString(KEY_PRODUCT_TYPE), ProductType.NORMAL);
         String name = bundle.getString(KEY_NAME);
-        Measure measure = MeasureMapper.from(bundle.getBundle(KEY_MEASURE));
+        String measureName = bundle.getString(KEY_MEASURE_NAME);
+        int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION);
         String price = bundle.getString(KEY_PRICE);
         String priceWithDiscountPosition = bundle.getString(KEY_PRICE_WITH_DISCOUNT_POSITION);
         String quantity = bundle.getString(KEY_QUANTITY);
@@ -49,7 +50,8 @@ public final class PositionMapper {
                 productUuid,
                 productType,
                 name,
-                measure,
+                measureName,
+                measurePrecision,
                 new BigDecimal(price),
                 new BigDecimal(priceWithDiscountPosition),
                 new BigDecimal(quantity),
@@ -72,7 +74,8 @@ public final class PositionMapper {
         bundle.putString(KEY_PRODUCT_UUID, position.getProductUuid());
         bundle.putString(KEY_PRODUCT_TYPE, position.getProductType().toString());
         bundle.putString(KEY_NAME, position.getName());
-        bundle.putBundle(KEY_MEASURE, MeasureMapper.toBundle(position.getMeasure()));
+        bundle.putString(KEY_MEASURE_NAME, position.getMeasureName());
+        bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasurePrecision());
         bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());

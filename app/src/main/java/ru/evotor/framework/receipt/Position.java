@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 
-import ru.evotor.framework.inventory.Measure;
 import ru.evotor.framework.inventory.ProductType;
 
 /**
@@ -30,9 +29,13 @@ public class Position implements Parcelable {
      */
     private String name;
     /**
-     * Единица измерения.
+     * Наименование единицы измерения.
      */
-    private Measure measure;
+    private String measureName;
+    /**
+     * Точность единицы измерения.
+     */
+    private int measurePrecision;
     /**
      * Цена без скидок.
      */
@@ -75,7 +78,8 @@ public class Position implements Parcelable {
             String productUuid,
             ProductType productType,
             String name,
-            Measure measure,
+            String measureName,
+            int measurePrecision,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
@@ -90,7 +94,8 @@ public class Position implements Parcelable {
         this.productUuid = productUuid;
         this.productType = productType;
         this.name = name;
-        this.measure = measure;
+        this.measureName = measureName;
+        this.measurePrecision = measurePrecision;
         this.price = price;
         this.priceWithDiscountPosition = priceWithDiscountPosition;
         this.quantity = quantity;
@@ -118,8 +123,12 @@ public class Position implements Parcelable {
         return name;
     }
 
-    public Measure getMeasure() {
-        return measure;
+    public String getMeasureName() {
+        return measureName;
+    }
+
+    public int getMeasurePrecision() {
+        return measurePrecision;
     }
 
     public BigDecimal getPrice() {
@@ -169,7 +178,8 @@ public class Position implements Parcelable {
         dest.writeString(this.productUuid);
         dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
         dest.writeString(this.name);
-        dest.writeParcelable(this.measure, flags);
+        dest.writeString(this.measureName);
+        dest.writeInt(this.measurePrecision);
         dest.writeSerializable(this.price);
         dest.writeSerializable(this.priceWithDiscountPosition);
         dest.writeSerializable(this.quantity);
@@ -187,7 +197,8 @@ public class Position implements Parcelable {
         int tmpProductType = in.readInt();
         this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
         this.name = in.readString();
-        this.measure = in.readParcelable(Measure.class.getClassLoader());
+        this.measureName = in.readString();
+        this.measurePrecision = in.readInt();
         this.price = (BigDecimal) in.readSerializable();
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
