@@ -1,5 +1,8 @@
 package ru.evotor.framework.receipt;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.math.BigDecimal;
 
 import ru.evotor.framework.inventory.Measure;
@@ -9,7 +12,7 @@ import ru.evotor.framework.inventory.ProductType;
  * Created by a.kuznetsov on 19/04/2017.
  */
 
-public class Position {
+public class Position implements Parcelable {
     /**
      * UUID позиции
      */
@@ -154,4 +157,57 @@ public class Position {
     public PrintGroup getPrintGroup() {
         return printGroup;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uuid);
+        dest.writeString(this.productUuid);
+        dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
+        dest.writeString(this.name);
+        dest.writeParcelable(this.measure, flags);
+        dest.writeSerializable(this.price);
+        dest.writeSerializable(this.priceWithDiscountPosition);
+        dest.writeSerializable(this.quantity);
+        dest.writeString(this.barcode);
+        dest.writeString(this.mark);
+        dest.writeSerializable(this.alcoholByVolume);
+        dest.writeValue(this.alcoholProductKindCode);
+        dest.writeSerializable(this.tareVolume);
+        dest.writeParcelable(this.printGroup, flags);
+    }
+
+    protected Position(Parcel in) {
+        this.uuid = in.readString();
+        this.productUuid = in.readString();
+        int tmpProductType = in.readInt();
+        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+        this.name = in.readString();
+        this.measure = in.readParcelable(Measure.class.getClassLoader());
+        this.price = (BigDecimal) in.readSerializable();
+        this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
+        this.quantity = (BigDecimal) in.readSerializable();
+        this.barcode = in.readString();
+        this.mark = in.readString();
+        this.alcoholByVolume = (BigDecimal) in.readSerializable();
+        this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
+        this.tareVolume = (BigDecimal) in.readSerializable();
+        this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Position> CREATOR = new Parcelable.Creator<Position>() {
+        @Override
+        public Position createFromParcel(Parcel source) {
+            return new Position(source);
+        }
+
+        @Override
+        public Position[] newArray(int size) {
+            return new Position[size];
+        }
+    };
 }
