@@ -371,5 +371,9 @@ public class Position implements Parcelable {
             position.priceWithDiscountPosition = priceWithDiscountPosition;
             return this;
         }
+
+        public Position build() {
+            return new Position(position);
+        }
     }
 }
