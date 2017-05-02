@@ -22,6 +22,7 @@ import ru.evotor.framework.receipt.TaxNumber;
 public final class PositionMapper {
     private static final String KEY_UUID = "uuid";
     private static final String KEY_PRODUCT_UUID = "productUuid";
+    private static final String KEY_PRODUCT_CODE = "productCode";
     private static final String KEY_PRODUCT_TYPE = "productType";
     private static final String KEY_PRICE = "price";
     private static final String KEY_PRICE_WITH_DISCOUNT_POSITION = "priceWithDiscountPosition";
@@ -41,6 +42,7 @@ public final class PositionMapper {
     public static Position from(Bundle bundle) {
         String uuid = bundle.getString(KEY_UUID);
         String productUuid = bundle.getString(KEY_PRODUCT_UUID);
+        String productCode = bundle.getString(KEY_PRODUCT_CODE);
         ProductType productType = Utils.safeValueOf(ProductType.class, bundle.getString(KEY_PRODUCT_TYPE), ProductType.NORMAL);
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
@@ -70,6 +72,7 @@ public final class PositionMapper {
         return new Position(
                 uuid,
                 productUuid,
+                productCode,
                 productType,
                 name,
                 measureName,
@@ -95,6 +98,7 @@ public final class PositionMapper {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_UUID, position.getUuid());
         bundle.putString(KEY_PRODUCT_UUID, position.getProductUuid());
+        bundle.putString(KEY_PRODUCT_CODE, position.getProductCode());
         bundle.putString(KEY_PRODUCT_TYPE, position.getProductType().name());
         bundle.putString(KEY_NAME, position.getName());
         bundle.putString(KEY_MEASURE_NAME, position.getMeasureName());

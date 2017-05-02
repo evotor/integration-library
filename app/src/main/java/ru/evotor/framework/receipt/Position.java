@@ -28,6 +28,10 @@ public class Position implements Parcelable {
      */
     private String productUuid;
     /**
+     * Код товара.
+     */
+    private String productCode;
+    /**
      * Вид товара.
      */
     private ProductType productType;
@@ -91,6 +95,7 @@ public class Position implements Parcelable {
     public Position(
             String uuid,
             String productUuid,
+            String productCode,
             ProductType productType,
             String name,
             String measureName,
@@ -109,6 +114,7 @@ public class Position implements Parcelable {
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
+        this.productCode = productCode;
         this.productType = productType;
         this.name = name;
         this.measureName = measureName;
@@ -171,6 +177,10 @@ public class Position implements Parcelable {
 
     public String getProductUuid() {
         return productUuid;
+    }
+
+    public String getProductCode() {
+        return productCode;
     }
 
     public ProductType getProductType() {
@@ -242,6 +252,7 @@ public class Position implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.uuid);
         dest.writeString(this.productUuid);
+        dest.writeString(this.productCode);
         dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
         dest.writeString(this.name);
         dest.writeString(this.measureName);
@@ -266,6 +277,7 @@ public class Position implements Parcelable {
     protected Position(Parcel in) {
         this.uuid = in.readString();
         this.productUuid = in.readString();
+        this.productCode = in.readString();
         int tmpProductType = in.readInt();
         this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
         this.name = in.readString();
