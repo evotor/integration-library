@@ -4,6 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import ru.evotor.framework.inventory.ProductType;
 
@@ -72,6 +77,14 @@ public class Position implements Parcelable {
      * Группа печати.
      */
     private PrintGroup printGroup;
+    /**
+     * Экстра ключи
+     */
+    private List<ExtraKey> extraKeys = new ArrayList<>();
+    /**
+     * В качестве ключа используется TaxNumber
+     */
+    private Map<TaxNumber, Tax> taxes = new LinkedHashMap<>();
 
     public Position(
             String uuid,
@@ -88,7 +101,9 @@ public class Position implements Parcelable {
             BigDecimal alcoholByVolume,
             Long alcoholProductKindCode,
             BigDecimal tareVolume,
-            PrintGroup printGroup
+            PrintGroup printGroup,
+            List<ExtraKey> extraKeys,
+            Map<TaxNumber, Tax> taxes
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -105,6 +120,8 @@ public class Position implements Parcelable {
         this.alcoholProductKindCode = alcoholProductKindCode;
         this.tareVolume = tareVolume;
         this.printGroup = printGroup;
+        this.extraKeys.addAll(extraKeys);
+        this.taxes.putAll(taxes);
     }
 
     public String getUuid() {
@@ -167,6 +184,15 @@ public class Position implements Parcelable {
         return printGroup;
     }
 
+    public List<ExtraKey> getExtraKeys() {
+        return extraKeys;
+    }
+
+    public Map<TaxNumber, Tax> getTaxes() {
+        return taxes;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -189,6 +215,12 @@ public class Position implements Parcelable {
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
         dest.writeParcelable(this.printGroup, flags);
+        dest.writeList(this.extraKeys);
+        dest.writeInt(this.taxes.size());
+        for (Map.Entry<TaxNumber, Tax> entry : this.taxes.entrySet()) {
+            dest.writeInt(entry.getKey() == null ? -1 : entry.getKey().ordinal());
+            dest.writeParcelable(entry.getValue(), flags);
+        }
     }
 
     protected Position(Parcel in) {
@@ -208,9 +240,19 @@ public class Position implements Parcelable {
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
+        this.extraKeys = new ArrayList<ExtraKey>();
+        in.readList(this.extraKeys, ExtraKey.class.getClassLoader());
+        int taxesSize = in.readInt();
+        this.taxes = new HashMap<TaxNumber, Tax>(taxesSize);
+        for (int i = 0; i < taxesSize; i++) {
+            int tmpKey = in.readInt();
+            TaxNumber key = tmpKey == -1 ? null : TaxNumber.values()[tmpKey];
+            Tax value = in.readParcelable(Tax.class.getClassLoader());
+            this.taxes.put(key, value);
+        }
     }
 
-    public static final Parcelable.Creator<Position> CREATOR = new Parcelable.Creator<Position>() {
+    public static final Creator<Position> CREATOR = new Creator<Position>() {
         @Override
         public Position createFromParcel(Parcel source) {
             return new Position(source);
