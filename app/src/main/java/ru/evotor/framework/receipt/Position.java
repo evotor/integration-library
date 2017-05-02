@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.evotor.framework.calculator.MoneyCalculator;
+import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.ProductType;
 
 /**
@@ -124,6 +126,45 @@ public class Position implements Parcelable {
         this.taxes.putAll(taxes);
     }
 
+    /**
+     * Возвращает сумму без учета скидок.
+     *
+     * @return сумма без учета скидок.
+     */
+    public BigDecimal getTotalWithoutDiscounts() {
+        return MoneyCalculator.multiply(price, quantity);
+    }
+
+    /**
+     * Возвращает сумму без учета скидки на чек.
+     *
+     * @return сумма без учета скидки на чек.
+     */
+    public BigDecimal getTotalWithoutDocumentDiscount() {
+        return MoneyCalculator.multiply(priceWithDiscountPosition, quantity);
+    }
+
+    /**
+     * Возвращает процент скидки на позицию.
+     *
+     * @return процент скидки на позицию.
+     */
+    public BigDecimal getDiscountPercents() {
+        if (getDiscountPositionSum().compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+        return PercentCalculator.calcPercent(getTotalWithoutDiscounts(), getDiscountPositionSum());
+    }
+
+    /**
+     * Возвращает сумму скидки на позицию.
+     *
+     * @return сумма скидки на позицию.
+     */
+    public BigDecimal getDiscountPositionSum() {
+        return MoneyCalculator.subtract(getTotalWithoutDiscounts(), getTotalWithoutDocumentDiscount());
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -192,7 +233,6 @@ public class Position implements Parcelable {
         return taxes;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -240,10 +280,10 @@ public class Position implements Parcelable {
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
-        this.extraKeys = new ArrayList<ExtraKey>();
+        this.extraKeys = new ArrayList<>();
         in.readList(this.extraKeys, ExtraKey.class.getClassLoader());
         int taxesSize = in.readInt();
-        this.taxes = new HashMap<TaxNumber, Tax>(taxesSize);
+        this.taxes = new HashMap<>(taxesSize);
         for (int i = 0; i < taxesSize; i++) {
             int tmpKey = in.readInt();
             TaxNumber key = tmpKey == -1 ? null : TaxNumber.values()[tmpKey];
