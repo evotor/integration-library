@@ -132,6 +132,29 @@ public class Position implements Parcelable {
         this.taxes.putAll(taxes);
     }
 
+    public Position(Position position) {
+        this(
+                position.getUuid(),
+                position.getProductUuid(),
+                position.getProductCode(),
+                position.getProductType(),
+                position.getName(),
+                position.getMeasureName(),
+                position.getMeasurePrecision(),
+                position.getPrice(),
+                position.getPriceWithDiscountPosition(),
+                position.getQuantity(),
+                position.getBarcode(),
+                position.getMark(),
+                position.getAlcoholByVolume(),
+                position.getAlcoholProductKindCode(),
+                position.getTareVolume(),
+                position.getPrintGroup(),
+                position.getExtraKeys(),
+                position.getTaxes()
+        );
+    }
+
     /**
      * Возвращает сумму без учета скидок.
      *
@@ -326,4 +349,27 @@ public class Position implements Parcelable {
             return new Position[size];
         }
     };
+
+    public static final class Builder {
+        private Position position;
+
+        public Builder(Position position) {
+            this.position = new Position(position);
+        }
+
+        public Builder setQuantity(BigDecimal quantity) {
+            position.quantity = quantity;
+            return this;
+        }
+
+        public Builder setPrice(BigDecimal price) {
+            position.price = price;
+            return this;
+        }
+
+        public Builder setPriceWithDiscountPosition(BigDecimal priceWithDiscountPosition) {
+            position.priceWithDiscountPosition = priceWithDiscountPosition;
+            return this;
+        }
+    }
 }
