@@ -171,6 +171,17 @@ public class Position implements Parcelable {
         return MoneyCalculator.subtract(getTotalWithoutDiscounts(), getTotalWithoutDocumentDiscount());
     }
 
+    /**
+     * Возвращает сумму c учетом скидки на чек и на позицию.
+     *
+     * @param discountDocumentPositionSum сумма скидки на чек, распределенная на эту позицию
+     * @return сумма с учетом скидки на чек и на позицию.
+     */
+    public BigDecimal getTotal(BigDecimal discountDocumentPositionSum) {
+        return MoneyCalculator.subtract(MoneyCalculator.multiply(priceWithDiscountPosition, quantity),
+                discountDocumentPositionSum);
+    }
+
     public String getUuid() {
         return uuid;
     }
