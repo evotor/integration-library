@@ -18,6 +18,9 @@ public final class TaxMapper {
     private static final String KEY_VALUE = "value";
 
     public static Tax from(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String taxNumber = bundle.getString(KEY_TAX_NUMBER);
         String taxRatePercent = bundle.getString(KEY_TAX_RATE_PERCENT);
         String value = bundle.getString(KEY_VALUE);

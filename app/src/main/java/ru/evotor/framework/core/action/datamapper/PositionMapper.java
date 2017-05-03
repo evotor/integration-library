@@ -40,6 +40,9 @@ public final class PositionMapper {
     private static final String KEY_TAXES = "taxes";
 
     public static Position from(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String uuid = bundle.getString(KEY_UUID);
         String productUuid = bundle.getString(KEY_PRODUCT_UUID);
         String productCode = bundle.getString(KEY_PRODUCT_CODE);

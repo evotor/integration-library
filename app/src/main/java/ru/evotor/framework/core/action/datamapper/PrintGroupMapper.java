@@ -19,6 +19,9 @@ public final class PrintGroupMapper {
     private static final String KEY_TAXATION_SYSTEM = "taxationSystem";
 
     public static PrintGroup from(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String identifier = bundle.getString(KEY_IDENTIFIER);
         String type = bundle.getString(KEY_TYPE);
         String orgName = bundle.getString(KEY_ORG_NAME);

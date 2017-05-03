@@ -14,6 +14,9 @@ public final class ExtraKeyMapper {
     private static final String KEY_DESCRIPTION = "description";
 
     public static ExtraKey from(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String identity = bundle.getString(KEY_IDENTITY);
         String appId = bundle.getString(KEY_APP_ID);
         String description = bundle.getString(KEY_DESCRIPTION);
