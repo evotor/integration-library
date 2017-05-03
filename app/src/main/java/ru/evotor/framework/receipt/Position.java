@@ -372,6 +372,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setMark(String mark) {
+            position.mark = mark;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
