@@ -128,8 +128,12 @@ public class Position implements Parcelable {
         this.alcoholProductKindCode = alcoholProductKindCode;
         this.tareVolume = tareVolume;
         this.printGroup = printGroup;
-        this.extraKeys.addAll(extraKeys);
-        this.taxes.putAll(taxes);
+        if (extraKeys != null) {
+            this.extraKeys.addAll(extraKeys);
+        }
+        if (taxes != null) {
+            this.taxes.putAll(taxes);
+        }
     }
 
     public Position(Position position) {
