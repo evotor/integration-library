@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event;
+package ru.evotor.framework.core.action.event.receipt.before_position_added;
 
 import android.os.Bundle;
 
@@ -9,18 +9,18 @@ import ru.evotor.framework.receipt.Position;
  * Created by a.kuznetsov on 19/04/2017.
  */
 
-public class EvoV2ReceiptBeforeProductAddedEvent {
-    public static final String NAME = "evo.v2.receipt.beforeProductAdded";
+public class BeforePositionAddedEvent {
+    public static final String NAME = "evo.v2.receipt.sell.beforePositionAdded";
     private static final String KEY_POSITION = "position";
 
-    public static EvoV2ReceiptBeforeProductAddedEvent create(Bundle bundle) {
+    public static BeforePositionAddedEvent create(Bundle bundle) {
         Position position = PositionMapper.from(bundle.getBundle(KEY_POSITION));
-        return new EvoV2ReceiptBeforeProductAddedEvent(position);
+        return new BeforePositionAddedEvent(position);
     }
 
     private Position position;
 
-    public EvoV2ReceiptBeforeProductAddedEvent(Position position) {
+    public BeforePositionAddedEvent(Position position) {
         this.position = position;
     }
 
