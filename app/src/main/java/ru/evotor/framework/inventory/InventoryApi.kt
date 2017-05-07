@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import org.json.JSONObject
+import ru.evotor.framework.Utils
 import ru.evotor.framework.inventory.field.DictionaryField
 import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
@@ -27,10 +28,18 @@ object InventoryApi {
                         if (cursor.moveToFirst()) {
                             return Product(
                                     uuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_UUID)),
+                                    code = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_CODE)),
+                                    type = Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TYPE)), ProductType.NORMAL),
                                     productName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                                     description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
                                     price = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT))).divide(BigDecimal(100)),
-                                    quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)))
+                                    quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
+                                    measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
+                                    measurePrecision = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
+                                    alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                                    alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
+                                    tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) }
+                            )
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()

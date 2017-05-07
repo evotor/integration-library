@@ -7,8 +7,15 @@ import java.math.BigDecimal
  */
 data class Product(
         val uuid: String,
+        val code: String?,
+        val type: ProductType,
         val productName: String,
         val price: BigDecimal,
         val quantity: BigDecimal,
-        val description: String?
+        val description: String?,
+        val measureName: String,
+        val measurePrecision: String,
+        val alcoholByVolume: BigDecimal?,
+        val alcoholProductKindCode: Long?,
+        val tareVolume: BigDecimal?
 )
