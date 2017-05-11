@@ -270,7 +270,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
 
             void skip() {
-                set(new Result(Result.Type.SKIP, null));
+                set(new Result(Result.Type.OK, null));
             }
 
             public ComponentName getComponentName() {

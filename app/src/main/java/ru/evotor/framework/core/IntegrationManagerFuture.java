@@ -31,7 +31,6 @@ public interface IntegrationManagerFuture {
 
         public enum Type {
             OK,
-            SKIP,
             ERROR
         }
     }

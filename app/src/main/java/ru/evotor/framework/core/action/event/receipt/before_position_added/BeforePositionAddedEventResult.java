@@ -77,6 +77,13 @@ public class BeforePositionAddedEventResult {
         return bundle;
     }
 
+    public Result getResult() {
+        return result;
+    }
+
+    public List<ICommand> getCommands() {
+        return commands;
+    }
 
     public enum Result {
         OK,
