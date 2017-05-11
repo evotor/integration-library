@@ -45,10 +45,12 @@ public abstract class ActionProcessor {
         }
 
         public final void startActivity(Intent intent) throws RemoteException {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, new IntegrationResponse(response));
-            bundle.putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData);
-            intent.putExtra(IntegrationManager.KEY_INTENT_DATA, bundle);
+            if (intent.hasExtra(IntegrationManager.KEY_INTENT_DATA)) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, new IntegrationResponse(response));
+                bundle.putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData);
+                intent.putExtra(IntegrationManager.KEY_INTENT_DATA, bundle);
+            }
 
             final Bundle data = new Bundle();
             data.putParcelable(IntegrationManager.KEY_INTENT, intent);
