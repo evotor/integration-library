@@ -23,10 +23,10 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * Object used to communicate responses back to the AccountManager
+ * Object used to communicate responses back to the IntegrationManager
  */
 public class IntegrationResponse implements Parcelable {
-    private static final String TAG = "AccountAuthenticator";
+    private static final String TAG = "IntegrationResponse";
 
     private IIntegrationManagerResponse mIntegrationManagerResponse;
 
@@ -52,7 +52,7 @@ public class IntegrationResponse implements Parcelable {
 
     public void onRequestContinued() {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "AccountAuthenticatorResponse.onRequestContinued");
+            Log.v(TAG, "IntegrationResponse.onRequestContinued");
         }
         //TODO
         //try {
@@ -64,7 +64,7 @@ public class IntegrationResponse implements Parcelable {
 
     public void onError(int errorCode, String errorMessage) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
-            Log.v(TAG, "AccountAuthenticatorResponse.onError: " + errorCode + ", " + errorMessage);
+            Log.v(TAG, "IntegrationResponse.onError: " + errorCode + ", " + errorMessage);
         }
         try {
             mIntegrationManagerResponse.onError(errorCode, errorMessage);
