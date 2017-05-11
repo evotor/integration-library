@@ -10,4 +10,8 @@ public class BeforePositionAddedEventActivity extends IntegrationActivity {
     public void setIntegrationResult(BeforePositionAddedEventResult result) {
         setIntegrationResult(result == null ? null : result.toBundle());
     }
+
+    public BeforePositionAddedEvent getEvent() {
+        return BeforePositionAddedEvent.create(getSourceBundle());
+    }
 }

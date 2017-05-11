@@ -26,7 +26,7 @@ public abstract class ActionProcessor {
     }
 
     public void process(IIntegrationManagerResponse response, Bundle bundle) {
-        process(bundle, new Callback(response));
+        process(bundle, new Callback(response, bundle));
     }
 
     public abstract void process(Bundle bundle, Callback callback);
@@ -37,14 +37,17 @@ public abstract class ActionProcessor {
 
     public final class Callback {
         private IIntegrationManagerResponse response;
+        private Bundle sourceData;
 
-        private Callback(IIntegrationManagerResponse response) {
+        private Callback(IIntegrationManagerResponse response, Bundle sourceData) {
             this.response = response;
+            this.sourceData = sourceData;
         }
 
         public final void startActivity(Intent intent) throws RemoteException {
             Bundle bundle = new Bundle();
             bundle.putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, new IntegrationResponse(response));
+            bundle.putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData);
             intent.putExtra(IntegrationManager.KEY_INTENT_DATA, bundle);
 
             final Bundle data = new Bundle();

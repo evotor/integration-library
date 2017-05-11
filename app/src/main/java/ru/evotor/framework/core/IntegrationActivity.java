@@ -30,6 +30,14 @@ public abstract class IntegrationActivity extends Activity {
         }
     }
 
+    protected Bundle getSourceBundle() {
+        Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
+        if (bundle == null) {
+            return null;
+        }
+        return bundle.getParcelable(IntegrationManager.KEY_SOURCE_DATA);
+    }
+
     public void finish() {
         if (mIntegrationResponse != null) {
             // send the result bundle back if set, otherwise send an error.
