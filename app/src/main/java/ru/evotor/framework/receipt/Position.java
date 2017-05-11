@@ -381,6 +381,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setExtraKeys(List<ExtraKey> extraKeys) {
+            position.extraKeys = extraKeys;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
