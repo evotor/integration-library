@@ -34,8 +34,8 @@ class ReceiptsApi {
 
         @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
 
-        const val ROW_ID = "_id"
         const val ROW_UUID = "uuid"
+        const val ROW_PRODUCT_UUID = "productUuid"
         const val ROW_TYPE = "type"
         const val ROW_CODE = "code"
         const val ROW_MEASURE_NAME = "measureName"
