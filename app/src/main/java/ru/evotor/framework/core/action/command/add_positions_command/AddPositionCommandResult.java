@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command.add_position_command;
+package ru.evotor.framework.core.action.command.add_positions_command;
 
 import android.os.Bundle;
 

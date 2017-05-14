@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.receipt.before_position_added;
+package ru.evotor.framework.core.action.event.receipt.before_positions_added;
 
 import ru.evotor.framework.core.IntegrationActivity;
 
