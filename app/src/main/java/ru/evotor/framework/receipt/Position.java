@@ -5,10 +5,9 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
@@ -86,11 +85,7 @@ public class Position implements Parcelable {
     /**
      * Экстра ключи
      */
-    private List<ExtraKey> extraKeys = new ArrayList<>();
-    /**
-     * В качестве ключа используется TaxNumber
-     */
-    private Map<TaxNumber, Tax> taxes = new LinkedHashMap<>();
+    private Set<ExtraKey> extraKeys = new HashSet<>();
 
     public Position(
             String uuid,
@@ -109,8 +104,7 @@ public class Position implements Parcelable {
             Long alcoholProductKindCode,
             BigDecimal tareVolume,
             PrintGroup printGroup,
-            List<ExtraKey> extraKeys,
-            Map<TaxNumber, Tax> taxes
+            Set<ExtraKey> extraKeys
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -130,9 +124,6 @@ public class Position implements Parcelable {
         this.printGroup = printGroup;
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
-        }
-        if (taxes != null) {
-            this.taxes.putAll(taxes);
         }
     }
 
@@ -154,8 +145,7 @@ public class Position implements Parcelable {
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
                 position.getPrintGroup(),
-                position.getExtraKeys(),
-                position.getTaxes()
+                position.getExtraKeys()
         );
     }
 
@@ -273,12 +263,67 @@ public class Position implements Parcelable {
         return printGroup;
     }
 
-    public List<ExtraKey> getExtraKeys() {
+    public Set<ExtraKey> getExtraKeys() {
         return extraKeys;
     }
 
-    public Map<TaxNumber, Tax> getTaxes() {
-        return taxes;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Position position = (Position) o;
+
+        if (measurePrecision != position.measurePrecision) return false;
+        if (uuid != null ? !uuid.equals(position.uuid) : position.uuid != null) return false;
+        if (productUuid != null ? !productUuid.equals(position.productUuid) : position.productUuid != null)
+            return false;
+        if (productCode != null ? !productCode.equals(position.productCode) : position.productCode != null)
+            return false;
+        if (productType != position.productType) return false;
+        if (name != null ? !name.equals(position.name) : position.name != null) return false;
+        if (measureName != null ? !measureName.equals(position.measureName) : position.measureName != null)
+            return false;
+        if (price != null ? !price.equals(position.price) : position.price != null) return false;
+        if (priceWithDiscountPosition != null ? !priceWithDiscountPosition.equals(position.priceWithDiscountPosition) : position.priceWithDiscountPosition != null)
+            return false;
+        if (quantity != null ? !quantity.equals(position.quantity) : position.quantity != null)
+            return false;
+        if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
+            return false;
+        if (mark != null ? !mark.equals(position.mark) : position.mark != null) return false;
+        if (alcoholByVolume != null ? !alcoholByVolume.equals(position.alcoholByVolume) : position.alcoholByVolume != null)
+            return false;
+        if (alcoholProductKindCode != null ? !alcoholProductKindCode.equals(position.alcoholProductKindCode) : position.alcoholProductKindCode != null)
+            return false;
+        if (tareVolume != null ? !tareVolume.equals(position.tareVolume) : position.tareVolume != null)
+            return false;
+        if (printGroup != null ? !printGroup.equals(position.printGroup) : position.printGroup != null)
+            return false;
+        return (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (productUuid != null ? productUuid.hashCode() : 0);
+        result = 31 * result + (productCode != null ? productCode.hashCode() : 0);
+        result = 31 * result + (productType != null ? productType.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (measureName != null ? measureName.hashCode() : 0);
+        result = 31 * result + measurePrecision;
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (barcode != null ? barcode.hashCode() : 0);
+        result = 31 * result + (mark != null ? mark.hashCode() : 0);
+        result = 31 * result + (alcoholByVolume != null ? alcoholByVolume.hashCode() : 0);
+        result = 31 * result + (alcoholProductKindCode != null ? alcoholProductKindCode.hashCode() : 0);
+        result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
+        result = 31 * result + (printGroup != null ? printGroup.hashCode() : 0);
+        result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -304,12 +349,7 @@ public class Position implements Parcelable {
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
         dest.writeParcelable(this.printGroup, flags);
-        dest.writeList(this.extraKeys);
-        dest.writeInt(this.taxes.size());
-        for (Map.Entry<TaxNumber, Tax> entry : this.taxes.entrySet()) {
-            dest.writeInt(entry.getKey() == null ? -1 : entry.getKey().ordinal());
-            dest.writeParcelable(entry.getValue(), flags);
-        }
+        dest.writeList(new ArrayList<>(this.extraKeys));
     }
 
     protected Position(Parcel in) {
@@ -330,16 +370,9 @@ public class Position implements Parcelable {
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
-        this.extraKeys = new ArrayList<>();
-        in.readList(this.extraKeys, ExtraKey.class.getClassLoader());
-        int taxesSize = in.readInt();
-        this.taxes = new HashMap<>(taxesSize);
-        for (int i = 0; i < taxesSize; i++) {
-            int tmpKey = in.readInt();
-            TaxNumber key = tmpKey == -1 ? null : TaxNumber.values()[tmpKey];
-            Tax value = in.readParcelable(Tax.class.getClassLoader());
-            this.taxes.put(key, value);
-        }
+        List<ExtraKey> extraKeyList = new ArrayList<>();
+        in.readList(extraKeyList, ExtraKey.class.getClassLoader());
+        extraKeys.addAll(extraKeyList);
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -359,6 +392,11 @@ public class Position implements Parcelable {
 
         public Builder(Position position) {
             this.position = new Position(position);
+        }
+
+        public Builder setUuid(String uuid) {
+            position.uuid = uuid;
+            return this;
         }
 
         public Builder setQuantity(BigDecimal quantity) {
@@ -381,7 +419,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setExtraKeys(List<ExtraKey> extraKeys) {
+        public Builder setExtraKeys(Set<ExtraKey> extraKeys) {
             position.extraKeys = extraKeys;
             return this;
         }

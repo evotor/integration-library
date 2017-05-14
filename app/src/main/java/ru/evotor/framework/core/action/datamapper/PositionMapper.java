@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
-import ru.evotor.framework.receipt.Tax;
-import ru.evotor.framework.receipt.TaxNumber;
 
 /**
  * Created by a.kuznetsov on 19/04/2017.
@@ -37,7 +35,6 @@ public final class PositionMapper {
     private static final String KEY_TARE_VOLUME = "tareVolume";
     private static final String KEY_PRINT_GROUP = "printGroup";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
-    private static final String KEY_TAXES = "taxes";
 
     public static Position from(Bundle bundle) {
         if (bundle == null) {
@@ -60,16 +57,9 @@ public final class PositionMapper {
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
 
         Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
-        List<ExtraKey> extraKeys = new ArrayList<>(extraKeysParcelable.length);
+        Set<ExtraKey> extraKeys = new HashSet<>(extraKeysParcelable.length);
         for (Parcelable extraKey : extraKeysParcelable) {
             extraKeys.add(ExtraKeyMapper.from((Bundle) extraKey));
-        }
-
-        Parcelable[] taxesParcelable = bundle.getParcelableArray(KEY_TAXES);
-        LinkedHashMap<TaxNumber, Tax> taxes = new LinkedHashMap<>(taxesParcelable.length);
-        for (Parcelable taxParcelable : taxesParcelable) {
-            Tax tax = TaxMapper.from((Bundle) taxParcelable);
-            taxes.put(tax.getTaxNumber(), tax);
         }
 
         return new Position(
@@ -89,8 +79,7 @@ public final class PositionMapper {
                 Long.valueOf(alcoholProductKindCode),
                 new BigDecimal(tareVolume),
                 PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP)),
-                extraKeys,
-                taxes
+                extraKeys
         );
     }
 
@@ -116,18 +105,11 @@ public final class PositionMapper {
         bundle.putString(KEY_TARE_VOLUME, position.getTareVolume().toPlainString());
         bundle.putBundle(KEY_PRINT_GROUP, PrintGroupMapper.toBundle(position.getPrintGroup()));
         Parcelable[] extraKeys = new Parcelable[position.getExtraKeys().size()];
+        Iterator<ExtraKey> it = position.getExtraKeys().iterator();
         for (int i = 0; i < extraKeys.length; i++) {
-            extraKeys[i] = ExtraKeyMapper.toBundle(position.getExtraKeys().get(i));
+            extraKeys[i] = ExtraKeyMapper.toBundle(it.next());
         }
         bundle.putParcelableArray(KEY_EXTRA_KEYS, extraKeys);
-
-        Parcelable[] taxes = new Parcelable[position.getTaxes().size()];
-        int i = 0;
-        for (Tax tax : position.getTaxes().values()) {
-            taxes[i] = TaxMapper.toBundle(tax);
-            i++;
-        }
-        bundle.putParcelableArray(KEY_TAXES, taxes);
 
         return bundle;
     }
