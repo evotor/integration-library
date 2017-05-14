@@ -8,8 +8,8 @@ import ru.evotor.framework.core.action.processor.ActionProcessor;
  * Created by a.kuznetsov on 19/04/2017.
  */
 
-public abstract class BeforePositionAddedEventProcessor extends ActionProcessor {
-    public BeforePositionAddedEventProcessor() {
+public abstract class BeforePositionsAddedEventProcessor extends ActionProcessor {
+    public BeforePositionsAddedEventProcessor() {
         super(BeforePositionsAddedEvent.NAME);
     }
 
