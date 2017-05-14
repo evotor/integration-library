@@ -2,7 +2,6 @@ package ru.evotor.framework.core.action.event.receipt.before_position_added;
 
 import android.os.Bundle;
 
-import ru.evotor.framework.core.action.event.receipt.before_position_added.BeforePositionAddedEvent;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
@@ -11,14 +10,14 @@ import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 public abstract class BeforePositionAddedEventProcessor extends ActionProcessor {
     public BeforePositionAddedEventProcessor() {
-        super(BeforePositionAddedEvent.NAME);
+        super(BeforePositionsAddedEvent.NAME);
     }
 
     @Override
     public void process(Bundle bundle, Callback callback) {
-        call(BeforePositionAddedEvent.create(bundle), callback);
+        call(BeforePositionsAddedEvent.create(bundle), callback);
     }
 
-    public abstract void call(BeforePositionAddedEvent event, Callback callback);
+    public abstract void call(BeforePositionsAddedEvent event, Callback callback);
 }
 
