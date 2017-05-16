@@ -20,6 +20,8 @@ import java.math.BigDecimal
 object InventoryApi {
     @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
 
+    const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
+
     @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
         context.contentResolver
