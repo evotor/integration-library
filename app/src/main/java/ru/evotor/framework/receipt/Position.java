@@ -424,6 +424,21 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setMeasureName(String measureName) {
+            position.measureName = measureName;
+            return this;
+        }
+
+        public Builder setMeasurePrecision(int measurePrecision) {
+            position.measurePrecision = measurePrecision;
+            return this;
+        }
+
+        public Builder setPrintGroup(PrintGroup printGroup) {
+            position.printGroup = printGroup;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
