@@ -1,4 +1,5 @@
-
+[![](https://jitpack.io/v/evotor/integration-library.svg)](https://jitpack.io/#evotor/integration-library)
+[![Gitter](https://badges.gitter.im/evotor/integration-library.svg)](https://gitter.im/evotor/integration-library.svg)
 
 В build.gradle проекта добавьте ссылку на репозиторий jitpack:
 
