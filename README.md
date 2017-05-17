@@ -11,11 +11,11 @@ allprojects {
 }
 ```
 
-в модуле `build.gradle` добавьте зависимость и укажите точную версию (текущая: v0.2.0):
+в модуле `build.gradle` добавьте зависимость и укажите точную версию:
 
 ```
 dependencies {
-compile 'com.github.evotor:integration-library:v0.2.0'
+compile 'com.github.evotor:integration-library:v0.3.+'
 }
 ```
 
