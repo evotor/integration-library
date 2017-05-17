@@ -10,7 +10,9 @@ import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadExc
 import ru.evotor.devices.commons.exception.DeviceServiceRuntimeException;
 import ru.evotor.devices.commons.exception.ServiceNotConnectedException;
 import ru.evotor.devices.commons.services.IPrinterServiceWrapper;
+import ru.evotor.devices.commons.services.IScalesServiceWrapper;
 import ru.evotor.devices.commons.services.PrinterService;
+import ru.evotor.devices.commons.services.ScalesService;
 
 public class DeviceServiceConnector {
 
@@ -20,10 +22,12 @@ public class DeviceServiceConnector {
     public static final String TARGET_CLASS_NAME = "ru.evotor.devices.DeviceService";
 
     public static final String ACTION_PRINTER_SERVICE = "ru.evotor.devices.PrintService";
+    public static final String ACTION_SCALES_SERVICE = "ru.evotor.devices.ScalesService";
 
     protected static Context context;
 
     protected static final PrinterService printerService = new PrinterService();
+    protected static final ScalesService scalesService = new ScalesService();
 
     protected final static CopyOnWriteArrayList<ConnectionWrapper> connectionWrappers = new CopyOnWriteArrayList<>();
 
@@ -50,6 +54,12 @@ public class DeviceServiceConnector {
         return printerService;
     }
 
+    public static IScalesServiceWrapper getScalesService() throws ServiceNotConnectedException {
+        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        scalesService.waitInitService(context);
+        return scalesService;
+    }
+
     public static void startInitConnections(final Context appContext) {
         startInitConnections(appContext, false);
     }
@@ -62,6 +72,7 @@ public class DeviceServiceConnector {
         DeviceServiceConnector.context = appContext;
 
         printerService.startInitConnection(context, force);
+        scalesService.startInitConnection(context, force);
     }
 
 
@@ -70,6 +81,7 @@ public class DeviceServiceConnector {
             return;
         }
         printerService.startDeinitConnection();
+        scalesService.startDeinitConnection();
     }
 
     public static void processException(Exception exc) throws DeviceServiceException {
