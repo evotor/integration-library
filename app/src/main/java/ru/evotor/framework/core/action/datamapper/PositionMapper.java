@@ -100,9 +100,9 @@ public final class PositionMapper {
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());
         bundle.putString(KEY_BARCODE, position.getBarcode());
         bundle.putString(KEY_MARK, position.getMark());
-        bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume().toPlainString());
-        bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode().toString());
-        bundle.putString(KEY_TARE_VOLUME, position.getTareVolume().toPlainString());
+        bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume() == null ? null : position.getAlcoholByVolume().toPlainString());
+        bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode() == null ? null : position.getAlcoholProductKindCode().toString());
+        bundle.putString(KEY_TARE_VOLUME, position.getTareVolume() == null ? null : position.getTareVolume().toPlainString());
         bundle.putBundle(KEY_PRINT_GROUP, PrintGroupMapper.toBundle(position.getPrintGroup()));
         Parcelable[] extraKeys = new Parcelable[position.getExtraKeys().size()];
         Iterator<ExtraKey> it = position.getExtraKeys().iterator();
