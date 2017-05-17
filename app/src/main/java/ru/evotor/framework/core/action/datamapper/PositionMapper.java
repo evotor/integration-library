@@ -75,9 +75,9 @@ public final class PositionMapper {
                 new BigDecimal(quantity),
                 barcode,
                 mark,
-                new BigDecimal(alcoholByVolume),
-                Long.valueOf(alcoholProductKindCode),
-                new BigDecimal(tareVolume),
+                alcoholByVolume == null ? null : new BigDecimal(alcoholByVolume),
+                alcoholProductKindCode == null ? null : Long.valueOf(alcoholProductKindCode),
+                tareVolume == null ? null : new BigDecimal(tareVolume),
                 PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP)),
                 extraKeys
         );
