@@ -19,7 +19,7 @@ public class AddPositionsCommandResult {
         String resultName = bundle.getString(KEY_RESULT);
 
         return new AddPositionsCommandResult(
-                Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN)
+                Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
                 bundle.getInt(KEY_ERROR_CODE, ERROR_CODE_OK)
         );
     }
