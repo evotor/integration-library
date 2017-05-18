@@ -13,11 +13,21 @@ public interface IntegrationManagerFuture {
     Result getResult() throws IOException, IntegrationException;
 
     class Result {
-        private Type type;
-        private Bundle data;
+        private final Type type;
+        private final Error error;
+        private final Bundle data;
 
-        public Result(Type type, Bundle data) {
+        public Result(Bundle data) {
+            this(Type.OK, null, data);
+        }
+
+        public Result(Error error) {
+            this(Type.ERROR, error, null);
+        }
+
+        public Result(Type type, Error error, Bundle data) {
             this.type = type;
+            this.error = error;
             this.data = data;
         }
 
@@ -27,6 +37,10 @@ public interface IntegrationManagerFuture {
 
         public Bundle getData() {
             return data;
+        }
+
+        public Error getError() {
+            return error;
         }
 
         public enum Type {

@@ -15,8 +15,6 @@ public interface IntegrationManager {
     String KEY_INTENT = "intent";
     String KEY_SKIP = "skip";
     String KEY_DATA = "data";
-    String KEY_ERROR_CODE = "errorCode";
-    String KEY_ERROR_MESSAGE = "errorMessage";
 
     public IntegrationManagerFuture call(
             String action,

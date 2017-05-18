@@ -213,8 +213,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     throw (IntegrationException) cause;
                 } else if (cause instanceof RuntimeException) {
                     throw (RuntimeException) cause;
-                } else if (cause instanceof Error) {
-                    throw (Error) cause;
+                } else if (cause instanceof java.lang.Error) {
+                    throw (java.lang.Error) cause;
                 } else {
                     throw new IllegalStateException(cause);
                 }
@@ -259,7 +259,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 } else if (bundle.getBoolean(KEY_SKIP)) {
                     skip();
                 } else {
-                    set(new Result(Result.Type.OK, bundle.getBundle(KEY_DATA)));
+                    set(new Result(bundle.getBundle(KEY_DATA)));
                 }
             }
 
@@ -267,14 +267,13 @@ public class IntegrationManagerImpl implements IntegrationManager {
             public void onError(int code, String message) {
                 Log.e(TAG, "onError(code = " + code + ", message = " + message + ")");
 
-                Bundle data = new Bundle();
-                data.putInt(KEY_ERROR_CODE, code);
-                data.putString(KEY_ERROR_MESSAGE, message);
-                set(new Result(Result.Type.ERROR, data));
+//                set(new Result(new Error(code, message)));
+
+                throw new RuntimeException("onError(code = " + code + ", message = " + message + ")");
             }
 
             void skip() {
-                set(new Result(Result.Type.OK, null));
+                set(new Result((Bundle) null));
             }
 
             public ComponentName getComponentName() {
