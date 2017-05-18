@@ -14,12 +14,13 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         intent?.extras?.getString(EXTRA_SCANNED_CODE)?.let { code ->
             if (code.isNotEmpty()) {
-                onReceiveBarcode(code)
+                onBarcodeReceived(code, context)
             }
         }
     }
 
-    public abstract fun onReceiveBarcode(barcode: String)
+    public abstract fun onBarcodeReceived(barcode: String, context: Context?)
+
 
     companion object {
 
