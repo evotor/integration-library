@@ -267,9 +267,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             public void onError(int code, String message) {
                 Log.e(TAG, "onError(code = " + code + ", message = " + message + ")");
 
-//                set(new Result(new Error(code, message)));
-
-                throw new RuntimeException("onError(code = " + code + ", message = " + message + ")");
+                set(new Result(new Error(code, message)));
             }
 
             void skip() {
