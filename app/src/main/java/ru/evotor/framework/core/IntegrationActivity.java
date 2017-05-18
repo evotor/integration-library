@@ -16,6 +16,14 @@ public abstract class IntegrationActivity extends Activity {
         mResultBundle = result;
     }
 
+    public final void onError(int errorCode, String errorMessage) {
+        if (mIntegrationResponse != null) {
+            mIntegrationResponse.onError(errorCode, errorMessage);
+            mIntegrationResponse = null;
+        }
+        finish();
+    }
+
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 

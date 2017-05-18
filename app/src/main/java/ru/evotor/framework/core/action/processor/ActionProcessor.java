@@ -64,7 +64,7 @@ public abstract class ActionProcessor {
             response.onResult(result);
         }
 
-        public final void onError(int errorCode, java.lang.String errorMessage) throws RemoteException {
+        public final void onError(int errorCode, String errorMessage) throws RemoteException {
             response.onError(errorCode, errorMessage);
         }
 
