@@ -9,7 +9,6 @@ import android.content.IntentFilter
  * Created by nixan on 28.04.17.
  */
 
-
 abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -20,7 +19,7 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    abstract fun onReceiveBarcode(barcode: String)
+    public abstract fun onReceiveBarcode(barcode: String)
 
     companion object {
 
@@ -31,7 +30,14 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
         public val EXTRA_SCANNED_CODE = "ScannedCode"
 
         @JvmField
+        public val SENDER_PERMISSION = "ru.evotor.devices.SCANNER_SENDER"
+
+        @JvmField
+        public val RECEIVER_PERMISSION = "ru.evotor.devices.SCANNER_RECEIVER"
+
+        @JvmField
         public val BARCODE_INTENT_FILTER = IntentFilter(ACTION_SCANNED)
+
     }
 
 }

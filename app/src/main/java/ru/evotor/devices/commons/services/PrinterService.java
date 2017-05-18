@@ -23,7 +23,7 @@ import static ru.evotor.devices.commons.DeviceServiceConnector.TARGET_PACKAGE;
 
 public class PrinterService extends AbstractService implements IPrinterServiceWrapper {
 
-    public static final String UNKNOWN_EXCEPTION_TEXT = "The request to DeviceService failed";
+    public static final String UNKNOWN_EXCEPTION_TEXT = "Request to DeviceService failed";
 
     protected volatile Boolean serviceConnected = null;
     protected ru.evotor.devices.commons.IPrinterService service;
