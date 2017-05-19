@@ -10,30 +10,32 @@ import android.os.RemoteException;
 
 import ru.evotor.devices.commons.ConnectionWrapper;
 import ru.evotor.devices.commons.DeviceServiceConnector;
+import ru.evotor.devices.commons.IScalesService;
 import ru.evotor.devices.commons.exception.DeviceServiceException;
 import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
 import ru.evotor.devices.commons.exception.UnknownException;
-import ru.evotor.devices.commons.printer.PrinterDocument;
-import ru.evotor.devices.commons.result.ResultInt;
-import ru.evotor.devices.commons.result.ResultVoid;
+import ru.evotor.devices.commons.result.ResultWeight;
+import ru.evotor.devices.commons.scales.Weight;
 
-import static ru.evotor.devices.commons.DeviceServiceConnector.ACTION_PRINTER_SERVICE;
+import static ru.evotor.devices.commons.DeviceServiceConnector.ACTION_SCALES_SERVICE;
 import static ru.evotor.devices.commons.DeviceServiceConnector.TARGET_CLASS_NAME;
 import static ru.evotor.devices.commons.DeviceServiceConnector.TARGET_PACKAGE;
 
-public class PrinterService extends AbstractService implements IPrinterServiceWrapper {
+public class ScalesService extends AbstractService implements IScalesServiceWrapper {
 
     public static final String UNKNOWN_EXCEPTION_TEXT = "Request to DeviceService failed";
 
+    protected Context context;
+
     protected volatile Boolean serviceConnected = null;
-    protected ru.evotor.devices.commons.IPrinterService service;
+    protected IScalesService service;
     protected final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {
-            service = ru.evotor.devices.commons.IPrinterService.Stub.asInterface(binder);
+            service = IScalesService.Stub.asInterface(binder);
             serviceConnected = true;
             for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
-                connectionWrapper.onPrinterServiceConnected(PrinterService.this);
+                connectionWrapper.onScalesServiceConnected(ScalesService.this);
             }
         }
 
@@ -43,12 +45,12 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
             serviceConnected = false;
             startInitConnection(context, false);
             for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
-                connectionWrapper.onPrinterServiceDisconnected();
+                connectionWrapper.onScalesServiceDisconnected();
             }
         }
     };
 
-    public PrinterService() {
+    public ScalesService() {
     }
 
     @Override
@@ -64,10 +66,9 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
                 if (appContext == null) {
                     return;
                 }
-
                 context = appContext;
                 if (service == null || force) {
-                    Intent pr = new Intent(ACTION_PRINTER_SERVICE);
+                    Intent pr = new Intent(ACTION_SCALES_SERVICE);
                     pr.setPackage(TARGET_PACKAGE);
                     pr.setClassName(TARGET_PACKAGE, TARGET_CLASS_NAME);
                     serviceConnected = null;
@@ -91,42 +92,20 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
                 context.unbindService(serviceConnection);
                 service = null;
                 for (ConnectionWrapper connectionWrapper : DeviceServiceConnector.getConnectionWrappers()) {
-                    connectionWrapper.onPrinterServiceDisconnected();
+                    connectionWrapper.onScalesServiceDisconnected();
                 }
             }
         }.start();
     }
 
-    public int getAllowableSymbolsLineLength(int deviceId) throws DeviceServiceException {
+
+    @Override
+    public Weight getWeight(int deviceId) throws DeviceServiceException {
         DeviceServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
-            ResultInt result = service.getAllowableSymbolsLineLength(deviceId);
+            ResultWeight result = service.getWeight(deviceId);
             return result.getResult();
-        } catch (RemoteException | RuntimeException exc) {
-            DeviceServiceConnector.processException(exc);
-            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
-        }
-    }
-
-    public int getAllowablePixelLineLength(int deviceId) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
-
-        try {
-            ResultInt result = service.getAllowablePixelLineLength(deviceId);
-            return result.getResult();
-        } catch (RemoteException | RuntimeException exc) {
-            DeviceServiceConnector.processException(exc);
-            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
-        }
-    }
-
-    public void printDocument(int deviceId, PrinterDocument printerDocument) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
-
-        try {
-            ResultVoid result = service.printDocument(deviceId, printerDocument);
-            result.processAnswer();
         } catch (RemoteException | RuntimeException exc) {
             DeviceServiceConnector.processException(exc);
             throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
