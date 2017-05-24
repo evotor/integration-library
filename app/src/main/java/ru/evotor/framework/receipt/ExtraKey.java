@@ -1,10 +1,13 @@
 package ru.evotor.framework.receipt;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by a.kuznetsov on 02/05/2017.
  */
 
-public class ExtraKey {
+public class ExtraKey implements Parcelable {
     private final String identity;
     private final String appId;
     private final String description;
@@ -48,4 +51,34 @@ public class ExtraKey {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.identity);
+        dest.writeString(this.appId);
+        dest.writeString(this.description);
+    }
+
+    protected ExtraKey(Parcel in) {
+        this.identity = in.readString();
+        this.appId = in.readString();
+        this.description = in.readString();
+    }
+
+    public static final Parcelable.Creator<ExtraKey> CREATOR = new Parcelable.Creator<ExtraKey>() {
+        @Override
+        public ExtraKey createFromParcel(Parcel source) {
+            return new ExtraKey(source);
+        }
+
+        @Override
+        public ExtraKey[] newArray(int size) {
+            return new ExtraKey[size];
+        }
+    };
 }
