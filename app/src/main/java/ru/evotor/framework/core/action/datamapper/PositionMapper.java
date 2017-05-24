@@ -18,6 +18,8 @@ import ru.evotor.framework.receipt.Position;
  */
 
 public final class PositionMapper {
+    public static final String KEY_POSITION = "position";
+
     private static final String KEY_UUID = "uuid";
     private static final String KEY_PRODUCT_UUID = "productUuid";
     private static final String KEY_PRODUCT_CODE = "productCode";
@@ -57,9 +59,18 @@ public final class PositionMapper {
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
 
         Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
-        Set<ExtraKey> extraKeys = new HashSet<>(extraKeysParcelable.length);
-        for (Parcelable extraKey : extraKeysParcelable) {
-            extraKeys.add(ExtraKeyMapper.from((Bundle) extraKey));
+        Set<ExtraKey> extraKeys = new HashSet<>();
+        if (extraKeysParcelable != null) {
+            for (Parcelable extraKey : extraKeysParcelable) {
+                extraKeys.add(ExtraKeyMapper.from((Bundle) extraKey));
+            }
+        }
+
+        if (quantity == null ||
+                price == null ||
+                priceWithDiscountPosition == null
+                ) {
+            return null;
         }
 
         return new Position(
