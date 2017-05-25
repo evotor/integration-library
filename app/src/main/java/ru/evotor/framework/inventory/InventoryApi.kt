@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import org.json.JSONObject
 import ru.evotor.framework.Utils
+import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.inventory.field.DictionaryField
 import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
@@ -19,6 +20,52 @@ import java.math.BigDecimal
 
 object InventoryApi {
     @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
+
+    @JvmStatic
+    fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
+        val positionsList = ArrayList<Position>()
+
+        var cursor: Cursor? = context.contentResolver.query(
+                Uri.withAppendedPath(PositionTable.URI, barcode),
+                null, null, null, null)
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    var position: Position = Position(null,
+                            cursor.getString(cursor.getColumnIndex(PositionTable.ROW_PRODUCT_UUID)),
+                            null, null, null, null, 0,
+                            BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.ROW_PRICE))).divide(BigDecimal(100)),
+                            null,
+                            BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
+                            null, null, null, null, null, null, null
+                    )
+                    positionsList.add(position)
+                } while (cursor.moveToNext())
+            }
+        }
+
+        return positionsList
+    }
+
+    @JvmStatic
+    fun getAllBarcodesForProductByUuid(context: Context, uuid: String): List<String> {
+        val barcodesList = ArrayList<String>()
+
+        var cursor: Cursor? = context.contentResolver.query(
+                Uri.withAppendedPath(BarcodeTable.URI, uuid),
+                null, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    var barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
+                    barcodesList.add(barcode)
+                } while (cursor.moveToNext())
+            }
+        }
+
+        return barcodesList
+    }
 
     const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
 
