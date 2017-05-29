@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.receipt.position_added;
+package ru.evotor.framework.core.action.event.receipt.position_edited;
 
 /**
  * Created by a.kuznetsov on 18/05/2017.
