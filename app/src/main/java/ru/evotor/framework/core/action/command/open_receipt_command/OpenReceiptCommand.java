@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command.edit_positions_command;
+package ru.evotor.framework.core.action.command.open_receipt_command;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,41 +16,41 @@ import ru.evotor.framework.core.IntegrationManagerCallback;
 import ru.evotor.framework.core.IntegrationManagerImpl;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
-import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
+import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 
 /**
  * Created by a.kuznetsov on 26/04/2017.
  */
 
-public class EditPositionsCommand {
+public class OpenReceiptCommand {
 
-    public static final String NAME = "evo.v2.receipt.sell.editPositions";
+    public static final String NAME = "evo.v2.receipt.sell.openReceipt";
     private static final String KEY_CHANGES = "changes";
 
-    public static EditPositionsCommand create(Bundle bundle) {
+    public static OpenReceiptCommand create(Bundle bundle) {
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
-        return new EditPositionsCommand(Utils.filterByClass(
+        return new OpenReceiptCommand(Utils.filterByClass(
                 ChangesMapper.INSTANCE.create(changesParcelable),
-                IPositionChange.class
+                PositionAdd.class
         ));
     }
 
-    private final List<IPositionChange> changes;
+    private final List<PositionAdd> changes;
 
-    public EditPositionsCommand(List<IPositionChange> changes) {
+    public OpenReceiptCommand(List<PositionAdd> changes) {
         this.changes = changes;
     }
 
     public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
-        Objects.requireNonNull(context);
         Objects.requireNonNull(activityStarter);
+        Objects.requireNonNull(context);
 
         List<ComponentName> componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.getApplicationContext());
         if (componentNameList == null || componentNameList.isEmpty()) {
             return;
         }
         new IntegrationManagerImpl(context.getApplicationContext())
-                .call(EditPositionsCommand.NAME,
+                .call(OpenReceiptCommand.NAME,
 
                         componentNameList.get(0),
                         this.toBundle(),
@@ -71,7 +71,7 @@ public class EditPositionsCommand {
         return bundle;
     }
 
-    public List<IPositionChange> getChanges() {
+    public List<PositionAdd> getChanges() {
         return changes;
     }
 }
