@@ -7,7 +7,9 @@ import ru.evotor.framework.inventory.ProductType
 import java.math.BigDecimal
 
 object ReceiptApi {
-    @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.receipt")
+    const val AUTHORITY = "ru.evotor.receipt"
+    
+    @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
