@@ -23,6 +23,25 @@ object InventoryApi {
     const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
 
     @JvmStatic
+    fun getAllBarcodesForProduct(context: Context, productUuid: String): List<String> {
+        val barcodesList = ArrayList<String>()
+
+        val cursor: Cursor? = context.contentResolver.query(
+                Uri.withAppendedPath(BarcodeTable.URI, productUuid),
+                null, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    val barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
+                    barcodesList.add(barcode)
+                } while (cursor.moveToNext())
+            }
+        }
+
+        return barcodesList
+    }
+
+    @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
         context.contentResolver
                 .query(Uri.withAppendedPath(ProductTable.URI, uuid), null, null, null, null)
