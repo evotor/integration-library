@@ -14,6 +14,7 @@ public class OpenReceiptCommandResult {
     private static final String KEY_ERROR_CODE = "errorCode";
 
     public static final int ERROR_CODE_OK = 0;
+    public static final int ERROR_CODE_RECEIPT_IS_ALREADY_OPEN = -1;
 
     public static OpenReceiptCommandResult create(Bundle bundle) {
         String resultName = bundle.getString(KEY_RESULT);
