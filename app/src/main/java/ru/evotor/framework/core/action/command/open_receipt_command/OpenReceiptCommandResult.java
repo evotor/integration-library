@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.command.edit_positions_command;
+package ru.evotor.framework.core.action.command.open_receipt_command;
 
 import android.os.Bundle;
 
@@ -8,17 +8,18 @@ import ru.evotor.framework.Utils;
  * Created by a.kuznetsov on 26/04/2017.
  */
 
-public class EditPositionsCommandResult {
+public class OpenReceiptCommandResult {
 
     private static final String KEY_RESULT = "result";
     private static final String KEY_ERROR_CODE = "errorCode";
 
     public static final int ERROR_CODE_OK = 0;
+    public static final int ERROR_CODE_RECEIPT_IS_ALREADY_OPEN = -1;
 
-    public static EditPositionsCommandResult create(Bundle bundle) {
+    public static OpenReceiptCommandResult create(Bundle bundle) {
         String resultName = bundle.getString(KEY_RESULT);
 
-        return new EditPositionsCommandResult(
+        return new OpenReceiptCommandResult(
                 Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
                 bundle.getInt(KEY_ERROR_CODE, ERROR_CODE_OK)
         );
@@ -27,7 +28,7 @@ public class EditPositionsCommandResult {
     private final Result result;
     private final int errorCode;
 
-    public EditPositionsCommandResult(
+    public OpenReceiptCommandResult(
             Result result,
             int errorCode
     ) {
