@@ -7,7 +7,9 @@ import ru.evotor.framework.inventory.ProductType
 import java.math.BigDecimal
 
 object ReceiptApi {
-    @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.receipt")
+    const val AUTHORITY = "ru.evotor.receipt"
+    
+    @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -47,4 +49,53 @@ object ReceiptApi {
         return positionsList
     }
 
+    object Description {
+
+        const val PATH_RECEIPT_DESCRIPTION = "information"
+
+        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_DESCRIPTION)
+
+        const val ROW_ID = "_id"
+        const val ROW_UUID = "uuid"
+        const val ROW_DISCOUNT = "discount"
+
+    }
+
+    object Positions {
+
+        const val PATH_RECEIPT_POSITIONS = "positions"
+
+        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
+
+        const val ROW_UUID = "uuid"
+        const val ROW_PRODUCT_UUID = "productUuid"
+        const val ROW_TYPE = "type"
+        const val ROW_CODE = "code"
+        const val ROW_MEASURE_NAME = "measureName"
+        const val ROW_MEASURE_PRECISION = "measurePrecision"
+        const val ROW_PRICE = "price"
+        const val ROW_QUANTITY = "quantity"
+        const val ROW_MARK = "mark"
+        const val ROW_NAME = "name"
+    }
+
+    object Payments {
+
+        const val PATH_RECEIPT_PAYMENTS = "payments"
+
+        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_PAYMENTS)
+
+        const val ROW_ID = "_id"
+        const val ROW_UUID = "uuid"
+        const val ROW_SUM = "sum"
+        const val ROW_TYPE = "type"
+        const val ROW_RRN = "rrn"
+        const val ROW_PIN_PAD_UUID = "pin_pad_uuid"
+
+        object Type {
+            const val TYPE_CASH = 0
+            const val TYPE_CARD = 1
+        }
+
+    }
 }
