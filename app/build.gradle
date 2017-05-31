@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-apply plugin: 'maven-publish'
-
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -26,30 +24,4 @@ dependencies {
 }
 repositories {
     mavenCentral()
-}
-
-
-publishing {
-    publications {
-
-        maven(MavenPublication) {
-            groupId 'ru.evotor'
-            artifactId "integration-library"
-            version "1.0.21-dev"
-            artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
-
-            //generate pom nodes for dependencies
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                configurations.compile.allDependencies.each { dependency ->
-                    if (dependency.group) {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', dependency.group)
-                        dependencyNode.appendNode('artifactId', dependency.name)
-                        dependencyNode.appendNode('version', dependency.version)
-                    }
-                }
-            }
-        }
-    }
 }
