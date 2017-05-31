@@ -4,8 +4,6 @@ import android.os.Bundle;
 
 import java.math.BigDecimal;
 
-import static ru.evotor.framework.calculator.MoneyCalculator.HUNDRED;
-
 public class ReceiptDiscountEvent {
     private static final String TAG = "ReceiptDiscountEvent";
 
