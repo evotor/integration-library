@@ -35,7 +35,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.19-dev"
+            version "1.0.21-dev"
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 
             //generate pom nodes for dependencies
