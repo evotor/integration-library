@@ -5,7 +5,6 @@ import android.os.Bundle;
 import java.math.BigDecimal;
 
 import static ru.evotor.framework.calculator.MoneyCalculator.HUNDRED;
-import static ru.evotor.framework.calculator.MoneyCalculator.MONEY_PRECISION;
 
 public class ReceiptDiscountEvent {
     private static final String TAG = "ReceiptDiscountEvent";
@@ -14,7 +13,7 @@ public class ReceiptDiscountEvent {
     private static final String KEY_DISCOUNT = "discount";
 
     public static ReceiptDiscountEvent create(Bundle bundle) {
-        BigDecimal discount = new BigDecimal(bundle.getLong(KEY_DISCOUNT, 0)).setScale(MONEY_PRECISION).divide(HUNDRED, BigDecimal.ROUND_FLOOR);
+        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT, "0"));
         return new ReceiptDiscountEvent(discount);
     }
 
@@ -26,7 +25,7 @@ public class ReceiptDiscountEvent {
 
     public Bundle toBundle() {
         Bundle result = new Bundle();
-        result.putLong(KEY_DISCOUNT, discount.multiply(HUNDRED).longValue());
+        result.putString(KEY_DISCOUNT, discount.toPlainString());
         return result;
     }
 

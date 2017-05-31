@@ -3,7 +3,7 @@ package ru.evotor.framework.calculator;
 import java.math.BigDecimal;
 
 public abstract class MoneyCalculator {
-    public static final BigDecimal HUNDRED = new BigDecimal("100");
+    private static final BigDecimal HUNDRED = new BigDecimal("100");
     public static final int MONEY_PRECISION = 2;
 
     public static BigDecimal add(BigDecimal value1, BigDecimal value2) {
