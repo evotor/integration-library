@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,14 +23,14 @@ import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAd
  * Created by a.kuznetsov on 26/04/2017.
  */
 
-public class OpenReceiptCommand {
+public class OpenSellReceiptCommand {
 
     public static final String NAME = "evo.v2.receipt.sell.openReceipt";
     private static final String KEY_CHANGES = "changes";
 
-    public static OpenReceiptCommand create(Bundle bundle) {
+    public static OpenSellReceiptCommand create(Bundle bundle) {
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
-        return new OpenReceiptCommand(Utils.filterByClass(
+        return new OpenSellReceiptCommand(Utils.filterByClass(
                 ChangesMapper.INSTANCE.create(changesParcelable),
                 PositionAdd.class
         ));
@@ -37,8 +38,11 @@ public class OpenReceiptCommand {
 
     private final List<PositionAdd> changes;
 
-    public OpenReceiptCommand(List<PositionAdd> changes) {
-        this.changes = changes;
+    public OpenSellReceiptCommand(List<PositionAdd> changes) {
+        this.changes = new ArrayList<>();
+        if (changes != null) {
+            this.changes.addAll(changes);
+        }
     }
 
     public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
@@ -50,7 +54,7 @@ public class OpenReceiptCommand {
             return;
         }
         new IntegrationManagerImpl(context.getApplicationContext())
-                .call(OpenReceiptCommand.NAME,
+                .call(OpenSellReceiptCommand.NAME,
 
                         componentNameList.get(0),
                         this.toBundle(),
