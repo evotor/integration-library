@@ -9,15 +9,12 @@ import ru.evotor.framework.core.action.processor.ActionProcessor;
  */
 
 public abstract class BeforePositionsEditedEventProcessor extends ActionProcessor {
-    public BeforePositionsEditedEventProcessor() {
-        super(BeforePositionsEditedEvent.NAME);
-    }
 
     @Override
-    public void process(Bundle bundle, Callback callback) {
-        call(BeforePositionsEditedEvent.create(bundle), callback);
+    public void process(String action, Bundle bundle, Callback callback) {
+        call(action, new BeforePositionsEditedEvent(bundle), callback);
     }
 
-    public abstract void call(BeforePositionsEditedEvent event, Callback callback);
+    public abstract void call(String action, BeforePositionsEditedEvent event, Callback callback);
 }
 

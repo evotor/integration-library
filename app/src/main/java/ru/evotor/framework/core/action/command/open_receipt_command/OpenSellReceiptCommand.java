@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,7 +39,10 @@ public class OpenSellReceiptCommand {
     private final List<PositionAdd> changes;
 
     public OpenSellReceiptCommand(List<PositionAdd> changes) {
-        this.changes = changes;
+        this.changes = new ArrayList<>();
+        if (changes != null) {
+            this.changes.addAll(changes);
+        }
     }
 
     public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
