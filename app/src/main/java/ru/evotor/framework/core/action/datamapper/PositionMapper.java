@@ -136,6 +136,17 @@ public final class PositionMapper {
         }
         bundle.putParcelableArray(KEY_EXTRA_KEYS, extraKeys);
 
+        List<Position> subPositions = position.getSubPosition();
+        List<Parcelable> subPositionsParcelablesList = subPositions == null ? null : new ArrayList<Parcelable>();
+        Parcelable[] subPositionsParcelables = null;
+        if (subPositions != null) {
+            for (Position subPosition : subPositions) {
+                subPositionsParcelablesList.add(toBundle(subPosition));
+            }
+            subPositionsParcelables = subPositionsParcelablesList.toArray(new Parcelable[]{});
+        }
+        bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
+
         return bundle;
     }
 

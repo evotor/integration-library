@@ -311,6 +311,9 @@ public class Position implements Parcelable {
             return false;
         if (printGroup != null ? !printGroup.equals(position.printGroup) : position.printGroup != null)
             return false;
+        if (subPositions != null ? !subPositions.equals(position.subPositions) : position.subPositions != null) {
+            return false;
+        }
         return (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null);
 
     }
@@ -333,6 +336,7 @@ public class Position implements Parcelable {
         result = 31 * result + (alcoholProductKindCode != null ? alcoholProductKindCode.hashCode() : 0);
         result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
         result = 31 * result + (printGroup != null ? printGroup.hashCode() : 0);
+        result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         return result;
     }
@@ -361,6 +365,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.tareVolume);
         dest.writeParcelable(this.printGroup, flags);
         dest.writeList(new ArrayList<>(this.extraKeys));
+        dest.writeTypedList(this.subPositions);
     }
 
     protected Position(Parcel in) {
@@ -383,7 +388,10 @@ public class Position implements Parcelable {
         this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
         List<ExtraKey> extraKeyList = new ArrayList<>();
         in.readList(extraKeyList, ExtraKey.class.getClassLoader());
-        extraKeys.addAll(extraKeyList);
+        this.extraKeys.addAll(extraKeyList);
+        List<Position> subPositions = new ArrayList<>();
+        in.readTypedList(subPositions, Position.CREATOR);
+        this.subPositions = subPositions;
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -447,6 +455,11 @@ public class Position implements Parcelable {
 
         public Builder setPrintGroup(PrintGroup printGroup) {
             position.printGroup = printGroup;
+            return this;
+        }
+
+        public Builder setSubPositions(List<Position> subPositions) {
+            position.subPositions = subPositions;
             return this;
         }
 
