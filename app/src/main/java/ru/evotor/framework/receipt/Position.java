@@ -478,6 +478,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setBarcode(String barcode) {
+            position.barcode = barcode;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }

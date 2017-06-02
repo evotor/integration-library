@@ -1,13 +1,13 @@
 package ru.evotor.framework.core;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by a.kuznetsov on 15/04/2017.
  */
 
-public abstract class IntegrationActivity extends Activity {
+public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
 
     private IntegrationResponse mIntegrationResponse = null;
     private Bundle mResultBundle = null;
