@@ -15,25 +15,11 @@ import ru.evotor.framework.core.IntegrationResponse;
 
 public abstract class ActionProcessor {
 
-    private String action;
-
-    public ActionProcessor(String action) {
-        if (action == null) {
-            throw new IllegalArgumentException("action can't be null");
-        }
-
-        this.action = action;
+    public void process(String action, IIntegrationManagerResponse response, Bundle bundle) {
+        process(action, bundle, new Callback(response, bundle));
     }
 
-    public void process(IIntegrationManagerResponse response, Bundle bundle) {
-        process(bundle, new Callback(response, bundle));
-    }
-
-    public abstract void process(Bundle bundle, Callback callback);
-
-    public String getAction() {
-        return action;
-    }
+    public abstract void process(String action, Bundle bundle, Callback callback);
 
     public final class Callback {
         private IIntegrationManagerResponse response;
