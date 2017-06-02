@@ -12,6 +12,6 @@ public class BeforePositionsEditedEventActivity extends IntegrationActivity {
     }
 
     public BeforePositionsEditedEvent getEvent() {
-        return BeforePositionsEditedEvent.create(getSourceBundle());
+        return new BeforePositionsEditedEvent(getSourceBundle());
     }
 }

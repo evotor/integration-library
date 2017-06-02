@@ -12,6 +12,7 @@ public class OpenReceiptCommandResult {
 
     private static final String KEY_RESULT = "result";
     private static final String KEY_ERROR_CODE = "errorCode";
+    private static final String KEY_RECEIPT_UUID = "receiptUuid";
 
     public static final int ERROR_CODE_OK = 0;
     public static final int ERROR_CODE_RECEIPT_IS_ALREADY_OPEN = -1;
@@ -21,24 +22,30 @@ public class OpenReceiptCommandResult {
 
         return new OpenReceiptCommandResult(
                 Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
-                bundle.getInt(KEY_ERROR_CODE, ERROR_CODE_OK)
+                bundle.getInt(KEY_ERROR_CODE, ERROR_CODE_OK),
+                bundle.getString(KEY_RECEIPT_UUID)
         );
     }
 
     private final Result result;
     private final int errorCode;
+    private final String receiptUuid;
 
     public OpenReceiptCommandResult(
             Result result,
-            int errorCode
+            int errorCode,
+            String receiptUuid
     ) {
         this.result = result;
         this.errorCode = errorCode;
+        this.receiptUuid = receiptUuid;
     }
 
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_RESULT, result.name());
+        bundle.putInt(KEY_ERROR_CODE, errorCode);
+        bundle.putString(KEY_RECEIPT_UUID, receiptUuid);
         return bundle;
     }
 

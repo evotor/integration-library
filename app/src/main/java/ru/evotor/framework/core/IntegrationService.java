@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ru.evotor.framework.core.action.processor.ActionProcessor;
@@ -20,7 +21,7 @@ public class IntegrationService extends Service {
         public void call(IIntegrationManagerResponse response, String action, Bundle bundle) throws RemoteException {
             ActionProcessor processor = processors.get(action);
             if (processor != null) {
-                processor.process(response, bundle);
+                processor.process(action, response, bundle);
             }
         }
     };
@@ -32,10 +33,10 @@ public class IntegrationService extends Service {
         return binder.asBinder();
     }
 
-    protected final void registerProcessor(ActionProcessor processor) {
-        if (processor == null) {
-            throw new IllegalArgumentException("processor can't be null");
-        }
-        processors.put(processor.getAction(), processor);
+    protected final void registerProcessor(String action, ActionProcessor processor) {
+        Objects.requireNonNull(action);
+        Objects.requireNonNull(processor);
+
+        processors.put(action, processor);
     }
 }
