@@ -9,9 +9,8 @@ import ru.evotor.framework.receipt.Position;
  */
 
 public class PositionEditedEvent extends PositionEvent {
-    public static final String BROADCAST_ACTION = "evotor.intent.action.receipt.sell.POSITION_EDITED";
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.POSITION_EDITED";
-    public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.POSITION_ADDED";
+    public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.POSITION_EDITED";
 
     public PositionEditedEvent(Bundle extras) {
         super(extras);
