@@ -206,6 +206,21 @@ public class Position implements Parcelable {
                 discountDocumentPositionSum);
     }
 
+    /**
+     * Возвращает сумму без учета скидки на чек с учётом всех подпозиций.
+     *
+     * @return сумма без учета скидки на чек с учётом всех подпозиций.
+     */
+    public BigDecimal getTotalWithSubPositionsAndWithoutDocumentDiscount() {
+        BigDecimal sum = getTotalWithoutDocumentDiscount();
+        if (getSubPosition() != null) {
+            for (Position subPosition : getSubPosition()) {
+                sum = sum.add(subPosition.getTotalWithoutDocumentDiscount());
+            }
+        }
+        return sum;
+    }
+
     public String getUuid() {
         return uuid;
     }
