@@ -86,6 +86,10 @@ public class Position implements Parcelable {
      * Экстра ключи
      */
     private Set<ExtraKey> extraKeys = new HashSet<>();
+    /*
+     * Подпозиции (модификаторы)
+     */
+    private List<Position> subPositions = new ArrayList<>();
 
     public Position(
             String uuid,
@@ -104,7 +108,8 @@ public class Position implements Parcelable {
             Long alcoholProductKindCode,
             BigDecimal tareVolume,
             PrintGroup printGroup,
-            Set<ExtraKey> extraKeys
+            Set<ExtraKey> extraKeys,
+            List<Position> subPositions
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -125,6 +130,7 @@ public class Position implements Parcelable {
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
+        this.subPositions = subPositions;
     }
 
     public Position(Position position) {
@@ -145,7 +151,8 @@ public class Position implements Parcelable {
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
                 position.getPrintGroup(),
-                position.getExtraKeys()
+                position.getExtraKeys(),
+                position.getSubPosition()
         );
     }
 
@@ -265,6 +272,10 @@ public class Position implements Parcelable {
 
     public Set<ExtraKey> getExtraKeys() {
         return extraKeys;
+    }
+
+    public List<Position> getSubPosition() {
+        return subPositions;
     }
 
     @Override
