@@ -86,6 +86,10 @@ public class Position implements Parcelable {
      * Экстра ключи
      */
     private Set<ExtraKey> extraKeys = new HashSet<>();
+    /*
+     * Подпозиции (модификаторы)
+     */
+    private List<Position> subPositions = new ArrayList<>();
 
     public Position(
             String uuid,
@@ -104,7 +108,8 @@ public class Position implements Parcelable {
             Long alcoholProductKindCode,
             BigDecimal tareVolume,
             PrintGroup printGroup,
-            Set<ExtraKey> extraKeys
+            Set<ExtraKey> extraKeys,
+            List<Position> subPositions
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -125,6 +130,7 @@ public class Position implements Parcelable {
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
+        this.subPositions = subPositions;
     }
 
     public Position(Position position) {
@@ -145,7 +151,8 @@ public class Position implements Parcelable {
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
                 position.getPrintGroup(),
-                position.getExtraKeys()
+                position.getExtraKeys(),
+                position.getSubPosition()
         );
     }
 
@@ -197,6 +204,21 @@ public class Position implements Parcelable {
     public BigDecimal getTotal(BigDecimal discountDocumentPositionSum) {
         return MoneyCalculator.subtract(MoneyCalculator.multiply(priceWithDiscountPosition, quantity),
                 discountDocumentPositionSum);
+    }
+
+    /**
+     * Возвращает сумму без учета скидки на чек с учётом всех подпозиций.
+     *
+     * @return сумма без учета скидки на чек с учётом всех подпозиций.
+     */
+    public BigDecimal getTotalWithSubPositionsAndWithoutDocumentDiscount() {
+        BigDecimal sum = getTotalWithoutDocumentDiscount();
+        if (getSubPosition() != null) {
+            for (Position subPosition : getSubPosition()) {
+                sum = sum.add(subPosition.getTotalWithoutDocumentDiscount());
+            }
+        }
+        return sum;
     }
 
     public String getUuid() {
@@ -267,6 +289,10 @@ public class Position implements Parcelable {
         return extraKeys;
     }
 
+    public List<Position> getSubPosition() {
+        return subPositions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -300,6 +326,9 @@ public class Position implements Parcelable {
             return false;
         if (printGroup != null ? !printGroup.equals(position.printGroup) : position.printGroup != null)
             return false;
+        if (subPositions != null ? !subPositions.equals(position.subPositions) : position.subPositions != null) {
+            return false;
+        }
         return (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null);
 
     }
@@ -322,6 +351,7 @@ public class Position implements Parcelable {
         result = 31 * result + (alcoholProductKindCode != null ? alcoholProductKindCode.hashCode() : 0);
         result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
         result = 31 * result + (printGroup != null ? printGroup.hashCode() : 0);
+        result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         return result;
     }
@@ -350,6 +380,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.tareVolume);
         dest.writeParcelable(this.printGroup, flags);
         dest.writeList(new ArrayList<>(this.extraKeys));
+        dest.writeTypedList(this.subPositions);
     }
 
     protected Position(Parcel in) {
@@ -372,7 +403,10 @@ public class Position implements Parcelable {
         this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
         List<ExtraKey> extraKeyList = new ArrayList<>();
         in.readList(extraKeyList, ExtraKey.class.getClassLoader());
-        extraKeys.addAll(extraKeyList);
+        this.extraKeys.addAll(extraKeyList);
+        List<Position> subPositions = new ArrayList<>();
+        in.readTypedList(subPositions, Position.CREATOR);
+        this.subPositions = subPositions;
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -436,6 +470,11 @@ public class Position implements Parcelable {
 
         public Builder setPrintGroup(PrintGroup printGroup) {
             position.printGroup = printGroup;
+            return this;
+        }
+
+        public Builder setSubPositions(List<Position> subPositions) {
+            position.subPositions = subPositions;
             return this;
         }
 

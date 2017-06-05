@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
@@ -37,6 +39,7 @@ public final class PositionMapper {
     private static final String KEY_TARE_VOLUME = "tareVolume";
     private static final String KEY_PRINT_GROUP = "printGroup";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
+    private static final String KEY_SUB_POSITION = "subPosition";
 
     public static Position from(Bundle bundle) {
         if (bundle == null) {
@@ -66,6 +69,16 @@ public final class PositionMapper {
             }
         }
 
+        List<Position> subPositions = new ArrayList<>();
+        Parcelable[] parcelablesSubPositions = bundle.getParcelableArray(KEY_SUB_POSITION);
+        if (parcelablesSubPositions != null) {
+            for (Parcelable parcelable : parcelablesSubPositions) {
+                if (parcelable instanceof Bundle) {
+                    subPositions.add(from((Bundle) parcelable));
+                }
+            }
+        }
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -90,7 +103,8 @@ public final class PositionMapper {
                 alcoholProductKindCode == null ? null : Long.valueOf(alcoholProductKindCode),
                 tareVolume == null ? null : new BigDecimal(tareVolume),
                 PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP)),
-                extraKeys
+                extraKeys,
+                subPositions
         );
     }
 
@@ -121,6 +135,17 @@ public final class PositionMapper {
             extraKeys[i] = ExtraKeyMapper.toBundle(it.next());
         }
         bundle.putParcelableArray(KEY_EXTRA_KEYS, extraKeys);
+
+        List<Position> subPositions = position.getSubPosition();
+        List<Parcelable> subPositionsParcelablesList = subPositions == null ? null : new ArrayList<Parcelable>();
+        Parcelable[] subPositionsParcelables = null;
+        if (subPositions != null) {
+            for (Position subPosition : subPositions) {
+                subPositionsParcelablesList.add(toBundle(subPosition));
+            }
+            subPositionsParcelables = subPositionsParcelablesList.toArray(new Parcelable[]{});
+        }
+        bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         return bundle;
     }
