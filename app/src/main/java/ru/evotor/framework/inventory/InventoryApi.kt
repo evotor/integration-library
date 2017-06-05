@@ -31,11 +31,9 @@ object InventoryApi {
                 null, null, null, null)
         if (cursor != null) {
             try {
-                if (cursor.moveToFirst()) {
-                    do {
-                        val barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
-                        barcodesList.add(barcode)
-                    } while (cursor.moveToNext())
+                while (cursor.moveToNext()) {
+                    val barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
+                    barcodesList.add(barcode)
                 }
             } finally {
                 cursor.close()
