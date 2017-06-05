@@ -30,11 +30,15 @@ object InventoryApi {
                 Uri.withAppendedPath(BarcodeTable.URI, productUuid),
                 null, null, null, null)
         if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    val barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
-                    barcodesList.add(barcode)
-                } while (cursor.moveToNext())
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+                        val barcode: String = cursor.getString(cursor.getColumnIndex(BarcodeTable.ROW_BARCODE))
+                        barcodesList.add(barcode)
+                    } while (cursor.moveToNext())
+                }
+            } finally {
+                cursor.close()
             }
         }
 
