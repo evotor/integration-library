@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.calculator.MoneyCalculator;
+import ru.evotor.framework.calculator.QuantityCalculator;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
@@ -94,9 +96,9 @@ public final class PositionMapper {
                 name,
                 measureName,
                 measurePrecision,
-                new BigDecimal(price),
-                new BigDecimal(priceWithDiscountPosition),
-                new BigDecimal(quantity),
+                MoneyCalculator.round(new BigDecimal(price)),
+                MoneyCalculator.round(new BigDecimal(priceWithDiscountPosition)),
+                QuantityCalculator.round(new BigDecimal(quantity)),
                 barcode,
                 mark,
                 alcoholByVolume == null ? null : new BigDecimal(alcoholByVolume),

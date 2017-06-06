@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
 public class ReceiptDiscountEventResult {
@@ -18,7 +19,7 @@ public class ReceiptDiscountEventResult {
 
     public static ReceiptDiscountEventResult create(Bundle bundle) {
         String resultName = bundle.getString(KEY_RESULT);
-        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT, "0"));
+        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
         return new ReceiptDiscountEventResult(
                 Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
                 discount,
