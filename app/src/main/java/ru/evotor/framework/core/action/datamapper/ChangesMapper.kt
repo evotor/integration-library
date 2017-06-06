@@ -3,17 +3,13 @@ package ru.evotor.framework.core.action.datamapper
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import ru.evotor.framework.Utils.safeValueOf
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.core.action.event.receipt.changes.UnknownChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
+import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
 import ru.evotor.framework.safeValueOf
-
-/**
- * Created by a.kuznetsov on 23/05/2017.
- */
 
 object ChangesMapper {
     private const val TAG = "ChangesMapper"
@@ -76,6 +72,7 @@ object ChangesMapper {
             IChange.Type.POSITION_REMOVE -> PositionRemove.from(bundle)
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
             IChange.Type.POSITION_EDIT -> PositionEdit.from(bundle)
+            IChange.Type.SET_EXTRA -> SetExtra.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }

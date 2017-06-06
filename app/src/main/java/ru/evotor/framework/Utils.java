@@ -2,6 +2,7 @@ package ru.evotor.framework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by a.kuznetsov on 30/04/2017.
@@ -9,8 +10,9 @@ import java.util.List;
 
 public final class Utils {
     public static <T extends Enum<T>> T safeValueOf(Class<T> clazz, String name, T defaultValue) {
-        if (name == null || clazz == null) {
-            return null;
+        Objects.requireNonNull(clazz);
+        if (name == null) {
+            return defaultValue;
         }
 
         try {

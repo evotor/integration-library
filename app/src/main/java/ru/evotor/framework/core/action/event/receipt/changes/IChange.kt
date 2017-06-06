@@ -13,6 +13,7 @@ interface IChange {
         POSITION_ADD,
         POSITION_REMOVE,
         POSITION_EDIT,
+        SET_EXTRA,
         UNKNOWN
     }
 }
