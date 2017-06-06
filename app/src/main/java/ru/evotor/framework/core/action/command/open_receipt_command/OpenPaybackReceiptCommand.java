@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
+import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
 /**
  * Created by a.kuznetsov on 26/04/2017.
@@ -27,22 +30,31 @@ public class OpenPaybackReceiptCommand {
 
     public static final String NAME = "evo.v2.receipt.payback.openReceipt";
     private static final String KEY_CHANGES = "changes";
+    private static final String KEY_RECEIPT_EXTRA = "extra";
 
     public static OpenPaybackReceiptCommand create(Bundle bundle) {
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
-        return new OpenPaybackReceiptCommand(Utils.filterByClass(
-                ChangesMapper.INSTANCE.create(changesParcelable),
-                PositionAdd.class
-        ));
+        return new OpenPaybackReceiptCommand(
+                Utils.filterByClass(
+                        ChangesMapper.INSTANCE.create(changesParcelable),
+                        PositionAdd.class
+                ),
+                SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+        );
     }
 
+    @NonNull
     private final List<PositionAdd> changes;
+    @Nullable
+    private final SetExtra extra;
 
-    public OpenPaybackReceiptCommand(List<PositionAdd> changes) {
+
+    public OpenPaybackReceiptCommand(@Nullable List<PositionAdd> changes, @Nullable SetExtra extraChange) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
         }
+        this.extra = extraChange;
     }
 
     public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
@@ -72,10 +84,17 @@ public class OpenPaybackReceiptCommand {
             changesParcelable[i] = ChangesMapper.INSTANCE.toBundle(change);
         }
         bundle.putParcelableArray(KEY_CHANGES, changesParcelable);
+        bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
         return bundle;
     }
 
+    @NonNull
     public List<PositionAdd> getChanges() {
         return changes;
+    }
+
+    @Nullable
+    public SetExtra getExtra() {
+        return extra;
     }
 }

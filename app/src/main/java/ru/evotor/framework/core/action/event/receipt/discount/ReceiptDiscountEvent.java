@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import java.math.BigDecimal;
 
+import ru.evotor.framework.calculator.MoneyCalculator;
+
 public class ReceiptDiscountEvent {
     private static final String TAG = "ReceiptDiscountEvent";
 
@@ -15,7 +17,7 @@ public class ReceiptDiscountEvent {
 
     public static ReceiptDiscountEvent create(Bundle bundle) {
         String receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null);
-        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT, "0"));
+        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
         return new ReceiptDiscountEvent(receiptUuid, discount);
     }
 

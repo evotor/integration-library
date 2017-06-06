@@ -5,6 +5,7 @@ import android.os.Bundle;
 import java.math.BigDecimal;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.receipt.Tax;
 import ru.evotor.framework.receipt.TaxNumber;
 
@@ -27,7 +28,7 @@ public final class TaxMapper {
         return new Tax(
                 Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT),
                 new BigDecimal(taxRatePercent),
-                new BigDecimal(value)
+                MoneyCalculator.round(new BigDecimal(value))
         );
     }
 
