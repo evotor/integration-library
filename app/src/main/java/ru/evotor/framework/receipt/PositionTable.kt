@@ -4,6 +4,8 @@ import android.net.Uri
 
 object PositionTable {
     @JvmField val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "Position")
+    const val ROW_POSITION_UUID = "POSITION_UUID"
+    const val ROW_PARENT_POSITION_UUID = "PARENT_POSITION_UUID"
     const val ROW_PRODUCT_UUID = "PRODUCT_UUID"
     const val ROW_PRODUCT_CODE = "PRODUCT_CODE"
     const val ROW_PRODUCT_TYPE = "PRODUCT_TYPE"
