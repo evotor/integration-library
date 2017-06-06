@@ -2,22 +2,24 @@ package ru.evotor.framework.core.action.event.receipt.before_positions_edited;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
+import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
-/**
- * Created by a.kuznetsov on 26/04/2017.
- */
 public class BeforePositionsEditedEventResult {
 
     private static final String KEY_RESULT = "result";
     private static final String KEY_CHANGES = "changes";
+    private static final String KEY_RECEIPT_EXTRA = "extra";
 
     public static BeforePositionsEditedEventResult create(Bundle bundle) {
         String resultName = bundle.getString(KEY_RESULT);
@@ -31,16 +33,31 @@ public class BeforePositionsEditedEventResult {
         }
         return new BeforePositionsEditedEventResult(
                 Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
-                positionChanges
+                positionChanges,
+                SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
         );
     }
 
+    @NonNull
     private final Result result;
+    @NonNull
     private final List<IPositionChange> changes;
+    @Nullable
+    private final SetExtra extra;
 
-    public BeforePositionsEditedEventResult(Result result, List<IPositionChange> changes) {
+    public BeforePositionsEditedEventResult(
+            @NonNull Result result,
+            @Nullable List<IPositionChange> changes,
+            @Nullable SetExtra extra
+    ) {
+        Objects.requireNonNull(result);
+
         this.result = result;
-        this.changes = changes;
+        this.changes = new ArrayList<>();
+        if (changes != null) {
+            this.changes.addAll(changes);
+        }
+        this.extra = extra;
     }
 
     public Bundle toBundle() {
@@ -52,15 +69,23 @@ public class BeforePositionsEditedEventResult {
             changesParcelable[i] = ChangesMapper.INSTANCE.toBundle(change);
         }
         bundle.putParcelableArray(KEY_CHANGES, changesParcelable);
+        bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
         return bundle;
     }
 
+    @NonNull
     public Result getResult() {
         return result;
     }
 
+    @NonNull
     public List<IPositionChange> getChanges() {
         return changes;
+    }
+
+    @Nullable
+    public SetExtra getExtra() {
+        return extra;
     }
 
     public enum Result {
