@@ -28,7 +28,11 @@ public class OpenSellReceiptCommand {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static OpenSellReceiptCommand create(Bundle bundle) {
+    @Nullable
+    public static OpenSellReceiptCommand create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         return new OpenSellReceiptCommand(
                 Utils.filterByClass(

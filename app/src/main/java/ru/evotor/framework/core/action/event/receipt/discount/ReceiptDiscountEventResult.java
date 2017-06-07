@@ -17,7 +17,11 @@ public class ReceiptDiscountEventResult {
     private static final String KEY_DISCOUNT = "discount";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static ReceiptDiscountEventResult create(Bundle bundle) {
+    @Nullable
+    public static ReceiptDiscountEventResult create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String resultName = bundle.getString(KEY_RESULT);
         BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
         return new ReceiptDiscountEventResult(

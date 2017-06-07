@@ -2,6 +2,7 @@ package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,10 +17,6 @@ import ru.evotor.framework.calculator.QuantityCalculator;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
-
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
 
 public final class PositionMapper {
     public static final String KEY_POSITION = "position";
@@ -43,7 +40,8 @@ public final class PositionMapper {
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
 
-    public static Position from(Bundle bundle) {
+    @Nullable
+    public static Position from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }

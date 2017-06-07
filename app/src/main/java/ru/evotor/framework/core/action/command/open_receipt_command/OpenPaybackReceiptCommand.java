@@ -32,7 +32,12 @@ public class OpenPaybackReceiptCommand {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static OpenPaybackReceiptCommand create(Bundle bundle) {
+    @Nullable
+    public static OpenPaybackReceiptCommand create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         return new OpenPaybackReceiptCommand(
                 Utils.filterByClass(

@@ -10,10 +10,6 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
-
 public class BeforePositionsEditedEvent {
     private static final String TAG = "PositionsEditedEvent";
 
