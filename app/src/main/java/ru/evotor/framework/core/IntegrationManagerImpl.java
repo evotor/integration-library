@@ -136,6 +136,9 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 return;
             }
             service.call(response, mAction, mData);
+            if (!isDone()) {
+                response.skip();
+            }
         }
 
         private IIntegrationManager getService(ComponentName componentName) {

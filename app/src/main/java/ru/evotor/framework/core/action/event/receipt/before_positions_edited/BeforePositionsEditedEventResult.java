@@ -21,7 +21,11 @@ public class BeforePositionsEditedEventResult {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static BeforePositionsEditedEventResult create(Bundle bundle) {
+    @Nullable
+    public static BeforePositionsEditedEventResult create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String resultName = bundle.getString(KEY_RESULT);
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         List<IChange> changes = ChangesMapper.INSTANCE.create(changesParcelable);
