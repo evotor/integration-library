@@ -1,6 +1,8 @@
 package ru.evotor.framework.core.action.event.cash_operations;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
@@ -9,19 +11,29 @@ public class CashOutEvent extends CashOperationEvent {
 
     private static final String KEY_TOTAL = "total";
 
+    @Nullable
     private final BigDecimal total;
 
+    @Nullable
     public BigDecimal getTotal() {
         return total;
     }
 
-    public CashOutEvent(Bundle extras) {
+    public CashOutEvent(@Nullable String documentUuid, @Nullable BigDecimal total) {
+        super(documentUuid);
+        this.total = total;
+    }
+
+    private CashOutEvent(@NonNull Bundle extras) {
         super(extras);
         this.total = new BigDecimal(extras.getString(KEY_TOTAL, "0"));
     }
 
-    public CashOutEvent(String documentUuid, BigDecimal total) {
-        super(documentUuid);
-        this.total = total;
+    @Nullable
+    public static CashOutEvent create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+        return new CashOutEvent(bundle);
     }
 }
