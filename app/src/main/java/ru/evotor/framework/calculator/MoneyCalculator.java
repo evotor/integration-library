@@ -1,6 +1,9 @@
 package ru.evotor.framework.calculator;
 
+import android.support.annotation.NonNull;
+
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class MoneyCalculator {
     private static final BigDecimal HUNDRED = new BigDecimal("100");
@@ -29,5 +32,11 @@ public abstract class MoneyCalculator {
     public static BigDecimal toBigDecimal(double value) {
         BigDecimal bigDecimalValue = new BigDecimal(value);
         return bigDecimalValue.setScale(MONEY_PRECISION, BigDecimal.ROUND_HALF_UP);
+    }
+
+    @NonNull
+    public static BigDecimal round(@NonNull BigDecimal value) {
+        Objects.requireNonNull(value);
+        return value.setScale(MONEY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 }

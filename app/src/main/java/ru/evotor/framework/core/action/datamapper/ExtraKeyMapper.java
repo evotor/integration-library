@@ -1,19 +1,17 @@
 package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import ru.evotor.framework.receipt.ExtraKey;
-
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
 
 public final class ExtraKeyMapper {
     private static final String KEY_IDENTITY = "identity";
     private static final String KEY_APP_ID = "appId";
     private static final String KEY_DESCRIPTION = "description";
 
-    public static ExtraKey from(Bundle bundle) {
+    @Nullable
+    public static ExtraKey from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }

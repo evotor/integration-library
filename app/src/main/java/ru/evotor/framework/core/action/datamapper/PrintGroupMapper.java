@@ -1,14 +1,11 @@
 package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.PrintGroup;
 import ru.evotor.framework.receipt.TaxationSystem;
-
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
 
 public final class PrintGroupMapper {
     private static final String KEY_IDENTIFIER = "identifier";
@@ -18,7 +15,8 @@ public final class PrintGroupMapper {
     private static final String KEY_ORG_ADDRESS = "orgAddress";
     private static final String KEY_TAXATION_SYSTEM = "taxationSystem";
 
-    public static PrintGroup from(Bundle bundle) {
+    @Nullable
+    public static PrintGroup from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }

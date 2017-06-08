@@ -1,6 +1,9 @@
 package ru.evotor.framework.calculator;
 
+import android.support.annotation.NonNull;
+
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class QuantityCalculator {
 
@@ -20,5 +23,11 @@ public abstract class QuantityCalculator {
 
     public static BigDecimal multiply(BigDecimal quantity, BigDecimal multiplicand) {
         return quantity.multiply(multiplicand).setScale(QUANTITY_PRECISION, BigDecimal.ROUND_HALF_UP);
+    }
+
+    @NonNull
+    public static BigDecimal round(@NonNull BigDecimal value) {
+        Objects.requireNonNull(value);
+        return value.setScale(QUANTITY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 }

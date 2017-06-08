@@ -1,8 +1,11 @@
 package ru.evotor.framework.core.action.event.receipt.discount;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
+
+import ru.evotor.framework.calculator.MoneyCalculator;
 
 public class ReceiptDiscountEvent {
     private static final String TAG = "ReceiptDiscountEvent";
@@ -13,9 +16,13 @@ public class ReceiptDiscountEvent {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_DISCOUNT = "discount";
 
-    public static ReceiptDiscountEvent create(Bundle bundle) {
+    @Nullable
+    public static ReceiptDiscountEvent create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null);
-        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT, "0"));
+        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
         return new ReceiptDiscountEvent(receiptUuid, discount);
     }
 
