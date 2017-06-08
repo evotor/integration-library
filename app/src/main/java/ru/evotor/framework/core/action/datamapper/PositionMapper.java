@@ -2,20 +2,21 @@ package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.calculator.MoneyCalculator;
+import ru.evotor.framework.calculator.QuantityCalculator;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
-
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
 
 public final class PositionMapper {
     public static final String KEY_POSITION = "position";
@@ -37,8 +38,10 @@ public final class PositionMapper {
     private static final String KEY_TARE_VOLUME = "tareVolume";
     private static final String KEY_PRINT_GROUP = "printGroup";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
+    private static final String KEY_SUB_POSITION = "subPosition";
 
-    public static Position from(Bundle bundle) {
+    @Nullable
+    public static Position from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
@@ -48,7 +51,7 @@ public final class PositionMapper {
         ProductType productType = Utils.safeValueOf(ProductType.class, bundle.getString(KEY_PRODUCT_TYPE), ProductType.NORMAL);
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
-        int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION);
+        int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
         String price = bundle.getString(KEY_PRICE);
         String priceWithDiscountPosition = bundle.getString(KEY_PRICE_WITH_DISCOUNT_POSITION);
         String quantity = bundle.getString(KEY_QUANTITY);
@@ -63,6 +66,16 @@ public final class PositionMapper {
         if (extraKeysParcelable != null) {
             for (Parcelable extraKey : extraKeysParcelable) {
                 extraKeys.add(ExtraKeyMapper.from((Bundle) extraKey));
+            }
+        }
+
+        List<Position> subPositions = new ArrayList<>();
+        Parcelable[] parcelablesSubPositions = bundle.getParcelableArray(KEY_SUB_POSITION);
+        if (parcelablesSubPositions != null) {
+            for (Parcelable parcelable : parcelablesSubPositions) {
+                if (parcelable instanceof Bundle) {
+                    subPositions.add(from((Bundle) parcelable));
+                }
             }
         }
 
@@ -81,16 +94,17 @@ public final class PositionMapper {
                 name,
                 measureName,
                 measurePrecision,
-                new BigDecimal(price),
-                new BigDecimal(priceWithDiscountPosition),
-                new BigDecimal(quantity),
+                MoneyCalculator.round(new BigDecimal(price)),
+                MoneyCalculator.round(new BigDecimal(priceWithDiscountPosition)),
+                QuantityCalculator.round(new BigDecimal(quantity)),
                 barcode,
                 mark,
                 alcoholByVolume == null ? null : new BigDecimal(alcoholByVolume),
                 alcoholProductKindCode == null ? null : Long.valueOf(alcoholProductKindCode),
                 tareVolume == null ? null : new BigDecimal(tareVolume),
                 PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP)),
-                extraKeys
+                extraKeys,
+                subPositions
         );
     }
 
@@ -121,6 +135,17 @@ public final class PositionMapper {
             extraKeys[i] = ExtraKeyMapper.toBundle(it.next());
         }
         bundle.putParcelableArray(KEY_EXTRA_KEYS, extraKeys);
+
+        List<Position> subPositions = position.getSubPosition();
+        List<Parcelable> subPositionsParcelablesList = subPositions == null ? null : new ArrayList<Parcelable>();
+        Parcelable[] subPositionsParcelables = null;
+        if (subPositions != null) {
+            for (Position subPosition : subPositions) {
+                subPositionsParcelablesList.add(toBundle(subPosition));
+            }
+            subPositionsParcelables = subPositionsParcelablesList.toArray(new Parcelable[]{});
+        }
+        bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         return bundle;
     }

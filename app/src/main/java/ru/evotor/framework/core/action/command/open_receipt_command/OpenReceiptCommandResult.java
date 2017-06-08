@@ -1,6 +1,7 @@
 package ru.evotor.framework.core.action.command.open_receipt_command;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import ru.evotor.framework.Utils;
 
@@ -17,7 +18,11 @@ public class OpenReceiptCommandResult {
     public static final int ERROR_CODE_OK = 0;
     public static final int ERROR_CODE_RECEIPT_IS_ALREADY_OPEN = -1;
 
-    public static OpenReceiptCommandResult create(Bundle bundle) {
+    @Nullable
+    public static OpenReceiptCommandResult create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         String resultName = bundle.getString(KEY_RESULT);
 
         return new OpenReceiptCommandResult(

@@ -1,23 +1,22 @@
 package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.receipt.Tax;
 import ru.evotor.framework.receipt.TaxNumber;
-
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
 
 public final class TaxMapper {
     private static final String KEY_TAX_NUMBER = "taxNumber";
     private static final String KEY_TAX_RATE_PERCENT = "taxRatePercent";
     private static final String KEY_VALUE = "value";
 
-    public static Tax from(Bundle bundle) {
+    @Nullable
+    public static Tax from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
@@ -27,7 +26,7 @@ public final class TaxMapper {
         return new Tax(
                 Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT),
                 new BigDecimal(taxRatePercent),
-                new BigDecimal(value)
+                MoneyCalculator.round(new BigDecimal(value))
         );
     }
 

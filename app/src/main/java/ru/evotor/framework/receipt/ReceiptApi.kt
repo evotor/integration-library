@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 object ReceiptApi {
     const val AUTHORITY = "ru.evotor.receipt"
-    
+
     @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
     @JvmStatic
@@ -20,10 +20,10 @@ object ReceiptApi {
                 null, null, null, null)
 
         if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
+            try {
+                while (cursor.moveToNext()) {
                     val position: Position = Position(
-                            null,
+                            cursor.getString(cursor.getColumnIndex(PositionTable.ROW_POSITION_UUID)),
                             cursor.getString(cursor.getColumnIndex(PositionTable.ROW_PRODUCT_UUID)),
                             cursor.getString(cursor.getColumnIndex(PositionTable.ROW_PRODUCT_CODE)),
                             ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.ROW_PRODUCT_TYPE))),
@@ -39,10 +39,13 @@ object ReceiptApi {
                             cursor.getLong(cursor.getColumnIndex(PositionTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                             BigDecimal(cursor.getString(cursor.getColumnIndex(PositionTable.ROW_TARE_VOLUME))).divide(BigDecimal(1000)),
                             null,
+                            null,
                             null
                     )
                     positionsList.add(position)
-                } while (cursor.moveToNext())
+                }
+            } finally {
+                cursor.close()
             }
         }
 

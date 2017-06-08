@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +17,7 @@ import ru.evotor.framework.core.action.processor.ActionProcessor;
 /**
  * Created by a.kuznetsov on 19/04/2017.
  */
-public class IntegrationService extends Service {
+public abstract class IntegrationService extends Service {
 
     private final IIntegrationManager.Stub binder = new IIntegrationManager.Stub() {
         @Override
@@ -39,4 +42,23 @@ public class IntegrationService extends Service {
 
         processors.put(action, processor);
     }
+
+    @Override
+    @CallSuper
+    public void onCreate() {
+        super.onCreate();
+
+        Map<String, ActionProcessor> processorMap = createProcessors();
+        if (processorMap != null) {
+            for (Map.Entry<String, ActionProcessor> entry : processorMap.entrySet()) {
+                if (entry.getKey() != null && entry.getValue() != null) {
+                    registerProcessor(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+
+    }
+
+    @Nullable
+    protected abstract Map<String, ActionProcessor> createProcessors();
 }
