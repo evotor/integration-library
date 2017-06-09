@@ -267,10 +267,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
 
             @Override
-            public void onError(int code, String message) {
+            public void onError(int code, String message, Bundle data) {
                 Log.e(TAG, "onError(code = " + code + ", message = " + message + ")");
 
-                set(new Result(new Error(code, message)));
+                set(new Result(new Error(code, message, data)));
             }
 
             void skip() {

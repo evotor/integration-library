@@ -17,7 +17,6 @@ import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
 public class BeforePositionsEditedEventResult {
 
-    private static final String KEY_RESULT = "result";
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
@@ -26,7 +25,6 @@ public class BeforePositionsEditedEventResult {
         if (bundle == null) {
             return null;
         }
-        String resultName = bundle.getString(KEY_RESULT);
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         List<IChange> changes = ChangesMapper.INSTANCE.create(changesParcelable);
         List<IPositionChange> positionChanges = new ArrayList<>();
@@ -36,27 +34,20 @@ public class BeforePositionsEditedEventResult {
             }
         }
         return new BeforePositionsEditedEventResult(
-                Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
                 positionChanges,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
         );
     }
 
     @NonNull
-    private final Result result;
-    @NonNull
     private final List<IPositionChange> changes;
     @Nullable
     private final SetExtra extra;
 
     public BeforePositionsEditedEventResult(
-            @NonNull Result result,
             @Nullable List<IPositionChange> changes,
             @Nullable SetExtra extra
     ) {
-        Objects.requireNonNull(result);
-
-        this.result = result;
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
@@ -66,7 +57,6 @@ public class BeforePositionsEditedEventResult {
 
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_RESULT, result.name());
         Parcelable[] changesParcelable = new Parcelable[changes.size()];
         for (int i = 0; i < changesParcelable.length; i++) {
             IChange change = changes.get(i);
@@ -78,11 +68,6 @@ public class BeforePositionsEditedEventResult {
     }
 
     @NonNull
-    public Result getResult() {
-        return result;
-    }
-
-    @NonNull
     public List<IPositionChange> getChanges() {
         return changes;
     }
@@ -90,10 +75,5 @@ public class BeforePositionsEditedEventResult {
     @Nullable
     public SetExtra getExtra() {
         return extra;
-    }
-
-    public enum Result {
-        OK,
-        UNKNOWN;
     }
 }

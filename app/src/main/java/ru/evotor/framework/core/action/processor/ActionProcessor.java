@@ -47,7 +47,11 @@ public abstract class ActionProcessor {
         }
 
         public final void onError(int errorCode, String errorMessage) throws RemoteException {
-            response.onError(errorCode, errorMessage);
+            onError(errorCode, errorMessage, null);
+        }
+
+        public final void onError(int errorCode, String errorMessage, Bundle data) throws RemoteException {
+            response.onError(errorCode, errorMessage, data);
         }
 
         public final void skip() throws RemoteException {

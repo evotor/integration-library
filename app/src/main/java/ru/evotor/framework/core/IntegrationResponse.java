@@ -63,11 +63,15 @@ public class IntegrationResponse implements Parcelable {
     }
 
     public void onError(int errorCode, String errorMessage) {
+        onError(errorCode, errorMessage, null);
+    }
+
+    public void onError(int errorCode, String errorMessage, Bundle data) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "IntegrationResponse.onError: " + errorCode + ", " + errorMessage);
         }
         try {
-            mIntegrationManagerResponse.onError(errorCode, errorMessage);
+            mIntegrationManagerResponse.onError(errorCode, errorMessage, data);
         } catch (RemoteException e) {
             // this should never happen
         }
