@@ -22,17 +22,18 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
-/**
- * Created by a.kuznetsov on 26/04/2017.
- */
-
 public class OpenPaybackReceiptCommand {
 
     public static final String NAME = "evo.v2.receipt.payback.openReceipt";
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static OpenPaybackReceiptCommand create(Bundle bundle) {
+    @Nullable
+    public static OpenPaybackReceiptCommand create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         return new OpenPaybackReceiptCommand(
                 Utils.filterByClass(
@@ -57,7 +58,7 @@ public class OpenPaybackReceiptCommand {
         this.extra = extraChange;
     }
 
-    public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
+    public void process(@NonNull final Context context, @NonNull final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
         Objects.requireNonNull(activityStarter);
         Objects.requireNonNull(context);
 
@@ -76,6 +77,7 @@ public class OpenPaybackReceiptCommand {
                 );
     }
 
+    @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         Parcelable[] changesParcelable = new Parcelable[changes.size()];

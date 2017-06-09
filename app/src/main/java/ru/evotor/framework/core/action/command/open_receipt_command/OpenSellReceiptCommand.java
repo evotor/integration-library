@@ -28,7 +28,11 @@ public class OpenSellReceiptCommand {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
 
-    public static OpenSellReceiptCommand create(Bundle bundle) {
+    @Nullable
+    public static OpenSellReceiptCommand create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         return new OpenSellReceiptCommand(
                 Utils.filterByClass(
@@ -52,7 +56,7 @@ public class OpenSellReceiptCommand {
         this.extra = extra;
     }
 
-    public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
+    public void process(@NonNull final Context context, @NonNull final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
         Objects.requireNonNull(activityStarter);
         Objects.requireNonNull(context);
 
@@ -71,6 +75,7 @@ public class OpenSellReceiptCommand {
                 );
     }
 
+    @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         Parcelable[] changesParcelable = new Parcelable[changes.size()];

@@ -9,10 +9,6 @@ import ru.evotor.framework.core.IIntegrationManagerResponse;
 import ru.evotor.framework.core.IntegrationManager;
 import ru.evotor.framework.core.IntegrationResponse;
 
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
-
 public abstract class ActionProcessor {
 
     public void process(String action, IIntegrationManagerResponse response, Bundle bundle) {
