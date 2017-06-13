@@ -3,7 +3,7 @@ package ru.evotor.framework.receipt
 import android.net.Uri
 
 object PositionTable {
-    @JvmField val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "Position")
+    @JvmField val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "position")
     const val ROW_POSITION_UUID = "POSITION_UUID"
     const val ROW_PARENT_POSITION_UUID = "PARENT_POSITION_UUID"
     const val ROW_PRODUCT_UUID = "PRODUCT_UUID"
