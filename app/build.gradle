@@ -26,10 +26,15 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
+
 repositories {
     mavenCentral()
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
 
 publishing {
     publications {
@@ -37,7 +42,8 @@ publishing {
         maven(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.29-dev"
+            version "1.0.43-dev"
+            artifact(sourceJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 
             //generate pom nodes for dependencies
