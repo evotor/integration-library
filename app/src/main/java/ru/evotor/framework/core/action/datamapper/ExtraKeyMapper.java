@@ -25,7 +25,8 @@ public final class ExtraKeyMapper {
         );
     }
 
-    public static Bundle toBundle(ExtraKey extraKey) {
+    @Nullable
+    public static Bundle toBundle(@Nullable ExtraKey extraKey) {
         if (extraKey == null) {
             return null;
         }

@@ -6,25 +6,22 @@ import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
+import ru.evotor.framework.core.action.datamapper.BundleUtils;
+
 public class CashInEvent extends CashOperationEvent {
     public static final String BROADCAST_ACTION_CASH_IN = "evotor.intent.action.cashOperation.IN";
 
     private static final String KEY_TOTAL = "total";
 
-    @Nullable
+    @NonNull
     private final BigDecimal total;
 
-    @Nullable
+    @NonNull
     public BigDecimal getTotal() {
         return total;
     }
 
-    private CashInEvent(@NonNull Bundle extras) {
-        super(extras);
-        this.total = new BigDecimal(extras.getString(KEY_TOTAL, "0"));
-    }
-
-    public CashInEvent(@Nullable String documentUuid, @Nullable BigDecimal total) {
+    public CashInEvent(@NonNull String documentUuid, @NonNull BigDecimal total) {
         super(documentUuid);
         this.total = total;
     }
@@ -34,6 +31,19 @@ public class CashInEvent extends CashOperationEvent {
         if (bundle == null) {
             return null;
         }
-        return new CashInEvent(bundle);
+        String documentUuid = CashOperationEvent.getDocumentUuid(bundle);
+        if (documentUuid == null) {
+            return null;
+        }
+
+        BigDecimal total = BundleUtils.getMoney(bundle, KEY_TOTAL);
+        if (total == null) {
+            return null;
+        }
+
+        return new CashInEvent(
+                documentUuid,
+                total
+        );
     }
 }

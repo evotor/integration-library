@@ -11,11 +11,12 @@ import android.support.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.core.ICanStartActivity;
 import ru.evotor.framework.core.IntegrationManagerCallback;
 import ru.evotor.framework.core.IntegrationManagerImpl;
 
-public class ClearSellReceiptCommand {
+public class ClearSellReceiptCommand implements IBundlable {
 
     public static final String NAME = "evo.v2.receipt.sell.clearReceipt";
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
@@ -62,6 +63,7 @@ public class ClearSellReceiptCommand {
     }
 
     @NonNull
+    @Override
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_RECEIPT_UUID, receiptUuid);

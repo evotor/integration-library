@@ -4,6 +4,8 @@ package ru.evotor.framework.core.action.processor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import ru.evotor.framework.core.IIntegrationManagerResponse;
 import ru.evotor.framework.core.IntegrationManager;
@@ -15,7 +17,7 @@ public abstract class ActionProcessor {
         process(action, bundle, new Callback(response, bundle));
     }
 
-    public abstract void process(String action, Bundle bundle, Callback callback);
+    public abstract void process(@NonNull String action, @Nullable Bundle bundle, @NonNull Callback callback);
 
     public final class Callback {
         private IIntegrationManagerResponse response;

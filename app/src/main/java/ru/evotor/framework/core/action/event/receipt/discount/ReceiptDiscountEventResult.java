@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import ru.evotor.framework.calculator.MoneyCalculator;
+import ru.evotor.framework.core.action.datamapper.BundleUtils;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
 public class ReceiptDiscountEventResult {
@@ -20,7 +20,10 @@ public class ReceiptDiscountEventResult {
         if (bundle == null) {
             return null;
         }
-        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
+        BigDecimal discount = BundleUtils.getMoney(bundle, KEY_DISCOUNT);
+        if (discount == null) {
+            return null;
+        }
         return new ReceiptDiscountEventResult(
                 discount,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
@@ -42,6 +45,7 @@ public class ReceiptDiscountEventResult {
         this.extra = extra;
     }
 
+    @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_DISCOUNT, discount.toPlainString());

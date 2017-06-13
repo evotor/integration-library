@@ -7,15 +7,14 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import ru.evotor.framework.Utils;
+import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
-public class BeforePositionsEditedEventResult {
+public class BeforePositionsEditedEventResult implements IBundlable {
 
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
@@ -55,6 +54,8 @@ public class BeforePositionsEditedEventResult {
         this.extra = extra;
     }
 
+    @Override
+    @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         Parcelable[] changesParcelable = new Parcelable[changes.size()];

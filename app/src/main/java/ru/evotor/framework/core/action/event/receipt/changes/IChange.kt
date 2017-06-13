@@ -1,12 +1,11 @@
 package ru.evotor.framework.core.action.event.receipt.changes
 
-import android.os.Bundle
+import ru.evotor.IBundlable
 
 /**
  * Created by a.kuznetsov on 23/05/2017.
  */
-interface IChange {
-    fun toBundle(): Bundle
+interface IChange : IBundlable {
     fun getType(): Type
 
     enum class Type {

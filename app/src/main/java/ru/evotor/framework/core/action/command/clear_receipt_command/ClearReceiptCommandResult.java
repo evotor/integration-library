@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class ClearReceiptCommandResult {
+import ru.evotor.IBundlable;
+
+public class ClearReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_RECEIPT_PROCESSING_IN_PROGRESS = -1;
 
     @Nullable
@@ -21,6 +23,7 @@ public class ClearReceiptCommandResult {
     }
 
     @NonNull
+    @Override
     public Bundle toBundle() {
         return new Bundle();
     }

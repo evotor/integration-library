@@ -3,9 +3,6 @@ package ru.evotor.framework.core.action.event.receipt.changes.position
 import android.os.Bundle
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
-/**
- * Created by a.kuznetsov on 23/05/2017.
- */
 data class PositionRemove(
         private val positionUuid: String
 ) : IPositionChange {

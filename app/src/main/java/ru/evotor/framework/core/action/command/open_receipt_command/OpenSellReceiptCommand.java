@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.ICanStartActivity;
 import ru.evotor.framework.core.IntegrationManagerCallback;
@@ -22,7 +23,7 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
-public class OpenSellReceiptCommand {
+public class OpenSellReceiptCommand implements IBundlable {
 
     public static final String NAME = "evo.v2.receipt.sell.openReceipt";
     private static final String KEY_CHANGES = "changes";
@@ -75,6 +76,7 @@ public class OpenSellReceiptCommand {
                 );
     }
 
+    @Override
     @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
