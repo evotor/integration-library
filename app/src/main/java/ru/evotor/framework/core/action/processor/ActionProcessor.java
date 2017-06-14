@@ -4,7 +4,10 @@ package ru.evotor.framework.core.action.processor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.core.IIntegrationManagerResponse;
 import ru.evotor.framework.core.IntegrationManager;
 import ru.evotor.framework.core.IntegrationResponse;
@@ -15,7 +18,7 @@ public abstract class ActionProcessor {
         process(action, bundle, new Callback(response, bundle));
     }
 
-    public abstract void process(String action, Bundle bundle, Callback callback);
+    public abstract void process(@NonNull String action, @Nullable Bundle bundle, @NonNull Callback callback);
 
     public final class Callback {
         private IIntegrationManagerResponse response;
@@ -40,6 +43,10 @@ public abstract class ActionProcessor {
             response.onResult(data);
         }
 
+        public final void onResult(IBundlable bundlable) throws RemoteException {
+            onResult(bundlable == null ? null : bundlable.toBundle());
+        }
+
         public final void onResult(Bundle bundle) throws RemoteException {
             Bundle result = new Bundle();
             result.putBundle(IntegrationManager.KEY_DATA, bundle);
@@ -47,7 +54,15 @@ public abstract class ActionProcessor {
         }
 
         public final void onError(int errorCode, String errorMessage) throws RemoteException {
-            response.onError(errorCode, errorMessage);
+            onError(errorCode, errorMessage, (Bundle) null);
+        }
+
+        public final void onError(int errorCode, String errorMessage, IBundlable data) throws RemoteException {
+            onError(errorCode, errorMessage, data == null ? null : data.toBundle());
+        }
+
+        public final void onError(int errorCode, String errorMessage, Bundle data) throws RemoteException {
+            response.onError(errorCode, errorMessage, data);
         }
 
         public final void skip() throws RemoteException {

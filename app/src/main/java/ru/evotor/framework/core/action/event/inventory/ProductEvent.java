@@ -4,23 +4,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public abstract class ProductEvent {
+import ru.evotor.IBundlable;
+
+public abstract class ProductEvent implements IBundlable {
     private static final String KEY_PRODUCT_UUID = "productUuid";
 
     @Nullable
     private final String productUuid;
 
-    public ProductEvent(Bundle extras) {
-        this(
-                extras.getString(KEY_PRODUCT_UUID)
-        );
-    }
-
     public ProductEvent(@Nullable String productUuid) {
         this.productUuid = productUuid;
     }
 
+    @Nullable
+    static String getProductUuid(@Nullable Bundle bundle) {
+        return bundle == null ? null : bundle.getString(KEY_PRODUCT_UUID);
+    }
+
     @NonNull
+    @Override
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putString(KEY_PRODUCT_UUID, productUuid);

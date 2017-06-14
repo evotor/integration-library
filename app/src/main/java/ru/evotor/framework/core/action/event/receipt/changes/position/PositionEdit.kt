@@ -5,9 +5,6 @@ import ru.evotor.framework.core.action.datamapper.PositionMapper
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.receipt.Position
 
-/**
- * Created by a.kuznetsov on 23/05/2017.
- */
 data class PositionEdit(val position: Position) : IPositionChange {
 
     override fun toBundle(): Bundle {

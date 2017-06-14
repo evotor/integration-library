@@ -13,10 +13,6 @@ import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.ProductType;
 
-/**
- * Created by a.kuznetsov on 19/04/2017.
- */
-
 public class Position implements Parcelable {
     /**
      * UUID позиции

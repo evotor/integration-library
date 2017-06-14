@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.receipt.Tax;
 import ru.evotor.framework.receipt.TaxNumber;
 
@@ -21,16 +20,17 @@ public final class TaxMapper {
             return null;
         }
         String taxNumber = bundle.getString(KEY_TAX_NUMBER);
-        String taxRatePercent = bundle.getString(KEY_TAX_RATE_PERCENT);
-        String value = bundle.getString(KEY_VALUE);
+        BigDecimal taxRatePercent = BundleUtils.getBigDecimal(bundle, KEY_TAX_RATE_PERCENT, null);
+        BigDecimal value = BundleUtils.getMoney(bundle, KEY_VALUE);
         return new Tax(
                 Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT),
-                new BigDecimal(taxRatePercent),
-                MoneyCalculator.round(new BigDecimal(value))
+                taxRatePercent,
+                value
         );
     }
 
-    public static Bundle toBundle(Tax tax) {
+    @Nullable
+    public static Bundle toBundle(@Nullable Tax tax) {
         if (tax == null) {
             return null;
         }
