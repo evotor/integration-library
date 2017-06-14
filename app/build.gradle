@@ -42,7 +42,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.48-dev"
+            version "1.0.51-dev"
             artifact(sourceJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 

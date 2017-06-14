@@ -27,6 +27,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ru.evotor.IBundlable;
+
 
 public class IntegrationManagerImpl implements IntegrationManager {
 
@@ -40,6 +42,17 @@ public class IntegrationManagerImpl implements IntegrationManager {
     public IntegrationManagerImpl(Context context) {
         this.context = context;
         this.mainHandler = new Handler(context.getMainLooper());
+    }
+
+    @Override
+    public IntegrationManagerFuture call(String action, ComponentName componentName, IBundlable data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
+        return call(action,
+                componentName,
+                data == null ? null : data.toBundle(),
+                activityStarter,
+                callback,
+                handler
+        );
     }
 
     @Override
@@ -248,10 +261,14 @@ public class IntegrationManagerImpl implements IntegrationManager {
             @Override
             public void onResult(Bundle bundle) {
                 Intent intent = bundle.getParcelable(KEY_INTENT);
-                if (intent != null && mActivityStarter != null) {
-                    // since the user provided an Activity we will silently start intents
-                    // that we see
-                    mActivityStarter.startActivity(intent);
+                if (intent != null) {
+                    if (mActivityStarter != null) {
+                        // since the user provided an Activity we will silently start intents
+                        // that we see
+                        mActivityStarter.startActivity(intent);
+                    } else {
+                        skip();
+                    }
                     // leave the Future running to wait for the real response to this request
                 } else if (bundle.getBoolean("retry")) {
                     try {
