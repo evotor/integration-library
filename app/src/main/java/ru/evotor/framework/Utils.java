@@ -1,5 +1,7 @@
 package ru.evotor.framework;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +24,7 @@ public final class Utils {
         }
     }
 
+    @NonNull
     public static <T, R> List<R> filterByClass(List<T> source, Class<R> clazz) {
         List<R> list = new ArrayList<>();
         for (T t : source) {

@@ -16,18 +16,18 @@ public class ReceiptDiscountEvent {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_DISCOUNT = "discount";
 
+    private final String receiptUuid;
+    private final BigDecimal discount;
+
     @Nullable
     public static ReceiptDiscountEvent create(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
-        String receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null);
-        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
-        return new ReceiptDiscountEvent(receiptUuid, discount);
+        return new ReceiptDiscountEvent(
+                bundle.getString(KEY_RECEIPT_UUID, null),
+                MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0"))));
     }
-
-    private final String receiptUuid;
-    private final BigDecimal discount;
 
     public ReceiptDiscountEvent(
             String receiptUuid,
