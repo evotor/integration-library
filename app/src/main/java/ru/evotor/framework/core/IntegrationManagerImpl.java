@@ -172,7 +172,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 return;
             }
             service.call(response, mAction, mData);
-            if (!isDone()) {
+            if (!isDone() && !response.uiInteractionHasStarted) {
                 response.skip();
             }
         }
@@ -281,6 +281,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
          */
         private class Response extends IIntegrationManagerResponse.Stub {
 
+            volatile boolean uiInteractionHasStarted = false;
+
             @Override
             public void onResult(Bundle bundle) {
                 Intent intent = bundle.getParcelable(KEY_INTENT);
@@ -289,6 +291,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                         // since the user provided an Activity we will silently start intents
                         // that we see
                         mActivityStarter.startActivity(intent);
+                        uiInteractionHasStarted = true;
                     } else {
                         skip();
                     }
