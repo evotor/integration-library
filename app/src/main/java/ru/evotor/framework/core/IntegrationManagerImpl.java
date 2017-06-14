@@ -46,6 +46,22 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
+    public IntegrationManagerFuture call(final String action, ComponentName componentName, IBundlable data, final Activity activity, IntegrationManagerCallback callback, Handler handler) {
+        return call(action,
+                componentName,
+                data == null ? null : data.toBundle(),
+                new ICanStartActivity() {
+                    @Override
+                    public void startActivity(Intent intent) {
+                        activity.startActivity(intent);
+                    }
+                },
+                callback,
+                handler
+        );
+    }
+
+    @Override
     public IntegrationManagerFuture call(String action, ComponentName componentName, IBundlable data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
         return call(action,
                 componentName,

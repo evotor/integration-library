@@ -1,7 +1,7 @@
 package ru.evotor.framework.core.action.command.clear_receipt_command;
 
+import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.evotor.IBundlable;
-import ru.evotor.framework.core.ICanStartActivity;
 import ru.evotor.framework.core.IntegrationManagerCallback;
 import ru.evotor.framework.core.IntegrationManagerImpl;
 
@@ -44,20 +43,19 @@ public class ClearPaybackReceiptCommand implements IBundlable {
         this.receiptUuid = receiptUuid;
     }
 
-    public void process(final Context context, final ICanStartActivity activityStarter, IntegrationManagerCallback callback) {
-        Objects.requireNonNull(activityStarter);
-        Objects.requireNonNull(context);
+    public void process(final Activity activity, IntegrationManagerCallback callback) {
+        Objects.requireNonNull(activity);
 
-        List<ComponentName> componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.getApplicationContext());
+        List<ComponentName> componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, activity.getApplicationContext());
         if (componentNameList == null || componentNameList.isEmpty()) {
             return;
         }
-        new IntegrationManagerImpl(context.getApplicationContext())
+        new IntegrationManagerImpl(activity.getApplicationContext())
                 .call(ClearPaybackReceiptCommand.NAME,
 
                         componentNameList.get(0),
-                        this.toBundle(),
-                        activityStarter,
+                        this,
+                        activity,
                         callback,
                         new Handler(Looper.getMainLooper())
                 );
