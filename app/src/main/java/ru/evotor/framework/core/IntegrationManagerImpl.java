@@ -1,5 +1,6 @@
 package ru.evotor.framework.core;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -99,6 +100,28 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final String mAction;
         final ComponentName mComponentName;
         final Bundle mData;
+
+        public ImsTask(
+                final Activity activity,
+                Handler handler,
+                IntegrationManagerCallback callback,
+                final String action,
+                ComponentName componentName,
+                Bundle data) {
+            this(
+                    activity == null ? null : new ICanStartActivity() {
+                        @Override
+                        public void startActivity(Intent intent) {
+                            activity.startActivity(intent);
+                        }
+                    },
+                    handler,
+                    callback,
+                    action,
+                    componentName,
+                    data
+            );
+        }
 
         public ImsTask(
                 ICanStartActivity activityStarter,
