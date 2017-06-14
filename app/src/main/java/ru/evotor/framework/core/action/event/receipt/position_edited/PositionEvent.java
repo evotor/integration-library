@@ -1,36 +1,42 @@
 package ru.evotor.framework.core.action.event.receipt.position_edited;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PositionMapper;
 import ru.evotor.framework.receipt.Position;
 
-/**
- * Created by a.kuznetsov on 18/05/2017.
- */
-
-public abstract class PositionEvent {
+public abstract class PositionEvent implements IBundlable {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_POSITION = "position";
 
+    @NonNull
     private final String receiptUuid;
+    @NonNull
     private final Position position;
 
-    public PositionEvent(Bundle extras) {
-        this(
-                extras.getString(KEY_RECEIPT_UUID, null),
-                PositionMapper.from(extras.getBundle(KEY_POSITION))
-        );
+    @Nullable
+    static String getReceiptUuid(@NonNull Bundle bundle) {
+        return bundle.getString(KEY_RECEIPT_UUID, null);
     }
 
-    public PositionEvent(
-            String receiptUuid,
-            Position position
+    @Nullable
+    static Position getPosition(@NonNull Bundle bundle) {
+        return PositionMapper.from(bundle.getBundle(KEY_POSITION));
+    }
+
+    PositionEvent(
+            @NonNull String receiptUuid,
+            @NonNull Position position
     ) {
         this.receiptUuid = receiptUuid;
         this.position = position;
     }
 
+    @NonNull
+    @Override
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putString(KEY_RECEIPT_UUID, receiptUuid);
@@ -38,10 +44,12 @@ public abstract class PositionEvent {
         return result;
     }
 
+    @NonNull
     public String getReceiptUuid() {
         return receiptUuid;
     }
 
+    @NonNull
     public Position getPosition() {
         return position;
     }

@@ -1,5 +1,6 @@
 package ru.evotor.framework.core;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ru.evotor.IBundlable;
+
 
 public class IntegrationManagerImpl implements IntegrationManager {
 
@@ -40,6 +43,33 @@ public class IntegrationManagerImpl implements IntegrationManager {
     public IntegrationManagerImpl(Context context) {
         this.context = context;
         this.mainHandler = new Handler(context.getMainLooper());
+    }
+
+    @Override
+    public IntegrationManagerFuture call(final String action, ComponentName componentName, IBundlable data, final Activity activity, IntegrationManagerCallback callback, Handler handler) {
+        return call(action,
+                componentName,
+                data == null ? null : data.toBundle(),
+                new ICanStartActivity() {
+                    @Override
+                    public void startActivity(Intent intent) {
+                        activity.startActivity(intent);
+                    }
+                },
+                callback,
+                handler
+        );
+    }
+
+    @Override
+    public IntegrationManagerFuture call(String action, ComponentName componentName, IBundlable data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
+        return call(action,
+                componentName,
+                data == null ? null : data.toBundle(),
+                activityStarter,
+                callback,
+                handler
+        );
     }
 
     @Override
@@ -86,6 +116,28 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final String mAction;
         final ComponentName mComponentName;
         final Bundle mData;
+
+        public ImsTask(
+                final Activity activity,
+                Handler handler,
+                IntegrationManagerCallback callback,
+                final String action,
+                ComponentName componentName,
+                Bundle data) {
+            this(
+                    activity == null ? null : new ICanStartActivity() {
+                        @Override
+                        public void startActivity(Intent intent) {
+                            activity.startActivity(intent);
+                        }
+                    },
+                    handler,
+                    callback,
+                    action,
+                    componentName,
+                    data
+            );
+        }
 
         public ImsTask(
                 ICanStartActivity activityStarter,
@@ -135,10 +187,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 response.skip();
                 return;
             }
+
             service.call(response, mAction, mData);
-            if (!isDone()) {
-                response.skip();
-            }
         }
 
         private IIntegrationManager getService(ComponentName componentName) {
@@ -248,10 +298,14 @@ public class IntegrationManagerImpl implements IntegrationManager {
             @Override
             public void onResult(Bundle bundle) {
                 Intent intent = bundle.getParcelable(KEY_INTENT);
-                if (intent != null && mActivityStarter != null) {
-                    // since the user provided an Activity we will silently start intents
-                    // that we see
-                    mActivityStarter.startActivity(intent);
+                if (intent != null) {
+                    if (mActivityStarter != null) {
+                        // since the user provided an Activity we will silently start intents
+                        // that we see
+                        mActivityStarter.startActivity(intent);
+                    } else {
+                        skip();
+                    }
                     // leave the Future running to wait for the real response to this request
                 } else if (bundle.getBoolean("retry")) {
                     try {
@@ -267,10 +321,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
 
             @Override
-            public void onError(int code, String message) {
+            public void onError(int code, String message, Bundle data) {
                 Log.e(TAG, "onError(code = " + code + ", message = " + message + ")");
 
-                set(new Result(new Error(code, message)));
+                set(new Result(new Error(code, message, data)));
             }
 
             void skip() {

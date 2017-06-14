@@ -1,11 +1,12 @@
 package ru.evotor.framework.core.action.event.receipt.discount;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
-import ru.evotor.framework.calculator.MoneyCalculator;
+import ru.evotor.framework.core.action.datamapper.BundleUtils;
 
 public class ReceiptDiscountEvent {
     private static final String TAG = "ReceiptDiscountEvent";
@@ -22,21 +23,27 @@ public class ReceiptDiscountEvent {
             return null;
         }
         String receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null);
-        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
+        BigDecimal discount = BundleUtils.getMoney(bundle, KEY_DISCOUNT);
+        if (discount == null) {
+            return null;
+        }
         return new ReceiptDiscountEvent(receiptUuid, discount);
     }
 
+    @NonNull
     private final String receiptUuid;
+    @NonNull
     private final BigDecimal discount;
 
     public ReceiptDiscountEvent(
-            String receiptUuid,
-            BigDecimal discount
+            @NonNull String receiptUuid,
+            @NonNull BigDecimal discount
     ) {
         this.receiptUuid = receiptUuid;
         this.discount = discount;
     }
 
+    @NonNull
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putString(KEY_RECEIPT_UUID, receiptUuid);
@@ -44,10 +51,12 @@ public class ReceiptDiscountEvent {
         return result;
     }
 
+    @NonNull
     public String getReceiptUuid() {
         return receiptUuid;
     }
 
+    @NonNull
     public BigDecimal getDiscount() {
         return discount;
     }

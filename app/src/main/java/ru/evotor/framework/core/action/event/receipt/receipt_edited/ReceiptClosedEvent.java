@@ -8,12 +8,8 @@ public class ReceiptClosedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT_CLOSED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT_CLOSED = "evotor.intent.action.receipt.payback.RECEIPT_CLOSED";
 
-    public ReceiptClosedEvent(@Nullable String receiptUuid) {
+    public ReceiptClosedEvent(@NonNull String receiptUuid) {
         super(receiptUuid);
-    }
-
-    private ReceiptClosedEvent(@NonNull Bundle extras) {
-        super(extras);
     }
 
     @Nullable
@@ -21,6 +17,10 @@ public class ReceiptClosedEvent extends ReceiptEvent {
         if (bundle == null) {
             return null;
         }
-        return new ReceiptClosedEvent(bundle);
+        String receiptUuid = getReceiptUuid(bundle);
+        if (receiptUuid == null) {
+            return null;
+        }
+        return new ReceiptClosedEvent(receiptUuid);
     }
 }
