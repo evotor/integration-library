@@ -2,6 +2,8 @@ package ru.evotor.framework.receipt;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -418,10 +420,74 @@ public class Position implements Parcelable {
     };
 
     public static final class Builder {
+        public static Builder newInstance(
+                @Nullable String uuid,
+                @Nullable String productUuid,
+                @NonNull String name,
+                @NonNull String measureName,
+                int measurePrecision,
+                @NonNull BigDecimal price,
+                @NonNull BigDecimal quantity
+        ) {
+            return new Builder(
+                    new Position(
+                            uuid,
+                            productUuid,
+                            null,
+                            ProductType.NORMAL,
+                            name,
+                            measureName,
+                            measurePrecision,
+                            price,
+                            price,
+                            quantity,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                    )
+            );
+        }
+
+        public static Builder copyFrom(Position position) {
+            return new Builder(new Position(position));
+        }
+
         private Position position;
 
+        @Deprecated
         public Builder(Position position) {
             this.position = new Position(position);
+        }
+
+        public Builder toAlcoholMarked(
+                @NonNull String mark,
+                @NonNull BigDecimal alcoholByVolume,
+                @NonNull Long alcoholProductKindCode,
+                @NonNull BigDecimal tareVolume
+        ) {
+            position.productType = ProductType.ALCOHOL_MARKED;
+            position.mark = mark;
+            position.alcoholByVolume = alcoholByVolume;
+            position.alcoholProductKindCode = alcoholProductKindCode;
+            position.tareVolume = tareVolume;
+            return this;
+        }
+
+        public Builder toAlcoholNotMarked(
+                @NonNull BigDecimal alcoholByVolume,
+                @NonNull Long alcoholProductKindCode,
+                @NonNull BigDecimal tareVolume
+        ) {
+            position.productType = ProductType.ALCOHOL_NOT_MARKED;
+            position.alcoholByVolume = alcoholByVolume;
+            position.alcoholProductKindCode = alcoholProductKindCode;
+            position.tareVolume = tareVolume;
+            return this;
         }
 
         public Builder setUuid(String uuid) {
