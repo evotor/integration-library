@@ -36,7 +36,8 @@ public final class PrintGroupMapper {
         );
     }
 
-    public static Bundle toBundle(PrintGroup printGroup) {
+    @Nullable
+    public static Bundle toBundle(@Nullable PrintGroup printGroup) {
         if (printGroup == null) {
             return null;
         }

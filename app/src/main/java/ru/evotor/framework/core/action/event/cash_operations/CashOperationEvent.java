@@ -4,22 +4,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public abstract class CashOperationEvent {
+import ru.evotor.IBundlable;
+
+public abstract class CashOperationEvent implements IBundlable {
     private static final String KEY_DOCUMENT_UUID = "documentUuid";
 
-    @Nullable
+    @NonNull
     private final String documentUuid;
 
-    public CashOperationEvent(@NonNull Bundle extras) {
-        this(
-                extras.getString(KEY_DOCUMENT_UUID)
-        );
-    }
-
-    public CashOperationEvent(@Nullable String documentUuid) {
+    CashOperationEvent(@NonNull String documentUuid) {
         this.documentUuid = documentUuid;
     }
 
+    @Nullable
+    static String getDocumentUuid(@Nullable Bundle bundle) {
+        return bundle == null ? null : bundle.getString(KEY_DOCUMENT_UUID);
+    }
+
+    @Override
     @NonNull
     public Bundle toBundle() {
         Bundle result = new Bundle();
@@ -27,7 +29,7 @@ public abstract class CashOperationEvent {
         return result;
     }
 
-    @Nullable
+    @NonNull
     public String getDocumentUuid() {
         return documentUuid;
     }

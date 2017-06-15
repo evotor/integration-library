@@ -2,21 +2,25 @@ package ru.evotor.framework.core;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-/**
- * Created by a.kuznetsov on 15/04/2017.
- */
+import ru.evotor.IBundlable;
 
 public abstract class IntegrationActivity extends Activity {
 
     private IntegrationResponse mIntegrationResponse = null;
     private Bundle mResultBundle = null;
 
-    public final void setIntegrationResult(Bundle result) {
+    public final void setIntegrationResult(@Nullable Bundle result) {
         mResultBundle = result;
     }
 
-    public final void onError(int errorCode, String errorMessage) {
+    public final void setIntegrationResult(@Nullable IBundlable result) {
+        mResultBundle = result == null ? null : result.toBundle();
+    }
+
+    public final void onError(int errorCode, @NonNull String errorMessage) {
         if (mIntegrationResponse != null) {
             mIntegrationResponse.onError(errorCode, errorMessage);
             mIntegrationResponse = null;
@@ -25,7 +29,7 @@ public abstract class IntegrationActivity extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle icicle) {
+    protected void onCreate(@Nullable Bundle icicle) {
         super.onCreate(icicle);
 
         Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
@@ -39,6 +43,7 @@ public abstract class IntegrationActivity extends Activity {
         }
     }
 
+    @Nullable
     protected Bundle getSourceBundle() {
         Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
         if (bundle == null) {

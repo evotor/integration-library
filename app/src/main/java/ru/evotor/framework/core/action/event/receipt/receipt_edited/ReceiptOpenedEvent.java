@@ -8,12 +8,8 @@ public class ReceiptOpenedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.OPENED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.OPENED";
 
-    public ReceiptOpenedEvent(@Nullable String receiptUuid) {
+    public ReceiptOpenedEvent(@NonNull String receiptUuid) {
         super(receiptUuid);
-    }
-
-    private ReceiptOpenedEvent(@NonNull Bundle extras) {
-        super(extras);
     }
 
     @Nullable
@@ -21,6 +17,10 @@ public class ReceiptOpenedEvent extends ReceiptEvent {
         if (bundle == null) {
             return null;
         }
-        return new ReceiptOpenedEvent(bundle);
+        String receiptUuid = getReceiptUuid(bundle);
+        if (receiptUuid == null) {
+            return null;
+        }
+        return new ReceiptOpenedEvent(receiptUuid);
     }
 }

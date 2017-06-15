@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.calculator.MoneyCalculator;
-import ru.evotor.framework.calculator.QuantityCalculator;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
@@ -52,9 +50,9 @@ public final class PositionMapper {
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
         int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
-        String price = bundle.getString(KEY_PRICE);
-        String priceWithDiscountPosition = bundle.getString(KEY_PRICE_WITH_DISCOUNT_POSITION);
-        String quantity = bundle.getString(KEY_QUANTITY);
+        BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
+        BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
+        BigDecimal quantity = BundleUtils.getQuantity(bundle, KEY_QUANTITY);
         String barcode = bundle.getString(KEY_BARCODE);
         String mark = bundle.getString(KEY_MARK);
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
@@ -94,9 +92,9 @@ public final class PositionMapper {
                 name,
                 measureName,
                 measurePrecision,
-                MoneyCalculator.round(new BigDecimal(price)),
-                MoneyCalculator.round(new BigDecimal(priceWithDiscountPosition)),
-                QuantityCalculator.round(new BigDecimal(quantity)),
+                price,
+                priceWithDiscountPosition,
+                quantity,
                 barcode,
                 mark,
                 alcoholByVolume == null ? null : new BigDecimal(alcoholByVolume),
@@ -108,7 +106,8 @@ public final class PositionMapper {
         );
     }
 
-    public static Bundle toBundle(Position position) {
+    @Nullable
+    public static Bundle toBundle(@Nullable Position position) {
         if (position == null) {
             return null;
         }
