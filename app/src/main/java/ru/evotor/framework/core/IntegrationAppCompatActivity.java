@@ -1,19 +1,22 @@
 package ru.evotor.framework.core;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by a.kuznetsov on 15/04/2017.
- */
+import ru.evotor.IBundlable;
 
 public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
 
     private IntegrationResponse mIntegrationResponse = null;
     private Bundle mResultBundle = null;
 
-    public final void setIntegrationResult(Bundle result) {
+    public final void setIntegrationResult(@Nullable Bundle result) {
         mResultBundle = result;
+    }
+
+    public final void setIntegrationResult(@Nullable IBundlable result) {
+        mResultBundle = result == null ? null : result.toBundle();
     }
 
     public final void onError(int errorCode, String errorMessage) {
@@ -25,7 +28,7 @@ public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle icicle) {
+    protected void onCreate(@Nullable Bundle icicle) {
         super.onCreate(icicle);
 
         Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
@@ -39,6 +42,7 @@ public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
         }
     }
 
+    @Nullable
     protected Bundle getSourceBundle() {
         Bundle bundle = getIntent().getBundleExtra(IntegrationManager.KEY_INTENT_DATA);
         if (bundle == null) {

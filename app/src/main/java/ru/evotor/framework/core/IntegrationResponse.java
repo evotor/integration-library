@@ -20,7 +20,11 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
+
+import ru.evotor.IBundlable;
 
 /**
  * Object used to communicate responses back to the IntegrationManager
@@ -40,6 +44,10 @@ public class IntegrationResponse implements Parcelable {
     public IntegrationResponse(Parcel parcel) {
         mIntegrationManagerResponse =
                 IIntegrationManagerResponse.Stub.asInterface(parcel.readStrongBinder());
+    }
+
+    public void onResult(IBundlable data) {
+        onResult(data == null ? null : data.toBundle());
     }
 
     public void onResult(Bundle result) {
@@ -62,12 +70,20 @@ public class IntegrationResponse implements Parcelable {
         //}
     }
 
-    public void onError(int errorCode, String errorMessage) {
+    public void onError(int errorCode, @NonNull String errorMessage) {
+        onError(errorCode, errorMessage, (IBundlable) null);
+    }
+
+    public void onError(int errorCode, @NonNull String errorMessage, @Nullable IBundlable data) {
+        onError(errorCode, errorMessage, data == null ? null : data.toBundle());
+    }
+
+    public void onError(int errorCode, @NonNull String errorMessage, @Nullable Bundle data) {
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "IntegrationResponse.onError: " + errorCode + ", " + errorMessage);
         }
         try {
-            mIntegrationManagerResponse.onError(errorCode, errorMessage);
+            mIntegrationManagerResponse.onError(errorCode, errorMessage, data);
         } catch (RemoteException e) {
             // this should never happen
         }

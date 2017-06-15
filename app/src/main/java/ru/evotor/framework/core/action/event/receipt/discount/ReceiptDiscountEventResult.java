@@ -9,16 +9,19 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+<<<<<<< HEAD
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
+=======
+import ru.evotor.framework.core.action.datamapper.BundleUtils;
+>>>>>>> develop
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
 public class ReceiptDiscountEventResult {
 
-    private static final String KEY_RESULT = "result";
     private static final String KEY_DISCOUNT = "discount";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_CHANGES = "changes";
@@ -28,10 +31,11 @@ public class ReceiptDiscountEventResult {
         if (bundle == null) {
             return null;
         }
-        String resultName = bundle.getString(KEY_RESULT);
-        BigDecimal discount = MoneyCalculator.round(new BigDecimal(bundle.getString(KEY_DISCOUNT, "0")));
+        BigDecimal discount = BundleUtils.getMoney(bundle, KEY_DISCOUNT);
+        if (discount == null) {
+            return null;
+        }
         return new ReceiptDiscountEventResult(
-                Utils.safeValueOf(Result.class, resultName, Result.UNKNOWN),
                 discount,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
                 Utils.filterByClass(
@@ -42,8 +46,6 @@ public class ReceiptDiscountEventResult {
     }
 
     @NonNull
-    private final Result result;
-    @NonNull
     private final BigDecimal discount;
     @Nullable
     private final SetExtra extra;
@@ -51,23 +53,20 @@ public class ReceiptDiscountEventResult {
     private final List<IPositionChange> changes;
 
     public ReceiptDiscountEventResult(
-            @NonNull Result result,
             @NonNull BigDecimal discount,
             @Nullable SetExtra extra,
             @Nullable List<IPositionChange> changes
     ) {
-        Objects.requireNonNull(result);
         Objects.requireNonNull(discount);
 
-        this.result = result;
         this.discount = discount;
         this.extra = extra;
         this.changes = changes;
     }
 
+    @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_RESULT, result.name());
         bundle.putString(KEY_DISCOUNT, discount.toPlainString());
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
         Parcelable[] changesParcelable = new Parcelable[changes == null ? 0 : changes.size()];
@@ -84,15 +83,11 @@ public class ReceiptDiscountEventResult {
         return discount;
     }
 
-    @NonNull
-    public Result getResult() {
-        return result;
-    }
-
     @Nullable
     public SetExtra getExtra() {
         return extra;
     }
+<<<<<<< HEAD
 
     @Nullable
     public List<IPositionChange> getChanges() {
@@ -103,4 +98,6 @@ public class ReceiptDiscountEventResult {
         OK,
         UNKNOWN;
     }
+=======
+>>>>>>> develop
 }

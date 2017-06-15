@@ -2,15 +2,18 @@ package ru.evotor.framework.core.action.event.receipt.before_positions_edited;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 
-public class BeforePositionsEditedEvent {
+public class BeforePositionsEditedEvent implements IBundlable {
     private static final String TAG = "PositionsEditedEvent";
 
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.beforePositionsEdited";
@@ -19,21 +22,29 @@ public class BeforePositionsEditedEvent {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_CHANGES = "changes";
 
-
+    @NonNull
     private final String receiptUuid;
+    @NonNull
     private final List<IPositionChange> changes;
 
     public BeforePositionsEditedEvent(
-            String receiptUuid,
-            List<IPositionChange> changes
+            @NonNull String receiptUuid,
+            @NonNull List<IPositionChange> changes
     ) {
         this.receiptUuid = receiptUuid;
         this.changes = changes;
     }
 
-    public BeforePositionsEditedEvent(Bundle bundle) {
-        this(
-                bundle.getString(KEY_RECEIPT_UUID, null),
+    @Nullable
+    public static BeforePositionsEditedEvent create(@Nullable Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+
+        String receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null);
+
+        return new BeforePositionsEditedEvent(
+                receiptUuid,
                 Utils.filterByClass(
                         ChangesMapper.INSTANCE.create(bundle.getParcelableArray(KEY_CHANGES)),
                         IPositionChange.class
@@ -41,6 +52,8 @@ public class BeforePositionsEditedEvent {
         );
     }
 
+    @Override
+    @NonNull
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putString(KEY_RECEIPT_UUID, receiptUuid);
@@ -53,10 +66,12 @@ public class BeforePositionsEditedEvent {
         return result;
     }
 
+    @NonNull
     public String getReceiptUuid() {
         return receiptUuid;
     }
 
+    @NonNull
     public List<IPositionChange> getChanges() {
         return changes;
     }
