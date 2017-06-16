@@ -25,7 +25,7 @@ public final class Utils {
     }
 
     @NonNull
-    public static <T, R> List<R> filterByClass(List<T> source, Class<R> clazz) {
+    public static <T, R> List<R> filterByClass(@NonNull List<T> source, @NonNull Class<R> clazz) {
         List<R> list = new ArrayList<>();
         for (T t : source) {
             if (clazz.isInstance(t)) {

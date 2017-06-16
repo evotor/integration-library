@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
@@ -16,7 +17,7 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
-public class ReceiptDiscountEventResult {
+public class ReceiptDiscountEventResult implements IBundlable {
 
     private static final String KEY_DISCOUNT = "discount";
     private static final String KEY_RECEIPT_EXTRA = "extra";
@@ -45,13 +46,13 @@ public class ReceiptDiscountEventResult {
     private final BigDecimal discount;
     @Nullable
     private final SetExtra extra;
-    @Nullable
+    @NonNull
     private final List<IPositionChange> changes;
 
     public ReceiptDiscountEventResult(
             @NonNull BigDecimal discount,
             @Nullable SetExtra extra,
-            @Nullable List<IPositionChange> changes
+            @NonNull List<IPositionChange> changes
     ) {
         Objects.requireNonNull(discount);
 
@@ -65,7 +66,7 @@ public class ReceiptDiscountEventResult {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_DISCOUNT, discount.toPlainString());
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
-        Parcelable[] changesParcelable = new Parcelable[changes == null ? 0 : changes.size()];
+        Parcelable[] changesParcelable = new Parcelable[changes.size()];
         for (int i = 0; i < changesParcelable.length; i++) {
             IChange change = changes.get(i);
             changesParcelable[i] = ChangesMapper.INSTANCE.toBundle(change);
@@ -83,8 +84,8 @@ public class ReceiptDiscountEventResult {
     public SetExtra getExtra() {
         return extra;
     }
-    
-    @Nullable
+
+    @NonNull
     public List<IPositionChange> getChanges() {
         return changes;
     }

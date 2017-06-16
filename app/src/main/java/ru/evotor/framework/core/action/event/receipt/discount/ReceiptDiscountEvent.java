@@ -6,9 +6,10 @@ import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
+import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;
 
-public class ReceiptDiscountEvent {
+public class ReceiptDiscountEvent implements IBundlable {
     private static final String TAG = "ReceiptDiscountEvent";
 
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.receiptDiscount";
