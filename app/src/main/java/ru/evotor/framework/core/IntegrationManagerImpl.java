@@ -240,7 +240,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private Result internalGetResult(Long timeout, TimeUnit unit)
-                throws OperationCanceledException, IOException, IntegrationException {
+                throws OperationCanceledException, IntegrationException {
             if (!isDone()) {
                 ensureNotOnMainThread();
             }
@@ -258,18 +258,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 // fall through and cancel
             } catch (ExecutionException e) {
                 final Throwable cause = e.getCause();
-                if (cause instanceof IOException) {
-                    throw (IOException) cause;
-                } else if (cause instanceof UnsupportedOperationException) {
-                    throw new IntegrationException(cause);
-                } else if (cause instanceof IntegrationException) {
+                if (cause instanceof IntegrationException) {
                     throw (IntegrationException) cause;
-                } else if (cause instanceof RuntimeException) {
-                    throw (RuntimeException) cause;
-                } else if (cause instanceof java.lang.Error) {
-                    throw (java.lang.Error) cause;
                 } else {
-                    throw new IllegalStateException(cause);
+                    throw new IntegrationException(cause);
                 }
             } finally {
                 cancel(true /* interrupt if running */);
@@ -279,7 +271,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
         @Override
         public Result getResult()
-                throws OperationCanceledException, IOException, IntegrationException {
+                throws OperationCanceledException, IntegrationException {
             return internalGetResult(null, null);
         }
 

@@ -2,15 +2,9 @@ package ru.evotor.framework.core;
 
 import android.os.Bundle;
 
-import java.io.IOException;
-
-/**
- * Created by a.kuznetsov on 11/04/2017.
- */
-
 public interface IntegrationManagerFuture {
 
-    Result getResult() throws IOException, IntegrationException;
+    Result getResult() throws IntegrationException;
 
     class Result {
         private final Type type;
