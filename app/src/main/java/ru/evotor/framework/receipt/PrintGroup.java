@@ -107,4 +107,32 @@ public class PrintGroup implements Parcelable {
             return new PrintGroup[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PrintGroup that = (PrintGroup) o;
+
+        if (identifier != null ? !identifier.equals(that.identifier) : that.identifier != null)
+            return false;
+        if (type != that.type) return false;
+        if (orgName != null ? !orgName.equals(that.orgName) : that.orgName != null) return false;
+        if (orgInn != null ? !orgInn.equals(that.orgInn) : that.orgInn != null) return false;
+        if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null)
+            return false;
+        return taxationSystem == that.taxationSystem;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = identifier != null ? identifier.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (orgName != null ? orgName.hashCode() : 0);
+        result = 31 * result + (orgInn != null ? orgInn.hashCode() : 0);
+        result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
+        result = 31 * result + (taxationSystem != null ? taxationSystem.hashCode() : 0);
+        return result;
+    }
 }
