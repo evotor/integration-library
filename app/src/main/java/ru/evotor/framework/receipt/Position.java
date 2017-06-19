@@ -77,10 +77,6 @@ public class Position implements Parcelable {
      */
     private BigDecimal tareVolume;
     /**
-     * Группа печати.
-     */
-    private PrintGroup printGroup;
-    /**
      * Экстра ключи
      */
     private Set<ExtraKey> extraKeys = new HashSet<>();
@@ -105,7 +101,6 @@ public class Position implements Parcelable {
             BigDecimal alcoholByVolume,
             Long alcoholProductKindCode,
             BigDecimal tareVolume,
-            PrintGroup printGroup,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
@@ -124,7 +119,6 @@ public class Position implements Parcelable {
         this.alcoholByVolume = alcoholByVolume;
         this.alcoholProductKindCode = alcoholProductKindCode;
         this.tareVolume = tareVolume;
-        this.printGroup = printGroup;
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
@@ -148,7 +142,6 @@ public class Position implements Parcelable {
                 position.getAlcoholByVolume(),
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
-                position.getPrintGroup(),
                 position.getExtraKeys(),
                 position.getSubPosition()
         );
@@ -279,10 +272,6 @@ public class Position implements Parcelable {
         return tareVolume;
     }
 
-    public PrintGroup getPrintGroup() {
-        return printGroup;
-    }
-
     public Set<ExtraKey> getExtraKeys() {
         return extraKeys;
     }
@@ -322,8 +311,6 @@ public class Position implements Parcelable {
             return false;
         if (tareVolume != null ? !tareVolume.equals(position.tareVolume) : position.tareVolume != null)
             return false;
-        if (printGroup != null ? !printGroup.equals(position.printGroup) : position.printGroup != null)
-            return false;
         if (subPositions != null ? !subPositions.equals(position.subPositions) : position.subPositions != null) {
             return false;
         }
@@ -348,7 +335,6 @@ public class Position implements Parcelable {
         result = 31 * result + (alcoholByVolume != null ? alcoholByVolume.hashCode() : 0);
         result = 31 * result + (alcoholProductKindCode != null ? alcoholProductKindCode.hashCode() : 0);
         result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
-        result = 31 * result + (printGroup != null ? printGroup.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         return result;
@@ -376,7 +362,6 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.alcoholByVolume);
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
-        dest.writeParcelable(this.printGroup, flags);
         dest.writeList(new ArrayList<>(this.extraKeys));
         dest.writeTypedList(this.subPositions);
     }
@@ -398,7 +383,6 @@ public class Position implements Parcelable {
         this.alcoholByVolume = (BigDecimal) in.readSerializable();
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
-        this.printGroup = in.readParcelable(PrintGroup.class.getClassLoader());
         List<ExtraKey> extraKeyList = new ArrayList<>();
         in.readList(extraKeyList, ExtraKey.class.getClassLoader());
         this.extraKeys.addAll(extraKeyList);
@@ -441,7 +425,6 @@ public class Position implements Parcelable {
                             price,
                             price,
                             quantity,
-                            null,
                             null,
                             null,
                             null,
@@ -527,11 +510,6 @@ public class Position implements Parcelable {
 
         public Builder setMeasurePrecision(int measurePrecision) {
             position.measurePrecision = measurePrecision;
-            return this;
-        }
-
-        public Builder setPrintGroup(PrintGroup printGroup) {
-            position.printGroup = printGroup;
             return this;
         }
 

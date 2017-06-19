@@ -34,7 +34,6 @@ public final class PositionMapper {
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
     private static final String KEY_ALCOHOL_PRODUCT_KIND_CODE = "alcoholProductKindCode";
     private static final String KEY_TARE_VOLUME = "tareVolume";
-    private static final String KEY_PRINT_GROUP = "printGroup";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
 
@@ -100,7 +99,6 @@ public final class PositionMapper {
                 alcoholByVolume == null ? null : new BigDecimal(alcoholByVolume),
                 alcoholProductKindCode == null ? null : Long.valueOf(alcoholProductKindCode),
                 tareVolume == null ? null : new BigDecimal(tareVolume),
-                PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP)),
                 extraKeys,
                 subPositions
         );
@@ -127,7 +125,6 @@ public final class PositionMapper {
         bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume() == null ? null : position.getAlcoholByVolume().toPlainString());
         bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode() == null ? null : position.getAlcoholProductKindCode().toString());
         bundle.putString(KEY_TARE_VOLUME, position.getTareVolume() == null ? null : position.getTareVolume().toPlainString());
-        bundle.putBundle(KEY_PRINT_GROUP, PrintGroupMapper.toBundle(position.getPrintGroup()));
         Parcelable[] extraKeys = new Parcelable[position.getExtraKeys().size()];
         Iterator<ExtraKey> it = position.getExtraKeys().iterator();
         for (int i = 0; i < extraKeys.length; i++) {
