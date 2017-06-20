@@ -327,7 +327,7 @@ public class Position implements Parcelable {
         if (subPositions != null ? !subPositions.equals(position.subPositions) : position.subPositions != null) {
             return false;
         }
-        return (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null);
+        return (extraKeys != null ? extraKeys.equals(position.extraKeys) : position.extraKeys == null);
 
     }
 
