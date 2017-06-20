@@ -2,9 +2,6 @@ package ru.evotor.framework.core.action.event.receipt.changes
 
 import ru.evotor.IBundlable
 
-/**
- * Created by a.kuznetsov on 23/05/2017.
- */
 interface IChange : IBundlable {
     fun getType(): Type
 
@@ -13,6 +10,7 @@ interface IChange : IBundlable {
         POSITION_REMOVE,
         POSITION_EDIT,
         SET_EXTRA,
+        SET_PRINT_GROUP,
         UNKNOWN
     }
 }

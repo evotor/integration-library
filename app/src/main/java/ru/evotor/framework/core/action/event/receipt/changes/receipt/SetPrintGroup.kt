@@ -23,7 +23,7 @@ data class SetPrintGroup(val position: Position, val printGroup: PrintGroup?) : 
     }
 
     override fun getType(): IChange.Type {
-        return IChange.Type.SET_EXTRA
+        return IChange.Type.SET_PRINT_GROUP
     }
 
     companion object {

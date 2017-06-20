@@ -311,10 +311,9 @@ public class Position implements Parcelable {
             return false;
         if (tareVolume != null ? !tareVolume.equals(position.tareVolume) : position.tareVolume != null)
             return false;
-        if (subPositions != null ? !subPositions.equals(position.subPositions) : position.subPositions != null) {
+        if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
             return false;
-        }
-        return (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null);
+        return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
 
     }
 
@@ -335,8 +334,8 @@ public class Position implements Parcelable {
         result = 31 * result + (alcoholByVolume != null ? alcoholByVolume.hashCode() : 0);
         result = 31 * result + (alcoholProductKindCode != null ? alcoholProductKindCode.hashCode() : 0);
         result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
-        result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
+        result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         return result;
     }
 

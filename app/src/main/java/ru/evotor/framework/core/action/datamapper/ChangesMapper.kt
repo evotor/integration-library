@@ -5,10 +5,7 @@ import android.os.Parcelable
 import android.util.Log
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.core.action.event.receipt.changes.UnknownChange
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.position.*
 import ru.evotor.framework.safeValueOf
 
 object ChangesMapper {
@@ -73,6 +70,7 @@ object ChangesMapper {
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
             IChange.Type.POSITION_EDIT -> PositionEdit.from(bundle)
             IChange.Type.SET_EXTRA -> SetExtra.from(bundle)
+            IChange.Type.SET_PRINT_GROUP -> SetPrintGroup.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
