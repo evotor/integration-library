@@ -1,19 +1,17 @@
 package ru.evotor.framework.core.action.event.receipt.changes.position
 
 import android.os.Bundle
-import ru.evotor.framework.core.action.datamapper.PositionMapper
 import ru.evotor.framework.core.action.datamapper.PrintGroupMapper
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
-import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.PrintGroup
 
-data class SetPrintGroup(val position: Position, val printGroup: PrintGroup?) : IChange {
+data class SetPrintGroup(val positionUuid: String, val printGroup: PrintGroup?) : IChange {
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
-            putBundle(
-                    KEY_POSITION,
-                    PositionMapper.toBundle(position)
+            putString(
+                    KEY_POSITION_UUID,
+                    positionUuid
             )
             putBundle(
                     KEY_PRINT_GROUP,
@@ -27,14 +25,14 @@ data class SetPrintGroup(val position: Position, val printGroup: PrintGroup?) : 
     }
 
     companion object {
-        const val KEY_POSITION = "position"
+        const val KEY_POSITION_UUID = "positionUuid"
         const val KEY_PRINT_GROUP = "printGroup"
 
         @JvmStatic
         fun from(bundle: Bundle?): SetPrintGroup? {
             bundle ?: return null
 
-            val position = PositionMapper.from(bundle.getBundle(KEY_POSITION))
+            val position = bundle.getString(KEY_POSITION_UUID)
             val printGroup = PrintGroupMapper.from(bundle.getBundle(KEY_PRINT_GROUP))
 
             if (position == null || printGroup == null) {

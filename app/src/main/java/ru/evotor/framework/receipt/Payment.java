@@ -3,6 +3,8 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.framework.Utils;
+
 public class Payment implements Parcelable {
 
     private final PaymentType paymentType;
@@ -55,12 +57,12 @@ public class Payment implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userDescription);
-        dest.writeInt(this.paymentType.ordinal());
+        dest.writeString(this.paymentType.name());
     }
 
     protected Payment(Parcel in) {
         this.userDescription = in.readString();
-        this.paymentType = PaymentType.values()[in.readInt()];
+        this.paymentType = Utils.safeValueOf(PaymentType.class, in.readString(), PaymentType.UNKNOWN);
     }
 
     public static final Creator<Payment> CREATOR = new Creator<Payment>() {

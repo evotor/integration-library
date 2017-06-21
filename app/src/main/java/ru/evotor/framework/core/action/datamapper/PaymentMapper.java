@@ -3,6 +3,7 @@ package ru.evotor.framework.core.action.datamapper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.Payment;
 import ru.evotor.framework.receipt.PaymentType;
 
@@ -15,7 +16,7 @@ public final class PaymentMapper {
         if (bundle == null) {
             return null;
         }
-        PaymentType paymentType = PaymentType.values()[bundle.getInt(KEY_PAYMENT_TYPE, 0)];
+        PaymentType paymentType = Utils.safeValueOf(PaymentType.class, bundle.getString(KEY_USER_DESCRIPTION), PaymentType.UNKNOWN);
         String userDescription = bundle.getString(KEY_USER_DESCRIPTION);
         return new Payment(
                 paymentType,
@@ -29,7 +30,7 @@ public final class PaymentMapper {
             return null;
         }
         Bundle bundle = new Bundle();
-        bundle.putInt(KEY_PAYMENT_TYPE, payment.getPaymentType().ordinal());
+        bundle.putString(KEY_PAYMENT_TYPE, payment.getPaymentType().name());
         bundle.putString(KEY_USER_DESCRIPTION, payment.getUserDescription());
 
         return bundle;
