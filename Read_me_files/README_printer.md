@@ -1,4 +1,4 @@
-[Главная страница](https://github.com/evotor/integration-library/blob/master/README.md) SSDK для принтера Эвотор
+[Главная страница](https://github.com/evotor/integration-library/blob/master/README.md) SDK для принтера Эвотор
 
 
 # __1.1. SDK для принтера Эвотор__
@@ -11,7 +11,7 @@ _Содержание:_
 
 <a name="1011"></a>
 ### 1.1.1. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`.  
-Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который содержится в библиотеке, подключенной на прошлом шаге. Проинициализирйте его в `onCreate` вашего `Application` или старте `activity`:  
+Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который содержится в библиотеке, подключенной на прошлом шаге. Проинициализируйте его в `onCreate` вашего `Application` или старте `activity`:  
 ```  
 DeviceServiceConnector.startInitConnections(getApplicationContext());
 ```
