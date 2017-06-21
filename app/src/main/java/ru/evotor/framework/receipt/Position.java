@@ -314,7 +314,6 @@ public class Position implements Parcelable {
         if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
             return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
-
     }
 
     @Override
