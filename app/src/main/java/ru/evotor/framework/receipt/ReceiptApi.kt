@@ -7,7 +7,7 @@ import ru.evotor.framework.inventory.ProductType
 import java.math.BigDecimal
 
 object ReceiptApi {
-    const val AUTHORITY = "ru.evotor.receipt"
+    const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
     @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
