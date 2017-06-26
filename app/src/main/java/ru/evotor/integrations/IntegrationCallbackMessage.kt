@@ -17,6 +17,7 @@ sealed class IntegrationCallbackMessage(val resultCode: Int) {
 
     companion object {
 
+        @JvmStatic
         fun fromMessage(message: Message): IntegrationCallbackMessage {
             return when (message.what) {
                 100 -> Success()
@@ -26,6 +27,7 @@ sealed class IntegrationCallbackMessage(val resultCode: Int) {
             }
         }
 
+        @JvmStatic
         fun toMessage(callbackMessage: IntegrationCallbackMessage): Message {
             return Message.obtain().apply {
                 what = callbackMessage.resultCode
