@@ -10,7 +10,8 @@ interface IChange : IBundlable {
         POSITION_REMOVE,
         POSITION_EDIT,
         SET_EXTRA,
-        SET_PRINT_GROUP,
+        SET_POSITION_PRINT_GROUP,
+        SET_PAYMENT_PURPOSE_PRINT_GROUP,
         UNKNOWN
     }
 }

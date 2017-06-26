@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.receipt.payment;
+package ru.evotor.framework.core.action.event.receipt.print_group;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,13 +8,13 @@ import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
 import ru.evotor.framework.receipt.PaymentSystem;
 
-public abstract class PaymentEvent implements IBundlable {
+public abstract class PrintGroupEvent implements IBundlable {
     private static final String KEY_PAYMENT_SELECTED = "paymentSystem";
 
     @NonNull
     private final PaymentSystem paymentSystem;
 
-    PaymentEvent(@NonNull PaymentSystem paymentSystem) {
+    PrintGroupEvent(@NonNull PaymentSystem paymentSystem) {
         this.paymentSystem = paymentSystem;
     }
 

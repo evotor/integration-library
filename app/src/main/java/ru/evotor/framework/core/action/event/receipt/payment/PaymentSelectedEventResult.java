@@ -4,60 +4,68 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.evotor.IBundlable;
-import ru.evotor.framework.Utils;
-import ru.evotor.framework.core.action.datamapper.ChangesMapper;
-import ru.evotor.framework.core.action.datamapper.PrintGroupMapper;
-import ru.evotor.framework.core.action.event.receipt.changes.IChange;
+import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup;
+import ru.evotor.framework.receipt.PaymentPurpose;
 
 public class PaymentSelectedEventResult implements IBundlable {
 
     private static final String KEY_RECEIPT_EXTRA = "extra";
-    private static final String KEY_PRINT_GROUPS = "printGroups";
+    private static final String KEY_PAYMENT_PARTS = "paymentPurposes";
 
     @Nullable
     public static PaymentSelectedEventResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
+
+        Parcelable[] accountsParcelables = bundle.getParcelableArray(KEY_PAYMENT_PARTS);
+        if (accountsParcelables == null) {
+            return null;
+        }
+        List<PaymentPurpose> paymentPurposes = new ArrayList<>();
+        for (int i = 0; i < accountsParcelables.length; i++) {
+            if (accountsParcelables[i] instanceof Bundle) {
+                PaymentPurpose paymentPurpose = PaymentPurposeMapper.from((Bundle) accountsParcelables[i]);
+                if (paymentPurpose != null) {
+                    paymentPurposes.add(paymentPurpose);
+                }
+            }
+        }
+
         return new PaymentSelectedEventResult(
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
-                Utils.filterByClass(
-                        ChangesMapper.INSTANCE.create(bundle.getParcelableArray(KEY_PRINT_GROUPS)),
-                        SetPrintGroup.class
-                )
+                paymentPurposes
         );
     }
 
     @Nullable
     private final SetExtra extra;
     @NonNull
-    private final List<SetPrintGroup> printGroups;
+    private final List<PaymentPurpose> paymentPurposes;
 
     public PaymentSelectedEventResult(
             @Nullable SetExtra extra,
-            @NonNull List<SetPrintGroup> printGroups
+            @NonNull List<PaymentPurpose> paymentPurposes
     ) {
         this.extra = extra;
-        this.printGroups = printGroups;
+        this.paymentPurposes = paymentPurposes;
     }
 
     @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
-        Parcelable[] printGroups = new Parcelable[this.printGroups.size()];
-        for (int i = 0; i < printGroups.length; i++) {
-            IChange change = this.printGroups.get(i);
-            printGroups[i] = ChangesMapper.INSTANCE.toBundle(change);
+        Parcelable[] accountsParcelables = new Parcelable[this.paymentPurposes.size()];
+        for (int i = 0; i < accountsParcelables.length; i++) {
+            accountsParcelables[i] = PaymentPurposeMapper.toBundle(paymentPurposes.get(i));
         }
-        bundle.putParcelableArray(KEY_PRINT_GROUPS, printGroups);
+        bundle.putParcelableArray(KEY_PAYMENT_PARTS, accountsParcelables);
         return bundle;
     }
 
@@ -67,7 +75,7 @@ public class PaymentSelectedEventResult implements IBundlable {
     }
 
     @NonNull
-    public List<SetPrintGroup> getPrintGroups() {
-        return printGroups;
+    public List<PaymentPurpose> getPaymentPurposes() {
+        return paymentPurposes;
     }
 }

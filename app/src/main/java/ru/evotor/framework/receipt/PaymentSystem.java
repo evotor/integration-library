@@ -5,12 +5,12 @@ import android.os.Parcelable;
 
 import ru.evotor.framework.Utils;
 
-public class Payment implements Parcelable {
+public class PaymentSystem implements Parcelable {
 
     private final PaymentType paymentType;
     private final String userDescription;
 
-    public Payment(PaymentType paymentType, String userDescription) {
+    public PaymentSystem(PaymentType paymentType, String userDescription) {
         this.paymentType = paymentType;
         this.userDescription = userDescription;
     }
@@ -28,7 +28,7 @@ public class Payment implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Payment another = (Payment) o;
+        PaymentSystem another = (PaymentSystem) o;
 
         if (paymentType != another.paymentType) {
             return false;
@@ -60,20 +60,20 @@ public class Payment implements Parcelable {
         dest.writeString(this.paymentType.name());
     }
 
-    protected Payment(Parcel in) {
+    protected PaymentSystem(Parcel in) {
         this.userDescription = in.readString();
         this.paymentType = Utils.safeValueOf(PaymentType.class, in.readString(), PaymentType.UNKNOWN);
     }
 
-    public static final Creator<Payment> CREATOR = new Creator<Payment>() {
+    public static final Creator<PaymentSystem> CREATOR = new Creator<PaymentSystem>() {
         @Override
-        public Payment createFromParcel(Parcel source) {
-            return new Payment(source);
+        public PaymentSystem createFromParcel(Parcel source) {
+            return new PaymentSystem(source);
         }
 
         @Override
-        public Payment[] newArray(int size) {
-            return new Payment[size];
+        public PaymentSystem[] newArray(int size) {
+            return new PaymentSystem[size];
         }
     };
 }

@@ -70,7 +70,8 @@ object ChangesMapper {
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
             IChange.Type.POSITION_EDIT -> PositionEdit.from(bundle)
             IChange.Type.SET_EXTRA -> SetExtra.from(bundle)
-            IChange.Type.SET_PRINT_GROUP -> SetPrintGroup.from(bundle)
+            IChange.Type.SET_POSITION_PRINT_GROUP -> SetPrintGroup.from(bundle)
+            IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP -> SetPrintGroup.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
