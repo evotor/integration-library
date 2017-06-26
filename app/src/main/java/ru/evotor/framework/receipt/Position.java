@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
+import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 
 public class Position implements Parcelable {
@@ -418,6 +420,31 @@ public class Position implements Parcelable {
     };
 
     public static final class Builder {
+        public static Builder newInstance(
+                @NonNull ProductItem.Product product,
+                @NonNull BigDecimal quantity
+        ) {
+            Builder builder = Builder.newInstance(
+                    UUID.randomUUID().toString(),
+                    product.getUuid(),
+                    product.getName(),
+                    product.getMeasureName(),
+                    product.getMeasurePrecision(),
+                    product.getPrice(),
+                    quantity
+            );
+
+            Position position = builder.position;
+            position.productType = product.getType();
+            position.alcoholByVolume = product.getAlcoholByVolume();
+            position.alcoholProductKindCode = product.getAlcoholProductKindCode();
+            position.tareVolume = product.getTareVolume();
+            position.productCode = product.getCode();
+
+            return builder;
+
+        }
+
         public static Builder newInstance(
                 @Nullable String uuid,
                 @Nullable String productUuid,
