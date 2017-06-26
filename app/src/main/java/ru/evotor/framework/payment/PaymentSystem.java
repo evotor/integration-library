@@ -1,4 +1,4 @@
-package ru.evotor.framework.receipt;
+package ru.evotor.framework.payment;
 
 import android.os.Parcel;
 import android.os.Parcelable;

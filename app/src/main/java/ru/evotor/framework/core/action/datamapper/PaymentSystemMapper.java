@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.receipt.PaymentSystem;
-import ru.evotor.framework.receipt.PaymentType;
+import ru.evotor.framework.payment.PaymentSystem;
+import ru.evotor.framework.payment.PaymentType;
 
 public final class PaymentSystemMapper {
     private static final String KEY_PAYMENT_TYPE = "paymentType";

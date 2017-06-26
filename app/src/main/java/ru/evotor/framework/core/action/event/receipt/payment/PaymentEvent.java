@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
-import ru.evotor.framework.receipt.PaymentSystem;
+import ru.evotor.framework.payment.PaymentSystem;
 
 public abstract class PaymentEvent implements IBundlable {
     private static final String KEY_PAYMENT_SELECTED = "paymentSystem";

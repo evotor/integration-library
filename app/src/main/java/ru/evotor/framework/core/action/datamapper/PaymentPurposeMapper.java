@@ -5,12 +5,12 @@ import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
-import ru.evotor.framework.receipt.PaymentPurpose;
+import ru.evotor.framework.payment.PaymentPurpose;
 
 public final class PaymentPurposeMapper {
     private static final String KEY_IDENTIFIER = "identifier";
     private static final String KEY_TOTAL = "total";
-    private static final String KEY_ACCOUNT = "account";
+    private static final String KEY_ACCOUNT_ID = "account";
 
     @Nullable
     public static PaymentPurpose from(@Nullable Bundle bundle) {
@@ -19,7 +19,7 @@ public final class PaymentPurposeMapper {
         }
         String identifier = bundle.getString(KEY_IDENTIFIER);
         BigDecimal total = new BigDecimal(bundle.getString(KEY_TOTAL));
-        String account = bundle.getString(KEY_ACCOUNT);
+        String account = bundle.getString(KEY_ACCOUNT_ID);
         return new PaymentPurpose(
                 identifier,
                 total,
@@ -35,7 +35,7 @@ public final class PaymentPurposeMapper {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_IDENTIFIER, paymentPurpose.getIdentifier());
         bundle.putString(KEY_TOTAL, paymentPurpose.getTotal().toPlainString());
-        bundle.putString(KEY_ACCOUNT, paymentPurpose.getAccount());
+        bundle.putString(KEY_ACCOUNT_ID, paymentPurpose.getAccountId());
 
         return bundle;
     }

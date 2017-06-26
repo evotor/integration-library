@@ -11,7 +11,7 @@ import java.util.List;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
-import ru.evotor.framework.receipt.PaymentPurpose;
+import ru.evotor.framework.payment.PaymentPurpose;
 
 public class PaymentSelectedEventResult implements IBundlable {
 

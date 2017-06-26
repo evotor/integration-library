@@ -1,4 +1,4 @@
-package ru.evotor.framework.receipt;
+package ru.evotor.framework.payment;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,12 +14,12 @@ public class PaymentPurpose implements Parcelable {
     @NonNull
     private final BigDecimal total;
     @Nullable
-    private final String account;
+    private final String accountId;
 
-    public PaymentPurpose(@Nullable String identifier, @NonNull BigDecimal total, @Nullable String account) {
+    public PaymentPurpose(@Nullable String identifier, @NonNull BigDecimal total, @Nullable String accountId) {
         this.identifier = identifier;
         this.total = total;
-        this.account = account;
+        this.accountId = accountId;
     }
 
     @Nullable
@@ -33,8 +33,8 @@ public class PaymentPurpose implements Parcelable {
     }
 
     @Nullable
-    public String getAccount() {
-        return account;
+    public String getAccountId() {
+        return accountId;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class PaymentPurpose implements Parcelable {
         if (identifier != null ? !identifier.equals(that.identifier) : that.identifier != null)
             return false;
         if (!total.equals(that.total)) return false;
-        return account != null ? account.equals(that.account) : that.account == null;
+        return accountId != null ? accountId.equals(that.accountId) : that.accountId == null;
 
     }
 
@@ -55,7 +55,7 @@ public class PaymentPurpose implements Parcelable {
     public int hashCode() {
         int result = identifier != null ? identifier.hashCode() : 0;
         result = 31 * result + total.hashCode();
-        result = 31 * result + (account != null ? account.hashCode() : 0);
+        result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
         return result;
     }
 
@@ -68,13 +68,13 @@ public class PaymentPurpose implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.identifier);
         dest.writeString(this.total.toPlainString());
-        dest.writeString(this.account);
+        dest.writeString(this.accountId);
     }
 
     protected PaymentPurpose(Parcel in) {
         this.identifier = in.readString();
         this.total = new BigDecimal(in.readString());
-        this.account = in.readString();
+        this.accountId = in.readString();
     }
 
     public static final Creator<PaymentPurpose> CREATOR = new Creator<PaymentPurpose>() {
