@@ -8,7 +8,7 @@ import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
  * Created by ivan on 26.06.17.
  */
 
-class MergeEventResult(val extra: SetExtra?) : IBundlable {
+class PositionsMergeEventResult(val extra: SetExtra?) : IBundlable {
 
     override fun toBundle(): Bundle {
         val result = Bundle()
@@ -19,11 +19,11 @@ class MergeEventResult(val extra: SetExtra?) : IBundlable {
     companion object {
         private val KEY_RECEIPT_EXTRA = "extra"
 
-        fun create(bundle: Bundle?): MergeEventResult? {
+        fun create(bundle: Bundle?): PositionsMergeEventResult? {
             return if (bundle == null)
                 null
             else
-                MergeEventResult(SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)))
+                PositionsMergeEventResult(SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)))
         }
     }
 }

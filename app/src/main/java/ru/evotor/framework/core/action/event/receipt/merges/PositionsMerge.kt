@@ -14,7 +14,7 @@ import ru.evotor.framework.receipt.Position
  * after - результат склейки
  */
 
-class Merge(val before: List<Position>, val after: Position) : Parcelable {
+class PositionsMerge(val before: List<Position>, val after: Position) : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, i: Int) {
         parcel.writeList(before)
@@ -23,15 +23,16 @@ class Merge(val before: List<Position>, val after: Position) : Parcelable {
 
     companion object {
 
-        val CREATOR: Parcelable.Creator<Merge> = object : Parcelable.Creator<Merge> {
-            override fun createFromParcel(parcel: Parcel): Merge {
+        @JvmField
+        val CREATOR: Parcelable.Creator<PositionsMerge> = object : Parcelable.Creator<PositionsMerge> {
+            override fun createFromParcel(parcel: Parcel): PositionsMerge {
                 val before = ArrayList<Position>()
                 parcel.readList(before, Position::class.java.classLoader)
                 val after = parcel.readParcelable<Position>(Position::class.java.classLoader)
-                return Merge(before, after)
+                return PositionsMerge(before, after)
             }
 
-            override fun newArray(size: Int): Array<Merge?> {
+            override fun newArray(size: Int): Array<PositionsMerge?> {
                 return arrayOfNulls(size)
             }
         }
