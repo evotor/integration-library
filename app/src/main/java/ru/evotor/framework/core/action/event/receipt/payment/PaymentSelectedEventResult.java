@@ -16,7 +16,7 @@ import ru.evotor.framework.payment.PaymentPurpose;
 public class PaymentSelectedEventResult implements IBundlable {
 
     private static final String KEY_RECEIPT_EXTRA = "extra";
-    private static final String KEY_PAYMENT_PARTS = "paymentPurposes";
+    private static final String KEY_PAYMENT_PURPOSES = "paymentPurposes";
 
     @Nullable
     public static PaymentSelectedEventResult create(@Nullable Bundle bundle) {
@@ -24,14 +24,14 @@ public class PaymentSelectedEventResult implements IBundlable {
             return null;
         }
 
-        Parcelable[] accountsParcelables = bundle.getParcelableArray(KEY_PAYMENT_PARTS);
-        if (accountsParcelables == null) {
+        Parcelable[] purposesParcelables = bundle.getParcelableArray(KEY_PAYMENT_PURPOSES);
+        if (purposesParcelables == null) {
             return null;
         }
         List<PaymentPurpose> paymentPurposes = new ArrayList<>();
-        for (int i = 0; i < accountsParcelables.length; i++) {
-            if (accountsParcelables[i] instanceof Bundle) {
-                PaymentPurpose paymentPurpose = PaymentPurposeMapper.from((Bundle) accountsParcelables[i]);
+        for (int i = 0; i < purposesParcelables.length; i++) {
+            if (purposesParcelables[i] instanceof Bundle) {
+                PaymentPurpose paymentPurpose = PaymentPurposeMapper.from((Bundle) purposesParcelables[i]);
                 if (paymentPurpose != null) {
                     paymentPurposes.add(paymentPurpose);
                 }
@@ -65,7 +65,7 @@ public class PaymentSelectedEventResult implements IBundlable {
         for (int i = 0; i < accountsParcelables.length; i++) {
             accountsParcelables[i] = PaymentPurposeMapper.toBundle(paymentPurposes.get(i));
         }
-        bundle.putParcelableArray(KEY_PAYMENT_PARTS, accountsParcelables);
+        bundle.putParcelableArray(KEY_PAYMENT_PURPOSES, accountsParcelables);
         return bundle;
     }
 

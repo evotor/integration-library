@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class ReceiptPaymentPartsEditedEvent extends ReceiptEvent {
-    public static final String BROADCAST_ACTION_SELL_RECEIPT_PRINT_GROUP_EDITED = "evotor.intent.action.receipt.sell.paymentParts.EDITED";
-    public static final String BROADCAST_ACTION_PAYBACK_PRINT_GROUP_EDITED = "evotor.intent.action.receipt.payback.paymentParts.EDITED";
+    public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.paymentParts.EDITED";
+    public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.paymentParts.EDITED";
 
     public ReceiptPaymentPartsEditedEvent(@NonNull String receiptUuid) {
         super(receiptUuid);

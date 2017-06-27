@@ -9,7 +9,7 @@ import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
 import ru.evotor.framework.payment.PaymentSystem;
 
 public abstract class PaymentEvent implements IBundlable {
-    private static final String KEY_PAYMENT_SELECTED = "paymentSystem";
+    private static final String KEY_SELECTED_PAYMENT_SYSTEM = "paymentSystem";
 
     @NonNull
     private final PaymentSystem paymentSystem;
@@ -20,7 +20,7 @@ public abstract class PaymentEvent implements IBundlable {
 
     @Nullable
     static PaymentSystem getPayment(@Nullable Bundle bundle) {
-        return bundle == null ? null : PaymentSystemMapper.from(bundle.getBundle(KEY_PAYMENT_SELECTED));
+        return bundle == null ? null : PaymentSystemMapper.from(bundle.getBundle(KEY_SELECTED_PAYMENT_SYSTEM));
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public abstract class PaymentEvent implements IBundlable {
     @NonNull
     public Bundle toBundle() {
         Bundle result = new Bundle();
-        result.putBundle(KEY_PAYMENT_SELECTED, PaymentSystemMapper.toBundle(paymentSystem));
+        result.putBundle(KEY_SELECTED_PAYMENT_SYSTEM, PaymentSystemMapper.toBundle(paymentSystem));
         return result;
     }
 
