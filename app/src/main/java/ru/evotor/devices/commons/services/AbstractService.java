@@ -3,7 +3,7 @@ package ru.evotor.devices.commons.services;
 
 import android.content.Context;
 
-import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
+import ru.evotor.OperationOnMainThreadException;
 import ru.evotor.devices.commons.exception.ServiceNotConnectedException;
 
 public abstract class AbstractService {
@@ -17,7 +17,7 @@ public abstract class AbstractService {
     protected abstract Boolean getServiceConnected();
 
     public void waitInitService(Context context) throws ServiceNotConnectedException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        OperationOnMainThreadException.throwIfMainThread();
 
         if (context == null) {
             throw new ServiceNotConnectedException("Unable to connect to DeviceService");

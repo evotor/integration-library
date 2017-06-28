@@ -11,7 +11,7 @@ import android.os.RemoteException;
 import ru.evotor.devices.commons.ConnectionWrapper;
 import ru.evotor.devices.commons.DeviceServiceConnector;
 import ru.evotor.devices.commons.exception.DeviceServiceException;
-import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
+import ru.evotor.OperationOnMainThreadException;
 import ru.evotor.devices.commons.exception.UnknownException;
 import ru.evotor.devices.commons.printer.PrinterDocument;
 import ru.evotor.devices.commons.result.ResultInt;
@@ -98,7 +98,7 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
     }
 
     public int getAllowableSymbolsLineLength(int deviceId) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        OperationOnMainThreadException.throwIfMainThread();
 
         try {
             ResultInt result = service.getAllowableSymbolsLineLength(deviceId);
@@ -110,7 +110,7 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
     }
 
     public int getAllowablePixelLineLength(int deviceId) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        OperationOnMainThreadException.throwIfMainThread();
 
         try {
             ResultInt result = service.getAllowablePixelLineLength(deviceId);
@@ -122,7 +122,7 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
     }
 
     public void printDocument(int deviceId, PrinterDocument printerDocument) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        OperationOnMainThreadException.throwIfMainThread();
 
         try {
             ResultVoid result = service.printDocument(deviceId, printerDocument);

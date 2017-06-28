@@ -12,7 +12,7 @@ import ru.evotor.devices.commons.ConnectionWrapper;
 import ru.evotor.devices.commons.DeviceServiceConnector;
 import ru.evotor.devices.commons.IScalesService;
 import ru.evotor.devices.commons.exception.DeviceServiceException;
-import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
+import ru.evotor.OperationOnMainThreadException;
 import ru.evotor.devices.commons.exception.UnknownException;
 import ru.evotor.devices.commons.result.ResultWeight;
 import ru.evotor.devices.commons.scales.Weight;
@@ -101,7 +101,7 @@ public class ScalesService extends AbstractService implements IScalesServiceWrap
 
     @Override
     public Weight getWeight(int deviceId) throws DeviceServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        OperationOnMainThreadException.throwIfMainThread();
 
         try {
             ResultWeight result = service.getWeight(deviceId);
