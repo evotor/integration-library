@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;
 
 public class CashInEvent extends CashOperationEvent {
-    public static final String BROADCAST_ACTION_CASH_IN = "evotor.intent.action.cashOperation.IN";
+    public static final String BROADCAST_ACTION_CASH_IN = "evotor.intent.action.cashOperation.CASH_IN";
 
     private static final String KEY_TOTAL = "total";
 
@@ -45,5 +45,13 @@ public class CashInEvent extends CashOperationEvent {
                 documentUuid,
                 total
         );
+    }
+
+    @NonNull
+    @Override
+    public Bundle toBundle() {
+        Bundle bundle = super.toBundle();
+        bundle.putString(KEY_TOTAL, total.toPlainString());
+        return bundle;
     }
 }
