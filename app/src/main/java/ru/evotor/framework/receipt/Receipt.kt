@@ -47,8 +47,26 @@ data class Receipt
             /**
              * Номер чека
              */
-            val number: String
+            val number: String,
+            /**
+             * Тип чека
+             */
+            val type: Type
     )
+
+    /**
+     * Тип чека
+     */
+    enum class Type {
+        /**
+         * Продажа
+         */
+        SELL,
+        /**
+         * Возврат
+         */
+        PAYBACK
+    }
 
     /**
      * Печатная форма чека
