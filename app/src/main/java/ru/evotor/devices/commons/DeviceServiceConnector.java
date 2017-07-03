@@ -6,7 +6,7 @@ import android.os.DeadObjectException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ru.evotor.devices.commons.exception.DeviceServiceException;
-import ru.evotor.OperationOnMainThreadException;
+import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
 import ru.evotor.devices.commons.exception.DeviceServiceRuntimeException;
 import ru.evotor.devices.commons.exception.ServiceNotConnectedException;
 import ru.evotor.devices.commons.services.IPrinterServiceWrapper;
@@ -49,13 +49,13 @@ public class DeviceServiceConnector {
 
 
     public static IPrinterServiceWrapper getPrinterService() throws ServiceNotConnectedException {
-        OperationOnMainThreadException.throwIfMainThread();
+        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
         printerService.waitInitService(context);
         return printerService;
     }
 
     public static IScalesServiceWrapper getScalesService() throws ServiceNotConnectedException {
-        OperationOnMainThreadException.throwIfMainThread();
+        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
         scalesService.waitInitService(context);
         return scalesService;
     }
