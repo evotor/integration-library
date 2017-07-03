@@ -10,7 +10,7 @@ public abstract class CashDrawerEvent implements IBundlable {
 
     private final int cashDrawerId;
 
-    CashDrawerEvent(Bundle extras) {
+    CashDrawerEvent(@NonNull Bundle extras) {
         this(
                 extras.getInt(KEY_CASH_DRAWER_ID, -1)
         );

@@ -39,7 +39,6 @@ object ReceiptApi {
                             cursor.getLong(cursor.getColumnIndex(PositionTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                             BigDecimal(cursor.getString(cursor.getColumnIndex(PositionTable.ROW_TARE_VOLUME))).divide(BigDecimal(1000)),
                             null,
-                            null,
                             null
                     )
                     positionsList.add(position)

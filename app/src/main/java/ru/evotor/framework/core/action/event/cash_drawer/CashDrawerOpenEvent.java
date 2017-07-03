@@ -1,6 +1,7 @@
 package ru.evotor.framework.core.action.event.cash_drawer;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 public class CashDrawerOpenEvent extends CashDrawerEvent {
@@ -10,7 +11,7 @@ public class CashDrawerOpenEvent extends CashDrawerEvent {
         super(cashDrawerId);
     }
 
-    private CashDrawerOpenEvent(Bundle extras) {
+    private CashDrawerOpenEvent(@NonNull Bundle extras) {
         super(extras);
     }
 
