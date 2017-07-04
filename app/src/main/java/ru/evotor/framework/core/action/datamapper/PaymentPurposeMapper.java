@@ -12,7 +12,7 @@ public final class PaymentPurposeMapper {
     private static final String KEY_PAYMENT_SYSTEM_ID = "paymentSystemId";
     private static final String KEY_TOTAL = "total";
     private static final String KEY_ACCOUNT_ID = "account";
-    private static final String KEY_USER_MASSAGE = "userMessage";
+    private static final String KEY_USER_MESSAGE = "userMessage";
 
     @Nullable
     public static PaymentPurpose from(@Nullable Bundle bundle) {
@@ -23,7 +23,7 @@ public final class PaymentPurposeMapper {
         String paymentSystemId = bundle.getString(KEY_PAYMENT_SYSTEM_ID);
         BigDecimal total = new BigDecimal(bundle.getString(KEY_TOTAL));
         String account = bundle.getString(KEY_ACCOUNT_ID);
-        String userMessage = bundle.getString(KEY_USER_MASSAGE);
+        String userMessage = bundle.getString(KEY_USER_MESSAGE);
         return new PaymentPurpose(
                 identifier,
                 paymentSystemId,
@@ -43,7 +43,7 @@ public final class PaymentPurposeMapper {
         bundle.putString(KEY_PAYMENT_SYSTEM_ID, paymentPurpose.getPaymentSystemId());
         bundle.putString(KEY_TOTAL, paymentPurpose.getTotal().toPlainString());
         bundle.putString(KEY_ACCOUNT_ID, paymentPurpose.getAccountId());
-        bundle.putString(KEY_USER_MASSAGE, paymentPurpose.getUserMessage());
+        bundle.putString(KEY_USER_MESSAGE, paymentPurpose.getUserMessage());
 
         return bundle;
     }
