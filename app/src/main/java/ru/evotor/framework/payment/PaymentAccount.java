@@ -4,10 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+/**
+ * Аккаунт в рамках платёжной системы
+ */
 public class PaymentAccount implements Parcelable {
 
+    /**
+     * Описание аккаунта, которое можно отобразить пользователю
+     */
     @Nullable
     private final String userDescription;
+    /**
+     * Идентификатор аккаунта в рамках платёжной системы
+     */
     @Nullable
     private final String accountId;
 
