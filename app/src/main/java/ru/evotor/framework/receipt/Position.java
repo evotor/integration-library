@@ -145,7 +145,7 @@ public class Position implements Parcelable {
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
                 position.getExtraKeys(),
-                position.getSubPosition()
+                position.getSubPositions()
         );
     }
 
@@ -206,8 +206,8 @@ public class Position implements Parcelable {
      */
     public BigDecimal getTotalWithSubPositionsAndWithoutDocumentDiscount() {
         BigDecimal sum = getTotalWithoutDocumentDiscount();
-        if (getSubPosition() != null) {
-            for (Position subPosition : getSubPosition()) {
+        if (getSubPositions() != null) {
+            for (Position subPosition : getSubPositions()) {
                 sum = sum.add(subPosition.getTotalWithoutDocumentDiscount());
             }
         }
@@ -278,7 +278,7 @@ public class Position implements Parcelable {
         return extraKeys;
     }
 
-    public List<Position> getSubPosition() {
+    public List<Position> getSubPositions() {
         return subPositions;
     }
 
