@@ -9,8 +9,10 @@ import ru.evotor.framework.payment.PaymentPurpose;
 
 public final class PaymentPurposeMapper {
     private static final String KEY_IDENTIFIER = "identifier";
+    private static final String KEY_PAYMENT_SYSTEM_ID = "paymentSystemId";
     private static final String KEY_TOTAL = "total";
     private static final String KEY_ACCOUNT_ID = "account";
+    private static final String KEY_USER_MESSAGE = "userMessage";
 
     @Nullable
     public static PaymentPurpose from(@Nullable Bundle bundle) {
@@ -18,12 +20,16 @@ public final class PaymentPurposeMapper {
             return null;
         }
         String identifier = bundle.getString(KEY_IDENTIFIER);
+        String paymentSystemId = bundle.getString(KEY_PAYMENT_SYSTEM_ID);
         BigDecimal total = new BigDecimal(bundle.getString(KEY_TOTAL));
         String account = bundle.getString(KEY_ACCOUNT_ID);
+        String userMessage = bundle.getString(KEY_USER_MESSAGE);
         return new PaymentPurpose(
                 identifier,
+                paymentSystemId,
                 total,
-                account
+                account,
+                userMessage
         );
     }
 
@@ -34,8 +40,10 @@ public final class PaymentPurposeMapper {
         }
         Bundle bundle = new Bundle();
         bundle.putString(KEY_IDENTIFIER, paymentPurpose.getIdentifier());
+        bundle.putString(KEY_PAYMENT_SYSTEM_ID, paymentPurpose.getPaymentSystemId());
         bundle.putString(KEY_TOTAL, paymentPurpose.getTotal().toPlainString());
         bundle.putString(KEY_ACCOUNT_ID, paymentPurpose.getAccountId());
+        bundle.putString(KEY_USER_MESSAGE, paymentPurpose.getUserMessage());
 
         return bundle;
     }
