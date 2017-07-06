@@ -51,11 +51,23 @@ object ReceiptApi {
         return positionsList
     }
 
+    /**
+     * Получить текущий открытый чек.
+     * @param context контекст приложения
+     * @param type тип чека
+     * @return чек или null, если чек закрыт
+     */
     @JvmStatic
     fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
         return getReceipt(context, type, null);
     }
 
+    /**
+     * Получить чек по uuid. Чек может быть уже закрыт
+     * @param context контекст приложения
+     * @param uuid uuid чека
+     * @return чек или null, если чек не найден
+     */
     @JvmStatic
     fun getReceipt(context: Context, uuid: String): Receipt? {
         return getReceipt(context, null, uuid);
@@ -148,6 +160,12 @@ object ReceiptApi {
         )
     }
 
+    /**
+     * Запрос списка заголовков чека
+     * @param context контекст приложения
+     * @param type фильтр по типу чека
+     * @return курсор с заголовками чека
+     */
     @JvmStatic
     fun getReceiptHeaders(context: Context, type: Receipt.Type? = null): ru.evotor.framework.Cursor<Receipt.Header?>? {
         return context.contentResolver.query(
