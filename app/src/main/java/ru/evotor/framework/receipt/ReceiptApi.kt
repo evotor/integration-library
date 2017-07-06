@@ -221,14 +221,26 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100)),
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100)),
+                if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
+                    BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100))
+                } else {
+                    BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100))
+                },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)),
+                if (cursor.getColumnIndex(PositionTable.COLUMN_MARK) != -1) {
+                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
+                } else {
+                    null
+                },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))).divide(BigDecimal(1000)),
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 BigDecimal(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))).divide(BigDecimal(1000)),
-                createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS))),
+                if (cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS) != -1) {
+                    createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+                } else {
+                    null
+                },
                 null
         )
     }
@@ -254,6 +266,7 @@ object ReceiptApi {
 
     private fun createExtraKeysFromDBFormat(value: String?): Set<ExtraKey> {
         val result = HashSet<ExtraKey>()
+        value ?: return result
         val jsonExtraKeys = JSONArray(value)
         for (i in 0 until jsonExtraKeys.length()) {
             jsonExtraKeys.getJSONObject(i).let {
