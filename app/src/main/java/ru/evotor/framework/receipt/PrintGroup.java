@@ -4,15 +4,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by a.kuznetsov on 30/04/2017.
+ * Описание характеристик печатной группы - отдельного печатного документа в рамках одного чека
  */
-
 public class PrintGroup implements Parcelable {
+    /**
+     * Идентификатор печатной группы
+     */
     private String identifier;
+    /**
+     * Тип печатной группы (фискальный, енвд и др.)
+     */
     private Type type;
+    /**
+     * Название организации
+     */
     private String orgName;
+    /**
+     * ИНН организации
+     */
     private String orgInn;
+    /**
+     * Адрес организации
+     */
     private String orgAddress;
+    /**
+     * Система налогооблажения
+     */
     private TaxationSystem taxationSystem;
 
     public PrintGroup(
