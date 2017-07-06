@@ -11,6 +11,7 @@ object UserApi {
      * @param context контекст приложения
      * @return список пользователей
      */
+    @JvmStatic
     fun getAllUsers(context: Context): List<User>? {
         context.contentResolver
                 .query(UsersTable.URI, null, null, null, null)
@@ -35,6 +36,7 @@ object UserApi {
      * @param context контекст приложения
      * @return авторизованный пользователь или null, если пользователь не авторизован
      */
+    @JvmStatic
     fun getAuthenticatedUser(context: Context): User? {
         context.contentResolver
                 .query(UsersTable.URI_AUTHENTICATED, null, null, null, null)
@@ -57,6 +59,7 @@ object UserApi {
      * @param context контекст приложения
      * @return список всех прав системы
      */
+    @JvmStatic
     fun getAllGrants(context: Context): List<Grant>? {
         context.contentResolver
                 .query(GrantsTable.URI, null, null, null, null)
@@ -81,6 +84,7 @@ object UserApi {
      * @param context контекст приложения
      * @return список прав авторизованного пользователя
      */
+    @JvmStatic
     fun getGrantsOfAuthenticatedUser(context: Context): List<Grant>? {
 
         context.contentResolver
