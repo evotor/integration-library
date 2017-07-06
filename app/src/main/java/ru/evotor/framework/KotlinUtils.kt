@@ -13,15 +13,15 @@ inline fun <T> Iterable<T>.sumByBigDecimal(selector: (T) -> BigDecimal): BigDeci
     return sum
 }
 
-inline fun <reified T : kotlin.Enum<T>> safeValueOf(type: String?): T? {
+inline fun <reified T : kotlin.Enum<T>> safeValueOf(type: String?, default: T? = null): T? {
     if (type == null) {
-        return null
+        return default
     }
 
     try {
         return java.lang.Enum.valueOf(T::class.java, type)
     } catch (e: IllegalArgumentException) {
-        return null
+        return default
     }
 }
 

@@ -16,13 +16,9 @@ data class Payment(
          */
         val value: BigDecimal,
         /**
-         * Сумма сдачи
-         */
-        val change: BigDecimal,
-        /**
          * Платежная система
          */
-        val system: PaymentSystem,
+        val system: PaymentSystem?,
         /**
          * Идентификатор цели платежа
          */
@@ -30,6 +26,9 @@ data class Payment(
         /**
          * Идентификатор аккаунта
          */
-        val accountId: String?
-
+        val accountId: String?,
+        /**
+         * Описание аккаунта
+         */
+        val accountUserDescription: String?
 )
