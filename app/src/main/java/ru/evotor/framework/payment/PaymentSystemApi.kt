@@ -15,20 +15,20 @@ object PaymentSystemApi {
     fun getPaymentSystems(context: Context): List<Pair<PaymentSystem, List<PaymentAccount>>> {
         val paymentSystemList = mutableListOf<Pair<PaymentSystem, MutableList<PaymentAccount>>>()
 
-        val cursor: Cursor? = context.contentResolver.query(PaymentTable.URI, null, null, null, null)
+        val cursor: Cursor? = context.contentResolver.query(PaymentSystemTable.URI, null, null, null, null)
 
         if (cursor != null) {
             try {
                 while (cursor.moveToNext()) {
                     val paymentSystem = PaymentSystem(
-                            Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentTable.ROW_PAYMENT_TYPE)), PaymentType.UNKNOWN),
-                            cursor.getString(cursor.getColumnIndex(PaymentTable.ROW_PAYMENT_SYSTEM_USER_DESCRIPTION)),
-                            cursor.getString(cursor.getColumnIndex(PaymentTable.PAYMENT_SYSTEM_ID))
+                            Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), PaymentType.UNKNOWN),
+                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)),
+                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
                     )
 
                     val paymentAccount = PaymentAccount(
-                            cursor.getString(cursor.getColumnIndex(PaymentTable.ROW_ACCOUNT_USER_DESCRIPTION)),
-                            cursor.getString(cursor.getColumnIndex(PaymentTable.ROW_ACCOUNT_ID))
+                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_ID))
                     )
 
                     var inList = false
