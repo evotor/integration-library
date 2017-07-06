@@ -45,9 +45,9 @@ data class Receipt
              */
             val uuid: String,
             /**
-             * Номер чека
+             * Номер чека. Может быть null для еще незакрытого чека
              */
-            val number: String,
+            val number: String?,
             /**
              * Тип чека
              */
