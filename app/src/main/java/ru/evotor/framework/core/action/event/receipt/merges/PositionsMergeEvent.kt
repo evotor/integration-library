@@ -17,7 +17,9 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
     }
 
     companion object {
+        @JvmField
         val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.mergingPositions"
+        @JvmField
         val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.mergingPositions"
         private val KEY_RECEIPT_UUID = "receiptUuid"
         private val KEY_MERGES = "merges"

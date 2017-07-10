@@ -38,12 +38,12 @@ public final class Utils {
     }
 
     @Nullable
-    public static <T> List<T> convertParcelables(Parcelable[] parcelables, @NonNull Class<T> clazz) {
+    public static <T> List<T> convertParcelables(@Nullable Parcelable[] parcelables, @NonNull Class<T> clazz) {
         if (parcelables != null) {
             List<T> exports = new ArrayList<>();
-            for (int i = 0; i < parcelables.length; i++) {
-                if (clazz.isInstance(parcelables[i])) {
-                    exports.add((T) parcelables[i]);
+            for (Parcelable parcelable : parcelables) {
+                if (clazz.isInstance(parcelable)) {
+                    exports.add((T) parcelable);
                 }
             }
             return exports;

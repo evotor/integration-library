@@ -13,8 +13,6 @@ class PrintExtraPlacePrintGroupHeader(
                 bundle.apply { putString(KEY_PRINT_GROUP_ID, place.printGroupId) }
 
         fun fromBundle(bundle: Bundle): PrintExtraPlacePrintGroupHeader? =
-                bundle.getString(KEY_PRINT_GROUP_ID)?.let {
-                    PrintExtraPlacePrintGroupHeader(it)
-                }
+                PrintExtraPlacePrintGroupHeader(bundle.getString(KEY_PRINT_GROUP_ID))
     }
 }

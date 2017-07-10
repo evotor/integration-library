@@ -13,8 +13,6 @@ class PrintExtraPlacePrintGroupSummary(
                 bundle.apply { putString(KEY_PRINT_GROUP_ID, place.printGroupId) }
 
         fun fromBundle(bundle: Bundle): PrintExtraPlacePrintGroupSummary? =
-                bundle.getString(KEY_PRINT_GROUP_ID)?.let {
-                    PrintExtraPlacePrintGroupSummary(it)
-                }
+                PrintExtraPlacePrintGroupSummary(bundle.getString(KEY_PRINT_GROUP_ID))
     }
 }
