@@ -32,13 +32,19 @@ public class PrintGroup implements Parcelable {
      */
     private TaxationSystem taxationSystem;
 
+    /**
+     * Печатать/не печатать чек
+     */
+    private boolean shouldPrintReceipt;
+
     public PrintGroup(
             String identifier,
             Type type,
             String orgName,
             String orgInn,
             String orgAddress,
-            TaxationSystem taxationSystem
+            TaxationSystem taxationSystem,
+            boolean shouldPrintReceipt
     ) {
         this.identifier = identifier;
         this.type = type;
@@ -46,6 +52,7 @@ public class PrintGroup implements Parcelable {
         this.orgInn = orgInn;
         this.orgAddress = orgAddress;
         this.taxationSystem = taxationSystem;
+        this.shouldPrintReceipt = shouldPrintReceipt;
     }
 
     public String getIdentifier() {
@@ -70,6 +77,10 @@ public class PrintGroup implements Parcelable {
 
     public TaxationSystem getTaxationSystem() {
         return taxationSystem;
+    }
+
+    public boolean isShouldPrintReceipt() {
+        return shouldPrintReceipt;
     }
 
     public enum Type {
@@ -100,6 +111,7 @@ public class PrintGroup implements Parcelable {
         dest.writeString(this.orgInn);
         dest.writeString(this.orgAddress);
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
+        dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
     }
 
     protected PrintGroup(Parcel in) {
@@ -111,6 +123,7 @@ public class PrintGroup implements Parcelable {
         this.orgAddress = in.readString();
         int tmpTaxationSystem = in.readInt();
         this.taxationSystem = tmpTaxationSystem == -1 ? null : TaxationSystem.values()[tmpTaxationSystem];
+        this.shouldPrintReceipt = in.readInt() == 1;
     }
 
     public static final Parcelable.Creator<PrintGroup> CREATOR = new Parcelable.Creator<PrintGroup>() {
@@ -139,6 +152,7 @@ public class PrintGroup implements Parcelable {
         if (orgInn != null ? !orgInn.equals(that.orgInn) : that.orgInn != null) return false;
         if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null)
             return false;
+        if (shouldPrintReceipt != that.shouldPrintReceipt) return false;
         return taxationSystem == that.taxationSystem;
     }
 
