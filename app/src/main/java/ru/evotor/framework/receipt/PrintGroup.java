@@ -123,7 +123,11 @@ public class PrintGroup implements Parcelable {
         this.orgAddress = in.readString();
         int tmpTaxationSystem = in.readInt();
         this.taxationSystem = tmpTaxationSystem == -1 ? null : TaxationSystem.values()[tmpTaxationSystem];
-        this.shouldPrintReceipt = in.readInt() == 1;
+        try {
+            this.shouldPrintReceipt = in.readInt() == 1;
+        } catch (Exception e) {
+            return;
+        }
     }
 
     public static final Parcelable.Creator<PrintGroup> CREATOR = new Parcelable.Creator<PrintGroup>() {
