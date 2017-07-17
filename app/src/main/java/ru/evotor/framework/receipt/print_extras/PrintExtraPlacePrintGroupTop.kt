@@ -2,6 +2,9 @@ package ru.evotor.framework.receipt.print_extras
 
 import android.os.Bundle
 
+/**
+ * Печатная информация будет добавлена сверху от чека: после клише, до текста "Кассовый чек"
+ */
 class PrintExtraPlacePrintGroupTop(
         val printGroupId: String?
 ) : PrintExtraPlace(PrintExtraPlaceType.PRINT_GROUP_TOP) {

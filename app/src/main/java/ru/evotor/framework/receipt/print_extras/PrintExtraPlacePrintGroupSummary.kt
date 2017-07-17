@@ -2,6 +2,9 @@ package ru.evotor.framework.receipt.print_extras
 
 import android.os.Bundle
 
+/**
+ * Печатная информация будет добавлена в нижней части чека, после итога и списка отплат, до поля "всего оплачено"
+ */
 class PrintExtraPlacePrintGroupSummary(
         val printGroupId: String?
 ) : PrintExtraPlace(PrintExtraPlaceType.PRINT_GROUP_SUMMARY) {

@@ -2,6 +2,9 @@ package ru.evotor.framework.receipt.print_extras
 
 import android.os.Bundle
 
+/**
+ * Печатная информация будет добавлена сразу после позиции в чеке, до списка её модификаторов (подпозиций)
+ */
 class PrintExtraPlacePositionFooter(
         val positionUuid: String?
 ) : PrintExtraPlace(PrintExtraPlaceType.POSITION_FOOTER) {
