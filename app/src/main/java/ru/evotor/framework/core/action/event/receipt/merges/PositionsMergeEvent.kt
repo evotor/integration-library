@@ -17,8 +17,8 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
     }
 
     companion object {
-        val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.mergingPositions"
-        val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.mergingPositions"
+        const val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.mergingPositions"
+        const val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.mergingPositions"
         private val KEY_RECEIPT_UUID = "receiptUuid"
         private val KEY_MERGES = "merges"
 
