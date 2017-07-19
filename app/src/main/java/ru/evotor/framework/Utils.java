@@ -1,6 +1,8 @@
 package ru.evotor.framework;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +35,20 @@ public final class Utils {
             }
         }
         return list;
+    }
+
+    @Nullable
+    public static <T> List<T> convertParcelables(@Nullable Parcelable[] parcelables, @NonNull Class<T> clazz) {
+        if (parcelables != null) {
+            List<T> exports = new ArrayList<>();
+            for (Parcelable parcelable : parcelables) {
+                if (clazz.isInstance(parcelable)) {
+                    exports.add((T) parcelable);
+                }
+            }
+            return exports;
+        } else {
+            return null;
+        }
     }
 }

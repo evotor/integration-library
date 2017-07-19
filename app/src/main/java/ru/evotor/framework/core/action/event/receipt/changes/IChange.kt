@@ -12,6 +12,7 @@ interface IChange : IBundlable {
         SET_EXTRA,
         SET_POSITION_PRINT_GROUP,
         SET_PAYMENT_PURPOSE_PRINT_GROUP,
+        SET_PRINT_EXTRA,
         UNKNOWN
     }
 }
