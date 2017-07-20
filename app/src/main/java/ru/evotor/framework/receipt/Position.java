@@ -99,6 +99,47 @@ public class Position implements Parcelable {
             String name,
             String measureName,
             int measurePrecision,
+            BigDecimal price,
+            BigDecimal priceWithDiscountPosition,
+            BigDecimal quantity,
+            String barcode,
+            String mark,
+            BigDecimal alcoholByVolume,
+            Long alcoholProductKindCode,
+            BigDecimal tareVolume,
+            Set<ExtraKey> extraKeys,
+            List<Position> subPositions
+    ) {
+        this.uuid = uuid;
+        this.productUuid = productUuid;
+        this.productCode = productCode;
+        this.productType = productType;
+        this.name = name;
+        this.measureName = measureName;
+        this.measurePrecision = measurePrecision;
+        this.taxNumber = TaxNumber.NO_VAT;
+        this.price = price;
+        this.priceWithDiscountPosition = priceWithDiscountPosition;
+        this.quantity = quantity;
+        this.barcode = barcode;
+        this.mark = mark;
+        this.alcoholByVolume = alcoholByVolume;
+        this.alcoholProductKindCode = alcoholProductKindCode;
+        this.tareVolume = tareVolume;
+        if (extraKeys != null) {
+            this.extraKeys.addAll(extraKeys);
+        }
+        this.subPositions = subPositions;
+    }
+
+    public Position(
+            String uuid,
+            String productUuid,
+            String productCode,
+            ProductType productType,
+            String name,
+            String measureName,
+            int measurePrecision,
             TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
