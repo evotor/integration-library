@@ -15,6 +15,7 @@ import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
+import ru.evotor.framework.receipt.TaxNumber;
 
 public final class PositionMapper {
     public static final String KEY_POSITION = "position";
@@ -29,6 +30,7 @@ public final class PositionMapper {
     private static final String KEY_NAME = "name";
     private static final String KEY_MEASURE_NAME = "measureName";
     private static final String KEY_MEASURE_PRECISION = "measurePrecision";
+    private static final String KEY_TAX_NUMBER = "taxNumber";
     private static final String KEY_BARCODE = "barcode";
     private static final String KEY_MARK = "mark";
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
@@ -49,6 +51,7 @@ public final class PositionMapper {
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
         int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
+        TaxNumber taxNumber = TaxNumberMapper.from(bundle.getBundle(KEY_TAX_NUMBER));
         BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
         BigDecimal quantity = BundleUtils.getQuantity(bundle, KEY_QUANTITY);
@@ -91,6 +94,7 @@ public final class PositionMapper {
                 name,
                 measureName,
                 measurePrecision,
+                taxNumber,
                 price,
                 priceWithDiscountPosition,
                 quantity,
@@ -117,6 +121,7 @@ public final class PositionMapper {
         bundle.putString(KEY_NAME, position.getName());
         bundle.putString(KEY_MEASURE_NAME, position.getMeasureName());
         bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasurePrecision());
+        bundle.putBundle(KEY_TAX_NUMBER, TaxNumberMapper.toBundle(position.getTaxNumber()));
         bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());

@@ -5,29 +5,25 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import ru.evotor.IBundlable;
-import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.IntegrationManagerCallback;
 import ru.evotor.framework.core.IntegrationManagerImpl;
-import ru.evotor.framework.core.action.datamapper.ChangesMapper;
-import ru.evotor.framework.core.action.event.receipt.changes.IChange;
-import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
+import ru.evotor.framework.core.action.datamapper.ReceiptMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup;
+import ru.evotor.framework.receipt.Receipt;
 
 
 public class PrintPaybackReceiptCommand implements IBundlable {
 
     public static final String NAME = "evo.v2.receipt.payback.printReceipt";
-    private static final String KEY_CHANGES = "changes";
+    private static final String KEY_RECEIPT = "receipt";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_PRINT_GROUP = "printGroup";
 
@@ -36,29 +32,22 @@ public class PrintPaybackReceiptCommand implements IBundlable {
         if (bundle == null) {
             return null;
         }
-        Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
         return new PrintPaybackReceiptCommand(
-                Utils.filterByClass(
-                        ChangesMapper.INSTANCE.create(changesParcelable),
-                        PositionAdd.class
-                ),
+                ReceiptMapper.from(bundle.getBundle(KEY_RECEIPT)),
                 SetPrintGroup.from(bundle.getBundle(KEY_PRINT_GROUP)),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
         );
     }
 
     @NonNull
-    private final List<PositionAdd> changes;
+    private final Receipt receipt;
     @NonNull
     private SetPrintGroup printGroup;
     @Nullable
     private final SetExtra extra;
 
-    public PrintPaybackReceiptCommand(@Nullable List<PositionAdd> changes, @Nullable SetPrintGroup printGroup, @Nullable SetExtra extra) {
-        this.changes = new ArrayList<>();
-        if (changes != null) {
-            this.changes.addAll(changes);
-        }
+    public PrintPaybackReceiptCommand(@NonNull Receipt receipt, @Nullable SetPrintGroup printGroup, @Nullable SetExtra extra) {
+        this.receipt = receipt;
         if (printGroup != null) {
             this.printGroup = printGroup;
         }
@@ -86,20 +75,15 @@ public class PrintPaybackReceiptCommand implements IBundlable {
     @NonNull
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
-        Parcelable[] changesParcelable = new Parcelable[changes.size()];
-        for (int i = 0; i < changesParcelable.length; i++) {
-            IChange change = changes.get(i);
-            changesParcelable[i] = ChangesMapper.INSTANCE.toBundle(change);
-        }
-        bundle.putParcelableArray(KEY_CHANGES, changesParcelable);
+        bundle.putBundle(KEY_RECEIPT, ReceiptMapper.toBundle(receipt));
         bundle.putBundle(KEY_PRINT_GROUP, printGroup.toBundle());
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
         return bundle;
     }
 
     @NonNull
-    public List<PositionAdd> getChanges() {
-        return changes;
+    public Receipt getReceipt() {
+        return receipt;
     }
 
     @NonNull
