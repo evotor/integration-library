@@ -43,6 +43,14 @@ public class CashOutEvent extends CashOperationEvent {
     }
 
     @NonNull
+    @Override
+    public Bundle toBundle() {
+        Bundle bundle = super.toBundle();
+        bundle.putString(KEY_TOTAL, total.toPlainString());
+        return bundle;
+    }
+
+    @NonNull
     public BigDecimal getTotal() {
         return total;
     }

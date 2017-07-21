@@ -19,6 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -32,17 +35,17 @@ repositories {
 }
 
 task sourceJar(type: Jar) {
+    classifier "sources"
     from android.sourceSets.main.java.srcDirs
-    classifier "source"
 }
 
 publishing {
     publications {
 
-        maven(MavenPublication) {
+        mavenKotlin(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.59-dev"
+            version "1.0.88-dev"
             artifact(sourceJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 
