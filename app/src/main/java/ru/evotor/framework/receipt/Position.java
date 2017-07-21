@@ -25,10 +25,12 @@ public class Position implements Parcelable {
     /**
      * UUID товара.
      */
+    @Nullable
     private String productUuid;
     /**
      * Код товара.
      */
+    @Nullable
     private String productCode;
     /**
      * Вид товара.
@@ -61,6 +63,7 @@ public class Position implements Parcelable {
     /**
      * Штрихкод, по которому товар был найден.
      */
+    @Nullable
     private String barcode;
     /**
      * Алкогольная марка.
@@ -92,8 +95,8 @@ public class Position implements Parcelable {
 
     public Position(
             String uuid,
-            String productUuid,
-            String productCode,
+            @Nullable String productUuid,
+            @Nullable String productCode,
             ProductType productType,
             String name,
             String measureName,
@@ -101,7 +104,7 @@ public class Position implements Parcelable {
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
-            String barcode,
+            @Nullable String barcode,
             String mark,
             @Nullable BigDecimal alcoholByVolume,
             @Nullable Long alcoholProductKindCode,
@@ -217,73 +220,128 @@ public class Position implements Parcelable {
         return sum;
     }
 
+    /**
+     * @return UUID позиции
+     */
     public String getUuid() {
         return uuid;
     }
 
+    /**
+     * @return UUID товара.
+     */
+    @Nullable
     public String getProductUuid() {
         return productUuid;
     }
 
+    /**
+     * @return Код товара.
+     */
+    @Nullable
     public String getProductCode() {
         return productCode;
     }
 
+    /**
+     * @return Вид товара.
+     */
     public ProductType getProductType() {
         return productType;
     }
 
+    /**
+     * @return Наименование
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return Наименование единицы измерения.
+     */
     public String getMeasureName() {
         return measureName;
     }
 
+    /**
+     * @return Точность единицы измерения.
+     */
     public int getMeasurePrecision() {
         return measurePrecision;
     }
 
+    /**
+     * @return Цена без скидок.
+     */
     public BigDecimal getPrice() {
         return price;
     }
 
+    /**
+     * @return Цена с учетом скидки на позицию.
+     */
     public BigDecimal getPriceWithDiscountPosition() {
         return priceWithDiscountPosition;
     }
 
+    /**
+     * @return Количество.
+     */
     public BigDecimal getQuantity() {
         return quantity;
     }
 
+    /**
+     * @return Штрихкод, по которому товар был найден.
+     */
+    @Nullable
     public String getBarcode() {
         return barcode;
     }
 
+    /**
+     * @return Алкогольная марка.
+     */
+    @Nullable
     public String getMark() {
         return mark;
     }
 
+    /**
+     * @return Крепость.
+     */
     @Nullable
     public BigDecimal getAlcoholByVolume() {
         return alcoholByVolume;
     }
 
+    /**
+     * @return Код вида продукции ФСРАР.
+     */
     @Nullable
     public Long getAlcoholProductKindCode() {
         return alcoholProductKindCode;
     }
 
+    /**
+     * @return Объём тары.
+     */
     @Nullable
     public BigDecimal getTareVolume() {
         return tareVolume;
     }
 
+    /**
+     * @return Экстра ключи.
+     */
     public Set<ExtraKey> getExtraKeys() {
         return extraKeys;
     }
 
+    /**
+     * @return Подпозиции (модификаторы).
+     */
     public List<Position> getSubPositions() {
         return subPositions;
     }
