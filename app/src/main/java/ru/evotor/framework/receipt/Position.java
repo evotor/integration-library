@@ -117,7 +117,7 @@ public class Position implements Parcelable {
         this.name = name;
         this.measureName = measureName;
         this.measurePrecision = measurePrecision;
-        this.taxNumber = TaxNumber.NO_VAT;
+        this.taxNumber = null;
         this.price = price;
         this.priceWithDiscountPosition = priceWithDiscountPosition;
         this.quantity = quantity;
@@ -183,7 +183,7 @@ public class Position implements Parcelable {
                 position.getName(),
                 position.getMeasureName(),
                 position.getMeasurePrecision(),
-                position.getTaxNumber(),
+                (position.getTaxNumber() != null ? position.getTaxNumber() : null),
                 position.getPrice(),
                 position.getPriceWithDiscountPosition(),
                 position.getQuantity(),

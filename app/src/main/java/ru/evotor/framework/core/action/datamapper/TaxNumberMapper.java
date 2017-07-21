@@ -18,7 +18,7 @@ public final class TaxNumberMapper {
         }
         String taxNumber = bundle.getString(KEY_TAX_NUMBER);
 
-        return Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT);
+        return Utils.safeValueOf(TaxNumber.class, taxNumber, null);
     }
 
     @Nullable
