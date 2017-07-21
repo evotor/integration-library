@@ -237,7 +237,7 @@ object ReceiptApi {
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE))).divide(BigDecimal(100)),
-                createPaymentSystem(cursor) ?: return null,
+                createPaymentSystem(cursor),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION))
