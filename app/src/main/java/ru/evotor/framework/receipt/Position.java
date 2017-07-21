@@ -69,14 +69,17 @@ public class Position implements Parcelable {
     /**
      * Крепость.
      */
+    @Nullable
     private BigDecimal alcoholByVolume;
     /**
      * Код вида продукции ФСРАР.
      */
+    @Nullable
     private Long alcoholProductKindCode;
     /**
      * Объём тары.
      */
+    @Nullable
     private BigDecimal tareVolume;
     /**
      * Экстра ключи
@@ -100,9 +103,9 @@ public class Position implements Parcelable {
             BigDecimal quantity,
             String barcode,
             String mark,
-            BigDecimal alcoholByVolume,
-            Long alcoholProductKindCode,
-            BigDecimal tareVolume,
+            @Nullable BigDecimal alcoholByVolume,
+            @Nullable Long alcoholProductKindCode,
+            @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
@@ -262,14 +265,17 @@ public class Position implements Parcelable {
         return mark;
     }
 
+    @Nullable
     public BigDecimal getAlcoholByVolume() {
         return alcoholByVolume;
     }
 
+    @Nullable
     public Long getAlcoholProductKindCode() {
         return alcoholProductKindCode;
     }
 
+    @Nullable
     public BigDecimal getTareVolume() {
         return tareVolume;
     }
