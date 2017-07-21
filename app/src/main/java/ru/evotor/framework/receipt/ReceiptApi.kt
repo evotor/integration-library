@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.inventory.ProductType
+import ru.evotor.framework.optLong
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -233,9 +234,9 @@ object ReceiptApi {
                 } else {
                     null
                 },
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))).divide(BigDecimal(1000)),
+                cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                BigDecimal(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))).divide(BigDecimal(1000)),
+                cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
                 if (cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS) != -1) {
                     createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
                 } else {
@@ -249,7 +250,7 @@ object ReceiptApi {
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE))).divide(BigDecimal(100)),
-                createPaymentSystem(cursor) ?: return null,
+                createPaymentSystem(cursor),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION))

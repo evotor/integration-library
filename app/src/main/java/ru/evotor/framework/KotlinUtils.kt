@@ -26,3 +26,11 @@ inline fun <reified T : kotlin.Enum<T>> safeValueOf(type: String?, default: T? =
 }
 
 fun min(a: BigDecimal, b: BigDecimal) = if (a <= b) a else b
+
+fun android.database.Cursor.optLong(columnIndex: Int): Long? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getLong(columnIndex)
+}
