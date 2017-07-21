@@ -51,6 +51,7 @@ public class Position implements Parcelable {
     /**
      * НДС
      */
+    @Nullable
     private TaxNumber taxNumber;
     /**
      * Цена без скидок.
@@ -329,6 +330,7 @@ public class Position implements Parcelable {
     /**
      * @return Налоговая ставка.
      */
+    @Nullable
     public TaxNumber getTaxNumber() {
         return taxNumber;
     }
