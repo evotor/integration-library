@@ -60,7 +60,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
-        return getReceipt(context, type, null);
+        return getReceipt(context, type, null)
     }
 
     /**
@@ -71,7 +71,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getReceipt(context: Context, uuid: String): Receipt? {
-        return getReceipt(context, null, uuid);
+        return getReceipt(context, null, uuid)
     }
 
     private fun getReceipt(context: Context, type: Receipt.Type?, uuid: String? = null): Receipt? {
@@ -208,7 +208,8 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_NAME)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_INN)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
-                safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)))
+                safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
+                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1
         )
     }
 

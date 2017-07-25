@@ -49,6 +49,11 @@ public class Position implements Parcelable {
      */
     private int measurePrecision;
     /**
+     * НДС
+     */
+    @Nullable
+    private TaxNumber taxNumber;
+    /**
      * Цена без скидок.
      */
     private BigDecimal price;
@@ -119,6 +124,49 @@ public class Position implements Parcelable {
         this.name = name;
         this.measureName = measureName;
         this.measurePrecision = measurePrecision;
+        this.taxNumber = null;
+        this.price = price;
+        this.priceWithDiscountPosition = priceWithDiscountPosition;
+        this.quantity = quantity;
+        this.barcode = barcode;
+        this.mark = mark;
+        this.alcoholByVolume = alcoholByVolume;
+        this.alcoholProductKindCode = alcoholProductKindCode;
+        this.tareVolume = tareVolume;
+        if (extraKeys != null) {
+            this.extraKeys.addAll(extraKeys);
+        }
+        this.subPositions = subPositions;
+    }
+
+    public Position(
+            String uuid,
+            String productUuid,
+            String productCode,
+            ProductType productType,
+            String name,
+            String measureName,
+            int measurePrecision,
+            TaxNumber taxNumber,
+            BigDecimal price,
+            BigDecimal priceWithDiscountPosition,
+            BigDecimal quantity,
+            String barcode,
+            String mark,
+            BigDecimal alcoholByVolume,
+            Long alcoholProductKindCode,
+            BigDecimal tareVolume,
+            Set<ExtraKey> extraKeys,
+            List<Position> subPositions
+    ) {
+        this.uuid = uuid;
+        this.productUuid = productUuid;
+        this.productCode = productCode;
+        this.productType = productType;
+        this.name = name;
+        this.measureName = measureName;
+        this.measurePrecision = measurePrecision;
+        this.taxNumber = taxNumber;
         this.price = price;
         this.priceWithDiscountPosition = priceWithDiscountPosition;
         this.quantity = quantity;
@@ -142,6 +190,7 @@ public class Position implements Parcelable {
                 position.getName(),
                 position.getMeasureName(),
                 position.getMeasurePrecision(),
+                (position.getTaxNumber() != null ? position.getTaxNumber() : null),
                 position.getPrice(),
                 position.getPriceWithDiscountPosition(),
                 position.getQuantity(),
@@ -279,6 +328,14 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Налоговая ставка.
+     */
+    @Nullable
+    public TaxNumber getTaxNumber() {
+        return taxNumber;
+    }
+
+    /**
      * @return Цена с учетом скидки на позицию.
      */
     public BigDecimal getPriceWithDiscountPosition() {
@@ -363,6 +420,7 @@ public class Position implements Parcelable {
         if (name != null ? !name.equals(position.name) : position.name != null) return false;
         if (measureName != null ? !measureName.equals(position.measureName) : position.measureName != null)
             return false;
+        if (taxNumber != position.taxNumber) return false;
         if (price != null ? !price.equals(position.price) : position.price != null) return false;
         if (priceWithDiscountPosition != null ? !priceWithDiscountPosition.equals(position.priceWithDiscountPosition) : position.priceWithDiscountPosition != null)
             return false;
@@ -391,6 +449,7 @@ public class Position implements Parcelable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (measureName != null ? measureName.hashCode() : 0);
         result = 31 * result + measurePrecision;
+        result = 31 * result + (taxNumber != null ? taxNumber.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
@@ -418,6 +477,7 @@ public class Position implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.measureName);
         dest.writeInt(this.measurePrecision);
+        dest.writeInt(this.taxNumber == null ? TaxNumber.NO_VAT.ordinal() : this.taxNumber.ordinal());
         dest.writeSerializable(this.price);
         dest.writeSerializable(this.priceWithDiscountPosition);
         dest.writeSerializable(this.quantity);
@@ -439,6 +499,8 @@ public class Position implements Parcelable {
         this.name = in.readString();
         this.measureName = in.readString();
         this.measurePrecision = in.readInt();
+        int tmpTaxNumber = in.readInt();
+        this.taxNumber = tmpTaxNumber == TaxNumber.NO_VAT.ordinal() ? TaxNumber.NO_VAT : TaxNumber.values()[tmpTaxNumber];
         this.price = (BigDecimal) in.readSerializable();
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
@@ -511,6 +573,7 @@ public class Position implements Parcelable {
                             name,
                             measureName,
                             measurePrecision,
+                            null,
                             price,
                             price,
                             quantity,
@@ -599,6 +662,11 @@ public class Position implements Parcelable {
 
         public Builder setMeasurePrecision(int measurePrecision) {
             position.measurePrecision = measurePrecision;
+            return this;
+        }
+
+        public Builder setTaxNumber(TaxNumber taxNumber) {
+            position.taxNumber = taxNumber;
             return this;
         }
 
