@@ -22,6 +22,8 @@ public final class PrintReceiptMapper {
     private static final String KEY_POSITIONS = "positions";
     private static final String KEY_PAYMENTS = "payments";
     private static final String KEY_CHANGES = "changes";
+    private static final String KEY_DISCOUNT = "discount";
+    private static final String KEY_DISCOUNT_PERCENT = "discountPercent";
 
     @Nullable
     public static Receipt.PrintReceipt from(@Nullable Bundle bundle) {
@@ -62,7 +64,9 @@ public final class PrintReceiptMapper {
                 printGroup,
                 positions,
                 payments,
-                changes
+                changes,
+                BigDecimal.ZERO, //TODO discount,
+                BigDecimal.ZERO //TODO discountPercent
         );
     }
 

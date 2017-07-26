@@ -6,11 +6,13 @@ import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.optLong
+import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
+import java.util.*
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -151,7 +153,9 @@ object ReceiptApi {
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
-                    payments.mapValues { it.value.change }
+                    payments.mapValues { it.value.change },
+                    BigDecimal.ZERO, //TODO discount,
+                    BigDecimal.ZERO //TODO discountPercent
             ))
         }
 
@@ -287,7 +291,10 @@ object ReceiptApi {
         return Receipt.Header(
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
-                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null
+                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null,
+                cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
+                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
+                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE)
         )
     }
 

@@ -3,6 +3,8 @@ package ru.evotor.framework.core.action.datamapper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
+
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.Receipt;
 
@@ -12,6 +14,9 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_RECEIPT_NUMBER = "receiptNumber";
     private static final String KEY_RECEIPT_TYPE = "receiptType";
+    private static final String KEY_RECEIPT_DATE = "receiptDate";
+    private static final String KEY_CLIENT_EMAIL = "clientEmail";
+    private static final String KEY_CLIENT_PHONE = "clientPhone";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -21,10 +26,21 @@ public final class ReceiptHeaderMapper {
         String receiptUuid = bundle.getString(KEY_RECEIPT_UUID);
         String receiptNumber = bundle.getString(KEY_RECEIPT_NUMBER);
         String receiptType = bundle.getString(KEY_RECEIPT_TYPE);
+        Date date = null;
+        if (bundle.containsKey(KEY_RECEIPT_DATE)) {
+            date = new Date(bundle.getLong(KEY_RECEIPT_DATE));
+        }
+
+        if (receiptUuid == null) {
+            return null;
+        }
         return new Receipt.Header(
                 receiptUuid,
                 receiptNumber,
-                Utils.safeValueOf(Receipt.Type.class, receiptType, null)
+                Utils.safeValueOf(Receipt.Type.class, receiptType, null),
+                date,
+                bundle.getString(KEY_CLIENT_EMAIL),
+                bundle.getString(KEY_CLIENT_PHONE)
         );
     }
 
