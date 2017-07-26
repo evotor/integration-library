@@ -14,9 +14,11 @@ import ru.evotor.framework.min
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Position
+import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Receipt
 import ru.evotor.framework.sumByBigDecimal
 import java.math.BigDecimal
+import java.util.*
 
 
 /**
@@ -26,7 +28,9 @@ import java.math.BigDecimal
  */
 class PrintSellReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
-        val extra: SetExtra?) : IBundlable {
+        val extra: SetExtra?,
+        val clientPhone: String?,
+        val clientEmail: String?) : IBundlable {
 
     /**
      * @param positions Список позиций
@@ -34,10 +38,20 @@ class PrintSellReceiptCommand(
      */
     constructor(
             positions: List<Position>,
-            payments: List<Payment>) : this(
+            payments: List<Payment>,
+            clientPhone: String?,
+            clientEmail: String?) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
-                        null,
+                        PrintGroup(
+                                UUID.randomUUID().toString(),
+                                PrintGroup.Type.CASH_RECEIPT,
+                                null,
+                                null,
+                                null,
+                                null,
+                                clientEmail == null && clientPhone == null
+                        ),
                         positions,
                         payments.associate { it to it.value },
                         calculateChanges(
@@ -48,7 +62,9 @@ class PrintSellReceiptCommand(
                         BigDecimal.ZERO
                 ))
             },
-            null
+            null,
+            clientPhone,
+            clientEmail
     )
 
     /**
@@ -73,6 +89,8 @@ class PrintSellReceiptCommand(
         val bundle = Bundle()
         bundle.putParcelableArrayList(KEY_PRINT_RECEIPTS, printReceipts.mapTo(ArrayList(), { PrintReceiptMapper.toBundle(it) }))
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
+        bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
+        bundle.putString(KEY_CLIENT_PHONE, clientPhone)
         return bundle
     }
 
@@ -81,6 +99,8 @@ class PrintSellReceiptCommand(
         const val NAME = "evo.v2.receipt.sell.printReceipt"
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
+        private const val KEY_CLIENT_EMAIL = "clientEmail"
+        private const val KEY_CLIENT_PHONE = "clientPhone"
 
         fun create(bundle: Bundle?): PrintSellReceiptCommand? {
             if (bundle == null) {
@@ -90,7 +110,9 @@ class PrintSellReceiptCommand(
                     bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
                             .map { PrintReceiptMapper.from(it) }
                             .filterNotNull(),
-                    SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+                    SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
+                    bundle.getString(KEY_CLIENT_PHONE, null),
+                    bundle.getString(KEY_CLIENT_EMAIL, null)
             )
         }
 
