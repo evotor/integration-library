@@ -118,7 +118,7 @@ class PrintSellReceiptCommand(
 
 
         private fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
-            var remaining = sum;
+            var remaining = sum
             val result = HashMap<Payment, BigDecimal>()
             for (payment in payments) {
                 if (payment.system?.paymentType != PaymentType.CASH) {
