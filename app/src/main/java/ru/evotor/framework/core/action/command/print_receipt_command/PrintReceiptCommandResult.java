@@ -11,11 +11,29 @@ public class PrintReceiptCommandResult implements IBundlable {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_RECEIPT_NUMBER = "receiptNumber";
 
+    /**
+     * Нужна синхронизация даты/времени ККМ и терминала
+     */
     public static final int ERROR_CODE_DATETIME_SYNC_REQUIRED = -1;
+    /**
+     * Время сессии превысило 24 часа
+     */
     public static final int ERROR_CODE_SESSION_TIME_EXPIRED = -2;
+    /**
+     * В интерет чеках поля 'эл.почта' и/или 'телефон' клиента должны быть заполнены
+     */
     public static final int ERROR_CODE_EMAIL_AND_PHONE_ARE_NULL = -3;
+    /**
+     * ККМ в данный момент выполняет другую операцию
+     */
     public static final int ERROR_CODE_KKM_IS_BUSY = -4;
+    /**
+     * Нет авторизованного пользователя на терминале
+     */
     public static final int ERROR_CODE_NO_AUTHENTICATED_USER = -5;
+    /**
+     * Ошибка создания документа для печати
+     */
     public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -6;
 
     @Nullable
