@@ -14,10 +14,9 @@ public class PrintReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_DATETIME_SYNC_REQUIRED = -1;
     public static final int ERROR_CODE_SESSION_TIME_EXPIRED = -2;
     public static final int ERROR_CODE_EMAIL_AND_PHONE_ARE_NULL = -3;
-    public static final int ERROR_CODE_KKM_CRITICAL_OPERATION_ERROR = -4;
-    public static final int ERROR_CODE_KKM_IS_BUSY = -5;
-    public static final int ERROR_CODE_NO_AUTHENTICATED_USER = -6;
-    public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -7;
+    public static final int ERROR_CODE_KKM_IS_BUSY = -4;
+    public static final int ERROR_CODE_NO_AUTHENTICATED_USER = -5;
+    public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -6;
 
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
