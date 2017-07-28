@@ -35,6 +35,10 @@ public class PrintReceiptCommandResult implements IBundlable {
      * Ошибка создания документа для печати
      */
     public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -6;
+    /**
+     * У приложения нет необходимого разрешения (permission)
+     */
+    public static final int ERROR_CODE_NO_PERMISSION = -7;
 
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {

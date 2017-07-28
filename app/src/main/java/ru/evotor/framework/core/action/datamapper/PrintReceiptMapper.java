@@ -23,7 +23,6 @@ public final class PrintReceiptMapper {
     private static final String KEY_PAYMENTS = "payments";
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_DISCOUNT = "discount";
-    private static final String KEY_DISCOUNT_PERCENT = "discountPercent";
 
     @Nullable
     public static Receipt.PrintReceipt from(@Nullable Bundle bundle) {
@@ -60,13 +59,14 @@ public final class PrintReceiptMapper {
             changes.put(PaymentMapper.from(changesBundle.getBundle(key)), new BigDecimal(key));
         }
 
+        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT));
+
         return new Receipt.PrintReceipt(
                 printGroup,
                 positions,
                 payments,
                 changes,
-                BigDecimal.ZERO, //TODO discount,
-                BigDecimal.ZERO //TODO discountPercent
+                discount
         );
     }
 
@@ -100,6 +100,8 @@ public final class PrintReceiptMapper {
 
         }
         bundle.putBundle(KEY_CHANGES, changes);
+
+        bundle.putString(KEY_DISCOUNT, printReceipt.getDiscount() != null ? printReceipt.getDiscount().toPlainString() : null);
 
         return bundle;
     }

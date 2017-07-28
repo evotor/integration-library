@@ -154,8 +154,7 @@ object ReceiptApi {
                             .map { it.position },
                     payments.mapValues { it.value.value },
                     payments.mapValues { it.value.change },
-                    BigDecimal.ZERO, //TODO discount,
-                    BigDecimal.ZERO //TODO discountPercent
+                    BigDecimal.ZERO //TODO discount
             ))
         }
 

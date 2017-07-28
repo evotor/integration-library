@@ -25,6 +25,8 @@ import java.util.*
  * Команда печати чека продажи
  * @param printReceipts Список печатных чеков
  * @param extra Экстра данные к чеку
+ * @param clientPhone Телефон клиента
+ * @param clientEmail Эл.почта клиента
  */
 class PrintSellReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
@@ -35,12 +37,16 @@ class PrintSellReceiptCommand(
     /**
      * @param positions Список позиций
      * @param payments Список оплат
+     * @param clientPhone Телефон клиента
+     * @param clientEmail Эл.почта клиента
+     * @param discount Сумма скидки на чек
      */
     constructor(
             positions: List<Position>,
             payments: List<Payment>,
             clientPhone: String?,
-            clientEmail: String?) : this(
+            clientEmail: String?,
+            discount: BigDecimal?) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -58,8 +64,7 @@ class PrintSellReceiptCommand(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
                         ),
-                        BigDecimal.ZERO,
-                        BigDecimal.ZERO
+                        discount
                 ))
             },
             null,
