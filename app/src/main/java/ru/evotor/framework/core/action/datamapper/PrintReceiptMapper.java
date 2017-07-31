@@ -21,9 +21,12 @@ public final class PrintReceiptMapper {
     private static final String KEY_PRINT_GROUP = "printGroup";
     private static final String KEY_POSITIONS = "positions";
     private static final String KEY_PAYMENTS = "payments";
+    private static final String KEY_SINGLE_PAYMENT = "payment";
+    private static final String KEY_SINGLE_PAYMENT_VALUE = "paymentValue";
     private static final String KEY_CHANGES = "changes";
+    private static final String KEY_SINGLE_CHANGE = "change";
+    private static final String KEY_SINGLE_CHANGE_VALUE = "changeValue";
     private static final String KEY_DISCOUNT = "discount";
-    private static final String KEY_DISCOUNT_PERCENT = "discountPercent";
 
     @Nullable
     public static Receipt.PrintReceipt from(@Nullable Bundle bundle) {
@@ -43,30 +46,35 @@ public final class PrintReceiptMapper {
         }
 
         Map<Payment, BigDecimal> payments = new HashMap<>();
-        Bundle paymentsBundle = bundle.getBundle(KEY_PAYMENTS);
-        if (paymentsBundle == null) {
+        ArrayList<Bundle> paymentsParcelableList = bundle.getParcelableArrayList(KEY_PAYMENTS);
+        if (paymentsParcelableList == null) {
             return null;
         }
-        for (String key : paymentsBundle.keySet()) {
-            payments.put(PaymentMapper.from(paymentsBundle.getBundle(key)), new BigDecimal(key));
+        for (int i = 0; i < paymentsParcelableList.size(); i++) {
+            Bundle completePaymentBundle = paymentsParcelableList.get(i);
+            Payment payment = PaymentMapper.from(completePaymentBundle.getBundle(KEY_SINGLE_PAYMENT));
+            payments.put(payment, new BigDecimal(completePaymentBundle.getString(KEY_SINGLE_PAYMENT_VALUE)));
         }
 
         Map<Payment, BigDecimal> changes = new HashMap<>();
-        Bundle changesBundle = bundle.getBundle(KEY_PAYMENTS);
-        if (changesBundle == null) {
+        ArrayList<Bundle> changesParcelableList = bundle.getParcelableArrayList(KEY_CHANGES);
+        if (changesParcelableList == null) {
             return null;
         }
-        for (String key : changesBundle.keySet()) {
-            changes.put(PaymentMapper.from(changesBundle.getBundle(key)), new BigDecimal(key));
+        for (int i = 0; i < changesParcelableList.size(); i++) {
+            Bundle completeChangeBundle = changesParcelableList.get(i);
+            Payment change = PaymentMapper.from(completeChangeBundle.getBundle(KEY_SINGLE_CHANGE));
+            changes.put(change, new BigDecimal(completeChangeBundle.getString(KEY_SINGLE_CHANGE_VALUE)));
         }
+
+        BigDecimal discount = new BigDecimal(bundle.getString(KEY_DISCOUNT));
 
         return new Receipt.PrintReceipt(
                 printGroup,
                 positions,
                 payments,
                 changes,
-                BigDecimal.ZERO, //TODO discount,
-                BigDecimal.ZERO //TODO discountPercent
+                discount
         );
     }
 
@@ -85,21 +93,27 @@ public final class PrintReceiptMapper {
         }
         bundle.putParcelableArray(KEY_POSITIONS, positionsParcelable);
 
-        Bundle payments = new Bundle();
-        for (Map.Entry<Payment, BigDecimal> entry : printReceipt.getPayments().entrySet()) {
-            Bundle singlePaymentBundle = PaymentMapper.toBundle(entry.getKey());
-            payments.putBundle(entry.getValue().toPlainString(), singlePaymentBundle);
-
+        ArrayList<Bundle> payments = new ArrayList<>();
+        for (Map.Entry<Payment, BigDecimal> paymentEntry : printReceipt.getPayments().entrySet()) {
+            Bundle singlePaymentBundle = PaymentMapper.toBundle(paymentEntry.getKey());
+            Bundle completePaymentBundle = new Bundle();
+            completePaymentBundle.putParcelable(KEY_SINGLE_PAYMENT, singlePaymentBundle);
+            completePaymentBundle.putString(KEY_SINGLE_PAYMENT_VALUE, paymentEntry.getValue().toPlainString());
+            payments.add(completePaymentBundle);
         }
-        bundle.putBundle(KEY_PAYMENTS, payments);
+        bundle.putParcelableArrayList(KEY_PAYMENTS, payments);
 
-        Bundle changes = new Bundle();
-        for (Map.Entry<Payment, BigDecimal> entry : printReceipt.getChanges().entrySet()) {
-            Bundle singleChangesBundle = PaymentMapper.toBundle(entry.getKey());
-            payments.putBundle(entry.getValue().toPlainString(), singleChangesBundle);
-
+        ArrayList<Bundle> changes = new ArrayList<>();
+        for (Map.Entry<Payment, BigDecimal> changeEntry : printReceipt.getChanges().entrySet()) {
+            Bundle singleChangeBundle = PaymentMapper.toBundle(changeEntry.getKey());
+            Bundle completeChangeBundle = new Bundle();
+            completeChangeBundle.putParcelable(KEY_SINGLE_CHANGE, singleChangeBundle);
+            completeChangeBundle.putString(KEY_SINGLE_CHANGE_VALUE, changeEntry.getValue().toPlainString());
+            changes.add(completeChangeBundle);
         }
-        bundle.putBundle(KEY_CHANGES, changes);
+        bundle.putParcelableArrayList(KEY_CHANGES, changes);
+
+        bundle.putString(KEY_DISCOUNT, printReceipt.getDiscount().toPlainString());
 
         return bundle;
     }
