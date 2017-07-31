@@ -57,7 +57,7 @@ public final class PrintReceiptMapper {
         }
 
         Map<Payment, BigDecimal> changes = new HashMap<>();
-        ArrayList<Bundle> changesParcelableList = bundle.getParcelableArrayList(KEY_PAYMENTS);
+        ArrayList<Bundle> changesParcelableList = bundle.getParcelableArrayList(KEY_CHANGES);
         if (changesParcelableList == null) {
             return null;
         }
