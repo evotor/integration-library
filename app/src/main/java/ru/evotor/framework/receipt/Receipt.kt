@@ -105,6 +105,6 @@ data class Receipt
             /**
              * Сумма скидки на чек
              */
-            val discount: BigDecimal?
+            val discount: BigDecimal
     )
 }

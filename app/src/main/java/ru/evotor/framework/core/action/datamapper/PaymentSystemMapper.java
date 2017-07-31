@@ -18,7 +18,7 @@ public final class PaymentSystemMapper {
         if (bundle == null) {
             return null;
         }
-        PaymentType paymentType = Utils.safeValueOf(PaymentType.class, bundle.getString(KEY_USER_DESCRIPTION), PaymentType.UNKNOWN);
+        PaymentType paymentType = Utils.safeValueOf(PaymentType.class, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN);
         String userDescription = bundle.getString(KEY_USER_DESCRIPTION);
         String paymentSystemId = bundle.getString(KEY_PAYMENT_SYSTEM_ID);
         if (paymentType == null || userDescription == null || paymentSystemId == null) {
