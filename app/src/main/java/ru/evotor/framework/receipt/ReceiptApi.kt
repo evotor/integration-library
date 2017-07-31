@@ -153,8 +153,7 @@ object ReceiptApi {
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
-                    payments.mapValues { it.value.change },
-                    BigDecimal.ZERO //TODO discount
+                    payments.mapValues { it.value.change }
             ))
         }
 
