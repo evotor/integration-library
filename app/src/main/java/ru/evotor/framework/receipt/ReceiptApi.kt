@@ -224,6 +224,11 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                if (cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER) != -1) {
+                    TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER)))
+                } else {
+                    null
+                },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100)),
                 if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
                     BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100))
