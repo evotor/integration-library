@@ -1,6 +1,9 @@
 package ru.evotor.framework.calculator;
 
+import android.support.annotation.NonNull;
+
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public abstract class PercentCalculator {
     private static final BigDecimal HUNDRED = new BigDecimal("100");
@@ -17,4 +20,9 @@ public abstract class PercentCalculator {
         return value1.add(value2);
     }
 
+    @NonNull
+    public static BigDecimal round(@NonNull BigDecimal value) {
+        Objects.requireNonNull(value);
+        return value.setScale(PERCENT_PRECISION, BigDecimal.ROUND_HALF_UP);
+    }
 }
