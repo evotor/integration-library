@@ -39,6 +39,14 @@ public class PrintReceiptCommandResult implements IBundlable {
      * У приложения нет необходимого разрешения (permission)
      */
     public static final int ERROR_CODE_NO_PERMISSION = -7;
+    /**
+     * Нет позиций в чеке
+     */
+    public static final int ERROR_CODE_NO_POSITIONS = -8;
+    /**
+     * Нет платежей в чеке
+     */
+    public static final int ERROR_CODE_NO_PAYMENTS = -9;
 
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
