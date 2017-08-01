@@ -529,6 +529,30 @@ public class Position implements Parcelable {
         }
     };
 
+    @Override
+    public String toString() {
+        return "Position{" +
+                "uuid='" + uuid + '\'' +
+                ", productUuid='" + productUuid + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", productType=" + productType +
+                ", name='" + name + '\'' +
+                ", measureName='" + measureName + '\'' +
+                ", measurePrecision=" + measurePrecision +
+                ", taxNumber=" + taxNumber +
+                ", price=" + price +
+                ", priceWithDiscountPosition=" + priceWithDiscountPosition +
+                ", quantity=" + quantity +
+                ", barcode='" + barcode + '\'' +
+                ", mark='" + mark + '\'' +
+                ", alcoholByVolume=" + alcoholByVolume +
+                ", alcoholProductKindCode=" + alcoholProductKindCode +
+                ", tareVolume=" + tareVolume +
+                ", extraKeys=" + extraKeys +
+                ", subPositions=" + subPositions +
+                '}';
+    }
+
     public static final class Builder {
         public static Builder newInstance(
                 @NonNull ProductItem.Product product,

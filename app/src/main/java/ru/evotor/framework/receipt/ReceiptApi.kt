@@ -224,10 +224,8 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                if (cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER) != -1) {
+                cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let {
                     TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER)))
-                } else {
-                    null
                 },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100)),
                 if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
@@ -237,18 +235,14 @@ object ReceiptApi {
                 },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                if (cursor.getColumnIndex(PositionTable.COLUMN_MARK) != -1) {
+                cursor.optString(PositionTable.COLUMN_MARK)?.let {
                     cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                } else {
-                    null
                 },
                 cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
-                if (cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS) != -1) {
+                cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
                     createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
-                } else {
-                    null
                 },
                 null
         )
