@@ -3,6 +3,7 @@ package ru.evotor.framework.core.action.datamapper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import ru.evotor.framework.Utils;
@@ -34,6 +35,7 @@ public final class ReceiptHeaderMapper {
         if (receiptUuid == null) {
             return null;
         }
+
         return new Receipt.Header(
                 receiptUuid,
                 receiptNumber,

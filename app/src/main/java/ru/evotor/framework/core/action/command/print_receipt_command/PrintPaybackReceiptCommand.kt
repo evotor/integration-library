@@ -61,46 +61,7 @@ class PrintPaybackReceiptCommand(
                         calculateChanges(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
-                        ),
-                        BigDecimal.ZERO
-                ))
-            },
-            null,
-            clientPhone,
-            clientEmail
-    )
-
-    /**
-     * @param positions Список позиций
-     * @param payments Список оплат
-     * @param clientPhone Телефон клиента
-     * @param clientEmail Эл.почта клиента
-     * @param discount Сумма скидки на чек
-     */
-    constructor(
-            positions: List<Position>,
-            payments: List<Payment>,
-            clientPhone: String?,
-            clientEmail: String?,
-            discount: BigDecimal) : this(
-            ArrayList<Receipt.PrintReceipt>().apply {
-                add(Receipt.PrintReceipt(
-                        PrintGroup(
-                                UUID.randomUUID().toString(),
-                                PrintGroup.Type.CASH_RECEIPT,
-                                null,
-                                null,
-                                null,
-                                null,
-                                clientEmail == null && clientPhone == null
-                        ),
-                        positions,
-                        payments.associate { it to it.value },
-                        calculateChanges(
-                                positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
-                                payments
-                        ),
-                        discount
+                        )
                 ))
             },
             null,
