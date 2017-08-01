@@ -51,7 +51,11 @@ data class Receipt
             /**
              * Тип чека
              */
-            val type: Type
+            val type: Type,
+            /**
+             * Extra
+             */
+            val extra: String?
     )
 
     /**
