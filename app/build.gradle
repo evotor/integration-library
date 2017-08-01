@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.dokka-android'
 
 android {
     compileSdkVersion 25
@@ -10,7 +11,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 25
         versionCode 5
-        versionName "0.4.0"
+        versionName "0.4.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,14 +40,26 @@ task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+dokka {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    from dokka.outputDirectory
+}
+
 publishing {
     publications {
 
         mavenKotlin(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.103-dev"
+            version "1.0.109-dev"
             artifact(sourceJar)
+            artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 
             //generate pom nodes for dependencies

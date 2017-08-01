@@ -22,13 +22,13 @@ import java.util.*
 
 
 /**
- * Команда печати чека продажи
+ * Команда печати чека возврата
  * @param printReceipts Список печатных чеков
  * @param extra Экстра данные к чеку
  * @param clientPhone Телефон клиента
  * @param clientEmail Эл.почта клиента
  */
-class PrintSellReceiptCommand(
+class PrintPaybackReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
         val extra: SetExtra?,
         val clientPhone: String?,
@@ -69,16 +69,13 @@ class PrintSellReceiptCommand(
             clientEmail
     )
 
-    /**
-     *
-     */
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, activity.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
         IntegrationManagerImpl(activity.applicationContext)
-                .call(PrintSellReceiptCommand.NAME,
+                .call(PrintPaybackReceiptCommand.NAME,
                         componentNameList[0],
                         this,
                         activity,
@@ -98,17 +95,17 @@ class PrintSellReceiptCommand(
 
     companion object {
 
-        const val NAME = "evo.v2.receipt.sell.printReceipt"
+        const val NAME = "evo.v2.receipt.payback.printReceipt"
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
         private const val KEY_CLIENT_EMAIL = "clientEmail"
         private const val KEY_CLIENT_PHONE = "clientPhone"
 
-        fun create(bundle: Bundle?): PrintSellReceiptCommand? {
+        fun create(bundle: Bundle?): PrintPaybackReceiptCommand? {
             if (bundle == null) {
                 return null
             }
-            return PrintSellReceiptCommand(
+            return PrintPaybackReceiptCommand(
                     bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
                             .map { PrintReceiptMapper.from(it) }
                             .filterNotNull(),
@@ -117,7 +114,6 @@ class PrintSellReceiptCommand(
                     bundle.getString(KEY_CLIENT_EMAIL, null)
             )
         }
-
 
         private fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
             var remaining = sum
@@ -136,4 +132,5 @@ class PrintSellReceiptCommand(
             return result
         }
     }
+
 }

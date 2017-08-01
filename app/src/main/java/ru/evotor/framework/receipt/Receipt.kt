@@ -101,14 +101,6 @@ data class Receipt
             /**
              * Сдача
              */
-            val changes: Map<Payment, BigDecimal>,
-            /**
-             * Сумма скидки на чек
-             */
-            val discount: BigDecimal,
-            /**
-             * Процент скидки на чек
-             */
-            val discountPercent: BigDecimal
+            val changes: Map<Payment, BigDecimal>
     )
 }
