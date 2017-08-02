@@ -1,5 +1,6 @@
 package ru.evotor.framework.receipt
 
+import ru.evotor.framework.sumByBigDecimal
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,6 +26,15 @@ data class Receipt
         return printDocuments
                 .flatMap { it.positions }
                 .toList()
+    }
+
+    /**
+     * Размер скидки на чек c учетом всех позиций
+     */
+    fun getTotalDiscount(): BigDecimal {
+        return printDocuments
+                .flatMap { it.positions }
+                .sumByBigDecimal { it.discountPositionSum }
     }
 
     /**

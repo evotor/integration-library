@@ -27,12 +27,14 @@ import java.util.*
  * @param extra Экстра данные к чеку
  * @param clientPhone Телефон клиента
  * @param clientEmail Эл.почта клиента
+ * @param receiptDiscount Скидка на чек
  */
 class PrintPaybackReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
         val extra: SetExtra?,
         val clientPhone: String?,
-        val clientEmail: String?) : IBundlable {
+        val clientEmail: String?,
+        val receiptDiscount: BigDecimal?) : IBundlable {
 
     /**
      * @param positions Список позиций
@@ -66,7 +68,8 @@ class PrintPaybackReceiptCommand(
             },
             null,
             clientPhone,
-            clientEmail
+            clientEmail,
+            BigDecimal.ZERO
     )
 
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
@@ -90,6 +93,7 @@ class PrintPaybackReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
+        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
         return bundle
     }
 
@@ -101,6 +105,7 @@ class PrintPaybackReceiptCommand(
         private const val KEY_RECEIPT_EXTRA = "extra"
         private const val KEY_CLIENT_EMAIL = "clientEmail"
         private const val KEY_CLIENT_PHONE = "clientPhone"
+        private const val KEY_RECEIPT_DISCOUNT = "receiptDiscount"
 
         fun create(bundle: Bundle?): PrintPaybackReceiptCommand? {
             if (bundle == null) {
@@ -112,7 +117,8 @@ class PrintPaybackReceiptCommand(
                             .filterNotNull(),
                     SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
                     bundle.getString(KEY_CLIENT_PHONE, null),
-                    bundle.getString(KEY_CLIENT_EMAIL, null)
+                    bundle.getString(KEY_CLIENT_EMAIL, null),
+                    BigDecimal(bundle.getString(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO.toPlainString()))
             )
         }
 
