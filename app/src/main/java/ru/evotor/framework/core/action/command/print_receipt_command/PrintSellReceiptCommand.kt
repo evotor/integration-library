@@ -98,6 +98,7 @@ class PrintSellReceiptCommand(
 
     companion object {
 
+        const val NAME_PERMISSION = "ru.evotor.permission.receipt.print.INTERNET_RECEIPT"
         const val NAME = "evo.v2.receipt.sell.printReceipt"
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
