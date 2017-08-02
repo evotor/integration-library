@@ -24,9 +24,7 @@ data class SetPrintGroup(val printGroup: PrintGroup?, val paymentPurposeIds: Lis
         }
     }
 
-    override fun getType(): IChange.Type {
-        return IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP
-    }
+    override fun getType() = IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP
 
     companion object {
         const val KEY_PRINT_GROUP = "printGroup"

@@ -6,6 +6,7 @@ import android.util.Log
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.core.action.event.receipt.changes.UnknownChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.*
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
 import ru.evotor.framework.safeValueOf
 
 object ChangesMapper {
@@ -72,6 +73,7 @@ object ChangesMapper {
             IChange.Type.SET_EXTRA -> SetExtra.from(bundle)
             IChange.Type.SET_POSITION_PRINT_GROUP -> SetPrintGroup.from(bundle)
             IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP -> SetPrintGroup.from(bundle)
+            IChange.Type.SET_PRINT_EXTRA -> SetPrintExtra.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
