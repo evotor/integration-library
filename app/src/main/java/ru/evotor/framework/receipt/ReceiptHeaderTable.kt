@@ -7,4 +7,5 @@ object ReceiptHeaderTable {
     const val COLUMN_DATE = "DATE"
     const val COLUMN_CLIENT_EMAIL = "CLIENT_EMAIL"
     const val COLUMN_CLIENT_PHONE = "CLIENT_PHONE"
+    const val COLUMN_EXTRA = "EXTRA"
 }

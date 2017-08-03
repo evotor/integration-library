@@ -65,7 +65,12 @@ data class Receipt
             /**
              * Phone для отправки чека по смс
              */
-            var clientPhone: String?
+            var clientPhone: String?,
+
+            /**
+             * Extra
+             */
+            val extra: String?
     )
 
     /**
