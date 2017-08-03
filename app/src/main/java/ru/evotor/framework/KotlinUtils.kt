@@ -27,10 +27,36 @@ inline fun <reified T : kotlin.Enum<T>> safeValueOf(type: String?, default: T? =
 
 fun min(a: BigDecimal, b: BigDecimal) = if (a <= b) a else b
 
+fun android.database.Cursor.optLong(columnName: String): Long? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return optLong(index)
+}
+
 fun android.database.Cursor.optLong(columnIndex: Int): Long? {
     if (isNull(columnIndex)) {
         return null
     }
 
     return getLong(columnIndex)
+}
+
+fun android.database.Cursor.optString(columnName: String): String? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return optString(index)
+}
+
+fun android.database.Cursor.optString(columnIndex: Int): String? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getString(columnIndex)
 }

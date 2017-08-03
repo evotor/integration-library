@@ -98,4 +98,13 @@ public class PaymentSystem implements Parcelable {
             return new PaymentSystem[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "PaymentSystem{" +
+                "paymentType=" + paymentType +
+                ", userDescription='" + userDescription + '\'' +
+                ", paymentSystemId='" + paymentSystemId + '\'' +
+                '}';
+    }
 }

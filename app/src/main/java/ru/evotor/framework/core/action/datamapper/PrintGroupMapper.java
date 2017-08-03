@@ -14,6 +14,7 @@ public final class PrintGroupMapper {
     private static final String KEY_ORG_INN = "orgInn";
     private static final String KEY_ORG_ADDRESS = "orgAddress";
     private static final String KEY_TAXATION_SYSTEM = "taxationSystem";
+    private static final String KEY_SHOULD_PRINT_RECEIPT = "shouldPrintReceipt";
 
     @Nullable
     public static PrintGroup from(@Nullable Bundle bundle) {
@@ -26,13 +27,15 @@ public final class PrintGroupMapper {
         String orgInn = bundle.getString(KEY_ORG_INN);
         String orgAddress = bundle.getString(KEY_ORG_ADDRESS);
         String taxationSystem = bundle.getString(KEY_TAXATION_SYSTEM);
+        boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
         return new PrintGroup(
                 identifier,
                 Utils.safeValueOf(PrintGroup.Type.class, type, PrintGroup.Type.CASH_RECEIPT),
                 orgName,
                 orgInn,
                 orgAddress,
-                Utils.safeValueOf(TaxationSystem.class, taxationSystem, null)
+                Utils.safeValueOf(TaxationSystem.class, taxationSystem, null),
+                shouldPrintReceipt
         );
     }
 
@@ -48,6 +51,7 @@ public final class PrintGroupMapper {
         bundle.putString(KEY_ORG_INN, printGroup.getOrgInn());
         bundle.putString(KEY_ORG_ADDRESS, printGroup.getOrgAddress());
         bundle.putString(KEY_TAXATION_SYSTEM, printGroup.getTaxationSystem() == null ? null : printGroup.getTaxationSystem().name());
+        bundle.putBoolean(KEY_SHOULD_PRINT_RECEIPT, printGroup.isShouldPrintReceipt());
 
         return bundle;
     }

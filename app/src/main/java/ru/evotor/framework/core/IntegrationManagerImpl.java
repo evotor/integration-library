@@ -16,7 +16,6 @@ import android.os.OperationCanceledException;
 import android.os.RemoteException;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
