@@ -27,12 +27,14 @@ import java.util.*
  * @param extra Экстра данные к чеку
  * @param clientPhone Телефон клиента
  * @param clientEmail Эл.почта клиента
+ * @param receiptDiscount Скидка на чек
  */
 class PrintSellReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
         val extra: SetExtra?,
         val clientPhone: String?,
-        val clientEmail: String?) : IBundlable {
+        val clientEmail: String?,
+        val receiptDiscount: BigDecimal?) : IBundlable {
 
     /**
      * @param positions Список позиций
@@ -66,7 +68,8 @@ class PrintSellReceiptCommand(
             },
             null,
             clientPhone,
-            clientEmail
+            clientEmail,
+            BigDecimal.ZERO
     )
 
     /**
@@ -93,16 +96,19 @@ class PrintSellReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
+        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
         return bundle
     }
 
     companion object {
 
+        const val NAME_PERMISSION = "ru.evotor.permission.receipt.print.INTERNET_RECEIPT"
         const val NAME = "evo.v2.receipt.sell.printReceipt"
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
         private const val KEY_CLIENT_EMAIL = "clientEmail"
         private const val KEY_CLIENT_PHONE = "clientPhone"
+        private const val KEY_RECEIPT_DISCOUNT = "receiptDiscount"
 
         fun create(bundle: Bundle?): PrintSellReceiptCommand? {
             if (bundle == null) {
@@ -114,13 +120,14 @@ class PrintSellReceiptCommand(
                             .filterNotNull(),
                     SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
                     bundle.getString(KEY_CLIENT_PHONE, null),
-                    bundle.getString(KEY_CLIENT_EMAIL, null)
+                    bundle.getString(KEY_CLIENT_EMAIL, null),
+                    BigDecimal(bundle.getString(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO.toPlainString()))
             )
         }
 
 
         private fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
-            var remaining = sum
+            var remaining = MoneyCalculator.subtract(payments.sumByBigDecimal { it.value }, sum)
             val result = HashMap<Payment, BigDecimal>()
             for (payment in payments) {
                 if (payment.system?.paymentType != PaymentType.CASH) {
