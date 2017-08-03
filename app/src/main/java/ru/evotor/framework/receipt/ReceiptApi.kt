@@ -283,10 +283,14 @@ object ReceiptApi {
     }
 
     private fun createReceiptHeader(cursor: Cursor): Receipt.Header? {
+        val extraIndex = cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_EXTRA)
+        val extra = if (extraIndex == -1) null else cursor.getString(extraIndex)
+
         return Receipt.Header(
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
-                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null
+                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null,
+                extra
         )
     }
 
