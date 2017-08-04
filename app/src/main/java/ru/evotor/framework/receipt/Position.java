@@ -477,7 +477,7 @@ public class Position implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.measureName);
         dest.writeInt(this.measurePrecision);
-        dest.writeInt(this.taxNumber == null ? TaxNumber.NO_VAT.ordinal() : this.taxNumber.ordinal());
+        dest.writeInt(this.taxNumber == null ? -1 : this.taxNumber.ordinal());
         dest.writeSerializable(this.price);
         dest.writeSerializable(this.priceWithDiscountPosition);
         dest.writeSerializable(this.quantity);
@@ -500,7 +500,7 @@ public class Position implements Parcelable {
         this.measureName = in.readString();
         this.measurePrecision = in.readInt();
         int tmpTaxNumber = in.readInt();
-        this.taxNumber = tmpTaxNumber == TaxNumber.NO_VAT.ordinal() ? TaxNumber.NO_VAT : TaxNumber.values()[tmpTaxNumber];
+        this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
         this.price = (BigDecimal) in.readSerializable();
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
