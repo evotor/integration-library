@@ -27,7 +27,7 @@ public final class TaxNumberMapper {
             return null;
         }
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_TAX_NUMBER, taxNumber.getValue().toPlainString());
+        bundle.putString(KEY_TAX_NUMBER, taxNumber.name());
 
         return bundle;
     }
