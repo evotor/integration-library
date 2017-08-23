@@ -30,11 +30,6 @@ public class OpenReceiptCommandResult implements IBundlable {
     @NonNull
     private final String receiptUuid;
 
-    @NonNull
-    public String getReceiptUuid() {
-        return receiptUuid;
-    }
-
     public OpenReceiptCommandResult(
             @NonNull String receiptUuid
     ) {
@@ -47,5 +42,10 @@ public class OpenReceiptCommandResult implements IBundlable {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_RECEIPT_UUID, receiptUuid);
         return bundle;
+    }
+
+    @NonNull
+    public String getReceiptUuid() {
+        return receiptUuid;
     }
 }
