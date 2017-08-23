@@ -2,6 +2,7 @@ package ru.evotor.framework.core.action.datamapper
 
 import android.os.Bundle
 import ru.evotor.framework.calculator.MoneyCalculator
+import ru.evotor.framework.calculator.PercentCalculator
 import ru.evotor.framework.calculator.QuantityCalculator
 import java.math.BigDecimal
 
@@ -34,4 +35,11 @@ object BundleUtils {
     @JvmStatic
     fun getQuantity(bundle: Bundle, key: String, default: BigDecimal? = null)
             = bundle.getBigDecimal(key, default)?.let { QuantityCalculator.round(it) }
+
+    @JvmStatic
+    fun getPercent(bundle: Bundle, key: String) = getPercent(bundle, key, null)
+
+    @JvmStatic
+    fun getPercent(bundle: Bundle, key: String, default: BigDecimal? = null)
+            = bundle.getBigDecimal(key, default)?.let { PercentCalculator.round(it) }
 }

@@ -45,6 +45,7 @@ object InventoryApi {
 
     @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
+        if (uuid.isBlank()) return null
         context.contentResolver
                 .query(Uri.withAppendedPath(ProductTable.URI, uuid), null, null, null, null)
                 ?.let { cursor ->

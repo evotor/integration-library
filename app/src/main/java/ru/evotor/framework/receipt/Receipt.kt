@@ -1,6 +1,7 @@
 package ru.evotor.framework.receipt
 
 import java.math.BigDecimal
+import java.util.*
 
 /**
  * Чек
@@ -51,7 +52,25 @@ data class Receipt
             /**
              * Тип чека
              */
-            val type: Type
+            val type: Type,
+            /**
+             * Дата регистрации чека.
+             */
+            val date: Date?,
+            /**
+             * Email для отправки чека по почте
+             */
+            var clientEmail: String?,
+
+            /**
+             * Phone для отправки чека по смс
+             */
+            var clientPhone: String?,
+
+            /**
+             * Extra
+             */
+            val extra: String?
     )
 
     /**

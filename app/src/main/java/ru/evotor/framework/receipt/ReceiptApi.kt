@@ -6,11 +6,13 @@ import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.optLong
+import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
+import java.util.*
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -60,7 +62,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
-        return getReceipt(context, type, null);
+        return getReceipt(context, type, null)
     }
 
     /**
@@ -71,7 +73,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getReceipt(context: Context, uuid: String): Receipt? {
-        return getReceipt(context, null, uuid);
+        return getReceipt(context, null, uuid)
     }
 
     private fun getReceipt(context: Context, type: Receipt.Type?, uuid: String? = null): Receipt? {
@@ -208,7 +210,8 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_NAME)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_INN)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
-                safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)))
+                safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
+                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1
         )
     }
 
@@ -221,6 +224,9 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let {
+                    TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER)))
+                },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100)),
                 if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
                     BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100))
@@ -229,18 +235,14 @@ object ReceiptApi {
                 },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                if (cursor.getColumnIndex(PositionTable.COLUMN_MARK) != -1) {
+                cursor.optString(PositionTable.COLUMN_MARK)?.let {
                     cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                } else {
-                    null
                 },
                 cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
-                if (cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS) != -1) {
+                cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
                     createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
-                } else {
-                    null
                 },
                 null
         )
@@ -283,10 +285,17 @@ object ReceiptApi {
     }
 
     private fun createReceiptHeader(cursor: Cursor): Receipt.Header? {
+        val extraIndex = cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_EXTRA)
+        val extra = if (extraIndex == -1) null else cursor.getString(extraIndex)
+
         return Receipt.Header(
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
-                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null
+                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null,
+                cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
+                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
+                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
+                extra
         )
     }
 
