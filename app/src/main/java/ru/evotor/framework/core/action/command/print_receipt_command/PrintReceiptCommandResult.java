@@ -70,6 +70,16 @@ public class PrintReceiptCommandResult implements IBundlable {
     @NonNull
     private final String receiptNumber;
 
+    @NonNull
+    public String getReceiptUuid() {
+        return receiptUuid;
+    }
+
+    @NonNull
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
     public PrintReceiptCommandResult(
             @NonNull String receiptUuid,
             @NonNull String receiptNumber

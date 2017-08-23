@@ -30,6 +30,11 @@ public class OpenReceiptCommandResult implements IBundlable {
     @NonNull
     private final String receiptUuid;
 
+    @NonNull
+    public String getReceiptUuid() {
+        return receiptUuid;
+    }
+
     public OpenReceiptCommandResult(
             @NonNull String receiptUuid
     ) {
