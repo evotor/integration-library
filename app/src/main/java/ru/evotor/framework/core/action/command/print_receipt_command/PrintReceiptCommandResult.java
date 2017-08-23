@@ -86,4 +86,14 @@ public class PrintReceiptCommandResult implements IBundlable {
         bundle.putString(KEY_RECEIPT_NUMBER, receiptNumber);
         return bundle;
     }
+
+    @NonNull
+    public String getReceiptUuid() {
+        return receiptUuid;
+    }
+
+    @NonNull
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
 }
