@@ -19,8 +19,9 @@ abstract class PaymentSystemEvent(
     }
 
     companion object {
-        val NAME_RECEIPT = "evo.v2.receipt.paymentSystem"
-        val NAME_PERMISSION = "ru.evotor.permission.PAYMENT_SYSTEM"
+        const val NAME_ACTION = "evo.v2.receipt.paymentSystem"
+        const val NAME_PERMISSION = "ru.evotor.permission.PAYMENT_SYSTEM"
+        const val META_NAME_PAYMENT_SYSTEM_ID = "ru.evotor.paymentSystem.PAYMENT_SYSTEM_ID"
 
         private val KEY_OPERATION_TYPE = "operationType"
 

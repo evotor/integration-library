@@ -6,13 +6,15 @@ import java.math.BigDecimal
 
 class PaymentSystemSellEvent(
         val receiptUuid: String,
+        val accoundId: String?,
         val sum: BigDecimal,
-        val description: String
+        val description: String?
 ) : PaymentSystemEvent(PaymentSystemEvent.OperationType.SELL) {
 
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RECEIPT_UUID, receiptUuid)
+        result.putString(KEY_ACCOUNT_ID, accoundId)
         result.putString(KEY_SUM, sum.toPlainString())
         result.putString(KEY_DESCRIPTION, description)
         return result
@@ -20,6 +22,7 @@ class PaymentSystemSellEvent(
 
     companion object {
         private val KEY_RECEIPT_UUID = "receiptUuid"
+        private val KEY_ACCOUNT_ID = "accountId"
         private val KEY_DESCRIPTION = "description"
         private val KEY_SUM = "sum"
 
@@ -28,9 +31,10 @@ class PaymentSystemSellEvent(
                 return null
             }
             val receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null)
+            val accoundId = bundle.getString(KEY_ACCOUNT_ID, null)
             val sum = BundleUtils.getMoney(bundle, KEY_SUM)
             val description = bundle.getString(KEY_DESCRIPTION, null)
-            return PaymentSystemSellEvent(receiptUuid, sum!!, description)
+            return PaymentSystemSellEvent(receiptUuid, accoundId, sum!!, description)
         }
     }
 }
