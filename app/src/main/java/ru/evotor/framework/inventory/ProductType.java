@@ -5,5 +5,5 @@ package ru.evotor.framework.inventory;
  */
 
 public enum ProductType {
-    NORMAL, ALCOHOL_MARKED, ALCOHOL_NOT_MARKED
+    NORMAL, ALCOHOL_MARKED, ALCOHOL_NOT_MARKED, SERVICE
 }
