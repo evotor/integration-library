@@ -234,7 +234,7 @@ object ReceiptApi {
                     BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100))
                 },
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
+                cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
                 cursor.optString(PositionTable.COLUMN_MARK)?.let {
                     cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
                 },
@@ -242,7 +242,7 @@ object ReceiptApi {
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
                 cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-                    createExtraKeysFromDBFormat(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+                    createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
                 },
                 null
         )
@@ -274,9 +274,9 @@ object ReceiptApi {
         for (i in 0 until jsonExtraKeys.length()) {
             jsonExtraKeys.getJSONObject(i).let {
                 result.add(ExtraKey(
-                        it.getString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
-                        it.getString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
-                        it.getString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
+                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
+                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
+                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
                 ))
             }
         }
