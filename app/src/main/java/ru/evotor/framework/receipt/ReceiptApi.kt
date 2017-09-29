@@ -13,6 +13,7 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -118,13 +119,15 @@ object ReceiptApi {
             }
         }
 
-        val positionMap = getPositionResults
-                .associateBy { it.position.uuid }
+        val getPositionResultsWithoutSubPositions = getPositionResults.filter { it.parentUuid == null }
+
+        val getPositionResultsWithSubPositions = getPositionResults.filter { it.parentUuid == null }
 
         for ((position, _, parentUuid) in getPositionResults.filter { it.parentUuid != null }) {
-            positionMap.get(parentUuid)?.position?.subPositions?.add(position)
+            getPositionResultsWithSubPositions.find {
+                it.position.uuid == parentUuid
+            }?.position?.subPositions?.add(position)
         }
-        val getPositionResultsWithoutSubPositions = getPositionResults.filter { it.parentUuid == null }
 
         val getPaymentsResults = ArrayList<GetPaymentsResult>()
         context.contentResolver.query(
@@ -149,7 +152,7 @@ object ReceiptApi {
             val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment } ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
             printDocuments.add(Receipt.PrintReceipt(
                     printGroup,
-                    getPositionResultsWithoutSubPositions
+                    getPositionResultsWithSubPositions
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
@@ -244,7 +247,7 @@ object ReceiptApi {
                 cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
                     createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
                 },
-                null
+                ArrayList<Position>()
         )
     }
 
