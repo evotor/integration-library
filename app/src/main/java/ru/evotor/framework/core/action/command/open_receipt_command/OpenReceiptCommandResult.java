@@ -43,4 +43,9 @@ public class OpenReceiptCommandResult implements IBundlable {
         bundle.putString(KEY_RECEIPT_UUID, receiptUuid);
         return bundle;
     }
+
+    @NonNull
+    public String getReceiptUuid() {
+        return receiptUuid;
+    }
 }

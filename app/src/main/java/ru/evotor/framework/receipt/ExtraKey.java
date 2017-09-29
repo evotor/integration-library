@@ -2,6 +2,7 @@ package ru.evotor.framework.receipt;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 /**
  * Created by a.kuznetsov on 02/05/2017.
@@ -12,7 +13,7 @@ public class ExtraKey implements Parcelable {
     private final String appId;
     private final String description;
 
-    public ExtraKey(String identity, String appId, String description) {
+    public ExtraKey(@Nullable String identity, @Nullable String appId, @Nullable String description) {
         this.identity = identity;
         this.appId = appId;
         this.description = description;
