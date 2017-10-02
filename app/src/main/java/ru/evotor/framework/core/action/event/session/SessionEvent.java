@@ -1,13 +1,13 @@
-package ru.evotor.framework.core.action.event.reports;
+package ru.evotor.framework.core.action.event.session;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import ru.evotor.IBundlable;
 
-public abstract class ReportEvent implements IBundlable {
+public abstract class SessionEvent implements IBundlable {
 
-    public ReportEvent() {
+    public SessionEvent() {
     }
 
     @NonNull
