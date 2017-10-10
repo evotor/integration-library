@@ -57,7 +57,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'ru.evotor'
             artifactId "integration-library"
-            version "1.0.114-dev"
+            version "1.0.116-dev"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
