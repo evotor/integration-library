@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.ResultReceiver;
 
 /**
  * Чтобы получать пуши от своего сервера, необходимо унаследоваться от {@link PushNotificationReceiver},
- * зарегистрироваться с помощью registerAppToReceiveNotifications. После регистрации, через
- * {@link PushNotificationReceiver#onReceivePushNotification(android.content.Context, android.os.Bundle, long)}
+ * зарегистрироваться с помощью {@link PushNotificationReceiver#registerAppToReceiveNotifications(Context)}.
+ * После регистрации, через {@link PushNotificationReceiver#onReceivePushNotification(Context, Bundle, long)}
  * можно получить индентификтор устройства, который уже используется сервером, для рассылки пуш уведомлений.
  */
 public abstract class PushNotificationReceiver extends BroadcastReceiver {
@@ -23,7 +22,7 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
-            if(intent.hasExtra(CORRELATION_ID)){
+            if (intent.hasExtra(CORRELATION_ID)) {
                 onReceiveCorrelationID(context, intent.getStringExtra(CORRELATION_ID));
             } else {
                 onReceivePushNotification(context, intent.getBundleExtra(PUSH_DATA),
@@ -34,15 +33,17 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
 
     /**
      * Обработка пуш уведомления
-     * @param context контекст приложения
-     * @param data данные пуш уведомления в виде Bundle (JSON конвертируется в Bundle)
+     *
+     * @param context   контекст приложения
+     * @param data      данные пуш уведомления в виде Bundle (JSON конвертируется в Bundle)
      * @param messageId индентификатор пуш уведомления
      */
     public abstract void onReceivePushNotification(Context context, Bundle data, long messageId);
 
     /**
      * Получение индентификатора, нужный для посылки пушей
-     * @param context контекст приложения
+     *
+     * @param context       контекст приложения
      * @param correlationID данный индентификтор устройства необходимо передать серверу, для отправления пуш уведомлений
      */
     public abstract void onReceiveCorrelationID(Context context, String correlationID);
@@ -50,7 +51,8 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
     /**
      * Регистрация приложения, для получения пушей.
      * Данная операция должна выполняться один раз.
-     * После регистрации, вызовится {@link PushNotificationReceiver#onReceivePushNotification(android.content.Context, android.os.Bundle, long)}
+     * После регистрации, вызовится {@link PushNotificationReceiver#onReceivePushNotification(Context, Bundle, long)}
+     *
      * @param context контекст приложения
      */
     public static void registerAppToReceiveNotifications(Context context) {
