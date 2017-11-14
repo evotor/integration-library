@@ -303,12 +303,20 @@ class Position() : Parcelable {
         uuid = parcel.readString()
         productUuid = parcel.readString()
         productCode = parcel.readString()
+        productType = ProductType.valueOf(parcel.readString())
         name = parcel.readString()
         measureName = parcel.readString()
         measurePrecision = parcel.readInt()
+        taxNumber = TaxNumber.valueOf(parcel.readString())
+        price = parcel.readSerializable() as BigDecimal
+        priceWithDiscountPosition = parcel.readSerializable() as BigDecimal
+        quantity = parcel.readSerializable() as BigDecimal
         barcode = parcel.readString()
         mark = parcel.readString()
+        alcoholByVolume = parcel.readSerializable() as BigDecimal
         alcoholProductKindCode = parcel.readValue(Long::class.java.classLoader) as? Long
+        tareVolume = parcel.readSerializable() as BigDecimal
+        extraKeys = parcel.createTypedArrayList(ExtraKey.CREATOR).toMutableSet()
         subPositions = parcel.createTypedArrayList(CREATOR)
     }
 
@@ -545,12 +553,20 @@ class Position() : Parcelable {
         parcel.writeString(uuid)
         parcel.writeString(productUuid)
         parcel.writeString(productCode)
+        parcel.writeString(productType.name)
         parcel.writeString(name)
         parcel.writeString(measureName)
         parcel.writeInt(measurePrecision)
+        parcel.writeString(taxNumber?.name)
+        parcel.writeSerializable(price)
+        parcel.writeSerializable(priceWithDiscountPosition)
+        parcel.writeSerializable(quantity)
         parcel.writeString(barcode)
         parcel.writeString(mark)
+        parcel.writeSerializable(alcoholByVolume)
         parcel.writeValue(alcoholProductKindCode)
+        parcel.writeSerializable(tareVolume)
+        parcel.writeTypedList(extraKeys.toList())
         parcel.writeTypedList(subPositions)
     }
 
