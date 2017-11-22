@@ -3,13 +3,23 @@ package ru.evotor.framework.navigation
 import android.content.Intent
 
 object NavigationApi {
+    const val BROADCAST_ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
+    const val BROADCAST_ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
+    const val BROADCAST_ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
+    const val BROADCAST_ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
+    const val BROADCAST_ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
+    const val BROADCAST_ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
+    const val BROADCAST_ACTION_EDIT_COMMODITY = "evotor.intent.action.edit.COMMODITY"
+
+    const val EXTRA_IN_COMMODITY_UUID = "inCommodityUuid"
+    const val EXTRA_OUT_COMMODITY_UUID = "outCommodityUuid"
 
     /**
      * форма наполнения чека продажи
      */
     @JvmStatic
     fun createIntentForSellReceiptEdit(): Intent {
-        return Intent("evotor.intent.action.edit.SELL")
+        return Intent(BROADCAST_ACTION_EDIT_SELL)
     }
 
     /**
@@ -17,7 +27,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForPaybackReceiptEdit(): Intent {
-        return Intent("evotor.intent.action.edit.PAYBACK")
+        return Intent(BROADCAST_ACTION_EDIT_PAYBACK)
     }
 
     /**
@@ -25,7 +35,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForSellReceiptPayment(): Intent {
-        return Intent("evotor.intent.action.payment.SELL")
+        return Intent(BROADCAST_ACTION_PAYMENT_SELL)
     }
 
     /**
@@ -33,7 +43,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForPaybackReceiptPayment(): Intent {
-        return Intent("evotor.intent.action.payment.PAYBACK")
+        return Intent(BROADCAST_ACTION_PAYMENT_PAYBACK)
     }
 
     /**
@@ -41,7 +51,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForCashReceiptSettings(): Intent {
-        return Intent("evotor.intent.action.settings.CASH_RECEIPT")
+        return Intent(BROADCAST_ACTION_SETTINGS_CASH_RECEIPT)
     }
 
     /**
@@ -49,7 +59,15 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForCashRegisterReport(): Intent {
-        return Intent("evotor.intent.action.report.CASH_REGISTER")
+        return Intent(BROADCAST_ACTION_REPORT_CASH_REGISTER)
+    }
+
+    /**
+     * форма редактора товара
+     */
+    @JvmStatic
+    fun createIntentForEditCommodity(uuid: String?): Intent {
+        return Intent(BROADCAST_ACTION_EDIT_COMMODITY).apply { uuid?.let { putExtra(EXTRA_IN_COMMODITY_UUID, uuid) } }
     }
 
 }
