@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * Чтобы получать пуши от своего сервера, необходимо унаследоваться от {@link PushNotificationReceiver},
+ * Чтобы получать push-уведомления от своего сервера, необходимо унаследоваться от {@link PushNotificationReceiver},
  * зарегистрироваться с помощью {@link PushNotificationReceiver#onReceiveCorrelationId(Context, String)}.
  * После регистрации, через {@link PushNotificationReceiver#onReceivePushNotification(Context, Bundle, long)}
  * можно получить индентификтор устройства, который уже используется сервером, для рассылки пуш уведомлений.
@@ -35,7 +35,7 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
      * Обработка push-уведомление
      *
      * @param context   контекст приложения
-     * @param data      данные пуш уведомления в виде Bundle (JSON конвертируется в Bundle)
+     * @param data      данные push-уведомления в виде Bundle (JSON конвертируется в Bundle)
      * @param messageId индентификатор push-уведомления
      */
     public abstract void onReceivePushNotification(Context context, Bundle data, long messageId);
@@ -49,7 +49,7 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
     public abstract void onReceiveCorrelationId(Context context, String correlationId);
 
     /**
-     * Регистрация приложения, для получения пушей.
+     * Регистрация приложения, для получения push-уведомления.
      * Данная операция должна выполняться один раз.
      * После регистрации, вызовится {@link PushNotificationReceiver#onReceiveCorrelationId(Context, String)}
      *
