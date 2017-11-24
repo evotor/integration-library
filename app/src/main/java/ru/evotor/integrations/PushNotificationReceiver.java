@@ -32,11 +32,11 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Обработка пуш уведомления
+     * Обработка push-уведомление
      *
      * @param context   контекст приложения
      * @param data      данные пуш уведомления в виде Bundle (JSON конвертируется в Bundle)
-     * @param messageId индентификатор пуш уведомления
+     * @param messageId индентификатор push-уведомления
      */
     public abstract void onReceivePushNotification(Context context, Bundle data, long messageId);
 
