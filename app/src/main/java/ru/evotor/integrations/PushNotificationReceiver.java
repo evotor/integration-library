@@ -49,7 +49,7 @@ public abstract class PushNotificationReceiver extends BroadcastReceiver {
     public abstract void onReceiveCorrelationId(Context context, String correlationId);
 
     /**
-     * Регистрация приложения, для получения push-уведомления.
+     * Регистрация приложения, для получения push-уведомлений.
      * Данная операция должна выполняться один раз.
      * После регистрации, вызовится {@link PushNotificationReceiver#onReceiveCorrelationId(Context, String)}
      *
