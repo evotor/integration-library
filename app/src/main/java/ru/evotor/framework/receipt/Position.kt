@@ -551,13 +551,15 @@ class Position() : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Position> {
-        override fun createFromParcel(parcel: Parcel): Position {
-            return Position(parcel)
-        }
+    companion object {
+        @JvmField val CREATOR = object : Parcelable.Creator<Position> {
+            override fun createFromParcel(parcel: Parcel): Position {
+                return Position(parcel)
+            }
 
-        override fun newArray(size: Int): Array<Position?> {
-            return arrayOfNulls(size)
+            override fun newArray(size: Int): Array<Position?> {
+                return arrayOfNulls(size)
+            }
         }
     }
 }
