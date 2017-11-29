@@ -17,125 +17,109 @@ class Position() : Parcelable {
 
     /**
      * UUID позиции
-     */
-    /**
      * @return UUID позиции
      */
     lateinit var uuid: String
+
     /**
-     * UUID товара.
-     */
-    /**
-     * @return UUID товара.
+     * UUID товара
+     * @return UUID товара
      */
     var productUuid: String? = null
+
     /**
-     * Код товара.
-     */
-    /**
-     * @return Код товара.
+     * Код товара
+     * @return Код товара
      */
     var productCode: String? = null
+
     /**
-     * Вид товара.
-     */
-    /**
-     * @return Вид товара.
+     * Вид товара
+     * @return Вид товара
      */
     lateinit var productType: ProductType
+
     /**
-     * Наименование.
-     */
-    /**
+     * Наименование
      * @return Наименование
      */
     lateinit var name: String
+
     /**
-     * Наименование единицы измерения.
-     */
-    /**
-     * @return Наименование единицы измерения.
+     * Наименование единицы измерения
+     * @return Наименование единицы измерения
      */
     lateinit var measureName: String
+
     /**
-     * Точность единицы измерения.
-     */
-    /**
-     * @return Точность единицы измерения.
+     * Точность единицы измерения
+     * @return Точность единицы измерения
      */
     var measurePrecision: Int = 0
+
     /**
      * НДС
-     */
-    /**
-     * @return Налоговая ставка.
+     * @return Налоговая ставка
      */
     var taxNumber: TaxNumber? = null
+
     /**
-     * Цена без скидок.
-     */
-    /**
-     * @return Цена без скидок.
+     * Цена без скидок
+     * @return Цена без скидок
      */
     lateinit var price: BigDecimal
+
     /**
-     * Цена с учетом скидки на позицию.
-     */
-    /**
-     * @return Цена с учетом скидки на позицию.
+     * Цена с учетом скидки на позицию
+     * @return Цена с учетом скидки на позицию
      */
     lateinit var priceWithDiscountPosition: BigDecimal
+
     /**
-     * Количество.
-     */
-    /**
-     * @return Количество.
+     * Количество
+     * @return Количество
      */
     lateinit var quantity: BigDecimal
+
     /**
-     * Штрихкод, по которому товар был найден.
-     */
-    /**
-     * @return Штрихкод, по которому товар был найден.
+     * Штрихкод, по которому товар был найден
+     * @return Штрихкод, по которому товар был найден
      */
     var barcode: String? = null
+
     /**
-     * Алкогольная марка.
-     */
-    /**
-     * @return Алкогольная марка.
+     * Алкогольная марка
+     * @return Алкогольная марка
      */
     var mark: String? = null
+
     /**
-     * Крепость.
-     */
-    /**
-     * @return Крепость.
+     * Крепость
+     * @return Крепость
      */
     var alcoholByVolume: BigDecimal? = null
+
     /**
-     * Код вида продукции ФСРАР.
-     */
-    /**
-     * @return Код вида продукции ФСРАР.
+     * Код вида продукции ФСРАР
+     * @return Код вида продукции ФСРАР
      */
     var alcoholProductKindCode: Long? = null
+
     /**
-     * Объём тары.
-     */
-    /**
-     * @return Объём тары.
+     * Объём тары
+     * @return Объём тары
      */
     var tareVolume: BigDecimal? = null
+
     /**
      * Экстра ключи
+     * @return Экстра ключи
      */
     var extraKeys: MutableSet<ExtraKey> = HashSet()
+
     /*
      * Подпозиции (модификаторы)
-     */
-    /**
-     * @return Подпозиции (модификаторы).
+     * @return Подпозиции (модификаторы)
      */
     var subPositions: MutableList<Position> = ArrayList()
 
@@ -241,25 +225,22 @@ class Position() : Parcelable {
     )
 
     /**
-     * Возвращает сумму без учета скидок.
-
-     * @return сумма без учета скидок.
+     * Возвращает сумму без учета скидок
+     * @return сумма без учета скидок
      */
     val totalWithoutDiscounts: BigDecimal
         get() = MoneyCalculator.multiply(price, quantity)
 
     /**
-     * Возвращает сумму без учета скидки на чек.
-
-     * @return сумма без учета скидки на чек.
+     * Возвращает сумму без учета скидки на чек
+     * @return сумма без учета скидки на чек
      */
     val totalWithoutDocumentDiscount: BigDecimal
         get() = MoneyCalculator.multiply(priceWithDiscountPosition, quantity)
 
     /**
-     * Возвращает процент скидки на позицию.
-
-     * @return процент скидки на позицию.
+     * Возвращает процент скидки на позицию
+     * @return процент скидки на позицию
      */
     val discountPercents: BigDecimal
         get() {
@@ -270,19 +251,16 @@ class Position() : Parcelable {
         }
 
     /**
-     * Возвращает сумму скидки на позицию.
-
-     * @return сумма скидки на позицию.
+     * Возвращает сумму скидки на позицию
+     * @return сумма скидки на позицию
      */
     val discountPositionSum: BigDecimal
         get() = MoneyCalculator.subtract(totalWithoutDiscounts, totalWithoutDocumentDiscount)
 
     /**
-     * Возвращает сумму c учетом скидки на чек и на позицию.
-
+     * Возвращает сумму c учетом скидки на чек и на позицию
      * @param discountDocumentPositionSum сумма скидки на чек, распределенная на эту позицию
-     * *
-     * @return сумма с учетом скидки на чек и на позицию.
+     * @return сумма с учетом скидки на чек и на позицию
      */
     fun getTotal(discountDocumentPositionSum: BigDecimal): BigDecimal {
         return MoneyCalculator.subtract(MoneyCalculator.multiply(priceWithDiscountPosition, quantity),
@@ -290,9 +268,8 @@ class Position() : Parcelable {
     }
 
     /**
-     * Возвращает сумму без учета скидки на чек с учётом всех подпозиций.
-
-     * @return сумма без учета скидки на чек с учётом всех подпозиций.
+     * Возвращает сумму без учета скидки на чек с учётом всех подпозиций
+     * @return сумма без учета скидки на чек с учётом всех подпозиций
      */
     val totalWithSubPositionsAndWithoutDocumentDiscount: BigDecimal
         get() {
