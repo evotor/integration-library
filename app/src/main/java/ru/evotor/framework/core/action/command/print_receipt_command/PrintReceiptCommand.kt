@@ -9,6 +9,7 @@ import ru.evotor.framework.calculator.MoneyCalculator
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
+import ru.evotor.framework.core.action.datamapper.getMoney
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
 import ru.evotor.framework.min
 import ru.evotor.framework.payment.PaymentType
@@ -87,7 +88,7 @@ abstract class PrintReceiptCommand(
         }
 
         internal fun getReceiptDiscount(bundle: Bundle): BigDecimal? {
-            return BigDecimal(bundle.getString(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO.toPlainString()))
+            return bundle.getMoney(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

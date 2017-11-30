@@ -21,7 +21,7 @@ public final class PaymentPurposeMapper {
         }
         String identifier = bundle.getString(KEY_IDENTIFIER);
         String paymentSystemId = bundle.getString(KEY_PAYMENT_SYSTEM_ID);
-        BigDecimal total = new BigDecimal(bundle.getString(KEY_TOTAL));
+        BigDecimal total = BundleUtils.getMoney(bundle, KEY_TOTAL);
         String account = bundle.getString(KEY_ACCOUNT_ID);
         String userMessage = bundle.getString(KEY_USER_MESSAGE);
         return new PaymentPurpose(

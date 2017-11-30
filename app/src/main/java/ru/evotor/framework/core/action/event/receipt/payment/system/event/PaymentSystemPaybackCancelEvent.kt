@@ -1,7 +1,7 @@
 package ru.evotor.framework.core.action.event.receipt.payment.system.event
 
 import android.os.Bundle
-import ru.evotor.framework.core.action.datamapper.BundleUtils
+import ru.evotor.framework.core.action.datamapper.getMoney
 import java.math.BigDecimal
 
 class PaymentSystemPaybackCancelEvent(
@@ -35,7 +35,7 @@ class PaymentSystemPaybackCancelEvent(
             }
             val receiptUuid = bundle.getString(KEY_RECEIPT_UUID, null)
             val accountId = bundle.getString(KEY_ACCOUNT_ID, null)
-            val sum = BundleUtils.getMoney(bundle, KEY_SUM)
+            val sum = bundle.getMoney(KEY_SUM)
             val rrn = bundle.getString(KEY_RRN, null)
             val description = bundle.getString(KEY_DESCRIPTION, null)
             return PaymentSystemPaybackCancelEvent(receiptUuid, accountId, sum!!, rrn, description)
