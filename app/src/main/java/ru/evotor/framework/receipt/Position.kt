@@ -13,115 +13,170 @@ import ru.evotor.framework.calculator.PercentCalculator
 import ru.evotor.framework.inventory.ProductItem
 import ru.evotor.framework.inventory.ProductType
 
-class Position() : Parcelable {
-
+class Position(uuid: String,
+               productUuid: String?,
+               productCode: String?,
+               productType: ProductType,
+               name: String,
+               measureName: String,
+               measurePrecision: Int,
+               taxNumber: TaxNumber?,
+               price: BigDecimal,
+               priceWithDiscountPosition: BigDecimal,
+               quantity: BigDecimal,
+               barcode: String?,
+               mark: String?,
+               alcoholByVolume: BigDecimal?,
+               alcoholProductKindCode: Long?,
+               tareVolume: BigDecimal?,
+               extraKeys: Set<ExtraKey>?,
+               subPositions: List<Position>?) : Parcelable {
     /**
      * UUID позиции
      * @return UUID позиции
      */
-    lateinit var uuid: String
+    var uuid: String
+        private set
 
     /**
      * UUID товара
      * @return UUID товара
      */
     var productUuid: String? = null
+        private set
 
     /**
      * Код товара
      * @return Код товара
      */
     var productCode: String? = null
+        private set
 
     /**
      * Вид товара
      * @return Вид товара
      */
-    lateinit var productType: ProductType
+    var productType: ProductType
+        private set
 
     /**
      * Наименование
      * @return Наименование
      */
-    lateinit var name: String
+    var name: String
+        private set
 
     /**
      * Наименование единицы измерения
      * @return Наименование единицы измерения
      */
-    lateinit var measureName: String
+    var measureName: String
+        private set
 
     /**
      * Точность единицы измерения
      * @return Точность единицы измерения
      */
     var measurePrecision: Int = 0
+        private set
 
     /**
      * НДС
      * @return Налоговая ставка
      */
     var taxNumber: TaxNumber? = null
+        private set
 
     /**
      * Цена без скидок
      * @return Цена без скидок
      */
-    lateinit var price: BigDecimal
+    var price: BigDecimal
+        private set
 
     /**
      * Цена с учетом скидки на позицию
      * @return Цена с учетом скидки на позицию
      */
-    lateinit var priceWithDiscountPosition: BigDecimal
+    var priceWithDiscountPosition: BigDecimal
+        private set
 
     /**
      * Количество
      * @return Количество
      */
-    lateinit var quantity: BigDecimal
+    var quantity: BigDecimal
+        private set
 
     /**
      * Штрихкод, по которому товар был найден
      * @return Штрихкод, по которому товар был найден
      */
     var barcode: String? = null
+        private set
 
     /**
      * Алкогольная марка
      * @return Алкогольная марка
      */
     var mark: String? = null
+        private set
 
     /**
      * Крепость
      * @return Крепость
      */
     var alcoholByVolume: BigDecimal? = null
+        private set
 
     /**
      * Код вида продукции ФСРАР
      * @return Код вида продукции ФСРАР
      */
     var alcoholProductKindCode: Long? = null
+        private set
 
     /**
      * Объём тары
      * @return Объём тары
      */
     var tareVolume: BigDecimal? = null
+        private set
 
     /**
      * Экстра ключи
      * @return Экстра ключи
      */
     var extraKeys: MutableSet<ExtraKey> = HashSet()
+        private set
 
     /*
      * Подпозиции (модификаторы)
      * @return Подпозиции (модификаторы)
      */
     var subPositions: MutableList<Position> = ArrayList()
+        private set
+
+    init {
+        this.uuid = uuid
+        this.productUuid = productUuid
+        this.productCode = productCode
+        this.productType = productType
+        this.name = name
+        this.measureName = measureName
+        this.measurePrecision = measurePrecision
+        this.taxNumber = taxNumber
+        this.price = price
+        this.priceWithDiscountPosition = priceWithDiscountPosition
+        this.quantity = quantity
+        this.barcode = barcode
+        this.mark = mark
+        this.alcoholByVolume = alcoholByVolume
+        this.alcoholProductKindCode = alcoholProductKindCode
+        this.tareVolume = tareVolume
+        extraKeys?.let { this.extraKeys.addAll(it) }
+        subPositions?.let { this.subPositions.addAll(it)}
+    }
 
     @Deprecated("Deprecated since 10.11.2017. Use position constructor with 18 parameters, containing TaxNumber argument.")
     constructor(
@@ -142,66 +197,26 @@ class Position() : Parcelable {
             tareVolume: BigDecimal?,
             extraKeys: Set<ExtraKey>?,
             subPositions: List<Position>?
-    ) : this() {
-        this.uuid = uuid
-        this.productUuid = productUuid
-        this.productCode = productCode
-        this.productType = productType
-        this.name = name
-        this.measureName = measureName
-        this.measurePrecision = measurePrecision
-        this.taxNumber = null
-        this.price = price
-        this.priceWithDiscountPosition = priceWithDiscountPosition
-        this.quantity = quantity
-        this.barcode = barcode
-        this.mark = mark
-        this.alcoholByVolume = alcoholByVolume
-        this.alcoholProductKindCode = alcoholProductKindCode
-        this.tareVolume = tareVolume
-        extraKeys?.let { this.extraKeys.addAll(it) }
-        subPositions?.let { this.subPositions.addAll(it) }
-    }
-
-    constructor(
-            uuid: String,
-            productUuid: String?,
-            productCode: String?,
-            productType: ProductType,
-            name: String,
-            measureName: String,
-            measurePrecision: Int,
-            taxNumber: TaxNumber?,
-            price: BigDecimal,
-            priceWithDiscountPosition: BigDecimal,
-            quantity: BigDecimal,
-            barcode: String?,
-            mark: String?,
-            alcoholByVolume: BigDecimal?,
-            alcoholProductKindCode: Long?,
-            tareVolume: BigDecimal?,
-            extraKeys: Set<ExtraKey>?,
-            subPositions: List<Position>?
-    ) : this() {
-        this.uuid = uuid
-        this.productUuid = productUuid
-        this.productCode = productCode
-        this.productType = productType
-        this.name = name
-        this.measureName = measureName
-        this.measurePrecision = measurePrecision
-        this.taxNumber = taxNumber
-        this.price = price
-        this.priceWithDiscountPosition = priceWithDiscountPosition
-        this.quantity = quantity
-        this.barcode = barcode
-        this.mark = mark
-        this.alcoholByVolume = alcoholByVolume
-        this.alcoholProductKindCode = alcoholProductKindCode
-        this.tareVolume = tareVolume
-        extraKeys?.let { this.extraKeys.addAll(it) }
-        subPositions?.let { this.subPositions.addAll(it)}
-    }
+    ) : this(
+            uuid,
+            productUuid,
+            productCode,
+            productType,
+            name,
+            measureName,
+            measurePrecision,
+            null,
+            price,
+            priceWithDiscountPosition,
+            quantity,
+            barcode,
+            mark,
+            alcoholByVolume,
+            alcoholProductKindCode,
+            tareVolume,
+            extraKeys,
+            subPositions
+    )
 
     constructor(position: Position) : this(
             position.uuid,
@@ -276,26 +291,26 @@ class Position() : Parcelable {
             return subPositions.fold(totalWithoutDocumentDiscount){ sum, subPosition -> sum.add(subPosition.totalWithoutDocumentDiscount) }
         }
 
-    constructor(parcel: Parcel) : this() {
-        uuid = parcel.readString()
-        productUuid = parcel.readString()
-        productCode = parcel.readString()
-        productType = ProductType.valueOf(parcel.readString())
-        name = parcel.readString()
-        measureName = parcel.readString()
-        measurePrecision = parcel.readInt()
-        taxNumber = TaxNumber.valueOf(parcel.readString())
-        price = parcel.readSerializable() as BigDecimal
-        priceWithDiscountPosition = parcel.readSerializable() as BigDecimal
-        quantity = parcel.readSerializable() as BigDecimal
-        barcode = parcel.readString()
-        mark = parcel.readString()
-        alcoholByVolume = parcel.readSerializable() as BigDecimal
-        alcoholProductKindCode = parcel.readValue(Long::class.java.classLoader) as? Long
-        tareVolume = parcel.readSerializable() as BigDecimal
-        extraKeys = parcel.createTypedArrayList(ExtraKey.CREATOR).toMutableSet()
+    constructor(parcel: Parcel) : this(
+        uuid = parcel.readString(),
+        productUuid = parcel.readString(),
+        productCode = parcel.readString(),
+        productType = ProductType.valueOf(parcel.readString()),
+        name = parcel.readString(),
+        measureName = parcel.readString(),
+        measurePrecision = parcel.readInt(),
+        taxNumber = TaxNumber.valueOf(parcel.readString()),
+        price = parcel.readSerializable() as BigDecimal,
+        priceWithDiscountPosition = parcel.readSerializable() as BigDecimal,
+        quantity = parcel.readSerializable() as BigDecimal,
+        barcode = parcel.readString(),
+        mark = parcel.readString(),
+        alcoholByVolume = parcel.readSerializable() as BigDecimal,
+        alcoholProductKindCode = parcel.readValue(Long::class.java.classLoader) as? Long,
+        tareVolume = parcel.readSerializable() as BigDecimal,
+        extraKeys = parcel.createTypedArrayList(ExtraKey.CREATOR).toSet(),
         subPositions = parcel.createTypedArrayList(CREATOR)
-    }
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
