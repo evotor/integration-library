@@ -486,7 +486,7 @@ class Position(uuid: String,
         }
 
         companion object {
-            fun newInstance(
+            @JvmStatic fun newInstance(
                     product: ProductItem.Product,
                     quantity: BigDecimal
             ): Builder {
@@ -511,7 +511,7 @@ class Position(uuid: String,
 
             }
 
-            fun newInstance(
+            @JvmStatic fun newInstance(
                     uuid: String,
                     productUuid: String?,
                     name: String,
@@ -535,7 +535,7 @@ class Position(uuid: String,
                 )
             }
 
-            fun copyFrom(position: Position): Builder {
+            @JvmStatic fun copyFrom(position: Position): Builder {
                 return Builder(Position(position))
             }
         }
