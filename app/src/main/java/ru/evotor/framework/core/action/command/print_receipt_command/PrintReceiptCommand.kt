@@ -88,7 +88,7 @@ abstract class PrintReceiptCommand(
         }
 
         internal fun getReceiptDiscount(bundle: Bundle): BigDecimal? {
-            return bundle.getMoney(KEY_RECEIPT_DISCOUNT)
+            return bundle.getMoney(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
