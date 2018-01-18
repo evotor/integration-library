@@ -52,4 +52,11 @@ object NavigationApi {
         return Intent("evotor.intent.action.report.CASH_REGISTER")
     }
 
+    /**
+     * форма смены пользователей
+     */
+    @JvmStatic
+    fun createIntentForChangeUser(): Intent {
+        return Intent("evotor.intent.action.user.CHANGE")
+    }
 }

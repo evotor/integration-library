@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.Map;
 import java.util.Objects;
@@ -25,6 +26,14 @@ public abstract class IntegrationService extends Service {
             ActionProcessor processor = processors.get(action);
             if (processor != null) {
                 processor.process(action, response, bundle);
+            } else {
+                Log.e("IntegrationService", "Processor for action \"" + action + "\" not found in service " + IntegrationService.this.getClass().getName(), new IllegalStateException());
+
+                // skip
+                Bundle result = new Bundle();
+                result.putBoolean(IntegrationManager.KEY_SKIP, true);
+
+                response.onResult(result);
             }
         }
     };

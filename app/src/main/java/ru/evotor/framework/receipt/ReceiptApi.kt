@@ -264,7 +264,7 @@ object ReceiptApi {
     private fun createPaymentSystem(cursor: Cursor): PaymentSystem? {
         return PaymentSystem(
                 safeValueOf<PaymentType>(cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), null) ?: return null,
-                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)) ?: return null,
+                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)) ?: return null,
                 cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID)) ?: return null
         )
     }
