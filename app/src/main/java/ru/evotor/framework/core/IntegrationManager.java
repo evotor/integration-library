@@ -1,7 +1,7 @@
 package ru.evotor.framework.core;
 
-import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -23,7 +23,7 @@ public interface IntegrationManager {
             String action,
             ComponentName componentName,
             IBundlable data,
-            Activity activity,
+            Context activity,
             IntegrationManagerCallback callback,
             Handler handler);
 
