@@ -14,7 +14,7 @@ import ru.evotor.framework.core.IntegrationResponse;
 
 public abstract class ActionProcessor {
 
-    public void process(String action, IIntegrationManagerResponse response, Bundle bundle) {
+    public synchronized void process(String action, IIntegrationManagerResponse response, Bundle bundle) {
         process(action, bundle, new Callback(response, bundle));
     }
 
