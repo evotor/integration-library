@@ -165,8 +165,14 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 doWork(new Response());
             } catch (RemoteException e) {
                 setException(e);
+            } catch (Exception e) {
+                skip();
             }
             return this;
+        }
+
+        private void skip() {
+            set(new Result((Bundle) null));
         }
 
         @Override
