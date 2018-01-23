@@ -30,4 +30,9 @@ public abstract class QuantityCalculator {
         Objects.requireNonNull(value);
         return value.setScale(QUANTITY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
+
+    public static BigDecimal fromDouble(double source) {
+        return divide(new BigDecimal(Math.round(source * 1000)), new BigDecimal(1000));
+    }
+
 }
