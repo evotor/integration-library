@@ -39,4 +39,9 @@ public abstract class MoneyCalculator {
         Objects.requireNonNull(value);
         return value.setScale(MONEY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
+
+    public static BigDecimal fromDouble(double source) {
+        return divide(new BigDecimal(Math.round(source * 1000)), new BigDecimal(1000));
+    }
+
 }

@@ -6,5 +6,5 @@ public enum TaxationSystem {
     SIMPLIFIELD_INCOME_OUTCOME,
     SINGLE_IMPUTED_INCOME,
     SINGLE_AGRICULTURE,
-    PATENT;
+    PATENT
 }
