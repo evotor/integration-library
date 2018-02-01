@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public abstract class MoneyCalculator {
+  
     private static final BigDecimal HUNDRED = new BigDecimal("100");
     public static final int MONEY_PRECISION = 2;
 
@@ -39,9 +40,4 @@ public abstract class MoneyCalculator {
         Objects.requireNonNull(value);
         return value.setScale(MONEY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
-
-    public static BigDecimal fromDouble(double source) {
-        return divide(new BigDecimal(Math.round(source * 1000)), new BigDecimal(1000));
-    }
-
 }

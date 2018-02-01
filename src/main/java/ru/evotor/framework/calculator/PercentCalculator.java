@@ -20,6 +20,11 @@ public abstract class PercentCalculator {
         return value1.add(value2);
     }
 
+    public static BigDecimal toBigDecimal(double value) {
+        BigDecimal bigDecimalValue = new BigDecimal(value);
+        return bigDecimalValue.setScale(PERCENT_PRECISION, BigDecimal.ROUND_HALF_UP);
+    }
+  
     @NonNull
     public static BigDecimal round(@NonNull BigDecimal value) {
         Objects.requireNonNull(value);
