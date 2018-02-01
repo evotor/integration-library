@@ -25,9 +25,10 @@ public abstract class QuantityCalculator {
         return quantity.multiply(multiplicand).setScale(QUANTITY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 
-    @NonNull
+
     public static BigDecimal toBigDecimal(double value) {
-        return round(new BigDecimal(value));
+        BigDecimal bigDecimalValue = new BigDecimal(value);
+        return bigDecimalValue.setScale(QUANTITY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 
     @NonNull
