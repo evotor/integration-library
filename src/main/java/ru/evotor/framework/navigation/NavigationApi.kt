@@ -64,6 +64,14 @@ object NavigationApi {
     }
 
     /**
+     * форма смены пользователей
+     */
+    @JvmStatic
+    fun createIntentForChangeUser(): Intent {
+        return Intent("evotor.intent.action.user.CHANGE")
+    }
+
+    /**
      * форма редактора товара
      */
     @JvmStatic
