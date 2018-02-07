@@ -70,7 +70,8 @@ public final class PrintReceiptMapper {
                 printGroup,
                 positions,
                 payments,
-                changes
+                changes,
+                new HashMap<String, BigDecimal>()
         );
     }
 

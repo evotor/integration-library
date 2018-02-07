@@ -62,7 +62,8 @@ class PrintSellReceiptCommand(
                         calculateChanges(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
-                        )
+                        ),
+                        hashMapOf()
                 ))
             },
             null,
