@@ -1,5 +1,6 @@
 package ru.evotor.framework.receipt
 
+import ru.evotor.framework.calculator.MoneyCalculator
 import java.math.BigDecimal
 import java.util.*
 
@@ -35,6 +36,16 @@ data class Receipt
                 .map { it.payments }
                 .flatMap { it.keys }
                 .distinct()
+    }
+
+    /**
+     * Сумма всех скидок
+     */
+    fun getDiscount(): BigDecimal {
+        return printDocuments
+                .fold(BigDecimal.ZERO, { acc, printReceipt ->
+                    MoneyCalculator.add(acc, printReceipt.getDiscount())
+                })
     }
 
     /**
@@ -106,6 +117,21 @@ data class Receipt
             /**
              * Сдача
              */
-            val changes: Map<Payment, BigDecimal>
-    )
+            val changes: Map<Payment, BigDecimal>,
+            /**
+             * Скидки
+             */
+            val discounts: HashMap<String, BigDecimal>
+    ) {
+
+        /**
+         * Сумма скидок для текущей группы
+         */
+        fun getDiscount(): BigDecimal {
+            return positions
+                    .fold(BigDecimal.ZERO, { acc, position ->
+                        MoneyCalculator.add(acc, discounts[position.uuid] ?: BigDecimal.ZERO)
+                    })
+        }
+    }
 }
