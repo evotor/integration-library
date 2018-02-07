@@ -22,17 +22,22 @@ object ReceiptApi {
     @Deprecated(message = "Используйте методы API. Данная константа будет удалена")
     @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
+    private const val POSITION_DISCOUNT_UUID = "POSITION_UUID"
+    private const val DISCOUNT_COLUMN_NAME = "DISCOUNT"
+
     private const val AUTHORITY_V2 = "ru.evotor.evotorpos.v2.receipt"
     private const val RECEIPTS_PATH = "receipts"
     private const val CURRENT_SELL_PATH = "sell"
     private const val CURRENT_PAYBACK_PATH = "payback"
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
+    private const val DISCOUNT_PATH = "discount"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
     private val CURRENT_SELL_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_SELL_PATH)
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
+    private val RECEIPT_DISCOUNT_URI = Uri.withAppendedPath(BASE_URI_V2, DISCOUNT_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -144,6 +149,24 @@ object ReceiptApi {
             }
         }
 
+        val receiptDiscount = HashMap<String, BigDecimal>()
+
+        context.contentResolver.query(
+                RECEIPT_DISCOUNT_URI,
+                null,
+                null,
+                null,
+                null
+        )?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID))
+                val discount = BigDecimal(cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)))
+                        .divide(BigDecimal(100))
+
+                receiptDiscount[posDiscountUuid] = discount
+            }
+        }
+
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
         val groupByPrintGroupPaymentResults = getPaymentsResults
                 .groupBy { it.printGroup }
@@ -155,7 +178,8 @@ object ReceiptApi {
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
-                    payments.mapValues { it.value.change }
+                    payments.mapValues { it.value.change },
+                    receiptDiscount
             ))
         }
 
