@@ -12,8 +12,14 @@ object NavigationApi {
     private const val BROADCAST_ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
     private const val BROADCAST_ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
 
-    // extras for edit commodity intent
+    // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
+
+    const val EXTRA_INTEGRATION = "integration"
+
+    const val EXTRA_ADDED_COMMODITY_UUID = "added_commodity_uuid"
+
+    const val EXTRA_MULTIPLY_ADDING = "multiplyAdding"
 
     /**
      * форма наполнения чека продажи
@@ -72,7 +78,7 @@ object NavigationApi {
     }
 
     /**
-     * форма редактора товара
+     * форма добавления нового товара
      */
     @JvmStatic
     fun createIntentForEditProduct(productBuilder: EditProductIntentBuilder): Intent {
@@ -92,6 +98,8 @@ object NavigationApi {
             val bundle = Bundle()
             barcode.let {
                 bundle.putString(EXTRA_BARCODE, barcode)
+                bundle.putBoolean(EXTRA_INTEGRATION, true)
+                bundle.putBoolean(EXTRA_MULTIPLY_ADDING, false)
             }
             putExtras(bundle)
         }
