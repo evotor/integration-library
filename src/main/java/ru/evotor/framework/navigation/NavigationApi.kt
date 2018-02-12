@@ -4,13 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 
 object NavigationApi {
-    private const val BROADCAST_ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
-    private const val BROADCAST_ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
-    private const val BROADCAST_ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
-    private const val BROADCAST_ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
-    private const val BROADCAST_ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
-    private const val BROADCAST_ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
-    private const val BROADCAST_ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
+    private const val ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
+    private const val ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
+    private const val ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
+    private const val ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
+    private const val ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
+    private const val ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
+    private const val ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
+    private const val ACTION_CHANGE_USER = "evotor.intent.action.user.CHANGE"
 
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
@@ -26,7 +27,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForSellReceiptEdit(): Intent {
-        return Intent(BROADCAST_ACTION_EDIT_SELL)
+        return Intent(ACTION_EDIT_SELL)
     }
 
     /**
@@ -34,7 +35,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForPaybackReceiptEdit(): Intent {
-        return Intent(BROADCAST_ACTION_EDIT_PAYBACK)
+        return Intent(ACTION_EDIT_PAYBACK)
     }
 
     /**
@@ -42,7 +43,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForSellReceiptPayment(): Intent {
-        return Intent(BROADCAST_ACTION_PAYMENT_SELL)
+        return Intent(ACTION_PAYMENT_SELL)
     }
 
     /**
@@ -50,7 +51,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForPaybackReceiptPayment(): Intent {
-        return Intent(BROADCAST_ACTION_PAYMENT_PAYBACK)
+        return Intent(ACTION_PAYMENT_PAYBACK)
     }
 
     /**
@@ -58,7 +59,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForCashReceiptSettings(): Intent {
-        return Intent(BROADCAST_ACTION_SETTINGS_CASH_RECEIPT)
+        return Intent(ACTION_SETTINGS_CASH_RECEIPT)
     }
 
     /**
@@ -66,7 +67,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForCashRegisterReport(): Intent {
-        return Intent(BROADCAST_ACTION_REPORT_CASH_REGISTER)
+        return Intent(ACTION_REPORT_CASH_REGISTER)
     }
 
     /**
@@ -74,7 +75,7 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForChangeUser(): Intent {
-        return Intent("evotor.intent.action.user.CHANGE")
+        return Intent(ACTION_CHANGE_USER)
     }
 
     /**
@@ -94,7 +95,7 @@ object NavigationApi {
         }
 
         @JvmSynthetic
-        internal fun build() = Intent(BROADCAST_ACTION_EDIT_PRODUCT).apply {
+        internal fun build() = Intent(ACTION_EDIT_PRODUCT).apply {
             val bundle = Bundle()
             barcode.let {
                 bundle.putString(EXTRA_BARCODE, barcode)
