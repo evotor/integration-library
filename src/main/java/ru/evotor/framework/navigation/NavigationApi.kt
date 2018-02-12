@@ -1,7 +1,6 @@
 package ru.evotor.framework.navigation
 
 import android.content.Intent
-import android.os.Bundle
 
 object NavigationApi {
     private const val ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
@@ -17,7 +16,10 @@ object NavigationApi {
     const val EXTRA_BARCODE = "barcode"
     const val EXTRA_PRODUCT_UUID = "productUuid"
 
-    const val EXTRA_ADDED_PRODUCT_UUID = "added_product_uuid"
+    /**
+     * ключ для получения uuid продукта при успешном добавлении
+     */
+    const val EXTRA_ADDED_PRODUCT_UUID = "addedProductUuid"
 
     /**
      * форма наполнения чека продажи
@@ -84,33 +86,39 @@ object NavigationApi {
     }
 
     /**
-     * форма редактирования товара товара
+     * форма редактирования товара
      */
     @JvmStatic
     fun createIntentForEditProduct(productBuilder: EditProductIntentBuilder): Intent {
         return productBuilder.build()
     }
 
+    /**
+     * полуение uuid продукта при успешном добавлении
+     */
+    @JvmStatic
+    fun getProductUuid(intent: Intent): String? {
+        return intent.getStringExtra(EXTRA_ADDED_PRODUCT_UUID)
+    }
+
     class NewProductIntentBuilder {
         private var barcode: String? = null
 
-        fun setBarcode(barcode: String): NewProductIntentBuilder {
+        fun setBarcode(barcode: String?): NewProductIntentBuilder {
             this.barcode = barcode
             return this
         }
 
         @JvmSynthetic
         internal fun build() = Intent(ACTION_EDIT_PRODUCT).apply {
-            val bundle = Bundle()
-            barcode.let {
-                bundle.putString(EXTRA_BARCODE, barcode)
+            barcode?.let {
+                putExtra(EXTRA_BARCODE, it)
             }
-            putExtras(bundle)
         }
     }
 
     class EditProductIntentBuilder {
-        private var uuid: String? = null
+        private lateinit var uuid: String
 
         fun setUuid(uuid: String): EditProductIntentBuilder {
             this.uuid = uuid
@@ -119,11 +127,7 @@ object NavigationApi {
 
         @JvmSynthetic
         internal fun build() = Intent(ACTION_EDIT_PRODUCT).apply {
-            val bundle = Bundle()
-            uuid.let {
-                bundle.putString(EXTRA_PRODUCT_UUID, uuid)
-            }
-            putExtras(bundle)
+            putExtra(EXTRA_PRODUCT_UUID, uuid)
         }
     }
 
