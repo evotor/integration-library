@@ -15,6 +15,7 @@ object NavigationApi {
 
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
+    const val EXTRA_PRODUCT_UUID = "commodityUuid"
 
     const val EXTRA_ADDED_COMMODITY_UUID = "added_commodity_uuid"
 
@@ -82,6 +83,14 @@ object NavigationApi {
         return productBuilder.build()
     }
 
+    /**
+     * форма редактирования товара товара
+     */
+    @JvmStatic
+    fun createIntentForEditProduct(productBuilder: EditProductIntentBuilder): Intent {
+        return productBuilder.build()
+    }
+
     class NewProductIntentBuilder {
         private var barcode: String? = null
 
@@ -99,4 +108,24 @@ object NavigationApi {
             putExtras(bundle)
         }
     }
+
+    class EditProductIntentBuilder {
+        private var uuid: String? = null
+
+        fun setUuid(uuid: String): EditProductIntentBuilder {
+            this.uuid = uuid
+            return this
+        }
+
+        @JvmSynthetic
+        internal fun build() = Intent(ACTION_EDIT_PRODUCT).apply {
+            val bundle = Bundle()
+            uuid.let {
+                bundle.putString(EXTRA_PRODUCT_UUID, uuid)
+            }
+            putExtras(bundle)
+        }
+    }
+
+
 }
