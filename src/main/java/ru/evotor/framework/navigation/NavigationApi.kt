@@ -15,9 +15,9 @@ object NavigationApi {
 
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
-    const val EXTRA_PRODUCT_UUID = "commodityUuid"
+    const val EXTRA_PRODUCT_UUID = "productUuid"
 
-    const val EXTRA_ADDED_COMMODITY_UUID = "added_commodity_uuid"
+    const val EXTRA_ADDED_PRODUCT_UUID = "added_product_uuid"
 
     /**
      * форма наполнения чека продажи
