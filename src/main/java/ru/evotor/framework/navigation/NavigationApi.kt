@@ -16,11 +16,7 @@ object NavigationApi {
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
 
-    const val EXTRA_INTEGRATION = "integration"
-
     const val EXTRA_ADDED_COMMODITY_UUID = "added_commodity_uuid"
-
-    const val EXTRA_MULTIPLY_ADDING = "multiplyAdding"
 
     /**
      * форма наполнения чека продажи
@@ -82,14 +78,14 @@ object NavigationApi {
      * форма добавления нового товара
      */
     @JvmStatic
-    fun createIntentForEditProduct(productBuilder: EditProductIntentBuilder): Intent {
+    fun createIntentForNewProduct(productBuilder: NewProductIntentBuilder): Intent {
         return productBuilder.build()
     }
 
-    class EditProductIntentBuilder {
+    class NewProductIntentBuilder {
         private var barcode: String? = null
 
-        fun setBarcode(barcode: String): EditProductIntentBuilder {
+        fun setBarcode(barcode: String): NewProductIntentBuilder {
             this.barcode = barcode
             return this
         }
@@ -99,8 +95,6 @@ object NavigationApi {
             val bundle = Bundle()
             barcode.let {
                 bundle.putString(EXTRA_BARCODE, barcode)
-                bundle.putBoolean(EXTRA_INTEGRATION, true)
-                bundle.putBoolean(EXTRA_MULTIPLY_ADDING, false)
             }
             putExtras(bundle)
         }
