@@ -10,6 +10,8 @@ import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
+import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
+import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -21,9 +23,6 @@ object ReceiptApi {
 
     @Deprecated(message = "Используйте методы API. Данная константа будет удалена")
     @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
-
-    private const val POSITION_DISCOUNT_UUID = "POSITION_UUID"
-    private const val DISCOUNT_COLUMN_NAME = "DISCOUNT"
 
     private const val AUTHORITY_V2 = "ru.evotor.evotorpos.v2.receipt"
     private const val RECEIPTS_PATH = "receipts"
@@ -150,9 +149,14 @@ object ReceiptApi {
         }
 
         val receiptDiscount = HashMap<String, BigDecimal>()
+        val receiptUuid = if (uuid != null) {
+            Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, uuid)
+        } else {
+            RECEIPT_DISCOUNT_URI
+        }
 
         context.contentResolver.query(
-                RECEIPT_DISCOUNT_URI,
+                receiptUuid,
                 null,
                 null,
                 null,

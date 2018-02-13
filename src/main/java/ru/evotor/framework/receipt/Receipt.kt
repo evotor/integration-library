@@ -39,12 +39,12 @@ data class Receipt
     }
 
     /**
-     * Сумма всех скидок
+     * Скидка на чек. Без учета скидок на позиции
      */
     fun getDiscount(): BigDecimal {
         return printDocuments
-                .fold(BigDecimal.ZERO, { acc, printReceipt ->
-                    MoneyCalculator.add(acc, printReceipt.getDiscount())
+                .fold(BigDecimal.ZERO, { acc, printDocument ->
+                    MoneyCalculator.add(acc, printDocument.getDiscount())
                 })
     }
 
@@ -119,9 +119,13 @@ data class Receipt
              */
             val changes: Map<Payment, BigDecimal>,
             /**
-             * Скидки
+             * Скидка на документ, распределенная на позиции
+             * Ключ - uuid позиции
+             * Значение - скидка (уже высчитанная из цены)
+             *
+             * Added on 13.02.2018
              */
-            val discounts: HashMap<String, BigDecimal>
+            val discounts: Map<String, BigDecimal>?
     ) {
 
         /**
@@ -130,7 +134,7 @@ data class Receipt
         fun getDiscount(): BigDecimal {
             return positions
                     .fold(BigDecimal.ZERO, { acc, position ->
-                        MoneyCalculator.add(acc, discounts[position.uuid] ?: BigDecimal.ZERO)
+                        MoneyCalculator.add(acc, discounts?.get(position.uuid) ?: BigDecimal.ZERO)
                     })
         }
     }
