@@ -11,7 +11,7 @@ import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
-import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID
+import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -163,7 +163,7 @@ object ReceiptApi {
                 null
         )?.use { cursor ->
             while (cursor.moveToNext()) {
-                val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID))
+                val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
                 val discount = BigDecimal(cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)))
                         .divide(BigDecimal(100))
 
