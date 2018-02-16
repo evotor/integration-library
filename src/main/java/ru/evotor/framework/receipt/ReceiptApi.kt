@@ -10,6 +10,8 @@ import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
+import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
+import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -28,11 +30,13 @@ object ReceiptApi {
     private const val CURRENT_PAYBACK_PATH = "payback"
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
+    private const val DISCOUNT_PATH = "discount"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
     private val CURRENT_SELL_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_SELL_PATH)
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
+    private val RECEIPT_DISCOUNT_URI = Uri.withAppendedPath(BASE_URI_V2, DISCOUNT_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -144,6 +148,29 @@ object ReceiptApi {
             }
         }
 
+        val receiptDiscount = HashMap<String, BigDecimal>()
+        val receiptUuid = if (uuid != null) {
+            Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, uuid)
+        } else {
+            RECEIPT_DISCOUNT_URI
+        }
+
+        context.contentResolver.query(
+                receiptUuid,
+                null,
+                null,
+                null,
+                null
+        )?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
+                val discount = BigDecimal(cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)))
+                        .divide(BigDecimal(100))
+
+                receiptDiscount[posDiscountUuid] = discount
+            }
+        }
+
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
         val groupByPrintGroupPaymentResults = getPaymentsResults
                 .groupBy { it.printGroup }
@@ -155,7 +182,8 @@ object ReceiptApi {
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
-                    payments.mapValues { it.value.change }
+                    payments.mapValues { it.value.change },
+                    receiptDiscount
             ))
         }
 
