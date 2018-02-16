@@ -98,6 +98,10 @@ public class Position implements Parcelable {
      */
     private List<Position> subPositions = new ArrayList<>();
 
+    /**
+     * Deprecated since 16.02.2018. Use position Builder.
+     */
+    @Deprecated
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -117,26 +121,25 @@ public class Position implements Parcelable {
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
-        this.uuid = uuid;
-        this.productUuid = productUuid;
-        this.productCode = productCode;
-        this.productType = productType;
-        this.name = name;
-        this.measureName = measureName;
-        this.measurePrecision = measurePrecision;
-        this.taxNumber = null;
-        this.price = price;
-        this.priceWithDiscountPosition = priceWithDiscountPosition;
-        this.quantity = quantity;
-        this.barcode = barcode;
-        this.mark = mark;
-        this.alcoholByVolume = alcoholByVolume;
-        this.alcoholProductKindCode = alcoholProductKindCode;
-        this.tareVolume = tareVolume;
-        if (extraKeys != null) {
-            this.extraKeys.addAll(extraKeys);
-        }
-        this.subPositions = subPositions;
+        this(
+                uuid,
+                productUuid,
+                productCode,
+                productType,
+                name,
+                measureName,
+                measurePrecision,
+                null,
+                price,
+                priceWithDiscountPosition,
+                quantity,
+                barcode,
+                mark,
+                alcoholByVolume,
+                alcoholProductKindCode,
+                tareVolume, extraKeys,
+                subPositions
+        );
     }
 
     public Position(
@@ -190,7 +193,7 @@ public class Position implements Parcelable {
                 position.getName(),
                 position.getMeasureName(),
                 position.getMeasurePrecision(),
-                (position.getTaxNumber() != null ? position.getTaxNumber() : null),
+                position.getTaxNumber(),
                 position.getPrice(),
                 position.getPriceWithDiscountPosition(),
                 position.getQuantity(),
@@ -568,15 +571,17 @@ public class Position implements Parcelable {
                     quantity
             );
 
-            Position position = builder.position;
-            position.productType = product.getType();
-            position.alcoholByVolume = product.getAlcoholByVolume();
-            position.alcoholProductKindCode = product.getAlcoholProductKindCode();
-            position.tareVolume = product.getTareVolume();
-            position.productCode = product.getCode();
+            builder.setTaxNumber(product.getTaxNumber())
+                    .setAlcoParams(
+                            null,
+                            product.getAlcoholByVolume(),
+                            product.getAlcoholProductKindCode(),
+                            product.getTareVolume());
+
+            builder.position.productType = product.getType();
+            builder.position.productCode = product.getCode();
 
             return builder;
-
         }
 
         public static Builder newInstance(
@@ -630,10 +635,12 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_MARKED;
-            position.mark = mark;
-            position.alcoholByVolume = alcoholByVolume;
-            position.alcoholProductKindCode = alcoholProductKindCode;
-            position.tareVolume = tareVolume;
+            setAlcoParams(
+                    mark,
+                    alcoholByVolume,
+                    alcoholProductKindCode,
+                    tareVolume
+            );
             return this;
         }
 
@@ -643,10 +650,47 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_NOT_MARKED;
+            setAlcoParams(
+                    null,
+                    alcoholByVolume,
+                    alcoholProductKindCode,
+                    tareVolume
+            );
+            return this;
+        }
+
+        public Builder toNormal() {
+            position.productType = ProductType.NORMAL;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toService() {
+            position.productType = ProductType.NORMAL;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        private void setAlcoParams(
+                String mark,
+                BigDecimal alcoholByVolume,
+                Long alcoholProductKindCode,
+                BigDecimal tareVolume
+        ) {
+            position.mark = mark;
             position.alcoholByVolume = alcoholByVolume;
             position.alcoholProductKindCode = alcoholProductKindCode;
             position.tareVolume = tareVolume;
-            return this;
         }
 
         public Builder setUuid(String uuid) {
