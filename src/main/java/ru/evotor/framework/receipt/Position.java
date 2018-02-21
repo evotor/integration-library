@@ -671,7 +671,7 @@ public class Position implements Parcelable {
         }
 
         public Builder toService() {
-            position.productType = ProductType.NORMAL;
+            position.productType = ProductType.SERVICE;
             setAlcoParams(
                     null,
                     null,
