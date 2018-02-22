@@ -31,12 +31,14 @@ object ReceiptApi {
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
     private const val DISCOUNT_PATH = "discount"
+    private const val DISCOUNTS_PATH = "discounts"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
     private val CURRENT_SELL_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_SELL_PATH)
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
     private val RECEIPT_DISCOUNT_URI = Uri.withAppendedPath(BASE_URI_V2, DISCOUNT_PATH)
+    private val RECEIPT_DISCOUNTS_URI = Uri.withAppendedPath(BASE_URI_V2, DISCOUNTS_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -151,9 +153,13 @@ object ReceiptApi {
         val receiptDiscount = try {
             val discountMap = HashMap<String, BigDecimal>()
             val receiptUuid = if (uuid != null) {
-                Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, uuid)
+                Uri.withAppendedPath(RECEIPT_DISCOUNTS_URI, uuid)
             } else {
-                RECEIPT_DISCOUNT_URI
+                when (type) {
+                    Receipt.Type.SELL -> Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, CURRENT_SELL_PATH)
+                    Receipt.Type.PAYBACK -> Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, CURRENT_PAYBACK_PATH)
+                    else -> RECEIPT_DISCOUNT_URI
+                }
             }
 
             context.contentResolver.query(
@@ -175,6 +181,7 @@ object ReceiptApi {
             discountMap
         } catch (error: IllegalArgumentException) {
             //old version of evopos, does not support discounts
+            error.printStackTrace()
             null
         }
 
