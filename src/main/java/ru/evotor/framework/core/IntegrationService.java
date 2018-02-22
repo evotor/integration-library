@@ -29,6 +29,7 @@ public abstract class IntegrationService extends Service {
                     processor.process(action, response, bundle);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e("IntegrationService", e.getMessage());
                     throw e;
                 }
 
