@@ -148,27 +148,34 @@ object ReceiptApi {
             }
         }
 
-        val receiptDiscount = HashMap<String, BigDecimal>()
-        val receiptUuid = if (uuid != null) {
-            Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, uuid)
-        } else {
-            RECEIPT_DISCOUNT_URI
-        }
-
-        context.contentResolver.query(
-                receiptUuid,
-                null,
-                null,
-                null,
-                null
-        )?.use { cursor ->
-            while (cursor.moveToNext()) {
-                val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
-                val discount = BigDecimal(cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)))
-                        .divide(BigDecimal(100))
-
-                receiptDiscount[posDiscountUuid] = discount
+        val receiptDiscount = try {
+            val discountMap = HashMap<String, BigDecimal>()
+            val receiptUuid = if (uuid != null) {
+                Uri.withAppendedPath(RECEIPT_DISCOUNT_URI, uuid)
+            } else {
+                RECEIPT_DISCOUNT_URI
             }
+
+            context.contentResolver.query(
+                    receiptUuid,
+                    null,
+                    null,
+                    null,
+                    null
+            )?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
+                    val discount = BigDecimal(cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)))
+                            .divide(BigDecimal(100))
+
+                    discountMap[posDiscountUuid] = discount
+                }
+            }
+
+            discountMap
+        } catch (error: IllegalArgumentException) {
+            //old version of evopos, does not support discounts
+            null
         }
 
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
