@@ -163,7 +163,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         public final IntegrationManagerFuture start() {
             try {
                 doWork(new Response());
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 setException(e);
             }
             return this;
@@ -303,6 +303,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
                         doWork(this);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        setException(e);
                     }
                 } else if (bundle.getBoolean(KEY_SKIP)) {
                     skip();

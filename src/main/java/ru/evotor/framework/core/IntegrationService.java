@@ -25,7 +25,13 @@ public abstract class IntegrationService extends Service {
         public void call(IIntegrationManagerResponse response, String action, Bundle bundle) throws RemoteException {
             ActionProcessor processor = processors.get(action);
             if (processor != null) {
-                processor.process(action, response, bundle);
+                try {
+                    processor.process(action, response, bundle);
+                } catch (Exception e) {
+                    Log.e("IntegrationService", "Message: " + e.getMessage(), e);
+                    throw e;
+                }
+
             } else {
                 Log.e("IntegrationService", "Processor for action \"" + action + "\" not found in service " + IntegrationService.this.getClass().getName(), new IllegalStateException());
 

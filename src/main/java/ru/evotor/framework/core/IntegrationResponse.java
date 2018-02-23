@@ -55,6 +55,9 @@ public class IntegrationResponse implements Parcelable {
             mIntegrationManagerResponse.onResult(result);
         } catch (RemoteException e) {
             // this should never happen
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
