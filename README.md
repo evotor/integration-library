@@ -16,7 +16,7 @@ allprojects {
 
 ```
 dependencies {
-compile 'com.github.evotor:integration-library:v0.4.+'
+    implementation 'com.github.evotor:integration-library:v0.4.+'
 }
 ```
 
