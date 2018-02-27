@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 public class ReceiptClosedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT_CLOSED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT_CLOSED = "evotor.intent.action.receipt.payback.RECEIPT_CLOSED";
+    public static final String BROADCAST_ACTION_BUY_RECEIPT_CLOSED = "evotor.intent.action.receipt.buy.RECEIPT_CLOSED";
+    public static final String BROADCAST_ACTION_BUYBACK_RECEIPT_CLOSED = "evotor.intent.action.receipt.buyback.RECEIPT_CLOSED";
 
     public ReceiptClosedEvent(@NonNull String receiptUuid) {
         super(receiptUuid);

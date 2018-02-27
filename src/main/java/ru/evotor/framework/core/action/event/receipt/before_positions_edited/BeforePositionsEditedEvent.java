@@ -18,6 +18,8 @@ public class BeforePositionsEditedEvent implements IBundlable {
 
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.beforePositionsEdited";
     public static final String NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.beforePositionsEdited";
+    public static final String NAME_BUY_RECEIPT = "evo.v2.receipt.buy.beforePositionsEdited";
+    public static final String NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.beforePositionsEdited";
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_CHANGES = "changes";
