@@ -92,8 +92,8 @@ object ReceiptApi {
         val baseUri = when (type) {
             Receipt.Type.SELL -> CURRENT_SELL_RECEIPT_URI
             Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
-            Receipt.Type.BUY -> CURRENT_SELL_RECEIPT_URI
-            Receipt.Type.BUYBACK -> CURRENT_PAYBACK_RECEIPT_URI
+            Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
+            Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
             else -> Uri.withAppendedPath(RECEIPTS_URI, uuid)
         }
 
