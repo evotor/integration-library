@@ -5,8 +5,12 @@ import android.content.Intent
 object NavigationApi {
     private const val ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
     private const val ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
+    private const val ACTION_EDIT_BUY = "evotor.intent.action.edit.BUY"
+    private const val ACTION_EDIT_BUYBACK = "evotor.intent.action.edit.BUYBACK"
     private const val ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
     private const val ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
+    private const val ACTION_PAYMENT_BUY = "evotor.intent.action.payment.BUY"
+    private const val ACTION_PAYMENT_BUYBACK = "evotor.intent.action.payment.BUYBACK"
     private const val ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
     private const val ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
     private const val ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
@@ -38,6 +42,22 @@ object NavigationApi {
     }
 
     /**
+     * форма наполнения чека покупки
+     */
+    @JvmStatic
+    fun createIntentForBuyReceiptEdit(): Intent {
+        return Intent(ACTION_EDIT_BUY)
+    }
+
+    /**
+     * форма наполнения чека возврата покупки
+     */
+    @JvmStatic
+    fun createIntentForBuybackReceiptEdit(): Intent {
+        return Intent(ACTION_EDIT_BUYBACK)
+    }
+
+    /**
      * форма оплаты чека продажи
      */
     @JvmStatic
@@ -51,6 +71,22 @@ object NavigationApi {
     @JvmStatic
     fun createIntentForPaybackReceiptPayment(): Intent {
         return Intent(ACTION_PAYMENT_PAYBACK)
+    }
+
+    /**
+     * форма оплаты чека покупки
+     */
+    @JvmStatic
+    fun createIntentForBuyReceiptPayment(): Intent {
+        return Intent(ACTION_PAYMENT_BUY)
+    }
+
+    /**
+     * форма оплаты чека возврата покупки
+     */
+    @JvmStatic
+    fun createIntentForBuybackReceiptPayment(): Intent {
+        return Intent(ACTION_PAYMENT_BUYBACK)
     }
 
     /**

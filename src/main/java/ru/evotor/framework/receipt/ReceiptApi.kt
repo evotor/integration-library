@@ -28,6 +28,8 @@ object ReceiptApi {
     private const val RECEIPTS_PATH = "receipts"
     private const val CURRENT_SELL_PATH = "sell"
     private const val CURRENT_PAYBACK_PATH = "payback"
+    private const val CURRENT_BUY_PATH = "buy"
+    private const val CURRENT_BUYBACK_PATH = "buyback"
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
     private const val DISCOUNTS_PATH = "discounts"
@@ -36,6 +38,8 @@ object ReceiptApi {
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
     private val CURRENT_SELL_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_SELL_PATH)
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
+    private val CURRENT_BUY_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUY_PATH)
+    private val CURRENT_BUYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUYBACK_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -88,6 +92,8 @@ object ReceiptApi {
         val baseUri = when (type) {
             Receipt.Type.SELL -> CURRENT_SELL_RECEIPT_URI
             Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
+            Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
+            Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
             else -> Uri.withAppendedPath(RECEIPTS_URI, uuid)
         }
 

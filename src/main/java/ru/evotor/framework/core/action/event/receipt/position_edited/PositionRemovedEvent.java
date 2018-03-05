@@ -13,6 +13,8 @@ import ru.evotor.framework.receipt.Position;
 public class PositionRemovedEvent extends PositionEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.POSITION_REMOVED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.POSITION_REMOVED";
+    public static final String BROADCAST_ACTION_BUY_RECEIPT = "evotor.intent.action.receipt.buy.POSITION_REMOVED";
+    public static final String BROADCAST_ACTION_BUYBACK_RECEIPT = "evotor.intent.action.receipt.buyback.POSITION_REMOVED";
 
     @Nullable
     public static PositionRemovedEvent create(@Nullable Bundle extras) {

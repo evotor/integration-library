@@ -13,6 +13,8 @@ import ru.evotor.framework.receipt.Position;
 public class PositionAddedEvent extends PositionEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.POSITION_ADDED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.POSITION_ADDED";
+    public static final String BROADCAST_ACTION_BUY_RECEIPT = "evotor.intent.action.receipt.buy.POSITION_ADDED";
+    public static final String BROADCAST_ACTION_BUYBACK_RECEIPT = "evotor.intent.action.receipt.buyback.POSITION_ADDED";
 
     @Nullable
     public static PositionAddedEvent create(@Nullable Bundle extras) {
