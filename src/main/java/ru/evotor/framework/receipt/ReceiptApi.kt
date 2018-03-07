@@ -22,7 +22,8 @@ object ReceiptApi {
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
     @Deprecated(message = "Используйте методы API. Данная константа будет удалена")
-    @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
+    @JvmField
+    val BASE_URI = Uri.parse("content://$AUTHORITY")
 
     private const val AUTHORITY_V2 = "ru.evotor.evotorpos.v2.receipt"
     private const val RECEIPTS_PATH = "receipts"
@@ -183,7 +184,8 @@ object ReceiptApi {
         val groupByPrintGroupPaymentResults = getPaymentsResults
                 .groupBy { it.printGroup }
         for (printGroup in printGroups) {
-            val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment } ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
+            val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment }
+                    ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
             printDocuments.add(Receipt.PrintReceipt(
                     printGroup,
                     getPositionResultsWithoutSubPositionsInList
@@ -208,7 +210,7 @@ object ReceiptApi {
      * @return курсор с заголовками чека
      */
     @JvmStatic
-    fun getReceiptHeaders(context: Context, type: Receipt.Type? = null): ru.evotor.framework.Cursor<Receipt.Header?>? {
+    fun getReceiptHeaders(context: Context, type: Receipt.Type? = null): ru.evotor.query.Cursor<Receipt.Header?>? {
         return context.contentResolver.query(
                 RECEIPTS_URI,
                 null,
@@ -216,7 +218,18 @@ object ReceiptApi {
                 type?.let { arrayOf(it.name) },
                 null
         )?.let {
-            object : ru.evotor.framework.Cursor<Receipt.Header?>(it) {
+            object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
+                override fun toList(): List<Receipt.Header?>? {
+                    var result: List<Receipt.Header?>? = null
+                    if (moveToFirst()) {
+                        result = ArrayList()
+                        while (moveToNext()) {
+                            result.add(getValue())
+                        }
+                    }
+                    return result
+                }
+
                 override fun getValue(): Receipt.Header? {
                     return createReceiptHeader(this)
                 }
@@ -243,7 +256,8 @@ object ReceiptApi {
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
         return PrintGroup(
-                cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER)) ?: return null,
+                cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
+                        ?: return null,
                 safeValueOf<PrintGroup.Type>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TYPE))),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_NAME)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_INN)),
@@ -299,9 +313,12 @@ object ReceiptApi {
 
     private fun createPaymentSystem(cursor: Cursor): PaymentSystem? {
         return PaymentSystem(
-                safeValueOf<PaymentType>(cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), null) ?: return null,
-                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)) ?: return null,
-                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID)) ?: return null
+                safeValueOf<PaymentType>(cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), null)
+                        ?: return null,
+                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION))
+                        ?: return null,
+                cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
+                        ?: return null
         )
     }
 
@@ -329,7 +346,8 @@ object ReceiptApi {
         return Receipt.Header(
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
-                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE))) ?: return null,
+                safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE)))
+                        ?: return null,
                 cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
                 cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
                 cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
@@ -345,7 +363,8 @@ object ReceiptApi {
 
         const val PATH_RECEIPT_DESCRIPTION = "information"
 
-        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_DESCRIPTION)
+        @JvmField
+        val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_DESCRIPTION)
 
         const val ROW_ID = "_id"
         const val ROW_UUID = "uuid"
@@ -358,7 +377,8 @@ object ReceiptApi {
 
         const val PATH_RECEIPT_POSITIONS = "positions"
 
-        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
+        @JvmField
+        val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_POSITIONS)
 
         const val ROW_UUID = "uuid"
         const val ROW_PRODUCT_UUID = "productUuid"
@@ -377,7 +397,8 @@ object ReceiptApi {
 
         const val PATH_RECEIPT_PAYMENTS = "payments"
 
-        @JvmField val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_PAYMENTS)
+        @JvmField
+        val URI = Uri.withAppendedPath(BASE_URI, PATH_RECEIPT_PAYMENTS)
 
         const val ROW_ID = "_id"
         const val ROW_UUID = "uuid"
