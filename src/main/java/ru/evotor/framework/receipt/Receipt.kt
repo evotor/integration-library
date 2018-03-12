@@ -95,7 +95,15 @@ data class Receipt
         /**
          * Возврат
          */
-        PAYBACK
+        PAYBACK,
+        /**
+         * Покупка
+         */
+        BUY,
+        /**
+         * Возврат покупки
+         */
+        BUYBACK
     }
 
     /**
