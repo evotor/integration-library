@@ -18,7 +18,7 @@ class ReceiptResult : Result {
     /**
      * ФН - Заводской номер фискального накопителя
      */
-    var fnRegNumber: String? = null
+    var fnSerialNumber: String? = null
 
     /**
      * ФПД - номер фискального признака документа
@@ -34,6 +34,16 @@ class ReceiptResult : Result {
      * ФД - Дата фискального документа
      */
     var fiscalReceiptDate: String? = null
+
+    /**
+     * Серийный (заводской) номер ККТ
+     */
+    var kktSerialNumber: String? = null
+
+    /**
+     * Регистрационный номер ККТ
+     */
+    var kktRegNumber: String? = null
 
     constructor()
 
@@ -51,10 +61,12 @@ class ReceiptResult : Result {
         receiptDay = parcel.readInt()
         receiptMonth = parcel.readInt()
         receiptYear = parcel.readInt()
-        fnRegNumber = parcel.readString()
+        fnSerialNumber = parcel.readString()
         fiscalSignDocNumber = parcel.readString()
         fiscalDocNumber = parcel.readInt()
         fiscalReceiptDate = parcel.readString()
+        kktSerialNumber = parcel.readString()
+        kktRegNumber = parcel.readString()
     }
 
     override fun describeContents(): Int = 0
@@ -68,10 +80,12 @@ class ReceiptResult : Result {
         dest.writeInt(receiptDay)
         dest.writeInt(receiptMonth)
         dest.writeInt(receiptYear)
-        dest.writeString(fnRegNumber)
+        dest.writeString(fnSerialNumber)
         dest.writeString(fiscalSignDocNumber)
         dest.writeInt(fiscalDocNumber)
         dest.writeString(fiscalReceiptDate)
+        dest.writeString(kktSerialNumber)
+        dest.writeString(kktRegNumber)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -87,10 +101,12 @@ class ReceiptResult : Result {
         if (receiptDay != other.receiptDay) return false
         if (receiptMonth != other.receiptMonth) return false
         if (receiptYear != other.receiptYear) return false
-        if (fnRegNumber != other.fnRegNumber) return false
+        if (fnSerialNumber != other.fnSerialNumber) return false
         if (fiscalSignDocNumber != other.fiscalSignDocNumber) return false
         if (fiscalDocNumber != other.fiscalDocNumber) return false
         if (fiscalReceiptDate != other.fiscalReceiptDate) return false
+        if (kktSerialNumber != other.kktSerialNumber) return false
+        if (kktRegNumber != other.kktRegNumber) return false
 
         return true
     }
@@ -103,26 +119,22 @@ class ReceiptResult : Result {
         result = 31 * result + receiptDay
         result = 31 * result + receiptMonth
         result = 31 * result + receiptYear
-        result = 31 * result + (fnRegNumber?.hashCode() ?: 0)
+        result = 31 * result + (fnSerialNumber?.hashCode() ?: 0)
         result = 31 * result + (fiscalSignDocNumber?.hashCode() ?: 0)
         result = 31 * result + fiscalDocNumber
         result = 31 * result + (fiscalReceiptDate?.hashCode() ?: 0)
+        result = 31 * result + (kktSerialNumber?.hashCode() ?: 0)
+        result = 31 * result + (kktRegNumber?.hashCode() ?: 0)
         return result
     }
-
 
     companion object {
         private const val serialVersionUID = 6106269076155338045L
 
-        @JvmField
         val CREATOR: Parcelable.Creator<ReceiptResult> = object : Parcelable.Creator<ReceiptResult> {
-            override fun createFromParcel(pc: Parcel): ReceiptResult {
-                return ReceiptResult(pc)
-            }
+            override fun createFromParcel(pc: Parcel): ReceiptResult = ReceiptResult(pc)
 
-            override fun newArray(size: Int): Array<ReceiptResult?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<ReceiptResult?> = arrayOfNulls(size)
         }
     }
 }
