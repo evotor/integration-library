@@ -6066,4 +6066,15 @@ public class KKMService extends AbstractService implements IKKMServiceWrapper {
             throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
         }
     }
+
+    @Override
+    public void printImage(int deviceId, String filename) throws DeviceServiceException {
+        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        try {
+            service.printImage(deviceId, filename);
+        } catch (RemoteException | RuntimeException exc) {
+            DeviceServiceConnector.processException(exc);
+            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+        }
+    }
 }

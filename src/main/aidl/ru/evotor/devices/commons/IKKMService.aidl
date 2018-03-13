@@ -1002,4 +1002,6 @@ interface IKKMService {
 	ResultBoolean hasNewSoftwareForFlashing(int deviceId);
 
 	ResultVoid flashAllIfAvailable(int deviceId);
+
+	ResultVoid printImage(int deviceId, String filename);
 }

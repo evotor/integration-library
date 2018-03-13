@@ -997,4 +997,6 @@ public interface IKKMServiceWrapper {
     boolean hasNewSoftwareForFlashing(int deviceId) throws DeviceServiceException;
 
     void flashAllIfAvailable(int deviceId) throws DeviceServiceException;
+
+    void printImage(int deviceId, String filename) throws DeviceServiceException;
 }
