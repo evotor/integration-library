@@ -219,17 +219,6 @@ object ReceiptApi {
                 null
         )?.let {
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
-                override fun toList(): List<Receipt.Header?>? {
-                    var result: List<Receipt.Header?>? = null
-                    if (moveToFirst()) {
-                        result = ArrayList()
-                        while (moveToNext()) {
-                            result.add(getValue())
-                        }
-                    }
-                    return result
-                }
-
                 override fun getValue(): Receipt.Header? {
                     return createReceiptHeader(this)
                 }
