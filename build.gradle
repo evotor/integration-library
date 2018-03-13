@@ -29,7 +29,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile 'com.github.evotor:query-api:-SNAPSHOT'
+    compile 'com.github.evotor:query-api:6806973afa'
     compile 'ru.evotor.devices:publics:2.3.1+'
 }
 
