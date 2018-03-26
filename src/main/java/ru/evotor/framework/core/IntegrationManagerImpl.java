@@ -163,7 +163,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         public final IntegrationManagerFuture start() {
             try {
                 doWork(new Response());
-            } catch (Exception e) {
+            } catch (RemoteException e) {
                 setException(e);
             } catch (Exception e) {
                 skip();
