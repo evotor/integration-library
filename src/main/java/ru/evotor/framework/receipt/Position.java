@@ -97,11 +97,15 @@ public class Position implements Parcelable {
      * Экстра ключи
      */
     private Set<ExtraKey> extraKeys = new HashSet<>();
-    /*
+    /**
      * Подпозиции (модификаторы)
      */
     private List<Position> subPositions = new ArrayList<>();
 
+    /**
+     * Атрибуты
+     */
+    @Nullable
     private Map<String, DomainAttributeValue> attributes;
 
     /**
@@ -166,7 +170,7 @@ public class Position implements Parcelable {
             @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions,
-            Map<String, DomainAttributeValue> attributes
+            @Nullable Map<String, DomainAttributeValue> attributes
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -175,7 +179,6 @@ public class Position implements Parcelable {
         this.name = name;
         this.measureName = measureName;
         this.measurePrecision = measurePrecision;
-        this.taxNumber = taxNumber;
         this.price = price;
         this.priceWithDiscountPosition = priceWithDiscountPosition;
         this.quantity = quantity;
@@ -193,24 +196,24 @@ public class Position implements Parcelable {
 
     public Position(
             String uuid,
-            String productUuid,
-            String productCode,
+            @Nullable String productUuid,
+            @Nullable String productCode,
             ProductType productType,
             String name,
             String measureName,
             int measurePrecision,
-            TaxNumber taxNumber,
+            @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
-            String barcode,
+            @Nullable String barcode,
             String mark,
-            BigDecimal alcoholByVolume,
-            Long alcoholProductKindCode,
-            BigDecimal tareVolume,
+            @Nullable BigDecimal alcoholByVolume,
+            @Nullable Long alcoholProductKindCode,
+            @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions,
-            Map<String, DomainAttributeValue> attributes
+            @Nullable Map<String, DomainAttributeValue> attributes
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -237,21 +240,21 @@ public class Position implements Parcelable {
 
     public Position(
             String uuid,
-            String productUuid,
-            String productCode,
+            @Nullable String productUuid,
+            @Nullable String productCode,
             ProductType productType,
             String name,
             String measureName,
             int measurePrecision,
-            TaxNumber taxNumber,
+            @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
-            String barcode,
+            @Nullable String barcode,
             String mark,
-            BigDecimal alcoholByVolume,
-            Long alcoholProductKindCode,
-            BigDecimal tareVolume,
+            @Nullable BigDecimal alcoholByVolume,
+            @Nullable Long alcoholProductKindCode,
+            @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
