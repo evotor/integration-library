@@ -8,7 +8,7 @@ import java.math.BigDecimal
 /**
  * Created by a.lunkov on 13.03.2018.
  */
-object ProductMapper {
+internal object ProductMapper {
     @JvmStatic
     fun getValueFromCursor(cursor: Cursor): ProductItem? {
         try {

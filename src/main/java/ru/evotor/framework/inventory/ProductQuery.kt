@@ -11,33 +11,33 @@ import java.math.BigDecimal
 class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, ProductItem?>(ProductTable.URI) {
 
     @JvmField
-    val uuid = addFieldFilter<String>("UUID")
+    val uuid = addFieldFilter<String>(ProductTable.ROW_UUID)
     @JvmField
-    val parentUuid = addFieldFilter<String?>("PARENT_UUID")
+    val parentUuid = addFieldFilter<String?>(ProductTable.ROW_PARENT_UUID)
     @JvmField
-    val code = addFieldFilter<String?>("CODE")
+    val code = addFieldFilter<String?>(ProductTable.ROW_CODE)
     @JvmField
-    val name = addFieldFilter<String>("NAME")
+    val name = addFieldFilter<String>(ProductTable.ROW_NAME)
     @JvmField
-    val taxNumber = addFieldFilter<TaxNumber>("TAX_NUMBER")
+    val taxNumber = addFieldFilter<TaxNumber>(ProductTable.ROW_TAX_NUMBER)
     @JvmField
-    val type = addFieldFilter<ProductType>("TYPE")
+    val type = addFieldFilter<ProductType>(ProductTable.ROW_TYPE)
     @JvmField
-    val price = addFieldFilter<BigDecimal>("PRICE_OUT")
+    val price = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_PRICE_OUT, {it.multiply(BigDecimal(100))})
     @JvmField
-    val quantity = addFieldFilter<BigDecimal>("QUANTITY")
+    val quantity = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_QUANTITY, {it.multiply(BigDecimal(1000))})
     @JvmField
-    val description = addFieldFilter<String?>("DESCRIPTION")
+    val description = addFieldFilter<String?>(ProductTable.ROW_DESCRIPTION)
     @JvmField
-    val measureName = addFieldFilter<String>("MEASURE_NAME")
+    val measureName = addFieldFilter<String>(ProductTable.ROW_MEASURE_NAME)
     @JvmField
-    val measurePrecision = addFieldFilter<Int>("MEASURE_PRECISION")
+    val measurePrecision = addFieldFilter<Int>(ProductTable.ROW_MEASURE_PRECISION)
     @JvmField
-    val alcoholByVolume = addFieldFilter<BigDecimal?>("ALCOHOL_BY_VOLUME")
+    val alcoholByVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_ALCOHOL_BY_VOLUME, {it?.multiply(BigDecimal(1000))})
     @JvmField
-    val alcoholProductKindCode = addFieldFilter<Long?>("ALCOHOL_PRODUCT_KIND_CODE")
+    val alcoholProductKindCode = addFieldFilter<Long?>(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)
     @JvmField
-    val tareVolume = addFieldFilter<BigDecimal?>("TARE_VOLUME")
+    val tareVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_TARE_VOLUME, {it?.multiply(BigDecimal(1000))})
 
     override val currentQuery: ProductQuery
         get() = this
@@ -45,33 +45,33 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
         @JvmField
-        val uuid = addFieldSorter("UUID")
+        val uuid = addFieldSorter(ProductTable.ROW_UUID)
         @JvmField
-        val parentUuid = addFieldSorter("PARENT_UUID")
+        val parentUuid = addFieldSorter(ProductTable.ROW_PARENT_UUID)
         @JvmField
-        val code = addFieldSorter("CODE")
+        val code = addFieldSorter(ProductTable.ROW_CODE)
         @JvmField
-        val name = addFieldSorter("NAME")
+        val name = addFieldSorter(ProductTable.ROW_NAME)
         @JvmField
-        val taxNumber = addFieldSorter("TAX_NUMBER")
+        val taxNumber = addFieldSorter(ProductTable.ROW_TAX_NUMBER)
         @JvmField
-        val type = addFieldSorter("TYPE")
+        val type = addFieldSorter(ProductTable.ROW_TYPE)
         @JvmField
-        val price = addFieldSorter("PRICE")
+        val price = addFieldSorter(ProductTable.ROW_PRICE_OUT)
         @JvmField
-        val quantity = addFieldSorter("QUANTITY")
+        val quantity = addFieldSorter(ProductTable.ROW_QUANTITY)
         @JvmField
-        val description = addFieldSorter("DESCRIPTION")
+        val description = addFieldSorter(ProductTable.ROW_DESCRIPTION)
         @JvmField
-        val measureName = addFieldSorter("MEASURE_NAME")
+        val measureName = addFieldSorter(ProductTable.ROW_MEASURE_NAME)
         @JvmField
-        val measurePrecision = addFieldSorter("MEASURE_PRECISION")
+        val measurePrecision = addFieldSorter(ProductTable.ROW_MEASURE_PRECISION)
         @JvmField
-        val alcoholByVolume = addFieldSorter("ALCOHOL_BY_VOLUME")
+        val alcoholByVolume = addFieldSorter(ProductTable.ROW_ALCOHOL_BY_VOLUME)
         @JvmField
-        val alcoholProductKindCode = addFieldSorter("ALCOHOL_PRODUCT_KIND_CODE")
+        val alcoholProductKindCode = addFieldSorter(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)
         @JvmField
-        val tareVolume = addFieldSorter("TARE_VOLUME")
+        val tareVolume = addFieldSorter(ProductTable.ROW_TARE_VOLUME)
 
         override val currentSortOrder: SortOrder
             get() = this
