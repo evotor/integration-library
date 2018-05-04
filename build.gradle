@@ -29,6 +29,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile 'com.github.evotor:push-notifications:v0.2.1'
     compile 'com.github.evotor:query-api:62512472c4'
 }
 
