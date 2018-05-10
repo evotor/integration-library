@@ -6,33 +6,33 @@ import android.os.Parcelable
 /**
  * Атрибут
  */
-data class DomainAttribute(
+data class Attribute(
         /**
          * Уникальный идентификатор атрибута
          */
-        val uuid: String? = null,
+        val uuid: String,
 
         /**
          * Имя атрибута (ex. 'Цвет')
          */
-        val name: String? = null,
+        val name: String,
 
         /**
          * Список значений атрибутов
          */
-        var attributeValuesForAdapter: List<DomainAttributeValue>? = null
+        var attributeValues: List<AttributeValue>? = null
 
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
-            parcel.createTypedArrayList(DomainAttributeValue.CREATOR))
+            parcel.createTypedArrayList(AttributeValue.CREATOR))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uuid)
         parcel.writeString(name)
-        parcel.writeTypedList(attributeValuesForAdapter)
+        parcel.writeTypedList(attributeValues)
     }
 
     override fun describeContents(): Int = 0
@@ -40,10 +40,10 @@ data class DomainAttribute(
     companion object {
 
         @JvmField
-        val CREATOR: Parcelable.Creator<DomainAttribute> = object : Parcelable.Creator<DomainAttribute> {
-            override fun createFromParcel(parcel: Parcel): DomainAttribute = DomainAttribute(parcel)
+        val CREATOR: Parcelable.Creator<Attribute> = object : Parcelable.Creator<Attribute> {
+            override fun createFromParcel(parcel: Parcel): Attribute = Attribute(parcel)
 
-            override fun newArray(size: Int): Array<DomainAttribute?> = arrayOfNulls(size)
+            override fun newArray(size: Int): Array<Attribute?> = arrayOfNulls(size)
         }
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.domain.DomainAttributeValue;
+import ru.evotor.framework.domain.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
@@ -83,8 +82,8 @@ public final class PositionMapper {
             }
         }
 
-        Map<String, DomainAttributeValue> attributes =
-                (Map<String, DomainAttributeValue>) bundle.getSerializable(KEY_ATTRIBUTES);
+        Map<String, AttributeValue> attributes =
+                PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
 
         if (quantity == null ||
                 price == null ||
@@ -156,7 +155,7 @@ public final class PositionMapper {
         }
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
-        bundle.putSerializable(KEY_ATTRIBUTES, (Serializable) position.getAttributes());
+        bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
         return bundle;
     }
 

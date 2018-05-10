@@ -163,16 +163,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
         public final IntegrationManagerFuture start() {
             try {
                 doWork(new Response());
-            } catch (RemoteException e) {
-                setException(e);
             } catch (Exception e) {
-                skip();
+                setException(e);
             }
             return this;
-        }
-
-        private void skip() {
-            set(new Result((Bundle) null));
         }
 
         @Override

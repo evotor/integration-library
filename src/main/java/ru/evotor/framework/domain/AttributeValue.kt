@@ -6,26 +6,26 @@ import android.os.Parcelable
 /**
  * Значение атрибута
  */
-data class DomainAttributeValue(
+data class AttributeValue(
         /**
          * Уникальный идентификатор атрибута
          */
-        val dictionaryUuid: String? = null,
+        val dictionaryUuid: String,
 
         /**
          * Имя атрибута (ex. 'Цвет')
          */
-        val dictionaryName: String? = null,
+        val dictionaryName: String,
 
         /**
          * Уникальный идентификатор значения атрибута
          */
-        val uuid: String? = null,
+        val uuid: String,
 
         /**
          * Имя значения атрибута (ex. 'Черный')
          */
-        val name: String? = null
+        val name: String
 
 ) : Parcelable {
 
@@ -47,11 +47,11 @@ data class DomainAttributeValue(
     companion object {
 
         @JvmField
-        val CREATOR: Parcelable.Creator<DomainAttributeValue> = object : Parcelable.Creator<DomainAttributeValue> {
-            override fun createFromParcel(parcel: Parcel): DomainAttributeValue =
-                    DomainAttributeValue(parcel)
+        val CREATOR: Parcelable.Creator<AttributeValue> = object : Parcelable.Creator<AttributeValue> {
+            override fun createFromParcel(parcel: Parcel): AttributeValue =
+                    AttributeValue(parcel)
 
-            override fun newArray(size: Int): Array<DomainAttributeValue?> = arrayOfNulls(size)
+            override fun newArray(size: Int): Array<AttributeValue?> = arrayOfNulls(size)
         }
     }
 }

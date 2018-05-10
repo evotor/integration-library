@@ -17,11 +17,12 @@ import java.util.UUID;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
-import ru.evotor.framework.domain.DomainAttributeValue;
+import ru.evotor.framework.domain.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 
 public class Position implements Parcelable {
+    private static final int VERSION = 1;
     /**
      * UUID позиции
      */
@@ -104,9 +105,11 @@ public class Position implements Parcelable {
 
     /**
      * Атрибуты
+     * ключ - id словаря для вариантов аттрибута
+     * значение - выбранный элемент из словаря аттрибутов
      */
     @Nullable
-    private Map<String, DomainAttributeValue> attributes;
+    private Map<String, AttributeValue> attributes;
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -152,49 +155,7 @@ public class Position implements Parcelable {
         );
     }
 
-    public Position(
-            String uuid,
-            @Nullable String productUuid,
-            @Nullable String productCode,
-            ProductType productType,
-            String name,
-            String measureName,
-            int measurePrecision,
-            BigDecimal price,
-            BigDecimal priceWithDiscountPosition,
-            BigDecimal quantity,
-            @Nullable String barcode,
-            String mark,
-            @Nullable BigDecimal alcoholByVolume,
-            @Nullable Long alcoholProductKindCode,
-            @Nullable BigDecimal tareVolume,
-            Set<ExtraKey> extraKeys,
-            List<Position> subPositions,
-            @Nullable Map<String, DomainAttributeValue> attributes
-    ) {
-        this.uuid = uuid;
-        this.productUuid = productUuid;
-        this.productCode = productCode;
-        this.productType = productType;
-        this.name = name;
-        this.measureName = measureName;
-        this.measurePrecision = measurePrecision;
-        this.price = price;
-        this.priceWithDiscountPosition = priceWithDiscountPosition;
-        this.quantity = quantity;
-        this.barcode = barcode;
-        this.mark = mark;
-        this.alcoholByVolume = alcoholByVolume;
-        this.alcoholProductKindCode = alcoholProductKindCode;
-        this.tareVolume = tareVolume;
-        if (extraKeys != null) {
-            this.extraKeys.addAll(extraKeys);
-        }
-        this.subPositions = subPositions;
-        this.attributes = attributes;
-    }
-
-    public Position(
+    private Position(
             String uuid,
             @Nullable String productUuid,
             @Nullable String productCode,
@@ -213,7 +174,7 @@ public class Position implements Parcelable {
             @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions,
-            @Nullable Map<String, DomainAttributeValue> attributes
+            @Nullable Map<String, AttributeValue> attributes
     ) {
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -503,11 +464,15 @@ public class Position implements Parcelable {
         return subPositions;
     }
 
-    public Map<String, DomainAttributeValue> getAttributes() {
+    /**
+     * @return аттрибуты позицииы
+     */
+    @Nullable
+    public Map<String, AttributeValue> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String, DomainAttributeValue> attributes) {
+    public void setAttributes(@Nullable Map<String, AttributeValue> attributes) {
         this.attributes = attributes;
     }
 
@@ -787,6 +752,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setAttributes(@Nullable Map<String, AttributeValue> attributes) {
+            position.attributes = attributes;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
@@ -819,7 +789,7 @@ public class Position implements Parcelable {
         dest.writeTypedList(this.subPositions);
         dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
         if (this.attributes != null) {
-            for (Map.Entry<String, DomainAttributeValue> entry : this.attributes.entrySet()) {
+            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
                 dest.writeString(entry.getKey());
                 dest.writeParcelable(entry.getValue(), flags);
             }
@@ -847,13 +817,22 @@ public class Position implements Parcelable {
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        int attributesSize = in.readInt();
-        if (attributesSize > 0) {
-            this.attributes = new HashMap<>(attributesSize);
-            for (int i = 0; i < attributesSize; i++) {
-                String key = in.readString();
-                DomainAttributeValue value = in.readParcelable(DomainAttributeValue.class.getClassLoader());
-                this.attributes.put(key, value);
+        readAdditionalFiels(in.readInt(), in);
+    }
+
+    private void readAdditionalFiels(int version, Parcel in) {
+        switch (version) {
+            case 1: {
+                int attributesSize = in.readInt();
+                if (attributesSize > 0) {
+                    this.attributes = new HashMap<>(attributesSize);
+                    for (int i = 0; i < attributesSize; i++) {
+                        String key = in.readString();
+                        AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                        this.attributes.put(key, value);
+                    }
+                }
+                break;
             }
         }
     }
