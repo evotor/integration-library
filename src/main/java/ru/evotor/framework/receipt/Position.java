@@ -465,7 +465,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return аттрибуты позицииы
+     * @return атрибуты позиции
      */
     @Nullable
     public Map<String, AttributeValue> getAttributes() {
