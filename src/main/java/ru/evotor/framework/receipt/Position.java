@@ -817,10 +817,10 @@ public class Position implements Parcelable {
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        readAdditionalFiels(in.readInt(), in);
+        readAdditionalFields(in.readInt(), in);
     }
 
-    private void readAdditionalFiels(int version, Parcel in) {
+    private void readAdditionalFields(int version, Parcel in) {
         switch (version) {
             case 1: {
                 int attributesSize = in.readInt();
