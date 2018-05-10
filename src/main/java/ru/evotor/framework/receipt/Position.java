@@ -155,7 +155,7 @@ public class Position implements Parcelable {
         );
     }
 
-    private Position(
+    public Position(
             String uuid,
             @Nullable String productUuid,
             @Nullable String productCode,

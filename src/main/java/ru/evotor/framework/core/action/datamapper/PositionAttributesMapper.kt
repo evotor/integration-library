@@ -20,8 +20,8 @@ object PositionAttributesMapper {
     fun toBundle(attributes: Map<String, AttributeValue>?): Bundle? {
         attributes?.let {
             return Bundle().apply {
-                for (key in attributes.keys) {
-                    this.putParcelable(key, attributes[key])
+                attributes.keys.forEach {
+                    this.putParcelable(it, attributes[it])
                 }
             }
         } ?: return null
