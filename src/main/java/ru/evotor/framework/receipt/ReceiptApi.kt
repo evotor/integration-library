@@ -296,7 +296,8 @@ object ReceiptApi {
                 createPaymentSystem(cursor),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
-                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION))
+                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_IDENTIFIER))
         )
     }
 
