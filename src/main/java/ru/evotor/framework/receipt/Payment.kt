@@ -32,7 +32,7 @@ data class Payment(
          */
         val accountUserDescription: String?,
         /**
-         * rrn
+         * Идентификатор платежа в платежной системе (RRN для оплаты картой)
          */
         val identifier: String?
 ) {
