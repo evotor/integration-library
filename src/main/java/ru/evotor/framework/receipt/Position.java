@@ -787,8 +787,8 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.tareVolume);
         dest.writeTypedArray(this.extraKeys.toArray(new ExtraKey[this.extraKeys.size()]), flags);
         dest.writeTypedList(this.subPositions);
-        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
         dest.writeInt(VERSION);
+        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
         if (this.attributes != null) {
             for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
                 dest.writeString(entry.getKey());
