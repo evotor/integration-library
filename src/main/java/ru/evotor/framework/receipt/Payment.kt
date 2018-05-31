@@ -37,6 +37,7 @@ data class Payment(
         val identifier: String?
 ) {
     override fun toString(): String {
-        return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription)"
+        return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, " +
+                "accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
     }
 }
