@@ -47,10 +47,6 @@ public class PrintReceiptCommandResult implements IBundlable {
      * Нет платежей в чеке
      */
     public static final int ERROR_CODE_NO_PAYMENTS = -9;
-    /**
-     * Ккм не доступна
-     */
-    public static final int ERROR_KKM_IS_NOT_AVAILABLE = -10;
     
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {

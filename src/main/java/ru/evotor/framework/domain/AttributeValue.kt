@@ -1,12 +1,19 @@
 package ru.evotor.framework.domain
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+
+const val VERSION = 1
 
 /**
  * Значение атрибута
  */
 data class AttributeValue(
+        /**
+         * Версия Parcelable
+         */
+        val version : Int,
         /**
          * Уникальный идентификатор атрибута
          */
@@ -30,12 +37,14 @@ data class AttributeValue(
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+            parcel.readInt(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(VERSION)
         parcel.writeString(dictionaryUuid)
         parcel.writeString(dictionaryName)
         parcel.writeString(uuid)

@@ -465,13 +465,16 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return атрибуты позиции
+     * @return значения атрибутов позиции
      */
     @Nullable
     public Map<String, AttributeValue> getAttributes() {
         return attributes;
     }
 
+    /**
+     * @param attributes значения выбранных атрибутов для позиции
+     */
     public void setAttributes(@Nullable Map<String, AttributeValue> attributes) {
         this.attributes = attributes;
     }
