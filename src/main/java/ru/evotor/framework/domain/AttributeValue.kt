@@ -1,6 +1,5 @@
 package ru.evotor.framework.domain
 
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -44,7 +43,7 @@ data class AttributeValue(
             parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(VERSION)
+        parcel.writeInt(version)
         parcel.writeString(dictionaryUuid)
         parcel.writeString(dictionaryName)
         parcel.writeString(uuid)
