@@ -17,6 +17,7 @@ public final class PaymentMapper {
     private static final String KEY_PURPOSE_IDENTIFIER = "purposeIdentifier";
     private static final String KEY_ACCOUNT_ID = "accountId";
     private static final String KEY_ACCOUNT_USER_DESCRIPTION = "accountUserDescription";
+    private static final String KEY_IDENTIFIER = "identifier";
 
     @Nullable
     public static Payment from(@Nullable Bundle bundle) {
@@ -29,13 +30,16 @@ public final class PaymentMapper {
         String purposeIdentifier = bundle.getString(KEY_PURPOSE_IDENTIFIER);
         String accountId = bundle.getString(KEY_ACCOUNT_ID);
         String accountUserDescription = bundle.getString(KEY_ACCOUNT_USER_DESCRIPTION);
+        String identifier = bundle.getString(KEY_IDENTIFIER);
+
         return new Payment(
                 uuid,
                 value,
                 paymentSystem,
                 purposeIdentifier,
                 accountId,
-                accountUserDescription
+                accountUserDescription,
+                identifier
         );
     }
 
@@ -51,6 +55,7 @@ public final class PaymentMapper {
         bundle.putString(KEY_PURPOSE_IDENTIFIER, payment.getPurposeIdentifier());
         bundle.putString(KEY_ACCOUNT_ID, payment.getAccountId());
         bundle.putString(KEY_ACCOUNT_USER_DESCRIPTION, payment.getAccountUserDescription());
+        bundle.putString(KEY_IDENTIFIER, payment.getIdentifier());
 
         return bundle;
     }

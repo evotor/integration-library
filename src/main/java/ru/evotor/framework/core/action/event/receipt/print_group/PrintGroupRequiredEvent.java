@@ -8,6 +8,7 @@ import ru.evotor.framework.payment.PaymentSystem;
 
 public class PrintGroupRequiredEvent extends PrintGroupEvent {
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.printGroup.REQUIRED";
+    public static final String NAME_BUY_RECEIPT = "evo.v2.receipt.buy.printGroup.REQUIRED";
 
     public PrintGroupRequiredEvent(@NonNull PaymentSystem paymentSystem) {
         super(paymentSystem);
