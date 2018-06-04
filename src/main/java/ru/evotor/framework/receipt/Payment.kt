@@ -30,9 +30,11 @@ data class Payment(
         /**
          * Описание аккаунта
          */
-        val accountUserDescription: String?
-
-
+        val accountUserDescription: String?,
+        /**
+         * Идентификатор платежа в платежной системе (RRN для оплаты картой)
+         */
+        val identifier: String?
 ) {
     override fun toString(): String {
         return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription)"

@@ -290,14 +290,21 @@ object ReceiptApi {
     }
 
     private fun createPayment(cursor: Cursor): Payment? {
+        val identifierColumnIndex = cursor.getColumnIndex(PaymentTable.COLUMN_IDENTIFIER)
+        val identifier = if (identifierColumnIndex != -1) {
+            cursor.getString(identifierColumnIndex)
+        } else {
+            null
+        }
+
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE))).divide(BigDecimal(100)),
                 createPaymentSystem(cursor),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
-                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION))
-        )
+                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                identifier)
     }
 
     private fun createPaymentSystem(cursor: Cursor): PaymentSystem? {
