@@ -36,6 +36,16 @@ data class Payment(
          */
         val identifier: String?
 ) {
+
+    constructor(
+            uuid: String,
+            value: BigDecimal,
+            system: PaymentSystem?,
+            purposeIdentifier: String?,
+            accountId: String?,
+            accountUserDescription: String?
+    ) : this(uuid, value, system, purposeIdentifier, accountId, accountUserDescription, null)
+
     override fun toString(): String {
         return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription)"
     }
