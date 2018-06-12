@@ -2,7 +2,6 @@ package ru.evotor.framework.domain
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fasterxml.jackson.annotation.JsonProperty
 
 const val VERSION = 1
 
@@ -13,30 +12,25 @@ data class AttributeValue(
         /**
          * Версия Parcelable
          */
-        @JsonProperty("version")
-        val version : Int = VERSION,
+        val version: Int = VERSION,
         /**
          * Уникальный идентификатор атрибута
          */
-        @JsonProperty("dictionaryUuid")
         val dictionaryUuid: String,
 
         /**
          * Имя атрибута (ex. 'Цвет')
          */
-        @JsonProperty("dictionaryName")
         val dictionaryName: String,
 
         /**
          * Уникальный идентификатор значения атрибута
          */
-        @JsonProperty("uuid")
         val uuid: String,
 
         /**
          * Имя значения атрибута (ex. 'Черный')
          */
-        @JsonProperty("name")
         val name: String
 
 ) : Parcelable {
