@@ -13,6 +13,7 @@ data class AttributeValue(
          * Версия Parcelable
          */
         val version: Int = VERSION,
+
         /**
          * Уникальный идентификатор атрибута
          */
