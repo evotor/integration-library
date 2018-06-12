@@ -2,6 +2,7 @@ package ru.evotor.framework.domain
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.fasterxml.jackson.annotation.JsonProperty
 
 const val VERSION = 1
 
