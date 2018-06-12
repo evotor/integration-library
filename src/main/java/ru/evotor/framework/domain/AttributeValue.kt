@@ -12,25 +12,30 @@ data class AttributeValue(
         /**
          * Версия Parcelable
          */
+        @JsonProperty("version")
         val version : Int = VERSION,
         /**
          * Уникальный идентификатор атрибута
          */
+        @JsonProperty("dictionaryUuid")
         val dictionaryUuid: String,
 
         /**
          * Имя атрибута (ex. 'Цвет')
          */
+        @JsonProperty("dictionaryName")
         val dictionaryName: String,
 
         /**
          * Уникальный идентификатор значения атрибута
          */
+        @JsonProperty("uuid")
         val uuid: String,
 
         /**
          * Имя значения атрибута (ex. 'Черный')
          */
+        @JsonProperty("name")
         val name: String
 
 ) : Parcelable {
