@@ -8,6 +8,7 @@ import ru.evotor.framework.payment.PaymentSystem;
 
 public class PaymentSelectedEvent extends PaymentEvent {
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.payment.SELECTED";
+    public static final String NAME_PERMISSION_COMBINED = "ru.evotor.permission.sell.payment.COMBINED";
 
     public PaymentSelectedEvent(@NonNull PaymentSystem paymentSystem) {
         super(paymentSystem);

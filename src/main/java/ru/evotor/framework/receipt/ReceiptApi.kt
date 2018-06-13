@@ -406,6 +406,7 @@ object ReceiptApi {
         object Type {
             const val TYPE_CASH = 0
             const val TYPE_CARD = 1
+            const val TYPE_COMBINED = 2
         }
 
     }
