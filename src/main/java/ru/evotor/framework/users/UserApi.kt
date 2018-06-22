@@ -19,7 +19,7 @@ object UserApi {
                     val users = ArrayList<User>()
                     try {
                         while (cursor.moveToNext()) {
-                            users.add(createUser(cursor))
+                            users.add(UserMapper.createUser(cursor))
                         }
                         return users
                     } catch (e: Exception) {
@@ -43,7 +43,7 @@ object UserApi {
                 ?.let { cursor ->
                     try {
                         if (cursor.moveToFirst()) {
-                            return createUser(cursor)
+                            return UserMapper.createUser(cursor)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -67,7 +67,7 @@ object UserApi {
                     val grants = ArrayList<Grant>()
                     try {
                         while (cursor.moveToNext()) {
-                            grants.add(createGrant(cursor))
+                            grants.add(UserMapper.createGrant(cursor))
                         }
                         return grants
                     } catch (e: Exception) {
@@ -93,7 +93,7 @@ object UserApi {
                     val grants = ArrayList<Grant>()
                     try {
                         while (cursor.moveToNext()) {
-                            grants.add(createGrant(cursor))
+                            grants.add(UserMapper.createGrant(cursor))
                         }
                         return grants
                     } catch (e: Exception) {
@@ -105,22 +105,5 @@ object UserApi {
         return null
     }
 
-    private fun createGrant(cursor: Cursor): Grant {
-        return Grant(
-                title = cursor.getString(cursor.getColumnIndex(GrantsTable.ROW_TITLE)),
-                roleUuid = cursor.getString(cursor.getColumnIndex(GrantsTable.ROW_ROLE_UUID))
-        )
-    }
 
-    private fun createUser(cursor: Cursor): User {
-        return User(
-                uuid = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_UUID)),
-                secondName = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_SECOND_NAME)),
-                firstName = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_FIRST_NAME)),
-                phone = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_PHONE)),
-                pin = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_PIN)),
-                roleUuid = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_ROLE_UUID)),
-                roleTitle = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_ROLE_TITLE))
-        )
-    }
 }
