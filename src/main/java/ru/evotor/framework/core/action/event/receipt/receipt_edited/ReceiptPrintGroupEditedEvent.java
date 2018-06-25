@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 public class ReceiptPrintGroupEditedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.printGroup.EDITED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.printGroup.EDITED";
+    public static final String BROADCAST_ACTION_BUY_RECEIPT = "evotor.intent.action.receipt.buy.printGroup.EDITED";
+    public static final String BROADCAST_ACTION_BUYBACK_RECEIPT = "evotor.intent.action.receipt.buyback.printGroup.EDITED";
 
     public ReceiptPrintGroupEditedEvent(@NonNull String receiptUuid) {
         super(receiptUuid);
