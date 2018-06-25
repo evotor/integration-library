@@ -47,7 +47,6 @@ data class Payment(
     ) : this(uuid, value, system, purposeIdentifier, accountId, accountUserDescription, null)
 
     override fun toString(): String {
-        return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, " +
-                "accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
+        return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
     }
 }
