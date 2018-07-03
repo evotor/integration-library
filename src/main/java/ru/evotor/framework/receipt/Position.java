@@ -173,50 +173,6 @@ public class Position implements Parcelable {
             @Nullable Long alcoholProductKindCode,
             @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
-            List<Position> subPositions,
-            @Nullable Map<String, AttributeValue> attributes
-    ) {
-        this.uuid = uuid;
-        this.productUuid = productUuid;
-        this.productCode = productCode;
-        this.productType = productType;
-        this.name = name;
-        this.measureName = measureName;
-        this.measurePrecision = measurePrecision;
-        this.taxNumber = taxNumber;
-        this.price = price;
-        this.priceWithDiscountPosition = priceWithDiscountPosition;
-        this.quantity = quantity;
-        this.barcode = barcode;
-        this.mark = mark;
-        this.alcoholByVolume = alcoholByVolume;
-        this.alcoholProductKindCode = alcoholProductKindCode;
-        this.tareVolume = tareVolume;
-        if (extraKeys != null) {
-            this.extraKeys.addAll(extraKeys);
-        }
-        this.subPositions = subPositions;
-        this.attributes = attributes;
-    }
-
-    public Position(
-            String uuid,
-            @Nullable String productUuid,
-            @Nullable String productCode,
-            ProductType productType,
-            String name,
-            String measureName,
-            int measurePrecision,
-            @Nullable TaxNumber taxNumber,
-            BigDecimal price,
-            BigDecimal priceWithDiscountPosition,
-            BigDecimal quantity,
-            @Nullable String barcode,
-            String mark,
-            @Nullable BigDecimal alcoholByVolume,
-            @Nullable Long alcoholProductKindCode,
-            @Nullable BigDecimal tareVolume,
-            Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
         this.uuid = uuid;
@@ -260,9 +216,9 @@ public class Position implements Parcelable {
                 position.getAlcoholProductKindCode(),
                 position.getTareVolume(),
                 position.getExtraKeys(),
-                position.getSubPositions(),
-                position.getAttributes()
+                position.getSubPositions()
         );
+        this.attributes = position.getAttributes();
     }
 
     /**
