@@ -563,6 +563,94 @@ public class Position implements Parcelable {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uuid);
+        dest.writeString(this.productUuid);
+        dest.writeString(this.productCode);
+        dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
+        dest.writeString(this.name);
+        dest.writeString(this.measureName);
+        dest.writeInt(this.measurePrecision);
+        dest.writeInt(this.taxNumber == null ? -1 : this.taxNumber.ordinal());
+        dest.writeSerializable(this.price);
+        dest.writeSerializable(this.priceWithDiscountPosition);
+        dest.writeSerializable(this.quantity);
+        dest.writeString(this.barcode);
+        dest.writeString(this.mark);
+        dest.writeSerializable(this.alcoholByVolume);
+        dest.writeValue(this.alcoholProductKindCode);
+        dest.writeSerializable(this.tareVolume);
+        dest.writeTypedArray(this.extraKeys.toArray(new ExtraKey[this.extraKeys.size()]), flags);
+        dest.writeTypedList(this.subPositions);
+        dest.writeInt(VERSION);
+        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
+        if (this.attributes != null) {
+            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeParcelable(entry.getValue(), flags);
+            }
+        }
+    }
+
+    protected Position(Parcel in) {
+        this.uuid = in.readString();
+        this.productUuid = in.readString();
+        this.productCode = in.readString();
+        int tmpProductType = in.readInt();
+        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+        this.name = in.readString();
+        this.measureName = in.readString();
+        this.measurePrecision = in.readInt();
+        int tmpTaxNumber = in.readInt();
+        this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
+        this.price = (BigDecimal) in.readSerializable();
+        this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
+        this.quantity = (BigDecimal) in.readSerializable();
+        this.barcode = in.readString();
+        this.mark = in.readString();
+        this.alcoholByVolume = (BigDecimal) in.readSerializable();
+        this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
+        this.tareVolume = (BigDecimal) in.readSerializable();
+        this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
+        this.subPositions = in.createTypedArrayList(Position.CREATOR);
+        readAdditionalFields(in.readInt(), in);
+    }
+
+    private void readAdditionalFields(int version, Parcel in) {
+        switch (version) {
+            case 1: {
+                int attributesSize = in.readInt();
+                if (attributesSize > 0) {
+                    this.attributes = new HashMap<>(attributesSize);
+                    for (int i = 0; i < attributesSize; i++) {
+                        String key = in.readString();
+                        AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                        this.attributes.put(key, value);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    public static final Creator<Position> CREATOR = new Creator<Position>() {
+        @Override
+        public Position createFromParcel(Parcel source) {
+            return new Position(source);
+        }
+
+        @Override
+        public Position[] newArray(int size) {
+            return new Position[size];
+        }
+    };
+
     public static final class Builder {
         public static Builder newInstance(
                 @NonNull ProductItem.Product product,
@@ -765,91 +853,4 @@ public class Position implements Parcelable {
         }
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.uuid);
-        dest.writeString(this.productUuid);
-        dest.writeString(this.productCode);
-        dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
-        dest.writeString(this.name);
-        dest.writeString(this.measureName);
-        dest.writeInt(this.measurePrecision);
-        dest.writeInt(this.taxNumber == null ? -1 : this.taxNumber.ordinal());
-        dest.writeSerializable(this.price);
-        dest.writeSerializable(this.priceWithDiscountPosition);
-        dest.writeSerializable(this.quantity);
-        dest.writeString(this.barcode);
-        dest.writeString(this.mark);
-        dest.writeSerializable(this.alcoholByVolume);
-        dest.writeValue(this.alcoholProductKindCode);
-        dest.writeSerializable(this.tareVolume);
-        dest.writeTypedArray(this.extraKeys.toArray(new ExtraKey[this.extraKeys.size()]), flags);
-        dest.writeTypedList(this.subPositions);
-        dest.writeInt(VERSION);
-        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
-        if (this.attributes != null) {
-            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
-                dest.writeString(entry.getKey());
-                dest.writeParcelable(entry.getValue(), flags);
-            }
-        }
-    }
-
-    protected Position(Parcel in) {
-        this.uuid = in.readString();
-        this.productUuid = in.readString();
-        this.productCode = in.readString();
-        int tmpProductType = in.readInt();
-        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
-        this.name = in.readString();
-        this.measureName = in.readString();
-        this.measurePrecision = in.readInt();
-        int tmpTaxNumber = in.readInt();
-        this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
-        this.price = (BigDecimal) in.readSerializable();
-        this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
-        this.quantity = (BigDecimal) in.readSerializable();
-        this.barcode = in.readString();
-        this.mark = in.readString();
-        this.alcoholByVolume = (BigDecimal) in.readSerializable();
-        this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
-        this.tareVolume = (BigDecimal) in.readSerializable();
-        this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
-        this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        readAdditionalFields(in.readInt(), in);
-    }
-
-    private void readAdditionalFields(int version, Parcel in) {
-        switch (version) {
-            case 1: {
-                int attributesSize = in.readInt();
-                if (attributesSize > 0) {
-                    this.attributes = new HashMap<>(attributesSize);
-                    for (int i = 0; i < attributesSize; i++) {
-                        String key = in.readString();
-                        AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
-                        this.attributes.put(key, value);
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    public static final Creator<Position> CREATOR = new Creator<Position>() {
-        @Override
-        public Position createFromParcel(Parcel source) {
-            return new Position(source);
-        }
-
-        @Override
-        public Position[] newArray(int size) {
-            return new Position[size];
-        }
-    };
 }
