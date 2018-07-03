@@ -92,7 +92,7 @@ public final class PositionMapper {
             return null;
         }
 
-        return new Position(
+        return Position.Builder.copyFrom(new Position(
                 uuid,
                 productUuid,
                 productCode,
@@ -110,9 +110,8 @@ public final class PositionMapper {
                 alcoholProductKindCode == null ? null : Long.valueOf(alcoholProductKindCode),
                 tareVolume == null ? null : new BigDecimal(tareVolume),
                 extraKeys,
-                subPositions,
-                attributes
-        );
+                subPositions
+        )).setAttributes(attributes).build();
     }
 
     @Nullable
