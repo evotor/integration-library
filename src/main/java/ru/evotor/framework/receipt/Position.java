@@ -22,7 +22,14 @@ import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 
 public class Position implements Parcelable {
+    /**
+     * Текущая версия объекта Position
+     */
     private static final int VERSION = 1;
+    /**
+     * Magic number для идентификации использования версионирования объекта
+     */
+    private static final int MAGIC_NUMBER = 8800;
     /**
      * UUID позиции
      */
@@ -544,7 +551,16 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.tareVolume);
         dest.writeTypedArray(this.extraKeys.toArray(new ExtraKey[this.extraKeys.size()]), flags);
         dest.writeTypedList(this.subPositions);
+        dest.writeInt(MAGIC_NUMBER);
         dest.writeInt(VERSION);
+        // Determine position in parcel for writing data size
+        int dataSizePosition = dest.dataPosition();
+        // Use integer placeholder for additional data size
+        dest.writeInt(0);
+        //Determine position of data start
+        int startDataPosition = dest.dataPosition();
+
+        //Write additional data
         dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
         if (this.attributes != null) {
             for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
@@ -552,6 +568,13 @@ public class Position implements Parcelable {
                 dest.writeParcelable(entry.getValue(), flags);
             }
         }
+        // Calculate additional data size
+        int dataSize = dest.dataPosition() - startDataPosition;
+        //Set position to start to write additional data size
+        dest.setDataPosition(dataSizePosition);
+        dest.writeInt(dataSize);
+        // Go back to the end of parcel
+        dest.setDataPosition(startDataPosition + dataSize);
     }
 
     protected Position(Parcel in) {
@@ -575,10 +598,28 @@ public class Position implements Parcelable {
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        readAdditionalFields(in.readInt(), in);
+        readAdditionalFields(in);
     }
 
-    private void readAdditionalFields(int version, Parcel in) {
+    private void readAdditionalFields(Parcel in) {
+
+        boolean isVersionGreaterThanCurrent = false;
+        int startReadingPosition = in.dataPosition();
+
+        // Check if versioning is supported
+        if (in.readInt() != MAGIC_NUMBER) {
+            // Versioning is not supported return pointer to start position and end reading
+            in.setDataPosition(startReadingPosition);
+            return;
+        }
+        //Read object version
+        int version = in.readInt();
+        int startDataPosition = in.dataPosition();
+        int dataSize = in.readInt();
+
+        if (version > VERSION) {
+            isVersionGreaterThanCurrent = true;
+        }
         switch (version) {
             case 1: {
                 int attributesSize = in.readInt();
@@ -592,6 +633,10 @@ public class Position implements Parcelable {
                 }
                 break;
             }
+        }
+
+        if (isVersionGreaterThanCurrent) {
+            in.setDataPosition(startDataPosition + dataSize);
         }
     }
 
