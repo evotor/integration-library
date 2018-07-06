@@ -1,6 +1,7 @@
 package ru.evotor.framework.users
 
 import android.database.Cursor
+import ru.evotor.framework.optString
 
 internal object UserMapper {
     fun createGrant(cursor: Cursor): Grant {
@@ -15,7 +16,7 @@ internal object UserMapper {
                 uuid = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_UUID)),
                 secondName = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_SECOND_NAME)),
                 firstName = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_FIRST_NAME)),
-                inn = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_INN)),
+                inn = cursor.optString(cursor.getColumnIndex(UsersTable.ROW_USER_INN)),
                 phone = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_PHONE)),
                 pin = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_PIN)),
                 roleUuid = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_ROLE_UUID)),
