@@ -45,8 +45,8 @@ data class AttributeValue(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(version)
-        parcel.writeString(dictionaryUuid)
-        parcel.writeString(dictionaryName)
+        parcel.writeString(attributeUuid)
+        parcel.writeString(attributeName)
         parcel.writeString(uuid)
         parcel.writeString(name)
     }
