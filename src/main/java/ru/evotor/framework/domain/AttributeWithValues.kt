@@ -32,18 +32,18 @@ data class AttributeWithValues(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(version)
         // Determine position in parcel for writing data size
-        int dataSizePosition = parcel.dataPosition();
+        val dataSizePosition = parcel.dataPosition();
         // Use integer placeholder for data size
         parcel.writeInt(0);
         //Determine position of data start
-        int startDataPosition = parcel.dataPosition();
+        val startDataPosition = parcel.dataPosition();
         parcel.writeString(uuid)
         parcel.writeString(name)
         parcel.writeTypedList(attributeValues)
         // Calculate data size
-        int dataSize = parcel.dataPosition() - startDataPosition;
+        val dataSize = parcel.dataPosition() - startDataPosition;
         // Save position at the end of data
-        int endOfDataPosition = parcel.dataPosition();
+        val endOfDataPosition = parcel.dataPosition();
         //Set position to start to write data size
         parcel.setDataPosition(dataSizePosition);
         parcel.writeInt(dataSize);
