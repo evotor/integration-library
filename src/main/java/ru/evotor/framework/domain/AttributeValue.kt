@@ -62,10 +62,12 @@ data class AttributeValue(
         fun readFromParcel(parcel : Parcel) : AttributeValue {
             val version = parcel.readInt()
             val dataSize = parcel.readInt()
+            val dataStartPosition = parcel.dataPosition()
             val attributeUuid = parcel.readString()
             val attributeName = parcel.readString()
             val uuid = parcel.readString()
             val name = parcel.readString()
+            parcel.setDataPosition(dataStartPosition + dataSize)
             return AttributeValue(attributeUuid, attributeName, uuid, name)
         }
 
