@@ -66,7 +66,7 @@ data class AttributeValue(
             val attributeName = parcel.readString()
             val uuid = parcel.readString()
             val name = parcel.readString()
-            return AttributeValue(version, attributeUuid, attributeName, uuid, name);
+            return AttributeValue(attributeUuid, attributeName, uuid, name)
         }
 
         @JvmField
