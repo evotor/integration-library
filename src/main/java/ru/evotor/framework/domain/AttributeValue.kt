@@ -10,11 +10,6 @@ private const val VERSION = 1
  */
 data class AttributeValue(
         /**
-         * Версия Parcelable
-         */
-        val version: Int = VERSION,
-
-        /**
          * Уникальный идентификатор атрибута
          */
         val attributeUuid: String,
@@ -37,7 +32,7 @@ data class AttributeValue(
 ) : Parcelable {
         
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(version)
+        parcel.writeInt(VERSION)
         // Determine position in parcel for writing data size
         val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
