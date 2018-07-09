@@ -3,7 +3,6 @@ package ru.evotor.framework.domain
 import android.os.Parcel
 import android.os.Parcelable
 
-const val VERSION = 1
 /**
  * Атрибут
  */
@@ -11,7 +10,7 @@ data class AttributeWithValues(
         /**
          * Версия Parcelable
          */
-        val version: Int = VERSION,
+        val version: Int = 1,
         /**
          * Уникальный идентификатор атрибута
          */
