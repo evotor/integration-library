@@ -36,7 +36,7 @@ data class AttributeWithValues(
             parcel.createTypedArrayList(AttributeValue.CREATOR))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(version),
+        parcel.writeInt(version)
         parcel.writeString(uuid)
         parcel.writeString(name)
         parcel.writeTypedList(attributeValues)
