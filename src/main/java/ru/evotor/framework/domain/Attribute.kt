@@ -20,7 +20,7 @@ data class Attribute(
         /**
          * Список значений атрибутов
          */
-        var attributeValues: List<AttributeValue>
+        val attributeValues: List<AttributeValue>
 
 ) : Parcelable {
 
