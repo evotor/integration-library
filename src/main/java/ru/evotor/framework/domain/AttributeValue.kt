@@ -35,14 +35,7 @@ data class AttributeValue(
         val name: String
 
 ) : Parcelable {
-
-    constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString())
-
+        
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(version)
         // Determine position in parcel for writing data size
@@ -70,11 +63,21 @@ data class AttributeValue(
     override fun describeContents(): Int = 0
 
     companion object {
+        @JvmStatic
+        fun readFromParcel(parcel : Parcel) : AttributeValue {
+            val version = parcel.readInt()
+            val dataSize = parcel.readInt()
+            val attributeUuid = parcel.readString()
+            val attributeName = parcel.readString()
+            val uuid = parcel.readString()
+            val name = parcel.readString()
+            return AttributeValue(version, attributeUuid, attributeName, uuid, name);
+        }
 
         @JvmField
         val CREATOR: Parcelable.Creator<AttributeValue> = object : Parcelable.Creator<AttributeValue> {
             override fun createFromParcel(parcel: Parcel): AttributeValue =
-                    AttributeValue(parcel)
+                    AttributeValue.readFromParcel(parcel)
 
             override fun newArray(size: Int): Array<AttributeValue?> = arrayOfNulls(size)
         }
