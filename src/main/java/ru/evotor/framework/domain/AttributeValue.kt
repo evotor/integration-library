@@ -39,25 +39,25 @@ data class AttributeValue(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(version)
         // Determine position in parcel for writing data size
-        val dataSizePosition = parcel.dataPosition();
+        val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
-        parcel.writeInt(0);
+        parcel.writeInt(0)
         //Determine position of data start
-        val startDataPosition = parcel.dataPosition();
+        val startDataPosition = parcel.dataPosition()
 
         parcel.writeString(attributeUuid)
         parcel.writeString(attributeName)
         parcel.writeString(uuid)
         parcel.writeString(name)
         // Calculate data size
-        val dataSize = parcel.dataPosition() - startDataPosition;
+        val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
-        val endOfDataPosition = parcel.dataPosition();
+        val endOfDataPosition = parcel.dataPosition()
         //Set position to start to write additional data size
-        parcel.setDataPosition(dataSizePosition);
-        parcel.writeInt(dataSize);
+        parcel.setDataPosition(dataSizePosition)
+        parcel.writeInt(dataSize)
         // Go back to the end of parcel
-        parcel.setDataPosition(endOfDataPosition);
+        parcel.setDataPosition(endOfDataPosition)
     }
 
     override fun describeContents(): Int = 0
