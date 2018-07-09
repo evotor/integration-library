@@ -46,10 +46,10 @@ data class AttributeWithValues(
     companion object {
 
         @JvmField
-        val CREATOR: Parcelable.Creator<Attribute> = object : Parcelable.Creator<Attribute> {
-            override fun createFromParcel(parcel: Parcel): Attribute = Attribute(parcel)
+        val CREATOR: Parcelable.Creator<AttributeWithValues> = object : Parcelable.Creator<AttributeWithValues> {
+            override fun createFromParcel(parcel: Parcel): AttributeWithValues = AttributeWithValues(parcel)
 
-            override fun newArray(size: Int): Array<Attribute?> = arrayOfNulls(size)
+            override fun newArray(size: Int): Array<AttributeWithValues?> = arrayOfNulls(size)
         }
     }
 }
