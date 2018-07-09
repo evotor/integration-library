@@ -606,8 +606,8 @@ public class Position implements Parcelable {
         boolean isVersionGreaterThanCurrent = false;
         int startReadingPosition = in.dataPosition();
 
-        // Check if versioning is supported
-        if (in.readInt() != MAGIC_NUMBER) {
+        // Check if available data size is more than integer size and versioning is supported
+        if (in.dataAvail() <= 4 || in.readInt() != MAGIC_NUMBER) {
             // Versioning is not supported return pointer to start position and end reading
             in.setDataPosition(startReadingPosition);
             return;
