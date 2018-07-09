@@ -3,6 +3,8 @@ package ru.evotor.framework.domain
 import android.os.Parcel
 import android.os.Parcelable
 
+private const val VERSION = 1
+
 /**
  * Атрибут
  */
@@ -10,7 +12,7 @@ data class AttributeWithValues(
         /**
          * Версия Parcelable
          */
-        val version: Int = 1,
+        val version: Int = VERSION,
         /**
          * Уникальный идентификатор атрибута
          */
@@ -36,9 +38,24 @@ data class AttributeWithValues(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(version)
+        // Determine position in parcel for writing data size
+        int dataSizePosition = dest.dataPosition();
+        // Use integer placeholder for data size
+        dest.writeInt(0);
+        //Determine position of data start
+        int startDataPosition = dest.dataPosition();
         parcel.writeString(uuid)
         parcel.writeString(name)
         parcel.writeTypedList(attributeValues)
+        // Calculate data size
+        int dataSize = dest.dataPosition() - startDataPosition;
+        // Save position at the end of data
+        int endOfDataPosition = dest.dataPosition();
+        //Set position to start to write data size
+        dest.setDataPosition(dataSizePosition);
+        dest.writeInt(dataSize);
+        // Go back to the end of parcel
+        dest.setDataPosition(endOfDataPosition);
     }
 
     override fun describeContents(): Int = 0
