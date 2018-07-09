@@ -17,12 +17,12 @@ data class AttributeValue(
         /**
          * Уникальный идентификатор атрибута
          */
-        val dictionaryUuid: String,
+        val attributeUuid: String,
 
         /**
          * Имя атрибута (ex. 'Цвет')
          */
-        val dictionaryName: String,
+        val attributeName: String,
 
         /**
          * Уникальный идентификатор значения атрибута
