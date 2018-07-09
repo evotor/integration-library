@@ -570,11 +570,13 @@ public class Position implements Parcelable {
         }
         // Calculate additional data size
         int dataSize = dest.dataPosition() - startDataPosition;
+        // Save position at the end of data
+        int endOfDataPosition = dest.dataPosition();
         //Set position to start to write additional data size
         dest.setDataPosition(dataSizePosition);
         dest.writeInt(dataSize);
         // Go back to the end of parcel
-        dest.setDataPosition(startDataPosition + dataSize);
+        dest.setDataPosition(endOfDataPosition);
     }
 
     protected Position(Parcel in) {
