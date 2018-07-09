@@ -3,7 +3,7 @@ package ru.evotor.framework.domain
 import android.os.Parcel
 import android.os.Parcelable
 
-const val VERSION = 1
+private const val VERSION = 1
 
 /**
  * Значение атрибута
