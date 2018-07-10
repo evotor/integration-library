@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.domain.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
@@ -38,6 +40,7 @@ public final class PositionMapper {
     private static final String KEY_TARE_VOLUME = "tareVolume";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
+    private static final String KEY_ATTRIBUTES = "attributes";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -79,6 +82,9 @@ public final class PositionMapper {
             }
         }
 
+        Map<String, AttributeValue> attributes =
+                PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -86,7 +92,7 @@ public final class PositionMapper {
             return null;
         }
 
-        return new Position(
+        Position result = new Position(
                 uuid,
                 productUuid,
                 productCode,
@@ -106,6 +112,8 @@ public final class PositionMapper {
                 extraKeys,
                 subPositions
         );
+        result.setAttributes(attributes);
+        return result;
     }
 
     @Nullable
@@ -148,6 +156,7 @@ public final class PositionMapper {
         }
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
+        bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
         return bundle;
     }
 
