@@ -620,8 +620,8 @@ public class Position implements Parcelable {
         }
         //Read object version
         int version = in.readInt();
-        int startDataPosition = in.dataPosition();
         int dataSize = in.readInt();
+        int startDataPosition = in.dataPosition();
 
         if (version > VERSION) {
             isVersionGreaterThanCurrent = true;
