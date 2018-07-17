@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
-import ru.evotor.framework.domain.AttributeValue;
+import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
