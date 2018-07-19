@@ -13,6 +13,12 @@ inline fun <T> Iterable<T>.sumByBigDecimal(selector: (T) -> BigDecimal): BigDeci
     return sum
 }
 
+fun BigDecimal.isEquals(value: BigDecimal): Boolean = this.compareTo(value) == 0
+
+fun BigDecimal.isGreaterThan(value: BigDecimal): Boolean = this.compareTo(value) > 0
+
+fun BigDecimal.isLessThan(value: BigDecimal): Boolean = this.compareTo(value) < 0
+
 inline fun <reified T : kotlin.Enum<T>> safeValueOf(type: String?, default: T? = null): T? {
     if (type == null) {
         return default
