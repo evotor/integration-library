@@ -1,7 +1,7 @@
 package ru.evotor.framework.core.action.datamapper
 
 import android.os.Bundle
-import ru.evotor.framework.domain.AttributeValue
+import ru.evotor.framework.inventory.AttributeValue
 
 
 object PositionAttributesMapper {
