@@ -7,16 +7,12 @@ import android.os.Bundle
 
 abstract class AbstractBroadcastReceiver : BroadcastReceiver() {
 
-    lateinit var context: Context
-        private set
-
-    final override fun onReceive(p0: Context, p1: Intent) {
-        context = p0
-        if (p1.action != null && p1.extras != null) {
-            onEvent(p1.action, p1.extras)
+    final override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action != null && intent.extras != null) {
+            onEvent(context, intent.action, intent.extras)
         }
     }
 
-    protected abstract fun onEvent(action: String, bundle: Bundle)
+    protected abstract fun onEvent(context: Context, action: String, bundle: Bundle)
 
 }

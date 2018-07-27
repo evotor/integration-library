@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.broadcast
 
+import android.content.Context
 import android.os.Bundle
 
 /**
@@ -10,12 +11,12 @@ abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
     /**
      * Обработчик событий получения штрихкода.
      */
-    protected abstract fun handleBarcodeReceivedEvent(barcode: String)
+    protected abstract fun handleBarcodeReceivedEvent(context: Context, barcode: String)
 
-    final override fun onEvent(action: String, bundle: Bundle) {
+    final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         bundle.getString(KEY_SCANNED_CODE)?.let {
             if (it.isNotEmpty()) {
-                handleBarcodeReceivedEvent(it)
+                handleBarcodeReceivedEvent(context, it)
             }
         }
     }
