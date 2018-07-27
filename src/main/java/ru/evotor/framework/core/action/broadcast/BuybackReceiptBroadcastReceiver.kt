@@ -1,7 +1,8 @@
 package ru.evotor.framework.core.action.broadcast
 
 /**
- * Класс, получающий широковещательные сообщения о событиях чека возврата покупки.
+ * Широковещательный приёмник событий чека возврата покупки.
+ * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
  */
 open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_OPENED,

@@ -4,7 +4,8 @@ import android.content.Context
 import android.os.Bundle
 
 /**
- * Класс, получающий широковещательные сообщения о событиях сканера штрихкодов.
+ * Широковещательный приёмник событий сканера штрихкодов.
+ * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
  */
 abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
 

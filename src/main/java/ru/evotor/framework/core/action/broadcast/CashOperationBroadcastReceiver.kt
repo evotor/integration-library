@@ -6,7 +6,8 @@ import ru.evotor.framework.core.action.datamapper.CashOperationEventMapper
 import java.math.BigDecimal
 
 /**
- * Класс, получающий широковещательные сообщения о денежных операциях.
+ * Широковещательный приёмник событий денежных операциях.
+ * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
  */
 open class CashOperationBroadcastReceiver : AbstractBroadcastReceiver() {
 

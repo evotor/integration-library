@@ -5,7 +5,8 @@ import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.InventoryEventMapper
 
 /**
- * Класс, получающий широковещательные сообщения о товароучётных событиях.
+ * Широковещательный приёмник товароучётных событий.
+ * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
  */
 open class InventoryBroadcastReceiver : AbstractBroadcastReceiver() {
 

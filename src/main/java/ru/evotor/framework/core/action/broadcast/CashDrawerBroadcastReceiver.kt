@@ -4,7 +4,8 @@ import android.content.Context
 import android.os.Bundle
 
 /**
- * Класс, получающий широковещательные сообщения о событиях денежного ящика.
+ * Широковещательный приёмник событий денежного ящика.
+ * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
  */
 abstract class CashDrawerBroadcastReceiver : AbstractBroadcastReceiver() {
 
