@@ -13,6 +13,7 @@ open class InventoryBroadcastReceiver : AbstractBroadcastReceiver() {
     /**
      * Обработчик событий открытия карточки товара.
      */
+    @RequiresIntentAction(ACTION_PRODUCT_CARD_OPENED)
     protected open fun handleProductCardOpenedEvent(context: Context, productUuid: String) = Unit
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {

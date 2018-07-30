@@ -14,11 +14,13 @@ open class CashOperationBroadcastReceiver : AbstractBroadcastReceiver() {
     /**
      * Обработчик событий внесения наличности.
      */
+    @RequiresIntentAction(ACTION_CASH_IN)
     protected open fun handleCashInEvent(context: Context, documentUuid: String, total: BigDecimal) = Unit
 
     /**
      * Обработчик событий изъятия наличности.
      */
+    @RequiresIntentAction(ACTION_CASH_OUT)
     protected open fun handleCashOutEvent(context: Context, documentUuid: String, total: BigDecimal) = Unit
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {

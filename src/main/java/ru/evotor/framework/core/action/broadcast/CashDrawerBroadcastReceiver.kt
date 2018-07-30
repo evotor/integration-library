@@ -12,6 +12,7 @@ abstract class CashDrawerBroadcastReceiver : AbstractBroadcastReceiver() {
     /**
      * Обработчик событий открытия денежного ящика.
      */
+    @RequiresIntentAction(ACTION_CASH_DRAWER_OPENED)
     protected abstract fun handleCashDrawerOpenedEvent(context: Context, cashDrawerId: Int)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
@@ -22,7 +23,7 @@ abstract class CashDrawerBroadcastReceiver : AbstractBroadcastReceiver() {
 
         const val ACTION_CASH_DRAWER_OPENED = "evotor.intent.action.cashDrawer.OPEN"
 
-        private const val KEY_CASH_DRAWER_ID = "cashDrawerId"
+        const val KEY_CASH_DRAWER_ID = "cashDrawerId"
 
     }
 

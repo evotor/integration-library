@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.ReceiptEventMapper
 
-open class ReceiptBroadcastReceiver(
+abstract class ReceiptBroadcastReceiver(
         private val actionReceiptOpened: String,
         private val actionPositionAdded: String,
         private val actionPositionEdited: String,
@@ -13,35 +13,17 @@ open class ReceiptBroadcastReceiver(
         private val actionReceiptClosed: String
 ) : AbstractBroadcastReceiver() {
 
-    /**
-     * Обработчик событий открытия чека.
-     */
-    protected open fun handleReceiptOpenedEvent(context: Context, receiptUuid: String) = Unit
+    protected abstract fun handleReceiptOpenedEvent(context: Context, receiptUuid: String)
 
-    /**
-     * Обработчик событий добавления позиции в чек.
-     */
-    protected open fun handlePositionAddedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    protected abstract fun handlePositionAddedEvent(context: Context, receiptUuid: String, positionUuid: String)
 
-    /**
-     * Обработчик событий изменения позиции чека.
-     */
-    protected open fun handlePositionEditedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    protected abstract fun handlePositionEditedEvent(context: Context, receiptUuid: String, positionUuid: String)
 
-    /**
-     * Обработчик событий удаления позиции чека.
-     */
-    protected open fun handlePositionRemovedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    protected abstract fun handlePositionRemovedEvent(context: Context, receiptUuid: String, positionUuid: String)
 
-    /**
-     * Обработчик событий очистки чека.
-     */
-    protected open fun handleReceiptClearedEvent(context: Context, receiptUuid: String) = Unit
+    protected abstract fun handleReceiptClearedEvent(context: Context, receiptUuid: String)
 
-    /**
-     * Обработчик событий закрытия чека.
-     */
-    protected open fun handleReceiptClosedEvent(context: Context, receiptUuid: String) = Unit
+    protected abstract fun handleReceiptClosedEvent(context: Context, receiptUuid: String)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         val mapper = ReceiptEventMapper(bundle)
