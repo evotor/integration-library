@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.math.BigDecimal;
+
 import ru.evotor.framework.payment.PaymentSystem;
 
 public class PaymentSelectedEvent extends PaymentEvent {
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.payment.SELECTED";
 
-    public PaymentSelectedEvent(@NonNull PaymentSystem paymentSystem) {
-        super(paymentSystem);
+    public PaymentSelectedEvent(@NonNull PaymentSystem paymentSystem, @NonNull BigDecimal maxSum) {
+        super(paymentSystem, maxSum);
     }
 
     @Nullable
@@ -24,8 +26,14 @@ public class PaymentSelectedEvent extends PaymentEvent {
             return null;
         }
 
+        BigDecimal totalSum = PaymentEvent.getMaxSum(bundle);
+        if (totalSum == null) {
+            return null;
+        }
+
         return new PaymentSelectedEvent(
-                paymentSystem
+                paymentSystem,
+                totalSum
         );
     }
 }
