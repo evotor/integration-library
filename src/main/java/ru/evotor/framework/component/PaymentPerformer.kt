@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.framework.payment.PaymentSystem
 
-class PaymentIntegrationComponent : IntegrationComponent, Parcelable {
+class PaymentPerformer : IntegrationComponent, Parcelable {
     var paymentSystem: PaymentSystem? = null
 
     constructor(paymentSystem: PaymentSystem?,
@@ -39,12 +39,12 @@ class PaymentIntegrationComponent : IntegrationComponent, Parcelable {
 
     companion object {
         @JvmField
-        val CREATOR: Parcelable.Creator<PaymentIntegrationComponent> = object : Parcelable.Creator<PaymentIntegrationComponent> {
-            override fun createFromParcel(parcel: Parcel): PaymentIntegrationComponent {
-                return PaymentIntegrationComponent(parcel)
+        val CREATOR: Parcelable.Creator<PaymentPerformer> = object : Parcelable.Creator<PaymentPerformer> {
+            override fun createFromParcel(parcel: Parcel): PaymentPerformer {
+                return PaymentPerformer(parcel)
             }
 
-            override fun newArray(size: Int): Array<PaymentIntegrationComponent?> {
+            override fun newArray(size: Int): Array<PaymentPerformer?> {
                 return arrayOfNulls(size)
             }
         }

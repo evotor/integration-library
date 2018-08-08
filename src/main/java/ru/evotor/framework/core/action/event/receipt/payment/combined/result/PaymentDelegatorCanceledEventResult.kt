@@ -4,9 +4,9 @@ import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.PaymentMapper
 import ru.evotor.framework.receipt.Payment
 
-class CombinedPaymentCanceledEventResult(
+class PaymentDelegatorCanceledEventResult(
         val payment: Payment
-) : CombinedPaymentEventResult(ResultType.CANCEL) {
+) : PaymentDelegatorEventResult(ResultType.CANCEL) {
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putBundle(KEY_PAYMENT, PaymentMapper.toBundle(payment))
@@ -16,12 +16,12 @@ class CombinedPaymentCanceledEventResult(
     companion object {
         private const val KEY_PAYMENT = "payment"
 
-        fun create(bundle: Bundle?): CombinedPaymentCanceledEventResult? {
+        fun create(bundle: Bundle?): PaymentDelegatorCanceledEventResult? {
             if (bundle == null) {
                 return null
             }
             return PaymentMapper.from(bundle.getBundle(KEY_PAYMENT))
-                    ?.let { CombinedPaymentCanceledEventResult(it) }
+                    ?.let { PaymentDelegatorCanceledEventResult(it) }
         }
     }
 }

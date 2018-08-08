@@ -4,7 +4,7 @@ import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
 
-abstract class CombinedPaymentEventResult(
+abstract class PaymentDelegatorEventResult(
         val resultType: ResultType
 ) : IBundlable {
 
@@ -21,15 +21,15 @@ abstract class CombinedPaymentEventResult(
     companion object {
         private val KEY_RESULT_TYPE = "resultType"
 
-        fun create(bundle: Bundle?): CombinedPaymentEventResult? {
+        fun create(bundle: Bundle?): PaymentDelegatorEventResult? {
             if (bundle == null) {
                 return null
             }
             val resultType = Utils.safeValueOf(ResultType::class.java, bundle.getString(KEY_RESULT_TYPE, null), ResultType.UNKNOWN)
             return when (resultType) {
-                ResultType.SELECTED -> CombinedPaymentSelectedEventResult.create(bundle)
-                ResultType.CANCEL -> CombinedPaymentCanceledEventResult.create(bundle)
-                ResultType.CANCEL_ALL -> CombinedPaymentCanceledAllEventResult.create(bundle)
+                ResultType.SELECTED -> PaymentDelegatorSelectedEventResult.create(bundle)
+                ResultType.CANCEL -> PaymentDelegatorCanceledEventResult.create(bundle)
+                ResultType.CANCEL_ALL -> PaymentDelegatorCanceledAllEventResult.create(bundle)
                 else -> null
             }
         }
