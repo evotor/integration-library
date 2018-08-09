@@ -3,13 +3,16 @@ package ru.evotor.framework.core.action.event.receipt.payment.combined.result
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
+import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
 
 abstract class PaymentDelegatorEventResult(
-        val resultType: ResultType
+        val resultType: ResultType,
+        val extra: SetExtra?
 ) : IBundlable {
 
     override fun toBundle(): Bundle {
         val result = Bundle()
+        result.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         result.putString(KEY_RESULT_TYPE, resultType.name)
         return result
     }
@@ -19,7 +22,8 @@ abstract class PaymentDelegatorEventResult(
     }
 
     companion object {
-        private val KEY_RESULT_TYPE = "resultType"
+        private const val KEY_RESULT_TYPE = "resultType"
+        const val KEY_RECEIPT_EXTRA = "extra"
 
         fun create(bundle: Bundle?): PaymentDelegatorEventResult? {
             if (bundle == null) {
