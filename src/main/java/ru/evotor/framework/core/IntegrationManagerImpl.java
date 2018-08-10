@@ -293,7 +293,11 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     if (mActivityStarter != null) {
                         // since the user provided an Activity we will silently start intents
                         // that we see
-                        mActivityStarter.startActivity(intent);
+                        try {
+                            mActivityStarter.startActivity(intent);
+                        } catch (Throwable error) {
+                            setException(error);
+                        }
                     } else {
                         skip();
                     }
