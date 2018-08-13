@@ -95,7 +95,7 @@ abstract class PrintReceiptCommand(
             var remaining = MoneyCalculator.subtract(payments.sumByBigDecimal { it.value }, sum)
             val result = HashMap<Payment, BigDecimal>()
             for (payment in payments) {
-                if (payment.system?.paymentType != PaymentType.CASH) {
+                if (payment.paymentPerformer.paymentSystem?.paymentType != PaymentType.CASH) {
                     result.put(payment, BigDecimal.ZERO)
                     continue
                 }

@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import org.json.JSONArray
+import ru.evotor.framework.component.PaymentPerformer
+import ru.evotor.framework.component.PaymentPerformerTable
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -300,11 +302,21 @@ object ReceiptApi {
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE))).divide(BigDecimal(100)),
-                createPaymentSystem(cursor),
+                createPaymentPerformer(cursor) ?: return null,
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
                 identifier)
+    }
+
+    private fun createPaymentPerformer(cursor: Cursor): PaymentPerformer? {
+        return PaymentPerformer(
+                createPaymentSystem(cursor) ?: return null,
+                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_PACKAGE_NAME)),
+                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_COMPONENT_NAME)),
+                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_APP_UUID)),
+                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_APP_NAME))
+        )
     }
 
     private fun createPaymentSystem(cursor: Cursor): PaymentSystem? {

@@ -20,9 +20,9 @@ public class PaymentPurpose implements Parcelable {
     @Nullable
     private final String identifier;
     /**
-     * Интеграционное приложение, осуществляющее оплату и определенной платежной системой
+     * Интеграционное приложение, осуществляющее оплату определенной платежной системой
      */
-    @Nullable
+    @NonNull
     private final PaymentPerformer paymentPerformer;
     /**
      * Сумма к оплате

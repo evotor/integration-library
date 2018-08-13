@@ -1,6 +1,6 @@
 package ru.evotor.framework.receipt
 
-import ru.evotor.framework.payment.PaymentSystem
+import ru.evotor.framework.component.PaymentPerformer
 import java.math.BigDecimal
 
 /**
@@ -16,9 +16,9 @@ data class Payment(
          */
         val value: BigDecimal,
         /**
-         * Платежная система
+         * Интеграционное приложение, осуществляющее оплату определенной платежной системой
          */
-        val system: PaymentSystem?,
+        val paymentPerformer: PaymentPerformer,
         /**
          * Идентификатор цели платежа
          */
@@ -40,13 +40,13 @@ data class Payment(
     constructor(
             uuid: String,
             value: BigDecimal,
-            system: PaymentSystem?,
+            paymentPerformer: PaymentPerformer,
             purposeIdentifier: String?,
             accountId: String?,
             accountUserDescription: String?
-    ) : this(uuid, value, system, purposeIdentifier, accountId, accountUserDescription, null)
+    ) : this(uuid, value, paymentPerformer, purposeIdentifier, accountId, accountUserDescription, null)
 
     override fun toString(): String {
-        return "Payment(uuid='$uuid', value=$value, system=$system, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
+        return "Payment(uuid='$uuid', value=$value, paymentPerformer=$paymentPerformer, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
     }
 }
