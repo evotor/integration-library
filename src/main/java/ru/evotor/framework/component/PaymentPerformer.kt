@@ -25,7 +25,6 @@ class PaymentPerformer : IntegrationComponent, Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        super.writeToParcel(parcel, flags)
         parcel.writeParcelable(paymentSystem, flags)
         parcel.writeString(packageName)
         parcel.writeString(componentName)
