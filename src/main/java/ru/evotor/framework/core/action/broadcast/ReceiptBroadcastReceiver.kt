@@ -2,7 +2,12 @@ package ru.evotor.framework.core.action.broadcast
 
 import android.content.Context
 import android.os.Bundle
-import ru.evotor.framework.core.action.datamapper.ReceiptEventMapper
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClearedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClosedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent
 
 abstract class ReceiptBroadcastReceiver(
         private val actionReceiptOpened: String,
@@ -13,33 +18,26 @@ abstract class ReceiptBroadcastReceiver(
         private val actionReceiptClosed: String
 ) : AbstractBroadcastReceiver() {
 
-    protected abstract fun handleReceiptOpenedEvent(context: Context, receiptUuid: String)
+    protected abstract fun handleReceiptOpenedEvent(context: Context, receiptOpenedEvent: ReceiptOpenedEvent)
 
-    protected abstract fun handlePositionAddedEvent(context: Context, receiptUuid: String, positionUuid: String)
+    protected abstract fun handlePositionAddedEvent(context: Context, positionAddedEvent: PositionAddedEvent)
 
-    protected abstract fun handlePositionEditedEvent(context: Context, receiptUuid: String, positionUuid: String)
+    protected abstract fun handlePositionEditedEvent(context: Context, positionEditedEvent: PositionEditedEvent)
 
-    protected abstract fun handlePositionRemovedEvent(context: Context, receiptUuid: String, positionUuid: String)
+    protected abstract fun handlePositionRemovedEvent(context: Context, positionRemovedEvent: PositionRemovedEvent)
 
-    protected abstract fun handleReceiptClearedEvent(context: Context, receiptUuid: String)
+    protected abstract fun handleReceiptClearedEvent(context: Context, receiptClearedEvent: ReceiptClearedEvent)
 
-    protected abstract fun handleReceiptClosedEvent(context: Context, receiptUuid: String)
+    protected abstract fun handleReceiptClosedEvent(context: Context, receiptClosedEvent: ReceiptClosedEvent)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
-        val mapper = ReceiptEventMapper(bundle)
-        val receiptUuid = mapper.getReceiptUuid() ?: return
         when (action) {
-            actionReceiptOpened -> handleReceiptOpenedEvent(context, receiptUuid)
-            actionPositionAdded, actionPositionEdited, actionPositionRemoved -> {
-                val positionUuid = mapper.getPosition()?.uuid ?: return
-                when (action) {
-                    actionPositionAdded -> handlePositionAddedEvent(context, receiptUuid, positionUuid)
-                    actionPositionEdited -> handlePositionEditedEvent(context, receiptUuid, positionUuid)
-                    actionPositionRemoved -> handlePositionRemovedEvent(context, receiptUuid, positionUuid)
-                }
-            }
-            actionReceiptCleared -> handleReceiptClearedEvent(context, receiptUuid)
-            actionReceiptClosed -> handleReceiptClosedEvent(context, receiptUuid)
+            actionReceiptOpened -> handleReceiptOpenedEvent(context, ReceiptOpenedEvent.create(bundle) ?: return)
+            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.create(bundle) ?: return)
+            actionPositionEdited -> handlePositionEditedEvent(context, PositionEditedEvent.create(bundle) ?: return)
+            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.create(bundle) ?: return)
+            actionReceiptCleared -> handleReceiptClearedEvent(context, ReceiptClearedEvent.create(bundle) ?: return)
+            actionReceiptClosed -> handleReceiptClosedEvent(context, ReceiptClosedEvent.create(bundle) ?: return)
         }
     }
 

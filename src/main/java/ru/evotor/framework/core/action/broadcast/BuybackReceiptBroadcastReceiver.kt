@@ -1,10 +1,16 @@
 package ru.evotor.framework.core.action.broadcast
 
 import android.content.Context
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
+import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClearedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClosedEvent
+import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent
 
 /**
  * Широковещательный приёмник событий чека возврата покупки.
- * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/">Использование широковещательного приёмника</a>
  */
 open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_OPENED,
@@ -19,37 +25,37 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
      * Обработчик событий открытия чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_OPENED)
-    override fun handleReceiptOpenedEvent(context: Context, receiptUuid: String) = Unit
+    override fun handleReceiptOpenedEvent(context: Context, receiptOpenedEvent: ReceiptOpenedEvent) = Unit
 
     /**
      * Обработчик событий добавления позиции в чек.
      */
     @RequiresIntentAction(ACTION_POSITION_ADDED)
-    override fun handlePositionAddedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    override fun handlePositionAddedEvent(context: Context, positionAddedEvent: PositionAddedEvent) = Unit
 
     /**
      * Обработчик событий изменения позиции чека.
      */
     @RequiresIntentAction(ACTION_POSITION_EDITED)
-    override fun handlePositionEditedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    override fun handlePositionEditedEvent(context: Context, positionEditedEvent: PositionEditedEvent) = Unit
 
     /**
      * Обработчик событий удаления позиции чека.
      */
     @RequiresIntentAction(ACTION_POSITION_REMOVED)
-    override fun handlePositionRemovedEvent(context: Context, receiptUuid: String, positionUuid: String) = Unit
+    override fun handlePositionRemovedEvent(context: Context, positionRemovedEvent: PositionRemovedEvent) = Unit
 
     /**
      * Обработчик событий очистки чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_CLEARED)
-    override fun handleReceiptClearedEvent(context: Context, receiptUuid: String) = Unit
+    override fun handleReceiptClearedEvent(context: Context, receiptClearedEvent: ReceiptClearedEvent) = Unit
 
     /**
      * Обработчик событий закрытия чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_CLOSED)
-    override fun handleReceiptClosedEvent(context: Context, receiptUuid: String) = Unit
+    override fun handleReceiptClosedEvent(context: Context, receiptClosedEvent: ReceiptClosedEvent) = Unit
 
     companion object {
 

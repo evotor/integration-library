@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.RequiresPermission
+import ru.evotor.framework.core.action.event.scanner.BarcodeReceivedEvent
 
 /**
  * Широковещательный приёмник событий сканера штрихкодов.
- * @see <a href="https://developer.evotor.ru/docs/tobi_pizda">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/">Использование широковещательного приёмника</a>
  */
 abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
 
@@ -16,15 +17,11 @@ abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
      */
     @RequiresPermission(RECEIVER_PERMISSION)
     @RequiresIntentAction(ACTION_BARCODE_RECEIVED)
-    protected abstract fun handleBarcodeReceivedEvent(context: Context, barcode: String)
+    protected abstract fun handleBarcodeReceivedEvent(context: Context, barcodeReceivedEvent: BarcodeReceivedEvent)
 
     @SuppressLint("MissingPermission")
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
-        bundle.getString(KEY_SCANNED_CODE)?.let {
-            if (it.isNotEmpty()) {
-                handleBarcodeReceivedEvent(context, it)
-            }
-        }
+        handleBarcodeReceivedEvent(context, BarcodeReceivedEvent.from(bundle) ?: return)
     }
 
     companion object {
@@ -34,8 +31,6 @@ abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
         const val SENDER_PERMISSION = "ru.evotor.devices.SCANNER_SENDER"
 
         const val RECEIVER_PERMISSION = "ru.evotor.devices.SCANNER_RECEIVER"
-
-        const val KEY_SCANNED_CODE = "ScannedCode"
 
     }
 
