@@ -1,4 +1,4 @@
-package ru.evotor.framework.domain
+package ru.evotor.framework.inventory
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -6,31 +6,25 @@ import android.os.Parcelable
 private const val VERSION = 1
 
 /**
- * Значение атрибута
+ * Атрибут
  */
-data class AttributeValue(
+data class AttributeWithValues(
         /**
          * Уникальный идентификатор атрибута
-         */
-        val attributeUuid: String,
-
-        /**
-         * Имя атрибута (ex. 'Цвет')
-         */
-        val attributeName: String,
-
-        /**
-         * Уникальный идентификатор значения атрибута
          */
         val uuid: String,
 
         /**
-         * Имя значения атрибута (ex. 'Черный')
+         * Имя атрибута (ex. 'Цвет')
          */
-        val name: String
+        val name: String,
+
+        /**
+         * Список значений атрибутов
+         */
+        val attributeValues: List<AttributeValue>
 
 ) : Parcelable {
-        
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(VERSION)
         // Determine position in parcel for writing data size
@@ -39,16 +33,14 @@ data class AttributeValue(
         parcel.writeInt(0)
         //Determine position of data start
         val startDataPosition = parcel.dataPosition()
-
-        parcel.writeString(attributeUuid)
-        parcel.writeString(attributeName)
         parcel.writeString(uuid)
         parcel.writeString(name)
+        parcel.writeTypedList(attributeValues)
         // Calculate data size
         val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = parcel.dataPosition()
-        //Set position to start to write additional data size
+        //Set position to start to write data size
         parcel.setDataPosition(dataSizePosition)
         parcel.writeInt(dataSize)
         // Go back to the end of parcel
@@ -58,25 +50,24 @@ data class AttributeValue(
     override fun describeContents(): Int = 0
 
     companion object {
+            
         @JvmStatic
-        fun readFromParcel(parcel : Parcel) : AttributeValue {
+        fun readFromParcel(parcel: Parcel) : AttributeWithValues {
             val version = parcel.readInt()
             val dataSize = parcel.readInt()
             val dataStartPosition = parcel.dataPosition()
-            val attributeUuid = parcel.readString()
-            val attributeName = parcel.readString()
             val uuid = parcel.readString()
             val name = parcel.readString()
+            val attributeValues = parcel.createTypedArrayList(AttributeValue.CREATOR)
             parcel.setDataPosition(dataStartPosition + dataSize)
-            return AttributeValue(attributeUuid, attributeName, uuid, name)
+            return AttributeWithValues(uuid, name, attributeValues)
         }
 
         @JvmField
-        val CREATOR: Parcelable.Creator<AttributeValue> = object : Parcelable.Creator<AttributeValue> {
-            override fun createFromParcel(parcel: Parcel): AttributeValue =
-                    AttributeValue.readFromParcel(parcel)
+        val CREATOR: Parcelable.Creator<AttributeWithValues> = object : Parcelable.Creator<AttributeWithValues> {
+            override fun createFromParcel(parcel: Parcel): AttributeWithValues = readFromParcel(parcel)
 
-            override fun newArray(size: Int): Array<AttributeValue?> = arrayOfNulls(size)
+            override fun newArray(size: Int): Array<AttributeWithValues?> = arrayOfNulls(size)
         }
     }
 }
