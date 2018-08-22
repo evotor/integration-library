@@ -15,6 +15,7 @@ import java.util.Set;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.payment.PaymentFeature;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
@@ -41,6 +42,7 @@ public final class PositionMapper {
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
     private static final String KEY_ATTRIBUTES = "attributes";
+    private static final String KEY_PAYMENT_FEATURE = "paymentFeature";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -85,6 +87,11 @@ public final class PositionMapper {
         Map<String, AttributeValue> attributes =
                 PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
 
+        PaymentFeature paymentFeature = bundle.getParcelable(KEY_PAYMENT_FEATURE);
+        if (paymentFeature == null) {
+            paymentFeature = new PaymentFeature.CheckoutFull();
+        }
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -113,6 +120,7 @@ public final class PositionMapper {
                 subPositions
         );
         result.setAttributes(attributes);
+        result.setPaymentFeature(paymentFeature);
         return result;
     }
 
@@ -157,6 +165,7 @@ public final class PositionMapper {
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
+        bundle.putParcelable(KEY_PAYMENT_FEATURE, position.getPaymentFeature());
         return bundle;
     }
 
