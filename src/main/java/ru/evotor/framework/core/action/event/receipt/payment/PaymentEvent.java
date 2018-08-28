@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
+import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
 import ru.evotor.framework.payment.PaymentPurpose;
 
 public abstract class PaymentEvent implements IBundlable {
     private static final String KEY_SELECTED_PAYMENT_PURPOSE = "paymentPurpose";
+    private static final String KEY_SELECTED_PAYMENT_SYSTEM = "paymentSystem";
 
     @NonNull
     private final PaymentPurpose paymentPurpose;
@@ -32,6 +34,10 @@ public abstract class PaymentEvent implements IBundlable {
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putBundle(KEY_SELECTED_PAYMENT_PURPOSE, PaymentPurposeMapper.toBundle(paymentPurpose));
+        result.putBundle(KEY_SELECTED_PAYMENT_SYSTEM, PaymentSystemMapper.toBundle(
+                paymentPurpose.getPaymentPerformer() != null
+                        ? paymentPurpose.getPaymentPerformer().getPaymentSystem()
+                        : null));
         return result;
     }
 

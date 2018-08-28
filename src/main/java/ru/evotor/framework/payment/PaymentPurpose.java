@@ -20,6 +20,13 @@ public class PaymentPurpose implements Parcelable {
     @Nullable
     private final String identifier;
     /**
+     * Идентификатор платёжной системы
+     * @deprecated To define payment paymentSystem use {@link #paymentPerformer} instead
+     */
+    @Nullable
+    @Deprecated
+    private final String paymentSystemId;
+    /**
      * Интеграционное приложение, осуществляющее оплату определенной платежной системой
      */
     @NonNull
@@ -40,8 +47,9 @@ public class PaymentPurpose implements Parcelable {
     @Nullable
     private final String userMessage;
 
-    public PaymentPurpose(@Nullable String identifier, @Nullable PaymentPerformer paymentPerformer, @NonNull BigDecimal total, @Nullable String accountId, @Nullable String userMessage) {
+    public PaymentPurpose(@Nullable String identifier, @Nullable String paymentSystemId, @Nullable PaymentPerformer paymentPerformer, @NonNull BigDecimal total, @Nullable String accountId, @Nullable String userMessage) {
         this.identifier = identifier;
+        this.paymentSystemId = paymentSystemId;
         this.paymentPerformer = paymentPerformer;
         this.total = total;
         this.accountId = accountId;
@@ -51,6 +59,16 @@ public class PaymentPurpose implements Parcelable {
     @Nullable
     public String getIdentifier() {
         return identifier;
+    }
+
+    /**
+     * Идентификатор платёжной системы
+     * @deprecated To define payment paymentSystem use {@link #paymentPerformer} instead
+     */
+    @Nullable
+    @Deprecated
+    public String getPaymentSystemId() {
+        return paymentSystemId;
     }
 
     @Nullable
@@ -156,6 +174,7 @@ public class PaymentPurpose implements Parcelable {
 
     protected PaymentPurpose(Parcel in) {
         this.identifier = in.readString();
+        this.paymentSystemId = in.readString();
         this.paymentPerformer = in.readParcelable(PaymentPerformer.class.getClassLoader());
         this.total = new BigDecimal(in.readString());
         this.accountId = in.readString();

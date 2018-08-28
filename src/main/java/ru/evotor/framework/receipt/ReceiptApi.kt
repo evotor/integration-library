@@ -302,6 +302,7 @@ object ReceiptApi {
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE))).divide(BigDecimal(100)),
+                createPaymentSystem(cursor),
                 createPaymentPerformer(cursor) ?: return null,
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),

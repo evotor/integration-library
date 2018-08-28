@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 
 import ru.evotor.framework.component.PaymentPerformer;
+import ru.evotor.framework.payment.PaymentSystem;
 import ru.evotor.framework.receipt.Payment;
 
 
@@ -13,6 +14,7 @@ public final class PaymentMapper {
 
     private static final String KEY_UUID = "uuid";
     private static final String KEY_VALUE = "value";
+    private static final String KEY_SYSTEM = "system";
     private static final String KEY_PERFORMER = "paymentPerformer";
     private static final String KEY_PURPOSE_IDENTIFIER = "purposeIdentifier";
     private static final String KEY_ACCOUNT_ID = "accountId";
@@ -26,6 +28,7 @@ public final class PaymentMapper {
         }
         String uuid = bundle.getString(KEY_UUID);
         BigDecimal value = BundleUtils.getMoney(bundle, KEY_VALUE);
+        PaymentSystem paymentSystem = PaymentSystemMapper.from(bundle.getBundle(KEY_SYSTEM));
         PaymentPerformer paymentPerformer = PaymentPerformerMapper.INSTANCE.fromBundle(bundle.getBundle(KEY_PERFORMER));
         String purposeIdentifier = bundle.getString(KEY_PURPOSE_IDENTIFIER);
         String accountId = bundle.getString(KEY_ACCOUNT_ID);
@@ -35,6 +38,7 @@ public final class PaymentMapper {
         return new Payment(
                 uuid,
                 value,
+                paymentPerformer != null ? paymentPerformer.getPaymentSystem() : paymentSystem,
                 paymentPerformer,
                 purposeIdentifier,
                 accountId,
@@ -51,6 +55,7 @@ public final class PaymentMapper {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_UUID, payment.getUuid());
         bundle.putString(KEY_VALUE, payment.getValue().toPlainString());
+        bundle.putBundle(KEY_SYSTEM, PaymentSystemMapper.toBundle(payment.getPaymentPerformer().getPaymentSystem()));
         bundle.putBundle(KEY_PERFORMER, PaymentPerformerMapper.INSTANCE.toBundle(payment.getPaymentPerformer()));
         bundle.putString(KEY_PURPOSE_IDENTIFIER, payment.getPurposeIdentifier());
         bundle.putString(KEY_ACCOUNT_ID, payment.getAccountId());
