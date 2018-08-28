@@ -124,7 +124,7 @@ public class Position implements Parcelable {
      * По умолчанию это 'Полный расчет'
      */
     @NonNull
-    private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
+    private PaymentFeature paymentFeature = PaymentFeature.CHECKOUT_FULL;
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -502,8 +502,7 @@ public class Position implements Parcelable {
             return false;
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
-        if (!paymentFeature.equals(position.paymentFeature))
-            return false;
+        if (paymentFeature != position.paymentFeature) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -616,7 +615,7 @@ public class Position implements Parcelable {
             }
         }
         // Payment features
-        dest.writeParcelable(this.paymentFeature, flags);
+        dest.writeInt(this.paymentFeature.ordinal());
     }
 
     protected Position(Parcel in) {
@@ -691,9 +690,11 @@ public class Position implements Parcelable {
     }
 
     private void readPaymentFeatureField(Parcel in) {
-        PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
-        if (paymentFeature != null) {
-            this.paymentFeature = paymentFeature;
+        int paymentFeatureOrdinal = in.readInt();
+        if (paymentFeatureOrdinal == -1) {
+            this.paymentFeature = PaymentFeature.CHECKOUT_FULL;
+        } else {
+            this.paymentFeature = PaymentFeature.values()[paymentFeatureOrdinal];
         }
     }
 

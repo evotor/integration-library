@@ -87,10 +87,8 @@ public final class PositionMapper {
         Map<String, AttributeValue> attributes =
                 PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
 
-        PaymentFeature paymentFeature = bundle.getParcelable(KEY_PAYMENT_FEATURE);
-        if (paymentFeature == null) {
-            paymentFeature = new PaymentFeature.CheckoutFull();
-        }
+        PaymentFeature paymentFeature =
+                PaymentFeatureMapper.fromBundle(bundle.getBundle(KEY_PAYMENT_FEATURE));
 
         if (quantity == null ||
                 price == null ||
@@ -165,7 +163,7 @@ public final class PositionMapper {
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
-        bundle.putParcelable(KEY_PAYMENT_FEATURE, position.getPaymentFeature());
+        bundle.putBundle(KEY_PAYMENT_FEATURE, PaymentFeatureMapper.toBundle(position.getPaymentFeature()));
         return bundle;
     }
 
