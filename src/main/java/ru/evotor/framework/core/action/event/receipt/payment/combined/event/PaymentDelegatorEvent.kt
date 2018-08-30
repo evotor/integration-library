@@ -8,7 +8,6 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
             Bundle().apply { putString(KEY_RECEIPT_UUID, receiptUuid) }
 
     companion object {
-        // TODO refactor action and permission
         const val NAME_ACTION = "evo.v2.receipt.sell.payment.COMBINED"
         const val NAME_PERMISSION = "ru.evotor.permission.COMBINED"
 

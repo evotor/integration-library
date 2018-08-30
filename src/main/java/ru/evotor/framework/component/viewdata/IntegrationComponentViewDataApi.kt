@@ -2,7 +2,10 @@ package ru.evotor.framework.component.viewdata
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.os.Bundle
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem
@@ -21,53 +24,59 @@ object IntegrationComponentViewDataApi {
         val intent = Intent(eventName)
         val applicationsInfo = packageManager.queryIntentServices(intent, PackageManager.GET_META_DATA)
         for (resolveInfo in applicationsInfo) {
-            if (resolveInfo.serviceInfo == null || resolveInfo.serviceInfo.metaData == null) {
-                continue
+            generatePaymentPerformerViewData(context, resolveInfo)?.let {
+                applicationsList.add(it)
             }
-            val metaData = resolveInfo.serviceInfo.metaData
-            val psId = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
-                    ?: continue
-            var hasPermission: Boolean
-            var appUuid: String? = null
-            try {
-                val packageInfo = packageManager.getPackageInfo(
-                        resolveInfo.serviceInfo.packageName,
-                        PackageManager.GET_META_DATA or PackageManager.GET_PERMISSIONS
-                )
-                hasPermission = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
-                if (packageInfo.applicationInfo.metaData != null) {
-                    appUuid = packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
-                }
-            } catch (exc: PackageManager.NameNotFoundException) {
-                hasPermission = false
-            }
-            if (!hasPermission || appUuid == null) {
-                continue
-            }
-            val paymentSystem = PaymentSystem(
-                    PaymentType.ELECTRON,
-                    resolveInfo.loadLabel(packageManager).toString(),
-                    psId
-            )
-            val paymentPerformer = PaymentPerformer(
-                    paymentSystem,
-                    resolveInfo.serviceInfo.packageName,
-                    resolveInfo.serviceInfo.name,
-                    appUuid,
-                    resolveInfo.loadLabel(packageManager).toString()
-            )
-            val app = PaymentPerformerViewData(
-                    paymentPerformer,
-                    resolveInfo.loadIcon(packageManager),
-                    if (metaData.containsKey(BACKGROUND_COLOR_KEY))
-                        metaData.getInt(BACKGROUND_COLOR_KEY)
-                    else
-                        context.resources.getColor(R.color.white),
-                    context.resources.getColor(R.color.text_black)
-            )
-            applicationsList.add(app)
         }
         return applicationsList
     }
 
+    private fun generatePaymentPerformerViewData(context: Context, resolveInfo: ResolveInfo): PaymentPerformerViewData? {
+        if (resolveInfo.serviceInfo == null || resolveInfo.serviceInfo.metaData == null) {
+            return null
+        }
+        val metaData = resolveInfo.serviceInfo.metaData
+        val paymentSystemId = getPaymentSystemId(metaData) ?: return null
+        val packageManager = context.packageManager
+        var appUuid: String? = null
+        try {
+            val packageInfo = packageManager.getPackageInfo(resolveInfo.serviceInfo.packageName, PackageManager.GET_META_DATA or PackageManager.GET_PERMISSIONS)
+            if (!hasPermission(packageInfo)) {
+                return null
+            }
+            if (packageInfo.applicationInfo.metaData != null) {
+                appUuid = packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
+            }
+        } catch (exc: PackageManager.NameNotFoundException) {
+            return null
+        }
+        if (appUuid == null) {
+            return null
+        }
+        val paymentSystem = PaymentSystem(
+                PaymentType.ELECTRON,
+                resolveInfo.loadLabel(packageManager).toString(),
+                paymentSystemId
+        )
+        val paymentPerformer = PaymentPerformer(
+                paymentSystem,
+                resolveInfo.serviceInfo.packageName,
+                resolveInfo.serviceInfo.name,
+                appUuid,
+                resolveInfo.loadLabel(packageManager).toString()
+        )
+        return PaymentPerformerViewData(
+                paymentPerformer,
+                resolveInfo.loadIcon(packageManager),
+                if (metaData.containsKey(BACKGROUND_COLOR_KEY))
+                    metaData.getInt(BACKGROUND_COLOR_KEY)
+                else
+                    context.resources.getColor(R.color.white),
+                context.resources.getColor(R.color.text_black)
+        )
+    }
+
+    private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
+
+    private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
 }
