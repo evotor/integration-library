@@ -15,6 +15,7 @@ object NavigationApi {
     private const val ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
     private const val ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
     private const val ACTION_CHANGE_USER = "evotor.intent.action.user.CHANGE"
+    private const val ACTION_OPEN_PRODUCT_LIST = "evotor.intent.action.commodity.SELECT"
 
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
@@ -114,6 +115,14 @@ object NavigationApi {
     }
 
     /**
+     * форма списка товаров
+     */
+    @JvmStatic
+    fun createIntentForOpenProductList(): Intent {
+        return Intent(ACTION_OPEN_PRODUCT_LIST)
+    }
+
+    /**
      * форма добавления нового товара
      */
     @JvmStatic
@@ -130,7 +139,7 @@ object NavigationApi {
     }
 
     /**
-     * полуение uuid продукта при успешном добавлении
+     * Получение uuid продукта при успешном добавлении
      */
     @JvmStatic
     fun getProductUuid(intent: Intent): String? {
