@@ -3,24 +3,20 @@ package ru.evotor.framework.component
 import android.os.Parcel
 import android.os.Parcelable
 
-open class IntegrationComponent : Parcelable {
-    var packageName: String? = null
-    var componentName: String? = null
-    var appUuid: String? = null
-    var appName: String? = null
-
-    constructor(
-            packageName: String?,
-            componentName: String?,
-            appUuid: String?,
-            appName: String?
-    ) {
-        this.packageName = packageName
-        this.componentName = componentName
-        this.appUuid = appUuid
-        this.appName = appName
-    }
-
+/**
+ * Компонент интеграционного приложения, данные из манифеста
+ *
+ * @property packageName Название пакета
+ * @property componentName Название компонента (сервис, активити и т.п.)
+ * @property appUuid Уникальный идентификатора приложения в системе Эвотора
+ * @property appName Название приложения
+ */
+open class IntegrationComponent(
+        val packageName: String?,
+        val componentName: String?,
+        val appUuid: String?,
+        val appName: String?
+) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),

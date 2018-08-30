@@ -4,18 +4,21 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.framework.payment.PaymentSystem
 
-class PaymentPerformer : IntegrationComponent, Parcelable {
-    var paymentSystem: PaymentSystem? = null
-
-    constructor(paymentSystem: PaymentSystem?,
-                packageName: String?,
-                componentName: String?,
-                appUuid: String?,
-                appName: String?
-    ) : super(packageName, componentName, appUuid, appName) {
-        this.paymentSystem = paymentSystem
-    }
-
+/**
+ * Компонент интеграционного приложения, осуществляющий оплату
+ *
+ * @property paymentSystem Платежная система
+ * @property packageName Название пакета
+ * @property componentName Название компонента (сервис, активити и т.п.)
+ * @property appUuid Уникальный идентификатора приложения в системе Эвотора
+ * @property appName Название приложения
+ */
+class PaymentPerformer(val paymentSystem: PaymentSystem?,
+                       packageName: String?,
+                       componentName: String?,
+                       appUuid: String?,
+                       appName: String?
+) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readParcelable(PaymentSystem::class.java.classLoader),
             parcel.readString(),
