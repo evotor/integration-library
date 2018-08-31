@@ -85,4 +85,28 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as PaymentPerformer
+
+        if (paymentSystem != other.paymentSystem) return false
+        if (packageName != other.packageName) return false
+        if (componentName != other.componentName) return false
+        if (appUuid != other.appUuid) return false
+        if (appName != other.appName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result =  paymentSystem?.hashCode() ?: 0
+        result = 31 * result + (packageName?.hashCode() ?: 0)
+        result = 31 * result + (componentName?.hashCode() ?: 0)
+        result = 31 * result + (appUuid?.hashCode() ?: 0)
+        result = 31 * result + (appName?.hashCode() ?: 0)
+        return result
+    }
 }
