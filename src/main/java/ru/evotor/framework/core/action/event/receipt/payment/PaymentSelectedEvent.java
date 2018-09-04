@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import ru.evotor.framework.payment.PaymentSystem;
+import ru.evotor.framework.payment.PaymentPurpose;
 
 public class PaymentSelectedEvent extends PaymentEvent {
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.payment.SELECTED";
 
-    public PaymentSelectedEvent(@NonNull PaymentSystem paymentSystem) {
-        super(paymentSystem);
+    public PaymentSelectedEvent(@NonNull PaymentPurpose paymentPurpose) {
+        super(paymentPurpose);
     }
 
     @Nullable
@@ -19,13 +19,11 @@ public class PaymentSelectedEvent extends PaymentEvent {
             return null;
         }
 
-        PaymentSystem paymentSystem = PaymentEvent.getPayment(bundle);
-        if (paymentSystem == null) {
+        PaymentPurpose paymentPurpose = PaymentEvent.getPaymentPurpose(bundle);
+        if (paymentPurpose == null) {
             return null;
         }
 
-        return new PaymentSelectedEvent(
-                paymentSystem
-        );
+        return new PaymentSelectedEvent(paymentPurpose);
     }
 }
