@@ -1,9 +1,14 @@
 package ru.evotor.framework.payment
 
 /**
- * Признак способа расчета для позиции
+ * Тип признака способа расчета для позиции
  */
-enum class PaymentFeature {
+enum class PaymentFeatureType {
+
+    /**
+     * Неизвестно. По-умолчанию
+     */
+    UNKNOWN,
 
     /**
      * Полная предварительная оплата до момента передачи предмета расчета

@@ -21,6 +21,7 @@ import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.payment.PaymentFeature;
+import ru.evotor.framework.payment.PaymentFeatureType;
 
 public class Position implements Parcelable {
     /**
@@ -121,10 +122,10 @@ public class Position implements Parcelable {
 
     /**
      * Признак способа расчета
-     * По умолчанию это 'Полный расчет'
+     * По умолчанию это 'UNKNOWN'
      */
     @NonNull
-    private PaymentFeature paymentFeature = PaymentFeature.CHECKOUT_FULL;
+    private PaymentFeature paymentFeature = new PaymentFeature(PaymentFeatureType.UNKNOWN, null);
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -615,7 +616,7 @@ public class Position implements Parcelable {
             }
         }
         // Payment features
-        dest.writeInt(this.paymentFeature.ordinal());
+        dest.writeParcelable(this.paymentFeature, flags);
     }
 
     protected Position(Parcel in) {
@@ -690,11 +691,11 @@ public class Position implements Parcelable {
     }
 
     private void readPaymentFeatureField(Parcel in) {
-        int paymentFeatureOrdinal = in.readInt();
-        if (paymentFeatureOrdinal == -1) {
-            this.paymentFeature = PaymentFeature.CHECKOUT_FULL;
+        PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
+        if (paymentFeature == null) {
+            this.paymentFeature = new PaymentFeature(PaymentFeatureType.UNKNOWN, null);
         } else {
-            this.paymentFeature = PaymentFeature.values()[paymentFeatureOrdinal];
+            this.paymentFeature = paymentFeature;
         }
     }
 
