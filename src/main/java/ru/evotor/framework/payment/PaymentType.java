@@ -28,8 +28,9 @@ public enum PaymentType {
      * Постоплатой (в кредит)
      */
     CREDIT,
+
     /**
      * Встречным предоставлением
      */
-    OTHER_PAYMENT
+    COUNTEROFFER
 }
