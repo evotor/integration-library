@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import ru.evotor.framework.ColorUtils
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem
@@ -66,14 +67,15 @@ object IntegrationComponentViewDataApi {
                 appUuid,
                 resolveInfo.loadLabel(packageManager).toString()
         )
+        val backgroundColor =  if (metaData.containsKey(BACKGROUND_COLOR_KEY))
+            metaData.getInt(BACKGROUND_COLOR_KEY)
+        else
+            ContextCompat.getColor(context, R.color.white)
         return PaymentPerformerViewData(
                 paymentPerformer,
                 resolveInfo.loadIcon(packageManager),
-                if (metaData.containsKey(BACKGROUND_COLOR_KEY))
-                    metaData.getInt(BACKGROUND_COLOR_KEY)
-                else
-                    ContextCompat.getColor(context, R.color.white),
-                ContextCompat.getColor(context, R.color.text_black)
+                backgroundColor,
+                ColorUtils.getContrastColor(backgroundColor)
         )
     }
 
