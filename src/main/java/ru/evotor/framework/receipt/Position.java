@@ -21,7 +21,6 @@ import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.payment.PaymentFeature;
-import ru.evotor.framework.payment.PaymentFeatureType;
 
 public class Position implements Parcelable {
     /**
@@ -125,7 +124,7 @@ public class Position implements Parcelable {
      * По умолчанию это 'UNKNOWN'
      */
     @NonNull
-    private PaymentFeature paymentFeature = new PaymentFeature(PaymentFeatureType.UNKNOWN, null);
+    private PaymentFeature paymentFeature = new PaymentFeature.Unknown();
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -693,7 +692,7 @@ public class Position implements Parcelable {
     private void readPaymentFeatureField(Parcel in) {
         PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
         if (paymentFeature == null) {
-            this.paymentFeature = new PaymentFeature(PaymentFeatureType.UNKNOWN, null);
+            this.paymentFeature = new PaymentFeature.Unknown();
         } else {
             this.paymentFeature = paymentFeature;
         }
