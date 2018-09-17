@@ -30,6 +30,15 @@ public final class PaymentMapper {
         BigDecimal value = BundleUtils.getMoney(bundle, KEY_VALUE);
         PaymentSystem paymentSystem = PaymentSystemMapper.from(bundle.getBundle(KEY_SYSTEM));
         PaymentPerformer paymentPerformer = PaymentPerformerMapper.INSTANCE.fromBundle(bundle.getBundle(KEY_PERFORMER));
+        if (paymentPerformer == null) {
+            paymentPerformer = new PaymentPerformer(
+                    paymentSystem,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
         String purposeIdentifier = bundle.getString(KEY_PURPOSE_IDENTIFIER);
         String accountId = bundle.getString(KEY_ACCOUNT_ID);
         String accountUserDescription = bundle.getString(KEY_ACCOUNT_USER_DESCRIPTION);
@@ -38,7 +47,7 @@ public final class PaymentMapper {
         return new Payment(
                 uuid,
                 value,
-                paymentPerformer != null ? paymentPerformer.getPaymentSystem() : paymentSystem,
+                paymentPerformer.getPaymentSystem(),
                 paymentPerformer,
                 purposeIdentifier,
                 accountId,
