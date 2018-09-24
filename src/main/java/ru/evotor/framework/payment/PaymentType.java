@@ -31,5 +31,5 @@ public enum PaymentType {
     /**
      * Встречным предоставлением
      */
-    OTHER_PAYMENT
+    COUNTEROFFER
 }
