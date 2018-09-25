@@ -8,7 +8,7 @@ import ru.evotor.framework.core.action.event.scanner.BarcodeReceivedEvent
 
 /**
  * Широковещательный приёмник событий сканера штрихкодов.
- * @see <a href="https://developer.evotor.ru/docs/">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_barcode_scanner.html">Использование широковещательного приёмника</a>
  */
 abstract class ScannerBroadcastReceiver : AbstractBroadcastReceiver() {
 

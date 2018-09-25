@@ -10,7 +10,7 @@ import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpene
 
 /**
  * Широковещательный приёмник событий чека возврата покупки.
- * @see <a href="https://developer.evotor.ru/docs/">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_OPENED,

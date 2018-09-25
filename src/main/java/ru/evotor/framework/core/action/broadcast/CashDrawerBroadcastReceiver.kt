@@ -6,7 +6,7 @@ import ru.evotor.framework.core.action.event.cash_drawer.CashDrawerOpenEvent
 
 /**
  * Широковещательный приёмник событий денежного ящика.
- * @see <a href="https://developer.evotor.ru/docs/">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 abstract class CashDrawerBroadcastReceiver : AbstractBroadcastReceiver() {
 
