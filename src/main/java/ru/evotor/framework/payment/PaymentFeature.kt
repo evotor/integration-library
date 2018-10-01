@@ -224,6 +224,8 @@ sealed class PaymentFeature : Parcelable {
 
     /**
      * Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
+     *
+     * @param amount : сумма первичного взноса
      */
     class CheckoutPartial(val amount: BigDecimal) : PaymentFeature() {
 
@@ -264,10 +266,10 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит
      */
-    class CreditPass(val amount: BigDecimal) : PaymentFeature() {
+    class CreditPass() : PaymentFeature() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-            dest.writeString(amount.toPlainString())
+
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -286,9 +288,8 @@ sealed class PaymentFeature : Parcelable {
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
-                val amount = BigDecimal(parcel.readString())
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return CreditPass(amount)
+                return CreditPass()
             }
 
             @JvmField
