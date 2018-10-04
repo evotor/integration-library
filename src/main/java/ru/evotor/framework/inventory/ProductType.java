@@ -9,14 +9,17 @@ public enum ProductType {
      * Товар
      */
     NORMAL,
+
     /**
      * Маркированный алкоголь
      */
     ALCOHOL_MARKED,
+
     /**
      * Немаркированный алкоголь
      */
     ALCOHOL_NOT_MARKED,
+
     /**
      * Услуга
      */
