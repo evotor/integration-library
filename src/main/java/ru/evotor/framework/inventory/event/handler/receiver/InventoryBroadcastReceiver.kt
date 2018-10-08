@@ -1,14 +1,16 @@
-package ru.evotor.framework.core.action.broadcast
+package ru.evotor.framework.inventory.event.handler.receiver
 
 import android.content.Context
 import android.os.Bundle
+import ru.evotor.framework.core.RequiresIntentAction
+import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.core.action.event.inventory.ProductCardOpenedEvent
 
 /**
  * Широковещательный приёмник товароучётных событий.
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
-open class InventoryBroadcastReceiver : AbstractBroadcastReceiver() {
+open class InventoryBroadcastReceiver : BroadcastEventReceiver() {
 
     /**
      * Обработчик событий открытия карточки товара.

@@ -1,24 +1,26 @@
-package ru.evotor.framework.core.action.broadcast
+package ru.evotor.framework.kkt.event.handler.receiver
 
 import android.content.Context
 import android.os.Bundle
+import ru.evotor.framework.core.RequiresIntentAction
+import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.core.action.event.cash_operations.CashInEvent
 import ru.evotor.framework.core.action.event.cash_operations.CashOutEvent
 
 /**
- * Широковещательный приёмник событий денежных операциях.
+ * Широковещательный приёмник событий кассы.
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
-open class CashOperationBroadcastReceiver : AbstractBroadcastReceiver() {
+open class KktBroadcastReceiver : BroadcastEventReceiver() {
 
     /**
-     * Обработчик событий внесения наличности.
+     * Обработчик событий внесения наличности в кассу.
      */
     @RequiresIntentAction(ACTION_CASH_IN)
     protected open fun handleCashInEvent(context: Context, cashInEvent: CashInEvent) = Unit
 
     /**
-     * Обработчик событий изъятия наличности.
+     * Обработчик событий изъятия наличности из кассы.
      */
     @RequiresIntentAction(ACTION_CASH_OUT)
     protected open fun handleCashOutEvent(context: Context, cashOutEvent: CashOutEvent) = Unit

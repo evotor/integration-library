@@ -1,7 +1,8 @@
-package ru.evotor.framework.core.action.broadcast
+package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
 import android.os.Bundle
+import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
@@ -16,7 +17,7 @@ abstract class ReceiptBroadcastReceiver(
         private val actionPositionRemoved: String,
         private val actionReceiptCleared: String,
         private val actionReceiptClosed: String
-) : AbstractBroadcastReceiver() {
+) : BroadcastEventReceiver() {
 
     protected abstract fun handleReceiptOpenedEvent(context: Context, receiptOpenedEvent: ReceiptOpenedEvent)
 

@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.scanner
+package ru.evotor.framework.device.scanner.event
 
 import android.os.Bundle
 
@@ -16,7 +16,8 @@ class BarcodeReceivedEvent(val barcode: String) : IBundlable {
         private const val KEY_BARCODE = "ScannedCode"
 
         fun from(bundle: Bundle): BarcodeReceivedEvent? {
-            return BarcodeReceivedEvent(bundle.getString(KEY_BARCODE) ?: return null)
+            return BarcodeReceivedEvent(bundle.getString(KEY_BARCODE)
+                    ?: return null)
         }
     }
 }

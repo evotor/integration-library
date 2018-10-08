@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.broadcast
+package ru.evotor.framework.core
 
 /**
  * Прикрепляется к обработчикам событий широковещательного приёмника.

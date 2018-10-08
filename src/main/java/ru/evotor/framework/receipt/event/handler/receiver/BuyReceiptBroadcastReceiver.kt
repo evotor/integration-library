@@ -1,6 +1,7 @@
-package ru.evotor.framework.core.action.broadcast
+package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
+import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
 import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
@@ -9,10 +10,10 @@ import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClose
 import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent
 
 /**
- * Широковещательный приёмник событий чека возврата покупки.
+ * Широковещательный приёмник событий чека покупки.
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
-open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
+open class BuyReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_OPENED,
         ACTION_POSITION_ADDED,
         ACTION_POSITION_EDITED,
@@ -59,17 +60,17 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
     companion object {
 
-        const val ACTION_RECEIPT_OPENED = "evotor.intent.action.receipt.buyback.OPENED"
+        const val ACTION_RECEIPT_OPENED = "evotor.intent.action.receipt.buy.OPENED"
 
-        const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.buyback.POSITION_ADDED"
+        const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.buy.POSITION_ADDED"
 
-        const val ACTION_POSITION_EDITED = "evotor.intent.action.receipt.buyback.POSITION_EDITED"
+        const val ACTION_POSITION_EDITED = "evotor.intent.action.receipt.buy.POSITION_EDITED"
 
-        const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.buyback.POSITION_REMOVED"
+        const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.buy.POSITION_REMOVED"
 
-        const val ACTION_RECEIPT_CLEARED = "evotor.intent.action.receipt.buyback.CLEARED"
+        const val ACTION_RECEIPT_CLEARED = "evotor.intent.action.receipt.buy.CLEARED"
 
-        const val ACTION_RECEIPT_CLOSED = "evotor.intent.action.receipt.buyback.CLOSED"
+        const val ACTION_RECEIPT_CLOSED = "evotor.intent.action.receipt.buy.CLOSED"
 
     }
 
