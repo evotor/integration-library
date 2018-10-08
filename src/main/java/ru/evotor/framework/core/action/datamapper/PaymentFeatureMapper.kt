@@ -18,6 +18,7 @@ object PaymentFeatureMapper {
         val defaultPaymentFeature = PaymentFeature.CheckoutFull()
 
         val paymentFeature = bundle?.let {
+            it.classLoader = PaymentFeature::class.java.classLoader
             it.getParcelable<PaymentFeature>(KEY_PAYMENT_FEATURE)
         }
 
