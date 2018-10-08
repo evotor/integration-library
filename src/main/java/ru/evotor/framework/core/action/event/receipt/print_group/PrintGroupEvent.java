@@ -11,19 +11,31 @@ import ru.evotor.framework.payment.PaymentSystem;
 public abstract class PrintGroupEvent implements IBundlable {
     private static final String KEY_SELECTED_PAYMENT_SYSTEM = "paymentSystem";
 
-    @NonNull
+    /**
+     * @deprecated Has no longer meaning as combined payment can occur
+     */
+    @Nullable
+    @Deprecated
     private final PaymentSystem paymentSystem;
 
-    PrintGroupEvent(@NonNull PaymentSystem paymentSystem) {
+    PrintGroupEvent(@Nullable PaymentSystem paymentSystem) {
         this.paymentSystem = paymentSystem;
     }
 
+    /**
+     * @deprecated Has no longer meaning as combined payment can occur
+     */
     @Nullable
-    static PaymentSystem getPayment(@Nullable Bundle bundle) {
+    @Deprecated
+    static PaymentSystem getPaymentSystem(@Nullable Bundle bundle) {
         return bundle == null ? null : PaymentSystemMapper.from(bundle.getBundle(KEY_SELECTED_PAYMENT_SYSTEM));
     }
 
-    @NonNull
+    /**
+     * @deprecated Has no longer meaning as combined payment can occur
+     */
+    @Nullable
+    @Deprecated
     public PaymentSystem getPaymentSystem() {
         return paymentSystem;
     }
@@ -34,5 +46,4 @@ public abstract class PrintGroupEvent implements IBundlable {
         result.putBundle(KEY_SELECTED_PAYMENT_SYSTEM, PaymentSystemMapper.toBundle(paymentSystem));
         return result;
     }
-
 }
