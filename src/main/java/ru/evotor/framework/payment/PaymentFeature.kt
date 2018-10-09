@@ -33,44 +33,6 @@ sealed class PaymentFeature : Parcelable {
     }
 
     /**
-     * Неизвестно. По-умолчанию
-     */
-    class Unknown() : PaymentFeature() {
-
-        override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
-        }
-
-        override fun writeToParcel(parcel: Parcel, flags: Int) {
-            parcel.writeInt(VERSION)
-            super.writeToParcel(parcel, flags)
-        }
-
-        override fun describeContents(): Int = 0
-
-        companion object {
-            private const val VERSION = 1
-
-            @JvmStatic
-            private fun readFromParcel(parcel: Parcel): Unknown {
-                val version = parcel.readInt()
-                val dataSize = parcel.readInt()
-                val dataStartPosition = parcel.dataPosition()
-                // read fields here
-                parcel.setDataPosition(dataStartPosition + dataSize)
-                return Unknown()
-            }
-
-            @JvmField
-            val CREATOR: Parcelable.Creator<Unknown> = object : Parcelable.Creator<Unknown> {
-                override fun createFromParcel(parcel: Parcel): Unknown = readFromParcel(parcel)
-
-                override fun newArray(size: Int): Array<Unknown?> = arrayOfNulls(size)
-            }
-        }
-    }
-
-    /**
      * Полная предварительная оплата до момента передачи предмета расчета
      */
     class PrepaymentFull() : PaymentFeature() {
@@ -186,6 +148,8 @@ sealed class PaymentFeature : Parcelable {
 
     /**
      * Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи предмета расчета
+     *
+     * По-умолчанию
      */
     class CheckoutFull() : PaymentFeature() {
 

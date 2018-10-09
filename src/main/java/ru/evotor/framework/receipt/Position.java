@@ -121,10 +121,10 @@ public class Position implements Parcelable {
 
     /**
      * Признак способа расчета
-     * По умолчанию это 'UNKNOWN'
+     * По умолчанию это 'Полный расчет'
      */
     @NonNull
-    private PaymentFeature paymentFeature = new PaymentFeature.Unknown();
+    private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -445,25 +445,11 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @param attributes значения выбранных атрибутов для позиции
-     */
-    public void setAttributes(@Nullable Map<String, AttributeValue> attributes) {
-        this.attributes = attributes;
-    }
-
-    /**
      * @return признак способа расчета для позиции
      */
     @NonNull
     public PaymentFeature getPaymentFeature() {
         return paymentFeature;
-    }
-
-    /**
-     * @param paymentFeature признак способа расчета для позиции
-     */
-    public void setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
-        this.paymentFeature = paymentFeature;
     }
 
     @Override
@@ -527,7 +513,7 @@ public class Position implements Parcelable {
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 31 * result + (paymentFeature.hashCode());
+        result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
         return result;
     }
 
@@ -692,7 +678,7 @@ public class Position implements Parcelable {
     private void readPaymentFeatureField(Parcel in) {
         PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
         if (paymentFeature == null) {
-            this.paymentFeature = new PaymentFeature.Unknown();
+            this.paymentFeature = new PaymentFeature.CheckoutFull();
         } else {
             this.paymentFeature = paymentFeature;
         }

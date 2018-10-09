@@ -15,9 +15,10 @@ object PaymentFeatureMapper {
 
     @JvmStatic
     fun fromBundle(bundle: Bundle?): PaymentFeature {
-        val defaultPaymentFeature = PaymentFeature.Unknown()
+        val defaultPaymentFeature = PaymentFeature.CheckoutFull()
 
         val paymentFeature = bundle?.let {
+            it.classLoader = PaymentFeature::class.java.classLoader
             it.getParcelable<PaymentFeature>(KEY_PAYMENT_FEATURE)
         }
 

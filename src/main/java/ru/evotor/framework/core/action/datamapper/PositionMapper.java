@@ -97,7 +97,7 @@ public final class PositionMapper {
             return null;
         }
 
-        Position result = new Position(
+        Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
                 productUuid,
                 productCode,
@@ -116,10 +116,10 @@ public final class PositionMapper {
                 tareVolume == null ? null : new BigDecimal(tareVolume),
                 extraKeys,
                 subPositions
-        );
-        result.setAttributes(attributes);
-        result.setPaymentFeature(paymentFeature);
-        return result;
+        ));
+        builder.setAttributes(attributes);
+        builder.setPaymentFeature(paymentFeature);
+        return builder.build();
     }
 
     @Nullable
