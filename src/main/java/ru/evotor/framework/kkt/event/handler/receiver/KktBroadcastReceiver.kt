@@ -17,13 +17,13 @@ open class KktBroadcastReceiver : BroadcastEventReceiver() {
      * Обработчик событий внесения наличности в кассу.
      */
     @RequiresIntentAction(ACTION_CASH_IN)
-    protected open fun handleCashInEvent(context: Context, cashInEvent: CashInEvent) = Unit
+    protected open fun handleCashInEvent(context: Context, event: CashInEvent) = Unit
 
     /**
      * Обработчик событий изъятия наличности из кассы.
      */
     @RequiresIntentAction(ACTION_CASH_OUT)
-    protected open fun handleCashOutEvent(context: Context, cashOutEvent: CashOutEvent) = Unit
+    protected open fun handleCashOutEvent(context: Context, event: CashOutEvent) = Unit
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {

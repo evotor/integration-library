@@ -19,11 +19,14 @@ abstract class ScannerBroadcastReceiver : BroadcastEventReceiver() {
      */
     @RequiresPermission(RECEIVER_PERMISSION)
     @RequiresIntentAction(ACTION_BARCODE_RECEIVED)
-    protected abstract fun handleBarcodeReceivedEvent(context: Context, barcodeReceivedEvent: BarcodeReceivedEvent)
+    protected abstract fun handleBarcodeReceivedEvent(context: Context, event: BarcodeReceivedEvent)
 
     @SuppressLint("MissingPermission")
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
-        handleBarcodeReceivedEvent(context, BarcodeReceivedEvent.from(bundle) ?: return)
+        when (action) {
+            ACTION_BARCODE_RECEIVED -> handleBarcodeReceivedEvent(context, BarcodeReceivedEvent.from(bundle)
+                    ?: return)
+        }
     }
 
     companion object {

@@ -26,37 +26,37 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
      * Обработчик событий открытия чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_OPENED)
-    override fun handleReceiptOpenedEvent(context: Context, receiptOpenedEvent: ReceiptOpenedEvent) = Unit
+    override fun handleReceiptOpenedEvent(context: Context, event: ReceiptOpenedEvent) = Unit
 
     /**
      * Обработчик событий добавления позиции в чек.
      */
     @RequiresIntentAction(ACTION_POSITION_ADDED)
-    override fun handlePositionAddedEvent(context: Context, positionAddedEvent: PositionAddedEvent) = Unit
+    override fun handlePositionAddedEvent(context: Context, event: PositionAddedEvent) = Unit
 
     /**
      * Обработчик событий изменения позиции чека.
      */
     @RequiresIntentAction(ACTION_POSITION_EDITED)
-    override fun handlePositionEditedEvent(context: Context, positionEditedEvent: PositionEditedEvent) = Unit
+    override fun handlePositionEditedEvent(context: Context, event: PositionEditedEvent) = Unit
 
     /**
      * Обработчик событий удаления позиции чека.
      */
     @RequiresIntentAction(ACTION_POSITION_REMOVED)
-    override fun handlePositionRemovedEvent(context: Context, positionRemovedEvent: PositionRemovedEvent) = Unit
+    override fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent) = Unit
 
     /**
      * Обработчик событий очистки чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_CLEARED)
-    override fun handleReceiptClearedEvent(context: Context, receiptClearedEvent: ReceiptClearedEvent) = Unit
+    override fun handleReceiptClearedEvent(context: Context, event: ReceiptClearedEvent) = Unit
 
     /**
      * Обработчик событий закрытия чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_CLOSED)
-    override fun handleReceiptClosedEvent(context: Context, receiptClosedEvent: ReceiptClosedEvent) = Unit
+    override fun handleReceiptClosedEvent(context: Context, event: ReceiptClosedEvent) = Unit
 
     companion object {
 

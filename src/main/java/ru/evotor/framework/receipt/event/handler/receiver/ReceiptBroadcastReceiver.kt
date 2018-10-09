@@ -19,26 +19,32 @@ abstract class ReceiptBroadcastReceiver(
         private val actionReceiptClosed: String
 ) : BroadcastEventReceiver() {
 
-    protected abstract fun handleReceiptOpenedEvent(context: Context, receiptOpenedEvent: ReceiptOpenedEvent)
+    protected abstract fun handleReceiptOpenedEvent(context: Context, event: ReceiptOpenedEvent)
 
-    protected abstract fun handlePositionAddedEvent(context: Context, positionAddedEvent: PositionAddedEvent)
+    protected abstract fun handlePositionAddedEvent(context: Context, event: PositionAddedEvent)
 
-    protected abstract fun handlePositionEditedEvent(context: Context, positionEditedEvent: PositionEditedEvent)
+    protected abstract fun handlePositionEditedEvent(context: Context, event: PositionEditedEvent)
 
-    protected abstract fun handlePositionRemovedEvent(context: Context, positionRemovedEvent: PositionRemovedEvent)
+    protected abstract fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent)
 
-    protected abstract fun handleReceiptClearedEvent(context: Context, receiptClearedEvent: ReceiptClearedEvent)
+    protected abstract fun handleReceiptClearedEvent(context: Context, event: ReceiptClearedEvent)
 
-    protected abstract fun handleReceiptClosedEvent(context: Context, receiptClosedEvent: ReceiptClosedEvent)
+    protected abstract fun handleReceiptClosedEvent(context: Context, event: ReceiptClosedEvent)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            actionReceiptOpened -> handleReceiptOpenedEvent(context, ReceiptOpenedEvent.create(bundle) ?: return)
-            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.create(bundle) ?: return)
-            actionPositionEdited -> handlePositionEditedEvent(context, PositionEditedEvent.create(bundle) ?: return)
-            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.create(bundle) ?: return)
-            actionReceiptCleared -> handleReceiptClearedEvent(context, ReceiptClearedEvent.create(bundle) ?: return)
-            actionReceiptClosed -> handleReceiptClosedEvent(context, ReceiptClosedEvent.create(bundle) ?: return)
+            actionReceiptOpened -> handleReceiptOpenedEvent(context, ReceiptOpenedEvent.create(bundle)
+                    ?: return)
+            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.create(bundle)
+                    ?: return)
+            actionPositionEdited -> handlePositionEditedEvent(context, PositionEditedEvent.create(bundle)
+                    ?: return)
+            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.create(bundle)
+                    ?: return)
+            actionReceiptCleared -> handleReceiptClearedEvent(context, ReceiptClearedEvent.create(bundle)
+                    ?: return)
+            actionReceiptClosed -> handleReceiptClosedEvent(context, ReceiptClosedEvent.create(bundle)
+                    ?: return)
         }
     }
 

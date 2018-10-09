@@ -16,10 +16,13 @@ abstract class CashDrawerBroadcastReceiver : BroadcastEventReceiver() {
      * Обработчик событий открытия денежного ящика.
      */
     @RequiresIntentAction(ACTION_CASH_DRAWER_OPENED)
-    protected abstract fun handleCashDrawerOpenedEvent(context: Context, cashDrawerOpenedEvent: CashDrawerOpenEvent)
+    protected abstract fun handleCashDrawerOpenedEvent(context: Context, event: CashDrawerOpenEvent)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
-        handleCashDrawerOpenedEvent(context, CashDrawerOpenEvent.create(bundle) ?: return)
+        when (action) {
+            ACTION_CASH_DRAWER_OPENED -> handleCashDrawerOpenedEvent(context, CashDrawerOpenEvent.create(bundle)
+                    ?: return)
+        }
     }
 
     companion object {
