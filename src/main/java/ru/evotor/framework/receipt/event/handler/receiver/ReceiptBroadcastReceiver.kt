@@ -3,12 +3,12 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.BroadcastEventReceiver
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClearedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClosedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent
+import ru.evotor.framework.receipt.event.ReceiptClearedEvent
+import ru.evotor.framework.receipt.event.ReceiptClosedEvent
+import ru.evotor.framework.receipt.event.ReceiptOpenedEvent
+import ru.evotor.framework.receipt.position.event.PositionAddedEvent
+import ru.evotor.framework.receipt.position.event.PositionEditedEvent
+import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 
 abstract class ReceiptBroadcastReceiver(
         private val actionReceiptOpened: String,
@@ -33,17 +33,17 @@ abstract class ReceiptBroadcastReceiver(
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            actionReceiptOpened -> handleReceiptOpenedEvent(context, ReceiptOpenedEvent.create(bundle)
+            actionReceiptOpened -> handleReceiptOpenedEvent(context, ReceiptOpenedEvent.from(bundle)
                     ?: return)
-            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.create(bundle)
+            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.from(bundle)
                     ?: return)
-            actionPositionEdited -> handlePositionEditedEvent(context, PositionEditedEvent.create(bundle)
+            actionPositionEdited -> handlePositionEditedEvent(context, PositionEditedEvent.from(bundle)
                     ?: return)
-            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.create(bundle)
+            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.from(bundle)
                     ?: return)
-            actionReceiptCleared -> handleReceiptClearedEvent(context, ReceiptClearedEvent.create(bundle)
+            actionReceiptCleared -> handleReceiptClearedEvent(context, ReceiptClearedEvent.from(bundle)
                     ?: return)
-            actionReceiptClosed -> handleReceiptClosedEvent(context, ReceiptClosedEvent.create(bundle)
+            actionReceiptClosed -> handleReceiptClosedEvent(context, ReceiptClosedEvent.from(bundle)
                     ?: return)
         }
     }

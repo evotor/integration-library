@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.core.BroadcastEventReceiver
-import ru.evotor.framework.core.action.event.cash_operations.CashInEvent
-import ru.evotor.framework.core.action.event.cash_operations.CashOutEvent
+import ru.evotor.framework.kkt.event.CashInEvent
+import ru.evotor.framework.kkt.event.CashOutEvent
 
 /**
  * Широковещательный приёмник событий кассы.
@@ -27,8 +27,8 @@ open class KktBroadcastReceiver : BroadcastEventReceiver() {
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            ACTION_CASH_IN -> handleCashInEvent(context, CashInEvent.create(bundle) ?: return)
-            ACTION_CASH_OUT -> handleCashOutEvent(context, CashOutEvent.create(bundle) ?: return)
+            ACTION_CASH_IN -> handleCashInEvent(context, CashInEvent.from(bundle) ?: return)
+            ACTION_CASH_OUT -> handleCashOutEvent(context, CashOutEvent.from(bundle) ?: return)
         }
     }
 

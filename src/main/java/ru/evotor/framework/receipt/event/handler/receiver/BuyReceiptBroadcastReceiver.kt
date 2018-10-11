@@ -2,12 +2,12 @@ package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionAddedEvent
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionEditedEvent
-import ru.evotor.framework.core.action.event.receipt.position_edited.PositionRemovedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClearedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptClosedEvent
-import ru.evotor.framework.core.action.event.receipt.receipt_edited.ReceiptOpenedEvent
+import ru.evotor.framework.receipt.event.ReceiptClearedEvent
+import ru.evotor.framework.receipt.event.ReceiptClosedEvent
+import ru.evotor.framework.receipt.event.ReceiptOpenedEvent
+import ru.evotor.framework.receipt.position.event.PositionAddedEvent
+import ru.evotor.framework.receipt.position.event.PositionEditedEvent
+import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 
 /**
  * Широковещательный приёмник событий чека покупки.

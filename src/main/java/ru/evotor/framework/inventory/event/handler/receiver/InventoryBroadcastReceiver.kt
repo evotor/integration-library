@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.core.BroadcastEventReceiver
-import ru.evotor.framework.core.action.event.inventory.ProductCardOpenedEvent
+import ru.evotor.framework.inventory.event.ProductCardOpenedEvent
 
 /**
  * Широковещательный приёмник товароучётных событий.
@@ -20,7 +20,7 @@ open class InventoryBroadcastReceiver : BroadcastEventReceiver() {
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            ACTION_PRODUCT_CARD_OPENED -> handleProductCardOpenedEvent(context, ProductCardOpenedEvent.create(bundle)
+            ACTION_PRODUCT_CARD_OPENED -> handleProductCardOpenedEvent(context, ProductCardOpenedEvent.from(bundle)
                     ?: return)
         }
     }

@@ -15,8 +15,8 @@ class BarcodeReceivedEvent(val barcode: String) : IBundlable {
     companion object {
         private const val KEY_BARCODE = "ScannedCode"
 
-        fun from(bundle: Bundle): BarcodeReceivedEvent? {
-            return BarcodeReceivedEvent(bundle.getString(KEY_BARCODE)
+        fun from(bundle: Bundle?): BarcodeReceivedEvent? = bundle?.let {
+            BarcodeReceivedEvent(bundle.getString(KEY_BARCODE)
                     ?: return null)
         }
     }
