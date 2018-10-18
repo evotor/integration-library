@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;
 
 /**
- * @deprecated Используйте {@link ru.evotor.framework.kkt.event.CashInEvent}
+ * @deprecated Используйте {@link ru.evotor.framework.kkt.event.CashInsertedEvent}
  */
 @Deprecated
 public class CashInEvent extends CashOperationEvent {
