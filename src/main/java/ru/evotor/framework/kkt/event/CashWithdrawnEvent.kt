@@ -7,8 +7,8 @@ class CashWithdrawnEvent(documentUuid: String, total: BigDecimal) : CashOperatio
     companion object {
         fun from(bundle: Bundle?): CashWithdrawnEvent? = bundle?.let {
             CashWithdrawnEvent(
-                    getDocumentUuid(bundle) ?: return null,
-                    getTotal(bundle) ?: return null
+                    getDocumentUuid(it) ?: return null,
+                    getTotal(it) ?: return null
             )
         }
     }

@@ -26,4 +26,5 @@ abstract class CashOperationEvent internal constructor(val documentUuid: String,
         internal fun getTotal(bundle: Bundle): BigDecimal? = BundleUtils.getMoney(bundle, KEY_TOTAL)
 
     }
+
 }

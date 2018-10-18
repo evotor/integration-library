@@ -13,10 +13,11 @@ abstract class ProductEvent internal constructor(val productUuid: String?) : IBu
     }
 
     companion object {
+
         private const val KEY_PRODUCT_UUID = "productUuid"
 
-        internal fun getProductUuid(bundle: Bundle): String? {
-            return bundle.getString(KEY_PRODUCT_UUID)
-        }
+        internal fun getProductUuid(bundle: Bundle): String? = bundle.getString(KEY_PRODUCT_UUID)
+
     }
+
 }

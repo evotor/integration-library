@@ -8,8 +8,9 @@ class PositionRemovedEvent(receiptUuid: String, position: Position) : PositionEv
     companion object {
         fun from(bundle: Bundle?): PositionRemovedEvent? = bundle?.let {
             PositionRemovedEvent(
-                    PositionEvent.getReceiptUuid(bundle) ?: return null,
-                    PositionEvent.getPosition(bundle) ?: return null)
+                    PositionEvent.getReceiptUuid(it) ?: return null,
+                    PositionEvent.getPosition(it) ?: return null
+            )
         }
     }
 }

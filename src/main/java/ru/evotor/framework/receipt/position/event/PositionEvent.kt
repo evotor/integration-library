@@ -29,5 +29,7 @@ abstract class PositionEvent internal constructor(
 
         internal fun getPosition(bundle: Bundle): Position? =
                 PositionMapper.from(bundle.getBundle(KEY_POSITION))
+
     }
+
 }

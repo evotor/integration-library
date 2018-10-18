@@ -4,9 +4,7 @@ import android.os.Bundle
 
 import ru.evotor.IBundlable
 
-abstract class CashDrawerEvent constructor(val cashDrawerId: Int) : IBundlable {
-
-    constructor(extras: Bundle) : this(extras.getInt(KEY_CASH_DRAWER_ID, -1))
+abstract class CashDrawerEvent internal constructor(val cashDrawerId: Int) : IBundlable {
 
     override fun toBundle(): Bundle {
         val result = Bundle()
@@ -15,6 +13,10 @@ abstract class CashDrawerEvent constructor(val cashDrawerId: Int) : IBundlable {
     }
 
     companion object {
+
         private const val KEY_CASH_DRAWER_ID = "cashDrawerId"
+
+        internal fun getCashDrawerId(bundle: Bundle) = bundle.getInt(KEY_CASH_DRAWER_ID, -1)
+
     }
 }

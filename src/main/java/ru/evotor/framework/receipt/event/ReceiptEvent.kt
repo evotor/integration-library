@@ -20,4 +20,5 @@ abstract class ReceiptEvent internal constructor(val receiptUuid: String) : IBun
                 bundle.getString(KEY_RECEIPT_UUID, null)
 
     }
+
 }

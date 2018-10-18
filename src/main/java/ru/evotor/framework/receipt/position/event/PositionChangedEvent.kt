@@ -8,8 +8,9 @@ class PositionChangedEvent(receiptUuid: String, position: Position) : PositionEv
     companion object {
         fun from(bundle: Bundle?): PositionChangedEvent? = bundle?.let {
             PositionChangedEvent(
-                    PositionEvent.getReceiptUuid(bundle) ?: return null,
-                    PositionEvent.getPosition(bundle) ?: return null)
+                    PositionEvent.getReceiptUuid(it) ?: return null,
+                    PositionEvent.getPosition(it) ?: return null
+            )
         }
     }
 }
