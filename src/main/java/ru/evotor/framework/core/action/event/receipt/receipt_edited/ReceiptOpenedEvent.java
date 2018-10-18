@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptOpenedEvent}
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptCreatedEvent}
  */
 @Deprecated
 public class ReceiptOpenedEvent extends ReceiptEvent {

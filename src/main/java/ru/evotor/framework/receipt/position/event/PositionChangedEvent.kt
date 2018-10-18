@@ -4,10 +4,10 @@ import android.os.Bundle
 
 import ru.evotor.framework.receipt.Position
 
-class PositionEditedEvent(receiptUuid: String, position: Position) : PositionEvent(receiptUuid, position) {
+class PositionChangedEvent(receiptUuid: String, position: Position) : PositionEvent(receiptUuid, position) {
     companion object {
-        fun from(bundle: Bundle?): PositionEditedEvent? = bundle?.let {
-            PositionEditedEvent(
+        fun from(bundle: Bundle?): PositionChangedEvent? = bundle?.let {
+            PositionChangedEvent(
                     PositionEvent.getReceiptUuid(bundle) ?: return null,
                     PositionEvent.getPosition(bundle) ?: return null)
         }

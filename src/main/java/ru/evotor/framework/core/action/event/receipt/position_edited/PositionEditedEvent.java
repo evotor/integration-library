@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import ru.evotor.framework.receipt.Position;
 
 /**
- * @deprecated Используйте {@link ru.evotor.framework.receipt.position.event.PositionEditedEvent}
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.position.event.PositionChangedEvent}
  */
 @Deprecated
 public class PositionEditedEvent extends PositionEvent {
