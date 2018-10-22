@@ -5,9 +5,9 @@ import android.os.Bundle
 import ru.evotor.framework.receipt.Position
 
 /**
- * Событие добавления позиции в чек.
+ * Событие обновления позиции чека.
  *
- * Происходит при добавлении позиции в чек, который в данный момент формируется в системе смарт-терминала.
+ * Происходит при изменении данных позиции чека, который в данный момент формируется в системе смарт-терминала.
  *
  * Обрабатывать это событие можно с помощью следующих широковещательных приёмников:
  * [ru.evotor.framework.receipt.event.handler.receiver.SellReceiptBroadcastReceiver]
@@ -16,12 +16,12 @@ import ru.evotor.framework.receipt.Position
  * [ru.evotor.framework.receipt.event.handler.receiver.BuybackReceiptBroadcastReceiver]
  *
  * @param receiptUuid uuid чека
- * @param position добавленная позиция
+ * @param position обновлённая позиция
  */
-class PositionAddedEvent(receiptUuid: String, position: Position) : PositionEvent(receiptUuid, position) {
+class PositionUpdatedEvent(receiptUuid: String, position: Position) : PositionEvent(receiptUuid, position) {
     companion object {
-        fun from(bundle: Bundle?): PositionAddedEvent? = bundle?.let {
-            PositionAddedEvent(
+        fun from(bundle: Bundle?): PositionUpdatedEvent? = bundle?.let {
+            PositionUpdatedEvent(
                     PositionEvent.getReceiptUuid(it) ?: return null,
                     PositionEvent.getPosition(it) ?: return null
             )

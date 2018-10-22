@@ -3,10 +3,10 @@ package ru.evotor.framework.receipt.event
 import android.os.Bundle
 
 /**
- * Событие удаления чека.
+ * Событие завершения чека.
  *
- * Происходит при удалении незавершенного чека из системы смарт-терминала,
- * например, при нажатии на кнопку "Удалить чек" в интерфейсе приложения "Продажа".
+ * Происходит при успешном завершении формирования чека в системе смарт-терминала,
+ * например, при успешном совершении продажи.
  *
  * Обрабатывать это событие можно с помощью следующих широковещательных приёмников:
  * [ru.evotor.framework.receipt.event.handler.receiver.SellReceiptBroadcastReceiver]
@@ -16,10 +16,10 @@ import android.os.Bundle
  *
  * @param receiptUuid uuid чека
  */
-class ReceiptDeletedEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
+class ReceiptCompletedEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
     companion object {
-        fun from(bundle: Bundle?): ReceiptDeletedEvent? = bundle?.let {
-            ReceiptDeletedEvent(ReceiptEvent.getReceiptUuid(it) ?: return null)
+        fun from(bundle: Bundle?): ReceiptCompletedEvent? = bundle?.let {
+            ReceiptCompletedEvent(ReceiptEvent.getReceiptUuid(it) ?: return null)
         }
     }
 }

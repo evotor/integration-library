@@ -4,6 +4,16 @@ import android.os.Bundle
 
 import ru.evotor.IBundlable
 
+/**
+ * Событие получения штрихкода.
+ *
+ * Происходит при сканировании штрихкода сканером штрихкодов, подключённым к смарт-терминалу.
+ *
+ * Обрабатывать это событие можно с помощью широковещательного приёмника событий сканера штрихкодов:
+ * [ru.evotor.framework.device.scanner.event.handler.receiver.ScannerBroadcastReceiver]
+ *
+ * @param barcode отсканированный штрихкод
+ */
 class BarcodeReceivedEvent(val barcode: String) : IBundlable {
 
     override fun toBundle(): Bundle {

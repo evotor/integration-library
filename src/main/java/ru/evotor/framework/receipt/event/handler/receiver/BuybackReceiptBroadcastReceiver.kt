@@ -2,11 +2,11 @@ package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.receipt.event.ReceiptClearedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
-import ru.evotor.framework.receipt.position.event.PositionChangedEvent
+import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 
 /**
@@ -16,14 +16,14 @@ import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_CREATED,
         ACTION_POSITION_ADDED,
-        ACTION_POSITION_CHANGED,
+        ACTION_POSITION_UPDATED,
         ACTION_POSITION_REMOVED,
-        ACTION_RECEIPT_CLEARED,
-        ACTION_RECEIPT_DELETED
+        ACTION_RECEIPT_DELETED,
+        ACTION_RECEIPT_COMPLETED
 ) {
 
     /**
-     * Обработчик событий открытия чека.
+     * Обработчик событий создания чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_CREATED)
     override fun handleReceiptCreatedEvent(context: Context, event: ReceiptCreatedEvent) = Unit
@@ -35,28 +35,28 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handlePositionAddedEvent(context: Context, event: PositionAddedEvent) = Unit
 
     /**
-     * Обработчик событий изменения позиции чека.
+     * Обработчик событий обновления позиции чека.
      */
-    @RequiresIntentAction(ACTION_POSITION_CHANGED)
-    override fun handlePositionChangedEvent(context: Context, event: PositionChangedEvent) = Unit
+    @RequiresIntentAction(ACTION_POSITION_UPDATED)
+    override fun handlePositionUpdatedEvent(context: Context, event: PositionUpdatedEvent) = Unit
 
     /**
-     * Обработчик событий удаления позиции чека.
+     * Обработчик событий удаления позиции из чека.
      */
     @RequiresIntentAction(ACTION_POSITION_REMOVED)
     override fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent) = Unit
 
     /**
-     * Обработчик событий очистки чека.
-     */
-    @RequiresIntentAction(ACTION_RECEIPT_CLEARED)
-    override fun handleReceiptClearedEvent(context: Context, event: ReceiptClearedEvent) = Unit
-
-    /**
-     * Обработчик событий закрытия чека.
+     * Обработчик событий удаления чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_DELETED)
     override fun handleReceiptDeletedEvent(context: Context, event: ReceiptDeletedEvent) = Unit
+
+    /**
+     * Обработчик событий завершения чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_COMPLETED)
+    override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
     companion object {
 
@@ -64,13 +64,13 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.buyback.POSITION_ADDED"
 
-        const val ACTION_POSITION_CHANGED = "evotor.intent.action.receipt.buyback.POSITION_EDITED"
+        const val ACTION_POSITION_UPDATED = "evotor.intent.action.receipt.buyback.POSITION_EDITED"
 
         const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.buyback.POSITION_REMOVED"
 
-        const val ACTION_RECEIPT_CLEARED = "evotor.intent.action.receipt.buyback.CLEARED"
+        const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.buyback.CLEARED"
 
-        const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.buyback.CLOSED"
+        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.buyback.CLOSED"
 
     }
 
