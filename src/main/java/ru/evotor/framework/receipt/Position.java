@@ -20,6 +20,8 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.organisations.Agent;
+import ru.evotor.framework.organisations.Producer;
 import ru.evotor.framework.payment.PaymentFeature;
 
 public class Position implements Parcelable {
@@ -125,6 +127,18 @@ public class Position implements Parcelable {
      */
     @NonNull
     private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
+
+    /**
+     * Поставщик
+     */
+    @Nullable
+    private Producer producer;
+
+    /**
+     * Агент
+     */
+    @Nullable
+    private Agent agent;
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -452,6 +466,22 @@ public class Position implements Parcelable {
         return paymentFeature;
     }
 
+    /**
+     * @return Поставщик
+     */
+    @Nullable
+    public Producer getProducer() {
+        return producer;
+    }
+
+    /**
+     * @return Агент
+     */
+    @Nullable
+    public Agent getAgent() {
+        return agent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -489,6 +519,8 @@ public class Position implements Parcelable {
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
         if (paymentFeature != position.paymentFeature) return false;
+        if (producer != position.producer) return false;
+        if (agent != position.agent) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -514,6 +546,8 @@ public class Position implements Parcelable {
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
+        result = 31 * result + (producer != null ? producer.hashCode() : 0);
+        result = 31 * result + (agent != null ? agent.hashCode() : 0);
         return result;
     }
 
@@ -540,6 +574,8 @@ public class Position implements Parcelable {
                 ", subPositions=" + subPositions +
                 ", attributes=" + attributes +
                 ", paymentFeature=" + paymentFeature +
+                ", producer=" + producer +
+                ", agent=" + agent +
                 '}';
     }
 
@@ -895,6 +931,16 @@ public class Position implements Parcelable {
 
         public Builder setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
             position.paymentFeature = paymentFeature;
+            return this;
+        }
+
+        public Builder setProducer(@Nullable Producer producer) {
+            position.producer = producer;
+            return this;
+        }
+
+        public Builder setAgent(@Nullable Agent agent) {
+            position.agent = agent;
             return this;
         }
 
