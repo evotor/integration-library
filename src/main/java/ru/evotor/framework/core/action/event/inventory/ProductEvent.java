@@ -6,6 +6,10 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.inventory.event.ProductEvent}
+ */
+@Deprecated
 public abstract class ProductEvent implements IBundlable {
     private static final String KEY_PRODUCT_UUID = "productUuid";
 
