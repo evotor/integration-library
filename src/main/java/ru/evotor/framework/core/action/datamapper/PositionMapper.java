@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.payment.PaymentFeature;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
@@ -38,6 +41,8 @@ public final class PositionMapper {
     private static final String KEY_TARE_VOLUME = "tareVolume";
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
+    private static final String KEY_ATTRIBUTES = "attributes";
+    private static final String KEY_PAYMENT_FEATURE = "paymentFeature";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -79,6 +84,12 @@ public final class PositionMapper {
             }
         }
 
+        Map<String, AttributeValue> attributes =
+                PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
+
+        PaymentFeature paymentFeature =
+                PaymentFeatureMapper.fromBundle(bundle.getBundle(KEY_PAYMENT_FEATURE));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -86,7 +97,7 @@ public final class PositionMapper {
             return null;
         }
 
-        return new Position(
+        Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
                 productUuid,
                 productCode,
@@ -105,7 +116,10 @@ public final class PositionMapper {
                 tareVolume == null ? null : new BigDecimal(tareVolume),
                 extraKeys,
                 subPositions
-        );
+        ));
+        builder.setAttributes(attributes);
+        builder.setPaymentFeature(paymentFeature);
+        return builder.build();
     }
 
     @Nullable
@@ -148,6 +162,8 @@ public final class PositionMapper {
         }
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
+        bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
+        bundle.putBundle(KEY_PAYMENT_FEATURE, PaymentFeatureMapper.toBundle(position.getPaymentFeature()));
         return bundle;
     }
 

@@ -7,17 +7,30 @@ import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
+import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.payment.PaymentFeature;
 
 public class Position implements Parcelable {
+    /**
+     * Текущая версия объекта Position
+     */
+    private static final int VERSION = 2;
+    /**
+     * Magic number для идентификации использования версионирования объекта
+     */
+    private static final int MAGIC_NUMBER = 8800;
     /**
      * UUID позиции
      */
@@ -93,10 +106,25 @@ public class Position implements Parcelable {
      * Экстра ключи
      */
     private Set<ExtraKey> extraKeys = new HashSet<>();
-    /*
+    /**
      * Подпозиции (модификаторы)
      */
     private List<Position> subPositions = new ArrayList<>();
+
+    /**
+     * Атрибуты
+     * ключ - id словаря для вариантов аттрибута
+     * значение - выбранный элемент из словаря аттрибутов
+     */
+    @Nullable
+    private Map<String, AttributeValue> attributes;
+
+    /**
+     * Признак способа расчета
+     * По умолчанию это 'Полный расчет'
+     */
+    @NonNull
+    private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -144,21 +172,21 @@ public class Position implements Parcelable {
 
     public Position(
             String uuid,
-            String productUuid,
-            String productCode,
+            @Nullable String productUuid,
+            @Nullable String productCode,
             ProductType productType,
             String name,
             String measureName,
             int measurePrecision,
-            TaxNumber taxNumber,
+            @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
-            String barcode,
+            @Nullable String barcode,
             String mark,
-            BigDecimal alcoholByVolume,
-            Long alcoholProductKindCode,
-            BigDecimal tareVolume,
+            @Nullable BigDecimal alcoholByVolume,
+            @Nullable Long alcoholProductKindCode,
+            @Nullable BigDecimal tareVolume,
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
@@ -205,6 +233,8 @@ public class Position implements Parcelable {
                 position.getExtraKeys(),
                 position.getSubPositions()
         );
+        this.attributes = position.getAttributes();
+        this.paymentFeature = position.getPaymentFeature();
     }
 
     /**
@@ -406,6 +436,22 @@ public class Position implements Parcelable {
         return subPositions;
     }
 
+    /**
+     * @return значения атрибутов позиции
+     */
+    @Nullable
+    public Map<String, AttributeValue> getAttributes() {
+        return attributes;
+    }
+
+    /**
+     * @return признак способа расчета для позиции
+     */
+    @NonNull
+    public PaymentFeature getPaymentFeature() {
+        return paymentFeature;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -440,6 +486,9 @@ public class Position implements Parcelable {
             return false;
         if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
             return false;
+        if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
+            return false;
+        if (paymentFeature != position.paymentFeature) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -463,7 +512,35 @@ public class Position implements Parcelable {
         result = 31 * result + (tareVolume != null ? tareVolume.hashCode() : 0);
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
+        result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "uuid='" + uuid + '\'' +
+                ", productUuid='" + productUuid + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", productType=" + productType +
+                ", name='" + name + '\'' +
+                ", measureName='" + measureName + '\'' +
+                ", measurePrecision=" + measurePrecision +
+                ", taxNumber=" + taxNumber +
+                ", price=" + price +
+                ", priceWithDiscountPosition=" + priceWithDiscountPosition +
+                ", quantity=" + quantity +
+                ", barcode='" + barcode + '\'' +
+                ", mark='" + mark + '\'' +
+                ", alcoholByVolume=" + alcoholByVolume +
+                ", alcoholProductKindCode=" + alcoholProductKindCode +
+                ", tareVolume=" + tareVolume +
+                ", extraKeys=" + extraKeys +
+                ", subPositions=" + subPositions +
+                ", attributes=" + attributes +
+                ", paymentFeature=" + paymentFeature +
+                '}';
     }
 
     @Override
@@ -489,8 +566,42 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.alcoholByVolume);
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
-        dest.writeList(new ArrayList<>(this.extraKeys));
+        dest.writeTypedArray(this.extraKeys.toArray(new ExtraKey[this.extraKeys.size()]), flags);
         dest.writeTypedList(this.subPositions);
+        dest.writeInt(MAGIC_NUMBER);
+        dest.writeInt(VERSION);
+        // Determine position in parcel for writing data size
+        int dataSizePosition = dest.dataPosition();
+        // Use integer placeholder for additional data size
+        dest.writeInt(0);
+        //Determine position of data start
+        int startDataPosition = dest.dataPosition();
+
+        //Write additional data
+        writeAdditionalFields(dest, flags);
+
+        // Calculate additional data size
+        int dataSize = dest.dataPosition() - startDataPosition;
+        // Save position at the end of data
+        int endOfDataPosition = dest.dataPosition();
+        //Set position to start to write additional data size
+        dest.setDataPosition(dataSizePosition);
+        dest.writeInt(dataSize);
+        // Go back to the end of parcel
+        dest.setDataPosition(endOfDataPosition);
+    }
+
+    private void writeAdditionalFields(Parcel dest, int flags) {
+        // Attributes
+        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
+        if (this.attributes != null) {
+            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeParcelable(entry.getValue(), flags);
+            }
+        }
+        // Payment features
+        dest.writeParcelable(this.paymentFeature, flags);
     }
 
     protected Position(Parcel in) {
@@ -512,12 +623,65 @@ public class Position implements Parcelable {
         this.alcoholByVolume = (BigDecimal) in.readSerializable();
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
-        List<ExtraKey> extraKeyList = new ArrayList<>();
-        in.readList(extraKeyList, ExtraKey.class.getClassLoader());
-        this.extraKeys.addAll(extraKeyList);
-        List<Position> subPositions = new ArrayList<>();
-        in.readTypedList(subPositions, Position.CREATOR);
-        this.subPositions = subPositions;
+        this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
+        this.subPositions = in.createTypedArrayList(Position.CREATOR);
+        readAdditionalFields(in);
+    }
+
+    private void readAdditionalFields(Parcel in) {
+
+        boolean isVersionGreaterThanCurrent = false;
+        int startReadingPosition = in.dataPosition();
+
+        // Check if available data size is more than integer size and versioning is supported
+        if (in.dataAvail() <= 4 || in.readInt() != MAGIC_NUMBER) {
+            // Versioning is not supported return pointer to start position and end reading
+            in.setDataPosition(startReadingPosition);
+            return;
+        }
+        //Read object version
+        int version = in.readInt();
+        int dataSize = in.readInt();
+        int startDataPosition = in.dataPosition();
+
+        if (version > VERSION) {
+            isVersionGreaterThanCurrent = true;
+        }
+        switch (version) {
+            case 1: {
+                readAttributesField(in);
+                break;
+            }
+            case 2: {
+                readAttributesField(in);
+                readPaymentFeatureField(in);
+            }
+        }
+
+        if (isVersionGreaterThanCurrent) {
+            in.setDataPosition(startDataPosition + dataSize);
+        }
+    }
+
+    private void readAttributesField(Parcel in) {
+        int attributesSize = in.readInt();
+        if (attributesSize > 0) {
+            this.attributes = new HashMap<>(attributesSize);
+            for (int i = 0; i < attributesSize; i++) {
+                String key = in.readString();
+                AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                this.attributes.put(key, value);
+            }
+        }
+    }
+
+    private void readPaymentFeatureField(Parcel in) {
+        PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
+        if (paymentFeature == null) {
+            this.paymentFeature = new PaymentFeature.CheckoutFull();
+        } else {
+            this.paymentFeature = paymentFeature;
+        }
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -531,30 +695,6 @@ public class Position implements Parcelable {
             return new Position[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "Position{" +
-                "uuid='" + uuid + '\'' +
-                ", productUuid='" + productUuid + '\'' +
-                ", productCode='" + productCode + '\'' +
-                ", productType=" + productType +
-                ", name='" + name + '\'' +
-                ", measureName='" + measureName + '\'' +
-                ", measurePrecision=" + measurePrecision +
-                ", taxNumber=" + taxNumber +
-                ", price=" + price +
-                ", priceWithDiscountPosition=" + priceWithDiscountPosition +
-                ", quantity=" + quantity +
-                ", barcode='" + barcode + '\'' +
-                ", mark='" + mark + '\'' +
-                ", alcoholByVolume=" + alcoholByVolume +
-                ", alcoholProductKindCode=" + alcoholProductKindCode +
-                ", tareVolume=" + tareVolume +
-                ", extraKeys=" + extraKeys +
-                ", subPositions=" + subPositions +
-                '}';
-    }
 
     public static final class Builder {
         public static Builder newInstance(
@@ -748,8 +888,19 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setAttributes(@Nullable Map<String, AttributeValue> attributes) {
+            position.attributes = attributes;
+            return this;
+        }
+
+        public Builder setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
+            position.paymentFeature = paymentFeature;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
     }
+
 }

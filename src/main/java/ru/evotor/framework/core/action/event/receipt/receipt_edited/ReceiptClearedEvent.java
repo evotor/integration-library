@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptDeletedEvent}
+ */
+@Deprecated
 public class ReceiptClearedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT_CLEARED = "evotor.intent.action.receipt.sell.CLEARED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT_CLEARED = "evotor.intent.action.receipt.payback.CLEARED";

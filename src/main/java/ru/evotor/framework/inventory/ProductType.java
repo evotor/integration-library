@@ -5,5 +5,23 @@ package ru.evotor.framework.inventory;
  */
 
 public enum ProductType {
-    NORMAL, ALCOHOL_MARKED, ALCOHOL_NOT_MARKED, SERVICE
+    /**
+     * Товар
+     */
+    NORMAL,
+
+    /**
+     * Маркированный алкоголь
+     */
+    ALCOHOL_MARKED,
+
+    /**
+     * Немаркированный алкоголь
+     */
+    ALCOHOL_NOT_MARKED,
+
+    /**
+     * Услуга
+     */
+    SERVICE
 }

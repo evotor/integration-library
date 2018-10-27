@@ -23,7 +23,7 @@ public class ErrorDescription extends AbstractInnerParcelable {
     public ErrorDescription(Parcel parcel) {
         errorCode = parcel.readInt();
         errorUserDescription = parcel.readString();
-        errorExtension = AbstractResult.createErrorExtension(errorCode, parcel);
+        errorExtension = ErrorDescriptionPacker.createErrorExtension(errorCode, parcel);
     }
 
     public int getErrorCode() {

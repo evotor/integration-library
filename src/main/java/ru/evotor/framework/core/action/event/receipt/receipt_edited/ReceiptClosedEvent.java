@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptCompletedEvent}
+ */
+@Deprecated
 public class ReceiptClosedEvent extends ReceiptEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT_CLOSED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT_CLOSED = "evotor.intent.action.receipt.payback.RECEIPT_CLOSED";

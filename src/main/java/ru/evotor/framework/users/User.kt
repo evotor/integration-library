@@ -11,4 +11,25 @@ data class User(
         val pin: String?,
         val roleUuid: String,
         val roleTitle: String
-)
+) {
+    var inn: String? = null
+
+    constructor(uuid: String,
+                secondName: String?,
+                firstName: String?,
+                inn: String?,
+                phone: String?,
+                pin: String?,
+                roleUuid: String,
+                roleTitle: String) : this(
+            uuid,
+            secondName,
+            firstName,
+            phone,
+            pin,
+            roleUuid,
+            roleTitle
+    ) {
+        this.inn = inn
+    }
+}
