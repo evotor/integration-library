@@ -1,20 +1,21 @@
-package ru.evotor.framework.organisation.agent.mapper
+package ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper
 
 import android.os.Bundle
-import ru.evotor.framework.organisation.agent.Agent
-import ru.evotor.framework.organisation.mapper.OrganisationMapper
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
+import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 import java.lang.Exception
 
 internal object AgentMapper {
 
-    private const val KEY_TYPE = "type"
+    private const val KEY_TYPE = "counterpartyType"
 
-    fun read(bundle: Bundle?) =
-            OrganisationMapper.read(bundle)?.let {
+    fun read(bundle: Bundle?): Agent? =
+            CounterpartyMapper.read(bundle)?.let {
                 try {
                     Agent(
                             type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
                             uuid = it.uuid,
+                            counterpartyType = it.counterpartyType,
                             fullName = it.fullName,
                             shortName = it.shortName,
                             inn = it.inn,
@@ -24,10 +25,11 @@ internal object AgentMapper {
                 } catch (e: Exception) {
                     null
                 }
+
             }
 
     fun write(agent: Agent, bundle: Bundle) = bundle.apply {
-        agent.type?.let { this.putInt(KEY_TYPE, it.ordinal) }
+        agent.type.let { this.putInt(KEY_TYPE, it.ordinal) }
     }
 
 }

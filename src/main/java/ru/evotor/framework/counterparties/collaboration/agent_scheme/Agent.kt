@@ -1,22 +1,24 @@
-package ru.evotor.framework.organisation.agent
+package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
-import ru.evotor.framework.organisation.Organisation
-import ru.evotor.framework.organisation.agent.mapper.AgentMapper
+import ru.evotor.framework.counterparties.Counterparty
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import java.util.*
 
 class Agent(
-        val type: Type?,
+        val type: Type,
         uuid: UUID?,
-        shortName: String?,
+        counterpartyType: Counterparty.Type?,
         fullName: String?,
+        shortName: String?,
         inn: String?,
         kpp: String?,
         contacts: Contacts?
-) : Organisation(
+) : Counterparty(
         uuid,
-        shortName,
+        counterpartyType,
         fullName,
+        shortName,
         inn,
         kpp,
         contacts

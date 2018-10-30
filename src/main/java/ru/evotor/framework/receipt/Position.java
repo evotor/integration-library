@@ -20,9 +20,8 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
-import ru.evotor.framework.organisation.agent.Agent;
-import ru.evotor.framework.organisation.agent.Supplier;
 import ru.evotor.framework.payment.PaymentFeature;
+import ru.evotor.framework.receipt.position.AgentRequisites;
 
 public class Position implements Parcelable {
     /**
