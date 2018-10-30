@@ -13,8 +13,8 @@ internal object AgentMapper {
             CounterpartyMapper.read(bundle)?.let {
                 try {
                     Agent(
-                            type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
                             uuid = it.uuid,
+                            type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
                             counterpartyType = it.counterpartyType,
                             fullName = it.fullName,
                             shortName = it.shortName,

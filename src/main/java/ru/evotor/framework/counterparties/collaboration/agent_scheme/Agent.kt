@@ -6,8 +6,8 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.Agen
 import java.util.*
 
 class Agent(
-        val type: Type,
         uuid: UUID?,
+        val type: Type,
         counterpartyType: Counterparty.Type?,
         fullName: String?,
         shortName: String?,

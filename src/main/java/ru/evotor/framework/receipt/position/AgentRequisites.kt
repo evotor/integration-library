@@ -149,8 +149,8 @@ data class AgentRequisites(
                 operationDescription: String?
         ) = AgentRequisites(
                 Agent(
-                        agentType,
                         null,
+                        agentType,
                         null,
                         null,
                         null,
