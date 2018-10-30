@@ -184,4 +184,24 @@ data class AgentRequisites(
 
     }
 
-}
+     override fun equals(other: Any?): Boolean {
+         if (this === other) return true
+         if (other !is AgentRequisites) return false
+
+         if (agent != other.agent) return false
+         if (supplier != other.supplier) return false
+         if (transactionOperator != other.transactionOperator) return false
+         if (operationDescription != other.operationDescription) return false
+
+         return true
+     }
+
+     override fun hashCode(): Int {
+         var result = agent.hashCode()
+         result = 31 * result + supplier.hashCode()
+         result = 31 * result + (transactionOperator?.hashCode() ?: 0)
+         result = 31 * result + (operationDescription?.hashCode() ?: 0)
+         return result
+     }
+
+ }

@@ -27,4 +27,11 @@ class TransactionOperator(
         fun from(bundle: Bundle?): TransactionOperator? = TransactionOperatorMapper.read(bundle)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TransactionOperator) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
 }

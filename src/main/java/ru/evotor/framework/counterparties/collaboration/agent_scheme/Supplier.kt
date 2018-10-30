@@ -27,4 +27,11 @@ class Supplier(
         fun from(bundle: Bundle?): Supplier? = SupplierMapper.read(bundle)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Supplier) return false
+        if (!super.equals(other)) return false
+        return true
+    }
+
 }

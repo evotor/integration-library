@@ -30,7 +30,7 @@ data class AttributeValue(
         val name: String
 
 ) : Parcelable {
-        
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(VERSION)
         // Determine position in parcel for writing data size
@@ -56,6 +56,27 @@ data class AttributeValue(
     }
 
     override fun describeContents(): Int = 0
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AttributeValue) return false
+
+        if (attributeUuid != other.attributeUuid) return false
+        if (attributeName != other.attributeName) return false
+        if (uuid != other.uuid) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = attributeUuid.hashCode()
+        result = 31 * result + attributeName.hashCode()
+        result = 31 * result + uuid.hashCode()
+        result = 31 * result + name.hashCode()
+        return result
+    }
+
 
     companion object {
         @JvmStatic

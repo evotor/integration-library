@@ -40,4 +40,20 @@ class Agent(
 
     override fun toBundle() = AgentMapper.write(this, super.toBundle())
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Agent) return false
+        if (!super.equals(other)) return false
+
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + type.hashCode()
+        return result
+    }
+
 }
