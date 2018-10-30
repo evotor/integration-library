@@ -7,7 +7,7 @@ import java.lang.Exception
 
 internal object AgentMapper {
 
-    private const val KEY_TYPE = "counterpartyType"
+    private const val KEY_TYPE = "TYPE"
 
     fun read(bundle: Bundle?): Agent? =
             CounterpartyMapper.read(bundle)?.let {

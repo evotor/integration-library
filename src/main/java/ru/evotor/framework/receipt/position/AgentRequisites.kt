@@ -1,16 +1,19 @@
 package ru.evotor.framework.receipt.position
 
+import android.os.Bundle
+import ru.evotor.IBundlable
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Supplier
+import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 data class AgentRequisites(
         val agent: Agent,
         val supplier: Supplier,
         val transactionOperator: TransactionOperator?,
         val operationDescription: String?
-) {
+) : IBundlable {
 
     companion object {
 
@@ -182,26 +185,30 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        fun from(bundle: Bundle?): AgentRequisites? = AgentRequisitesMapper.read(bundle)
+
     }
 
-     override fun equals(other: Any?): Boolean {
-         if (this === other) return true
-         if (other !is AgentRequisites) return false
+    override fun toBundle(): Bundle = AgentRequisitesMapper.write(this)
 
-         if (agent != other.agent) return false
-         if (supplier != other.supplier) return false
-         if (transactionOperator != other.transactionOperator) return false
-         if (operationDescription != other.operationDescription) return false
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AgentRequisites) return false
 
-         return true
-     }
+        if (agent != other.agent) return false
+        if (supplier != other.supplier) return false
+        if (transactionOperator != other.transactionOperator) return false
+        if (operationDescription != other.operationDescription) return false
 
-     override fun hashCode(): Int {
-         var result = agent.hashCode()
-         result = 31 * result + supplier.hashCode()
-         result = 31 * result + (transactionOperator?.hashCode() ?: 0)
-         result = 31 * result + (operationDescription?.hashCode() ?: 0)
-         return result
-     }
+        return true
+    }
 
- }
+    override fun hashCode(): Int {
+        var result = agent.hashCode()
+        result = 31 * result + supplier.hashCode()
+        result = 31 * result + (transactionOperator?.hashCode() ?: 0)
+        result = 31 * result + (operationDescription?.hashCode() ?: 0)
+        return result
+    }
+
+}

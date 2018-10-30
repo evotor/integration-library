@@ -7,15 +7,15 @@ import java.util.*
 
 internal object CounterpartyMapper {
 
-    private const val KEY_UUID = "uuid"
-    private const val KEY_COUNTERPARTY_TYPE = "counterpartyType"
-    private const val KEY_FULL_NAME = "fullName"
-    private const val KEY_SHORT_NAME = "shortName"
-    private const val KEY_INN = "inn"
-    private const val KEY_KPP = "kpp"
-    private const val KEY_CONTACTS = "contacts"
-    private const val KEY_PHONES = "phones"
-    private const val KEY_ADDRESSES = "addresses"
+    private const val KEY_UUID = "UUID"
+    private const val KEY_COUNTERPARTY_TYPE = "COUNTERPARTY_TYPE"
+    private const val KEY_FULL_NAME = "FULL_NAME"
+    private const val KEY_SHORT_NAME = "SHORT_NAME"
+    private const val KEY_INN = "INN"
+    private const val KEY_KPP = "KPP"
+    private const val KEY_CONTACTS = "CONTACTS"
+    private const val KEY_PHONES = "PHONES"
+    private const val KEY_ADDRESSES = "ADDRESSES"
 
     fun read(bundle: Bundle?): Counterparty? = bundle?.let {
         try {

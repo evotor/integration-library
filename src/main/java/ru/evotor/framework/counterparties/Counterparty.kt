@@ -39,7 +39,7 @@ abstract class Counterparty(
         fun from(bundle: Bundle?): Counterparty? = CounterpartyMapper.read(bundle)
     }
 
-    override fun toBundle() = CounterpartyMapper.write(this)
+    override fun toBundle(): Bundle = CounterpartyMapper.write(this)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

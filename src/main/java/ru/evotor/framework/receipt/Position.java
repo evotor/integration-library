@@ -27,7 +27,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     /**
      * Magic number для идентификации использования версионирования объекта
      */
@@ -242,6 +242,7 @@ public class Position implements Parcelable {
         );
         this.attributes = position.getAttributes();
         this.paymentFeature = position.getPaymentFeature();
+        this.agentRequisites = position.getAgentRequisites();
     }
 
     /**
@@ -620,6 +621,8 @@ public class Position implements Parcelable {
         }
         // Payment features
         dest.writeParcelable(this.paymentFeature, flags);
+        //AgentRequisites
+        dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -674,6 +677,11 @@ public class Position implements Parcelable {
                 readAttributesField(in);
                 readPaymentFeatureField(in);
             }
+            case 3: {
+                readAttributesField(in);
+                readPaymentFeatureField(in);
+                readAgentRequisitesField(in);
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -700,6 +708,10 @@ public class Position implements Parcelable {
         } else {
             this.paymentFeature = paymentFeature;
         }
+    }
+
+    private void readAgentRequisitesField(Parcel in) {
+        this.agentRequisites = AgentRequisites.Companion.from(in.readBundle(AgentRequisites.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {

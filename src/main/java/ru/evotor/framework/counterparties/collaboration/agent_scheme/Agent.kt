@@ -38,7 +38,7 @@ class Agent(
         fun from(bundle: Bundle?): Agent? = AgentMapper.read(bundle)
     }
 
-    override fun toBundle() = AgentMapper.write(this, super.toBundle())
+    override fun toBundle(): Bundle = AgentMapper.write(this, super.toBundle())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
