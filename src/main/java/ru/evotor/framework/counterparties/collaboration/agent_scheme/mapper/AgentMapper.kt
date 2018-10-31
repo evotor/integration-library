@@ -3,7 +3,6 @@ package ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper
 import android.os.Bundle
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
-import java.lang.Exception
 
 internal object AgentMapper {
 
@@ -11,20 +10,16 @@ internal object AgentMapper {
 
     fun read(bundle: Bundle?): Agent? =
             CounterpartyMapper.read(bundle)?.let {
-                try {
-                    Agent(
-                            uuid = it.uuid,
-                            type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
-                            counterpartyType = it.counterpartyType,
-                            fullName = it.fullName,
-                            shortName = it.shortName,
-                            inn = it.inn,
-                            kpp = it.kpp,
-                            contacts = it.contacts
-                    )
-                } catch (e: Exception) {
-                    null
-                }
+                Agent(
+                        uuid = it.uuid,
+                        type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
+                        counterpartyType = it.counterpartyType,
+                        fullName = it.fullName,
+                        shortName = it.shortName,
+                        inn = it.inn,
+                        kpp = it.kpp,
+                        contacts = it.contacts
+                )
 
             }
 
