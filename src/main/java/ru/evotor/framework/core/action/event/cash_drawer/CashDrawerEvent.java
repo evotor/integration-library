@@ -5,6 +5,10 @@ import android.support.annotation.NonNull;
 
 import ru.evotor.IBundlable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.device.cash_drawer.event.CashDrawerEvent}
+ */
+@Deprecated
 public abstract class CashDrawerEvent implements IBundlable {
     private static final String KEY_CASH_DRAWER_ID = "cashDrawerId";
 

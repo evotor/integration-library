@@ -20,12 +20,13 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.payment.PaymentFeature;
 
 public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     /**
      * Magic number для идентификации использования версионирования объекта
      */
@@ -117,6 +118,13 @@ public class Position implements Parcelable {
      */
     @Nullable
     private Map<String, AttributeValue> attributes;
+
+    /**
+     * Признак способа расчета
+     * По умолчанию это 'Полный расчет'
+     */
+    @NonNull
+    private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -226,6 +234,7 @@ public class Position implements Parcelable {
                 position.getSubPositions()
         );
         this.attributes = position.getAttributes();
+        this.paymentFeature = position.getPaymentFeature();
     }
 
     /**
@@ -436,10 +445,11 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @param attributes значения выбранных атрибутов для позиции
+     * @return признак способа расчета для позиции
      */
-    public void setAttributes(@Nullable Map<String, AttributeValue> attributes) {
-        this.attributes = attributes;
+    @NonNull
+    public PaymentFeature getPaymentFeature() {
+        return paymentFeature;
     }
 
     @Override
@@ -478,6 +488,7 @@ public class Position implements Parcelable {
             return false;
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
+        if (paymentFeature != position.paymentFeature) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -502,6 +513,7 @@ public class Position implements Parcelable {
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
         return result;
     }
 
@@ -527,6 +539,7 @@ public class Position implements Parcelable {
                 ", extraKeys=" + extraKeys +
                 ", subPositions=" + subPositions +
                 ", attributes=" + attributes +
+                ", paymentFeature=" + paymentFeature +
                 '}';
     }
 
@@ -565,13 +578,8 @@ public class Position implements Parcelable {
         int startDataPosition = dest.dataPosition();
 
         //Write additional data
-        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
-        if (this.attributes != null) {
-            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
-                dest.writeString(entry.getKey());
-                dest.writeParcelable(entry.getValue(), flags);
-            }
-        }
+        writeAdditionalFields(dest, flags);
+
         // Calculate additional data size
         int dataSize = dest.dataPosition() - startDataPosition;
         // Save position at the end of data
@@ -581,6 +589,19 @@ public class Position implements Parcelable {
         dest.writeInt(dataSize);
         // Go back to the end of parcel
         dest.setDataPosition(endOfDataPosition);
+    }
+
+    private void writeAdditionalFields(Parcel dest, int flags) {
+        // Attributes
+        dest.writeInt(this.attributes != null ? this.attributes.size() : 0);
+        if (this.attributes != null) {
+            for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeParcelable(entry.getValue(), flags);
+            }
+        }
+        // Payment features
+        dest.writeParcelable(this.paymentFeature, flags);
     }
 
     protected Position(Parcel in) {
@@ -628,21 +649,38 @@ public class Position implements Parcelable {
         }
         switch (version) {
             case 1: {
-                int attributesSize = in.readInt();
-                if (attributesSize > 0) {
-                    this.attributes = new HashMap<>(attributesSize);
-                    for (int i = 0; i < attributesSize; i++) {
-                        String key = in.readString();
-                        AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
-                        this.attributes.put(key, value);
-                    }
-                }
+                readAttributesField(in);
                 break;
+            }
+            case 2: {
+                readAttributesField(in);
+                readPaymentFeatureField(in);
             }
         }
 
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
+        }
+    }
+
+    private void readAttributesField(Parcel in) {
+        int attributesSize = in.readInt();
+        if (attributesSize > 0) {
+            this.attributes = new HashMap<>(attributesSize);
+            for (int i = 0; i < attributesSize; i++) {
+                String key = in.readString();
+                AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                this.attributes.put(key, value);
+            }
+        }
+    }
+
+    private void readPaymentFeatureField(Parcel in) {
+        PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
+        if (paymentFeature == null) {
+            this.paymentFeature = new PaymentFeature.CheckoutFull();
+        } else {
+            this.paymentFeature = paymentFeature;
         }
     }
 
@@ -852,6 +890,11 @@ public class Position implements Parcelable {
 
         public Builder setAttributes(@Nullable Map<String, AttributeValue> attributes) {
             position.attributes = attributes;
+            return this;
+        }
+
+        public Builder setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
+            position.paymentFeature = paymentFeature;
             return this;
         }
 

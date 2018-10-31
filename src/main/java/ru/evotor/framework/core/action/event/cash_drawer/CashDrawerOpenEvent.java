@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.device.cash_drawer.event.CashDrawerOpenedEvent}
+ */
+@Deprecated
 public class CashDrawerOpenEvent extends CashDrawerEvent {
     public static final String BROADCAST_ACTION_CASH_DRAWER_OPEN = "evotor.intent.action.cashDrawer.OPEN";
 

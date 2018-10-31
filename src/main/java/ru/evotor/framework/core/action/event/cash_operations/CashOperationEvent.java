@@ -6,6 +6,10 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.kkt.event.CashOperationEvent}
+ */
+@Deprecated
 public abstract class CashOperationEvent implements IBundlable {
     private static final String KEY_DOCUMENT_UUID = "documentUuid";
 

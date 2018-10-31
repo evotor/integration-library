@@ -6,6 +6,10 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptEvent}
+ */
+@Deprecated
 public abstract class ReceiptEvent implements IBundlable {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
 

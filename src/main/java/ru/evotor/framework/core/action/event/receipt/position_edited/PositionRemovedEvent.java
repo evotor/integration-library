@@ -7,9 +7,9 @@ import android.support.annotation.Nullable;
 import ru.evotor.framework.receipt.Position;
 
 /**
- * Created by a.kuznetsov on 18/05/2017.
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.position.event.PositionRemovedEvent}
  */
-
+@Deprecated
 public class PositionRemovedEvent extends PositionEvent {
     public static final String BROADCAST_ACTION_SELL_RECEIPT = "evotor.intent.action.receipt.sell.POSITION_REMOVED";
     public static final String BROADCAST_ACTION_PAYBACK_RECEIPT = "evotor.intent.action.receipt.payback.POSITION_REMOVED";
