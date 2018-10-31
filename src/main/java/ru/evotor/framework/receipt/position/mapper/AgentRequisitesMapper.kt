@@ -1,13 +1,16 @@
 package ru.evotor.framework.receipt.position.mapper
 
+import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Supplier
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.receipt.position.AgentRequisites
+import ru.evotor.framework.receipt.position.provider.AgentRequisitesContract
 import java.lang.Exception
+import java.util.*
 
-object AgentRequisitesMapper {
+internal object AgentRequisitesMapper {
 
     private const val KEY_AGENT = "AGENT"
     private const val KEY_SUPPLIER = "SUPPLIER"
@@ -25,6 +28,24 @@ object AgentRequisitesMapper {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun read(cursor: Cursor): AgentRequisites? = try {
+        AgentRequisites(
+                readAgent()
+        )
+    } catch (e: Exception) {
+        null
+    }
+
+    private fun readAgent(cursor: Cursor): Agent? = try {
+        Agent(
+                cursor.getString(cursor.getColumnIndexOrThrow(AgentRequisitesContract.COLUMN_AGENT_UUID))?.let { UUID.fromString(it) },
+                Agent.Type.values()[cursor.getInt(cursor.getColumnIndexOrThrow(AgentRequisitesContract.COLUMN_AGENT_TYPE))],
+                cursor.getString(cursor.getColumnIndexOrThrow(AgentRequisitesContract.COLUMN_AGENT_UUID))
+        )
+    } catch (e: Exception) {
+        null
     }
 
     fun write(agentRequisites: AgentRequisites) = Bundle().apply {

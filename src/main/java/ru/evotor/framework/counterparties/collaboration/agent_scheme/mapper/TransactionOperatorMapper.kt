@@ -5,7 +5,7 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Transaction
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 import java.lang.Exception
 
-object TransactionOperatorMapper {
+internal object TransactionOperatorMapper {
 
     fun read(bundle: Bundle?): TransactionOperator? =
             CounterpartyMapper.read(bundle)?.let {
