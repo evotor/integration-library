@@ -1,18 +1,18 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper
 
 import android.os.Bundle
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 
-internal object AgentMapper {
+object SubagentMapper {
 
     private const val KEY_TYPE = "TYPE"
 
-    fun read(bundle: Bundle?): Agent? =
+    fun read(bundle: Bundle?): Subagent? =
             CounterpartyMapper.read(bundle)?.let {
-                Agent(
+                Subagent(
                         uuid = it.uuid,
-                        type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
+                        type = Subagent.Type.values()[bundle!!.getInt(KEY_TYPE)],
                         counterpartyType = it.counterpartyType,
                         fullName = it.fullName,
                         shortName = it.shortName,
@@ -23,16 +23,8 @@ internal object AgentMapper {
 
             }
 
-    fun write(agent: Agent, bundle: Bundle) = bundle.apply {
-        agent.type?.let { this.putInt(KEY_TYPE, it.ordinal) }
+    fun write(agent: Subagent, bundle: Bundle) = bundle.apply {
+        agent.type.let { this.putInt(KEY_TYPE, it.ordinal) }
     }
-
-    fun convertToNull(agent: Agent): Agent? =
-            CounterpartyMapper.convertToNull(agent)?.let {
-                if (it.type == null)
-                    null
-                else
-                    it
-            }
 
 }

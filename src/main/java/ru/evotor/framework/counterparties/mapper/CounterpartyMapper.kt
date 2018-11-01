@@ -46,7 +46,6 @@ internal object CounterpartyMapper {
         this.putString(KEY_SHORT_NAME, counterparty.shortName)
         this.putString(KEY_INN, counterparty.inn)
         this.putString(KEY_KPP, counterparty.kpp)
-        this.putString(KEY_UUID, counterparty.kpp)
         this.putBundle(KEY_CONTACTS, counterparty.contacts?.let { writeContacts(it) })
     }
 
