@@ -2,7 +2,7 @@ package ru.evotor.framework
 
 import org.apache.commons.lang3.StringUtils
 
-fun android.database.Cursor.optInt(columnName: String): Int? {
+internal fun android.database.Cursor.optInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -11,7 +11,7 @@ fun android.database.Cursor.optInt(columnName: String): Int? {
     return optInt(index)
 }
 
-fun android.database.Cursor.optInt(columnIndex: Int): Int? {
+internal fun android.database.Cursor.optInt(columnIndex: Int): Int? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -19,7 +19,7 @@ fun android.database.Cursor.optInt(columnIndex: Int): Int? {
     return getInt(columnIndex)
 }
 
-fun android.database.Cursor.optList(columnName: String): List<String>? {
+internal fun android.database.Cursor.optList(columnName: String): List<String>? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -30,7 +30,7 @@ fun android.database.Cursor.optList(columnName: String): List<String>? {
 
 private const val LIST_SEPARATOR = ","
 
-fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
+internal fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
     if (isNull(columnIndex)) {
         return null
     }
