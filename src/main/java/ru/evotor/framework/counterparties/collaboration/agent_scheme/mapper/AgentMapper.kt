@@ -20,7 +20,6 @@ internal object AgentMapper {
                         kpp = it.kpp,
                         contacts = it.contacts
                 )
-
             }
 
     fun write(agent: Agent, bundle: Bundle) = bundle.apply {
