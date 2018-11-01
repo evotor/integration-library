@@ -14,6 +14,7 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
+import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -259,7 +260,7 @@ object ReceiptApi {
     }
 
     private fun createPosition(cursor: Cursor): Position? {
-        return Position(
+        val builder = Position.Builder.copyFrom(Position(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
@@ -288,7 +289,9 @@ object ReceiptApi {
                     createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
                 },
                 ArrayList<Position>()
-        )
+        ))
+        builder.setAgentRequisites(AgentRequisitesMapper.read(cursor)).build()
+        return builder.build()
     }
 
     private fun createPayment(cursor: Cursor): Payment? {

@@ -2,12 +2,12 @@ package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
 import ru.evotor.framework.counterparties.Counterparty
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.SubagentMapper
 import java.util.*
 
-class Agent(
+class Subagent(
         uuid: UUID?,
-        val type: Type?,
+        val type: Type,
         counterpartyType: Counterparty.Type?,
         fullName: String?,
         shortName: String?,
@@ -25,18 +25,15 @@ class Agent(
 ) {
 
     enum class Type {
-        AGENT,
-        COMMISSIONER,
-        ATTORNEY_IN_FACT,
-        PAYMENT_AGENT,
-        BANK_PAYMENT_AGENT,
+        PAYMENT_SUBAGENT,
+        BANK_PAYMENT_SUBAGENT,
     }
 
     companion object {
-        fun from(bundle: Bundle?): Agent? = AgentMapper.read(bundle)
+        fun from(bundle: Bundle?): Subagent? = SubagentMapper.read(bundle)
     }
 
-    override fun toBundle(): Bundle = AgentMapper.write(this, super.toBundle())
+    override fun toBundle(): Bundle = SubagentMapper.write(this, super.toBundle())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

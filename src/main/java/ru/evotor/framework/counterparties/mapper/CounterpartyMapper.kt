@@ -2,7 +2,6 @@ package ru.evotor.framework.counterparties.mapper
 
 import android.os.Bundle
 import ru.evotor.framework.counterparties.Counterparty
-import java.lang.Exception
 import java.util.*
 
 internal object CounterpartyMapper {
@@ -18,23 +17,19 @@ internal object CounterpartyMapper {
     private const val KEY_ADDRESSES = "ADDRESSES"
 
     fun read(bundle: Bundle?): Counterparty? = bundle?.let {
-        try {
-            object : Counterparty(
-                    uuid = it.getString(KEY_UUID)?.let { uuid -> UUID.fromString(uuid) },
-                    counterpartyType =
-                    if (it.containsKey(KEY_COUNTERPARTY_TYPE))
-                        Type.values()[it.getInt(KEY_COUNTERPARTY_TYPE)]
-                    else
-                        null,
-                    fullName = it.getString(KEY_FULL_NAME),
-                    shortName = it.getString(KEY_SHORT_NAME),
-                    inn = it.getString(KEY_INN),
-                    kpp = it.getString(KEY_KPP),
-                    contacts = readContacts(it.getBundle(KEY_CONTACTS))
-            ) {}
-        } catch (e: Exception) {
-            null
-        }
+        object : Counterparty(
+                uuid = it.getString(KEY_UUID)?.let { uuid -> UUID.fromString(uuid) },
+                counterpartyType =
+                if (it.containsKey(KEY_COUNTERPARTY_TYPE))
+                    Type.values()[it.getInt(KEY_COUNTERPARTY_TYPE)]
+                else
+                    null,
+                fullName = it.getString(KEY_FULL_NAME),
+                shortName = it.getString(KEY_SHORT_NAME),
+                inn = it.getString(KEY_INN),
+                kpp = it.getString(KEY_KPP),
+                contacts = readContacts(it.getBundle(KEY_CONTACTS))
+        ) {}
     }
 
     private fun readContacts(bundle: Bundle?) = bundle?.let {
@@ -51,7 +46,6 @@ internal object CounterpartyMapper {
         this.putString(KEY_SHORT_NAME, counterparty.shortName)
         this.putString(KEY_INN, counterparty.inn)
         this.putString(KEY_KPP, counterparty.kpp)
-        this.putString(KEY_UUID, counterparty.kpp)
         this.putBundle(KEY_CONTACTS, counterparty.contacts?.let { writeContacts(it) })
     }
 
@@ -59,5 +53,19 @@ internal object CounterpartyMapper {
         this.putStringArrayList(KEY_PHONES, contacts.phones as ArrayList<String>?)
         this.putStringArrayList(KEY_ADDRESSES, contacts.addresses as ArrayList<String>?)
     }
+
+    fun <C : Counterparty> convertToNull(counterparty: C): C? =
+            if (counterparty.uuid == null &&
+                    counterparty.counterpartyType == null &&
+                    counterparty.fullName == null &&
+                    counterparty.shortName == null &&
+                    counterparty.inn == null &&
+                    counterparty.kpp == null &&
+                    (counterparty.contacts == null ||
+                            (counterparty.contacts.phones == null &&
+                                    counterparty.contacts.addresses == null)))
+                null
+            else
+                counterparty
 
 }
