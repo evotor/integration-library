@@ -48,6 +48,16 @@ sealed class PaymentFeature : Parcelable {
 
         override fun describeContents(): Int = 0
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is PrepaymentFull) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+
         companion object {
             private const val VERSION = 1
 
@@ -86,6 +96,16 @@ sealed class PaymentFeature : Parcelable {
 
         override fun describeContents(): Int = 0
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is PrepaymentPartial) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+
         companion object {
             private const val VERSION = 1
 
@@ -123,6 +143,16 @@ sealed class PaymentFeature : Parcelable {
         }
 
         override fun describeContents(): Int = 0
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Advance) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
 
         companion object {
             private const val VERSION = 1
@@ -164,6 +194,16 @@ sealed class PaymentFeature : Parcelable {
 
         override fun describeContents(): Int = 0
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is CheckoutFull) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+
         companion object {
             private const val VERSION = 1
 
@@ -204,6 +244,19 @@ sealed class PaymentFeature : Parcelable {
 
         override fun describeContents(): Int = 0
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is CheckoutPartial) return false
+
+            if (amount != other.amount) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return amount.hashCode()
+        }
+
         companion object {
             private const val VERSION = 1
 
@@ -243,6 +296,16 @@ sealed class PaymentFeature : Parcelable {
 
         override fun describeContents(): Int = 0
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is CreditPass) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+
         companion object {
             private const val VERSION = 1
 
@@ -280,6 +343,16 @@ sealed class PaymentFeature : Parcelable {
         }
 
         override fun describeContents(): Int = 0
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is CreditCheckout) return false
+            return true
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
 
         companion object {
             private const val VERSION = 1

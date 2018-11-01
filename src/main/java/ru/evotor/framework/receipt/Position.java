@@ -21,12 +21,13 @@ import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.payment.PaymentFeature;
+import ru.evotor.framework.receipt.position.AgentRequisites;
 
 public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     /**
      * Magic number для идентификации использования версионирования объекта
      */
@@ -125,6 +126,12 @@ public class Position implements Parcelable {
      */
     @NonNull
     private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
+
+    /**
+     * Реквизиты агента
+     */
+    @Nullable
+    private AgentRequisites agentRequisites;
 
     /**
      * Deprecated since 16.02.2018. Use position Builder.
@@ -235,6 +242,7 @@ public class Position implements Parcelable {
         );
         this.attributes = position.getAttributes();
         this.paymentFeature = position.getPaymentFeature();
+        this.agentRequisites = position.getAgentRequisites();
     }
 
     /**
@@ -452,6 +460,14 @@ public class Position implements Parcelable {
         return paymentFeature;
     }
 
+    /**
+     * @return Агентские реквизиты
+     */
+    @Nullable
+    public AgentRequisites getAgentRequisites() {
+        return agentRequisites;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -489,6 +505,7 @@ public class Position implements Parcelable {
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
         if (paymentFeature != position.paymentFeature) return false;
+        if (agentRequisites != position.agentRequisites) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -514,6 +531,7 @@ public class Position implements Parcelable {
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
+        result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         return result;
     }
 
@@ -540,6 +558,7 @@ public class Position implements Parcelable {
                 ", subPositions=" + subPositions +
                 ", attributes=" + attributes +
                 ", paymentFeature=" + paymentFeature +
+                ", agentRequisites=" + agentRequisites +
                 '}';
     }
 
@@ -602,6 +621,8 @@ public class Position implements Parcelable {
         }
         // Payment features
         dest.writeParcelable(this.paymentFeature, flags);
+        //AgentRequisites
+        dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -656,6 +677,11 @@ public class Position implements Parcelable {
                 readAttributesField(in);
                 readPaymentFeatureField(in);
             }
+            case 3: {
+                readAttributesField(in);
+                readPaymentFeatureField(in);
+                readAgentRequisitesField(in);
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -682,6 +708,10 @@ public class Position implements Parcelable {
         } else {
             this.paymentFeature = paymentFeature;
         }
+    }
+
+    private void readAgentRequisitesField(Parcel in) {
+        this.agentRequisites = AgentRequisites.Companion.from(in.readBundle(AgentRequisites.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -895,6 +925,11 @@ public class Position implements Parcelable {
 
         public Builder setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
             position.paymentFeature = paymentFeature;
+            return this;
+        }
+
+        public Builder setAgentRequisites(@Nullable AgentRequisites agentRequisites) {
+            position.agentRequisites = agentRequisites;
             return this;
         }
 
