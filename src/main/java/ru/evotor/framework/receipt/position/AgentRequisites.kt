@@ -21,6 +21,7 @@ data class AgentRequisites(
 
     companion object {
 
+        @JvmStatic
         fun createForAgent(
                 supplierInn: String,
                 supplierPhones: List<String>
@@ -38,6 +39,7 @@ data class AgentRequisites(
                 null
         )
 
+        @JvmStatic
         fun createForCommissioner(
                 supplierInn: String,
                 supplierPhones: List<String>
@@ -55,6 +57,7 @@ data class AgentRequisites(
                 null
         )
 
+        @JvmStatic
         fun createForAttorneyInFact(
                 supplierInn: String,
                 supplierPhones: List<String>
@@ -72,6 +75,7 @@ data class AgentRequisites(
                 null
         )
 
+        @JvmStatic
         fun createForPaymentAgent(
                 agentPhones: List<String>,
                 supplierInn: String,
@@ -91,6 +95,7 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        @JvmStatic
         fun createForPaymentSubagent(
                 agentPhones: List<String>,
                 subagentPhones: List<String>,
@@ -111,6 +116,7 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        @JvmStatic
         fun createForBankPaymentAgent(
                 agentPhones: List<String>,
                 supplierInn: String,
@@ -134,6 +140,7 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        @JvmStatic
         fun createForBankPaymentSubagent(
                 agentPhones: List<String>,
                 subagentPhones: List<String>,
