@@ -11,6 +11,15 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.Agen
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
+/**
+ * Агентские реквизиты позиции
+ *
+ * @param agent агент
+ * @param subagent субагент
+ * @param supplier поставщик
+ * @param transactionOperator оператор перевода
+ * @param operationDescription описание операции агента
+ */
 data class AgentRequisites(
         val agent: Agent?,
         val subagent: Subagent?,
@@ -21,6 +30,12 @@ data class AgentRequisites(
 
     companion object {
 
+        /**
+         * Создает агентские реквизиты для агента типа "агент".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForAgent(
                 supplierInn: String,
@@ -39,6 +54,12 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "комиссионер".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForCommissioner(
                 supplierInn: String,
@@ -57,6 +78,12 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "поверенный".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForAttorneyInFact(
                 supplierInn: String,
@@ -75,6 +102,14 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "платёжный агент".
+         *
+         * @param agentPhones телефоны платёжного агента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param operationDescription операция платежного агента
+         */
         @JvmStatic
         fun createForPaymentAgent(
                 agentPhones: List<String>,
@@ -95,6 +130,15 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "платёжный субагент".
+         *
+         * @param agentPhones телефоны платёжного агента (оператора по приёму платежей)
+         * @param subagentPhones телефоны платёжного субагента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param operationDescription операция платежного субагента
+         */
         @JvmStatic
         fun createForPaymentSubagent(
                 agentPhones: List<String>,
@@ -116,6 +160,18 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "банковский платёжный агент".
+         *
+         * @param agentPhones телефоны банковского платёжного агента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param transactionOperatorName наименование оператора перевода
+         * @param transactionOperatorInn ИНН оператора перевода
+         * @param transactionOperatorPhones телефоны оператора перевода
+         * @param transactionOperatorAddress адрес оператора перевода
+         * @param operationDescription операция банковского платежного агента
+         */
         @JvmStatic
         fun createForBankPaymentAgent(
                 agentPhones: List<String>,
@@ -140,6 +196,19 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "банковский платёжный субагент".
+         *
+         * @param agentPhones телефоны банковского платёжного агента
+         * @param subagentPhones телефоны банковского платёжного субагента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param transactionOperatorName наименование оператора перевода
+         * @param transactionOperatorInn ИНН оператора перевода
+         * @param transactionOperatorPhones телефоны оператора перевода
+         * @param transactionOperatorAddress адрес оператора перевода
+         * @param operationDescription операция банковского платежного субагента
+         */
         @JvmStatic
         fun createForBankPaymentSubagent(
                 agentPhones: List<String>,

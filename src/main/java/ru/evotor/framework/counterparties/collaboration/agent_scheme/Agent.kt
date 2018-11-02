@@ -5,6 +5,9 @@ import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import java.util.*
 
+/**
+ * Агент
+ */
 class Agent(
         uuid: UUID?,
         val type: Type?,
@@ -24,6 +27,9 @@ class Agent(
         contacts
 ) {
 
+    /**
+     * Тип агента
+     */
     enum class Type {
         AGENT,
         COMMISSIONER,
