@@ -16,6 +16,7 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
+import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -291,6 +292,7 @@ object ReceiptApi {
                 .setSubPositions(emptyList())
                 .setAttributes(attributes)
                 .setProductCode(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)))
+                .setAgentRequisites(AgentRequisitesMapper.read(cursor))
 
         val productType = ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)))
         when (productType) {
