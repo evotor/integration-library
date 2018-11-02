@@ -4,7 +4,7 @@ import android.os.Bundle
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 
-object SubagentMapper {
+internal object SubagentMapper {
 
     private const val KEY_TYPE = "TYPE"
 

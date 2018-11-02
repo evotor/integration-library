@@ -5,7 +5,7 @@ package ru.evotor.framework.core
  * она запишется в кассу в качестве одного или нескольких тегов с указанными номерами.
  */
 @Repeatable
-annotation class FfdTag(
+internal annotation class FfdTag(
         /**
          * Номера тегов
          */

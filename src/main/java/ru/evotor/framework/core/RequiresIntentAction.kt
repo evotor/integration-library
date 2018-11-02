@@ -20,7 +20,7 @@ package ru.evotor.framework.core
  * }
  * </pre>
  */
-annotation class RequiresIntentAction(
+internal annotation class RequiresIntentAction(
         /**
          * Действие
          */
