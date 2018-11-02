@@ -1,18 +1,34 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
+import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import java.util.*
 
+/**
+ * Оператор перевода
+ */
 class TransactionOperator(
         uuid: UUID?,
+
         counterpartyType: Counterparty.Type?,
+
+        @FfdTag(1026)
         fullName: String?,
+
         shortName: String?,
+
+        @FfdTag(1016)
         inn: String?,
+
         kpp: String?,
-        contacts: Contacts?
+
+        @FfdTag(1075)
+        phones: List<String>?,
+
+        @FfdTag(1005)
+        addresses: List<String>?
 ) : Counterparty(
         uuid,
         counterpartyType,
@@ -20,7 +36,8 @@ class TransactionOperator(
         shortName,
         inn,
         kpp,
-        contacts
+        phones,
+        addresses
 ) {
 
     companion object {

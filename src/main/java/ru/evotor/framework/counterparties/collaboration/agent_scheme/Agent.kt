@@ -1,6 +1,7 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
+import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import java.util.*
@@ -10,13 +11,24 @@ import java.util.*
  */
 class Agent(
         uuid: UUID?,
+
+        @FfdTag(1057, 1222)
         val type: Type?,
+
         counterpartyType: Counterparty.Type?,
+
         fullName: String?,
+
         shortName: String?,
+
         inn: String?,
+
         kpp: String?,
-        contacts: Contacts?
+
+        @FfdTag(1073, 1074)
+        phones: List<String>?,
+
+        addresses: List<String>?
 ) : Counterparty(
         uuid,
         counterpartyType,
@@ -24,17 +36,33 @@ class Agent(
         shortName,
         inn,
         kpp,
-        contacts
+        phones,
+        addresses
 ) {
 
     /**
      * Тип агента
      */
     enum class Type {
+        /**
+         * Агент
+         */
         AGENT,
+        /**
+         * Комиссионер
+         */
         COMMISSIONER,
+        /**
+         * Поверенный
+         */
         ATTORNEY_IN_FACT,
+        /**
+         * Платёжный агент
+         */
         PAYMENT_AGENT,
+        /**
+         * Банковский платёжный агент
+         */
         BANK_PAYMENT_AGENT,
     }
 

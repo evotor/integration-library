@@ -2,6 +2,7 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
@@ -12,19 +13,33 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.Tran
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
- * Агентские реквизиты позиции
- *
- * @param agent агент
- * @param subagent субагент
- * @param supplier поставщик
- * @param transactionOperator оператор перевода
- * @param operationDescription описание операции агента
+ * Агентские реквизиты позиции чека
  */
 data class AgentRequisites(
+        /**
+         * Агент
+         */
         val agent: Agent?,
+
+        /**
+         * Субагент
+         */
         val subagent: Subagent?,
+
+        /**
+         * Поставщик
+         */
         val supplier: Supplier,
+
+        /**
+         * Оператор перевода
+         */
         val transactionOperator: TransactionOperator?,
+
+        /**
+         * Операция агента
+         */
+        @FfdTag(1044)
         val operationDescription: String?
 ) : IBundlable {
 
@@ -38,7 +53,10 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForAgent(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.AGENT,
@@ -62,7 +80,10 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForCommissioner(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.COMMISSIONER,
@@ -86,7 +107,10 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForAttorneyInFact(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.ATTORNEY_IN_FACT,
@@ -112,9 +136,16 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForPaymentAgent(
+                @FfdTag(1073, 1074)
                 agentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 Agent.Type.PAYMENT_AGENT,
@@ -141,10 +172,19 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForPaymentSubagent(
+                @FfdTag(1074)
                 agentPhones: List<String>,
+
+                @FfdTag(1073)
                 subagentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 null,
@@ -174,13 +214,28 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForBankPaymentAgent(
+                @FfdTag(1073)
                 agentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1026)
                 transactionOperatorName: String,
+
+                @FfdTag(1016)
                 transactionOperatorInn: String,
+
+                @FfdTag(1075)
                 transactionOperatorPhones: List<String>,
+
+                @FfdTag(1005)
                 transactionOperatorAddress: String,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 Agent.Type.BANK_PAYMENT_AGENT,
@@ -211,14 +266,31 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForBankPaymentSubagent(
+                @FfdTag(1073)
                 agentPhones: List<String>,
+
+                @FfdTag(1073)
                 subagentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1026)
                 transactionOperatorName: String,
+
+                @FfdTag(1016)
                 transactionOperatorInn: String,
+
+                @FfdTag(1075)
                 transactionOperatorPhones: List<String>,
+
+                @FfdTag(1005)
                 transactionOperatorAddress: String,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 null,
@@ -256,7 +328,8 @@ data class AgentRequisites(
                                 null,
                                 null,
                                 null,
-                                Counterparty.Contacts(agentPhones, null)
+                                agentPhones,
+                                null
                         )
                 ),
                 subagentType?.let {
@@ -268,7 +341,8 @@ data class AgentRequisites(
                             null,
                             null,
                             null,
-                            Counterparty.Contacts(subagentPhones, null)
+                            subagentPhones,
+                            null
                     )
                 },
                 Supplier(
@@ -278,7 +352,8 @@ data class AgentRequisites(
                         null,
                         supplierInn,
                         null,
-                        Counterparty.Contacts(supplierPhones, null)
+                        supplierPhones,
+                        null
                 ),
                 TransactionOperatorMapper.convertToNull(
                         TransactionOperator(
@@ -288,10 +363,8 @@ data class AgentRequisites(
                                 null,
                                 transactionOperatorInn,
                                 null,
-                                Counterparty.Contacts(
-                                        transactionOperatorPhones,
-                                        transactionOperatorAddress?.let { listOf(it) }
-                                )
+                                transactionOperatorPhones,
+                                transactionOperatorAddress?.let { listOf(it) }
                         )
                 ),
                 operationDescription

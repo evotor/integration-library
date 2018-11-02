@@ -1,18 +1,32 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
+import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.SupplierMapper
 import java.util.*
 
+/**
+ * Поставщик
+ */
 class Supplier(
         uuid: UUID?,
+
         counterpartyType: Counterparty.Type?,
+
         fullName: String?,
+
         shortName: String?,
+
+        @FfdTag(1226)
         inn: String?,
+
         kpp: String?,
-        contacts: Contacts?
+
+        @FfdTag(1171)
+        phones: List<String>?,
+
+        addresses: List<String>?
 ) : Counterparty(
         uuid,
         counterpartyType,
@@ -20,7 +34,8 @@ class Supplier(
         shortName,
         inn,
         kpp,
-        contacts
+        phones,
+        addresses
 ) {
 
     companion object {

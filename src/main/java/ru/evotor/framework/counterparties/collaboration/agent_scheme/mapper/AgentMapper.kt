@@ -18,7 +18,8 @@ internal object AgentMapper {
                         shortName = CounterpartyMapper.readShortName(it),
                         inn = CounterpartyMapper.readInn(it),
                         kpp = CounterpartyMapper.readKpp(it),
-                        contacts = CounterpartyMapper.readContacts(it)
+                        phones = CounterpartyMapper.readPhones(it),
+                        addresses = CounterpartyMapper.readAddresses(it)
                 )
             }
 

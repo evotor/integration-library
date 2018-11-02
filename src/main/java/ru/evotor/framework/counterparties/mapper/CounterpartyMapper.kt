@@ -12,7 +12,6 @@ internal object CounterpartyMapper {
     private const val KEY_SHORT_NAME = "SHORT_NAME"
     private const val KEY_INN = "INN"
     private const val KEY_KPP = "KPP"
-    private const val KEY_CONTACTS = "CONTACTS"
     private const val KEY_PHONES = "PHONES"
     private const val KEY_ADDRESSES = "ADDRESSES"
 
@@ -33,14 +32,9 @@ internal object CounterpartyMapper {
 
     fun readKpp(bundle: Bundle?) = bundle?.getString(KEY_KPP)
 
-    fun readContacts(bundle: Bundle?) = getContacts(bundle?.getBundle(KEY_CONTACTS))
+    fun readPhones(bundle: Bundle?) = bundle?.getStringArrayList(KEY_PHONES)
 
-    private fun getContacts(bundle: Bundle?) = bundle?.let {
-        Counterparty.Contacts(
-                phones = it.getStringArrayList(KEY_PHONES),
-                addresses = it.getStringArrayList(KEY_ADDRESSES)
-        )
-    }
+    fun readAddresses(bundle: Bundle?) = bundle?.getStringArrayList(KEY_ADDRESSES)
 
     fun write(counterparty: Counterparty) = Bundle().apply {
         this.putString(KEY_UUID, counterparty.uuid?.toString())
@@ -49,12 +43,8 @@ internal object CounterpartyMapper {
         this.putString(KEY_SHORT_NAME, counterparty.shortName)
         this.putString(KEY_INN, counterparty.inn)
         this.putString(KEY_KPP, counterparty.kpp)
-        this.putBundle(KEY_CONTACTS, counterparty.contacts?.let { writeContacts(it) })
-    }
-
-    private fun writeContacts(contacts: Counterparty.Contacts) = Bundle().apply {
-        this.putStringArrayList(KEY_PHONES, contacts.phones as ArrayList<String>?)
-        this.putStringArrayList(KEY_ADDRESSES, contacts.addresses as ArrayList<String>?)
+        this.putStringArrayList(KEY_PHONES, counterparty.phones as ArrayList<String>?)
+        this.putStringArrayList(KEY_ADDRESSES, counterparty.addresses as ArrayList<String>?)
     }
 
     fun <C : Counterparty> convertToNull(counterparty: C): C? =
@@ -64,9 +54,8 @@ internal object CounterpartyMapper {
                     counterparty.shortName == null &&
                     counterparty.inn == null &&
                     counterparty.kpp == null &&
-                    (counterparty.contacts == null ||
-                            (counterparty.contacts.phones == null &&
-                                    counterparty.contacts.addresses == null)))
+                    counterparty.phones == null &&
+                    counterparty.addresses == null)
                 null
             else
                 counterparty
