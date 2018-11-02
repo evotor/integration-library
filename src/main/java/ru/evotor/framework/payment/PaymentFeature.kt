@@ -57,7 +57,7 @@ sealed class PaymentFeature : Parcelable {
         @JvmOverloads
         fun fromInt(typeOrdinal: Int, amount: BigDecimal? = null): PaymentFeature {
             val type = Type.values()[typeOrdinal]
-            return fromType(type)
+            return fromType(type, amount)
         }
     }
 
