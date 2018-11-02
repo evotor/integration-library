@@ -49,10 +49,8 @@ internal object AgentRequisitesMapper {
             shortName = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_SHORT_NAME),
             inn = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_INN),
             kpp = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_KPP),
-            contacts = Counterparty.Contacts(
-                    phones = cursor.optList(AgentRequisitesContract.COLUMN_AGENT_PHONES),
-                    addresses = cursor.optList(AgentRequisitesContract.COLUMN_AGENT_ADDRESSES)
-            )
+            phones = cursor.optList(AgentRequisitesContract.COLUMN_AGENT_PHONES),
+            addresses = cursor.optList(AgentRequisitesContract.COLUMN_AGENT_ADDRESSES)
     )
 
     private fun readSubagent(cursor: Cursor): Subagent? {
@@ -65,10 +63,8 @@ internal object AgentRequisitesMapper {
                 shortName = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_SHORT_NAME),
                 inn = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_INN),
                 kpp = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_KPP),
-                contacts = Counterparty.Contacts(
-                        phones = cursor.optList(AgentRequisitesContract.COLUMN_SUBAGENT_PHONES),
-                        addresses = cursor.optList(AgentRequisitesContract.COLUMN_SUBAGENT_ADDRESSES)
-                )
+                phones = cursor.optList(AgentRequisitesContract.COLUMN_SUBAGENT_PHONES),
+                addresses = cursor.optList(AgentRequisitesContract.COLUMN_SUBAGENT_ADDRESSES)
         )
     }
 
@@ -80,10 +76,8 @@ internal object AgentRequisitesMapper {
                     shortName = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_SHORT_NAME),
                     inn = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_INN),
                     kpp = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_KPP),
-                    contacts = Counterparty.Contacts(
-                            phones = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_PHONES),
-                            addresses = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_ADDRESSES)
-                    )
+                    phones = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_PHONES),
+                    addresses = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_ADDRESSES)
             )
 
     private fun readTransactionOperator(cursor: Cursor): TransactionOperator? =
@@ -95,10 +89,8 @@ internal object AgentRequisitesMapper {
                             shortName = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_SHORT_NAME),
                             inn = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_INN),
                             kpp = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_KPP),
-                            contacts = Counterparty.Contacts(
-                                    phones = cursor.optList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_PHONES),
-                                    addresses = cursor.optList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_ADDRESSES)
-                            )
+                            phones = cursor.optList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_PHONES),
+                            addresses = cursor.optList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_ADDRESSES)
                     )
             )
 

@@ -2,6 +2,7 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
@@ -11,19 +12,51 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.Agen
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
+/**
+ * Агентские реквизиты позиции чека
+ */
 data class AgentRequisites(
+        /**
+         * Агент
+         */
         val agent: Agent?,
+
+        /**
+         * Субагент
+         */
         val subagent: Subagent?,
+
+        /**
+         * Поставщик
+         */
         val supplier: Supplier,
+
+        /**
+         * Оператор перевода
+         */
         val transactionOperator: TransactionOperator?,
+
+        /**
+         * Операция агента
+         */
+        @FfdTag(1044)
         val operationDescription: String?
 ) : IBundlable {
 
     companion object {
 
+        /**
+         * Создает агентские реквизиты для агента типа "агент".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForAgent(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.AGENT,
@@ -39,9 +72,18 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "комиссионер".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForCommissioner(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.COMMISSIONER,
@@ -57,9 +99,18 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "поверенный".
+         *
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         */
         @JvmStatic
         fun createForAttorneyInFact(
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>
         ) = create(
                 Agent.Type.ATTORNEY_IN_FACT,
@@ -75,11 +126,26 @@ data class AgentRequisites(
                 null
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "платёжный агент".
+         *
+         * @param agentPhones телефоны платёжного агента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param operationDescription операция платежного агента
+         */
         @JvmStatic
         fun createForPaymentAgent(
+                @FfdTag(1073, 1074)
                 agentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 Agent.Type.PAYMENT_AGENT,
@@ -95,12 +161,30 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "платёжный субагент".
+         *
+         * @param agentPhones телефоны платёжного агента (оператора по приёму платежей)
+         * @param subagentPhones телефоны платёжного субагента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param operationDescription операция платежного субагента
+         */
         @JvmStatic
         fun createForPaymentSubagent(
+                @FfdTag(1074)
                 agentPhones: List<String>,
+
+                @FfdTag(1073)
                 subagentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 null,
@@ -116,15 +200,42 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "банковский платёжный агент".
+         *
+         * @param agentPhones телефоны банковского платёжного агента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param transactionOperatorName наименование оператора перевода
+         * @param transactionOperatorInn ИНН оператора перевода
+         * @param transactionOperatorPhones телефоны оператора перевода
+         * @param transactionOperatorAddress адрес оператора перевода
+         * @param operationDescription операция банковского платежного агента
+         */
         @JvmStatic
         fun createForBankPaymentAgent(
+                @FfdTag(1073)
                 agentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1026)
                 transactionOperatorName: String,
+
+                @FfdTag(1016)
                 transactionOperatorInn: String,
+
+                @FfdTag(1075)
                 transactionOperatorPhones: List<String>,
+
+                @FfdTag(1005)
                 transactionOperatorAddress: String,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 Agent.Type.BANK_PAYMENT_AGENT,
@@ -140,16 +251,46 @@ data class AgentRequisites(
                 operationDescription
         )
 
+        /**
+         * Создает агентские реквизиты для агента типа "банковский платёжный субагент".
+         *
+         * @param agentPhones телефоны банковского платёжного агента
+         * @param subagentPhones телефоны банковского платёжного субагента
+         * @param supplierInn ИНН поставщика
+         * @param supplierPhones телефоны поставщика
+         * @param transactionOperatorName наименование оператора перевода
+         * @param transactionOperatorInn ИНН оператора перевода
+         * @param transactionOperatorPhones телефоны оператора перевода
+         * @param transactionOperatorAddress адрес оператора перевода
+         * @param operationDescription операция банковского платежного субагента
+         */
         @JvmStatic
         fun createForBankPaymentSubagent(
+                @FfdTag(1073)
                 agentPhones: List<String>,
+
+                @FfdTag(1073)
                 subagentPhones: List<String>,
+
+                @FfdTag(1226)
                 supplierInn: String,
+
+                @FfdTag(1171)
                 supplierPhones: List<String>,
+
+                @FfdTag(1026)
                 transactionOperatorName: String,
+
+                @FfdTag(1016)
                 transactionOperatorInn: String,
+
+                @FfdTag(1075)
                 transactionOperatorPhones: List<String>,
+
+                @FfdTag(1005)
                 transactionOperatorAddress: String,
+
+                @FfdTag(1044)
                 operationDescription: String
         ) = create(
                 null,
@@ -187,7 +328,8 @@ data class AgentRequisites(
                                 null,
                                 null,
                                 null,
-                                Counterparty.Contacts(agentPhones, null)
+                                agentPhones,
+                                null
                         )
                 ),
                 subagentType?.let {
@@ -199,7 +341,8 @@ data class AgentRequisites(
                             null,
                             null,
                             null,
-                            Counterparty.Contacts(subagentPhones, null)
+                            subagentPhones,
+                            null
                     )
                 },
                 Supplier(
@@ -209,7 +352,8 @@ data class AgentRequisites(
                         null,
                         supplierInn,
                         null,
-                        Counterparty.Contacts(supplierPhones, null)
+                        supplierPhones,
+                        null
                 ),
                 TransactionOperatorMapper.convertToNull(
                         TransactionOperator(
@@ -219,10 +363,8 @@ data class AgentRequisites(
                                 null,
                                 transactionOperatorInn,
                                 null,
-                                Counterparty.Contacts(
-                                        transactionOperatorPhones,
-                                        transactionOperatorAddress?.let { listOf(it) }
-                                )
+                                transactionOperatorPhones,
+                                transactionOperatorAddress?.let { listOf(it) }
                         )
                 ),
                 operationDescription

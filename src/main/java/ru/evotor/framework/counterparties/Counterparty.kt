@@ -15,9 +15,13 @@ abstract class Counterparty(
         val shortName: String?,
         val inn: String?,
         val kpp: String?,
-        val contacts: Contacts?
+        val phones: List<String>?,
+        val addresses: List<String>?
 ) : IBundlable {
 
+    /**
+     * Тип контрагента
+     */
     enum class Type {
         /**
          * Юридическое лицо
@@ -33,8 +37,6 @@ abstract class Counterparty(
         GOVERNMENT_AGENCY
     }
 
-    data class Contacts(val phones: List<String>?, val addresses: List<String>?)
-
     override fun toBundle(): Bundle = CounterpartyMapper.write(this)
 
     override fun equals(other: Any?): Boolean {
@@ -47,7 +49,8 @@ abstract class Counterparty(
         if (shortName != other.shortName) return false
         if (inn != other.inn) return false
         if (kpp != other.kpp) return false
-        if (contacts != other.contacts) return false
+        if (phones != other.phones) return false
+        if (addresses != other.addresses) return false
 
         return true
     }
@@ -59,7 +62,8 @@ abstract class Counterparty(
         result = 31 * result + (shortName?.hashCode() ?: 0)
         result = 31 * result + (inn?.hashCode() ?: 0)
         result = 31 * result + (kpp?.hashCode() ?: 0)
-        result = 31 * result + (contacts?.hashCode() ?: 0)
+        result = 31 * result + (phones?.hashCode() ?: 0)
+        result = 31 * result + (addresses?.hashCode() ?: 0)
         return result
     }
 

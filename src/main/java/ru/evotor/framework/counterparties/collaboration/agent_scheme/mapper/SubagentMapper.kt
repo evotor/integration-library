@@ -4,7 +4,7 @@ import android.os.Bundle
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 
-object SubagentMapper {
+internal object SubagentMapper {
 
     private const val KEY_TYPE = "TYPE"
 
@@ -18,12 +18,13 @@ object SubagentMapper {
                         shortName = CounterpartyMapper.readShortName(it),
                         inn = CounterpartyMapper.readInn(it),
                         kpp = CounterpartyMapper.readKpp(it),
-                        contacts = CounterpartyMapper.readContacts(it)
+                        phones = CounterpartyMapper.readPhones(it),
+                        addresses = CounterpartyMapper.readAddresses(it)
                 )
             }
 
-    fun write(agent: Subagent, bundle: Bundle) = bundle.apply {
-        agent.type.let { this.putInt(KEY_TYPE, it.ordinal) }
+    fun write(subagent: Subagent, bundle: Bundle) = bundle.apply {
+        this.putInt(KEY_TYPE, subagent.type.ordinal)
     }
 
 }
