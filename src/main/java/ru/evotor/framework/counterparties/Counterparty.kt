@@ -35,10 +35,6 @@ abstract class Counterparty(
 
     data class Contacts(val phones: List<String>?, val addresses: List<String>?)
 
-    companion object {
-        fun from(bundle: Bundle?): Counterparty? = CounterpartyMapper.read(bundle)
-    }
-
     override fun toBundle(): Bundle = CounterpartyMapper.write(this)
 
     override fun equals(other: Any?): Boolean {

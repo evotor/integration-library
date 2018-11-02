@@ -9,16 +9,16 @@ internal object AgentMapper {
     private const val KEY_TYPE = "TYPE"
 
     fun read(bundle: Bundle?): Agent? =
-            CounterpartyMapper.read(bundle)?.let {
+            bundle?.let {
                 Agent(
-                        uuid = it.uuid,
-                        type = Agent.Type.values()[bundle!!.getInt(KEY_TYPE)],
-                        counterpartyType = it.counterpartyType,
-                        fullName = it.fullName,
-                        shortName = it.shortName,
-                        inn = it.inn,
-                        kpp = it.kpp,
-                        contacts = it.contacts
+                        uuid = CounterpartyMapper.readUuid(it),
+                        type = Agent.Type.values()[it.getInt(KEY_TYPE)],
+                        counterpartyType = CounterpartyMapper.readCounterpartyType(it),
+                        fullName = CounterpartyMapper.readFullName(it),
+                        shortName = CounterpartyMapper.readShortName(it),
+                        inn = CounterpartyMapper.readInn(it),
+                        kpp = CounterpartyMapper.readKpp(it),
+                        contacts = CounterpartyMapper.readContacts(it)
                 )
             }
 

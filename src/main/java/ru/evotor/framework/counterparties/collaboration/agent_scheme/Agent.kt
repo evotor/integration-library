@@ -50,7 +50,7 @@ class Agent(
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + type.hashCode()
+        result = 31 * result + (type?.hashCode() ?: 0)
         return result
     }
 

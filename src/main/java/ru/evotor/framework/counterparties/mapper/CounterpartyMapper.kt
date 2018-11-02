@@ -16,23 +16,26 @@ internal object CounterpartyMapper {
     private const val KEY_PHONES = "PHONES"
     private const val KEY_ADDRESSES = "ADDRESSES"
 
-    fun read(bundle: Bundle?): Counterparty? = bundle?.let {
-        object : Counterparty(
-                uuid = it.getString(KEY_UUID)?.let { uuid -> UUID.fromString(uuid) },
-                counterpartyType =
-                if (it.containsKey(KEY_COUNTERPARTY_TYPE))
-                    Type.values()[it.getInt(KEY_COUNTERPARTY_TYPE)]
-                else
-                    null,
-                fullName = it.getString(KEY_FULL_NAME),
-                shortName = it.getString(KEY_SHORT_NAME),
-                inn = it.getString(KEY_INN),
-                kpp = it.getString(KEY_KPP),
-                contacts = readContacts(it.getBundle(KEY_CONTACTS))
-        ) {}
+    fun readUuid(bundle: Bundle?) = bundle?.let { it.getString(KEY_UUID)?.let { uuid -> UUID.fromString(uuid) } }
+
+    fun readCounterpartyType(bundle: Bundle?) = bundle?.let {
+        if (it.containsKey(KEY_COUNTERPARTY_TYPE))
+            Counterparty.Type.values()[it.getInt(KEY_COUNTERPARTY_TYPE)]
+        else
+            null
     }
 
-    private fun readContacts(bundle: Bundle?) = bundle?.let {
+    fun readFullName(bundle: Bundle?) = bundle?.getString(KEY_FULL_NAME)
+
+    fun readShortName(bundle: Bundle?) = bundle?.getString(KEY_SHORT_NAME)
+
+    fun readInn(bundle: Bundle?) = bundle?.getString(KEY_INN)
+
+    fun readKpp(bundle: Bundle?) = bundle?.getString(KEY_KPP)
+
+    fun readContacts(bundle: Bundle?) = getContacts(bundle?.getBundle(KEY_CONTACTS))
+
+    private fun getContacts(bundle: Bundle?) = bundle?.let {
         Counterparty.Contacts(
                 phones = it.getStringArrayList(KEY_PHONES),
                 addresses = it.getStringArrayList(KEY_ADDRESSES)

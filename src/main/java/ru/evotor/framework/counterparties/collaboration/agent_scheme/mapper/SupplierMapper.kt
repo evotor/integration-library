@@ -7,16 +7,15 @@ import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 internal object SupplierMapper {
 
     fun read(bundle: Bundle?): Supplier? =
-            CounterpartyMapper.read(bundle)?.let {
+            bundle?.let {
                 Supplier(
-                        uuid = it.uuid,
-                        counterpartyType = it.counterpartyType,
-                        fullName = it.fullName,
-                        shortName = it.shortName,
-                        inn = it.inn,
-                        kpp = it.kpp,
-                        contacts = it.contacts
+                        uuid = CounterpartyMapper.readUuid(it),
+                        counterpartyType = CounterpartyMapper.readCounterpartyType(it),
+                        fullName = CounterpartyMapper.readFullName(it),
+                        shortName = CounterpartyMapper.readShortName(it),
+                        inn = CounterpartyMapper.readInn(it),
+                        kpp = CounterpartyMapper.readKpp(it),
+                        contacts = CounterpartyMapper.readContacts(it)
                 )
             }
-
 }
