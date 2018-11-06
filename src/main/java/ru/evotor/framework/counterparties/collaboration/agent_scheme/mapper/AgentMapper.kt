@@ -28,11 +28,9 @@ internal object AgentMapper {
     }
 
     fun convertToNull(agent: Agent): Agent? =
-            CounterpartyMapper.convertToNull(agent)?.let {
-                if (it.type == null)
-                    null
-                else
-                    it
-            }
+            if (CounterpartyMapper.convertToNull(agent) == null && agent.type == null)
+                null
+            else
+                agent
 
 }
