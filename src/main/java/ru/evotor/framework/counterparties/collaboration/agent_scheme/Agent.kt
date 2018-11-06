@@ -9,36 +9,27 @@ import java.util.*
 /**
  * Агент
  */
-class Agent(
-        uuid: UUID?,
+data class Agent(
+        override val uuid: UUID?,
 
         @FfdTag(1057, 1222)
         val type: Type?,
 
-        counterpartyType: Counterparty.Type?,
+        override val counterpartyType: Counterparty.Type?,
 
-        fullName: String?,
+        override val fullName: String?,
 
-        shortName: String?,
+        override val shortName: String?,
 
-        inn: String?,
+        override val inn: String?,
 
-        kpp: String?,
+        override val kpp: String?,
 
         @FfdTag(1073, 1074)
-        phones: List<String>?,
+        override val phones: List<String>?,
 
-        addresses: List<String>?
-) : Counterparty(
-        uuid,
-        counterpartyType,
-        fullName,
-        shortName,
-        inn,
-        kpp,
-        phones,
-        addresses
-) {
+        override val addresses: List<String>?
+) : Counterparty() {
 
     /**
      * Тип агента
@@ -71,21 +62,5 @@ class Agent(
     }
 
     override fun toBundle(): Bundle = AgentMapper.write(this, super.toBundle())
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Agent) return false
-        if (!super.equals(other)) return false
-
-        if (type != other.type) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + (type?.hashCode() ?: 0)
-        return result
-    }
 
 }

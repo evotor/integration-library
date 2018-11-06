@@ -9,44 +9,28 @@ import java.util.*
 /**
  * Поставщик
  */
-class Supplier(
-        uuid: UUID?,
+data class Supplier(
+        override val uuid: UUID?,
 
-        counterpartyType: Counterparty.Type?,
+        override val counterpartyType: Counterparty.Type?,
 
-        fullName: String?,
+        override val fullName: String?,
 
-        shortName: String?,
+        override val shortName: String?,
 
         @FfdTag(1226)
-        inn: String?,
+        override val inn: String?,
 
-        kpp: String?,
+        override val kpp: String?,
 
         @FfdTag(1171)
-        phones: List<String>?,
+        override val phones: List<String>?,
 
-        addresses: List<String>?
-) : Counterparty(
-        uuid,
-        counterpartyType,
-        fullName,
-        shortName,
-        inn,
-        kpp,
-        phones,
-        addresses
-) {
+        override val addresses: List<String>?
+) : Counterparty() {
 
     companion object {
         fun from(bundle: Bundle?): Supplier? = SupplierMapper.read(bundle)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Supplier) return false
-        if (!super.equals(other)) return false
-        return true
     }
 
 }

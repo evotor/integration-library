@@ -9,46 +9,30 @@ import java.util.*
 /**
  * Оператор перевода
  */
-class TransactionOperator(
-        uuid: UUID?,
+data class TransactionOperator(
+        override val uuid: UUID?,
 
-        counterpartyType: Counterparty.Type?,
+        override val counterpartyType: Counterparty.Type?,
 
         @FfdTag(1026)
-        fullName: String?,
+        override val fullName: String?,
 
-        shortName: String?,
+        override val shortName: String?,
 
         @FfdTag(1016)
-        inn: String?,
+        override val inn: String?,
 
-        kpp: String?,
+        override val kpp: String?,
 
         @FfdTag(1075)
-        phones: List<String>?,
+        override val phones: List<String>?,
 
         @FfdTag(1005)
-        addresses: List<String>?
-) : Counterparty(
-        uuid,
-        counterpartyType,
-        fullName,
-        shortName,
-        inn,
-        kpp,
-        phones,
-        addresses
-) {
+        override val addresses: List<String>?
+) : Counterparty() {
 
     companion object {
         fun from(bundle: Bundle?): TransactionOperator? = TransactionOperatorMapper.read(bundle)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is TransactionOperator) return false
-        if (!super.equals(other)) return false
-        return true
     }
 
 }
