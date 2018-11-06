@@ -43,8 +43,8 @@ internal object CounterpartyMapper {
         this.putString(KEY_SHORT_NAME, counterparty.shortName)
         this.putString(KEY_INN, counterparty.inn)
         this.putString(KEY_KPP, counterparty.kpp)
-        this.putStringArrayList(KEY_PHONES, counterparty.phones as ArrayList<String>?)
-        this.putStringArrayList(KEY_ADDRESSES, counterparty.addresses as ArrayList<String>?)
+        this.putStringArrayList(KEY_PHONES, counterparty.phones?.let { ArrayList(it) })
+        this.putStringArrayList(KEY_ADDRESSES, counterparty.addresses?.let { ArrayList(it) })
     }
 
     fun <C : Counterparty> convertToNull(counterparty: C): C? =
