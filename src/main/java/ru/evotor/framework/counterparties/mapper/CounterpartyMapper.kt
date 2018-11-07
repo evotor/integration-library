@@ -3,6 +3,7 @@ package ru.evotor.framework.counterparties.mapper
 import android.os.Bundle
 import ru.evotor.framework.counterparties.Counterparty
 import java.util.*
+import kotlin.collections.ArrayList
 
 internal object CounterpartyMapper {
 
