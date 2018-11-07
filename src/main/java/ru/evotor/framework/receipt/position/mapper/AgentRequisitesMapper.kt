@@ -5,7 +5,7 @@ import android.os.Bundle
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Supplier
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.optInt
@@ -19,7 +19,7 @@ internal object AgentRequisitesMapper {
 
     private const val KEY_AGENT = "AGENT"
     private const val KEY_SUBAGENT = "SUBAGENT"
-    private const val KEY_SUPPLIER = "SUPPLIER"
+    private const val KEY_PRINCIPAL = "PRINCIPAL"
     private const val KEY_TRANSACTION_OPERATOR = "TRANSACTION_OPERATOR"
     private const val KEY_OPERATION_DESCRIPTION = "OPERATION_DESCRIPTION"
 
@@ -27,7 +27,7 @@ internal object AgentRequisitesMapper {
         AgentRequisites(
                 agent = Agent.from(it.getBundle(KEY_AGENT)),
                 subagent = Subagent.from(it.getBundle(KEY_SUBAGENT)),
-                supplier = Supplier.from(it.getBundle(KEY_SUPPLIER)) ?: return null,
+                principal = Principal.from(it.getBundle(KEY_PRINCIPAL)) ?: return null,
                 transactionOperator = TransactionOperator.from(it.getBundle(KEY_TRANSACTION_OPERATOR)),
                 operationDescription = it.getString(KEY_OPERATION_DESCRIPTION)
         )
@@ -36,7 +36,7 @@ internal object AgentRequisitesMapper {
     fun read(cursor: Cursor) = AgentRequisites(
             agent = readAgent(cursor),
             subagent = readSubagent(cursor),
-            supplier = readSupplier(cursor),
+            principal = readPrincipal(cursor),
             transactionOperator = readTransactionOperator(cursor),
             operationDescription = cursor.optString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
     )
@@ -68,16 +68,16 @@ internal object AgentRequisitesMapper {
         )
     }
 
-    private fun readSupplier(cursor: Cursor): Supplier =
-            Supplier(
-                    uuid = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_UUID)?.let { UUID.fromString(it) },
-                    counterpartyType = cursor.optInt(AgentRequisitesContract.COLUMN_SUPPLIER_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                    fullName = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_FULL_NAME),
-                    shortName = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_SHORT_NAME),
-                    inn = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_INN),
-                    kpp = cursor.optString(AgentRequisitesContract.COLUMN_SUPPLIER_KPP),
-                    phones = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_PHONES),
-                    addresses = cursor.optList(AgentRequisitesContract.COLUMN_SUPPLIER_ADDRESSES)
+    private fun readPrincipal(cursor: Cursor): Principal =
+            Principal(
+                    uuid = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_UUID)?.let { UUID.fromString(it) },
+                    counterpartyType = cursor.optInt(AgentRequisitesContract.COLUMN_PRINCIPAL_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
+                    fullName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_FULL_NAME),
+                    shortName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME),
+                    inn = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_INN),
+                    kpp = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_KPP),
+                    phones = cursor.optList(AgentRequisitesContract.COLUMN_PRINCIPAL_PHONES),
+                    addresses = cursor.optList(AgentRequisitesContract.COLUMN_PRINCIPAL_ADDRESSES)
             )
 
     private fun readTransactionOperator(cursor: Cursor): TransactionOperator? =
@@ -97,7 +97,7 @@ internal object AgentRequisitesMapper {
     fun write(agentRequisites: AgentRequisites) = Bundle().apply {
         this.putBundle(KEY_AGENT, agentRequisites.agent?.toBundle())
         this.putBundle(KEY_SUBAGENT, agentRequisites.subagent?.toBundle())
-        this.putBundle(KEY_SUPPLIER, agentRequisites.supplier.toBundle())
+        this.putBundle(KEY_PRINCIPAL, agentRequisites.principal.toBundle())
         this.putBundle(KEY_TRANSACTION_OPERATOR, agentRequisites.transactionOperator?.toBundle())
         this.putString(KEY_OPERATION_DESCRIPTION, agentRequisites.operationDescription)
     }

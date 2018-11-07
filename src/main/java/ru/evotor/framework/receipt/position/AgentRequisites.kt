@@ -3,11 +3,10 @@ package ru.evotor.framework.receipt.position
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.core.FfdTag
-import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Supplier
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
@@ -27,9 +26,9 @@ data class AgentRequisites(
         val subagent: Subagent?,
 
         /**
-         * Поставщик
+         * Принципал (поставщик)
          */
-        val supplier: Supplier,
+        val principal: Principal,
 
         /**
          * Оператор перевода
@@ -48,23 +47,23 @@ data class AgentRequisites(
         /**
          * Создает агентские реквизиты для агента типа "агент".
          *
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          */
         @JvmStatic
         fun createForAgent(
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>
+                principalPhones: List<String>
         ) = create(
                 Agent.Type.AGENT,
                 null,
                 null,
                 null,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 null,
                 null,
                 null,
@@ -75,23 +74,23 @@ data class AgentRequisites(
         /**
          * Создает агентские реквизиты для агента типа "комиссионер".
          *
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          */
         @JvmStatic
         fun createForCommissioner(
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>
+                principalPhones: List<String>
         ) = create(
                 Agent.Type.COMMISSIONER,
                 null,
                 null,
                 null,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 null,
                 null,
                 null,
@@ -102,23 +101,23 @@ data class AgentRequisites(
         /**
          * Создает агентские реквизиты для агента типа "поверенный".
          *
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          */
         @JvmStatic
         fun createForAttorneyInFact(
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>
+                principalPhones: List<String>
         ) = create(
                 Agent.Type.ATTORNEY_IN_FACT,
                 null,
                 null,
                 null,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 null,
                 null,
                 null,
@@ -130,8 +129,8 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "платёжный агент".
          *
          * @param agentPhones телефоны платёжного агента
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          * @param operationDescription операция платежного агента
          */
         @JvmStatic
@@ -140,10 +139,10 @@ data class AgentRequisites(
                 agentPhones: List<String>,
 
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>,
+                principalPhones: List<String>,
 
                 @FfdTag(1044)
                 operationDescription: String
@@ -152,8 +151,8 @@ data class AgentRequisites(
                 agentPhones,
                 null,
                 null,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 null,
                 null,
                 null,
@@ -166,8 +165,8 @@ data class AgentRequisites(
          *
          * @param agentPhones телефоны платёжного агента (оператора по приёму платежей)
          * @param subagentPhones телефоны платёжного субагента
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          * @param operationDescription операция платежного субагента
          */
         @JvmStatic
@@ -179,10 +178,10 @@ data class AgentRequisites(
                 subagentPhones: List<String>,
 
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>,
+                principalPhones: List<String>,
 
                 @FfdTag(1044)
                 operationDescription: String
@@ -191,8 +190,8 @@ data class AgentRequisites(
                 agentPhones,
                 Subagent.Type.PAYMENT_SUBAGENT,
                 subagentPhones,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 null,
                 null,
                 null,
@@ -204,8 +203,8 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "банковский платёжный агент".
          *
          * @param agentPhones телефоны банковского платёжного агента
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
@@ -218,10 +217,10 @@ data class AgentRequisites(
                 agentPhones: List<String>,
 
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>,
+                principalPhones: List<String>,
 
                 @FfdTag(1026)
                 transactionOperatorName: String,
@@ -242,8 +241,8 @@ data class AgentRequisites(
                 agentPhones,
                 null,
                 null,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 transactionOperatorName,
                 transactionOperatorInn,
                 transactionOperatorPhones,
@@ -256,8 +255,8 @@ data class AgentRequisites(
          *
          * @param agentPhones телефоны банковского платёжного агента
          * @param subagentPhones телефоны банковского платёжного субагента
-         * @param supplierInn ИНН поставщика
-         * @param supplierPhones телефоны поставщика
+         * @param principalInn ИНН принципала (поставщика)
+         * @param principalPhones телефоны принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
@@ -273,10 +272,10 @@ data class AgentRequisites(
                 subagentPhones: List<String>,
 
                 @FfdTag(1226)
-                supplierInn: String,
+                principalInn: String,
 
                 @FfdTag(1171)
-                supplierPhones: List<String>,
+                principalPhones: List<String>,
 
                 @FfdTag(1026)
                 transactionOperatorName: String,
@@ -297,8 +296,8 @@ data class AgentRequisites(
                 agentPhones,
                 Subagent.Type.BANK_PAYMENT_SUBAGENT,
                 subagentPhones,
-                supplierInn,
-                supplierPhones,
+                principalInn,
+                principalPhones,
                 transactionOperatorName,
                 transactionOperatorInn,
                 transactionOperatorPhones,
@@ -311,8 +310,8 @@ data class AgentRequisites(
                 agentPhones: List<String>?,
                 subagentType: Subagent.Type?,
                 subagentPhones: List<String>?,
-                supplierInn: String,
-                supplierPhones: List<String>,
+                principalInn: String,
+                principalPhones: List<String>,
                 transactionOperatorName: String?,
                 transactionOperatorInn: String?,
                 transactionOperatorPhones: List<String>?,
@@ -345,14 +344,14 @@ data class AgentRequisites(
                             null
                     )
                 },
-                Supplier(
+                Principal(
                         null,
                         null,
                         null,
                         null,
-                        supplierInn,
+                        principalInn,
                         null,
-                        supplierPhones,
+                        principalPhones,
                         null
                 ),
                 TransactionOperatorMapper.convertToNull(
