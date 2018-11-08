@@ -12,7 +12,10 @@ internal object AgentMapper {
             bundle?.let {
                 Agent(
                         uuid = CounterpartyMapper.readUuid(it),
-                        type = Agent.Type.values()[it.getInt(KEY_TYPE)],
+                        type = if (it.containsKey(KEY_TYPE))
+                            Agent.Type.values()[it.getInt(KEY_TYPE)]
+                        else
+                            null,
                         counterpartyType = CounterpartyMapper.readCounterpartyType(it),
                         fullName = CounterpartyMapper.readFullName(it),
                         shortName = CounterpartyMapper.readShortName(it),
@@ -28,11 +31,9 @@ internal object AgentMapper {
     }
 
     fun convertToNull(agent: Agent): Agent? =
-            CounterpartyMapper.convertToNull(agent)?.let {
-                if (it.type == null)
-                    null
-                else
-                    it
-            }
+            if (CounterpartyMapper.convertToNull(agent) == null && agent.type == null)
+                null
+            else
+                agent
 
 }

@@ -3,36 +3,34 @@ package ru.evotor.framework.counterparties.collaboration.agent_scheme
 import android.os.Bundle
 import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.PrincipalMapper
 import java.util.*
 
 /**
- * Оператор перевода
+ * Принципал (поставщик)
  */
-data class TransactionOperator(
+data class Principal(
         override val uuid: UUID?,
 
         override val counterpartyType: Counterparty.Type?,
 
-        @FfdTag(1026)
         override val fullName: String?,
 
         override val shortName: String?,
 
-        @FfdTag(1016)
+        @FfdTag(1226)
         override val inn: String?,
 
         override val kpp: String?,
 
-        @FfdTag(1075)
+        @FfdTag(1171)
         override val phones: List<String>?,
 
-        @FfdTag(1005)
         override val addresses: List<String>?
 ) : Counterparty() {
 
     companion object {
-        fun from(bundle: Bundle?): TransactionOperator? = TransactionOperatorMapper.read(bundle)
+        fun from(bundle: Bundle?): Principal? = PrincipalMapper.read(bundle)
     }
 
 }

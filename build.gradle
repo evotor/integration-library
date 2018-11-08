@@ -35,6 +35,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile 'com.github.evotor:push-notifications:v0.2.1'
     compile 'com.github.evotor:query-api:1.0.0'
+    testCompile 'junit:junit:4.12'
 }
 
 repositories {
