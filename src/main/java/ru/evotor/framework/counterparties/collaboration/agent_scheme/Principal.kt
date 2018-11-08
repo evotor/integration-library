@@ -3,13 +3,13 @@ package ru.evotor.framework.counterparties.collaboration.agent_scheme
 import android.os.Bundle
 import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.SupplierMapper
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.PrincipalMapper
 import java.util.*
 
 /**
- * Поставщик
+ * Принципал (поставщик)
  */
-data class Supplier(
+data class Principal(
         override val uuid: UUID?,
 
         override val counterpartyType: Counterparty.Type?,
@@ -30,7 +30,7 @@ data class Supplier(
 ) : Counterparty() {
 
     companion object {
-        fun from(bundle: Bundle?): Supplier? = SupplierMapper.read(bundle)
+        fun from(bundle: Bundle?): Principal? = PrincipalMapper.read(bundle)
     }
 
 }

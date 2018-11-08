@@ -1,14 +1,14 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper
 
 import android.os.Bundle
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Supplier
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.mapper.CounterpartyMapper
 
-internal object SupplierMapper {
+internal object PrincipalMapper {
 
-    fun read(bundle: Bundle?): Supplier? =
+    fun read(bundle: Bundle?): Principal? =
             bundle?.let {
-                Supplier(
+                Principal(
                         uuid = CounterpartyMapper.readUuid(it),
                         counterpartyType = CounterpartyMapper.readCounterpartyType(it),
                         fullName = CounterpartyMapper.readFullName(it),
