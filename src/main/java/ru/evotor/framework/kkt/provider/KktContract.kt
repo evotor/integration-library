@@ -2,9 +2,10 @@ package ru.evotor.framework.kkt.provider
 
 import android.net.Uri
 
-object KktContract {
-    @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.kkt")
-    @JvmField val URI_FFD_VERSION = Uri.withAppendedPath(BASE_URI, "FfdVersion")
+internal object KktContract {
+    val BASE_URI: Uri = Uri.parse("content://ru.evotor.evotorpos.kkt")
 
-    const val COLUMN_FFD_VERSION = "FFD_VERSION"
+    const val COLUMN_SUPPORTED_FFD_VERSION = "SUPPORTED_FFD_VERSION"
+    const val COLUMN_REGISTERED_AGENT_TYPES = "REGISTERED_AGENT_TYPES"
+    const val COLUMN_REGISTERED_SUBAGENT_TYPES = "REGISTERED_SUBAGENT_TYPES"
 }
