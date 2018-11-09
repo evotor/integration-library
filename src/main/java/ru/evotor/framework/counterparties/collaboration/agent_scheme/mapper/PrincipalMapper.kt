@@ -13,9 +13,9 @@ internal object PrincipalMapper {
                         counterpartyType = CounterpartyMapper.readCounterpartyType(it),
                         fullName = CounterpartyMapper.readFullName(it),
                         shortName = CounterpartyMapper.readShortName(it),
-                        inn = CounterpartyMapper.readInn(it),
+                        inn = CounterpartyMapper.readInn(it) ?: return null,
                         kpp = CounterpartyMapper.readKpp(it),
-                        phones = CounterpartyMapper.readPhones(it),
+                        phones = CounterpartyMapper.readPhones(it) ?: return null,
                         addresses = CounterpartyMapper.readAddresses(it)
                 )
             }
