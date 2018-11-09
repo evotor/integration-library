@@ -109,7 +109,7 @@ internal object AgentRequisitesMapper {
     }
 
     private fun readAgent(cursor: Cursor): Agent? =
-            if (cursor.optInt(AgentRequisitesContract.COLUMN_AGENT_IS_NULL) != 0)
+            if (cursor.optString(AgentRequisitesContract.COLUMN_AGENT_IS_NULL)?.toBoolean() != false)
                 null
             else
                 Agent(
@@ -155,7 +155,7 @@ internal object AgentRequisitesMapper {
     }
 
     private fun readTransactionOperator(cursor: Cursor): TransactionOperator? =
-            if (cursor.optInt(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_IS_NULL) != 0)
+            if (cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_IS_NULL)?.toBoolean() != false)
                 null
             else
                 TransactionOperator(
