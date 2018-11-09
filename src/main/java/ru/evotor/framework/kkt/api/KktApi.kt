@@ -8,6 +8,9 @@ import ru.evotor.framework.kkt.provider.KktContract
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optList
 
+/**
+ * API для работы с кассой.
+ */
 object KktApi {
 
     /**
