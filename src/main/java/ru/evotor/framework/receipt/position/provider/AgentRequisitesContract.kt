@@ -1,8 +1,6 @@
 package ru.evotor.framework.receipt.position.provider
 
 object AgentRequisitesContract {
-    const val COLUMN_POSITION_UUID = "POSITION_UUID"
-
     const val COLUMN_AGENT_IS_NULL = "AGENT_IS_NULL"
     const val COLUMN_AGENT_UUID = "AGENT_UUID"
     const val COLUMN_AGENT_TYPE = "AGENT_TYPE"
