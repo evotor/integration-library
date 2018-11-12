@@ -31,5 +31,5 @@ internal fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
         return null
     }
 
-    return getString(columnIndex).split("\\s*,\\s*")
+    return getString(columnIndex).split(Regex("\\s*,\\s*"))
 }
