@@ -19,12 +19,12 @@ data class Principal(
         override val shortName: String?,
 
         @FfdTag(1226)
-        override val inn: String?,
+        override val inn: String,
 
         override val kpp: String?,
 
         @FfdTag(1171)
-        override val phones: List<String>?,
+        override val phones: List<String>,
 
         override val addresses: List<String>?
 ) : Counterparty() {
