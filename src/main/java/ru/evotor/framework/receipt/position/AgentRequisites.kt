@@ -7,8 +7,6 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
@@ -63,7 +61,7 @@ data class AgentRequisites(
 
                 @FfdTag(1171)
                 principalPhones: List<String>
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 Agent.Type.AGENT,
                 null,
                 null,
@@ -90,7 +88,7 @@ data class AgentRequisites(
 
                 @FfdTag(1171)
                 principalPhones: List<String>
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 Agent.Type.COMMISSIONER,
                 null,
                 null,
@@ -117,7 +115,7 @@ data class AgentRequisites(
 
                 @FfdTag(1171)
                 principalPhones: List<String>
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 Agent.Type.ATTORNEY_IN_FACT,
                 null,
                 null,
@@ -152,7 +150,7 @@ data class AgentRequisites(
 
                 @FfdTag(1044)
                 operationDescription: String
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 Agent.Type.PAYMENT_AGENT,
                 agentPhones,
                 null,
@@ -191,7 +189,7 @@ data class AgentRequisites(
 
                 @FfdTag(1044)
                 operationDescription: String
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 null,
                 agentPhones,
                 Subagent.Type.PAYMENT_SUBAGENT,
@@ -242,7 +240,7 @@ data class AgentRequisites(
 
                 @FfdTag(1044)
                 operationDescription: String
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 Agent.Type.BANK_PAYMENT_AGENT,
                 agentPhones,
                 null,
@@ -297,7 +295,7 @@ data class AgentRequisites(
 
                 @FfdTag(1044)
                 operationDescription: String
-        ) = create(
+        ) = AgentRequisitesMapper.create(
                 null,
                 agentPhones,
                 Subagent.Type.BANK_PAYMENT_SUBAGENT,
@@ -308,70 +306,6 @@ data class AgentRequisites(
                 transactionOperatorInn,
                 transactionOperatorPhones,
                 transactionOperatorAddress,
-                operationDescription
-        )
-
-        private fun create(
-                agentType: Agent.Type?,
-                agentPhones: List<String>?,
-                subagentType: Subagent.Type?,
-                subagentPhones: List<String>?,
-                principalInn: String,
-                principalPhones: List<String>,
-                transactionOperatorName: String?,
-                transactionOperatorInn: String?,
-                transactionOperatorPhones: List<String>?,
-                transactionOperatorAddress: String?,
-                operationDescription: String?
-        ) = AgentRequisites(
-                AgentMapper.convertToNull(
-                        Agent(
-                                null,
-                                agentType,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                agentPhones,
-                                null
-                        )
-                ),
-                subagentType?.let {
-                    Subagent(
-                            null,
-                            it,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null,
-                            subagentPhones,
-                            null
-                    )
-                },
-                Principal(
-                        null,
-                        null,
-                        null,
-                        null,
-                        principalInn,
-                        null,
-                        principalPhones,
-                        null
-                ),
-                TransactionOperatorMapper.convertToNull(
-                        TransactionOperator(
-                                null,
-                                null,
-                                transactionOperatorName,
-                                null,
-                                transactionOperatorInn,
-                                null,
-                                transactionOperatorPhones,
-                                transactionOperatorAddress?.let { listOf(it) }
-                        )
-                ),
                 operationDescription
         )
 
