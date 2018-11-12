@@ -11,6 +11,12 @@ import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
  * Агентские реквизиты позиции чека
+ *
+ * ВАЖНО! При создании агентских реквизитов на устройстве агента или субагента необходимо
+ * использовать только те типы агента или субагента, которые были указаны при регистрации кассы.
+ *
+ * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredAgentTypes]
+ * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
  */
 data class AgentRequisites(
         /**
