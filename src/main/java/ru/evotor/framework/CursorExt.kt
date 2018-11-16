@@ -1,5 +1,8 @@
 package ru.evotor.framework
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 internal fun android.database.Cursor.optInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
@@ -31,5 +34,6 @@ internal fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
         return null
     }
 
-    return getString(columnIndex)?.split(Regex("\\s*,\\s*"))
+    return getString(columnIndex)?.let { Gson().fromJson(it, object : TypeToken<List<String>>() {}.type) }
+
 }
