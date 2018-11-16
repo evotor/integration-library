@@ -35,4 +35,5 @@ internal fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
     }
 
     return getString(columnIndex)?.let { Gson().fromJson(it, object : TypeToken<List<String>>() {}.type) }
+
 }
