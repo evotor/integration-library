@@ -12,7 +12,7 @@ import ru.evotor.framework.safeValueOf
 object ChangesMapper {
     private const val TAG = "ChangesMapper"
 
-    private const val KEY_CHANGE_TYPE = "type"
+    private const val KEY_CHANGE_TYPE = "formationMethod"
     private const val KEY_CHANGE = "change"
 
     private data class ChangeInBundle(val typeName: String, val bundle: Bundle)
@@ -28,7 +28,7 @@ object ChangesMapper {
 
                     val changeBundle = it.getBundle(KEY_CHANGE)
                     if (typeString == null) {
-                        Log.e(TAG, "type can not be null")
+                        Log.e(TAG, "formationMethod can not be null")
                         return@map null
                     }
 
