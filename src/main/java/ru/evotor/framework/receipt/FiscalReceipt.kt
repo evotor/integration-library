@@ -1,78 +1,100 @@
 package ru.evotor.framework.receipt
 
-import org.json.JSONObject
-import ru.evotor.framework.Document
-import ru.evotor.framework.FfdTag
+import android.os.Bundle
+import ru.evotor.IBundlable
 import ru.evotor.framework.FiscalDocument
-import ru.evotor.framework.RepresentsFfdTags
-import ru.evotor.framework.kkt.FfdVersion
-import java.math.BigDecimal
+import ru.evotor.framework.FiscalRequisite
+import ru.evotor.framework.FutureFeature
+import ru.evotor.framework.provider.DocumentContract
+import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
+import ru.evotor.framework.receipt.provider.FiscalReceiptContract
+import ru.evotor.query.Cursor
+import ru.evotor.query.FilterBuilder
 import java.util.*
 
 data class FiscalReceipt internal constructor(
-        @RepresentsFfdTags(FfdTag(1057, FfdTag.NecessityIndex.ONE, Document.Form.PRINT, Document.Form.ELECTRONIC))
-        override val uuid: UUID,
+        /**
+         * Номер фискального документа
+         */
+        @FiscalRequisite(tag = FiscalDocument.TAG_DOCUMENT_NUMBER, isPrinted = true, isSentToOfd = true)
+        override val documentNumber: Long,
 
-        override val name: String,
-        override val formCode: String,
-        override val number: Long,
+        /**
+         * Дата и время создания фискального документа
+         */
+        @FiscalRequisite(tag = FiscalDocument.TAG_CREATION_DATE, isPrinted = true, isSentToOfd = true)
         override val creationDate: Date,
-        override val userName: String,
-        override val userInn: String,
-        override val settlementsAddress: String,
-        override val settlementsPlace: String,
-        override val kktRegistrationNumber: Long,
-        override val sessionNumber: Long,
-        override val registeredFfdVersion: FfdVersion,
-        override val fiscalStorageNumber: Long,
-        override val fpd: Long,
-        override val fps: Long,
+
         /**
-         * Способ, которым был сформирован чек
+         * Признак (тип) расчёта
          */
-        val formationMethod: ReceiptFormationMethod,
-        /**
-         * Тип происведённого расчёта
-         */
+        @FiscalRequisite(tag = TAG_SETTLEMENT_TYPE, isPrinted = true, isSentToOfd = true)
         val settlementType: SettlementType,
+
         /**
-         * Название организации продавца
+         * Регистрационный номер ККТ
          */
-        val sellerOrganizationName: String,
+        @FiscalRequisite(tag = FiscalDocument.TAG_KKT_REGISTRATION_NUMBER, isPrinted = true, isSentToOfd = true)
+        override val kktRegistrationNumber: Long,
+
         /**
-         * ИНН организации продавца
+         * Номер аппаратной смены
          */
-        val sellerOrganizationInn: String,
+        @FiscalRequisite(tag = FiscalDocument.TAG_SESSION_NUMBER, isPrinted = true, isSentToOfd = true)
+        override val sessionNumber: Long,
+
         /**
-         * Адрес организации продавца
+         * Номер фискального накопителя
          */
-        val sellerOrganizationAddress: String,
+        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_STORAGE_NUMBER, isPrinted = true, isSentToOfd = true)
+        override val fiscalStorageNumber: Long,
+
         /**
-         * Система налогооблажения продавца
+         * Фискальный признак (фискальный идентификатор) документа
          */
-        val sellerTaxationSystem: TaxationSystem,
+        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER, isPrinted = true, isSentToOfd = true)
+        override val fiscalIdentifier: Long
+) : FiscalDocument(), IBundlable {
+    companion object {
         /**
-         * Позиции
+         * Фискальный тег "Признак расчёта"
          */
-        val positions: List<Position>,
-        /**
-         * Email покупателя для отправки чека по электронной почте
-         */
-        val customerEmail: String?,
-        /**
-         * Телефон покупателя для отправки чека по смс
-         */
-        val customerPhone: String?,
-        /**
-         * Оплаты
-         */
-        val payments: Map<Payment, BigDecimal>,
-        /**
-         * Сдачи
-         */
-        val changes: Map<Payment, BigDecimal>,
-        /**
-         * Дополнительные поля
-         */
-        val extra: JSONObject?
-) : FiscalDocument()
+        const val TAG_SETTLEMENT_TYPE = 1054
+
+        fun from(bundle: Bundle?): FiscalReceipt? = FiscalReceiptMapper.read(bundle)
+    }
+
+    override fun toBundle(): Bundle = FiscalReceiptMapper.write(this)
+
+    @FutureFeature("Query на получение фискальных чеков")
+    private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt?>(FiscalReceiptContract.URI) {
+        val uuid = addFieldFilter<UUID>(DocumentContract.COLUMN_UUID)
+        val documentNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
+        val creationDate = addFieldFilter<Date>(FiscalDocumentContract.COLUMN_CREATION_DATE)
+        val settlementType = addFieldFilter<SettlementType>(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
+        val kktRegistrationNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
+        val sessionNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
+        val fiscalStorageNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
+        val fiscalIdentifier = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
+
+        class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
+            val uuid = addFieldSorter(DocumentContract.COLUMN_UUID)
+            val documentNumber = addFieldSorter(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
+            val creationDate = addFieldSorter(FiscalDocumentContract.COLUMN_CREATION_DATE)
+            val settlementType = addFieldSorter(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
+            val kktRegistrationNumber = addFieldSorter(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
+            val sessionNumber = addFieldSorter(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
+            val fiscalStorageNumber = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
+            val fiscalIdentifier = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
+
+            override val currentSortOrder: SortOrder
+                get() = this
+        }
+
+        override val currentQuery: Query
+            get() = this
+
+        override fun getValue(cursor: Cursor<FiscalReceipt?>): FiscalReceipt? = FiscalReceiptMapper.read(cursor)
+    }
+}

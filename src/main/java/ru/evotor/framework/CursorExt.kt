@@ -37,3 +37,27 @@ internal fun android.database.Cursor.optList(columnIndex: Int): List<String>? {
     return getString(columnIndex)?.let { Gson().fromJson(it, object : TypeToken<List<String>>() {}.type) }
 
 }
+
+internal fun <T : Enum<*>> android.database.Cursor.optEnum(columnName: String, values: Array<T>): T? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return optEnum(index, values)
+}
+
+internal fun <T : Enum<*>> android.database.Cursor.optEnum(columnIndex: Int, values: Array<T>): T? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getInt(columnIndex).let {
+        try {
+            values[it]
+        } catch (e: IndexOutOfBoundsException) {
+            null
+        }
+    }
+
+}
