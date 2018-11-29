@@ -27,7 +27,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
     /**
      * Magic number для идентификации использования версионирования объекта
      */
@@ -85,7 +85,7 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная марка.
+     * Алкогольная или табачная марка.
      */
     private String mark;
     /**
@@ -399,7 +399,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Алкогольная марка.
+     * @return Алкогольная или табачная марка.
      */
     @Nullable
     public String getMark() {
@@ -742,7 +742,7 @@ public class Position implements Parcelable {
             );
 
             builder.setTaxNumber(product.getTaxNumber())
-                    .setAlcoParams(
+                    .setAlcoAndTobaccoParams(
                             null,
                             product.getAlcoholByVolume(),
                             product.getAlcoholProductKindCode(),
@@ -805,7 +805,7 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_MARKED;
-            setAlcoParams(
+            setAlcoAndTobaccoParams(
                     mark,
                     alcoholByVolume,
                     alcoholProductKindCode,
@@ -820,7 +820,7 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_NOT_MARKED;
-            setAlcoParams(
+            setAlcoAndTobaccoParams(
                     null,
                     alcoholByVolume,
                     alcoholProductKindCode,
@@ -829,9 +829,22 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toTobaccoMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.TOBACCO_MARKED;
+            setAlcoAndTobaccoParams(
+                    mark,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
-            setAlcoParams(
+            setAlcoAndTobaccoParams(
                     null,
                     null,
                     null,
@@ -842,7 +855,7 @@ public class Position implements Parcelable {
 
         public Builder toService() {
             position.productType = ProductType.SERVICE;
-            setAlcoParams(
+            setAlcoAndTobaccoParams(
                     null,
                     null,
                     null,
@@ -851,7 +864,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        private void setAlcoParams(
+        private void setAlcoAndTobaccoParams(
                 String mark,
                 BigDecimal alcoholByVolume,
                 Long alcoholProductKindCode,
