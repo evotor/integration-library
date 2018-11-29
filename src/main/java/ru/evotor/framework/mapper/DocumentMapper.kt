@@ -5,7 +5,6 @@ import android.os.Bundle
 import ru.evotor.framework.Document
 import ru.evotor.framework.optString
 import ru.evotor.framework.provider.DocumentContract
-import ru.evotor.framework.provider.FiscalDocumentContract
 import ru.evotor.framework.safeGetSerializable
 import java.util.*
 
@@ -19,6 +18,6 @@ internal object DocumentMapper {
     }
 
     fun write(document: Document) = Bundle().apply {
-        this.putSerializable(KEY_UUID, document.uuid)
+       // this.putSerializable(KEY_UUID, document.uuid)
     }
 }

@@ -15,7 +15,7 @@ internal object FiscalReceiptMapper {
 
     fun read(bundle: Bundle?): FiscalReceipt? = bundle?.let {
         FiscalReceipt(
-                uuid = DocumentMapper.readUuid(it) ?: return null,
+          //      uuid = DocumentMapper.readUuid(it) ?: return null,
                 documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
                 settlementType = it.safeGetEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
@@ -31,7 +31,7 @@ internal object FiscalReceiptMapper {
 
     fun read(cursor: Cursor): FiscalReceipt? {
         return FiscalReceipt(
-                uuid = DocumentMapper.readUuid(cursor) ?: return null,
+              //  uuid = DocumentMapper.readUuid(cursor) ?: return null,
                 documentNumber = FiscalDocumentMapper.readDocumentNumber(cursor) ?: return null,
                 creationDate = FiscalDocumentMapper.readCreationDate(cursor) ?: return null,
                 settlementType = cursor.optEnum(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values())
