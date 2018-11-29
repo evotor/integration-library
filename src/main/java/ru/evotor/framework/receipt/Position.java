@@ -27,7 +27,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 4;
+    private static final int VERSION = 3;
     /**
      * Magic number для идентификации использования версионирования объекта
      */
