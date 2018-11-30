@@ -69,7 +69,7 @@ data class FiscalReceipt internal constructor(
 
     @FutureFeature("Query на получение фискальных чеков")
     private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt?>(FiscalReceiptContract.URI) {
-        val uuid = addFieldFilter<UUID>(DocumentContract.COLUMN_UUID)
+        val uuid = addFieldFilter<UUID>(FiscalDocumentContract.COLUMN_UUID)
         val documentNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
         val creationDate = addFieldFilter<Date>(FiscalDocumentContract.COLUMN_CREATION_DATE)
         val settlementType = addFieldFilter<SettlementType>(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
@@ -79,7 +79,7 @@ data class FiscalReceipt internal constructor(
         val fiscalIdentifier = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            val uuid = addFieldSorter(DocumentContract.COLUMN_UUID)
+            val uuid = addFieldSorter(FiscalDocumentContract.COLUMN_UUID)
             val documentNumber = addFieldSorter(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
             val creationDate = addFieldSorter(FiscalDocumentContract.COLUMN_CREATION_DATE)
             val settlementType = addFieldSorter(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
