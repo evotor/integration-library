@@ -6,8 +6,7 @@ import ru.evotor.framework.core.action.processor.ActionProcessor
 abstract class PrintExtraRequiredEventProcessor : ActionProcessor() {
 
     override fun process(action: String, bundle: Bundle?, callback: ActionProcessor.Callback) {
-        val event = PrintExtraRequiredEvent.create(bundle)
-        if (event == null){
+        val event = PrintExtraRequiredEvent.create(bundle) ?: run {
             callback.skip()
             return
         }

@@ -6,8 +6,7 @@ import ru.evotor.framework.core.action.processor.ActionProcessor
 
 abstract class PaymentDelegatorEventProcessor: ActionProcessor() {
     override fun process(action: String, bundle: Bundle?, callback: Callback) {
-        val event = PaymentDelegatorEvent.create(bundle)
-        if (event == null){
+        val event = PaymentDelegatorEvent.create(bundle) ?: run {
             callback.skip()
             return
         }
