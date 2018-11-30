@@ -12,7 +12,7 @@ public abstract class PaymentSelectedEventProcessor extends ActionProcessor {
     public void process(@NonNull String action, @Nullable Bundle bundle, @NonNull Callback callback) throws RemoteException {
         PaymentSelectedEvent event = PaymentSelectedEvent.create(bundle);
 
-        if (event == null){
+        if (event == null) {
             callback.skip();
             return;
         }
