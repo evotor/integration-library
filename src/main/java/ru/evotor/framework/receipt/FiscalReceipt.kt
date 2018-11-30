@@ -5,7 +5,6 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.FiscalDocument
 import ru.evotor.framework.FiscalRequisite
 import ru.evotor.framework.FutureFeature
-import ru.evotor.framework.provider.DocumentContract
 import ru.evotor.framework.provider.FiscalDocumentContract
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract

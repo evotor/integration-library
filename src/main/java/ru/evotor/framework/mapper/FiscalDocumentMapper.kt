@@ -4,7 +4,6 @@ import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.*
 import ru.evotor.framework.provider.FiscalDocumentContract
-import java.text.DateFormat
 import java.util.*
 
 internal object FiscalDocumentMapper {
@@ -21,9 +20,7 @@ internal object FiscalDocumentMapper {
 
     fun readCreationDate(bundle: Bundle?): Date? = bundle?.safeGetSerializable(KEY_CREATION_DATE)
 
-    fun readCreationDate(cursor: Cursor): Date? {
-        return DateFormat.getInstance().parse(cursor.optString(KEY_CREATION_DATE) ?: return null)
-    }
+    fun readCreationDate(cursor: Cursor): Date? = cursor.optString(KEY_CREATION_DATE)?.let { Date(it.toLong()) }
 
     fun readKktRegistrationNumber(bundle: Bundle?): Long? = bundle?.safeGetLong(KEY_KKT_REGISTRATION_NUMBER)
 

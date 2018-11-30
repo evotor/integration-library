@@ -5,7 +5,6 @@ import ru.evotor.framework.mapper.FiscalDocumentMapper
 import java.util.*
 
 abstract class FiscalDocument internal constructor() : Document() {
-
     abstract val documentNumber: Long
     abstract val creationDate: Date
     abstract val kktRegistrationNumber: Long
