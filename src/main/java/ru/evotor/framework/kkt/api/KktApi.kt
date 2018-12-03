@@ -6,8 +6,8 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.optInt
-import ru.evotor.framework.optList
+import ru.evotor.framework.safeGetInt
+import ru.evotor.framework.safeGetList
 
 /**
  * API для работы с кассой.
@@ -28,7 +28,7 @@ object KktApi {
             null
     )?.use { cursor ->
         cursor.moveToFirst()
-        cursor.optInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
+        cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
             if (version !in 0..FfdVersion.values().size) {
                 throw OutdatedLibraryException(FfdVersion::class.java.name)
             }
@@ -53,7 +53,7 @@ object KktApi {
                     null
             )?.use { cursor ->
                 cursor.moveToFirst()
-                cursor.optList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
+                cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
                             throw OutdatedLibraryException(Agent.Type::class.java.name)
@@ -80,7 +80,7 @@ object KktApi {
                     null
             )?.use { cursor ->
                 cursor.moveToFirst()
-                cursor.optList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
+                cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
                             throw OutdatedLibraryException(Subagent.Type::class.java.name)

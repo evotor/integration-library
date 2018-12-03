@@ -53,7 +53,12 @@ data class FiscalReceipt internal constructor(
          * Фискальный признак (фискальный идентификатор) документа
          */
         @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER, isPrinted = true, isSentToOfd = true)
-        override val fiscalIdentifier: Long
+        override val fiscalIdentifier: Long,
+
+        /**
+         * Был ли напечатан фискальный чек
+         */
+        val wasPrinted: Boolean
 ) : FiscalDocument(), IBundlable {
     companion object {
         /**
@@ -67,8 +72,7 @@ data class FiscalReceipt internal constructor(
     override fun toBundle(): Bundle = FiscalReceiptMapper.write(this)
 
     @FutureFeature("Query на получение фискальных чеков")
-    private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt?>(FiscalReceiptContract.URI) {
-        val uuid = addFieldFilter<UUID>(FiscalDocumentContract.COLUMN_UUID)
+    private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt>(FiscalReceiptContract.URI) {
         val documentNumber = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
         val creationDate = addFieldFilter<Date>(FiscalDocumentContract.COLUMN_CREATION_DATE)
         val settlementType = addFieldFilter<SettlementType>(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
@@ -78,7 +82,6 @@ data class FiscalReceipt internal constructor(
         val fiscalIdentifier = addFieldFilter<Long>(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            val uuid = addFieldSorter(FiscalDocumentContract.COLUMN_UUID)
             val documentNumber = addFieldSorter(FiscalDocumentContract.COLUMN_DOCUMENT_NUMBER)
             val creationDate = addFieldSorter(FiscalDocumentContract.COLUMN_CREATION_DATE)
             val settlementType = addFieldSorter(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE)
@@ -94,6 +97,6 @@ data class FiscalReceipt internal constructor(
         override val currentQuery: Query
             get() = this
 
-        override fun getValue(cursor: Cursor<FiscalReceipt?>): FiscalReceipt? = FiscalReceiptMapper.read(cursor)
+        override fun getValue(cursor: Cursor<FiscalReceipt>): FiscalReceipt = FiscalReceiptMapper.read(cursor)
     }
 }

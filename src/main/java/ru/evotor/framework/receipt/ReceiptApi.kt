@@ -238,11 +238,11 @@ object ReceiptApi {
      * @param receiptUuid uuid ["чека"][ru.evotor.framework.receipt.Receipt]
      */
     @JvmStatic
-    fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt?>? =
+    fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
             context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
                     ?.let {
-                        object : ru.evotor.query.Cursor<FiscalReceipt?>(it) {
-                            override fun getValue(): FiscalReceipt? = FiscalReceiptMapper.read(this)
+                        object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
+                            override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
                         }
                     }
 

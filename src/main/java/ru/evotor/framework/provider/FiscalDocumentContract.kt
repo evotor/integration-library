@@ -7,7 +7,6 @@ internal object FiscalDocumentContract {
 
     val URI: Uri = Uri.parse("content://$AUTHORITY")
 
-    const val COLUMN_UUID = "UUID"
     const val COLUMN_DOCUMENT_NUMBER = "DOCUMENT_NUMBER"
     const val COLUMN_CREATION_DATE = "CREATION_DATE"
     const val COLUMN_KKT_REGISTRATION_NUMBER = "KKT_REGISTRATION_NUMBER"
