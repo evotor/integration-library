@@ -6,8 +6,10 @@ import ru.evotor.framework.core.action.processor.ActionProcessor
 
 abstract class PaymentSystemProcessor : ActionProcessor() {
     override fun process(action: String, bundle: Bundle?, callback: ActionProcessor.Callback) {
-        val event = PaymentSystemEvent.create(bundle) ?: return
-
+        val event = PaymentSystemEvent.create(bundle) ?: run {
+            callback.skip()
+            return
+        }
         when (event.operationType) {
             PaymentSystemEvent.OperationType.SELL -> sell(action, event as PaymentSystemSellEvent, callback)
             PaymentSystemEvent.OperationType.SELL_CANCEL -> sellCancel(action, event as PaymentSystemSellCancelEvent, callback)
