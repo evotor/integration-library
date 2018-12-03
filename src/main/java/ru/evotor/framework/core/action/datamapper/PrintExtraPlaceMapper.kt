@@ -6,7 +6,7 @@ import ru.evotor.framework.safeValueOf
 
 object PrintExtraPlaceMapper {
 
-    private const val KEY_TYPE = "formationMethod"
+    private const val KEY_TYPE = "type"
 
     fun toBundle(printExtraPlace: PrintExtraPlace): Bundle =
             Bundle().let {

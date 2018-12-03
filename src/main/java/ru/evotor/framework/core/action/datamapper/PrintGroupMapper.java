@@ -9,7 +9,7 @@ import ru.evotor.framework.receipt.TaxationSystem;
 
 public final class PrintGroupMapper {
     private static final String KEY_IDENTIFIER = "identifier";
-    private static final String KEY_TYPE = "formationMethod";
+    private static final String KEY_TYPE = "type";
     private static final String KEY_ORG_NAME = "orgName";
     private static final String KEY_ORG_INN = "orgInn";
     private static final String KEY_ORG_ADDRESS = "orgAddress";
