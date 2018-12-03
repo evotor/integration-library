@@ -1,6 +1,6 @@
 package ru.evotor.framework.core
 
-private const val CAUSE = "$"
+private const val CAUSE = "*"
 
 private const val BASE_MESSAGE = "Found $CAUSE that is not supported in current integration-library. Update your integration-library to resolve this error."
 
