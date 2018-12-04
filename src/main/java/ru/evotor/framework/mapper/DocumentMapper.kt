@@ -11,6 +11,5 @@ internal object DocumentMapper {
     fun readUuid(bundle: Bundle?): UUID? = bundle?.safeGetSerializable(KEY_UUID)
 
     fun write(document: Document) = Bundle().apply {
-       // this.putSerializable(KEY_UUID, document.uuid)
     }
 }
