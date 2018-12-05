@@ -15,7 +15,7 @@ internal object FiscalDocumentMapper {
     private const val KEY_FISCAL_STORAGE_NUMBER = "FISCAL_STORAGE_NUMBER"
     private const val KEY_FISCAL_IDENTIFIER = "FISCAL_IDENTIFIER"
 
-    private const val FISCAL_DATE_PATTERN = "ddMMyyyyhhmm"
+    private const val FISCAL_DATE_PATTERN = "ddMMyyyyHHmm"
 
     fun readDocumentNumber(bundle: Bundle?): Long? = bundle?.safeGetLong(KEY_DOCUMENT_NUMBER)
 
