@@ -14,7 +14,10 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
+import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -228,6 +231,21 @@ object ReceiptApi {
             }
         }
     }
+
+    /**
+     * Получить фискальные чеки по идентификатору ["чека"][ru.evotor.framework.receipt.Receipt].
+     * @param context контекст приложения
+     * @param receiptUuid uuid ["чека"][ru.evotor.framework.receipt.Receipt]
+     */
+    @JvmStatic
+    fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
+            context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
+                    ?.let {
+                        object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
+                            override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
+                        }
+                    }
+
 
     private fun createGetPositionResult(cursor: Cursor): GetPositionResult? {
         return GetPositionResult(
