@@ -742,7 +742,7 @@ public class Position implements Parcelable {
             );
 
             builder.setTaxNumber(product.getTaxNumber())
-                    .setAlcoAndTobaccoParams(
+                    .setAlcoParams(
                             null,
                             product.getAlcoholByVolume(),
                             product.getAlcoholProductKindCode(),
@@ -805,7 +805,7 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_MARKED;
-            setAlcoAndTobaccoParams(
+            setAlcoParams(
                     mark,
                     alcoholByVolume,
                     alcoholProductKindCode,
@@ -820,7 +820,7 @@ public class Position implements Parcelable {
                 @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.ALCOHOL_NOT_MARKED;
-            setAlcoAndTobaccoParams(
+            setAlcoParams(
                     null,
                     alcoholByVolume,
                     alcoholProductKindCode,
@@ -833,18 +833,13 @@ public class Position implements Parcelable {
                 @NonNull String mark
         ) {
             position.productType = ProductType.TOBACCO_MARKED;
-            setAlcoAndTobaccoParams(
-                    mark,
-                    null,
-                    null,
-                    null
-            );
+            setTobaccoParams(mark);
             return this;
         }
 
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
-            setAlcoAndTobaccoParams(
+            setAlcoParams(
                     null,
                     null,
                     null,
@@ -855,7 +850,7 @@ public class Position implements Parcelable {
 
         public Builder toService() {
             position.productType = ProductType.SERVICE;
-            setAlcoAndTobaccoParams(
+            setAlcoParams(
                     null,
                     null,
                     null,
@@ -864,7 +859,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        private void setAlcoAndTobaccoParams(
+        private void setAlcoParams(
                 String mark,
                 BigDecimal alcoholByVolume,
                 Long alcoholProductKindCode,
@@ -874,6 +869,10 @@ public class Position implements Parcelable {
             position.alcoholByVolume = alcoholByVolume;
             position.alcoholProductKindCode = alcoholProductKindCode;
             position.tareVolume = tareVolume;
+        }
+
+        private void setTobaccoParams(String mark) {
+            position.mark = mark;
         }
 
         public Builder setUuid(String uuid) {
