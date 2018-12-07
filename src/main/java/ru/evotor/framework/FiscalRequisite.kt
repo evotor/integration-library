@@ -1,6 +1,6 @@
 package ru.evotor.framework
 
-internal const val NO_FLAGS = 0
+private const val NO_FLAGS = 0
 
 /**
  * Означает, что фискальный реквизит может иметь несколько значений.
