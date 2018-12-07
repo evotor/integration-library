@@ -2,8 +2,8 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.FLAG_MULTIPLE_VALUES
 import ru.evotor.framework.FiscalRequisite
-import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
@@ -54,14 +54,14 @@ data class AgentRequisites(
         const val TAG_SETTLEMENT_SUBJECT_AGENT_TYPE = 1222
 
         /**
-         * Фискальный тег "Телефоны платёжного агента"
+         * Фискальный тег "Телефон платёжного агента"
          */
-        const val TAG_PAYMENT_AGENT_PHONES = 1073
+        const val TAG_PAYMENT_AGENT_PHONE = 1073
 
         /**
-         * Фискальный тег "Телефоны оператора по приёму платежей"
+         * Фискальный тег "Телефон оператора по приёму платежей"
          */
-        const val TAG_PAYMENT_OPERATOR_PHONES = 1074
+        const val TAG_PAYMENT_OPERATOR_PHONE = 1074
 
         /**
          * Фискальный тег "Наименование поставщика"
@@ -74,9 +74,9 @@ data class AgentRequisites(
         const val TAG_PRINCIPAL_INN = 1226
 
         /**
-         * Фискальный тег "Телефоны поставщика"
+         * Фискальный тег "Телефон поставщика"
          */
-        const val TAG_PRINCIPAL_PHONES = 1171
+        const val TAG_PRINCIPAL_PHONE = 1171
 
         /**
          * Фискальный тег "Наименование оператора перевода"
@@ -89,9 +89,9 @@ data class AgentRequisites(
         const val TAG_TRANSACTION_OPERATOR_INN = 1016
 
         /**
-         * Фискальный тег "Телефоны оператора перевода"
+         * Фискальный тег "Телефон оператора перевода"
          */
-        const val TAG_TRANSACTION_OPERATOR_PHONES = 1075
+        const val TAG_TRANSACTION_OPERATOR_PHONE = 1075
 
         /**
          * Фискальный тег "Адрес оператора перевода"
@@ -113,7 +113,7 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>
         ) = AgentRequisitesMapper.create(
                 Agent.Type.AGENT,
@@ -139,7 +139,7 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>
         ) = AgentRequisitesMapper.create(
                 Agent.Type.COMMISSIONER,
@@ -165,7 +165,7 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>
         ) = AgentRequisitesMapper.create(
                 Agent.Type.ATTORNEY_IN_FACT,
@@ -190,14 +190,14 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForPaymentAgent(
-                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONES)
-                @FiscalRequisite(tag = TAG_PAYMENT_OPERATOR_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
+                @FiscalRequisite(tag = TAG_PAYMENT_OPERATOR_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 agentPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PAYMENT_AGENT_OPERATION)
@@ -226,16 +226,16 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForPaymentSubagent(
-                @FiscalRequisite(tag = TAG_PAYMENT_OPERATOR_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_OPERATOR_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 agentPhones: List<String>,
 
-                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 subagentPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PAYMENT_AGENT_OPERATION)
@@ -267,13 +267,13 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForBankPaymentAgent(
-                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 agentPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_NAME)
@@ -282,7 +282,7 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_INN)
                 transactionOperatorInn: String,
 
-                @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_PHONES)
+                @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 transactionOperatorPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_ADDRESS)
@@ -318,16 +318,16 @@ data class AgentRequisites(
          */
         @JvmStatic
         fun createForBankPaymentSubagent(
-                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 agentPhones: List<String>,
 
-                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONES)
+                @FiscalRequisite(tag = TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 subagentPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_PRINCIPAL_INN)
                 principalInn: String,
 
-                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONES)
+                @FiscalRequisite(tag = TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 principalPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_NAME)
@@ -336,7 +336,7 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_INN)
                 transactionOperatorInn: String,
 
-                @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_PHONES)
+                @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_PHONE, flags = [FLAG_MULTIPLE_VALUES])
                 transactionOperatorPhones: List<String>,
 
                 @FiscalRequisite(tag = TAG_TRANSACTION_OPERATOR_ADDRESS)

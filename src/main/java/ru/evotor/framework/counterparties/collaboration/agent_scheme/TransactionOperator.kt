@@ -1,8 +1,8 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
+import ru.evotor.framework.FLAG_MULTIPLE_VALUES
 import ru.evotor.framework.FiscalRequisite
-import ru.evotor.framework.core.FfdTag
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.receipt.position.AgentRequisites
@@ -47,7 +47,7 @@ data class TransactionOperator(
         /**
          * Телефоны
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_TRANSACTION_OPERATOR_PHONES)
+        @FiscalRequisite(tag = AgentRequisites.TAG_TRANSACTION_OPERATOR_PHONE, flags = [FLAG_MULTIPLE_VALUES])
         override val phones: List<String>? = null,
 
         /**

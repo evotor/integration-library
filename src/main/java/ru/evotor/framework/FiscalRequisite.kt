@@ -1,5 +1,12 @@
 package ru.evotor.framework
 
+internal const val NO_FLAGS = 0
+
+/**
+ * Означает, что фискальный реквизит может иметь несколько значений.
+ */
+internal const val FLAG_MULTIPLE_VALUES = 2
+
 /**
  * Означает, что значение анотированной переменной было записано (если она была получена при
  * соответствующем обращении к БД СТ), либо будет записано (при передаче её в соответствующий метод
@@ -12,5 +19,10 @@ internal annotation class FiscalRequisite(
         /**
          * Фискальный тег
          */
-        val tag: Int
+        val tag: Int,
+
+        /**
+         * Флаги
+         */
+        vararg val flags: Int = [NO_FLAGS]
 )
