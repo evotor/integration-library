@@ -185,7 +185,7 @@ data class AgentRequisites(
          * @param agentPhones телефоны платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
-         * @param operationDescription операция платежного агента
+         * @param operationDescription описание операции платежного агента
          */
         @JvmStatic
         fun createForPaymentAgent(
@@ -221,7 +221,7 @@ data class AgentRequisites(
          * @param subagentPhones телефоны платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
-         * @param operationDescription операция платежного субагента
+         * @param operationDescription описание операции платежного субагента
          */
         @JvmStatic
         fun createForPaymentSubagent(
@@ -262,7 +262,7 @@ data class AgentRequisites(
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
          * @param transactionOperatorAddress адрес оператора перевода
-         * @param operationDescription операция банковского платежного агента
+         * @param operationDescription описание операции банковского платежного агента
          */
         @JvmStatic
         fun createForBankPaymentAgent(
@@ -313,7 +313,7 @@ data class AgentRequisites(
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
          * @param transactionOperatorAddress адрес оператора перевода
-         * @param operationDescription операция банковского платежного субагента
+         * @param operationDescription описание операции банковского платежного субагента
          */
         @JvmStatic
         fun createForBankPaymentSubagent(
