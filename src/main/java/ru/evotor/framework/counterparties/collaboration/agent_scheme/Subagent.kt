@@ -1,36 +1,64 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
-import ru.evotor.framework.core.FfdTag
+import ru.evotor.framework.FLAG_MULTIPLE_VALUES
+import ru.evotor.framework.FiscalRequisite
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.SubagentMapper
+import ru.evotor.framework.receipt.position.AgentRequisites
 import java.util.*
 
 /**
  * Cубагент
  */
 data class Subagent(
-        override val uuid: UUID?,
+        /**
+         * Uuid контрагента
+         */
+        override val uuid: UUID? = null,
 
-        @FfdTag(1057, 1222)
+        /**
+         * Тип субагента
+         */
+        @FiscalRequisite(tag = AgentRequisites.TAG_SETTLEMENT_SUBJECT_AGENT_TYPE)
         val type: Type,
 
-        override val counterpartyType: Counterparty.Type?,
+        /**
+         * Тип контрагента
+         */
+        override val counterpartyType: Counterparty.Type? = null,
 
-        override val fullName: String?,
+        /**
+         * Наименование полное
+         */
+        override val fullName: String? = null,
 
-        override val shortName: String?,
+        /**
+         * Наименование краткое
+         */
+        override val shortName: String? = null,
 
-        override val inn: String?,
+        /**
+         * ИНН
+         */
+        override val inn: String? = null,
 
-        override val kpp: String?,
+        /**
+         * КПП
+         */
+        override val kpp: String? = null,
 
-        @FfdTag(1073)
-        override val phones: List<String>?,
+        /**
+         * Телефоны
+         */
+        @FiscalRequisite(tag = AgentRequisites.TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
+        override val phones: List<String>? = null,
 
-        override val addresses: List<String>?
+        /**
+         * Адреса
+         */
+        override val addresses: List<String>? = null
 ) : Counterparty() {
-
     /**
      * Тип субагента
      */
@@ -39,6 +67,7 @@ data class Subagent(
          * Платёжный субагент
          */
         PAYMENT_SUBAGENT,
+
         /**
          * Банковский платёжный субагент
          */
@@ -50,5 +79,4 @@ data class Subagent(
     }
 
     override fun toBundle(): Bundle = SubagentMapper.write(this, super.toBundle())
-
 }

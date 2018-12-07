@@ -9,7 +9,6 @@ import java.util.*
  * Контрагент
  */
 abstract class Counterparty : IBundlable {
-
     abstract val uuid: UUID?
 
     abstract val counterpartyType: Type?
@@ -34,10 +33,12 @@ abstract class Counterparty : IBundlable {
          * Юридическое лицо
          */
         LEGAL_ENTITY,
+
         /**
          * Индивидуальный предприниматель
          */
         INDIVIDUAL_ENTREPRENEUR,
+
         /**
          * Государственный орган
          */
@@ -45,5 +46,4 @@ abstract class Counterparty : IBundlable {
     }
 
     override fun toBundle(): Bundle = CounterpartyMapper.write(this)
-
 }
