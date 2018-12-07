@@ -26,7 +26,7 @@ data class FiscalReceipt internal constructor(
         override val creationDate: Date,
 
         /**
-         * Признак (тип) расчёта
+         * Тип (признак) расчёта
          */
         @FiscalRequisite(tag = TAG_SETTLEMENT_TYPE)
         val settlementType: SettlementType,
