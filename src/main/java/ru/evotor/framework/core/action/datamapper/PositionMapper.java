@@ -43,7 +43,7 @@ public final class PositionMapper {
     private static final String KEY_EXTRA_KEYS = "extraKeys";
     private static final String KEY_SUB_POSITION = "subPosition";
     private static final String KEY_ATTRIBUTES = "attributes";
-    private static final String KEY_PAYMENT_FEATURE = "paymentFeature";
+    private static final String KEY_SETTLEMENT_METHOD = "settlementMethod";
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
 
     @Nullable
@@ -90,7 +90,7 @@ public final class PositionMapper {
                 PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
 
         SettlementMethod settlementMethod =
-                PaymentFeatureMapper.fromBundle(bundle.getBundle(KEY_PAYMENT_FEATURE));
+                SettlementMethodMapper.fromBundle(bundle.getBundle(KEY_SETTLEMENT_METHOD));
 
         AgentRequisites agentRequisites =
                 AgentRequisites.Companion.from(bundle.getBundle(KEY_AGENT_REQUISITES));
@@ -123,7 +123,7 @@ public final class PositionMapper {
                 subPositions
         ));
         builder.setAttributes(attributes);
-        builder.setPaymentFeature(settlementMethod);
+        builder.setSettlementMethod(settlementMethod);
         builder.setAgentRequisites(agentRequisites);
         return builder.build();
     }
@@ -169,7 +169,7 @@ public final class PositionMapper {
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
-        bundle.putBundle(KEY_PAYMENT_FEATURE, PaymentFeatureMapper.toBundle(position.getSettlementMethod()));
+        bundle.putBundle(KEY_SETTLEMENT_METHOD, SettlementMethodMapper.toBundle(position.getSettlementMethod()));
         bundle.putBundle(KEY_AGENT_REQUISITES, position.getAgentRequisites() != null ? position.getAgentRequisites().toBundle() : null);
         return bundle;
     }

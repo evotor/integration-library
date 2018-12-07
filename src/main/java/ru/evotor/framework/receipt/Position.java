@@ -675,11 +675,11 @@ public class Position implements Parcelable {
             }
             case 2: {
                 readAttributesField(in);
-                readPaymentFeatureField(in);
+                readSettlementMethodField(in);
             }
             case 3: {
                 readAttributesField(in);
-                readPaymentFeatureField(in);
+                readSettlementMethodField(in);
                 readAgentRequisitesField(in);
             }
         }
@@ -701,7 +701,7 @@ public class Position implements Parcelable {
         }
     }
 
-    private void readPaymentFeatureField(Parcel in) {
+    private void readSettlementMethodField(Parcel in) {
         SettlementMethod settlementMethod = in.readParcelable(SettlementMethod.class.getClassLoader());
         if (settlementMethod == null) {
             this.settlementMethod = new SettlementMethod.FullSettlement();
@@ -923,7 +923,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setPaymentFeature(@NonNull SettlementMethod settlementMethod) {
+        public Builder setSettlementMethod(@NonNull SettlementMethod settlementMethod) {
             position.settlementMethod = settlementMethod;
             return this;
         }
