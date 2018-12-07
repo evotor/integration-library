@@ -20,7 +20,7 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
-import ru.evotor.framework.payment.PaymentFeature;
+import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
 public class Position implements Parcelable {
@@ -125,7 +125,7 @@ public class Position implements Parcelable {
      * По умолчанию это 'Полный расчет'
      */
     @NonNull
-    private PaymentFeature paymentFeature = new PaymentFeature.CheckoutFull();
+    private SettlementMethod settlementMethod = new SettlementMethod.FullSettlement();
 
     /**
      * Реквизиты агента
@@ -241,7 +241,7 @@ public class Position implements Parcelable {
                 position.getSubPositions()
         );
         this.attributes = position.getAttributes();
-        this.paymentFeature = position.getPaymentFeature();
+        this.settlementMethod = position.getSettlementMethod();
         this.agentRequisites = position.getAgentRequisites();
     }
 
@@ -453,11 +453,11 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return признак способа расчета для позиции
+     * @return признак способа расчета
      */
     @NonNull
-    public PaymentFeature getPaymentFeature() {
-        return paymentFeature;
+    public SettlementMethod getSettlementMethod() {
+        return settlementMethod;
     }
 
     /**
@@ -504,7 +504,7 @@ public class Position implements Parcelable {
             return false;
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
-        if (paymentFeature != position.paymentFeature) return false;
+        if (settlementMethod != position.settlementMethod) return false;
         if (agentRequisites != position.agentRequisites) return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
@@ -530,7 +530,7 @@ public class Position implements Parcelable {
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 31 * result + (paymentFeature != null ? paymentFeature.hashCode() : 0);
+        result = 31 * result + (settlementMethod != null ? settlementMethod.hashCode() : 0);
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         return result;
     }
@@ -557,7 +557,7 @@ public class Position implements Parcelable {
                 ", extraKeys=" + extraKeys +
                 ", subPositions=" + subPositions +
                 ", attributes=" + attributes +
-                ", paymentFeature=" + paymentFeature +
+                ", settlementMethod=" + settlementMethod +
                 ", agentRequisites=" + agentRequisites +
                 '}';
     }
@@ -620,7 +620,7 @@ public class Position implements Parcelable {
             }
         }
         // Payment features
-        dest.writeParcelable(this.paymentFeature, flags);
+        dest.writeParcelable(this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
     }
@@ -702,11 +702,11 @@ public class Position implements Parcelable {
     }
 
     private void readPaymentFeatureField(Parcel in) {
-        PaymentFeature paymentFeature = in.readParcelable(PaymentFeature.class.getClassLoader());
-        if (paymentFeature == null) {
-            this.paymentFeature = new PaymentFeature.CheckoutFull();
+        SettlementMethod settlementMethod = in.readParcelable(SettlementMethod.class.getClassLoader());
+        if (settlementMethod == null) {
+            this.settlementMethod = new SettlementMethod.FullSettlement();
         } else {
-            this.paymentFeature = paymentFeature;
+            this.settlementMethod = settlementMethod;
         }
     }
 
@@ -923,8 +923,8 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setPaymentFeature(@NonNull PaymentFeature paymentFeature) {
-            position.paymentFeature = paymentFeature;
+        public Builder setPaymentFeature(@NonNull SettlementMethod settlementMethod) {
+            position.settlementMethod = settlementMethod;
             return this;
         }
 

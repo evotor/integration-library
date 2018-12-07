@@ -1,13 +1,13 @@
-package ru.evotor.framework.payment
+package ru.evotor.framework.receipt.position
 
 import android.os.Parcel
 import android.os.Parcelable
 import java.math.BigDecimal
 
 /**
- * Признак способа расчета для позиции
+ * Способ расчета
  */
-sealed class PaymentFeature : Parcelable {
+sealed class SettlementMethod : Parcelable {
 
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
 
@@ -35,7 +35,7 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Полная предварительная оплата до момента передачи предмета расчета
      */
-    class PrepaymentFull() : PaymentFeature() {
+    class FullPrepayment() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -50,7 +50,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is PrepaymentFull) return false
+            if (other !is FullPrepayment) return false
             return true
         }
 
@@ -62,20 +62,20 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): PrepaymentFull {
+            private fun readFromParcel(parcel: Parcel): FullPrepayment {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return PrepaymentFull()
+                return FullPrepayment()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<PrepaymentFull> = object : Parcelable.Creator<PrepaymentFull> {
-                override fun createFromParcel(parcel: Parcel): PrepaymentFull = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<FullPrepayment> = object : Parcelable.Creator<FullPrepayment> {
+                override fun createFromParcel(parcel: Parcel): FullPrepayment = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<PrepaymentFull?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<FullPrepayment?> = arrayOfNulls(size)
             }
         }
     }
@@ -83,7 +83,7 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Частичная предварительная оплата до момента передачи предмета расчета
      */
-    class PrepaymentPartial() : PaymentFeature() {
+    class PartialPrepayment() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -98,7 +98,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is PrepaymentPartial) return false
+            if (other !is PartialPrepayment) return false
             return true
         }
 
@@ -110,20 +110,20 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): PrepaymentPartial {
+            private fun readFromParcel(parcel: Parcel): PartialPrepayment {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return PrepaymentPartial()
+                return PartialPrepayment()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<PrepaymentPartial> = object : Parcelable.Creator<PrepaymentPartial> {
-                override fun createFromParcel(parcel: Parcel): PrepaymentPartial = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<PartialPrepayment> = object : Parcelable.Creator<PartialPrepayment> {
+                override fun createFromParcel(parcel: Parcel): PartialPrepayment = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<PrepaymentPartial?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<PartialPrepayment?> = arrayOfNulls(size)
             }
         }
     }
@@ -131,7 +131,7 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Аванс
      */
-    class Advance() : PaymentFeature() {
+    class AdvancePayment() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -146,7 +146,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is Advance) return false
+            if (other !is AdvancePayment) return false
             return true
         }
 
@@ -158,30 +158,29 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): Advance {
+            private fun readFromParcel(parcel: Parcel): AdvancePayment {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return Advance()
+                return AdvancePayment()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<Advance> = object : Parcelable.Creator<Advance> {
-                override fun createFromParcel(parcel: Parcel): Advance = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<AdvancePayment> = object : Parcelable.Creator<AdvancePayment> {
+                override fun createFromParcel(parcel: Parcel): AdvancePayment = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<Advance?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<AdvancePayment?> = arrayOfNulls(size)
             }
         }
     }
 
     /**
-     * Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи предмета расчета
-     *
-     * По-умолчанию
+     * Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи
+     * предмета расчета (полный расчёт)
      */
-    class CheckoutFull() : PaymentFeature() {
+    class FullSettlement() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -196,7 +195,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is CheckoutFull) return false
+            if (other !is FullSettlement) return false
             return true
         }
 
@@ -208,30 +207,30 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): CheckoutFull {
+            private fun readFromParcel(parcel: Parcel): FullSettlement {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return CheckoutFull()
+                return FullSettlement()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<CheckoutFull> = object : Parcelable.Creator<CheckoutFull> {
-                override fun createFromParcel(parcel: Parcel): CheckoutFull = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<FullSettlement> = object : Parcelable.Creator<FullSettlement> {
+                override fun createFromParcel(parcel: Parcel): FullSettlement = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<CheckoutFull?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<FullSettlement?> = arrayOfNulls(size)
             }
         }
     }
 
     /**
      * Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
-     *
-     * @param amount : сумма первичного взноса
+     * (частичный расчёт и в кредит)
+     * @param amount сумма первичного взноса
      */
-    class CheckoutPartial(val amount: BigDecimal) : PaymentFeature() {
+    class PartialSettlement(val amount: BigDecimal) : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
             dest.writeString(amount.toPlainString())
@@ -246,7 +245,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is CheckoutPartial) return false
+            if (other !is PartialSettlement) return false
 
             if (amount != other.amount) return false
 
@@ -261,21 +260,21 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): CheckoutPartial {
+            private fun readFromParcel(parcel: Parcel): PartialSettlement {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 val amount = BigDecimal(parcel.readString())
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return CheckoutPartial(amount)
+                return PartialSettlement(amount)
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<CheckoutPartial> = object : Parcelable.Creator<CheckoutPartial> {
-                override fun createFromParcel(parcel: Parcel): CheckoutPartial = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<PartialSettlement> = object : Parcelable.Creator<PartialSettlement> {
+                override fun createFromParcel(parcel: Parcel): PartialSettlement = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<CheckoutPartial?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<PartialSettlement?> = arrayOfNulls(size)
             }
         }
     }
@@ -283,7 +282,7 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит
      */
-    class CreditPass() : PaymentFeature() {
+    class Lend() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -298,7 +297,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is CreditPass) return false
+            if (other !is Lend) return false
             return true
         }
 
@@ -310,20 +309,20 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): CreditPass {
+            private fun readFromParcel(parcel: Parcel): Lend {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return CreditPass()
+                return Lend()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<CreditPass> = object : Parcelable.Creator<CreditPass> {
-                override fun createFromParcel(parcel: Parcel): CreditPass = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<Lend> = object : Parcelable.Creator<Lend> {
+                override fun createFromParcel(parcel: Parcel): Lend = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<CreditPass?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<Lend?> = arrayOfNulls(size)
             }
         }
     }
@@ -331,7 +330,7 @@ sealed class PaymentFeature : Parcelable {
     /**
      * Оплата предмета расчета после его передачи с оплатой в кредит (оплата кредита)
      */
-    class CreditCheckout() : PaymentFeature() {
+    class LoanPayment() : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -346,7 +345,7 @@ sealed class PaymentFeature : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is CreditCheckout) return false
+            if (other !is LoanPayment) return false
             return true
         }
 
@@ -358,20 +357,20 @@ sealed class PaymentFeature : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): CreditCheckout {
+            private fun readFromParcel(parcel: Parcel): LoanPayment {
                 val version = parcel.readInt()
                 val dataSize = parcel.readInt()
                 val dataStartPosition = parcel.dataPosition()
                 // read fields here
                 parcel.setDataPosition(dataStartPosition + dataSize)
-                return CreditCheckout()
+                return LoanPayment()
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<CreditCheckout> = object : Parcelable.Creator<CreditCheckout> {
-                override fun createFromParcel(parcel: Parcel): CreditCheckout = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<LoanPayment> = object : Parcelable.Creator<LoanPayment> {
+                override fun createFromParcel(parcel: Parcel): LoanPayment = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<CreditCheckout?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<LoanPayment?> = arrayOfNulls(size)
             }
         }
     }

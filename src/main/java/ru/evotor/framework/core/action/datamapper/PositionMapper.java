@@ -15,7 +15,7 @@ import java.util.Set;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
-import ru.evotor.framework.payment.PaymentFeature;
+import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
@@ -89,7 +89,7 @@ public final class PositionMapper {
         Map<String, AttributeValue> attributes =
                 PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
 
-        PaymentFeature paymentFeature =
+        SettlementMethod settlementMethod =
                 PaymentFeatureMapper.fromBundle(bundle.getBundle(KEY_PAYMENT_FEATURE));
 
         AgentRequisites agentRequisites =
@@ -123,7 +123,7 @@ public final class PositionMapper {
                 subPositions
         ));
         builder.setAttributes(attributes);
-        builder.setPaymentFeature(paymentFeature);
+        builder.setPaymentFeature(settlementMethod);
         builder.setAgentRequisites(agentRequisites);
         return builder.build();
     }
@@ -169,7 +169,7 @@ public final class PositionMapper {
         bundle.putParcelableArray(KEY_SUB_POSITION, subPositionsParcelables);
 
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
-        bundle.putBundle(KEY_PAYMENT_FEATURE, PaymentFeatureMapper.toBundle(position.getPaymentFeature()));
+        bundle.putBundle(KEY_PAYMENT_FEATURE, PaymentFeatureMapper.toBundle(position.getSettlementMethod()));
         bundle.putBundle(KEY_AGENT_REQUISITES, position.getAgentRequisites() != null ? position.getAgentRequisites().toBundle() : null);
         return bundle;
     }
