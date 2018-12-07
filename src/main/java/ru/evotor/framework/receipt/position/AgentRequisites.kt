@@ -41,12 +41,11 @@ data class AgentRequisites(
         val transactionOperator: TransactionOperator? = null,
 
         /**
-         * Операция агента
+         * Описание операции
          */
         @FiscalRequisite(tag = TAG_PAYMENT_AGENT_OPERATION)
         val operationDescription: String? = null
 ) : IBundlable {
-
     companion object {
         /**
          * Фискальный тег "Признак агента по предмету расчёта"
