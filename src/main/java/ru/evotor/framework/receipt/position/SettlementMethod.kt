@@ -227,7 +227,7 @@ sealed class SettlementMethod : Parcelable {
 
     /**
      * Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
-     * (частичный расчёт и в кредит)
+     * (частичный расчёт и кредит)
      * @param amount сумма первичного взноса
      */
     class PartialSettlement(val amount: BigDecimal) : SettlementMethod() {
