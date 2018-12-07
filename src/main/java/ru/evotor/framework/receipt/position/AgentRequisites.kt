@@ -49,9 +49,9 @@ data class AgentRequisites(
 
     companion object {
         /**
-         * Фискальный тег "Признак агента"
+         * Фискальный тег "Признак агента по предмету расчёта"
          */
-        const val TAG_AGENT_TYPE = 1222
+        const val TAG_SETTLEMENT_SUBJECT_AGENT_TYPE = 1222
 
         /**
          * Фискальный тег "Телефоны платёжного агента"

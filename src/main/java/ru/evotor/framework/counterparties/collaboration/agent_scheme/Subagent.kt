@@ -19,7 +19,7 @@ data class Subagent(
         /**
          * Тип субагента
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_AGENT_TYPE)
+        @FiscalRequisite(tag = AgentRequisites.TAG_SETTLEMENT_SUBJECT_AGENT_TYPE)
         val type: Type,
 
         /**
