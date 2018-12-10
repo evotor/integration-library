@@ -18,7 +18,7 @@ data class Subagent(
         override val uuid: UUID? = null,
 
         /**
-         * Тип субагента
+         * Тип (признак) субагента
          */
         @FiscalRequisite(tag = AgentRequisites.TAG_SETTLEMENT_SUBJECT_AGENT_TYPE)
         val type: Type,
