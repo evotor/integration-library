@@ -8,7 +8,7 @@ import java.math.BigDecimal
  * Способ расчета
  */
 sealed class SettlementMethod : Parcelable {
-
+/*
     companion object {
         enum class Type {
             /**
@@ -67,7 +67,7 @@ sealed class SettlementMethod : Parcelable {
         is SettlementMethod.Lend -> Type.CREDIT_PASS.ordinal
         is SettlementMethod.LoanPayment -> Type.CREDIT_CHECKOUT.ordinal
     }
-
+*/
 
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
 
