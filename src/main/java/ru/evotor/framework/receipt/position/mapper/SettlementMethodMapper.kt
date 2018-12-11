@@ -15,7 +15,7 @@ internal object SettlementMethodMapper {
     private const val KEY_Lend = 5
     private const val KEY_LoanPayment = 6
 
-    fun fromCursor(cursor: Cursor): SettlementMethod {
+    internal fun fromCursor(cursor: Cursor): SettlementMethod {
         val typeOrdinal = cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD))
         val amountValue = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD_AMOUNT))
         val amount = if (amountValue == null) null else BigDecimal(amountValue)
