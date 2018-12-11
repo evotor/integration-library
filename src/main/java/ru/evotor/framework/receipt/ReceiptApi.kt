@@ -6,6 +6,7 @@ import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
+import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -16,7 +17,7 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
@@ -278,38 +279,83 @@ object ReceiptApi {
     }
 
     private fun createPosition(cursor: Cursor): Position? {
-        val builder = Position.Builder.copyFrom(Position(
+        val price = BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100))
+        val priceWithDiscountPosition = if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
+            BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100))
+        } else {
+            price
+        }
+        val extraKeys = cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
+            createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+        }
+        val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
+            createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
+        }
+        val builder = Position.Builder.newInstance(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let {
-                    TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER)))
-                },
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100)),
-                if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
-                    BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION))).divide(BigDecimal(100))
-                } else {
-                    BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE))).divide(BigDecimal(100))
-                },
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
-                cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                cursor.optString(PositionTable.COLUMN_MARK)?.let {
-                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                },
-                cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
-                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) },
-                cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-                    createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
-                },
-                ArrayList<Position>()
-        ))
-        builder.setAgentRequisites(AgentRequisitesMapper.read(cursor)).build()
+                price,
+                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000))
+        )
+                .setTaxNumber(cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
+                .setPriceWithDiscountPosition(priceWithDiscountPosition)
+                .setBarcode(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)))
+                .setMark(cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
+                .setExtraKeys(extraKeys)
+                .setSubPositions(emptyList())
+                .setAttributes(attributes)
+                .setProductCode(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)))
+                .setAgentRequisites(AgentRequisitesMapper.read(cursor))
+        val productType = ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)))
+        when (productType) {
+            ProductType.ALCOHOL_MARKED -> {
+                builder.toAlcoholMarked(
+                        cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
+                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                )
+            }
+            ProductType.ALCOHOL_NOT_MARKED -> {
+                builder.toAlcoholNotMarked(
+                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                )
+            }
+            ProductType.SERVICE -> {
+                builder.toService()
+            }
+            else -> {
+            }
+        }
+        val settlementMethod = run {
+            val typeOrdinal = cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_PAYMENT_FEATURE))
+            val amountValue = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PAYMENT_FEATURE_AMOUNT))
+            val amount = if (amountValue == null) null else BigDecimal(amountValue)
+            SettlementMethod.fromInt(typeOrdinal, amount)
+        }
+        builder.setSettlementMethod(settlementMethod)
         return builder.build()
+    }
+
+    private fun createAttributesFromDBFormat(value: String?): Map<String, AttributeValue> {
+        if (value == null) return emptyMap()
+        val array = JSONArray(value)
+        return (0 until array.length()).toList()
+                .map { array.getJSONObject(it) }
+                .map {
+                    val attributeUuid = it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_UUID)
+                    attributeUuid to AttributeValue(
+                            attributeUuid,
+                            it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_NAME),
+                            it.optString(PositionTable.AttributeJSONKeys.UUID),
+                            it.optString(PositionTable.AttributeJSONKeys.NAME)
+                    )
+                }.toMap()
     }
 
     private fun createPayment(cursor: Cursor): Payment? {

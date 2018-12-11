@@ -9,6 +9,66 @@ import java.math.BigDecimal
  */
 sealed class SettlementMethod : Parcelable {
 
+    companion object {
+        enum class Type {
+            /**
+             * Полная предварительная оплата до момента передачи предмета расчета
+             */
+            PREPAYMENT_FULL,
+            /**
+             * Частичная предварительная оплата до момента передачи предмета расчета
+             */
+            PREPAYMENT_PARTIAL,
+            /**
+             * Аванс
+             */
+            ADVANCE,
+            /**
+             * Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи предмета расчета
+             */
+            CHECKOUT_FULL,
+            /**
+             * Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
+             */
+            CHECKOUT_PARTIAL,
+            /**
+             * Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит
+             */
+            CREDIT_PASS,
+            /**
+             * Оплата предмета расчета после его передачи с оплатой в кредит (оплата кредита)
+             */
+            CREDIT_CHECKOUT
+        }
+        @JvmStatic
+        @JvmOverloads
+        fun fromType(type: Type, amount: BigDecimal? = null): SettlementMethod = when (type) {
+            SettlementMethod.Companion.Type.PREPAYMENT_FULL -> FullPrepayment()
+            SettlementMethod.Companion.Type.PREPAYMENT_PARTIAL -> PartialPrepayment()
+            SettlementMethod.Companion.Type.ADVANCE -> AdvancePayment()
+            SettlementMethod.Companion.Type.CHECKOUT_FULL -> FullSettlement()
+            SettlementMethod.Companion.Type.CHECKOUT_PARTIAL -> PartialSettlement(amount!!)
+            SettlementMethod.Companion.Type.CREDIT_PASS -> Lend()
+            SettlementMethod.Companion.Type.CREDIT_CHECKOUT -> LoanPayment()
+        }
+        @JvmStatic
+        @JvmOverloads
+        fun fromInt(typeOrdinal: Int, amount: BigDecimal? = null): SettlementMethod {
+            val type = Type.values()[typeOrdinal]
+            return fromType(type, amount)
+        }
+    }
+    fun toInt(): Int = when (this) {
+        is SettlementMethod.FullPrepayment -> Type.PREPAYMENT_FULL.ordinal
+        is SettlementMethod.PartialPrepayment -> Type.PREPAYMENT_PARTIAL.ordinal
+        is SettlementMethod.AdvancePayment -> Type.ADVANCE.ordinal
+        is SettlementMethod.FullSettlement -> Type.CHECKOUT_FULL.ordinal
+        is SettlementMethod.PartialSettlement -> Type.CHECKOUT_PARTIAL.ordinal
+        is SettlementMethod.Lend -> Type.CREDIT_PASS.ordinal
+        is SettlementMethod.LoanPayment -> Type.CREDIT_CHECKOUT.ordinal
+    }
+
+
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
