@@ -333,8 +333,8 @@ object ReceiptApi {
             }
         }
         val settlementMethod = run {
-            val typeOrdinal = cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_PAYMENT_FEATURE))
-            val amountValue = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PAYMENT_FEATURE_AMOUNT))
+            val typeOrdinal = cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD))
+            val amountValue = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD_AMOUNT))
             val amount = if (amountValue == null) null else BigDecimal(amountValue)
             SettlementMethod.fromInt(typeOrdinal, amount)
         }
