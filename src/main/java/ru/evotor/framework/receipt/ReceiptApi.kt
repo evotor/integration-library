@@ -18,6 +18,7 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_C
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.SettlementMethod
+import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
@@ -332,13 +333,7 @@ object ReceiptApi {
             else -> {
             }
         }
-        val settlementMethod = run {
-            val typeOrdinal = cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD))
-            val amountValue = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_SETTLEMENT_METHOD_AMOUNT))
-            val amount = if (amountValue == null) null else BigDecimal(amountValue)
-            SettlementMethod.fromInt(typeOrdinal, amount)
-        }
-        builder.setSettlementMethod(settlementMethod)
+        builder.setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
         return builder.build()
     }
 
