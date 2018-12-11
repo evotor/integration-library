@@ -5,7 +5,7 @@ import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.SettlementMethod
 import java.math.BigDecimal
 
-object SettlementMethodMapper {
+internal object SettlementMethodMapper {
 
     private const val KEY_FullPrepayment = 0
     private const val KEY_PartialPrepayment = 1
