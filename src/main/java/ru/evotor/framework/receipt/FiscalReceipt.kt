@@ -16,43 +16,43 @@ data class FiscalReceipt internal constructor(
         /**
          * Номер фискального документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_DOCUMENT_NUMBER, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_DOCUMENT_NUMBER)
         override val documentNumber: Long,
 
         /**
          * Дата и время создания фискального документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_CREATION_DATE, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_CREATION_DATE)
         override val creationDate: Date,
 
         /**
-         * Признак (тип) расчёта
+         * Тип (признак) расчёта
          */
-        @FiscalRequisite(tag = TAG_SETTLEMENT_TYPE, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = TAG_SETTLEMENT_TYPE)
         val settlementType: SettlementType,
 
         /**
          * Регистрационный номер ККТ
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_KKT_REGISTRATION_NUMBER, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_KKT_REGISTRATION_NUMBER)
         override val kktRegistrationNumber: Long,
 
         /**
          * Номер аппаратной смены
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_SESSION_NUMBER, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_SESSION_NUMBER)
         override val sessionNumber: Long,
 
         /**
          * Номер фискального накопителя
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_STORAGE_NUMBER, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_STORAGE_NUMBER)
         override val fiscalStorageNumber: Long,
 
         /**
          * Фискальный признак (фискальный идентификатор) документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER, isPrinted = true, isSentToOfd = true)
+        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER)
         override val fiscalIdentifier: Long,
 
         /**
