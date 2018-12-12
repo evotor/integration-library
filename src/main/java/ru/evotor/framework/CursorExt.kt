@@ -2,6 +2,7 @@ package ru.evotor.framework
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.math.BigDecimal
 
 internal fun android.database.Cursor.safeGetBoolean(columnName: String): Boolean? {
     val index = getColumnIndex(columnName)
@@ -18,7 +19,7 @@ internal fun android.database.Cursor.safeGetBoolean(columnIndex: Int): Boolean? 
     }
 
     return getInt(columnIndex).let { int ->
-        when(int) {
+        when (int) {
             0 -> false
             1 -> true
             else -> null
@@ -83,4 +84,16 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnIndex: Int,
         }
     }
 
+}
+
+internal fun android.database.Cursor.safeGetBigDecimal(columnName: String) = optLong(columnName)?.let { long ->
+    BigDecimal(long)
+}
+
+internal fun android.database.Cursor.safeGetMoney(columnName: String) = optLong(columnName)?.let { long ->
+    BigDecimal(long).divide(BigDecimal(100))
+}
+
+internal fun android.database.Cursor.safeGetQuantity(columnName: String) = optLong(columnName)?.let { long ->
+    BigDecimal(long).divide(BigDecimal(1000))
 }
