@@ -3,8 +3,10 @@ package ru.evotor.framework.receipt.position.mapper
 import android.database.Cursor
 import ru.evotor.framework.*
 import ru.evotor.framework.core.OutdatedLibraryException
+import ru.evotor.framework.core.action.datamapper.SettlementMethodMapper
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
+import ru.evotor.framework.inventory.product.mapper.UnitOfMeasurementMapper
 import ru.evotor.framework.receipt.position.Position
 import ru.evotor.framework.receipt.position.provider.PositionContract
 import java.util.*
@@ -30,7 +32,8 @@ internal object PositionMapper {
                     ?: throw OutdatedLibraryException(Position::price.name),
             quantity = cursor.safeGetQuantity(PositionContract.COLUMN_QUANTITY)
                     ?: throw OutdatedLibraryException(Position::quantity.name),
-            unitOfMeasurement = cursor.safeGetInt(PositionContract.COLUMN_UNIT_OF_MEASUREMENT)
-                    ?: throw OutdatedLibraryException(Position::unitOfMeasurement.name)
+            unitOfMeasurement = UnitOfMeasurementMapper.read(cursor),
+            discount = cursor.safeGetMoney(PositionContract.COLUMN_DISCOUNT)
+                    ?: throw OutdatedLibraryException(Position::discount.name)
     )
 }
