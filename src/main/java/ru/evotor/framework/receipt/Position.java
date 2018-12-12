@@ -933,6 +933,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setProductCode(@Nullable String productCode) {
+            position.productCode = productCode;
+            return this;
+        }
+
         public Position build() {
             return new Position(position);
         }
