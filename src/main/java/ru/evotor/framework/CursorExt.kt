@@ -4,6 +4,23 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.math.BigDecimal
 
+internal fun android.database.Cursor.safeGetString(columnName: String): String? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return safeGetString(index)
+}
+
+internal fun android.database.Cursor.safeGetString(columnIndex: Int): String? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getString(columnIndex)
+}
+
 internal fun android.database.Cursor.safeGetBoolean(columnName: String): Boolean? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
@@ -42,6 +59,23 @@ internal fun android.database.Cursor.safeGetInt(columnIndex: Int): Int? {
     }
 
     return getInt(columnIndex)
+}
+
+internal fun android.database.Cursor.safeGetLong(columnName: String): Long? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return this.safeGetLong(index)
+}
+
+internal fun android.database.Cursor.safeGetLong(columnIndex: Int): Long? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getLong(columnIndex)
 }
 
 internal fun android.database.Cursor.safeGetList(columnName: String): List<String>? {
@@ -86,14 +120,14 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnIndex: Int,
 
 }
 
-internal fun android.database.Cursor.safeGetBigDecimal(columnName: String) = optLong(columnName)?.let { long ->
+internal fun android.database.Cursor.safeGetBigDecimal(columnName: String) = safeGetLong(columnName)?.let { long ->
     BigDecimal(long)
 }
 
-internal fun android.database.Cursor.safeGetMoney(columnName: String) = optLong(columnName)?.let { long ->
+internal fun android.database.Cursor.safeGetMoney(columnName: String) = safeGetLong(columnName)?.let { long ->
     BigDecimal(long).divide(BigDecimal(100))
 }
 
-internal fun android.database.Cursor.safeGetQuantity(columnName: String) = optLong(columnName)?.let { long ->
+internal fun android.database.Cursor.safeGetQuantity(columnName: String) = safeGetLong(columnName)?.let { long ->
     BigDecimal(long).divide(BigDecimal(1000))
 }

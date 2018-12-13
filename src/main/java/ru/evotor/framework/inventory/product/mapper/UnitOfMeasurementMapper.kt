@@ -1,11 +1,11 @@
 package ru.evotor.framework.inventory.product.mapper
 
 import android.database.Cursor
-import ru.evotor.framework.core.OutdatedLibraryException
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.UnitOfMeasurement
 import ru.evotor.framework.inventory.product.provider.UnitOfMeasurementContract
 import ru.evotor.framework.mapper.MultiVariationEntityMapper
-import ru.evotor.framework.optString
+import ru.evotor.framework.safeGetString
 import ru.evotor.framework.safeGetEnum
 
 internal object UnitOfMeasurementMapper {
@@ -22,10 +22,10 @@ internal object UnitOfMeasurementMapper {
 
     fun read(cursor: Cursor) = when (MultiVariationEntityMapper.readVariationId(cursor)) {
         VARIATION_ID_CUSTOM -> UnitOfMeasurement.Custom(
-                readType(cursor) ?: throw OutdatedLibraryException(UnitOfMeasurement::type.name),
-                readName(cursor) ?: throw OutdatedLibraryException(UnitOfMeasurement::name.name),
+                readType(cursor) ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::type.name),
+                readName(cursor) ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::name.name),
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
         VARIATION_ID_CONVENTIONAL_UNIT -> UnitOfMeasurement.ConventionalUnit()
         VARIATION_ID_PIECE -> UnitOfMeasurement.Piece()
@@ -33,30 +33,30 @@ internal object UnitOfMeasurementMapper {
         VARIATION_ID_KIT -> UnitOfMeasurement.Kit()
         VARIATION_ID_KILOGRAM -> UnitOfMeasurement.Kilogram(
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
         VARIATION_ID_METER -> UnitOfMeasurement.Meter(
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
         VARIATION_ID_SQUARE_METER -> UnitOfMeasurement.SquareMeter(
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
         VARIATION_ID_CUBIC_METER -> UnitOfMeasurement.CubicMeter(
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
         VARIATION_ID_LITER -> UnitOfMeasurement.Liter(
                 readPrecision(cursor)
-                        ?: throw OutdatedLibraryException(UnitOfMeasurement::precision.name)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::precision.name)
         )
-        else -> throw OutdatedLibraryException(UnitOfMeasurement::class.java.name)
+        else -> throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java.name)
     }
 
     private fun readType(cursor: Cursor) = cursor.safeGetEnum(UnitOfMeasurementContract.COLUMN_TYPE, UnitOfMeasurement.Type.values())
 
-    private fun readName(cursor: Cursor) = cursor.optString(UnitOfMeasurementContract.COLUMN_NAME)
+    private fun readName(cursor: Cursor) = cursor.safeGetString(UnitOfMeasurementContract.COLUMN_NAME)
 
     private fun readPrecision(cursor: Cursor) = cursor.safeGetEnum(UnitOfMeasurementContract.COLUMN_PRECISION, UnitOfMeasurement.Precision.values())
 }

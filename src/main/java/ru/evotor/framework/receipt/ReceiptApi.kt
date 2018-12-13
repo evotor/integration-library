@@ -8,8 +8,8 @@ import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
-import ru.evotor.framework.optLong
-import ru.evotor.framework.optString
+import ru.evotor.framework.safeGetLong
+import ru.evotor.framework.safeGetString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -285,11 +285,11 @@ object ReceiptApi {
         } else {
             price
         }
-        val extraKeys = cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-            createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+        val extraKeys = cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
+            createExtraKeysFromDBFormat(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
         }
-        val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
-            createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
+        val attributes = cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES)?.let {
+            createAttributesFromDBFormat(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
         }
         val builder = Position.Builder.newInstance(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
@@ -300,10 +300,10 @@ object ReceiptApi {
                 price,
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000))
         )
-                .setTaxNumber(cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
+                .setTaxNumber(cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
                 .setPriceWithDiscountPosition(priceWithDiscountPosition)
-                .setBarcode(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)))
-                .setMark(cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
+                .setBarcode(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)))
+                .setMark(cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
                 .setExtraKeys(extraKeys)
                 .setSubPositions(emptyList())
                 .setAttributes(attributes)
@@ -313,17 +313,17 @@ object ReceiptApi {
         when (productType) {
             ProductType.ALCOHOL_MARKED -> {
                 builder.toAlcoholMarked(
-                        cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
+                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
                 )
             }
             ProductType.ALCOHOL_NOT_MARKED -> {
                 builder.toAlcoholNotMarked(
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
                 )
             }
             ProductType.SERVICE -> {
@@ -418,9 +418,9 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
                 safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE)))
                         ?: return null,
-                cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
-                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
-                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
+                cursor.safeGetLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
+                cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
+                cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
                 extra
         )
     }

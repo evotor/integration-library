@@ -2,7 +2,7 @@ package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
 import android.os.Bundle
-import ru.evotor.framework.core.OutdatedLibraryException
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
@@ -12,7 +12,7 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.Agen
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
-import ru.evotor.framework.optString
+import ru.evotor.framework.safeGetString
 import ru.evotor.framework.receipt.position.AgentRequisites
 import ru.evotor.framework.receipt.position.provider.AgentRequisitesContract
 import java.util.*
@@ -104,38 +104,38 @@ internal object AgentRequisitesMapper {
                 agent = readAgent(cursor),
                 subagent = readSubagent(cursor),
                 principal = readPrincipal(cursor)
-                        ?: throw OutdatedLibraryException(AgentRequisites::principal.name),
+                        ?: throw IntegrationLibraryMappingException(AgentRequisites::principal.name),
                 transactionOperator = readTransactionOperator(cursor),
-                operationDescription = cursor.optString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
+                operationDescription = cursor.safeGetString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
         )
     }
 
     private fun readAgent(cursor: Cursor): Agent? =
-            if (cursor.optString(AgentRequisitesContract.COLUMN_AGENT_IS_NULL)?.toBoolean() != false)
+            if (cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_IS_NULL)?.toBoolean() != false)
                 null
             else
                 Agent(
-                        uuid = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_UUID)?.let { UUID.fromString(it) },
+                        uuid = cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_UUID)?.let { UUID.fromString(it) },
                         type = cursor.safeGetInt(AgentRequisitesContract.COLUMN_AGENT_TYPE)?.let { Agent.Type.values()[it] },
                         counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_AGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                        fullName = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_FULL_NAME),
-                        shortName = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_SHORT_NAME),
-                        inn = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_INN),
-                        kpp = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_KPP),
+                        fullName = cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_FULL_NAME),
+                        shortName = cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_SHORT_NAME),
+                        inn = cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_INN),
+                        kpp = cursor.safeGetString(AgentRequisitesContract.COLUMN_AGENT_KPP),
                         phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_AGENT_PHONES),
                         addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_AGENT_ADDRESSES)
                 )
 
     private fun readSubagent(cursor: Cursor): Subagent? {
         return Subagent(
-                uuid = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_UUID)?.let { UUID.fromString(it) },
+                uuid = cursor.safeGetString(AgentRequisitesContract.COLUMN_SUBAGENT_UUID)?.let { UUID.fromString(it) },
                 type = Subagent.Type.values()[cursor.safeGetInt(AgentRequisitesContract.COLUMN_SUBAGENT_TYPE)
                         ?: return null],
                 counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_SUBAGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                fullName = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_FULL_NAME),
-                shortName = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_SHORT_NAME),
-                inn = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_INN),
-                kpp = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_KPP),
+                fullName = cursor.safeGetString(AgentRequisitesContract.COLUMN_SUBAGENT_FULL_NAME),
+                shortName = cursor.safeGetString(AgentRequisitesContract.COLUMN_SUBAGENT_SHORT_NAME),
+                inn = cursor.safeGetString(AgentRequisitesContract.COLUMN_SUBAGENT_INN),
+                kpp = cursor.safeGetString(AgentRequisitesContract.COLUMN_SUBAGENT_KPP),
                 phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_SUBAGENT_PHONES),
                 addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_SUBAGENT_ADDRESSES)
         )
@@ -143,13 +143,13 @@ internal object AgentRequisitesMapper {
 
     private fun readPrincipal(cursor: Cursor): Principal? {
         return Principal(
-                uuid = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_UUID)?.let { UUID.fromString(it) },
+                uuid = cursor.safeGetString(AgentRequisitesContract.COLUMN_PRINCIPAL_UUID)?.let { UUID.fromString(it) },
                 counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_PRINCIPAL_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                fullName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_FULL_NAME),
-                shortName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME),
-                inn = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_INN)
+                fullName = cursor.safeGetString(AgentRequisitesContract.COLUMN_PRINCIPAL_FULL_NAME),
+                shortName = cursor.safeGetString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME),
+                inn = cursor.safeGetString(AgentRequisitesContract.COLUMN_PRINCIPAL_INN)
                         ?: return null,
-                kpp = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_KPP),
+                kpp = cursor.safeGetString(AgentRequisitesContract.COLUMN_PRINCIPAL_KPP),
                 phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_PRINCIPAL_PHONES)
                         ?: return null,
                 addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_PRINCIPAL_ADDRESSES)
@@ -157,16 +157,16 @@ internal object AgentRequisitesMapper {
     }
 
     private fun readTransactionOperator(cursor: Cursor): TransactionOperator? =
-            if (cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_IS_NULL)?.toBoolean() != false)
+            if (cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_IS_NULL)?.toBoolean() != false)
                 null
             else
                 TransactionOperator(
-                        uuid = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_UUID)?.let { UUID.fromString(it) },
+                        uuid = cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_UUID)?.let { UUID.fromString(it) },
                         counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                        fullName = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_FULL_NAME),
-                        shortName = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_SHORT_NAME),
-                        inn = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_INN),
-                        kpp = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_KPP),
+                        fullName = cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_FULL_NAME),
+                        shortName = cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_SHORT_NAME),
+                        inn = cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_INN),
+                        kpp = cursor.safeGetString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_KPP),
                         phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_PHONES),
                         addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_ADDRESSES)
                 )

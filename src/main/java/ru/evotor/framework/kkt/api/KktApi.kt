@@ -1,7 +1,7 @@
 package ru.evotor.framework.kkt.api
 
 import android.content.Context
-import ru.evotor.framework.core.OutdatedLibraryException
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
@@ -16,7 +16,7 @@ object KktApi {
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
      * @return FfdVersion или null, если не удалось связаться с кассой
-     * @throws OutdatedLibraryException, если используемая в приложении версия integration-library
+     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
      * не поддерживает полученную версию ФФД.
      */
     @JvmStatic
@@ -30,7 +30,7 @@ object KktApi {
         cursor.moveToFirst()
         cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
             if (version !in 0..FfdVersion.values().size) {
-                throw OutdatedLibraryException(FfdVersion::class.java.name)
+                throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
             }
             FfdVersion.values()[version]
         }
@@ -40,7 +40,7 @@ object KktApi {
      * Получает список типов агентов, которые были указаны при регистрации кассы.
      * @return List<Agent.Type> или null, если в кассе не зарегистрированы типы агентов, либо если
      * не удалось связаться с кассой.
-     * @throws OutdatedLibraryException, если используемая в приложении версия integration-library
+     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
      * не поддерживает полученные типы агентов.
      */
     @JvmStatic
@@ -56,7 +56,7 @@ object KktApi {
                 cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
-                            throw OutdatedLibraryException(Agent.Type::class.java.name)
+                            throw IntegrationLibraryMappingException(Agent.Type::class.java.name)
                         }
                         Agent.Type.values()[index]
                     }
@@ -67,7 +67,7 @@ object KktApi {
      * Получает список типов субагентов, которые были указаны при регистрации кассы.
      * @return List<Subagent.Type> или null, если в кассе не зарегистрированы типы субагентов, либо
      * если не удалось связаться с кассой.
-     * @throws OutdatedLibraryException, если используемая в приложении версия integration-library
+     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
      * не поддерживает полученные типы субагентов.
      */
     @JvmStatic
@@ -83,7 +83,7 @@ object KktApi {
                 cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
-                            throw OutdatedLibraryException(Subagent.Type::class.java.name)
+                            throw IntegrationLibraryMappingException(Subagent.Type::class.java.name)
                         }
                         Subagent.Type.values()[index]
                     }
