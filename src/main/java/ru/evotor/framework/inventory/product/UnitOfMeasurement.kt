@@ -58,7 +58,7 @@ sealed class UnitOfMeasurement(val type: Type, val name: String, val precision: 
         }
     }
 
-    class Custom(type: Type, name: String, precision: Precision) : UnitOfMeasurement(type, name, precision)
+    class Custom(type: Type, name: String, precision: Precision = Precision.ZERO) : UnitOfMeasurement(type, name, precision)
 
     enum class Type {
         QUANTITY_UNIT,
@@ -77,7 +77,7 @@ sealed class UnitOfMeasurement(val type: Type, val name: String, val precision: 
         FIVE,
     }
 
-    class Filter<Q, S : FilterBuilder.SortOrder<S>, R> : FilterBuilder.Inner<Q, S, R>() {
+    class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
         val type = addFieldFilter<Type>(UnitOfMeasurementContract.COLUMN_TYPE)
         val name = addFieldFilter<String>(UnitOfMeasurementContract.COLUMN_NAME)
         val precision = addFieldFilter<Precision>(UnitOfMeasurementContract.COLUMN_PRECISION)

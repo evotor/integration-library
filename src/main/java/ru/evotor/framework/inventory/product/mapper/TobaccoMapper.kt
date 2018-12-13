@@ -1,33 +1,51 @@
 package ru.evotor.framework.inventory.product.mapper
 
+import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.Tobacco
-import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.mapper.ExcisableProductMapper
+import ru.evotor.framework.inventory.product.extension.provider.ExcisableProductContract
 
 internal object TobaccoMapper {
-    fun read(cursor: Cursor) = Tobacco(
-            uuid = ProductMapper.readUuid(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::uuid.name),
-            groupUuid = ProductMapper.readGroupUuid(cursor),
-            name = ProductMapper.readName(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::name.name),
-            code = ProductMapper.readCode(cursor),
-            vendorCode = ProductMapper.readVendorCode(cursor),
-            barcodes = ProductMapper.readBarcodes(cursor),
-            mark = ExcisableProductMapper.readMark(cursor)
-                    ?: throw IntegrationLibraryMappingException(ExcisableProduct::mark.name),
-            purchasePrice = ProductMapper.readPurchasePrice(cursor),
-            sellingPrice = ProductMapper.readSellingPrice(cursor),
-            vatRate = ProductMapper.readVatRate(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::vatRate.name),
-            quantity = ProductMapper.readQuantity(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::quantity.name),
-            unitOfMeasurement = UnitOfMeasurementMapper.read(cursor),
-            description = ProductMapper.readDescription(cursor),
-            allowedToSell = ProductMapper.readAllowedToSell(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::allowedToSell.name)
-    )
+    fun read(context: Context, productCursor: Cursor): Tobacco {
+        val uuid = ProductMapper.readUuid(productCursor)
+                ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::uuid)
+
+        val excisableProductCursor = context.contentResolver.query(
+                Uri.withAppendedPath(ExcisableProductContract.URI, uuid.toString()),
+                null,
+                null,
+                null,
+                null
+        ) ?: throw IntegrationLibraryMappingException(Tobacco::class.java)
+        excisableProductCursor.moveToFirst()
+
+        val result = Tobacco(
+                uuid = uuid,
+                groupUuid = ProductMapper.readGroupUuid(productCursor),
+                name = ProductMapper.readName(productCursor)
+                        ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::name),
+                code = ProductMapper.readCode(productCursor),
+                vendorCode = ProductMapper.readVendorCode(productCursor),
+                barcodes = ProductMapper.readBarcodes(productCursor),
+                mark = ExcisableProductMapper.readMark(excisableProductCursor)
+                        ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::mark),
+                purchasePrice = ProductMapper.readPurchasePrice(productCursor),
+                sellingPrice = ProductMapper.readSellingPrice(productCursor),
+                vatRate = ProductMapper.readVatRate(productCursor)
+                        ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::vatRate),
+                quantity = ProductMapper.readQuantity(productCursor)
+                        ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::quantity),
+                unitOfMeasurement = UnitOfMeasurementMapper.read(productCursor),
+                description = ProductMapper.readDescription(productCursor),
+                allowedToSell = ProductMapper.readAllowedToSell(productCursor)
+                        ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::allowedToSell)
+        )
+
+        excisableProductCursor.close()
+
+        return result
+    }
 }

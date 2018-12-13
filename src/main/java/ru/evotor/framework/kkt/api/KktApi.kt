@@ -16,8 +16,7 @@ object KktApi {
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
      * @return FfdVersion или null, если не удалось связаться с кассой
-     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
-     * не поддерживает полученную версию ФФД.
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученную версию ФФД.
      */
     @JvmStatic
     fun getRegisteredFfdVersion(context: Context): FfdVersion? = context.contentResolver.query(
@@ -30,7 +29,7 @@ object KktApi {
         cursor.moveToFirst()
         cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
             if (version !in 0..FfdVersion.values().size) {
-                throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
+                throw IntegrationLibraryMappingException(FfdVersion::class.java)
             }
             FfdVersion.values()[version]
         }
@@ -40,8 +39,8 @@ object KktApi {
      * Получает список типов агентов, которые были указаны при регистрации кассы.
      * @return List<Agent.Type> или null, если в кассе не зарегистрированы типы агентов, либо если
      * не удалось связаться с кассой.
-     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
-     * не поддерживает полученные типы агентов.
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученные типы
+     * агентов.
      */
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
@@ -56,7 +55,7 @@ object KktApi {
                 cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
-                            throw IntegrationLibraryMappingException(Agent.Type::class.java.name)
+                            throw IntegrationLibraryMappingException(Agent.Type::class.java)
                         }
                         Agent.Type.values()[index]
                     }
@@ -67,8 +66,8 @@ object KktApi {
      * Получает список типов субагентов, которые были указаны при регистрации кассы.
      * @return List<Subagent.Type> или null, если в кассе не зарегистрированы типы субагентов, либо
      * если не удалось связаться с кассой.
-     * @throws IntegrationLibraryMappingException, если используемая в приложении версия integration-library
-     * не поддерживает полученные типы субагентов.
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученные типы
+     * субагентов.
      */
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
@@ -83,7 +82,7 @@ object KktApi {
                 cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
-                            throw IntegrationLibraryMappingException(Subagent.Type::class.java.name)
+                            throw IntegrationLibraryMappingException(Subagent.Type::class.java)
                         }
                         Subagent.Type.values()[index]
                     }

@@ -11,18 +11,12 @@ class GrantQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<GrantQ
     @JvmField
     val roleUuid = addFieldFilter<String>(GrantsTable.ROW_ROLE_UUID)
 
-    override val currentQuery: GrantQuery
-        get() = this
-
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
         @JvmField
         val title = addFieldSorter(GrantsTable.ROW_TITLE)
         @JvmField
         val roleUuid = addFieldSorter(GrantsTable.ROW_ROLE_UUID)
-
-        override val currentSortOrder: SortOrder
-            get() = this
 
     }
 

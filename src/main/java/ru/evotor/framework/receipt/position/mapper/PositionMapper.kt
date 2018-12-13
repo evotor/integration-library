@@ -20,22 +20,22 @@ internal object PositionMapper {
 
     fun read(cursor: Cursor) = Position(
             uuid = cursor.safeGetString(PositionContract.COLUMN_UUID)?.let { UUID.fromString(it) }
-                    ?: throw IntegrationLibraryMappingException(Position::uuid.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::uuid),
             productUuid = cursor.safeGetString(PositionContract.COLUMN_PRODUCT_UUID)?.let { UUID.fromString(it) }
-                    ?: throw IntegrationLibraryMappingException(Position::productUuid.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::productUuid),
             type = cursor.safeGetEnum(PositionContract.COLUMN_TYPE, Position.Type.values())
-                    ?: throw IntegrationLibraryMappingException(Position::type.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::type),
             name = cursor.safeGetString(PositionContract.COLUMN_NAME)
-                    ?: throw IntegrationLibraryMappingException(Position::name.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::name),
             productCode = cursor.safeGetString(PositionContract.COLUMN_PRODUCT_CODE)
-                    ?: throw IntegrationLibraryMappingException(Position::productCode.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::productCode),
             price = cursor.safeGetMoney(PositionContract.COLUMN_PRICE)
-                    ?: throw IntegrationLibraryMappingException(Position::price.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::price),
             quantity = cursor.safeGetQuantity(PositionContract.COLUMN_QUANTITY)
-                    ?: throw IntegrationLibraryMappingException(Position::quantity.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::quantity),
             unitOfMeasurement = UnitOfMeasurementMapper.read(cursor),
             discount = cursor.safeGetMoney(PositionContract.COLUMN_DISCOUNT)
-                    ?: throw IntegrationLibraryMappingException(Position::discount.name),
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::discount),
             settlementMethod = SettlementMethodMapper.read(cursor),
             agentRequisites = AgentRequisitesMapper.read(cursor)
     )

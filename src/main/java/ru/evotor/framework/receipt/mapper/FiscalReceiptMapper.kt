@@ -32,25 +32,22 @@ internal object FiscalReceiptMapper {
 
     fun read(cursor: Cursor) = FiscalReceipt(
             documentNumber = FiscalDocumentMapper.readDocumentNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::documentNumber),
             creationDate = FiscalDocumentMapper.readCreationDate(cursor)
-                    ?: throwOutdatedLibraryException(),
-            settlementType = cursor.safeGetEnum(
-                    FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
-            ) ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::creationDate),
+            settlementType = cursor.safeGetEnum(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values())
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::settlementType),
             kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::kktRegistrationNumber),
             sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::sessionNumber),
             fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::fiscalStorageNumber),
             fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
-                    ?: throwOutdatedLibraryException(),
-            wasPrinted = cursor.safeGetBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::fiscalIdentifier),
+            wasPrinted = cursor.safeGetBoolean(KEY_WAS_PRINTED)
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::wasPrinted)
     )
-
-    private fun throwOutdatedLibraryException(): Nothing =
-            throw IntegrationLibraryMappingException("${FiscalReceipt::class.java.name} field")
 
     fun write(fiscalReceipt: FiscalReceipt) = FiscalDocumentMapper.write(fiscalReceipt).apply {
         this.putInt(KEY_SETTLEMENT_TYPE, fiscalReceipt.settlementType.ordinal)

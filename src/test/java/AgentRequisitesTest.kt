@@ -1,8 +1,8 @@
 import junit.framework.Assert
 import org.junit.Test
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.receipt.position.AgentRequisites
 
@@ -137,7 +137,7 @@ class AgentRequisitesTest {
     ) = Assert.assertEquals(
             AgentRequisites.createForBankPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, transactionOperatorName, transactionOperatorInn, transactionOperatorPhones, transactionOperatorAddress, operationDescription),
             AgentRequisites(
-                    Agent(null,null, null, null, null, null, null, agentPhones, null),
+                    Agent(null, null, null, null, null, null, null, agentPhones, null),
                     Subagent(null, Subagent.Type.BANK_PAYMENT_SUBAGENT, null, null, null, null, null, subagentPhones, null),
                     Principal(null, null, null, null, principalInn, null, principalPhones, null),
                     TransactionOperator(null, null, transactionOperatorName, null, transactionOperatorInn, null, transactionOperatorPhones, listOf(transactionOperatorAddress)),

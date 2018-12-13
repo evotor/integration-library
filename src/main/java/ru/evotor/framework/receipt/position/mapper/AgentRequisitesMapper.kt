@@ -104,7 +104,7 @@ internal object AgentRequisitesMapper {
                 agent = readAgent(cursor),
                 subagent = readSubagent(cursor),
                 principal = readPrincipal(cursor)
-                        ?: throw IntegrationLibraryMappingException(AgentRequisites::principal.name),
+                        ?: throw IntegrationLibraryMappingException(AgentRequisites::class.java, AgentRequisites::principal),
                 transactionOperator = readTransactionOperator(cursor),
                 operationDescription = cursor.safeGetString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
         )

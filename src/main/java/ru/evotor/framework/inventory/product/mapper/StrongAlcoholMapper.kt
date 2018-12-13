@@ -1,41 +1,69 @@
 package ru.evotor.framework.inventory.product.mapper
 
+import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.StrongAlcohol
-import ru.evotor.framework.inventory.product.extension.AlcoholProduct
-import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.mapper.AlcoholProductMapper
 import ru.evotor.framework.inventory.product.extension.mapper.ExcisableProductMapper
+import ru.evotor.framework.inventory.product.extension.provider.AlcoholProductContract
+import ru.evotor.framework.inventory.product.extension.provider.ExcisableProductContract
 
 internal object StrongAlcoholMapper {
-    fun read(cursor: Cursor) = StrongAlcohol(
-            uuid = ProductMapper.readUuid(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::uuid.name),
-            groupUuid = ProductMapper.readGroupUuid(cursor),
-            name = ProductMapper.readName(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::name.name),
-            code = ProductMapper.readCode(cursor),
-            fsrarProductKindCode = AlcoholProductMapper.readFsrarProductKindCode(cursor)
-                    ?: throw IntegrationLibraryMappingException(AlcoholProduct::fsrarProductKindCode.name),
-            vendorCode = ProductMapper.readVendorCode(cursor),
-            barcodes = ProductMapper.readBarcodes(cursor),
-            mark = ExcisableProductMapper.readMark(cursor)
-                    ?: throw IntegrationLibraryMappingException(ExcisableProduct::mark.name),
-            purchasePrice = ProductMapper.readPurchasePrice(cursor),
-            sellingPrice = ProductMapper.readSellingPrice(cursor),
-            vatRate = ProductMapper.readVatRate(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::vatRate.name),
-            quantity = ProductMapper.readQuantity(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::quantity.name),
-            unitOfMeasurement = UnitOfMeasurementMapper.read(cursor),
-            tareVolume = AlcoholProductMapper.readTareVolume(cursor)
-                    ?: throw IntegrationLibraryMappingException(AlcoholProduct::tareVolume.name),
-            alcoholPercentage = AlcoholProductMapper.readAlcoholPercentage(cursor)
-                    ?: throw IntegrationLibraryMappingException(AlcoholProduct::alcoholPercentage.name),
-            description = ProductMapper.readDescription(cursor),
-            allowedToSell = ProductMapper.readAllowedToSell(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::allowedToSell.name)
-    )
+    fun read(context: Context, productCursor: Cursor): StrongAlcohol {
+        val uuid = ProductMapper.readUuid(productCursor)
+                ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::uuid)
+
+        val alcoholProductCursor = context.contentResolver.query(
+                Uri.withAppendedPath(AlcoholProductContract.URI, uuid.toString()),
+                null,
+                null,
+                null,
+                null
+        ) ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java)
+        alcoholProductCursor.moveToFirst()
+
+        val excisableProductCursor = context.contentResolver.query(
+                Uri.withAppendedPath(ExcisableProductContract.URI, uuid.toString()),
+                null,
+                null,
+                null,
+                null
+        ) ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java)
+        excisableProductCursor.moveToFirst()
+
+        val result = StrongAlcohol(
+                uuid = uuid,
+                groupUuid = ProductMapper.readGroupUuid(productCursor),
+                name = ProductMapper.readName(productCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::name),
+                code = ProductMapper.readCode(productCursor),
+                fsrarProductKindCode = AlcoholProductMapper.readFsrarProductKindCode(alcoholProductCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::fsrarProductKindCode),
+                vendorCode = ProductMapper.readVendorCode(productCursor),
+                barcodes = ProductMapper.readBarcodes(productCursor),
+                mark = ExcisableProductMapper.readMark(excisableProductCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::mark),
+                purchasePrice = ProductMapper.readPurchasePrice(productCursor),
+                sellingPrice = ProductMapper.readSellingPrice(productCursor),
+                vatRate = ProductMapper.readVatRate(productCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::vatRate),
+                quantity = ProductMapper.readQuantity(productCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::quantity),
+                unitOfMeasurement = UnitOfMeasurementMapper.read(productCursor),
+                tareVolume = AlcoholProductMapper.readTareVolume(alcoholProductCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::tareVolume),
+                alcoholPercentage = AlcoholProductMapper.readAlcoholPercentage(alcoholProductCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::alcoholPercentage),
+                description = ProductMapper.readDescription(productCursor),
+                allowedToSell = ProductMapper.readAllowedToSell(productCursor)
+                        ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::allowedToSell)
+        )
+
+        alcoholProductCursor.close()
+        excisableProductCursor.close()
+
+        return result
+    }
 }

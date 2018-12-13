@@ -89,13 +89,7 @@ data class FiscalReceipt internal constructor(
             val sessionNumber = addFieldSorter(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
             val fiscalStorageNumber = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
             val fiscalIdentifier = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
-
-            override val currentSortOrder: SortOrder
-                get() = this
         }
-
-        override val currentQuery: Query
-            get() = this
 
         override fun getValue(cursor: Cursor<FiscalReceipt>): FiscalReceipt = FiscalReceiptMapper.read(cursor)
     }

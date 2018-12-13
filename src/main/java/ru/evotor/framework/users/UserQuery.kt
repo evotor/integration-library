@@ -23,9 +23,6 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
     @JvmField
     val roleTitle = addFieldFilter<String>(UsersTable.ROW_ROLE_TITLE)
 
-    override val currentQuery: UserQuery
-        get() = this
-
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
         @JvmField
@@ -44,9 +41,6 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
         val roleUuid = addFieldSorter(UsersTable.ROW_ROLE_UUID)
         @JvmField
         val roleTitle = addFieldSorter(UsersTable.ROW_ROLE_TITLE)
-
-        override val currentSortOrder: SortOrder
-            get() = this
 
     }
 

@@ -1,7 +1,9 @@
 package ru.evotor.framework.core
 
-private const val CAUSE = "*"
+import kotlin.reflect.KProperty
 
+private const val CAUSE = "*"
+private const val SEPARATOR = "."
 private const val BASE_MESSAGE = "Found $CAUSE that is not supported in current integration-library. Try to update your integration-library to resolve this error."
 
 /**
@@ -11,4 +13,11 @@ private const val BASE_MESSAGE = "Found $CAUSE that is not supported in current 
  *
  * Если после обновления integration-library исключение не перестало возникать, свяжитесь с техподдержкой Эвотора.
  */
-internal class IntegrationLibraryMappingException internal constructor(cause: String) : IntegrationLibraryException(BASE_MESSAGE.replace(CAUSE, cause))
+internal class IntegrationLibraryMappingException(clazz: Class<*>, property: KProperty<*>? = null) : IntegrationLibraryException(
+        with(clazz.name) {
+            property?.let { this + SEPARATOR + it.name } ?: this
+        }.let { cause ->
+            BASE_MESSAGE.replace(CAUSE, cause)
+        }
+
+)

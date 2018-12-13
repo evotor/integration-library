@@ -16,7 +16,7 @@ object InventoryApi {
             context.contentResolver.query(
                     Uri.withAppendedPath(
                             InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_PRODUCTS
+                            ProductContract.PATH
                     ),
                     null,
                     null,
@@ -24,7 +24,7 @@ object InventoryApi {
                     null
             ).let { cursor ->
                 object : Cursor<Product>(cursor) {
-                    override fun getValue() = ProductMapper.read(this)
+                    override fun getValue() = ProductMapper.read(context, this)
                 }.toList()
             }
 
@@ -32,7 +32,7 @@ object InventoryApi {
             context.contentResolver.query(
                     Uri.withAppendedPath(
                             InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_POSITIONS
+                            PositionContract.PATH
                     ),
                     null,
                     null,

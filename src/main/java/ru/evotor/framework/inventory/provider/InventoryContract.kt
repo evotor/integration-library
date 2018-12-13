@@ -7,9 +7,5 @@ internal object InventoryContract {
 
     val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 
-    const val PATH_PRODUCTS = "products"
-    const val PATH_PRODUCT_GROUPS = "productGroups"
-    const val PATH_POSITIONS = "positions"
-
     fun getBarcodeUri(barcode: String): Uri = Uri.withAppendedPath(BASE_URI, barcode)
 }

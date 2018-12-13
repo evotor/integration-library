@@ -8,22 +8,22 @@ import ru.evotor.framework.inventory.product.PayableService
 internal object PayableServiceMapper {
     fun read(cursor: Cursor) = PayableService(
             uuid = ProductMapper.readUuid(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::uuid.name),
+                    ?: throw IntegrationLibraryMappingException(Product::class.java, Product::uuid),
             groupUuid = ProductMapper.readGroupUuid(cursor),
             name = ProductMapper.readName(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::name.name),
+                    ?: throw IntegrationLibraryMappingException(Product::class.java, Product::name),
             code = ProductMapper.readCode(cursor),
             vendorCode = ProductMapper.readVendorCode(cursor),
             barcodes = ProductMapper.readBarcodes(cursor),
             purchasePrice = ProductMapper.readPurchasePrice(cursor),
             sellingPrice = ProductMapper.readSellingPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::vatRate.name),
+                    ?: throw IntegrationLibraryMappingException(Product::class.java, Product::vatRate),
             quantity = ProductMapper.readQuantity(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::quantity.name),
+                    ?: throw IntegrationLibraryMappingException(Product::class.java, Product::quantity),
             unitOfMeasurement = UnitOfMeasurementMapper.read(cursor),
             description = ProductMapper.readDescription(cursor),
             allowedToSell = ProductMapper.readAllowedToSell(cursor)
-                    ?: throw IntegrationLibraryMappingException(Product::allowedToSell.name)
+                    ?: throw IntegrationLibraryMappingException(Product::class.java, Product::allowedToSell)
     )
 }
