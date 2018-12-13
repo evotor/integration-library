@@ -6,21 +6,22 @@ import ru.evotor.framework.core.OutdatedLibraryException
 import ru.evotor.framework.inventory.product.VatRate
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.provider.ProductContract
+import ru.evotor.framework.mapper.MultiVariationEntityMapper
 import java.util.*
 
 internal object ProductMapper {
-    private const val UNCLASSIFIED_PRODUCT_CLASS_ID = 0
-    private const val FREE_PRICE_PRODUCT_CLASS_ID = 1
-    private const val WEAK_ALCOHOL_CLASS_ID = 2
-    private const val STRONG_ALCOHOL_CLASS_ID = 3
-    private const val TOBACCO_CLASS_ID = 4
+    private const val VARIATION_ID_UNCLASSIFIED_PRODUCT = 0
+    private const val VARIATION_ID_WEAK_ALCOHOL = 1
+    private const val VARIATION_ID_STRONG_ALCOHOL = 2
+    private const val VARIATION_ID_TOBACCO = 3
+    private const val VARIATION_ID_PAYABLE_SERVICE = 4
 
-    fun read(cursor: Cursor) = when (cursor.safeGetInt(ProductContract.COLUMN_CLASS_ID)) {
-        UNCLASSIFIED_PRODUCT_CLASS_ID -> UnclassifiedProductMapper.read(cursor)
-        FREE_PRICE_PRODUCT_CLASS_ID -> FreePriceProductMapper.read(cursor)
-        WEAK_ALCOHOL_CLASS_ID -> WeakAlcoholMapper.read(cursor)
-        STRONG_ALCOHOL_CLASS_ID -> StrongAlcoholMapper.read(cursor)
-        TOBACCO_CLASS_ID -> TobaccoMapper.read(cursor)
+    fun read(cursor: Cursor) = when (MultiVariationEntityMapper.readVariationId(cursor)) {
+        VARIATION_ID_UNCLASSIFIED_PRODUCT -> UnclassifiedProductMapper.read(cursor)
+        VARIATION_ID_WEAK_ALCOHOL -> WeakAlcoholMapper.read(cursor)
+        VARIATION_ID_STRONG_ALCOHOL -> StrongAlcoholMapper.read(cursor)
+        VARIATION_ID_TOBACCO -> TobaccoMapper.read(cursor)
+        VARIATION_ID_PAYABLE_SERVICE -> PayableServiceMapper.read(cursor)
         else -> throw OutdatedLibraryException(Product::class.java.name)
     }
 

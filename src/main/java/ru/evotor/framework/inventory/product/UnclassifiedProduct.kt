@@ -1,6 +1,5 @@
 package ru.evotor.framework.inventory.product
 
-import ru.evotor.framework.inventory.product.extension.FixedPriceProduct
 import java.math.BigDecimal
 import java.util.*
 
@@ -12,10 +11,10 @@ data class UnclassifiedProduct internal constructor(
         override val vendorCode: String?,
         override val barcodes: List<String>?,
         override val purchasePrice: BigDecimal?,
-        override val sellingPrice: BigDecimal,
+        override val sellingPrice: BigDecimal?,
         override val vatRate: VatRate,
         override val quantity: BigDecimal,
         override val unitOfMeasurement: UnitOfMeasurement,
         override val description: String?,
         override val allowedToSell: Boolean
-) : Product(), FixedPriceProduct
+) : Product()

@@ -2,8 +2,6 @@ package ru.evotor.framework.receipt.position
 
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.UnitOfMeasurement
-import ru.evotor.framework.inventory.product.FreePriceProduct
-import ru.evotor.framework.inventory.product.extension.FixedPriceProduct
 import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import java.math.BigDecimal
 import java.util.*
@@ -23,22 +21,22 @@ data class Position internal constructor(
 ) {
     val priceWithDiscountsAndSurcharges get() = price - discount
 
-    constructor(product: FixedPriceProduct) : this(
-            productUuid = (product as Product).uuid,
-            type = PositionMapper.getType(product),
-            name = product.name,
-            productCode = product.code,
-            price = product.sellingPrice,
-            unitOfMeasurement = product.unitOfMeasurement
+    constructor(fixedPriceProduct: Product) : this(
+            productUuid = fixedPriceProduct.uuid,
+            type = PositionMapper.getPositionType(fixedPriceProduct),
+            name = fixedPriceProduct.name,
+            productCode = fixedPriceProduct.code,
+            price = fixedPriceProduct.sellingPrice!!,
+            unitOfMeasurement = fixedPriceProduct.unitOfMeasurement
     )
 
-    constructor(product: FreePriceProduct, price: BigDecimal) : this(
-            productUuid = product.uuid,
-            type = PositionMapper.getType(product),
-            name = product.name,
-            productCode = product.code,
+    constructor(freePriceProduct: Product, price: BigDecimal) : this(
+            productUuid = freePriceProduct.uuid,
+            type = PositionMapper.getPositionType(freePriceProduct),
+            name = freePriceProduct.name,
+            productCode = freePriceProduct.code,
             price = price,
-            unitOfMeasurement = product.unitOfMeasurement
+            unitOfMeasurement = freePriceProduct.unitOfMeasurement
     )
 
     constructor(
@@ -70,6 +68,6 @@ data class Position internal constructor(
         ORDINARY_PRODUCT,
         EXCISABLE_PRODUCT,
         JOB,
-        SERVICE
+        PAYABLE_SERVICE
     }
 }

@@ -20,8 +20,7 @@ internal object TobaccoMapper {
             mark = ExcisableProductMapper.readMark(cursor)
                     ?: throw OutdatedLibraryException(ExcisableProduct::mark.name),
             purchasePrice = ProductMapper.readPurchasePrice(cursor),
-            sellingPrice = ProductMapper.readSellingPrice(cursor)
-                    ?: throw OutdatedLibraryException(Product::sellingPrice.name),
+            sellingPrice = ProductMapper.readSellingPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw OutdatedLibraryException(Product::vatRate.name),
             quantity = ProductMapper.readQuantity(cursor)

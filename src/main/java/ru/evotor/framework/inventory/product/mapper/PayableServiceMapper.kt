@@ -2,11 +2,11 @@ package ru.evotor.framework.inventory.product.mapper
 
 import android.database.Cursor
 import ru.evotor.framework.core.OutdatedLibraryException
-import ru.evotor.framework.inventory.product.FreePriceProduct
 import ru.evotor.framework.inventory.product.Product
+import ru.evotor.framework.inventory.product.PayableService
 
-internal object FreePriceProductMapper {
-    fun read(cursor: Cursor) = FreePriceProduct(
+internal object PayableServiceMapper {
+    fun read(cursor: Cursor) = PayableService(
             uuid = ProductMapper.readUuid(cursor)
                     ?: throw OutdatedLibraryException(Product::uuid.name),
             groupUuid = ProductMapper.readGroupUuid(cursor),
@@ -16,6 +16,7 @@ internal object FreePriceProductMapper {
             vendorCode = ProductMapper.readVendorCode(cursor),
             barcodes = ProductMapper.readBarcodes(cursor),
             purchasePrice = ProductMapper.readPurchasePrice(cursor),
+            sellingPrice = ProductMapper.readSellingPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw OutdatedLibraryException(Product::vatRate.name),
             quantity = ProductMapper.readQuantity(cursor)

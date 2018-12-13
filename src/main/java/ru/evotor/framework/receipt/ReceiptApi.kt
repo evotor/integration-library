@@ -17,7 +17,6 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
@@ -333,7 +332,7 @@ object ReceiptApi {
             else -> {
             }
         }
-        builder.setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+        builder.setSettlementMethod(SettlementMethodMapper.read(cursor))
         return builder.build()
     }
 

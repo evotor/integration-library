@@ -2,6 +2,7 @@ package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
 import android.os.Bundle
+import ru.evotor.framework.core.OutdatedLibraryException
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
@@ -102,7 +103,8 @@ internal object AgentRequisitesMapper {
         return AgentRequisites(
                 agent = readAgent(cursor),
                 subagent = readSubagent(cursor),
-                principal = readPrincipal(cursor) ?: return null,
+                principal = readPrincipal(cursor)
+                        ?: throw OutdatedLibraryException(AgentRequisites::principal.name),
                 transactionOperator = readTransactionOperator(cursor),
                 operationDescription = cursor.optString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
         )

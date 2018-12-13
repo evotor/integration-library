@@ -4,9 +4,11 @@ import android.content.Context
 import android.net.Uri
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
+import ru.evotor.framework.inventory.product.provider.ProductContract
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.receipt.position.Position
 import ru.evotor.framework.receipt.position.mapper.PositionMapper
+import ru.evotor.framework.receipt.position.provider.PositionContract
 import ru.evotor.query.Cursor
 
 object InventoryApi {
@@ -14,7 +16,7 @@ object InventoryApi {
             context.contentResolver.query(
                     Uri.withAppendedPath(
                             InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_PRODUCTS_BY_BARCODE
+                            InventoryContract.PATH_PRODUCTS
                     ),
                     null,
                     null,
@@ -30,7 +32,7 @@ object InventoryApi {
             context.contentResolver.query(
                     Uri.withAppendedPath(
                             InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_POSITIONS_BY_BARCODE
+                            InventoryContract.PATH_POSITIONS
                     ),
                     null,
                     null,

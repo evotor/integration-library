@@ -20,8 +20,7 @@ internal object WeakAlcoholMapper {
             vendorCode = ProductMapper.readVendorCode(cursor),
             barcodes = ProductMapper.readBarcodes(cursor),
             purchasePrice = ProductMapper.readPurchasePrice(cursor),
-            sellingPrice = ProductMapper.readSellingPrice(cursor)
-                    ?: throw OutdatedLibraryException(Product::sellingPrice.name),
+            sellingPrice = ProductMapper.readSellingPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw OutdatedLibraryException(Product::vatRate.name),
             quantity = ProductMapper.readQuantity(cursor)

@@ -1,7 +1,9 @@
 package ru.evotor.framework.inventory.product
 
+import android.net.Uri
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
+import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
@@ -22,7 +24,9 @@ abstract class Product internal constructor() {
     abstract val description: String?
     abstract val allowedToSell: Boolean
 
-    class Query : FilterBuilder<Query, Query.SortOrder, Product>(ProductContract.URI) {
+    class Query : FilterBuilder<Query, Query.SortOrder, Product>(
+            Uri.withAppendedPath(InventoryContract.BASE_URI, InventoryContract.PATH_PRODUCTS)
+    ) {
         val uuid = addFieldFilter<UUID>(ProductContract.COLUMN_UUID)
         val groupUuid = addFieldFilter<UUID?>(ProductContract.COLUMN_GROUP_UUID)
         val name = addFieldFilter<String>(ProductContract.COLUMN_NAME)

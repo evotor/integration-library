@@ -5,10 +5,10 @@ import android.net.Uri
 internal object InventoryContract {
     private const val AUTHORITY = "ru.evotor.framework.inventory"
 
-    val URI: Uri = Uri.parse("content://$AUTHORITY")
+    val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 
-    const val PATH_PRODUCTS_BY_BARCODE = "products"
-    const val PATH_POSITIONS_BY_BARCODE = "positions"
+    const val PATH_PRODUCTS = "products"
+    const val PATH_POSITIONS = "positions"
 
-    fun getBarcodeUri(barcode: String): Uri = Uri.withAppendedPath(URI, barcode)
+    fun getBarcodeUri(barcode: String): Uri = Uri.withAppendedPath(BASE_URI, barcode)
 }

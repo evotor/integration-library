@@ -1,14 +1,6 @@
 package ru.evotor.framework.inventory.product.provider
 
-import android.net.Uri
-import ru.evotor.framework.inventory.provider.InventoryContract
-
 internal object ProductContract {
-    private const val PATH = "products"
-
-    val URI: Uri = Uri.withAppendedPath(InventoryContract.URI, PATH)
-
-    const val COLUMN_CLASS_ID = "CLASS_ID"
     const val COLUMN_UUID = "UUID"
     const val COLUMN_GROUP_UUID = "GROUP_UUID"
     const val COLUMN_NAME = "NAME"
