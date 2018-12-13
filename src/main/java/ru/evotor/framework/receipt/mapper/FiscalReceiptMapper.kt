@@ -2,7 +2,7 @@ package ru.evotor.framework.receipt.mapper
 
 import android.database.Cursor
 import android.os.Bundle
-import ru.evotor.framework.core.OutdatedLibraryException
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.mapper.FiscalDocumentMapper
 import ru.evotor.framework.safeGetEnum
 import ru.evotor.framework.receipt.FiscalReceipt
@@ -50,7 +50,7 @@ internal object FiscalReceiptMapper {
     )
 
     private fun throwOutdatedLibraryException(): Nothing =
-            throw OutdatedLibraryException("${FiscalReceipt::class.java.name} field")
+            throw IntegrationLibraryMappingException("${FiscalReceipt::class.java.name} field")
 
     fun write(fiscalReceipt: FiscalReceipt) = FiscalDocumentMapper.write(fiscalReceipt).apply {
         this.putInt(KEY_SETTLEMENT_TYPE, fiscalReceipt.settlementType.ordinal)
