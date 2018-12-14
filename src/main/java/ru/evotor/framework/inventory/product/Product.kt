@@ -57,6 +57,6 @@ abstract class Product internal constructor() {
         }
 
         override fun getValue(context: Context, cursor: Cursor<Product>): Product =
-                ProductMapper.read(context, cursor)
+                ProductMapper.read(cursor)
     }
 }

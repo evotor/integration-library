@@ -3,7 +3,6 @@ package ru.evotor.framework.inventory.product
 import android.content.Context
 import android.net.Uri
 import ru.evotor.framework.inventory.product.mapper.PayableServiceMapper
-import ru.evotor.framework.inventory.product.mapper.ProductMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.query.Cursor
@@ -39,7 +38,7 @@ class PayableService internal constructor(
         val sellingPrice = addFieldFilter<BigDecimal?>(ProductContract.COLUMN_SELLING_PRICE)
         val vatRate = addFieldFilter<VatRate>(ProductContract.COLUMN_VAT_RATE)
         val quantity = addFieldFilter<BigDecimal>(ProductContract.COLUMN_QUANTITY)
-        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Query, Query.SortOrder, PayableService>())
+        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Query, SortOrder, PayableService>())
         val description = addFieldFilter<String?>(ProductContract.COLUMN_DESCRIPTION)
         val allowedToSell = addFieldFilter<Boolean>(ProductContract.COLUMN_ALLOWED_TO_SELL)
 

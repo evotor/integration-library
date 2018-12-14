@@ -1,20 +1,22 @@
 package ru.evotor.framework.inventory.product.mapper
 
-import android.content.Context
 import android.database.Cursor
 import ru.evotor.framework.*
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.inventory.product.VatRate
 import ru.evotor.framework.inventory.product.Product
+import ru.evotor.framework.inventory.product.VatRate
+import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
+import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
+import ru.evotor.framework.inventory.product.category.entertainment.mapper.WeakAlcoholMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
 import java.util.*
 
 internal object ProductMapper {
-    fun read(context: Context, cursor: Cursor) = when (cursor.safeGetInt(ProductContract.COLUMN_VARIATION_ID)) {
+    fun read(cursor: Cursor) = when (cursor.safeGetInt(ProductContract.COLUMN_VARIATION_ID)) {
         ProductContract.VARIATION_ID_UNCLASSIFIED_PRODUCT -> UnclassifiedProductMapper.read(cursor)
-        ProductContract.VARIATION_ID_WEAK_ALCOHOL -> WeakAlcoholMapper.read(context, cursor)
-        ProductContract.VARIATION_ID_STRONG_ALCOHOL -> StrongAlcoholMapper.read(context, cursor)
-        ProductContract.VARIATION_ID_TOBACCO -> TobaccoMapper.read(context, cursor)
+        ProductContract.VARIATION_ID_WEAK_ALCOHOL -> WeakAlcoholMapper.read(cursor)
+        ProductContract.VARIATION_ID_STRONG_ALCOHOL -> StrongAlcoholMapper.read(cursor)
+        ProductContract.VARIATION_ID_TOBACCO -> TobaccoMapper.read(cursor)
         ProductContract.VARIATION_ID_PAYABLE_SERVICE -> PayableServiceMapper.read(cursor)
         else -> throw IntegrationLibraryMappingException(Product::class.java)
     }

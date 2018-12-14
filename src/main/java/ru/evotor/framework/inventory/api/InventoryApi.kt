@@ -24,7 +24,7 @@ object InventoryApi {
                     null
             ).let { cursor ->
                 object : Cursor<Product>(cursor) {
-                    override fun getValue() = ProductMapper.read(context, this)
+                    override fun getValue() = ProductMapper.read(this)
                 }.toList()
             }
 
