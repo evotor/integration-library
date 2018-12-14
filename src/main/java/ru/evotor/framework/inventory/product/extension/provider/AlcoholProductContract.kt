@@ -3,7 +3,7 @@ package ru.evotor.framework.inventory.product.extension.provider
 import android.net.Uri
 import ru.evotor.framework.inventory.provider.InventoryContract
 
-internal object AlcoholProductContract {
+object AlcoholProductContract {
     private const val PATH = "alcohol_products"
 
     val URI: Uri = Uri.withAppendedPath(InventoryContract.BASE_URI, PATH)

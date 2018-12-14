@@ -3,7 +3,7 @@ package ru.evotor.framework.inventory.provider
 import android.net.Uri
 
 internal object InventoryContract {
-    private const val AUTHORITY = "ru.evotor.framework.inventory"
+    const val AUTHORITY = "ru.evotor.framework.inventory"
 
     val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 

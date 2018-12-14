@@ -1,6 +1,5 @@
 package ru.evotor.framework.inventory
 
-import android.content.Context
 import android.net.Uri
 import ru.evotor.framework.inventory.mapper.ProductGroupMapper
 import ru.evotor.framework.inventory.provider.InventoryContract
@@ -27,7 +26,7 @@ data class ProductGroup internal constructor(
             val name = addFieldSorter(ProductGroupContract.COLUMN_NAME)
         }
 
-        override fun getValue(context: Context, cursor: Cursor<ProductGroup>): ProductGroup =
+        override fun getValue(cursor: Cursor<ProductGroup>): ProductGroup =
                 ProductGroupMapper.read(cursor)
     }
 }

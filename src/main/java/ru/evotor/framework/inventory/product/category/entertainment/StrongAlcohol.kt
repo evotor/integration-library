@@ -1,17 +1,16 @@
 package ru.evotor.framework.inventory.product.category.entertainment
 
-import android.content.Context
 import android.net.Uri
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.UnitOfMeasurement
 import ru.evotor.framework.inventory.product.VatRate
+import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
+import ru.evotor.framework.inventory.product.category.entertainment.provider.StrongAlcoholContract
 import ru.evotor.framework.inventory.product.extension.AlcoholProduct
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.provider.AlcoholProductContract
 import ru.evotor.framework.inventory.product.extension.provider.ExcisableProductContract
-import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
-import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
@@ -37,8 +36,7 @@ data class StrongAlcohol internal constructor(
         override val allowedToSell: Boolean
 ) : Product(), AlcoholProduct, ExcisableProduct {
     class Query : FilterBuilder<Query, Query.SortOrder, StrongAlcohol>(
-            Uri.withAppendedPath(InventoryContract.BASE_URI, ProductContract.PATH),
-            ProductContract.getQueryInitialEditions(ProductContract.VARIATION_ID_PAYABLE_SERVICE)
+            Uri.withAppendedPath(ProductContract.BASE_URI, StrongAlcoholContract.PATH)
     ) {
         val uuid = addFieldFilter<UUID>(ProductContract.COLUMN_UUID)
         val groupUuid = addFieldFilter<UUID?>(ProductContract.COLUMN_GROUP_UUID)
@@ -76,7 +74,7 @@ data class StrongAlcohol internal constructor(
             val allowedToSell = addFieldSorter(ProductContract.COLUMN_ALLOWED_TO_SELL)
         }
 
-        override fun getValue(context: Context, cursor: Cursor<StrongAlcohol>): StrongAlcohol =
+        override fun getValue(cursor: Cursor<StrongAlcohol>): StrongAlcohol =
                 StrongAlcoholMapper.read(cursor)
     }
 }

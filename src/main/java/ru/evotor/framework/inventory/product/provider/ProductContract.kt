@@ -1,8 +1,13 @@
 package ru.evotor.framework.inventory.product.provider
 
-import ru.evotor.query.FilterBuilder
+import android.net.Uri
+import ru.evotor.framework.inventory.provider.InventoryContract
 
-internal object ProductContract {
+object ProductContract {
+    const val AUTHORITY = "${InventoryContract.AUTHORITY}.product"
+
+    val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
+
     const val PATH = "products"
 
     const val COLUMN_VARIATION_ID = "VARIATION_ID"
@@ -20,15 +25,8 @@ internal object ProductContract {
     const val COLUMN_ALLOWED_TO_SELL = "ALLOWED_TO_SELL"
 
     const val VARIATION_ID_UNCLASSIFIED_PRODUCT = 0
-    const val VARIATION_ID_WEAK_ALCOHOL = 1
-    const val VARIATION_ID_STRONG_ALCOHOL = 2
-    const val VARIATION_ID_TOBACCO = 3
-    const val VARIATION_ID_PAYABLE_SERVICE = 4
-
-    fun getQueryInitialEditions(variationId: Int) = listOf(FilterBuilder.InitialEdition(
-            COLUMN_VARIATION_ID,
-            "=",
-            variationId,
-            "AND"
-    ))
+    const val VARIATION_ID_UNCLASSIFIED_PAYABLE_SERVICE = 3
+    const val VARIATION_ID_WEAK_ALCOHOL = 2
+    const val VARIATION_ID_STRONG_ALCOHOL = 1
+    const val VARIATION_ID_TOBACCO = 4
 }

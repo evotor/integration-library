@@ -17,7 +17,7 @@ internal object ProductMapper {
         ProductContract.VARIATION_ID_WEAK_ALCOHOL -> WeakAlcoholMapper.read(cursor)
         ProductContract.VARIATION_ID_STRONG_ALCOHOL -> StrongAlcoholMapper.read(cursor)
         ProductContract.VARIATION_ID_TOBACCO -> TobaccoMapper.read(cursor)
-        ProductContract.VARIATION_ID_PAYABLE_SERVICE -> PayableServiceMapper.read(cursor)
+        ProductContract.VARIATION_ID_UNCLASSIFIED_PAYABLE_SERVICE -> UnclassifiedPayableServiceMapper.read(cursor)
         else -> throw IntegrationLibraryMappingException(Product::class.java)
     }
 

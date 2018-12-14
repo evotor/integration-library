@@ -1,16 +1,16 @@
 package ru.evotor.framework.inventory.product
 
-import android.content.Context
 import android.net.Uri
-import ru.evotor.framework.inventory.product.mapper.PayableServiceMapper
+import ru.evotor.framework.inventory.product.extension.PayableService
+import ru.evotor.framework.inventory.product.mapper.UnclassifiedPayableServiceMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
-import ru.evotor.framework.inventory.provider.InventoryContract
+import ru.evotor.framework.inventory.product.provider.UnclassifiedPayableServiceContract
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.util.*
 
-class PayableService internal constructor(
+class UnclassifiedPayableService internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
         override val name: String,
@@ -24,10 +24,9 @@ class PayableService internal constructor(
         override val unitOfMeasurement: UnitOfMeasurement,
         override val description: String?,
         override val allowedToSell: Boolean
-) : Product() {
-    class Query : FilterBuilder<Query, Query.SortOrder, PayableService>(
-            Uri.withAppendedPath(InventoryContract.BASE_URI, ProductContract.PATH),
-            ProductContract.getQueryInitialEditions(ProductContract.VARIATION_ID_PAYABLE_SERVICE)
+) : Product(), PayableService {
+    class Query : FilterBuilder<Query, Query.SortOrder, UnclassifiedPayableService>(
+            Uri.withAppendedPath(ProductContract.BASE_URI, UnclassifiedPayableServiceContract.PATH)
     ) {
         val uuid = addFieldFilter<UUID>(ProductContract.COLUMN_UUID)
         val groupUuid = addFieldFilter<UUID?>(ProductContract.COLUMN_GROUP_UUID)
@@ -38,7 +37,7 @@ class PayableService internal constructor(
         val sellingPrice = addFieldFilter<BigDecimal?>(ProductContract.COLUMN_SELLING_PRICE)
         val vatRate = addFieldFilter<VatRate>(ProductContract.COLUMN_VAT_RATE)
         val quantity = addFieldFilter<BigDecimal>(ProductContract.COLUMN_QUANTITY)
-        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Query, SortOrder, PayableService>())
+        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Query, SortOrder, UnclassifiedPayableService>())
         val description = addFieldFilter<String?>(ProductContract.COLUMN_DESCRIPTION)
         val allowedToSell = addFieldFilter<Boolean>(ProductContract.COLUMN_ALLOWED_TO_SELL)
 
@@ -57,7 +56,7 @@ class PayableService internal constructor(
             val allowedToSell = addFieldSorter(ProductContract.COLUMN_ALLOWED_TO_SELL)
         }
 
-        override fun getValue(context: Context, cursor: Cursor<PayableService>): PayableService =
-                PayableServiceMapper.read(cursor)
+        override fun getValue(cursor: Cursor<UnclassifiedPayableService>): UnclassifiedPayableService =
+                UnclassifiedPayableServiceMapper.read(cursor)
     }
 }

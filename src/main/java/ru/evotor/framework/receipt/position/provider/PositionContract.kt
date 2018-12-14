@@ -1,6 +1,6 @@
 package ru.evotor.framework.receipt.position.provider
 
-internal object PositionContract {
+object PositionContract {
     const val PATH = "positions"
 
     const val COLUMN_UUID = "UUID"

@@ -1,6 +1,6 @@
 package ru.evotor.framework.inventory.product.provider
 
-internal object UnitOfMeasurementContract {
+object UnitOfMeasurementContract {
     const val COLUMN_VARIATION_ID = "UNIT_OF_MEASUREMENT_VARIATION_ID"
     const val COLUMN_TYPE = "UNIT_OF_MEASUREMENT_TYPE"
     const val COLUMN_NAME = "UNIT_OF_MEASUREMENT_NAME"

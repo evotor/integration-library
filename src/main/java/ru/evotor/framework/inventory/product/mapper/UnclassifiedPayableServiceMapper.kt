@@ -3,10 +3,10 @@ package ru.evotor.framework.inventory.product.mapper
 import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.inventory.product.PayableService
+import ru.evotor.framework.inventory.product.UnclassifiedPayableService
 
-internal object PayableServiceMapper {
-    fun read(cursor: Cursor) = PayableService(
+internal object UnclassifiedPayableServiceMapper {
+    fun read(cursor: Cursor) = UnclassifiedPayableService(
             uuid = ProductMapper.readUuid(cursor)
                     ?: throw IntegrationLibraryMappingException(Product::class.java, Product::uuid),
             groupUuid = ProductMapper.readGroupUuid(cursor),

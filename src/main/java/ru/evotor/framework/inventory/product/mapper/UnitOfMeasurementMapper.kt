@@ -42,10 +42,19 @@ internal object UnitOfMeasurementMapper {
                 readPrecision(cursor)
                         ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java, UnitOfMeasurement::precision)
         )
-        else -> throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java)
+        else -> UnitOfMeasurement.Custom(
+                readType(cursor)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java, UnitOfMeasurement::type),
+                readName(cursor)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java, UnitOfMeasurement::name),
+                readPrecision(cursor)
+                        ?: throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java, UnitOfMeasurement::precision)
+        )
+        //throw IntegrationLibraryMappingException(UnitOfMeasurement::class.java)
     }
 
     private fun readType(cursor: Cursor) = cursor.safeGetEnum(UnitOfMeasurementContract.COLUMN_TYPE, UnitOfMeasurement.Type.values())
+            ?: UnitOfMeasurement.Type.QUANTITY_UNIT
 
     private fun readName(cursor: Cursor) = cursor.safeGetString(UnitOfMeasurementContract.COLUMN_NAME)
 

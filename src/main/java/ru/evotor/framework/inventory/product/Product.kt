@@ -1,10 +1,8 @@
 package ru.evotor.framework.inventory.product
 
-import android.content.Context
 import android.net.Uri
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
 import ru.evotor.framework.inventory.product.provider.ProductContract
-import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
@@ -26,7 +24,7 @@ abstract class Product internal constructor() {
     abstract val allowedToSell: Boolean
 
     class Query : FilterBuilder<Query, Query.SortOrder, Product>(
-            Uri.withAppendedPath(InventoryContract.BASE_URI, ProductContract.PATH)
+            Uri.withAppendedPath(ProductContract.BASE_URI, ProductContract.PATH)
     ) {
         val uuid = addFieldFilter<UUID>(ProductContract.COLUMN_UUID)
         val groupUuid = addFieldFilter<UUID?>(ProductContract.COLUMN_GROUP_UUID)
@@ -56,7 +54,7 @@ abstract class Product internal constructor() {
             val allowedToSell = addFieldSorter(ProductContract.COLUMN_ALLOWED_TO_SELL)
         }
 
-        override fun getValue(context: Context, cursor: Cursor<Product>): Product =
+        override fun getValue(cursor: Cursor<Product>): Product =
                 ProductMapper.read(cursor)
     }
 }

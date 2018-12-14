@@ -3,9 +3,10 @@ package ru.evotor.framework.receipt.position.mapper
 import android.database.Cursor
 import ru.evotor.framework.*
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.inventory.product.PayableService
+import ru.evotor.framework.inventory.product.UnclassifiedPayableService
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
+import ru.evotor.framework.inventory.product.extension.PayableService
 import ru.evotor.framework.inventory.product.mapper.UnitOfMeasurementMapper
 import ru.evotor.framework.receipt.position.Position
 import ru.evotor.framework.receipt.position.provider.PositionContract
