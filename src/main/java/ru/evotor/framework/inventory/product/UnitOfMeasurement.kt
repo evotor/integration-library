@@ -1,6 +1,6 @@
 package ru.evotor.framework.inventory.product
 
-import ru.evotor.framework.inventory.product.provider.UnitOfMeasurementContract
+import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.query.FilterBuilder
 
 sealed class UnitOfMeasurement(val type: Type, val name: String, val precision: Precision = Precision.ZERO) {
@@ -78,14 +78,14 @@ sealed class UnitOfMeasurement(val type: Type, val name: String, val precision: 
     }
 
     class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
-        val type = addFieldFilter<Type>(UnitOfMeasurementContract.COLUMN_TYPE)
-        val name = addFieldFilter<String>(UnitOfMeasurementContract.COLUMN_NAME)
-        val precision = addFieldFilter<Precision>(UnitOfMeasurementContract.COLUMN_PRECISION)
+        val type = addFieldFilter<Type>(InventoryContract.UnitOfMeasurementColumns.TYPE)
+        val name = addFieldFilter<String>(InventoryContract.UnitOfMeasurementColumns.NAME)
+        val precision = addFieldFilter<Precision>(InventoryContract.UnitOfMeasurementColumns.PRECISION)
 
         class SortOrder<S : FilterBuilder.SortOrder<S>> : FilterBuilder.Inner.SortOrder<S>() {
-            val type = addFieldSorter(UnitOfMeasurementContract.COLUMN_TYPE)
-            val name = addFieldSorter(UnitOfMeasurementContract.COLUMN_NAME)
-            val precision = addFieldSorter(UnitOfMeasurementContract.COLUMN_PRECISION)
+            val type = addFieldSorter(InventoryContract.UnitOfMeasurementColumns.TYPE)
+            val name = addFieldSorter(InventoryContract.UnitOfMeasurementColumns.NAME)
+            val precision = addFieldSorter(InventoryContract.UnitOfMeasurementColumns.PRECISION)
         }
     }
 }

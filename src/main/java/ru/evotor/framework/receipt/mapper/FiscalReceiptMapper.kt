@@ -7,7 +7,7 @@ import ru.evotor.framework.mapper.FiscalDocumentMapper
 import ru.evotor.framework.safeGetEnum
 import ru.evotor.framework.receipt.FiscalReceipt
 import ru.evotor.framework.receipt.SettlementType
-import ru.evotor.framework.receipt.provider.FiscalReceiptContract
+import ru.evotor.framework.receipt.provider.ReceiptContract
 import ru.evotor.framework.safeGetBoolean
 
 internal object FiscalReceiptMapper {
@@ -35,7 +35,7 @@ internal object FiscalReceiptMapper {
                     ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::documentNumber),
             creationDate = FiscalDocumentMapper.readCreationDate(cursor)
                     ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::creationDate),
-            settlementType = cursor.safeGetEnum(FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values())
+            settlementType = cursor.safeGetEnum(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE, SettlementType.values())
                     ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::settlementType),
             kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor)
                     ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::kktRegistrationNumber),

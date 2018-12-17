@@ -5,5 +5,5 @@ import java.math.BigDecimal
 interface AlcoholProduct : ProductExtension {
     val fsrarProductKindCode: Long
     val tareVolume: BigDecimal
-    val alcoholPercentage: BigDecimal
+    val alcoholPercentage: BigDecimal?
 }

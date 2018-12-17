@@ -1,5 +1,6 @@
 package ru.evotor.framework.receipt.position.provider
 
+@Deprecated("replaced with ReceiptContract.AgentRequisitesColumns")
 object AgentRequisitesContract {
     const val COLUMN_AGENT_IS_NULL = "AGENT_IS_NULL"
     const val COLUMN_AGENT_UUID = "AGENT_UUID"

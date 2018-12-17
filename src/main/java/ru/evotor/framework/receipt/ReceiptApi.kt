@@ -18,7 +18,6 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_C
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
-import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -48,6 +47,14 @@ object ReceiptApi {
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
     private val CURRENT_BUY_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUY_PATH)
     private val CURRENT_BUYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUYBACK_PATH)
+
+    private const val FISCAL_DOCUMENTS_AUTHORITY = "ru.evotor.framework.document.fiscal"
+
+    private val FISCAL_DOCUMENTS_URI: Uri = Uri.parse("content://$FISCAL_DOCUMENTS_AUTHORITY")
+
+    private const val FISCAL_RECEIPT_PATH = "receipt"
+
+    private val FISCAL_RECEIPT_URI: Uri = Uri.withAppendedPath(FISCAL_DOCUMENTS_URI, FISCAL_RECEIPT_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -240,7 +247,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
-            context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
+            context.contentResolver.query(FISCAL_RECEIPT_URI, null, null, arrayOf(receiptUuid), null)
                     ?.let {
                         object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
                             override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
