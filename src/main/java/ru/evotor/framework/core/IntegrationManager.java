@@ -2,6 +2,7 @@ package ru.evotor.framework.core;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -19,7 +20,7 @@ public interface IntegrationManager {
     String KEY_SKIP = "skip";
     String KEY_DATA = "data";
 
-    public IntegrationManagerFuture call(
+    IntegrationManagerFuture call(
             String action,
             ComponentName componentName,
             IBundlable data,
@@ -27,7 +28,15 @@ public interface IntegrationManager {
             IntegrationManagerCallback callback,
             Handler handler);
 
-    public IntegrationManagerFuture call(
+    IntegrationManagerFuture call(
+            String action,
+            ComponentName componentName,
+            IBundlable data,
+            Context context,
+            IntegrationManagerCallback callback,
+            Handler handler);
+
+    IntegrationManagerFuture call(
             String action,
             ComponentName componentName,
             Bundle data,
@@ -35,7 +44,7 @@ public interface IntegrationManager {
             IntegrationManagerCallback callback,
             Handler handler);
 
-    public IntegrationManagerFuture call(
+    IntegrationManagerFuture call(
             String action,
             ComponentName componentName,
             IBundlable data,

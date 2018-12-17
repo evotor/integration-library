@@ -1,6 +1,7 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -45,6 +46,21 @@ abstract class PrintReceiptCommand(
                         componentNameList[0],
                         this,
                         activity,
+                        callback,
+                        Handler(Looper.getMainLooper())
+                )
+    }
+
+    internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
+        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
+        if (componentNameList == null || componentNameList.isEmpty()) {
+            return
+        }
+        IntegrationManagerImpl(context.applicationContext)
+                .call(action,
+                        componentNameList[0],
+                        this,
+                        context,
                         callback,
                         Handler(Looper.getMainLooper())
                 )

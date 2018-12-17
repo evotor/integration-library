@@ -1,6 +1,7 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
@@ -74,6 +75,10 @@ class PrintSellReceiptCommand(
 
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
         process(activity, callback, NAME)
+    }
+
+    fun process(context: Context, callback: IntegrationManagerCallback) {
+        process(context, callback, NAME)
     }
 
     companion object {
