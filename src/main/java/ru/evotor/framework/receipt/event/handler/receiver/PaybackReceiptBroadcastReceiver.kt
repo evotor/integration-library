@@ -70,7 +70,7 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.payback.CLEARED"
 
-        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.payback.CLOSED"
+        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.payback.RECEIPT_CLOSED"
 
     }
 

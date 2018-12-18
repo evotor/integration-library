@@ -70,7 +70,7 @@ open class BuyReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.buy.CLEARED"
 
-        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.buy.CLOSED"
+        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.buy.RECEIPT_CLOSED"
 
     }
 

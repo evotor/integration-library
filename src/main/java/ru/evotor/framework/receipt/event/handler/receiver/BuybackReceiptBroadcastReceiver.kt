@@ -70,7 +70,7 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.buyback.CLEARED"
 
-        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.buyback.CLOSED"
+        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.buyback.RECEIPT_CLOSED"
 
     }
 

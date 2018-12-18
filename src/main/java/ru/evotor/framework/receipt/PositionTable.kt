@@ -22,10 +22,20 @@ object PositionTable {
     const val COLUMN_TARE_VOLUME = "TARE_VOLUME"
     const val COLUMN_MARK = "MARK"
     const val COLUMN_EXTRA_KEYS = "EXTRA_KEYS"
+    const val COLUMN_SETTLEMENT_METHOD = "SETTLEMENT_METHOD"
+    const val COLUMN_SETTLEMENT_METHOD_AMOUNT = "SETTLEMENT_METHOD_AMOUNT"
+    const val COLUMN_ATTRIBUTES = "ATTRIBUTES"
 
     object ExtraKeyJSONKeys {
         const val KEY_IDENTITY = "identity"
         const val KEY_APP_ID = "appId"
         const val KEY_DESCRIPTION = "description"
+    }
+
+    object AttributeJSONKeys {
+        const val DICTIONARY_UUID = "DICTIONARY_UUID"
+        const val DICTIONARY_NAME = "DICTIONARY_NAME"
+        const val UUID = "UUID"
+        const val NAME = "NAME"
     }
 }
