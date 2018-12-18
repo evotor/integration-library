@@ -28,9 +28,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    kotlinOptions {
-        freeCompilerArgs = ['-jvm-target 1.8']
-    }
 }
 
 dependencies {
