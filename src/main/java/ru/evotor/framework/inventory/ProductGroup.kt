@@ -16,15 +16,11 @@ data class ProductGroup internal constructor(
     class Query : FilterBuilder<Query, Query.SortOrder, ProductGroup>(
             Uri.withAppendedPath(InventoryContract.BASE_URI, InventoryContract.PATH_PRODUCT_GROUPS)
     ) {
-        override val currentQuery: Query
-            get() = this
         val uuid = addFieldFilter<UUID>(InventoryContract.ProductGroupColumns.UUID)
         val parentGroupUuid = addFieldFilter<UUID?>(InventoryContract.ProductGroupColumns.PARENT_GROUP_UUID)
         val name = addFieldFilter<String>(InventoryContract.ProductGroupColumns.NAME)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            override val currentSortOrder: SortOrder
-                get() = this
             val uuid = addFieldSorter(InventoryContract.ProductGroupColumns.UUID)
             val parentGroupUuid = addFieldSorter(InventoryContract.ProductGroupColumns.PARENT_GROUP_UUID)
             val name = addFieldSorter(InventoryContract.ProductGroupColumns.NAME)
