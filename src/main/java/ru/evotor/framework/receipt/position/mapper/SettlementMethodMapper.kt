@@ -4,8 +4,8 @@ import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.provider.ReceiptContract
-import ru.evotor.framework.safeGetBigDecimal
-import ru.evotor.framework.safeGetInt
+import ru.evotor.framework.core.safeGetBigDecimal
+import ru.evotor.framework.core.safeGetInt
 
 internal object SettlementMethodMapper {
     fun read(cursor: Cursor) = when (cursor.safeGetInt(ReceiptContract.SettlementMethodColumns.VARIATION_ID)) {

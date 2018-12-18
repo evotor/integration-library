@@ -4,11 +4,12 @@ import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.mapper.FiscalDocumentMapper
-import ru.evotor.framework.safeGetEnum
+import ru.evotor.framework.core.safeGetEnum
+import ru.evotor.framework.core.getEnum
 import ru.evotor.framework.receipt.FiscalReceipt
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.provider.ReceiptContract
-import ru.evotor.framework.safeGetBoolean
+import ru.evotor.framework.core.safeGetBoolean
 
 internal object FiscalReceiptMapper {
     private const val KEY_SETTLEMENT_TYPE = "SETTLEMENT_TYPE"
@@ -18,7 +19,7 @@ internal object FiscalReceiptMapper {
         FiscalReceipt(
                 documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
-                settlementType = it.safeGetEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
+                settlementType = it.getEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
                         ?: return null,
                 kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
                         ?: return null,

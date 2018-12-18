@@ -4,7 +4,7 @@ import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.ProductGroup
 import ru.evotor.framework.inventory.provider.InventoryContract
-import ru.evotor.framework.safeGetString
+import ru.evotor.framework.core.safeGetString
 import java.util.*
 
 internal object ProductGroupMapper {

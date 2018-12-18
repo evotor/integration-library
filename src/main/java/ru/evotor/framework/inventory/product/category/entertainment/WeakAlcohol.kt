@@ -37,8 +37,6 @@ data class WeakAlcohol internal constructor(
                     InventoryContract.PATH_WEAK_ALCOHOL
             )
     ) {
-        override val currentQuery: Query
-            get() = this
         val uuid = addFieldFilter<UUID>(InventoryContract.ProductColumns.UUID)
         val groupUuid = addFieldFilter<UUID?>(InventoryContract.ProductColumns.GROUP_UUID)
         val name = addFieldFilter<String>(InventoryContract.ProductColumns.NAME)
@@ -56,8 +54,6 @@ data class WeakAlcohol internal constructor(
         val allowedToSell = addFieldFilter<Boolean>(InventoryContract.ProductColumns.ALLOWED_TO_SELL)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            override val currentSortOrder: SortOrder
-                get() = this
             val uuid = addFieldSorter(InventoryContract.ProductColumns.UUID)
             val groupUuid = addFieldSorter(InventoryContract.ProductColumns.GROUP_UUID)
             val name = addFieldSorter(InventoryContract.ProductColumns.NAME)

@@ -6,8 +6,8 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetList
+import ru.evotor.framework.core.safeGetInt
+import ru.evotor.framework.core.safeGetList
 
 /**
  * API для работы с кассой.

@@ -1,8 +1,7 @@
 package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
-import ru.evotor.framework.*
-import ru.evotor.framework.core.IntegrationLibraryMappingException
+import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.PayableService

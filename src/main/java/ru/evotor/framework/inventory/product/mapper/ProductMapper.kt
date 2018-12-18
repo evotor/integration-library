@@ -2,8 +2,7 @@ package ru.evotor.framework.inventory.product.mapper
 
 import android.content.Context
 import android.database.Cursor
-import ru.evotor.framework.*
-import ru.evotor.framework.core.IntegrationLibraryMappingException
+import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.VatRate
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper

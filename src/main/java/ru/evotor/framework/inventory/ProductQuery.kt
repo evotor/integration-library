@@ -10,8 +10,6 @@ import java.math.BigDecimal
  * Created by a.lunkov on 07.03.2018.
  */
 class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, ProductItem?>(ProductTable.URI) {
-    override val currentQuery: ProductQuery
-        get() = this
 
     @JvmField
     val uuid = addFieldFilter<String>(ProductTable.ROW_UUID)
@@ -43,8 +41,6 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     val tareVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_TARE_VOLUME, {it?.multiply(BigDecimal(1000))})
 
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-        override val currentSortOrder: SortOrder
-            get() = this
 
         @JvmField
         val uuid = addFieldSorter(ProductTable.ROW_UUID)

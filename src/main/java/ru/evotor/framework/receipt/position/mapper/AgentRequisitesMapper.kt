@@ -10,9 +10,9 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetList
-import ru.evotor.framework.safeGetString
+import ru.evotor.framework.core.safeGetInt
+import ru.evotor.framework.core.safeGetList
+import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.receipt.position.AgentRequisites
 import ru.evotor.framework.receipt.provider.ReceiptContract
 import java.util.*

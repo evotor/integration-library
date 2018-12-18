@@ -7,7 +7,6 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.FiscalDocument
 import ru.evotor.framework.FiscalRequisite
 import ru.evotor.framework.FutureFeature
-import ru.evotor.framework.provider.FiscalReceiptColumns
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.provider.ReceiptContract
 import ru.evotor.query.Cursor
@@ -77,8 +76,6 @@ data class FiscalReceipt internal constructor(
     private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt>(
             Uri.withAppendedPath(ReceiptContract.BASE_URI, ReceiptContract.PATH_FISCAL_RECEIPTS)
     ) {
-        override val currentQuery: Query
-            get() = this
         val documentNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.DOCUMENT_NUMBER)
         val creationDate = addFieldFilter<Date>(ReceiptContract.FiscalReceiptColumns.CREATION_DATE)
         val settlementType = addFieldFilter<SettlementType>(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE)
@@ -88,8 +85,6 @@ data class FiscalReceipt internal constructor(
         val fiscalIdentifier = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.FISCAL_IDENTIFIER)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            override val currentSortOrder: SortOrder
-                get() = this
             val documentNumber = addFieldSorter(ReceiptContract.FiscalReceiptColumns.DOCUMENT_NUMBER)
             val creationDate = addFieldSorter(ReceiptContract.FiscalReceiptColumns.CREATION_DATE)
             val settlementType = addFieldSorter(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE)

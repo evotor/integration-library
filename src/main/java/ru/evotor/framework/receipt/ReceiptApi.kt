@@ -8,8 +8,8 @@ import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
-import ru.evotor.framework.safeGetLong
-import ru.evotor.framework.safeGetString
+import ru.evotor.framework.core.safeGetLong
+import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -293,10 +293,10 @@ object ReceiptApi {
             price
         }
         val extraKeys = cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-            createExtraKeysFromDBFormat(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+            createExtraKeysFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS))
         }
         val attributes = cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES)?.let {
-            createAttributesFromDBFormat(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
+            createAttributesFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES))
         }
         val builder = Position.Builder.newInstance(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
@@ -309,7 +309,7 @@ object ReceiptApi {
         )
                 .setTaxNumber(cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
                 .setPriceWithDiscountPosition(priceWithDiscountPosition)
-                .setBarcode(cursor.safeGetString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)))
+                .setBarcode(cursor.safeGetString(PositionTable.COLUMN_BARCODE))
                 .setMark(cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
                 .setExtraKeys(extraKeys)
                 .setSubPositions(emptyList())

@@ -4,9 +4,9 @@ import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.UnitOfMeasurement
 import ru.evotor.framework.inventory.provider.InventoryContract
-import ru.evotor.framework.safeGetString
-import ru.evotor.framework.safeGetEnum
-import ru.evotor.framework.safeGetInt
+import ru.evotor.framework.core.safeGetString
+import ru.evotor.framework.core.safeGetEnum
+import ru.evotor.framework.core.safeGetInt
 
 internal object UnitOfMeasurementMapper {
     fun read(cursor: Cursor) = when (cursor.safeGetInt(InventoryContract.UnitOfMeasurementColumns.VARIATION_ID)) {
