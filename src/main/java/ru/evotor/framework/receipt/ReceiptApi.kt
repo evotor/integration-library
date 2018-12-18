@@ -321,16 +321,16 @@ object ReceiptApi {
             ProductType.ALCOHOL_MARKED -> {
                 builder.toAlcoholMarked(
                         cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
-                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.safeGetLong(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                        cursor.safeGetLong(PositionTable.COLUMN_TARE_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
                 )
             }
             ProductType.ALCOHOL_NOT_MARKED -> {
                 builder.toAlcoholNotMarked(
-                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
+                        cursor.safeGetLong(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.safeGetLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
+                        cursor.safeGetLong(PositionTable.COLUMN_TARE_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
                 )
             }
             ProductType.SERVICE -> {
