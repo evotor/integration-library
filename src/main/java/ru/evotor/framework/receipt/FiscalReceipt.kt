@@ -51,7 +51,7 @@ data class FiscalReceipt internal constructor(
         override val fiscalStorageNumber: Long,
 
         /**
-         * Фискальный признак (фискальный идентификатор) документа
+         * Фискальный признак документа
          */
         @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER)
         override val fiscalIdentifier: Long,
