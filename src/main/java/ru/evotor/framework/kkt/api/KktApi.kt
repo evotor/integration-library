@@ -91,21 +91,22 @@ object KktApi {
             }
 
     /**
-     * Поддерживает ли касса возможность пробивать фискальные документы по ставке НДС 20%.
+     * Установлен ли на терминал пакет обновлений с возможностью пробивать фискальные документы по
+     * ставке НДС 20%.
      * @return Boolean или null, если не удалось связаться с кассой.
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
      */
     @JvmStatic
-    fun isVatRate20Supported(context: Context): Boolean? =
+    fun isVatRate20Available(context: Context): Boolean? =
             context.contentResolver.query(
                     KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_IS_VAT_RATE_20_SUPPORTED),
+                    arrayOf(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE),
                     null,
                     null,
                     null
             )?.use { cursor ->
                 cursor.moveToFirst()
-                cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_SUPPORTED)
-                        ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Supported.name)
+                cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE)
+                        ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
             }
 }
