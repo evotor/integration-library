@@ -486,20 +486,22 @@ public class Position implements Parcelable {
         if (measureName != null ? !measureName.equals(position.measureName) : position.measureName != null)
             return false;
         if (taxNumber != position.taxNumber) return false;
-        if (price != null ? price.compareTo(position.price) != 0 : position.price != null)
+        if ((price != null ? price : BigDecimal.ZERO).compareTo(position.price != null ? position.price : BigDecimal.ZERO) != 0)
             return false;
-        if (priceWithDiscountPosition != null ? priceWithDiscountPosition.compareTo(position.priceWithDiscountPosition) != 0 : position.priceWithDiscountPosition != null)
+        if ((priceWithDiscountPosition != null ? priceWithDiscountPosition : BigDecimal.ZERO)
+                .compareTo(position.priceWithDiscountPosition != null ? position.priceWithDiscountPosition : BigDecimal.ZERO) != 0)
             return false;
-        if (quantity != null ? quantity.compareTo(position.quantity) != 0 : position.quantity != null)
+        if ((quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
         if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
             return false;
         if (mark != null ? !mark.equals(position.mark) : position.mark != null) return false;
-        if (alcoholByVolume != null ? alcoholByVolume.compareTo(position.alcoholByVolume) != 0 : position.alcoholByVolume != null)
+        if ((alcoholByVolume != null ? alcoholByVolume : BigDecimal.ZERO)
+                .compareTo(position.alcoholByVolume != null ? position.alcoholByVolume : BigDecimal.ZERO) != 0)
             return false;
-        if (alcoholProductKindCode != null ? alcoholProductKindCode.compareTo(position.alcoholProductKindCode) != 0 : position.alcoholProductKindCode != null)
+        if (alcoholProductKindCode != null ? !alcoholProductKindCode.equals(position.alcoholProductKindCode) : position.alcoholProductKindCode != null)
             return false;
-        if (tareVolume != null ? tareVolume.compareTo(position.tareVolume) != 0 : position.tareVolume != null)
+        if ((tareVolume != null ? tareVolume : BigDecimal.ZERO).compareTo(position.tareVolume != null ? position.tareVolume : BigDecimal.ZERO) != 0)
             return false;
         if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
             return false;
