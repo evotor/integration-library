@@ -15,6 +15,9 @@ import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Товар категории "Крепкий алкоголь"
+ */
 data class StrongAlcohol internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
@@ -29,6 +32,10 @@ data class StrongAlcohol internal constructor(
         override val alcoholPercentage: BigDecimal?,
         override val description: String?
 ) : Product(), AlcoholProduct, ExcisableProduct {
+
+    /**
+     * Запрос на получение товаров категории "Крепкий алкоголь" из базы данных смарт-терминала
+     */
     class Query : FilterBuilder<Query, Query.SortOrder, StrongAlcohol>(
             Uri.withAppendedPath(
                     InventoryContract.URI_PRODUCTS,

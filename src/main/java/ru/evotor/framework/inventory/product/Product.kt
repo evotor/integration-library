@@ -11,6 +11,9 @@ import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Товар в базе данных смарт-терминала
+ */
 abstract class Product internal constructor() {
     abstract val uuid: UUID
     abstract val groupUuid: UUID?
@@ -22,6 +25,9 @@ abstract class Product internal constructor() {
     abstract val quantity: Quantity
     abstract val description: String?
 
+    /**
+     * Запрос на получение товаров из базы данных смарт-терминала
+     */
     class Query : FilterBuilder<Query, Query.SortOrder, Product>(InventoryContract.URI_PRODUCTS) {
         val uuid = addFieldFilter<UUID>(InventoryContract.ProductColumns.UUID)
         val groupUuid = addFieldFilter<UUID?>(InventoryContract.ProductColumns.GROUP_UUID)

@@ -24,7 +24,7 @@ public final class InventoryContract {
     public static final Uri URI_PRODUCTS = Uri.withAppendedPath(BASE_URI, PATH_PRODUCTS);
 
     public static final String PATH_UNCLASSIFIED_PRODUCTS = "unclassified_products";
-    public static final String PATH_UNCLASSIFIED_PAYABLE_SERVICES = "unclassified_payable_services";
+    public static final String PATH_UNCLASSIFIED_SERVICES = "unclassified_services";
     public static final String PATH_WEAK_ALCOHOL = "weak_alcohol";
     public static final String PATH_STRONG_ALCOHOL = "strong_alcohol";
     public static final String PATH_TOBACCO = "tobacco";

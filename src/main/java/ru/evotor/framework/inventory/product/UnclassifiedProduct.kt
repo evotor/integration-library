@@ -12,6 +12,9 @@ import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Неклассифицированный товар
+ */
 data class UnclassifiedProduct internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
@@ -23,6 +26,10 @@ data class UnclassifiedProduct internal constructor(
         override val quantity: Quantity,
         override val description: String?
 ) : Product() {
+
+    /**
+     * Запрос на получение неклассифицированных товаров из базы данных смарт-терминала
+     */
     class Query : FilterBuilder<Query, Query.SortOrder, UnclassifiedProduct>(
             Uri.withAppendedPath(
                     InventoryContract.URI_PRODUCTS,

@@ -13,6 +13,9 @@ import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.util.*
 
+/**
+ * Товар категории "Тобак"
+ */
 data class Tobacco internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
@@ -24,6 +27,10 @@ data class Tobacco internal constructor(
         override val quantity: Quantity,
         override val description: String?
 ) : Product(), ExcisableProduct {
+
+    /**
+     * Запрос на получение товаров категории "Тобак" из базы данных смарт-терминала
+     */
     class Query : FilterBuilder<Query, Query.SortOrder, Tobacco>(
             Uri.withAppendedPath(
                     InventoryContract.URI_PRODUCTS,

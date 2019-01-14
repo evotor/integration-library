@@ -12,6 +12,9 @@ import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.util.*
 
+/**
+ * Неклассифицированная услуга
+ */
 data class UnclassifiedService internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
@@ -23,10 +26,14 @@ data class UnclassifiedService internal constructor(
         override val quantity: Quantity,
         override val description: String?
 ) : Product(), Service {
+
+    /**
+     * Запрос на получение неклассифицированных услуг из базы данных смарт-терминала
+     */
     class Query : FilterBuilder<Query, Query.SortOrder, UnclassifiedService>(
             Uri.withAppendedPath(
                     InventoryContract.URI_PRODUCTS,
-                    InventoryContract.PATH_UNCLASSIFIED_PAYABLE_SERVICES
+                    InventoryContract.PATH_UNCLASSIFIED_SERVICES
             )
     ) {
         val uuid = addFieldFilter<UUID>(InventoryContract.ProductColumns.UUID)
