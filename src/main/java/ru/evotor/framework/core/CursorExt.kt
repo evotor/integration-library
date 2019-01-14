@@ -2,6 +2,8 @@ package ru.evotor.framework.core
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import ru.evotor.framework.Quantity
+import ru.evotor.framework.payment.AmountOfRubles
 import java.math.BigDecimal
 
 private const val TRUE = 1
@@ -43,11 +45,8 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnName: Strin
 internal fun android.database.Cursor.safeGetBigDecimal(columnName: String): BigDecimal? =
         safeGetLong(columnName)?.let { BigDecimal(it) }
 
-internal fun android.database.Cursor.safeGetMoney(columnName: String): BigDecimal? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(100))
-
-internal fun android.database.Cursor.safeGetQuantity(columnName: String): BigDecimal? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))
+internal fun android.database.Cursor.safeGetMoney(columnName: String): AmountOfRubles? =
+        safeGetBigDecimal(columnName)?.divide(BigDecimal(100))?.let { AmountOfRubles(it) }
 
 internal fun android.database.Cursor.safeGetPercent(columnName: String): BigDecimal? =
         safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))

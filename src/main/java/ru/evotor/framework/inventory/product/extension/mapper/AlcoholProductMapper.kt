@@ -23,7 +23,7 @@ internal object AlcoholProductMapper {
                             null
                     )
 
-    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.AlcoholProductColumns.FSAR_PRODUCT_KIND_CODE)
+    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.AlcoholProductColumns.FSRAR_PRODUCT_KIND_CODE)
 
     fun readTareVolume(cursor: Cursor) = cursor.safeGetBigDecimal(InventoryContract.AlcoholProductColumns.TARE_VOLUME)
 

@@ -6,7 +6,7 @@ import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.category.entertainment.StrongAlcohol
 import ru.evotor.framework.inventory.product.extension.mapper.AlcoholProductMapper
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
-import ru.evotor.framework.inventory.product.mapper.UnitOfMeasurementMapper
+import ru.evotor.framework.mapper.QuantityMapper
 import java.util.*
 
 internal object StrongAlcoholMapper {
@@ -40,21 +40,15 @@ internal object StrongAlcoholMapper {
                     ?: productCursor)
                     ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::fsrarProductKindCode),
             vendorCode = ProductMapper.readVendorCode(productCursor),
-            barcodes = ProductMapper.readBarcodes(productCursor),
-            purchasePrice = ProductMapper.readPurchasePrice(productCursor),
-            sellingPrice = ProductMapper.readSellingPrice(productCursor),
+            price = ProductMapper.readSellingPrice(productCursor),
             vatRate = ProductMapper.readVatRate(productCursor)
                     ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::vatRate),
-            quantity = ProductMapper.readQuantity(productCursor)
-                    ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::quantity),
-            unitOfMeasurement = UnitOfMeasurementMapper.read(productCursor),
+            quantity = QuantityMapper.read(productCursor),
             tareVolume = AlcoholProductMapper.readTareVolume(alcoholProductCursor
                     ?: productCursor)
                     ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::tareVolume),
             alcoholPercentage = AlcoholProductMapper.readAlcoholPercentage(alcoholProductCursor
                     ?: productCursor),
-            description = ProductMapper.readDescription(productCursor),
-            allowedToSell = ProductMapper.readAllowedToSell(productCursor)
-                    ?: throw IntegrationLibraryMappingException(StrongAlcohol::class.java, StrongAlcohol::allowedToSell)
+            description = ProductMapper.readDescription(productCursor)
     )
 }

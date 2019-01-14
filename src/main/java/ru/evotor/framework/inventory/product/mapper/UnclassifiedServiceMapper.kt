@@ -2,21 +2,21 @@ package ru.evotor.framework.inventory.product.mapper
 
 import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.inventory.product.UnclassifiedProduct
+import ru.evotor.framework.inventory.product.UnclassifiedService
 import ru.evotor.framework.mapper.QuantityMapper
 
-internal object UnclassifiedProductMapper {
-    fun read(cursor: Cursor) = UnclassifiedProduct(
+internal object UnclassifiedServiceMapper {
+    fun read(cursor: Cursor) = UnclassifiedService(
             uuid = ProductMapper.readUuid(cursor)
-                    ?: throw IntegrationLibraryMappingException(UnclassifiedProduct::class.java, UnclassifiedProduct::uuid),
+                    ?: throw IntegrationLibraryMappingException(UnclassifiedService::class.java, UnclassifiedService::uuid),
             groupUuid = ProductMapper.readGroupUuid(cursor),
             name = ProductMapper.readName(cursor)
-                    ?: throw IntegrationLibraryMappingException(UnclassifiedProduct::class.java, UnclassifiedProduct::name),
+                    ?: throw IntegrationLibraryMappingException(UnclassifiedService::class.java, UnclassifiedService::name),
             code = ProductMapper.readCode(cursor),
             vendorCode = ProductMapper.readVendorCode(cursor),
             price = ProductMapper.readSellingPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
-                    ?: throw IntegrationLibraryMappingException(UnclassifiedProduct::class.java, UnclassifiedProduct::vatRate),
+                    ?: throw IntegrationLibraryMappingException(UnclassifiedService::class.java, UnclassifiedService::vatRate),
             quantity = QuantityMapper.read(cursor),
             description = ProductMapper.readDescription(cursor)
     )

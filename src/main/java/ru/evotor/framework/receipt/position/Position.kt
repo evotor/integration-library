@@ -1,79 +1,248 @@
 package ru.evotor.framework.receipt.position
 
+import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.inventory.product.UnitOfMeasurement
+import ru.evotor.framework.inventory.product.extension.ExcisableProduct
+import ru.evotor.framework.payment.AmountOfRubles
 import ru.evotor.framework.receipt.position.mapper.PositionMapper
-import java.math.BigDecimal
+import java.lang.IllegalArgumentException
 import java.util.*
 
-data class Position internal constructor(
-        val uuid: UUID = UUID.randomUUID(),
-        val productUuid: UUID? = null,
-        val type: Type = Type.ORDINARY_PRODUCT,
+class Position internal constructor(
+        val uuid: UUID,
+        val productUuid: UUID?,
+        val productCode: String?,
         val name: String,
-        val productCode: String? = null,
-        val barcode: String? = null,
-        val mark: String? = null,
-        val price: BigDecimal,
-        val quantity: BigDecimal = BigDecimal.ONE,
-        val unitOfMeasurement: UnitOfMeasurement? = null,
-        val discount: BigDecimal = BigDecimal.ZERO,
-        val settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),
-        val agentRequisites: AgentRequisites? = null
+        val type: Type,
+        val barcode: String?,
+        val mark: String?,
+        val price: AmountOfRubles,
+        val discount: AmountOfRubles,
+        val vatRate: VatRate,
+        val quantity: Quantity,
+        val settlementMethod: SettlementMethod,
+        val agentRequisites: AgentRequisites?
 ) {
     val priceWithDiscountsAndSurcharges get() = price - discount
 
-    constructor(fixedPriceProduct: Product) : this(
-            productUuid = fixedPriceProduct.uuid,
-            type = PositionMapper.getPositionType(fixedPriceProduct),
-            name = fixedPriceProduct.name,
-            productCode = fixedPriceProduct.code,
-            price = fixedPriceProduct.sellingPrice!!,
-            unitOfMeasurement = fixedPriceProduct.unitOfMeasurement
-    )
-
-    constructor(freePriceProduct: Product, price: BigDecimal) : this(
-            productUuid = freePriceProduct.uuid,
-            type = PositionMapper.getPositionType(freePriceProduct),
-            name = freePriceProduct.name,
-            productCode = freePriceProduct.code,
-            price = price,
-            unitOfMeasurement = freePriceProduct.unitOfMeasurement
+    constructor(
+            uuid: UUID = UUID.randomUUID(),
+            product: Product,
+            name: String = product.name,
+            barcode: String? = null,
+            price: AmountOfRubles = product.price!!,
+            discount: AmountOfRubles = AmountOfRubles(0),
+            quantity: Quantity = Quantity(
+                    1,
+                    product.quantity.scale(),
+                    product.quantity.unitOfMeasurement
+            ),
+            settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),
+            agentRequisites: AgentRequisites? = null
+    ) : this(
+            uuid,
+            product.uuid,
+            product.code,
+            name,
+            PositionMapper.getType(product),
+            barcode,
+            null,
+            price,
+            discount,
+            product.vatRate,
+            quantity,
+            settlementMethod,
+            agentRequisites
     )
 
     constructor(
             uuid: UUID = UUID.randomUUID(),
+            excisableProduct: ExcisableProduct,
+            name: String = (excisableProduct as Product).name,
+            barcode: String? = null,
+            mark: String,
+            price: AmountOfRubles = (excisableProduct as Product).price!!,
+            discount: AmountOfRubles = AmountOfRubles(0),
+            quantity: Quantity = Quantity(
+                    1,
+                    (excisableProduct as Product).quantity.scale(),
+                    (excisableProduct as Product).quantity.unitOfMeasurement
+            ),
+            settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),
+            agentRequisites: AgentRequisites? = null
+    ) : this(
+            uuid,
+            (excisableProduct as Product).uuid,
+            excisableProduct.code,
+            name,
+            PositionMapper.getType(excisableProduct),
+            barcode,
+            mark,
+            price,
+            discount,
+            excisableProduct.vatRate,
+            quantity,
+            settlementMethod,
+            agentRequisites
+    )
+
+    constructor(
+            uuid: UUID = UUID.randomUUID(),
+            productCode: String? = null,
             name: String,
             type: Type = Type.ORDINARY_PRODUCT,
-            productCode: String? = null,
             barcode: String? = null,
             mark: String? = null,
-            price: BigDecimal,
-            quantity: BigDecimal = BigDecimal(1),
-            unitOfMeasurement: UnitOfMeasurement? = null,
-            discount: BigDecimal = BigDecimal(0),
+            price: AmountOfRubles,
+            discount: AmountOfRubles = AmountOfRubles(0),
+            vatRate: VatRate = VatRate.WITHOUT_VAT,
+            quantity: Quantity = Quantity(1),
             settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),
             agentRequisites: AgentRequisites? = null
     ) : this(
             uuid,
             null,
-            type,
-            name,
             productCode,
+            name,
+            type,
             barcode,
             mark,
             price,
-            quantity,
-            unitOfMeasurement,
             discount,
+            vatRate,
+            quantity,
             settlementMethod,
             agentRequisites
     )
+
+    fun copy(
+            uuid: UUID = this.uuid,
+            productUuid: UUID? = this.productUuid,
+            name: String = this.name,
+            barcode: String? = this.barcode,
+            price: AmountOfRubles = this.price,
+            quantity: Quantity = this.quantity,
+            discount: AmountOfRubles = this.discount,
+            settlementMethod: SettlementMethod = this.settlementMethod,
+            agentRequisites: AgentRequisites? = this.agentRequisites
+    ) = Position(
+            uuid,
+            productUuid,
+            this.productCode,
+            name,
+            this.type,
+            barcode,
+            null,
+            price,
+            discount,
+            this.vatRate,
+            quantity,
+            settlementMethod,
+            agentRequisites
+    )
+
+    fun copy(
+            uuid: UUID = this.uuid,
+            excisableProductUuid: UUID? = this.productUuid,
+            name: String = this.name,
+            barcode: String? = this.barcode,
+            mark: String? = this.mark,
+            price: AmountOfRubles = this.price,
+            quantity: Quantity = this.quantity,
+            discount: AmountOfRubles = this.discount,
+            settlementMethod: SettlementMethod = this.settlementMethod,
+            agentRequisites: AgentRequisites? = this.agentRequisites
+    ) = Position(
+            uuid,
+            excisableProductUuid,
+            this.productCode,
+            name,
+            this.type,
+            barcode,
+            if (this.type == Type.EXCISABLE_PRODUCT || mark == null)
+                mark
+            else
+                throw IllegalArgumentException("Cannot set mark for non excisable position"),
+            price,
+            discount,
+            this.vatRate,
+            quantity,
+            settlementMethod,
+            agentRequisites
+    )
+
+    fun copy(
+            uuid: UUID = this.uuid,
+            productCode: String? = this.productCode,
+            name: String = this.name,
+            type: Type = this.type,
+            barcode: String? = this.barcode,
+            mark: String? = this.mark,
+            price: AmountOfRubles = this.price,
+            quantity: Quantity = this.quantity,
+            discount: AmountOfRubles = this.discount,
+            vatRate: VatRate = this.vatRate,
+            settlementMethod: SettlementMethod = this.settlementMethod,
+            agentRequisites: AgentRequisites? = this.agentRequisites
+    ) = Position(
+            uuid,
+            null,
+            productCode,
+            name,
+            type,
+            barcode,
+            mark,
+            price,
+            discount,
+            vatRate,
+            quantity,
+            settlementMethod,
+            agentRequisites
+    )
+
 
     enum class Type {
         ORDINARY_PRODUCT,
         EXCISABLE_PRODUCT,
         JOB,
-        PAYABLE_SERVICE
+        SERVICE
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Position) return false
+
+        if (uuid != other.uuid) return false
+        if (productUuid != other.productUuid) return false
+        if (type != other.type) return false
+        if (name != other.name) return false
+        if (productCode != other.productCode) return false
+        if (barcode != other.barcode) return false
+        if (mark != other.mark) return false
+        if (price != other.price) return false
+        if (vatRate != other.vatRate) return false
+        if (quantity != other.quantity) return false
+        if (discount != other.discount) return false
+        if (settlementMethod != other.settlementMethod) return false
+        if (agentRequisites != other.agentRequisites) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = uuid.hashCode()
+        result = 31 * result + (productUuid?.hashCode() ?: 0)
+        result = 31 * result + type.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + (productCode?.hashCode() ?: 0)
+        result = 31 * result + (barcode?.hashCode() ?: 0)
+        result = 31 * result + (mark?.hashCode() ?: 0)
+        result = 31 * result + price.hashCode()
+        result = 31 * result + vatRate.hashCode()
+        result = 31 * result + quantity.hashCode()
+        result = 31 * result + discount.hashCode()
+        result = 31 * result + settlementMethod.hashCode()
+        result = 31 * result + (agentRequisites?.hashCode() ?: 0)
+        return result
     }
 }

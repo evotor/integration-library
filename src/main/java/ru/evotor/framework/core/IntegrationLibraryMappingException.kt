@@ -19,5 +19,4 @@ internal class IntegrationLibraryMappingException(clazz: Class<*>, property: KPr
         }.let { cause ->
             BASE_MESSAGE.replace(CAUSE, cause)
         }
-
 )

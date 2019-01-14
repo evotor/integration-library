@@ -11,7 +11,7 @@ sealed class ReceiptDraft {
     abstract val settlementType: SettlementType
     abstract val taxationSystem: TaxationSystem
     abstract val positions: List<Position>
-    abstract val payments: Map<Payment, BigDecimal>
+    abstract val payments: Map<ru.evotor.framework.payment.Payment, BigDecimal>
 }
 
 data class FiscalReceiptDraft(
@@ -20,7 +20,7 @@ data class FiscalReceiptDraft(
         override val taxationSystem: TaxationSystem,
         val customerPhoneOrEmail: String? = null,
         override val positions: List<Position>,
-        override val payments: Map<Payment, BigDecimal>,
+        override val payments: Map<ru.evotor.framework.payment.Payment, BigDecimal>,
         val needToPrint: Boolean = true
 ) : ReceiptDraft()
 
@@ -34,5 +34,5 @@ data class NonFiscalReceiptDraft(
         val settlementsPlace: String,
         override val taxationSystem: TaxationSystem,
         override val positions: List<Position>,
-        override val payments: Map<Payment, BigDecimal>
+        override val payments: Map<ru.evotor.framework.payment.Payment, BigDecimal>
 ) : ReceiptDraft()

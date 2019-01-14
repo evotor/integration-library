@@ -33,6 +33,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile 'io.reactivex.rxjava2:rxjava:2.1.13'
     compile 'com.github.evotor:push-notifications:v0.2.1'
     compile 'com.github.evotor:query-api:afba92e274'
     compile 'com.google.code.gson:gson:2.8.5'
@@ -89,7 +90,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "v1.2.1-LOCAL"
+            version "v1.1.1-LOCAL"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"

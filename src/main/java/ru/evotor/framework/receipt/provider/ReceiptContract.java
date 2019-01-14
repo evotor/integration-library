@@ -18,14 +18,14 @@ public final class ReceiptContract {
 
     public interface PositionColumns extends IdentifiedEntityColumns {
         String PRODUCT_UUID = "PRODUCT_UUID";
-        String TYPE = "TYPE";
-        String NAME = "NAME";
         String PRODUCT_CODE = "PRODUCT_CODE";
+        String NAME = "NAME";
+        String TYPE = "TYPE";
         String BARCODE = "BARCODE";
         String MARK = "MARK";
         String PRICE = "PRICE";
-        String QUANTITY = "QUANTITY";
         String DISCOUNT = "DISCOUNT";
+        String VAT_RATE = "VAT_RATE";
     }
 
     public interface SettlementMethodColumns extends MultiVariationEntityColumns {
