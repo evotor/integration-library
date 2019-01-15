@@ -8,7 +8,7 @@ import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import java.lang.IllegalArgumentException
 import java.util.*
 
-class Position internal constructor(
+internal class Position internal constructor(
         val uuid: UUID,
         val productUuid: UUID?,
         val productCode: String?,

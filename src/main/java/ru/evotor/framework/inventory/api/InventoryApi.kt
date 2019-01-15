@@ -9,7 +9,7 @@ import ru.evotor.framework.receipt.position.Position
 import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import ru.evotor.query.Cursor
 
-object InventoryApi {
+private object InventoryApi {
     fun findProductsByBarcode(context: Context, barcode: String): List<Product> =
             context.contentResolver.query(
                     Uri.withAppendedPath(
@@ -26,7 +26,6 @@ object InventoryApi {
                 }.toList()
             }
 
-    /*
     fun createPositionsByBarcode(context: Context, barcode: String): List<Position> =
             context.contentResolver.query(
                     Uri.withAppendedPath(
@@ -41,5 +40,5 @@ object InventoryApi {
                 object : Cursor<Position>(cursor) {
                     override fun getValue() = PositionMapper.read(this)
                 }.toList()
-            }*/
+            }
 }
