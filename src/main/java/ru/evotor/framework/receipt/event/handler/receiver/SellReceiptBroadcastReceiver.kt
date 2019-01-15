@@ -70,7 +70,7 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 
-        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.CLOSED"
+        const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
 
     }
 
