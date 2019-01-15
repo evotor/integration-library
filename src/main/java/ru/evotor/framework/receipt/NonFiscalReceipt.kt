@@ -7,17 +7,11 @@ import java.math.BigDecimal
 import java.util.*
 
 @FutureFeature("Нефискальный чек (квитанция)")
-data class NonFiscalReceipt(
+private data class NonFiscalReceipt(
         override val uuid: UUID
 ) : Document() {
     enum class Type {
-        /**
-         * квитанция
-         */
         INVOICE,
-        /**
-         * ЕНВД чек, напечатанный строками
-         */
         STRING_UTII
     }
 }

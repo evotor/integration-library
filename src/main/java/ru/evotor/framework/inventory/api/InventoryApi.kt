@@ -26,6 +26,7 @@ object InventoryApi {
                 }.toList()
             }
 
+    /*
     fun createPositionsByBarcode(context: Context, barcode: String): List<Position> =
             context.contentResolver.query(
                     Uri.withAppendedPath(
@@ -40,5 +41,5 @@ object InventoryApi {
                 object : Cursor<Position>(cursor) {
                     override fun getValue() = PositionMapper.read(this)
                 }.toList()
-            }
+            }*/
 }
