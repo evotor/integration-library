@@ -1,5 +1,8 @@
 package ru.evotor.framework.provider;
 
+import ru.evotor.framework.core.DoNotUseThis;
+
+@DoNotUseThis()
 public interface UnitOfMeasurementColumns extends MultiVariationEntityColumns {
     String VARIATION_ID = "UNIT_OF_MEASUREMENT_VARIATION_ID";
     int VARIATION_ID_CUSTOM = 0;

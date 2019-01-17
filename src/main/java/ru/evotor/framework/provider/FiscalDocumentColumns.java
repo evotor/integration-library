@@ -1,5 +1,8 @@
 package ru.evotor.framework.provider;
 
+import ru.evotor.framework.core.DoNotUseThis;
+
+@DoNotUseThis()
 public interface FiscalDocumentColumns {
     String DOCUMENT_NUMBER = "DOCUMENT_NUMBER";
     String CREATION_DATE = "CREATION_DATE";

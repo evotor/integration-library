@@ -2,6 +2,7 @@ package ru.evotor.framework.kkt.api
 
 import android.content.Context
 import ru.evotor.framework.core.IntegrationLibraryMappingException
+import ru.evotor.framework.core.safeGetBoolean
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
@@ -21,13 +22,13 @@ object KktApi {
     @JvmStatic
     fun getRegisteredFfdVersion(context: Context): FfdVersion? = context.contentResolver.query(
             KktContract.BASE_URI,
-            arrayOf(KktContract.COLUMN_SUPPORTED_FFD_VERSION),
+            arrayOf(KktContract.Columns.SUPPORTED_FFD_VERSION),
             null,
             null,
             null
     )?.use { cursor ->
         cursor.moveToFirst()
-        cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
+        cursor.safeGetInt(KktContract.Columns.SUPPORTED_FFD_VERSION)?.let { version ->
             if (version !in 0..FfdVersion.values().size) {
                 throw IntegrationLibraryMappingException(FfdVersion::class.java)
             }
@@ -46,13 +47,13 @@ object KktApi {
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
             context.contentResolver.query(
                     KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_AGENT_TYPES),
+                    arrayOf(KktContract.Columns.REGISTERED_AGENT_TYPES),
                     null,
                     null,
                     null
             )?.use { cursor ->
                 cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
+                cursor.safeGetList(KktContract.Columns.REGISTERED_AGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Agent.Type::class.java)
@@ -73,13 +74,13 @@ object KktApi {
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
             context.contentResolver.query(
                     KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES),
+                    arrayOf(KktContract.Columns.REGISTERED_SUBAGENT_TYPES),
                     null,
                     null,
                     null
             )?.use { cursor ->
                 cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
+                cursor.safeGetList(KktContract.Columns.REGISTERED_SUBAGENT_TYPES)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Subagent.Type::class.java)
@@ -87,5 +88,25 @@ object KktApi {
                         Subagent.Type.values()[index]
                     }
                 }
+            }
+
+    /**
+     * Установлен ли на терминал пакет обновлений с возможностью пробивать фискальные документы по
+     * ставке НДС 20%.
+     * @return Boolean или null, если не удалось связаться с кассой.
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
+     */
+    @JvmStatic
+    fun isVatRate20Available(context: Context): Boolean? =
+            context.contentResolver.query(
+                    KktContract.BASE_URI,
+                    arrayOf(KktContract.Columns.IS_VAT_RATE_20_AVAILABLE),
+                    null,
+                    null,
+                    null
+            )?.use { cursor ->
+                cursor.moveToFirst()
+                cursor.safeGetBoolean(KktContract.Columns.IS_VAT_RATE_20_AVAILABLE)
+                        ?: throw IntegrationLibraryMappingException(Boolean::class.java)
             }
 }

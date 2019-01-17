@@ -2,9 +2,11 @@ package ru.evotor.framework.inventory.provider;
 
 import android.net.Uri;
 
+import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
 import ru.evotor.framework.provider.MultiVariationEntityColumns;
 
+@DoNotUseThis()
 public final class InventoryContract {
     private InventoryContract() {
     }

@@ -2,10 +2,12 @@ package ru.evotor.framework.receipt.provider;
 
 import android.net.Uri;
 
+import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.FiscalDocumentColumns;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
 import ru.evotor.framework.provider.MultiVariationEntityColumns;
 
+@DoNotUseThis()
 public final class ReceiptContract {
     private ReceiptContract() {
     }
