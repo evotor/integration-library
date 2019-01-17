@@ -117,62 +117,6 @@ internal class Position internal constructor(
 
     fun copy(
             uuid: UUID = this.uuid,
-            productUuid: UUID? = this.productUuid,
-            name: String = this.name,
-            barcode: String? = this.barcode,
-            price: AmountOfRubles = this.price,
-            quantity: Quantity = this.quantity,
-            discount: AmountOfRubles = this.discount,
-            settlementMethod: SettlementMethod = this.settlementMethod,
-            agentRequisites: AgentRequisites? = this.agentRequisites
-    ) = Position(
-            uuid,
-            productUuid,
-            this.productCode,
-            name,
-            this.type,
-            barcode,
-            null,
-            price,
-            discount,
-            this.vatRate,
-            quantity,
-            settlementMethod,
-            agentRequisites
-    )
-
-    fun copy(
-            uuid: UUID = this.uuid,
-            excisableProductUuid: UUID? = this.productUuid,
-            name: String = this.name,
-            barcode: String? = this.barcode,
-            mark: String? = this.mark,
-            price: AmountOfRubles = this.price,
-            quantity: Quantity = this.quantity,
-            discount: AmountOfRubles = this.discount,
-            settlementMethod: SettlementMethod = this.settlementMethod,
-            agentRequisites: AgentRequisites? = this.agentRequisites
-    ) = Position(
-            uuid,
-            excisableProductUuid,
-            this.productCode,
-            name,
-            this.type,
-            barcode,
-            if (this.type == Type.EXCISABLE_PRODUCT || mark == null)
-                mark
-            else
-                throw IllegalArgumentException("Cannot set mark for non excisable position"),
-            price,
-            discount,
-            this.vatRate,
-            quantity,
-            settlementMethod,
-            agentRequisites
-    )
-
-    fun copy(
-            uuid: UUID = this.uuid,
             productCode: String? = this.productCode,
             name: String = this.name,
             type: Type = this.type,
@@ -186,12 +130,18 @@ internal class Position internal constructor(
             agentRequisites: AgentRequisites? = this.agentRequisites
     ) = Position(
             uuid,
-            null,
+            if (productCode == this.productCode && type == this.type && vatRate == this.vatRate)
+                productUuid
+            else
+                null,
             productCode,
             name,
             type,
             barcode,
-            mark,
+            if (type == Type.EXCISABLE_PRODUCT)
+                mark
+            else
+                null,
             price,
             discount,
             vatRate,
@@ -199,7 +149,6 @@ internal class Position internal constructor(
             settlementMethod,
             agentRequisites
     )
-
 
     enum class Type {
         ORDINARY_PRODUCT,
