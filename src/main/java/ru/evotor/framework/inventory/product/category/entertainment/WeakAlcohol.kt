@@ -33,7 +33,7 @@ data class WeakAlcohol internal constructor(
 ) : Product(), AlcoholProduct {
 
     /**
-     * Запрос на получение товаров категории "Крепкий алкоголь" из базы данных смарт-терминала
+     * Запрос на получение товаров категории "Слабый алкоголь" из базы данных смарт-терминала
      */
     class Query : FilterBuilder<Query, Query.SortOrder, WeakAlcohol>(
             Uri.withAppendedPath(
