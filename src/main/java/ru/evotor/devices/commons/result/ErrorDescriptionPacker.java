@@ -108,6 +108,8 @@ public abstract class ErrorDescriptionPacker {
                 return new UsbHubStateErrorExtension(parcel);
             case DRIVER_EXCEPTION:
                 return new DriverExceptionErrorExtension(parcel);
+            case KKM_DEVICE_EXCEPTION:
+                return new KkmDeviceErrorExtension(parcel);
             default:
                 return null;
         }
