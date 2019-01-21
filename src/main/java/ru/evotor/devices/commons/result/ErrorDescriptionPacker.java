@@ -5,12 +5,14 @@ import android.os.Parcel;
 import ru.evotor.devices.commons.exception.DeviceNotFoundException;
 import ru.evotor.devices.commons.exception.DeviceServiceException;
 import ru.evotor.devices.commons.exception.DriverException;
+import ru.evotor.devices.commons.exception.KkmDeviceException;
 import ru.evotor.devices.commons.exception.NoPermanentInfoException;
 import ru.evotor.devices.commons.exception.ServiceNotConnectedException;
 import ru.evotor.devices.commons.exception.UnknownException;
 import ru.evotor.devices.commons.exception.UsbHubProblemException;
 import ru.evotor.devices.commons.exception.error_extension.AbstractErrorExtension;
 import ru.evotor.devices.commons.exception.error_extension.DriverExceptionErrorExtension;
+import ru.evotor.devices.commons.exception.error_extension.KkmDeviceErrorExtension;
 import ru.evotor.devices.commons.exception.error_extension.UsbHubStateErrorExtension;
 
 public abstract class ErrorDescriptionPacker {
@@ -20,6 +22,7 @@ public abstract class ErrorDescriptionPacker {
     private static final int USB_HUB_PROBLEM = -4;
     private static final int DRIVER_EXCEPTION = -5;
     private static final int NO_PERMANENT_INFO = -6;
+    private static final int KKM_DEVICE_EXCEPTION = -7;
 
     private ErrorDescriptionPacker() {
 
@@ -39,6 +42,9 @@ public abstract class ErrorDescriptionPacker {
             return new ErrorDescription(DRIVER_EXCEPTION, exc.getMessage(), new DriverExceptionErrorExtension(((DriverException) exc).getDriverMessage()));
         } else if (exc instanceof NoPermanentInfoException) {
             return new ErrorDescription(NO_PERMANENT_INFO, exc.getMessage());
+        } else if (exc instanceof KkmDeviceException) {
+            KkmDeviceException e = (KkmDeviceException) exc;
+            return new ErrorDescription(KKM_DEVICE_EXCEPTION, exc.getMessage(), new KkmDeviceErrorExtension(e.getErrorCode(), e.getMessage()));
         } else {
             return new ErrorDescription(UNKNOWN, exc.getMessage());
         }
@@ -81,6 +87,15 @@ public abstract class ErrorDescriptionPacker {
 
             case NO_PERMANENT_INFO:
                 return new NoPermanentInfoException();
+
+            case KKM_DEVICE_EXCEPTION:
+                AbstractErrorExtension deviceException = errorDescription.getErrorExtension();
+                if (deviceException instanceof KkmDeviceErrorExtension) {
+                    KkmDeviceErrorExtension e = (KkmDeviceErrorExtension) deviceException;
+                    return new KkmDeviceException(e.getErrorCode(), e.getErrorMessage());
+                } else {
+                    return new UnknownException(errorUserDescription);
+                }
 
             default:
                 return new UnknownException(errorUserDescription);
