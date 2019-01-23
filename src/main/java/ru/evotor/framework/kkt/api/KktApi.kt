@@ -21,7 +21,7 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredFfdVersion(context: Context): FfdVersion? = context.contentResolver.query(
-            KktContract.BASE_URI,
+            KktContract.AUTHORITY_URI,
             arrayOf(KktContract.Columns.SUPPORTED_FFD_VERSION),
             null,
             null,
@@ -46,7 +46,7 @@ object KktApi {
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
             context.contentResolver.query(
-                    KktContract.BASE_URI,
+                    KktContract.AUTHORITY_URI,
                     arrayOf(KktContract.Columns.REGISTERED_AGENT_TYPES),
                     null,
                     null,
@@ -73,7 +73,7 @@ object KktApi {
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
             context.contentResolver.query(
-                    KktContract.BASE_URI,
+                    KktContract.AUTHORITY_URI,
                     arrayOf(KktContract.Columns.REGISTERED_SUBAGENT_TYPES),
                     null,
                     null,
@@ -99,7 +99,7 @@ object KktApi {
     @JvmStatic
     fun isVatRate20Available(context: Context): Boolean? =
             context.contentResolver.query(
-                    KktContract.BASE_URI,
+                    KktContract.AUTHORITY_URI,
                     arrayOf(KktContract.Columns.IS_VAT_RATE_20_AVAILABLE),
                     null,
                     null,

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
+import ru.evotor.framework.provider.QuantityContract;
 
 @DoNotUseThis()
 public final class InventoryContract {
@@ -14,7 +15,7 @@ public final class InventoryContract {
 
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface ProductColumns extends IdentifiedEntityColumns {
+    public interface ProductColumns extends IdentifiedEntityColumns, QuantityContract.Columns {
         String VARIATION_ID = "VARIATION_ID";
         String GROUP_UUID = "GROUP_UUID";
         String NAME = "NAME";
@@ -42,21 +43,31 @@ public final class InventoryContract {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "products");
 
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.inventory.product.Product";
+
         public static final Uri UNCLASSIFIED_PRODUCTS_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_products");
         public static final Uri UNCLASSIFIED_SERVICES_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_services");
         public static final Uri WEAK_ALCOHOL_URI = Uri.withAppendedPath(CONTENT_URI, "weak_alcohol");
         public static final Uri STRONG_ALCOHOL_URI = Uri.withAppendedPath(CONTENT_URI, "strong_alcohol");
         public static final Uri TOBACCO_URI = Uri.withAppendedPath(CONTENT_URI, "tobacco");
 
-        public static final Uri PRODUCT_EXTENSIONS_URI = Uri.withAppendedPath(AUTHORITY_URI, "product_extensions");
-
-        public static final Uri ALCOHOL_PRODUCTS_URI = Uri.withAppendedPath(PRODUCT_EXTENSIONS_URI, "alcohol_products");
-
         public static final String VARIATION_ID_UNCLASSIFIED_PRODUCT = "NORMAL";
         public static final String VARIATION_ID_UNCLASSIFIED_SERVICE = "SERVICE";
         public static final String VARIATION_ID_WEAK_ALCOHOL = "ALCOHOL_NOT_MARKED";
         public static final String VARIATION_ID_STRONG_ALCOHOL = "ALCOHOL_MARKED";
         public static final String VARIATION_ID_TOBACCO = "TOBACCO";
+    }
+
+    public static final class ProductExtension implements AlcoholProductColumns {
+        private ProductExtension() {
+
+        }
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "product_extensions");
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.inventory.product.extension.ProductExtension";
+
+        public static final Uri ALCOHOL_PRODUCTS_URI = Uri.withAppendedPath(CONTENT_URI, "alcohol_products");
     }
 
     public interface ProductGroupColumns extends IdentifiedEntityColumns {
@@ -70,24 +81,34 @@ public final class InventoryContract {
         }
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "product_groups");
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.inventory.ProductGroup";
     }
 
-    public static final class Barcode {
+    public interface BarcodeColumns {
+        String PRODUCT_UUID = "COMMODITY_UUID";
+        String VALUE = "BARCODE";
+    }
+
+    public static final class Barcode implements BarcodeColumns {
         private Barcode() {
 
         }
 
-        public static Uri getContentUri(String barcode) {
-            return Uri.withAppendedPath(AUTHORITY_URI, barcode);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "barcodes");
+
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.inventory.product.Barcode";
+
+        public static Uri getParticularBarcodeUri(String barcode) {
+            return Uri.withAppendedPath(CONTENT_URI, barcode);
         }
 
-        public static final Uri getProductsByBarcodeUri(String barcode) {
-            return Uri.withAppendedPath(getContentUri(barcode), "products");
-
+        public static Uri getProductsByBarcodeUri(String barcode) {
+            return Uri.withAppendedPath(getParticularBarcodeUri(barcode), "products");
         }
 
-        public static final Uri getPositionsByBarcodeUri(String barcode) {
-            return Uri.withAppendedPath(getContentUri(barcode), "positions");
+        public static Uri getPositionsByBarcodeUri(String barcode) {
+            return Uri.withAppendedPath(getParticularBarcodeUri(barcode), "positions");
         }
     }
 }

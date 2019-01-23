@@ -2,7 +2,6 @@ package ru.evotor.framework.inventory.product.extension.mapper
 
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.core.safeGetLong
 import ru.evotor.framework.core.safeGetBigDecimal
@@ -13,16 +12,16 @@ internal object AlcoholProductMapper {
     fun loadExtension(context: Context, productUuid: UUID): Cursor? =
             context.contentResolver
                     .query(
-                            InventoryContract.Product.ALCOHOL_PRODUCTS_URI,
+                            InventoryContract.ProductExtension.ALCOHOL_PRODUCTS_URI,
                             null,
-                            "${InventoryContract.Product.PRODUCT_UUID}=?",
+                            "${InventoryContract.ProductExtension.PRODUCT_UUID}=?",
                             arrayOf(productUuid.toString()),
                             null
                     )
 
-    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
+    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.ProductExtension.FSRAR_PRODUCT_KIND_CODE)
 
-    fun readTareVolume(cursor: Cursor) = cursor.safeGetBigDecimal(InventoryContract.Product.TARE_VOLUME)
+    fun readTareVolume(cursor: Cursor) = cursor.safeGetBigDecimal(InventoryContract.ProductExtension.TARE_VOLUME)
 
-    fun readAlcoholPercentage(cursor: Cursor) = cursor.safeGetPercent(InventoryContract.Product.ALCOHOL_PERCENTAGE)
+    fun readAlcoholPercentage(cursor: Cursor) = cursor.safeGetPercent(InventoryContract.ProductExtension.ALCOHOL_PERCENTAGE)
 }

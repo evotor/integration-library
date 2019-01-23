@@ -8,9 +8,11 @@ import ru.evotor.framework.core.safeGetLong
 import ru.evotor.framework.provider.QuantityContract.Columns
 
 internal object QuantityMapper {
-    fun read(cursor: Cursor) = Quantity(
-            value = cursor.safeGetLong(Columns.QUANTITY_UNSCALED_VALUE) ?: throw IntegrationLibraryMappingException(Quantity::class.java),
-            scale = cursor.safeGetInt(Columns.QUANTITY_SCALE) ?: 0,
-            unitOfMeasurement = UnitOfMeasurementMapper.read(cursor)
-    )
+    fun read(cursor: Cursor): Quantity? {
+        return Quantity(
+                value = cursor.safeGetLong(Columns.QUANTITY_UNSCALED_VALUE) ?: return null,
+                scale = cursor.safeGetInt(Columns.QUANTITY_SCALE) ?: 0,
+                unitOfMeasurement = UnitOfMeasurementMapper.read(cursor) ?: return null
+        )
+    }
 }

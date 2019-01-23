@@ -20,6 +20,11 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.inventory.product.Product;
+import ru.evotor.framework.inventory.product.UnclassifiedProduct;
+import ru.evotor.framework.inventory.product.UnclassifiedService;
+import ru.evotor.framework.inventory.product.category.entertainment.StrongAlcohol;
+import ru.evotor.framework.inventory.product.category.entertainment.WeakAlcohol;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
@@ -749,6 +754,70 @@ public class Position implements Parcelable {
                             product.getTareVolume());
 
             builder.position.productType = product.getType();
+            builder.position.productCode = product.getCode();
+
+            return builder;
+        }
+
+        public static Builder newInstance(
+                @NonNull Product product,
+                @NonNull BigDecimal quantity
+        ) {
+            Builder builder = Builder.newInstance(
+                    UUID.randomUUID().toString(),
+                    product.getUuid().toString(),
+                    product.getName(),
+                    product.getQuantity().getUnitOfMeasurement().getName(),
+                    product.getQuantity().scale(),
+                    product.getPrice(),
+                    quantity
+            );
+
+            switch (product.getVatRate()) {
+                case WITHOUT_VAT:
+                    builder.setTaxNumber(TaxNumber.NO_VAT);
+                    break;
+                case VAT_0:
+                    builder.setTaxNumber(TaxNumber.VAT_0);
+                    break;
+                case VAT_10:
+                    builder.setTaxNumber(TaxNumber.VAT_10);
+                    break;
+                case VAT_10_110:
+                    builder.setTaxNumber(TaxNumber.VAT_10_110);
+                    break;
+                case VAT_20:
+                    builder.setTaxNumber(TaxNumber.VAT_18);
+                    break;
+                case VAT_20_118:
+                    builder.setTaxNumber(TaxNumber.VAT_18_118);
+                    break;
+            }
+
+            if (product instanceof UnclassifiedProduct) {
+                builder.setAlcoParams(null, null, null, null);
+                builder.position.productType = ProductType.NORMAL;
+            } else if (product instanceof UnclassifiedService) {
+                builder.setAlcoParams(null, null, null, null);
+                builder.position.productType = ProductType.SERVICE;
+            } else if (product instanceof WeakAlcohol) {
+                builder.setAlcoParams(
+                        null,
+                        ((WeakAlcohol) product).getAlcoholPercentage(),
+                        ((WeakAlcohol) product).getFsrarProductKindCode(),
+                        ((WeakAlcohol) product).getTareVolume()
+                );
+                builder.position.productType = ProductType.NORMAL;
+            } else if (product instanceof StrongAlcohol) {
+                builder.setAlcoParams(
+                        null,
+                        ((StrongAlcohol) product).getAlcoholPercentage(),
+                        ((StrongAlcohol) product).getFsrarProductKindCode(),
+                        ((StrongAlcohol) product).getTareVolume()
+                );
+                builder.position.productType = ProductType.ALCOHOL_MARKED;
+            }
+
             builder.position.productCode = product.getCode();
 
             return builder;

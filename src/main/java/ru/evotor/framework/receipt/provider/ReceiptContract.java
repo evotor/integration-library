@@ -5,6 +5,7 @@ import android.net.Uri;
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.FiscalDocumentColumns;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
+import ru.evotor.framework.provider.QuantityContract;
 
 @DoNotUseThis()
 public final class ReceiptContract {
@@ -15,7 +16,7 @@ public final class ReceiptContract {
 
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface PositionColumns extends IdentifiedEntityColumns {
+    public interface PositionColumns extends IdentifiedEntityColumns, QuantityContract.Columns {
         String PRODUCT_UUID = "PRODUCT_UUID";
         String PRODUCT_CODE = "PRODUCT_CODE";
         String NAME = "NAME";
@@ -76,9 +77,7 @@ public final class ReceiptContract {
 
         }
 
-        public static final int TYPE_ORDINARY_PRODUCT = 0;
-        public static final int TYPE_EXCISABLE_PRODUCT = 1;
-        public static final int TYPE_SERVICE = 2;
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.receipt.position.Position";
 
         public static final int SETTLEMENT_METHOD_VARIATION_ID_FULL_PREPAYMENT = 0;
         public static final int SETTLEMENT_METHOD_VARIATION_ID_PARTIAL_PREPAYMENT = 1;

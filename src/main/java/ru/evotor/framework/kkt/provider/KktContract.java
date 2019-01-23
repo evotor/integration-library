@@ -7,7 +7,7 @@ import ru.evotor.framework.core.DoNotUseThis;
 @DoNotUseThis()
 public final class KktContract {
     public static String AUTHORITY = "ru.evotor.evotorpos.kkt";
-    public static Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+    public static Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
     public interface Columns {
         String SUPPORTED_FFD_VERSION = "SUPPORTED_FFD_VERSION";

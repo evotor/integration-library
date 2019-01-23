@@ -1,5 +1,6 @@
 package ru.evotor.framework.receipt.position
 
+import ru.evotor.framework.FutureFeature
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
@@ -8,6 +9,7 @@ import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import java.lang.IllegalArgumentException
 import java.util.*
 
+@FutureFeature("Новая позиция")
 internal class Position internal constructor(
         val uuid: UUID,
         val productUuid: UUID?,

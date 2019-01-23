@@ -43,7 +43,8 @@ internal object WeakAlcoholMapper {
             price = ProductMapper.readSellingPrice(productCursor),
             vatRate = ProductMapper.readVatRate(productCursor)
                     ?: throw IntegrationLibraryMappingException(WeakAlcohol::class.java, WeakAlcohol::vatRate),
-            quantity = QuantityMapper.read(productCursor),
+            quantity = QuantityMapper.read(productCursor)
+                    ?: throw IntegrationLibraryMappingException(WeakAlcohol::class.java, WeakAlcohol::quantity),
             tareVolume = AlcoholProductMapper.readTareVolume(alcoholProductCursor
                     ?: productCursor)
                     ?: throw IntegrationLibraryMappingException(WeakAlcohol::class.java, WeakAlcohol::tareVolume),

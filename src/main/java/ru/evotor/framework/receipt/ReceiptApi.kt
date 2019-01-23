@@ -6,6 +6,7 @@ import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
 import ru.evotor.framework.core.safeGetLong
@@ -339,7 +340,8 @@ object ReceiptApi {
             else -> {
             }
         }
-        builder.setSettlementMethod(SettlementMethodMapper.read(cursor))
+        builder.setSettlementMethod(SettlementMethodMapper.read(cursor)
+                ?: throw IntegrationLibraryMappingException(Position::class.java))
         return builder.build()
     }
 

@@ -2,7 +2,6 @@ package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
 import android.os.Bundle
-import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
@@ -18,7 +17,6 @@ import ru.evotor.framework.receipt.provider.ReceiptContract
 import java.util.*
 
 internal object AgentRequisitesMapper {
-
     private const val KEY_AGENT = "AGENT"
     private const val KEY_SUBAGENT = "SUBAGENT"
     private const val KEY_PRINCIPAL = "PRINCIPAL"
@@ -103,8 +101,7 @@ internal object AgentRequisitesMapper {
         return AgentRequisites(
                 agent = readAgent(cursor),
                 subagent = readSubagent(cursor),
-                principal = readPrincipal(cursor)
-                        ?: throw IntegrationLibraryMappingException(AgentRequisites::class.java, AgentRequisites::principal),
+                principal = readPrincipal(cursor) ?: return null,
                 transactionOperator = readTransactionOperator(cursor),
                 operationDescription = cursor.safeGetString(ReceiptContract.Position.OPERATION_DESCRIPTION)
         )
@@ -178,5 +175,4 @@ internal object AgentRequisitesMapper {
         this.putBundle(KEY_TRANSACTION_OPERATOR, agentRequisites.transactionOperator?.toBundle())
         this.putString(KEY_OPERATION_DESCRIPTION, agentRequisites.operationDescription)
     }
-
 }

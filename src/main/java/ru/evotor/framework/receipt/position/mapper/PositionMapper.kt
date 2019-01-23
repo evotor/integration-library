@@ -6,6 +6,7 @@ import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.Service
 import ru.evotor.framework.mapper.QuantityMapper
+import ru.evotor.framework.receipt.TaxNumber
 import ru.evotor.framework.receipt.position.Position
 import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.receipt.provider.ReceiptContract
@@ -33,10 +34,24 @@ internal object PositionMapper {
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::price),
             discount = cursor.safeGetMoney(ReceiptContract.Position.DISCOUNT)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::discount),
-            vatRate = cursor.safeGetEnum(ReceiptContract.Position.VAT_RATE, VatRate.values())
+            vatRate = readVatRate(cursor)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::vatRate),
-            quantity = QuantityMapper.read(cursor),
-            settlementMethod = SettlementMethodMapper.read(cursor),
+            quantity = QuantityMapper.read(cursor)
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::quantity),
+            settlementMethod = SettlementMethodMapper.read(cursor)
+                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::settlementMethod),
             agentRequisites = AgentRequisitesMapper.read(cursor)
     )
+
+    fun readVatRate(cursor: Cursor): VatRate? = cursor.safeGetString(ReceiptContract.Position.VAT_RATE)?.let {
+        when (it) {
+            TaxNumber.NO_VAT.name -> VatRate.WITHOUT_VAT
+            TaxNumber.VAT_0.name -> VatRate.VAT_0
+            TaxNumber.VAT_10.name -> VatRate.VAT_10
+            TaxNumber.VAT_10_110.name -> VatRate.VAT_10_110
+            TaxNumber.VAT_18.name -> VatRate.VAT_20
+            TaxNumber.VAT_18_118.name -> VatRate.VAT_20_118
+            else -> null
+        }
+    }
 }

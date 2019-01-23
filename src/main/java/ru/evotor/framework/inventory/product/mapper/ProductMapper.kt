@@ -10,6 +10,7 @@ import ru.evotor.framework.inventory.product.category.entertainment.mapper.Stron
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.WeakAlcoholMapper
 import ru.evotor.framework.inventory.provider.InventoryContract
+import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import java.util.*
 
 internal object ProductMapper {
@@ -34,7 +35,7 @@ internal object ProductMapper {
 
     fun readSellingPrice(cursor: Cursor) = cursor.safeGetMoney(InventoryContract.Product.SELLING_PRICE)
 
-    fun readVatRate(cursor: Cursor): VatRate = Utils.safeValueOf(VatRate::class.java, cursor.safeGetString(InventoryContract.Product.VAT_RATE), VatRate.WITHOUT_VAT)
+    fun readVatRate(cursor: Cursor): VatRate? = PositionMapper.readVatRate(cursor)
 
     fun readDescription(cursor: Cursor) = cursor.safeGetString(InventoryContract.Product.DESCRIPTION)
 }

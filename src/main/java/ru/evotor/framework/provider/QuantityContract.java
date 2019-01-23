@@ -11,9 +11,6 @@ public final class QuantityContract {
     public interface Columns {
         String QUANTITY_UNSCALED_VALUE = "QUANTITY_UNSCALED_VALUE";
         String QUANTITY_SCALE = "QUANTITY_SCALE";
-    }
-
-    public interface UnitOfMeasurementColumns {
         String UNIT_OF_MEASUREMENT_VARIATION_ID = "UNIT_OF_MEASUREMENT_VARIATION_ID";
         String UNIT_OF_MEASUREMENT_TYPE = "UNIT_OF_MEASUREMENT_TYPE";
         String UNIT_OF_MEASUREMENT_NAME = "UNIT_OF_MEASUREMENT_NAME";
