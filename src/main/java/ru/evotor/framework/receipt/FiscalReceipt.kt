@@ -74,24 +74,24 @@ data class FiscalReceipt internal constructor(
 
     @FutureFeature("Query на получение фискальных чеков")
     private class Query : FilterBuilder<Query, Query.SortOrder, FiscalReceipt>(
-            Uri.withAppendedPath(ReceiptContract.BASE_URI, ReceiptContract.PATH_FISCAL_RECEIPTS)
+            ReceiptContract.FiscalReceipt.CONTENT_URI
     ) {
-        val documentNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.DOCUMENT_NUMBER)
-        val creationDate = addFieldFilter<Date>(ReceiptContract.FiscalReceiptColumns.CREATION_DATE)
-        val settlementType = addFieldFilter<SettlementType>(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE)
-        val kktRegistrationNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.KKT_REGISTRATION_NUMBER)
-        val sessionNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.SESSION_NUMBER)
-        val fiscalStorageNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.FISCAL_STORAGE_NUMBER)
-        val fiscalIdentifier = addFieldFilter<Long>(ReceiptContract.FiscalReceiptColumns.FISCAL_IDENTIFIER)
+        val documentNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceipt.DOCUMENT_NUMBER)
+        val creationDate = addFieldFilter<Date>(ReceiptContract.FiscalReceipt.CREATION_DATE)
+        val settlementType = addFieldFilter<SettlementType>(ReceiptContract.FiscalReceipt.SETTLEMENT_TYPE)
+        val kktRegistrationNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceipt.KKT_REGISTRATION_NUMBER)
+        val sessionNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceipt.SESSION_NUMBER)
+        val fiscalStorageNumber = addFieldFilter<Long>(ReceiptContract.FiscalReceipt.FISCAL_STORAGE_NUMBER)
+        val fiscalIdentifier = addFieldFilter<Long>(ReceiptContract.FiscalReceipt.FISCAL_IDENTIFIER)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            val documentNumber = addFieldSorter(ReceiptContract.FiscalReceiptColumns.DOCUMENT_NUMBER)
-            val creationDate = addFieldSorter(ReceiptContract.FiscalReceiptColumns.CREATION_DATE)
-            val settlementType = addFieldSorter(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE)
-            val kktRegistrationNumber = addFieldSorter(ReceiptContract.FiscalReceiptColumns.KKT_REGISTRATION_NUMBER)
-            val sessionNumber = addFieldSorter(ReceiptContract.FiscalReceiptColumns.SESSION_NUMBER)
-            val fiscalStorageNumber = addFieldSorter(ReceiptContract.FiscalReceiptColumns.FISCAL_STORAGE_NUMBER)
-            val fiscalIdentifier = addFieldSorter(ReceiptContract.FiscalReceiptColumns.FISCAL_IDENTIFIER)
+            val documentNumber = addFieldSorter(ReceiptContract.FiscalReceipt.DOCUMENT_NUMBER)
+            val creationDate = addFieldSorter(ReceiptContract.FiscalReceipt.CREATION_DATE)
+            val settlementType = addFieldSorter(ReceiptContract.FiscalReceipt.SETTLEMENT_TYPE)
+            val kktRegistrationNumber = addFieldSorter(ReceiptContract.FiscalReceipt.KKT_REGISTRATION_NUMBER)
+            val sessionNumber = addFieldSorter(ReceiptContract.FiscalReceipt.SESSION_NUMBER)
+            val fiscalStorageNumber = addFieldSorter(ReceiptContract.FiscalReceipt.FISCAL_STORAGE_NUMBER)
+            val fiscalIdentifier = addFieldSorter(ReceiptContract.FiscalReceipt.FISCAL_IDENTIFIER)
         }
 
         override fun getValue(context: Context, cursor: Cursor<FiscalReceipt>): FiscalReceipt = FiscalReceiptMapper.read(cursor)

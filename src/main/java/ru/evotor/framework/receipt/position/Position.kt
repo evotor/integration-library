@@ -153,7 +153,6 @@ internal class Position internal constructor(
     enum class Type {
         ORDINARY_PRODUCT,
         EXCISABLE_PRODUCT,
-        JOB,
         SERVICE
     }
 

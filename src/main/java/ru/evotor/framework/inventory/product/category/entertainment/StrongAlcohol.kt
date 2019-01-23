@@ -37,37 +37,34 @@ data class StrongAlcohol internal constructor(
      * Запрос на получение товаров категории "Крепкий алкоголь" из базы данных смарт-терминала
      */
     class Query : FilterBuilder<Query, Query.SortOrder, StrongAlcohol>(
-            Uri.withAppendedPath(
-                    InventoryContract.URI_PRODUCTS,
-                    InventoryContract.PATH_STRONG_ALCOHOL
-            )
+            InventoryContract.Product.STRONG_ALCOHOL_URI
     ) {
-        val uuid = addFieldFilter<UUID>(InventoryContract.ProductColumns.UUID)
-        val groupUuid = addFieldFilter<UUID?>(InventoryContract.ProductColumns.GROUP_UUID)
-        val name = addFieldFilter<String>(InventoryContract.ProductColumns.NAME)
-        val code = addFieldFilter<String?>(InventoryContract.ProductColumns.CODE)
-        val fsrarProductKindCode = addFieldFilter<Long>(InventoryContract.AlcoholProductColumns.FSRAR_PRODUCT_KIND_CODE)
-        val vendorCode = addFieldFilter<String?>(InventoryContract.ProductColumns.VENDOR_CODE)
-        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.ProductColumns.PURCHASE_PRICE)
-        val vatRate = addFieldFilter<VatRate>(InventoryContract.ProductColumns.VAT_RATE)
+        val uuid = addFieldFilter<UUID>(InventoryContract.Product.UUID)
+        val groupUuid = addFieldFilter<UUID?>(InventoryContract.Product.GROUP_UUID)
+        val name = addFieldFilter<String>(InventoryContract.Product.NAME)
+        val code = addFieldFilter<String?>(InventoryContract.Product.CODE)
+        val fsrarProductKindCode = addFieldFilter<Long>(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
+        val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
+        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.SELLING_PRICE)
+        val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, StrongAlcohol>())
-        val tareVolume = addFieldFilter<BigDecimal>(InventoryContract.AlcoholProductColumns.TARE_VOLUME)
-        val alcoholPercentage = addFieldFilter<BigDecimal?>(InventoryContract.AlcoholProductColumns.ALCOHOL_PERCENTAGE)
-        val description = addFieldFilter<String?>(InventoryContract.ProductColumns.DESCRIPTION)
+        val tareVolume = addFieldFilter<BigDecimal>(InventoryContract.Product.TARE_VOLUME)
+        val alcoholPercentage = addFieldFilter<BigDecimal?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
+        val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            val uuid = addFieldSorter(InventoryContract.ProductColumns.UUID)
-            val groupUuid = addFieldSorter(InventoryContract.ProductColumns.GROUP_UUID)
-            val name = addFieldSorter(InventoryContract.ProductColumns.NAME)
-            val code = addFieldSorter(InventoryContract.ProductColumns.CODE)
-            val fsrarProductKindCode = addFieldSorter(InventoryContract.AlcoholProductColumns.FSRAR_PRODUCT_KIND_CODE)
-            val vendorCode = addFieldSorter(InventoryContract.ProductColumns.VENDOR_CODE)
-            val price = addFieldSorter(InventoryContract.ProductColumns.SELLING_PRICE)
-            val vatRate = addFieldSorter(InventoryContract.ProductColumns.VAT_RATE)
+            val uuid = addFieldSorter(InventoryContract.Product.UUID)
+            val groupUuid = addFieldSorter(InventoryContract.Product.GROUP_UUID)
+            val name = addFieldSorter(InventoryContract.Product.NAME)
+            val code = addFieldSorter(InventoryContract.Product.CODE)
+            val fsrarProductKindCode = addFieldSorter(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
+            val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
+            val price = addFieldSorter(InventoryContract.Product.SELLING_PRICE)
+            val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
-            val tareVolume = addFieldSorter(InventoryContract.AlcoholProductColumns.TARE_VOLUME)
-            val alcoholPercentage = addFieldSorter(InventoryContract.AlcoholProductColumns.ALCOHOL_PERCENTAGE)
-            val description = addFieldSorter(InventoryContract.ProductColumns.DESCRIPTION)
+            val tareVolume = addFieldSorter(InventoryContract.Product.TARE_VOLUME)
+            val alcoholPercentage = addFieldSorter(InventoryContract.Product.ALCOHOL_PERCENTAGE)
+            val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
         }
 
         override fun getValue(context: Context, cursor: Cursor<StrongAlcohol>): StrongAlcohol =

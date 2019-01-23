@@ -32,31 +32,28 @@ data class Tobacco internal constructor(
      * Запрос на получение товаров категории "Табак" из базы данных смарт-терминала
      */
     class Query : FilterBuilder<Query, Query.SortOrder, Tobacco>(
-            Uri.withAppendedPath(
-                    InventoryContract.URI_PRODUCTS,
-                    InventoryContract.PATH_TOBACCO
-            )
+            InventoryContract.Product.TOBACCO_URI
     ) {
-        val uuid = addFieldFilter<UUID>(InventoryContract.ProductColumns.UUID)
-        val groupUuid = addFieldFilter<UUID?>(InventoryContract.ProductColumns.GROUP_UUID)
-        val name = addFieldFilter<String>(InventoryContract.ProductColumns.NAME)
-        val code = addFieldFilter<String?>(InventoryContract.ProductColumns.CODE)
-        val vendorCode = addFieldFilter<String?>(InventoryContract.ProductColumns.VENDOR_CODE)
-        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.ProductColumns.SELLING_PRICE)
-        val vatRate = addFieldFilter<VatRate>(InventoryContract.ProductColumns.VAT_RATE)
+        val uuid = addFieldFilter<UUID>(InventoryContract.Product.UUID)
+        val groupUuid = addFieldFilter<UUID?>(InventoryContract.Product.GROUP_UUID)
+        val name = addFieldFilter<String>(InventoryContract.Product.NAME)
+        val code = addFieldFilter<String?>(InventoryContract.Product.CODE)
+        val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
+        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.SELLING_PRICE)
+        val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val query = addInnerFilterBuilder(Quantity.Filter<Query, Query.SortOrder, Tobacco>())
-        val description = addFieldFilter<String?>(InventoryContract.ProductColumns.DESCRIPTION)
+        val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
-            val uuid = addFieldSorter(InventoryContract.ProductColumns.UUID)
-            val groupUuid = addFieldSorter(InventoryContract.ProductColumns.GROUP_UUID)
-            val name = addFieldSorter(InventoryContract.ProductColumns.NAME)
-            val code = addFieldSorter(InventoryContract.ProductColumns.CODE)
-            val vendorCode = addFieldSorter(InventoryContract.ProductColumns.VENDOR_CODE)
-            val price = addFieldSorter(InventoryContract.ProductColumns.SELLING_PRICE)
-            val vatRate = addFieldSorter(InventoryContract.ProductColumns.VAT_RATE)
+            val uuid = addFieldSorter(InventoryContract.Product.UUID)
+            val groupUuid = addFieldSorter(InventoryContract.Product.GROUP_UUID)
+            val name = addFieldSorter(InventoryContract.Product.NAME)
+            val code = addFieldSorter(InventoryContract.Product.CODE)
+            val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
+            val price = addFieldSorter(InventoryContract.Product.SELLING_PRICE)
+            val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
-            val description = addFieldSorter(InventoryContract.ProductColumns.DESCRIPTION)
+            val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
         }
 
         override fun getValue(context: Context, cursor: Cursor<Tobacco>): Tobacco =

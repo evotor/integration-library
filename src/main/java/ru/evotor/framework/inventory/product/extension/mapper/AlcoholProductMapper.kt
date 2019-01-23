@@ -13,19 +13,16 @@ internal object AlcoholProductMapper {
     fun loadExtension(context: Context, productUuid: UUID): Cursor? =
             context.contentResolver
                     .query(
-                            Uri.withAppendedPath(
-                                    InventoryContract.URI_PRODUCT_EXTENSIONS,
-                                    InventoryContract.PATH_ALCOHOL_PRODUCTS
-                            ),
+                            InventoryContract.Product.ALCOHOL_PRODUCTS_URI,
                             null,
-                            "${InventoryContract.AlcoholProductColumns.PRODUCT_UUID}=?",
+                            "${InventoryContract.Product.PRODUCT_UUID}=?",
                             arrayOf(productUuid.toString()),
                             null
                     )
 
-    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.AlcoholProductColumns.FSRAR_PRODUCT_KIND_CODE)
+    fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
 
-    fun readTareVolume(cursor: Cursor) = cursor.safeGetBigDecimal(InventoryContract.AlcoholProductColumns.TARE_VOLUME)
+    fun readTareVolume(cursor: Cursor) = cursor.safeGetBigDecimal(InventoryContract.Product.TARE_VOLUME)
 
-    fun readAlcoholPercentage(cursor: Cursor) = cursor.safeGetPercent(InventoryContract.AlcoholProductColumns.ALCOHOL_PERCENTAGE)
+    fun readAlcoholPercentage(cursor: Cursor) = cursor.safeGetPercent(InventoryContract.Product.ALCOHOL_PERCENTAGE)
 }

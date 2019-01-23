@@ -14,9 +14,7 @@ public final class ReceiptContract {
 
     public static final String AUTHORITY = "ru.evotor.framework.receipt";
 
-    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
-
-    public static final String PATH_FISCAL_RECEIPTS = "fiscal_receipts";
+    public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
     public interface PositionColumns extends IdentifiedEntityColumns {
         String PRODUCT_UUID = "PRODUCT_UUID";
@@ -31,17 +29,8 @@ public final class ReceiptContract {
     }
 
     public interface SettlementMethodColumns extends MultiVariationEntityColumns {
-        String VARIATION_ID = "SETTLEMENT_METHOD_VARIATION_ID";
-
-        int VARIATION_ID_FULL_PREPAYMENT = 0;
-        int VARIATION_ID_PARTIAL_PREPAYMENT = 1;
-        int VARIATION_ID_ADVANCE_PAYMENT = 2;
-        int VARIATION_ID_FULL_SETTLEMENT = 3;
-        int VARIATION_ID_PARTIAL_SETTLEMENT = 4;
-        int VARIATION_ID_LEND = 5;
-        int VARIATION_ID_LOAN_PAYMENT = 6;
-
-        String AMOUNT = "SETTLEMENT_METHOD_AMOUNT";
+        String SETTLEMENT_METHOD_VARIATION_ID = "SETTLEMENT_METHOD_VARIATION_ID";
+        String SETTLEMENT_METHOD_AMOUNT = "SETTLEMENT_METHOD_AMOUNT";
     }
 
     public interface AgentRequisitesColumns {
@@ -87,7 +76,25 @@ public final class ReceiptContract {
         String OPERATION_DESCRIPTION = "OPERATION_DESCRIPTION";
     }
 
+    public static final class Position implements PositionColumns, SettlementMethodColumns, AgentRequisitesColumns {
+        public static final int TYPE_ORDINARY_PRODUCT = 0;
+        public static final int TYPE_EXCISABLE_PRODUCT = 1;
+        public static final int TYPE_SERVICE = 2;
+
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_FULL_PREPAYMENT = 0;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_PARTIAL_PREPAYMENT = 1;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_ADVANCE_PAYMENT = 2;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_FULL_SETTLEMENT = 3;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_PARTIAL_SETTLEMENT = 4;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_LEND = 5;
+        public static final int SETTLEMENT_METHOD_VARIATION_ID_LOAN_PAYMENT = 6;
+    }
+
     public interface FiscalReceiptColumns extends FiscalDocumentColumns {
         String SETTLEMENT_TYPE = "SETTLEMENT_TYPE";
+    }
+
+    public static final class FiscalReceipt implements FiscalReceiptColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(ReceiptContract.AUTHORITY_URI, "fiscal_receipts");
     }
 }

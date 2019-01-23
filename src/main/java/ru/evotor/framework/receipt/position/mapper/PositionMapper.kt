@@ -19,21 +19,21 @@ internal object PositionMapper {
     }
 
     fun read(cursor: Cursor) = Position(
-            uuid = cursor.safeGetString(ReceiptContract.PositionColumns.UUID)?.let { UUID.fromString(it) }
+            uuid = cursor.safeGetString(ReceiptContract.Position.UUID)?.let { UUID.fromString(it) }
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::uuid),
-            productUuid = cursor.safeGetString(ReceiptContract.PositionColumns.PRODUCT_UUID)?.let { UUID.fromString(it) },
-            productCode = cursor.safeGetString(ReceiptContract.PositionColumns.PRODUCT_CODE),
-            name = cursor.safeGetString(ReceiptContract.PositionColumns.NAME)
+            productUuid = cursor.safeGetString(ReceiptContract.Position.PRODUCT_UUID)?.let { UUID.fromString(it) },
+            productCode = cursor.safeGetString(ReceiptContract.Position.PRODUCT_CODE),
+            name = cursor.safeGetString(ReceiptContract.Position.NAME)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::name),
-            type = cursor.safeGetEnum(ReceiptContract.PositionColumns.TYPE, Position.Type.values())
+            type = cursor.safeGetEnum(ReceiptContract.Position.TYPE, Position.Type.values())
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::type),
-            barcode = cursor.safeGetString(ReceiptContract.PositionColumns.BARCODE),
-            mark = cursor.safeGetString(ReceiptContract.PositionColumns.MARK),
-            price = cursor.safeGetMoney(ReceiptContract.PositionColumns.PRICE)
+            barcode = cursor.safeGetString(ReceiptContract.Position.BARCODE),
+            mark = cursor.safeGetString(ReceiptContract.Position.MARK),
+            price = cursor.safeGetMoney(ReceiptContract.Position.PRICE)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::price),
-            discount = cursor.safeGetMoney(ReceiptContract.PositionColumns.DISCOUNT)
+            discount = cursor.safeGetMoney(ReceiptContract.Position.DISCOUNT)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::discount),
-            vatRate = cursor.safeGetEnum(ReceiptContract.PositionColumns.VAT_RATE, VatRate.values())
+            vatRate = cursor.safeGetEnum(ReceiptContract.Position.VAT_RATE, VatRate.values())
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::vatRate),
             quantity = QuantityMapper.read(cursor),
             settlementMethod = SettlementMethodMapper.read(cursor),

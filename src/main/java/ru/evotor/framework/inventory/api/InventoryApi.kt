@@ -12,10 +12,8 @@ import ru.evotor.query.Cursor
 private object InventoryApi {
     fun findProductsByBarcode(context: Context, barcode: String): List<Product> =
             context.contentResolver.query(
-                    Uri.withAppendedPath(
-                            InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_PRODUCTS
-                    ),
+                    InventoryContract.Barcode.getProductsByBarcodeUri(barcode),
+                    ,
                     null,
                     null,
                     null,
@@ -28,10 +26,7 @@ private object InventoryApi {
 
     fun createPositionsByBarcode(context: Context, barcode: String): List<Position> =
             context.contentResolver.query(
-                    Uri.withAppendedPath(
-                            InventoryContract.getBarcodeUri(barcode),
-                            InventoryContract.PATH_POSITIONS
-                    ),
+                    InventoryContract.Barcode.getPositionsByBarcodeUri(barcode),
                     null,
                     null,
                     null,

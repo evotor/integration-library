@@ -8,20 +8,20 @@ import ru.evotor.framework.core.safeGetBigDecimal
 import ru.evotor.framework.core.safeGetInt
 
 internal object SettlementMethodMapper {
-    fun read(cursor: Cursor) = when (cursor.safeGetInt(ReceiptContract.SettlementMethodColumns.VARIATION_ID)) {
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_FULL_PREPAYMENT -> SettlementMethod.FullPrepayment()
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_PARTIAL_PREPAYMENT -> SettlementMethod.PartialPrepayment()
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_ADVANCE_PAYMENT -> SettlementMethod.AdvancePayment()
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_FULL_SETTLEMENT -> SettlementMethod.FullSettlement()
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_PARTIAL_SETTLEMENT -> SettlementMethod.PartialSettlement(
-                cursor.safeGetBigDecimal(ReceiptContract.SettlementMethodColumns.AMOUNT)
+    fun read(cursor: Cursor) = when (cursor.safeGetInt(ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID)) {
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_FULL_PREPAYMENT -> SettlementMethod.FullPrepayment()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_PARTIAL_PREPAYMENT -> SettlementMethod.PartialPrepayment()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_ADVANCE_PAYMENT -> SettlementMethod.AdvancePayment()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_FULL_SETTLEMENT -> SettlementMethod.FullSettlement()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_PARTIAL_SETTLEMENT -> SettlementMethod.PartialSettlement(
+                cursor.safeGetBigDecimal(ReceiptContract.Position.SETTLEMENT_METHOD_AMOUNT)
                         ?: throw IntegrationLibraryMappingException(
                                 SettlementMethod.PartialSettlement::class.java,
                                 SettlementMethod.PartialSettlement::amount
                         )
         )
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_LEND -> SettlementMethod.Lend()
-        ReceiptContract.SettlementMethodColumns.VARIATION_ID_LOAN_PAYMENT -> SettlementMethod.LoanPayment()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_LEND -> SettlementMethod.Lend()
+        ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_LOAN_PAYMENT -> SettlementMethod.LoanPayment()
         else -> throw IntegrationLibraryMappingException(SettlementMethod::class.java)
     }
 }
