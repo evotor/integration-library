@@ -20,7 +20,7 @@ internal object SettlementMethodMapper {
             )
             ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_LEND -> SettlementMethod.Lend()
             ReceiptContract.Position.SETTLEMENT_METHOD_VARIATION_ID_LOAN_PAYMENT -> SettlementMethod.LoanPayment()
-            else -> null
+            else -> SettlementMethod.FullSettlement()
         }
     }
 }
