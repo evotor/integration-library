@@ -1,6 +1,6 @@
 package ru.evotor.framework
 
-import ru.evotor.framework.provider.UnitOfMeasurementColumns
+import ru.evotor.framework.provider.QuantityContract.UnitOfMeasurementColumns
 import ru.evotor.query.FilterBuilder
 
 sealed class UnitOfMeasurement(val name: String, val type: Type) {
@@ -76,12 +76,12 @@ sealed class UnitOfMeasurement(val name: String, val type: Type) {
     }
 
     class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
-        val type = addFieldFilter<Type>(UnitOfMeasurementColumns.TYPE)
-        val name = addFieldFilter<String>(UnitOfMeasurementColumns.NAME)
+        val type = addFieldFilter<Type>(UnitOfMeasurementColumns.UNIT_OF_MEASUREMENT_TYPE)
+        val name = addFieldFilter<String>(UnitOfMeasurementColumns.UNIT_OF_MEASUREMENT_NAME)
 
         class SortOrder<S : FilterBuilder.SortOrder<S>> : FilterBuilder.Inner.SortOrder<S>() {
-            val type = addFieldSorter(UnitOfMeasurementColumns.TYPE)
-            val name = addFieldSorter(UnitOfMeasurementColumns.NAME)
+            val type = addFieldSorter(UnitOfMeasurementColumns.UNIT_OF_MEASUREMENT_TYPE)
+            val name = addFieldSorter(UnitOfMeasurementColumns.UNIT_OF_MEASUREMENT_NAME)
         }
     }
 

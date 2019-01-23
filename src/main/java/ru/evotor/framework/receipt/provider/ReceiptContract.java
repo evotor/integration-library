@@ -5,7 +5,6 @@ import android.net.Uri;
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.FiscalDocumentColumns;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
-import ru.evotor.framework.provider.MultiVariationEntityColumns;
 
 @DoNotUseThis()
 public final class ReceiptContract {
@@ -26,14 +25,10 @@ public final class ReceiptContract {
         String PRICE = "PRICE";
         String DISCOUNT = "DISCOUNT";
         String VAT_RATE = "VAT_RATE";
-    }
 
-    public interface SettlementMethodColumns extends MultiVariationEntityColumns {
         String SETTLEMENT_METHOD_VARIATION_ID = "SETTLEMENT_METHOD_VARIATION_ID";
         String SETTLEMENT_METHOD_AMOUNT = "SETTLEMENT_METHOD_AMOUNT";
-    }
 
-    public interface AgentRequisitesColumns {
         String AGENT_IS_NULL = "AGENT_IS_NULL";
         String AGENT_UUID = "AGENT_UUID";
         String AGENT_TYPE = "AGENT_TYPE";
@@ -76,7 +71,11 @@ public final class ReceiptContract {
         String OPERATION_DESCRIPTION = "OPERATION_DESCRIPTION";
     }
 
-    public static final class Position implements PositionColumns, SettlementMethodColumns, AgentRequisitesColumns {
+    public static final class Position implements PositionColumns {
+        private Position() {
+
+        }
+
         public static final int TYPE_ORDINARY_PRODUCT = 0;
         public static final int TYPE_EXCISABLE_PRODUCT = 1;
         public static final int TYPE_SERVICE = 2;
@@ -95,6 +94,10 @@ public final class ReceiptContract {
     }
 
     public static final class FiscalReceipt implements FiscalReceiptColumns {
+        private FiscalReceipt() {
+
+        }
+
         public static final Uri CONTENT_URI = Uri.withAppendedPath(ReceiptContract.AUTHORITY_URI, "fiscal_receipts");
     }
 }

@@ -1,9 +1,8 @@
 package ru.evotor.framework
 
-import ru.evotor.framework.provider.QuantutyColumns
+import ru.evotor.framework.provider.QuantityContract.Columns
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.math.RoundingMode
 
 private const val INVALID_SCALE_MESSAGE = "Invalid scale"
@@ -79,13 +78,13 @@ open class Quantity(
     }
 
     class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
-        val unscaledValue = addFieldFilter<Long>(QuantutyColumns.UNSCALED_VALUE)
-        val scale = addFieldFilter<Int>(QuantutyColumns.SCALE)
+        val unscaledValue = addFieldFilter<Long>(Columns.QUANTITY_UNSCALED_VALUE)
+        val scale = addFieldFilter<Int>(Columns.QUANTITY_SCALE)
         val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Q, S, R>())
 
         class SortOrder<S : FilterBuilder.SortOrder<S>> : FilterBuilder.Inner.SortOrder<S>() {
-            val unscaledValue = addFieldSorter(QuantutyColumns.UNSCALED_VALUE)
-            val scale = addFieldSorter(QuantutyColumns.SCALE)
+            val unscaledValue = addFieldSorter(Columns.QUANTITY_UNSCALED_VALUE)
+            val scale = addFieldSorter(Columns.QUANTITY_SCALE)
             val unitOfMeasurement = addInnerSortOrder(UnitOfMeasurement.Filter.SortOrder<S>())
         }
     }

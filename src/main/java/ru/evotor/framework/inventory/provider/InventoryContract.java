@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
-import ru.evotor.framework.provider.MultiVariationEntityColumns;
 
 @DoNotUseThis()
 public final class InventoryContract {
@@ -15,7 +14,8 @@ public final class InventoryContract {
 
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface ProductColumns extends IdentifiedEntityColumns, MultiVariationEntityColumns {
+    public interface ProductColumns extends IdentifiedEntityColumns {
+        String VARIATION_ID = "VARIATION_ID";
         String GROUP_UUID = "GROUP_UUID";
         String NAME = "NAME";
         String CODE = "CODE";
@@ -36,8 +36,11 @@ public final class InventoryContract {
     }
 
     public static final class Product implements ProductColumns, AlcoholProductColumns {
-        public static final String CONTENT_PATH = "products";
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, CONTENT_PATH);
+        private Product() {
+
+        }
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "products");
 
         public static final Uri UNCLASSIFIED_PRODUCTS_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_products");
         public static final Uri UNCLASSIFIED_SERVICES_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_services");
@@ -62,10 +65,18 @@ public final class InventoryContract {
     }
 
     public static final class ProductGroup implements ProductGroupColumns {
+        private ProductGroup() {
+
+        }
+
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "product_groups");
     }
 
     public static final class Barcode {
+        private Barcode() {
+
+        }
+
         public static Uri getContentUri(String barcode) {
             return Uri.withAppendedPath(AUTHORITY_URI, barcode);
         }
@@ -74,6 +85,7 @@ public final class InventoryContract {
             return Uri.withAppendedPath(getContentUri(barcode), "products");
 
         }
+
         public static final Uri getPositionsByBarcodeUri(String barcode) {
             return Uri.withAppendedPath(getContentUri(barcode), "positions");
         }

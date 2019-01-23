@@ -13,7 +13,6 @@ private object InventoryApi {
     fun findProductsByBarcode(context: Context, barcode: String): List<Product> =
             context.contentResolver.query(
                     InventoryContract.Barcode.getProductsByBarcodeUri(barcode),
-                    ,
                     null,
                     null,
                     null,
