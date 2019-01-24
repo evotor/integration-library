@@ -2,7 +2,6 @@ package ru.evotor.framework.inventory.product.mapper
 
 import android.content.Context
 import android.database.Cursor
-import ru.evotor.framework.Utils
 import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.receipt.position.VatRate
@@ -33,7 +32,7 @@ internal object ProductMapper {
 
     fun readVendorCode(cursor: Cursor) = cursor.safeGetString(InventoryContract.Product.VENDOR_CODE)
 
-    fun readSellingPrice(cursor: Cursor) = cursor.safeGetMoney(InventoryContract.Product.SELLING_PRICE)
+    fun readPrice(cursor: Cursor) = cursor.safeGetAmountOfRubles(InventoryContract.Product.PRICE)
 
     fun readVatRate(cursor: Cursor): VatRate? = PositionMapper.readVatRate(cursor)
 

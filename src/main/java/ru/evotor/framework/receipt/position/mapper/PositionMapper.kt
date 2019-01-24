@@ -30,9 +30,9 @@ internal object PositionMapper {
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::type),
             barcode = cursor.safeGetString(ReceiptContract.Position.BARCODE),
             mark = cursor.safeGetString(ReceiptContract.Position.MARK),
-            price = cursor.safeGetMoney(ReceiptContract.Position.PRICE)
+            price = cursor.safeGetAmountOfRubles(ReceiptContract.Position.PRICE)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::price),
-            discount = cursor.safeGetMoney(ReceiptContract.Position.DISCOUNT)
+            discount = cursor.safeGetAmountOfRubles(ReceiptContract.Position.DISCOUNT)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::discount),
             vatRate = readVatRate(cursor)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::vatRate),

@@ -1,7 +1,7 @@
 package ru.evotor.framework.inventory.product.category.entertainment
 
 import android.content.Context
-import android.net.Uri
+import ru.evotor.framework.inventory.product.AmountOfLiters
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.receipt.position.VatRate
@@ -28,7 +28,7 @@ data class StrongAlcohol internal constructor(
         override val price: AmountOfRubles?,
         override val vatRate: VatRate,
         override val quantity: Quantity,
-        override val tareVolume: BigDecimal,
+        override val tareVolume: AmountOfLiters,
         override val alcoholPercentage: BigDecimal?,
         override val description: String?
 ) : Product(), AlcoholProduct, ExcisableProduct {
@@ -45,10 +45,10 @@ data class StrongAlcohol internal constructor(
         val code = addFieldFilter<String?>(InventoryContract.Product.CODE)
         val fsrarProductKindCode = addFieldFilter<Long>(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
         val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
-        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.SELLING_PRICE)
+        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, StrongAlcohol>())
-        val tareVolume = addFieldFilter<BigDecimal>(InventoryContract.Product.TARE_VOLUME)
+        val tareVolume = addFieldFilter<AmountOfLiters>(InventoryContract.Product.TARE_VOLUME)
         val alcoholPercentage = addFieldFilter<BigDecimal?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
         val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
@@ -59,7 +59,7 @@ data class StrongAlcohol internal constructor(
             val code = addFieldSorter(InventoryContract.Product.CODE)
             val fsrarProductKindCode = addFieldSorter(InventoryContract.Product.FSRAR_PRODUCT_KIND_CODE)
             val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
-            val price = addFieldSorter(InventoryContract.Product.SELLING_PRICE)
+            val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
             val tareVolume = addFieldSorter(InventoryContract.Product.TARE_VOLUME)

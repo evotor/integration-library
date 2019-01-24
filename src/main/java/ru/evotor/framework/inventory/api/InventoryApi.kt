@@ -14,28 +14,28 @@ import ru.evotor.query.Cursor
 
 object InventoryApi {
     @JvmStatic
-    fun findProductsByBarcode(context: Context, barcode: String): List<Product> =
+    fun findProductsByBarcode(context: Context, barcode: String): List<Product>? =
             context.contentResolver.query(
                     InventoryContract.Barcode.getProductsByBarcodeUri(barcode),
                     null,
                     null,
                     null,
                     null
-            ).let { cursor ->
+            )?.let { cursor ->
                 object : Cursor<Product>(cursor) {
                     override fun getValue() = ProductMapper.read(context, this)
                 }.toList()
             }
 
     @JvmStatic
-    fun findBarcodesForProduct(context: Context, productUuid: String): List<String> =
+    fun findBarcodesForProduct(context: Context, productUuid: String): List<String>? =
             context.contentResolver.query(
                     InventoryContract.Barcode.CONTENT_URI,
                     arrayOf(InventoryContract.Barcode.VALUE),
                     "${InventoryContract.Barcode.PRODUCT_UUID} = ?",
                     arrayOf(productUuid),
                     null
-            ).let { cursor ->
+            )?.let { cursor ->
                 object : Cursor<String>(cursor) {
                     override fun getValue() =
                             this.safeGetString(InventoryContract.Barcode.VALUE)
@@ -45,14 +45,14 @@ object InventoryApi {
 
     @FutureFeature("Создание новых позиций по штрихкоду")
     @JvmStatic
-    private fun createPositionsByBarcode(context: Context, barcode: String): List<Position> =
+    private fun createPositionsByBarcode(context: Context, barcode: String): List<Position>? =
             context.contentResolver.query(
                     InventoryContract.Barcode.getPositionsByBarcodeUri(barcode),
                     null,
                     null,
                     null,
                     null
-            ).let { cursor ->
+            )?.let { cursor ->
                 object : Cursor<Position>(cursor) {
                     override fun getValue() = PositionMapper.read(this)
                 }.toList()

@@ -15,7 +15,7 @@ internal object TobaccoMapper {
                     ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::name),
             code = ProductMapper.readCode(cursor),
             vendorCode = ProductMapper.readVendorCode(cursor),
-            price = ProductMapper.readSellingPrice(cursor),
+            price = ProductMapper.readPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::vatRate),
             quantity = QuantityMapper.read(cursor)

@@ -21,7 +21,7 @@ public final class InventoryContract {
         String NAME = "NAME";
         String CODE = "CODE";
         String VENDOR_CODE = "VENDOR_CODE";
-        String SELLING_PRICE = "SELLING_PRICE";
+        String PRICE = "PRICE";
         String VAT_RATE = "VAT_RATE";
         String DESCRIPTION = "DESCRIPTION";
     }

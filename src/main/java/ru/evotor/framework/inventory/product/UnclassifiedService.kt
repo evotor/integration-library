@@ -1,7 +1,6 @@
 package ru.evotor.framework.inventory.product
 
 import android.content.Context
-import android.net.Uri
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.extension.Service
 import ru.evotor.framework.inventory.product.mapper.UnclassifiedServiceMapper
@@ -38,7 +37,7 @@ data class UnclassifiedService internal constructor(
         val name = addFieldFilter<String>(InventoryContract.Product.NAME)
         val code = addFieldFilter<String?>(InventoryContract.Product.CODE)
         val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
-        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.SELLING_PRICE)
+        val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, Query.SortOrder, UnclassifiedService>())
         val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
@@ -49,7 +48,7 @@ data class UnclassifiedService internal constructor(
             val name = addFieldSorter(InventoryContract.Product.NAME)
             val code = addFieldSorter(InventoryContract.Product.CODE)
             val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
-            val price = addFieldSorter(InventoryContract.Product.SELLING_PRICE)
+            val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
             val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
