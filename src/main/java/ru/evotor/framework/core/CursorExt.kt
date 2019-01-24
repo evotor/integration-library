@@ -56,5 +56,7 @@ internal fun android.database.Cursor.safeGetAmountOfRubles(columnName: String): 
 internal fun android.database.Cursor.safeGetAmountOfLiters(columnName: String): AmountOfLiters? =
         safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))?.let { AmountOfLiters(it) }
 
-internal fun android.database.Cursor.safeGetPercents(columnName: String): BigDecimal? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))
+internal fun android.database.Cursor.safeGetPercents(columnName: String): Float? =
+        safeGetLong(columnName)?.let {
+            it.toFloat() / 1000f
+        }

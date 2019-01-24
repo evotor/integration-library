@@ -28,7 +28,7 @@ data class WeakAlcohol internal constructor(
         override val vatRate: VatRate,
         override val quantity: Quantity,
         override val tareVolume: AmountOfLiters,
-        override val alcoholPercentage: BigDecimal?,
+        override val alcoholPercentage: Float?,
         override val description: String?
 ) : Product(), AlcoholProduct {
 
@@ -48,7 +48,7 @@ data class WeakAlcohol internal constructor(
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, WeakAlcohol>())
         val tareVolume = addFieldFilter<AmountOfLiters>(InventoryContract.Product.TARE_VOLUME)
-        val alcoholPercentage = addFieldFilter<BigDecimal?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
+        val alcoholPercentage = addFieldFilter<Float?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
         val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
