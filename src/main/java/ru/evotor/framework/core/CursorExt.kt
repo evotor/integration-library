@@ -58,5 +58,5 @@ internal fun android.database.Cursor.safeGetAmountOfLiters(columnName: String): 
 
 internal fun android.database.Cursor.safeGetPercents(columnName: String): Float? =
         safeGetLong(columnName)?.let {
-            it.toFloat() / 1000f
+            if(it > 0) it.toFloat() / 1000f else null
         }

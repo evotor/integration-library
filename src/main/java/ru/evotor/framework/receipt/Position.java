@@ -803,7 +803,7 @@ public class Position implements Parcelable {
             } else if (product instanceof WeakAlcohol) {
                 builder.setAlcoParams(
                         null,
-                        ((WeakAlcohol) product).getAlcoholPercentage(),
+                        ((WeakAlcohol) product).getAlcoholPercentage() != null ? new BigDecimal(((WeakAlcohol) product).getAlcoholPercentage()) : null,
                         ((WeakAlcohol) product).getFsrarProductKindCode(),
                         ((WeakAlcohol) product).getTareVolume()
                 );
@@ -811,7 +811,7 @@ public class Position implements Parcelable {
             } else if (product instanceof StrongAlcohol) {
                 builder.setAlcoParams(
                         null,
-                        ((StrongAlcohol) product).getAlcoholPercentage(),
+                        ((StrongAlcohol) product).getAlcoholPercentage() != null ? new BigDecimal(((StrongAlcohol) product).getAlcoholPercentage()) : null,
                         ((StrongAlcohol) product).getFsrarProductKindCode(),
                         ((StrongAlcohol) product).getTareVolume()
                 );
