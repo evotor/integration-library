@@ -49,7 +49,9 @@ internal fun android.database.Cursor.safeGetQuantityUnscaledValue(columnName: St
         safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))
 
 internal fun android.database.Cursor.safeGetAmountOfRubles(columnName: String): AmountOfRubles? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(100))?.let { AmountOfRubles(it) }
+        safeGetBigDecimal(columnName)
+                ?.divide(BigDecimal(100))
+                ?.let { if (it > BigDecimal(0)) AmountOfRubles(it) else null }
 
 internal fun android.database.Cursor.safeGetAmountOfLiters(columnName: String): AmountOfLiters? =
         safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))?.let { AmountOfLiters(it) }
