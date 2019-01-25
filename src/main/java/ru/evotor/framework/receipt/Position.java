@@ -90,7 +90,7 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная марка.
+     * Алкогольная или табачная марка.
      */
     private String mark;
     /**
@@ -404,7 +404,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Алкогольная марка.
+     * @return Алкогольная или табачная марка.
      */
     @Nullable
     public String getMark() {
@@ -898,6 +898,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toTobaccoMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.TOBACCO_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTobaccoParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -930,6 +944,10 @@ public class Position implements Parcelable {
             position.alcoholByVolume = alcoholByVolume;
             position.alcoholProductKindCode = alcoholProductKindCode;
             position.tareVolume = tareVolume;
+        }
+
+        private void setTobaccoParams(String mark) {
+            position.mark = mark;
         }
 
         public Builder setUuid(String uuid) {
