@@ -833,6 +833,12 @@ public class Position implements Parcelable {
                 @NonNull String mark
         ) {
             position.productType = ProductType.TOBACCO_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
             setTobaccoParams(mark);
             return this;
         }
