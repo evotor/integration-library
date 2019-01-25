@@ -4,7 +4,6 @@ import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.category.entertainment.Tobacco
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
-import ru.evotor.framework.mapper.QuantityMapper
 
 internal object TobaccoMapper {
     fun read(cursor: Cursor) = Tobacco(
@@ -18,7 +17,7 @@ internal object TobaccoMapper {
             price = ProductMapper.readPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::vatRate),
-            quantity = QuantityMapper.read(cursor)
+            quantity = ProductMapper.readQuantity(cursor)
                     ?: throw IntegrationLibraryMappingException(Tobacco::class.java, Tobacco::quantity),
             description = ProductMapper.readDescription(cursor)
     )

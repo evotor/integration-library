@@ -1,6 +1,5 @@
 package ru.evotor.framework
 
-import ru.evotor.framework.provider.QuantityContract
 import ru.evotor.query.FilterBuilder
 
 sealed class UnitOfMeasurement(val name: String, val type: Type) {
@@ -75,13 +74,31 @@ sealed class UnitOfMeasurement(val name: String, val type: Type) {
         MONEY_UNIT
     }
 
-    class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
-        val type = addFieldFilter<Type>(QuantityContract.Columns.UNIT_OF_MEASUREMENT_TYPE)
-        val name = addFieldFilter<String>(QuantityContract.Columns.UNIT_OF_MEASUREMENT_NAME)
+    class FullFilter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor(
+            columnName: String,
+            columnType: String
+    ) : FilterBuilder.Inner<Q, S, R>() {
+        val name = addFieldFilter<String>(columnName)
+        val type = addFieldFilter<Type>(columnType)
 
-        class SortOrder<S : FilterBuilder.SortOrder<S>> : FilterBuilder.Inner.SortOrder<S>() {
-            val type = addFieldSorter(QuantityContract.Columns.UNIT_OF_MEASUREMENT_TYPE)
-            val name = addFieldSorter(QuantityContract.Columns.UNIT_OF_MEASUREMENT_NAME)
+        class SortOrder<S : FilterBuilder.SortOrder<S>> internal constructor(
+                columnName: String,
+                columnType: String
+        ) : FilterBuilder.Inner.SortOrder<S>() {
+            val name = addFieldSorter(columnName)
+            val type = addFieldSorter(columnType)
+        }
+    }
+
+    class NameOnlyFilter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor(
+            columnName: String
+    ) : FilterBuilder.Inner<Q, S, R>() {
+        val name = addFieldFilter<String>(columnName)
+
+        class SortOrder<S : FilterBuilder.SortOrder<S>> internal constructor(
+                columnName: String
+        ) : FilterBuilder.Inner.SortOrder<S>() {
+            val name = addFieldSorter(columnName)
         }
     }
 

@@ -1,14 +1,15 @@
 package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
-import ru.evotor.framework.core.*
+import ru.evotor.framework.core.IntegrationLibraryMappingException
+import ru.evotor.framework.core.safeGetEnum
+import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.product.extension.Service
 import ru.evotor.framework.mapper.QuantityMapper
-import ru.evotor.framework.receipt.TaxNumber
+import ru.evotor.framework.payment.mapper.AmountOfRublesMapper
 import ru.evotor.framework.receipt.position.Position
-import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.receipt.provider.ReceiptContract
 import java.util.*
 
@@ -30,28 +31,22 @@ internal object PositionMapper {
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::type),
             barcode = cursor.safeGetString(ReceiptContract.Position.BARCODE),
             mark = cursor.safeGetString(ReceiptContract.Position.MARK),
-            price = cursor.safeGetAmountOfRubles(ReceiptContract.Position.PRICE)
+            price = AmountOfRublesMapper.read(cursor, ReceiptContract.Position.PRICE)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::price),
-            discount = cursor.safeGetAmountOfRubles(ReceiptContract.Position.DISCOUNT)
+            discount = AmountOfRublesMapper.read(cursor, ReceiptContract.Position.DISCOUNT)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::discount),
-            vatRate = readVatRate(cursor)
+            vatRate = VatRateMapper.read(cursor)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::vatRate),
-            quantity = QuantityMapper.read(cursor)
-                    ?: throw IntegrationLibraryMappingException(Position::class.java, Position::quantity),
+            quantity = QuantityMapper.read(
+                    cursor,
+                    ReceiptContract.Position.QUANTITY_UNSCALED_VALUE,
+                    ReceiptContract.Position.QUANTITY_SCALE,
+                    ReceiptContract.Position.UNIT_OF_MEASUREMENT_VARIATION_ID,
+                    ReceiptContract.Position.UNIT_OF_MEASUREMENT_NAME,
+                    ReceiptContract.Position.UNIT_OF_MEASUREMENT_TYPE
+            ) ?: throw IntegrationLibraryMappingException(Position::class.java, Position::quantity),
             settlementMethod = SettlementMethodMapper.read(cursor)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::settlementMethod),
             agentRequisites = AgentRequisitesMapper.read(cursor)
     )
-
-    fun readVatRate(cursor: Cursor): VatRate? = cursor.safeGetString(ReceiptContract.Position.VAT_RATE)?.let {
-        when (it) {
-            TaxNumber.NO_VAT.name -> VatRate.WITHOUT_VAT
-            TaxNumber.VAT_0.name -> VatRate.VAT_0
-            TaxNumber.VAT_10.name -> VatRate.VAT_10
-            TaxNumber.VAT_10_110.name -> VatRate.VAT_10_110
-            TaxNumber.VAT_18.name -> VatRate.VAT_20
-            TaxNumber.VAT_18_118.name -> VatRate.VAT_20_118
-            else -> null
-        }
-    }
 }

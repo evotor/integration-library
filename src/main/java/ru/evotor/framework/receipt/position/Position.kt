@@ -36,7 +36,6 @@ internal class Position internal constructor(
             discount: AmountOfRubles = AmountOfRubles(0),
             quantity: Quantity = Quantity(
                     1,
-                    product.quantity.scale(),
                     product.quantity.unitOfMeasurement
             ),
             settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),
@@ -67,7 +66,6 @@ internal class Position internal constructor(
             discount: AmountOfRubles = AmountOfRubles(0),
             quantity: Quantity = Quantity(
                     1,
-                    (excisableProduct as Product).quantity.scale(),
                     (excisableProduct as Product).quantity.unitOfMeasurement
             ),
             settlementMethod: SettlementMethod = SettlementMethod.FullSettlement(),

@@ -1,65 +1,68 @@
 package ru.evotor.framework
 
-import ru.evotor.framework.provider.QuantityContract.Columns
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-private const val INVALID_SCALE_MESSAGE = "Invalid scale"
-
 open class Quantity(
         value: BigDecimal,
-        scale: Int = 0,
         val unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()
 ) : BigDecimal(
-        if (scale !in MIN_SCALE..MAX_SCALE)
-            throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
-        else
-            value.setScale(scale, ROUND_HALF_UP).toPlainString()
+        value.scale().let { sourceScale ->
+            val resultScale = if (sourceScale < MIN_SCALE) MIN_SCALE else if (sourceScale > MAX_SCALE) MAX_SCALE else sourceScale
+            return@let if (resultScale != sourceScale) value.setScale(resultScale, ROUND_HALF_UP) else value
+        }.let { newValue ->
+            newValue.toPlainString()
+        }
 ) {
-    constructor(value: String, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), BigDecimal(value).scale(), unitOfMeasurement)
+    constructor(value: String, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
-    constructor(value: Int, scale: Int = 0, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), scale, unitOfMeasurement)
+    constructor(value: Int, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
-    constructor(value: Long, scale: Int = 0, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), scale, unitOfMeasurement)
+    constructor(value: Long, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
-    constructor(value: Double, scale: Int = 0, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), scale, unitOfMeasurement)
+    constructor(value: Double, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
-    fun toStringWithUnitName() = "${super.toString()} ${unitOfMeasurement.name}"
+    override fun add(augend: BigDecimal) = calculate(augend) { Quantity(super.add(it), this.unitOfMeasurement) }
 
-    override fun add(augend: BigDecimal) = Quantity(super.add(augend), this.scale(), this.unitOfMeasurement)
+    override fun subtract(subtrahend: BigDecimal) = calculate(subtrahend) { Quantity(super.subtract(it), this.unitOfMeasurement) }
 
-    override fun subtract(subtrahend: BigDecimal) = Quantity(super.subtract(subtrahend), this.scale(), this.unitOfMeasurement)
+    override fun multiply(multiplicand: BigDecimal) = calculate(multiplicand) { Quantity(super.multiply(it), this.unitOfMeasurement) }
 
-    override fun multiply(multiplicand: BigDecimal) = Quantity(super.multiply(multiplicand), this.scale(), this.unitOfMeasurement)
+    override fun divide(divisor: BigDecimal) = calculate(divisor) { Quantity(super.divide(it), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal) = Quantity(super.divide(divisor), this.scale(), this.unitOfMeasurement)
+    override fun divide(divisor: BigDecimal, roundingMode: Int) = calculate(divisor) { Quantity(super.divide(it, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, roundingMode: Int) = Quantity(super.divide(divisor, roundingMode), this.scale(), this.unitOfMeasurement)
+    override fun divide(divisor: BigDecimal, roundingMode: RoundingMode?) = calculate(divisor) { Quantity(super.divide(it, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, roundingMode: RoundingMode?) = Quantity(super.divide(divisor, roundingMode), this.scale(), this.unitOfMeasurement)
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = calculate(divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = if (scale in MIN_SCALE..MAX_SCALE) Quantity(super.divide(divisor, scale, roundingMode), scale, this.unitOfMeasurement) else throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = calculate(divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = if (scale in MIN_SCALE..MAX_SCALE) Quantity(super.divide(divisor, scale, roundingMode), scale, this.unitOfMeasurement) else throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
+    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = if (newScale in MIN_SCALE..MAX_SCALE) Quantity(super.setScale(newScale, roundingMode), newScale, this.unitOfMeasurement) else throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
+    override fun setScale(newScale: Int, roundingMode: Int) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int, roundingMode: Int) = if (newScale in MIN_SCALE..MAX_SCALE) Quantity(super.setScale(newScale, roundingMode), newScale, this.unitOfMeasurement) else throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
+    override fun setScale(newScale: Int) = Quantity(super.setScale(newScale), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int) = if (newScale in MIN_SCALE..MAX_SCALE) Quantity(super.setScale(newScale), newScale, this.unitOfMeasurement) else throw IllegalArgumentException(INVALID_SCALE_MESSAGE)
+    override fun abs() = Quantity(super.abs(), this.unitOfMeasurement)
 
-    override fun abs() = Quantity(super.abs(), this.scale(), this.unitOfMeasurement)
+    override fun plus() = Quantity(super.plus(), this.unitOfMeasurement)
 
-    override fun plus() = Quantity(super.plus(), this.scale(), this.unitOfMeasurement)
-
-    override fun negate() = Quantity(super.negate(), this.scale(), this.unitOfMeasurement)
+    override fun negate() = Quantity(super.negate(), this.unitOfMeasurement)
 
     override fun toByte() = byteValueExact()
 
     override fun toChar() = BigDecimal(this.toString()).toChar()
 
     override fun toShort() = shortValueExact()
+
+    private fun calculate(target: BigDecimal, calculationBlock: (Quantity) -> Quantity) =
+            if (target is Quantity && target.unitOfMeasurement == this.unitOfMeasurement)
+                calculationBlock.invoke(target)
+            else
+                throw UnsupportedOperationException("Расчёт не удался. Приведите оба значения к одной единице измерения.")
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -77,15 +80,33 @@ open class Quantity(
         return result
     }
 
-    class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor() : FilterBuilder.Inner<Q, S, R>() {
-        val unscaledValue = addFieldFilter<Long>(Columns.QUANTITY_UNSCALED_VALUE)
-        val scale = addFieldFilter<Int>(Columns.QUANTITY_SCALE)
-        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.Filter<Q, S, R>())
+    fun toStringWithUnitName() = "${super.toString()} ${unitOfMeasurement.name}"
 
-        class SortOrder<S : FilterBuilder.SortOrder<S>> : FilterBuilder.Inner.SortOrder<S>() {
-            val unscaledValue = addFieldSorter(Columns.QUANTITY_UNSCALED_VALUE)
-            val scale = addFieldSorter(Columns.QUANTITY_SCALE)
-            val unitOfMeasurement = addInnerSortOrder(UnitOfMeasurement.Filter.SortOrder<S>())
+    class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor(
+            columnUnscaledValue: String,
+            columnScale: String,
+            columnUnitOfMeasurementName: String,
+            columnUnitOfMeasurementType: String
+    ) : FilterBuilder.Inner<Q, S, R>() {
+        val unscaledValue = addFieldFilter<Long>(columnUnscaledValue)
+        val scale = addFieldFilter<Int>(columnScale)
+        val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.FullFilter<Q, S, R>(
+                columnUnitOfMeasurementName,
+                columnUnitOfMeasurementType
+        ))
+
+        class SortOrder<S : FilterBuilder.SortOrder<S>> internal constructor(
+                columnUnscaledValue: String,
+                columnScale: String,
+                columnUnitOfMeasurementName: String,
+                columnUnitOfMeasurementType: String
+        ) : FilterBuilder.Inner.SortOrder<S>() {
+            val unscaledValue = addFieldSorter(columnUnscaledValue)
+            val scale = addFieldSorter(columnScale)
+            val unitOfMeasurement = addInnerSortOrder(UnitOfMeasurement.FullFilter.SortOrder<S>(
+                    columnUnitOfMeasurementName,
+                    columnUnitOfMeasurementType
+            ))
         }
     }
 

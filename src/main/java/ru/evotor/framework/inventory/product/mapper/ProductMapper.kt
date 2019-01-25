@@ -2,6 +2,7 @@ package ru.evotor.framework.inventory.product.mapper
 
 import android.content.Context
 import android.database.Cursor
+import ru.evotor.framework.Quantity
 import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.receipt.position.VatRate
@@ -9,7 +10,9 @@ import ru.evotor.framework.inventory.product.category.entertainment.mapper.Stron
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.WeakAlcoholMapper
 import ru.evotor.framework.inventory.provider.InventoryContract
-import ru.evotor.framework.receipt.position.mapper.PositionMapper
+import ru.evotor.framework.mapper.QuantityMapper
+import ru.evotor.framework.payment.mapper.AmountOfRublesMapper
+import ru.evotor.framework.receipt.position.mapper.VatRateMapper
 import java.util.*
 
 internal object ProductMapper {
@@ -32,9 +35,18 @@ internal object ProductMapper {
 
     fun readVendorCode(cursor: Cursor) = cursor.safeGetString(InventoryContract.Product.VENDOR_CODE)
 
-    fun readPrice(cursor: Cursor) = cursor.safeGetAmountOfRubles(InventoryContract.Product.PRICE)
+    fun readPrice(cursor: Cursor) = AmountOfRublesMapper.read(cursor, InventoryContract.Product.PRICE)
 
-    fun readVatRate(cursor: Cursor): VatRate? = PositionMapper.readVatRate(cursor)
+    fun readVatRate(cursor: Cursor): VatRate? = VatRateMapper.read(cursor)
+
+    fun readQuantity(cursor: Cursor): Quantity? = QuantityMapper.read(
+            cursor,
+            InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+            InventoryContract.Product.QUANTITY_SCALE,
+            InventoryContract.Product.UNIT_OF_MEASUREMENT_VARIATION_ID,
+            InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
+            InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
+    )
 
     fun readDescription(cursor: Cursor) = cursor.safeGetString(InventoryContract.Product.DESCRIPTION)
 }

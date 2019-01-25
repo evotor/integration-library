@@ -2,10 +2,10 @@ package ru.evotor.framework.inventory.product.extension.mapper
 
 import android.content.Context
 import android.database.Cursor
-import ru.evotor.framework.core.safeGetAmountOfLiters
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.core.safeGetLong
 import ru.evotor.framework.core.safeGetPercents
+import ru.evotor.framework.mapper.VolumeMapper
 import java.util.*
 
 internal object AlcoholProductMapper {
@@ -21,7 +21,13 @@ internal object AlcoholProductMapper {
 
     fun readFsrarProductKindCode(cursor: Cursor) = cursor.safeGetLong(InventoryContract.ProductExtension.FSRAR_PRODUCT_KIND_CODE)
 
-    fun readTareVolume(cursor: Cursor) = cursor.safeGetAmountOfLiters(InventoryContract.ProductExtension.TARE_VOLUME)
+    fun readTareVolume(cursor: Cursor) = VolumeMapper.read(
+            cursor,
+            InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
+            InventoryContract.Product.TARE_VOLUME_SCALE,
+            InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_VARIATION_ID,
+            InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME
+    )
 
     fun readAlcoholPercentage(cursor: Cursor) = cursor.safeGetPercents(InventoryContract.ProductExtension.ALCOHOL_PERCENTAGE)
 }

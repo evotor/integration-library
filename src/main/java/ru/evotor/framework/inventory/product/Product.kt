@@ -35,7 +35,12 @@ abstract class Product internal constructor() {
         val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
         val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
-        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, Product>())
+        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, Product>(
+                InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+                InventoryContract.Product.QUANTITY_SCALE,
+                InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
+                InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
+        ))
         val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
         class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
@@ -46,7 +51,12 @@ abstract class Product internal constructor() {
             val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
             val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
-            val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
+            val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>(
+                    InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+                    InventoryContract.Product.QUANTITY_SCALE,
+                    InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
+                    InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
+            ))
             val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
         }
 

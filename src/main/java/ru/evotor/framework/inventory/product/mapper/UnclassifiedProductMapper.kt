@@ -17,7 +17,7 @@ internal object UnclassifiedProductMapper {
             price = ProductMapper.readPrice(cursor),
             vatRate = ProductMapper.readVatRate(cursor)
                     ?: throw IntegrationLibraryMappingException(UnclassifiedProduct::class.java, UnclassifiedProduct::vatRate),
-            quantity = QuantityMapper.read(cursor)
+            quantity = ProductMapper.readQuantity(cursor)
                     ?: throw IntegrationLibraryMappingException(UnclassifiedProduct::class.java, UnclassifiedProduct::quantity),
             description = ProductMapper.readDescription(cursor)
     )

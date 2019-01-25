@@ -2,7 +2,7 @@ package ru.evotor.framework.core
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.evotor.framework.inventory.product.AmountOfLiters
+import ru.evotor.framework.Volume
 import ru.evotor.framework.payment.AmountOfRubles
 import java.math.BigDecimal
 
@@ -44,17 +44,6 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnName: Strin
 
 internal fun android.database.Cursor.safeGetBigDecimal(columnName: String): BigDecimal? =
         safeGetLong(columnName)?.let { BigDecimal(it) }
-
-internal fun android.database.Cursor.safeGetQuantityUnscaledValue(columnName: String): BigDecimal? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))
-
-internal fun android.database.Cursor.safeGetAmountOfRubles(columnName: String): AmountOfRubles? =
-        safeGetBigDecimal(columnName)
-                ?.divide(BigDecimal(100))
-                ?.let { if (it > BigDecimal(0)) AmountOfRubles(it) else null }
-
-internal fun android.database.Cursor.safeGetAmountOfLiters(columnName: String): AmountOfLiters? =
-        safeGetBigDecimal(columnName)?.divide(BigDecimal(1000))?.let { AmountOfLiters(it) }
 
 internal fun android.database.Cursor.safeGetPercents(columnName: String): Float? =
         safeGetLong(columnName)?.let {

@@ -1,7 +1,7 @@
 package ru.evotor.framework.inventory.product.category.entertainment
 
 import android.content.Context
-import ru.evotor.framework.inventory.product.AmountOfLiters
+import ru.evotor.framework.Volume
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.receipt.position.VatRate
@@ -12,7 +12,6 @@ import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.payment.AmountOfRubles
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
-import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -28,7 +27,7 @@ data class StrongAlcohol internal constructor(
         override val price: AmountOfRubles?,
         override val vatRate: VatRate,
         override val quantity: Quantity,
-        override val tareVolume: AmountOfLiters,
+        override val tareVolume: Volume,
         override val alcoholPercentage: Float?,
         override val description: String?
 ) : Product(), AlcoholProduct, ExcisableProduct {
@@ -47,8 +46,17 @@ data class StrongAlcohol internal constructor(
         val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
         val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
-        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, StrongAlcohol>())
-        val tareVolume = addFieldFilter<AmountOfLiters>(InventoryContract.Product.TARE_VOLUME)
+        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, StrongAlcohol>(
+                InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+                InventoryContract.Product.QUANTITY_SCALE,
+                InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
+                InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
+        ))
+        val tareVolume = addInnerFilterBuilder(Volume.Filter<Query, SortOrder, StrongAlcohol>(
+                InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
+                InventoryContract.Product.TARE_VOLUME_SCALE,
+                InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME
+        ))
         val alcoholPercentage = addFieldFilter<Float?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
         val description = addFieldFilter<String?>(InventoryContract.Product.DESCRIPTION)
 
@@ -61,8 +69,17 @@ data class StrongAlcohol internal constructor(
             val vendorCode = addFieldSorter(InventoryContract.Product.VENDOR_CODE)
             val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
-            val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>())
-            val tareVolume = addFieldSorter(InventoryContract.Product.TARE_VOLUME)
+            val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>(
+                    InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+                    InventoryContract.Product.QUANTITY_SCALE,
+                    InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
+                    InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
+            ))
+            val tareVolume = addInnerSortOrder(Volume.Filter.SortOrder<SortOrder>(
+                    InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
+                    InventoryContract.Product.TARE_VOLUME_SCALE,
+                    InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME
+            ))
             val alcoholPercentage = addFieldSorter(InventoryContract.Product.ALCOHOL_PERCENTAGE)
             val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
         }

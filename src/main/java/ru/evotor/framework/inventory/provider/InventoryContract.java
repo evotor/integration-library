@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
-import ru.evotor.framework.provider.QuantityContract;
 
 @DoNotUseThis()
 public final class InventoryContract {
@@ -15,7 +14,7 @@ public final class InventoryContract {
 
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface ProductColumns extends IdentifiedEntityColumns, QuantityContract.Columns {
+    public interface ProductColumns extends IdentifiedEntityColumns {
         String VARIATION_ID = "VARIATION_ID";
         String GROUP_UUID = "GROUP_UUID";
         String NAME = "NAME";
@@ -23,6 +22,11 @@ public final class InventoryContract {
         String VENDOR_CODE = "VENDOR_CODE";
         String PRICE = "PRICE";
         String VAT_RATE = "VAT_RATE";
+        String QUANTITY_UNSCALED_VALUE = "QUANTITY_UNSCALED_VALUE";
+        String QUANTITY_SCALE = "QUANTITY_SCALE";
+        String UNIT_OF_MEASUREMENT_VARIATION_ID = "UNIT_OF_MEASUREMENT_VARIATION_ID";
+        String UNIT_OF_MEASUREMENT_TYPE = "UNIT_OF_MEASUREMENT_TYPE";
+        String UNIT_OF_MEASUREMENT_NAME = "UNIT_OF_MEASUREMENT_NAME";
         String DESCRIPTION = "DESCRIPTION";
     }
 
@@ -32,7 +36,10 @@ public final class InventoryContract {
 
     public interface AlcoholProductColumns extends ProductExtensionColumns {
         String FSRAR_PRODUCT_KIND_CODE = "FSRAR_PRODUCT_KIND_CODE";
-        String TARE_VOLUME = "TARE_VOLUME";
+        String TARE_VOLUME_UNSCALED_VALUE = "TARE_VOLUME_UNSCALED_VALUE";
+        String TARE_VOLUME_SCALE = "TARE_VOLUME_SCALE";
+        String TARE_VOLUME_UNIT_OF_MEASUREMENT_VARIATION_ID = "TARE_VOLUME_UNIT_OF_MEASUREMENT_VARIATION_ID";
+        String TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME = "TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME";
         String ALCOHOL_PERCENTAGE = "ALCOHOL_PERCENTAGE";
     }
 

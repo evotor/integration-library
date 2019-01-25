@@ -5,7 +5,6 @@ import android.net.Uri;
 import ru.evotor.framework.core.DoNotUseThis;
 import ru.evotor.framework.provider.FiscalDocumentColumns;
 import ru.evotor.framework.provider.IdentifiedEntityColumns;
-import ru.evotor.framework.provider.QuantityContract;
 
 @DoNotUseThis()
 public final class ReceiptContract {
@@ -16,7 +15,7 @@ public final class ReceiptContract {
 
     public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
 
-    public interface PositionColumns extends IdentifiedEntityColumns, QuantityContract.Columns {
+    public interface PositionColumns extends IdentifiedEntityColumns {
         String PRODUCT_UUID = "PRODUCT_UUID";
         String PRODUCT_CODE = "PRODUCT_CODE";
         String NAME = "NAME";
@@ -26,6 +25,11 @@ public final class ReceiptContract {
         String PRICE = "PRICE";
         String DISCOUNT = "DISCOUNT";
         String VAT_RATE = "VAT_RATE";
+        String QUANTITY_UNSCALED_VALUE = "QUANTITY_UNSCALED_VALUE";
+        String QUANTITY_SCALE = "QUANTITY_SCALE";
+        String UNIT_OF_MEASUREMENT_VARIATION_ID = "UNIT_OF_MEASUREMENT_VARIATION_ID";
+        String UNIT_OF_MEASUREMENT_TYPE = "UNIT_OF_MEASUREMENT_TYPE";
+        String UNIT_OF_MEASUREMENT_NAME = "UNIT_OF_MEASUREMENT_NAME";
 
         String SETTLEMENT_METHOD_VARIATION_ID = "SETTLEMENT_METHOD_VARIATION_ID";
         String SETTLEMENT_METHOD_AMOUNT = "SETTLEMENT_METHOD_AMOUNT";

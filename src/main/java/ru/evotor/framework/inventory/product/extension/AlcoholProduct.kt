@@ -1,10 +1,9 @@
 package ru.evotor.framework.inventory.product.extension
 
-import ru.evotor.framework.inventory.product.AmountOfLiters
-import java.math.BigDecimal
+import ru.evotor.framework.Volume
 
 interface AlcoholProduct : ProductExtension {
     val fsrarProductKindCode: Long
-    val tareVolume: AmountOfLiters
+    val tareVolume: Volume
     val alcoholPercentage: Float?
 }

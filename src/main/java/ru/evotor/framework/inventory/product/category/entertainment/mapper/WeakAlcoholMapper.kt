@@ -6,7 +6,6 @@ import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.product.category.entertainment.WeakAlcohol
 import ru.evotor.framework.inventory.product.extension.mapper.AlcoholProductMapper
 import ru.evotor.framework.inventory.product.mapper.ProductMapper
-import ru.evotor.framework.mapper.QuantityMapper
 import java.util.*
 
 internal object WeakAlcoholMapper {
@@ -43,7 +42,7 @@ internal object WeakAlcoholMapper {
             price = ProductMapper.readPrice(productCursor),
             vatRate = ProductMapper.readVatRate(productCursor)
                     ?: throw IntegrationLibraryMappingException(WeakAlcohol::class.java, WeakAlcohol::vatRate),
-            quantity = QuantityMapper.read(productCursor)
+            quantity = ProductMapper.readQuantity(productCursor)
                     ?: throw IntegrationLibraryMappingException(WeakAlcohol::class.java, WeakAlcohol::quantity),
             tareVolume = AlcoholProductMapper.readTareVolume(alcoholProductCursor
                     ?: productCursor)
