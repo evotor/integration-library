@@ -35,15 +35,15 @@ open class Quantity(
 
     override fun divide(divisor: BigDecimal, roundingMode: RoundingMode?) = calculate(divisor) { Quantity(super.divide(it, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = calculate(divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = calculate(divisor) { Quantity(super.divide(it, checkScale(scale), roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = calculate(divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = calculate(divisor) { Quantity(super.divide(it, checkScale(scale), roundingMode), this.unitOfMeasurement) }
 
-    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
+    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = Quantity(super.setScale(checkScale(newScale), roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int, roundingMode: Int) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
+    override fun setScale(newScale: Int, roundingMode: Int) = Quantity(super.setScale(checkScale(newScale), roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int) = Quantity(super.setScale(newScale), this.unitOfMeasurement)
+    override fun setScale(newScale: Int) = Quantity(super.setScale(checkScale(newScale)), this.unitOfMeasurement)
 
     override fun abs() = Quantity(super.abs(), this.unitOfMeasurement)
 
@@ -63,6 +63,11 @@ open class Quantity(
             else
                 throw UnsupportedOperationException("Расчёт не удался. Приведите оба значения к одной единице измерения.")
 
+    private fun checkScale(scale: Int) =
+            if (scale in MIN_SCALE..MAX_SCALE)
+                scale
+            else
+                throw IllegalArgumentException("Неправильный масштаб. Укажите масштаб от 0 до 3")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
