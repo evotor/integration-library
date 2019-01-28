@@ -23,5 +23,10 @@ public enum ProductType {
     /**
      * Услуга
      */
-    SERVICE
+    SERVICE,
+
+    /**
+     * Маркированный табак
+     */
+    TOBACCO_MARKED
 }

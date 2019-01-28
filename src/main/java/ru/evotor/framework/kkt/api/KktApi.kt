@@ -6,6 +6,7 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.provider.KktContract
+import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
 
@@ -87,5 +88,25 @@ object KktApi {
                         Subagent.Type.values()[index]
                     }
                 }
+            }
+
+    /**
+     * Установлен ли на терминал пакет обновлений с возможностью пробивать фискальные документы по
+     * ставке НДС 20%.
+     * @return Boolean или null, если не удалось связаться с кассой.
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
+     */
+    @JvmStatic
+    fun isVatRate20Available(context: Context): Boolean? =
+            context.contentResolver.query(
+                    KktContract.BASE_URI,
+                    arrayOf(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE),
+                    null,
+                    null,
+                    null
+            )?.use { cursor ->
+                cursor.moveToFirst()
+                cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE)
+                        ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
             }
 }
