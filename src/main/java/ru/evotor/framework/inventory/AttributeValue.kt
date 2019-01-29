@@ -30,7 +30,7 @@ data class AttributeValue(
         val name: String
 
 ) : Parcelable {
-        
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(VERSION)
         // Determine position in parcel for writing data size
@@ -56,7 +56,6 @@ data class AttributeValue(
     }
 
     override fun describeContents(): Int = 0
-
     companion object {
         @JvmStatic
         fun readFromParcel(parcel : Parcel) : AttributeValue {

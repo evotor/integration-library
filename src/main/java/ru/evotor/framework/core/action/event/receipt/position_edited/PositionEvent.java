@@ -8,6 +8,10 @@ import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PositionMapper;
 import ru.evotor.framework.receipt.Position;
 
+/**
+ * @deprecated Используйте {@link ru.evotor.framework.receipt.position.event.PositionEvent}
+ */
+@Deprecated
 public abstract class PositionEvent implements IBundlable {
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_POSITION = "position";

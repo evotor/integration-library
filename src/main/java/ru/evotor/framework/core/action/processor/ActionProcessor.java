@@ -14,11 +14,11 @@ import ru.evotor.framework.core.IntegrationResponse;
 
 public abstract class ActionProcessor {
 
-    public void process(String action, IIntegrationManagerResponse response, Bundle bundle) {
+    public void process(String action, IIntegrationManagerResponse response, Bundle bundle) throws RemoteException {
         process(action, bundle, new Callback(response, bundle));
     }
 
-    public abstract void process(@NonNull String action, @Nullable Bundle bundle, @NonNull Callback callback);
+    public abstract void process(@NonNull String action, @Nullable Bundle bundle, @NonNull Callback callback) throws RemoteException;
 
     public final class Callback {
         private IIntegrationManagerResponse response;
