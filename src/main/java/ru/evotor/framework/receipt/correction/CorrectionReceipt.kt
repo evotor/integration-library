@@ -17,7 +17,7 @@ data class CorrectionReceipt(
          */
         @FiscalRequisite(tag = FiscalTags.CREATION_DATE)
         override val creationDate: Date,
-        
+
         /**
          * Регистрационный номер ККТ
          */
@@ -42,3 +42,4 @@ data class CorrectionReceipt(
         @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
         override val fiscalIdentifier: Long
 ) : FiscalDocument()
+оплата сумма сис налог ндс тип коррекции причина коррекции дата записки номер записки
