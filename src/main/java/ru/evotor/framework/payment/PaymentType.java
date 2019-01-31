@@ -10,7 +10,7 @@ public enum PaymentType {
     UNKNOWN,
 
     /**
-     * Наличными срдествами
+     * Наличными средствами
      */
     CASH,
 
