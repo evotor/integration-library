@@ -47,7 +47,7 @@ object InventoryApi {
     @JvmStatic
     fun getAlcoCodesForProduct(context: Context, productUuid: String): List<String>? =
             context.contentResolver.query(
-                    Uri.withAppendedPath(AlcoCodeTable.URI, productUuid),
+                    AlcoCodeTable.URI,
                     arrayOf(AlcoCodeTable.COLUMN_ALCO_CODE),
                     "${AlcoCodeTable.COLUMN_COMMODITY_UUID} = ?",
                     arrayOf(productUuid),
@@ -102,6 +102,31 @@ object InventoryApi {
                 }
         return null
     }
+
+    @JvmStatic
+    fun getProductsByAlcoCode(context: Context, alcoCode: String): List<ProductItem.Product?>? =
+            context.contentResolver.query(
+                    AlcoCodeTable.URI,
+                    arrayOf(AlcoCodeTable.COLUMN_COMMODITY_UUID),
+                    "${AlcoCodeTable.COLUMN_ALCO_CODE} = ?",
+                    arrayOf(alcoCode),
+                    null
+            )?.use {
+                ArrayList<ProductItem.Product?>().apply {
+                    fun addValue() = this.add(
+                            getProductByUuid(
+                                    context,
+                                    it.getString(it.getColumnIndex(AlcoCodeTable.COLUMN_COMMODITY_UUID))
+                            ) as ProductItem.Product?
+                    )
+                    if (it.moveToFirst()) {
+                        addValue()
+                        while (it.moveToNext()) {
+                            addValue()
+                        }
+                    }
+                }
+            }
 
     @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
