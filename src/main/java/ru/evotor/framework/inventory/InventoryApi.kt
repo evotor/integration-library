@@ -18,7 +18,8 @@ import java.math.BigDecimal
 
 
 object InventoryApi {
-    @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
+    @JvmField
+    val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
 
     const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
 
@@ -42,6 +43,21 @@ object InventoryApi {
 
         return barcodesList
     }
+
+    @JvmStatic
+    fun getAlcoCodesForProduct(context: Context, productUuid: String): List<String>? =
+            context.contentResolver.query(
+                    Uri.withAppendedPath(AlcoCodeTable.URI, productUuid),
+                    arrayOf(AlcoCodeTable.COLUMN_ALCO_CODE),
+                    "${AlcoCodeTable.COLUMN_COMMODITY_UUID} = ?",
+                    arrayOf(productUuid),
+                    null
+            )?.let {
+                (object : ru.evotor.query.Cursor<String>(it) {
+                    override fun getValue() = getString(getColumnIndex(AlcoCodeTable.COLUMN_ALCO_CODE))
+
+                }).toList()
+            }
 
     @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
