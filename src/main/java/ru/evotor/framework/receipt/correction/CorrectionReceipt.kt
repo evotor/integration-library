@@ -41,5 +41,7 @@ data class CorrectionReceipt(
          */
         @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
         override val fiscalIdentifier: Long
-) : FiscalDocument()
+) : FiscalDocument() {
+
+}
 оплата сумма сис налог ндс тип коррекции причина коррекции дата записки номер записки

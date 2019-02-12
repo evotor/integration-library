@@ -1,14 +1,23 @@
 package ru.evotor.framework.kkt.api
 
+import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import ru.evotor.framework.core.IntegrationLibraryMappingException
+import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.provider.KktContract
+import ru.evotor.framework.receipt.Payment
+import ru.evotor.framework.receipt.Position
+import ru.evotor.framework.receipt.TaxationSystem
+import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
+import java.util.*
 
 /**
  * API для работы с кассой.
@@ -109,4 +118,24 @@ object KktApi {
                 cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE)
                         ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
             }
+
+    @JvmStatic
+    fun registerCorrectionReceipt(
+            activity: Activity,
+            taxationSystem: TaxationSystem,
+            positions: List<Position>,
+            payments: List<Payment>,
+            correctionType: CorrectionType,
+            basisForCorrection: String,
+            correctionDescription: String?,
+            correctableSettlementDate: Date,
+            prescriptionNumber: String
+    ) = IntegrationManagerImpl(activity.applicationContext)
+            .call(action,
+                    componentNameList[0],
+                    this,
+                    activity,
+                    callback,
+                    Handler(Looper.getMainLooper())
+            )
 }
