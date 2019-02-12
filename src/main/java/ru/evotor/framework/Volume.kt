@@ -1,6 +1,7 @@
 package ru.evotor.framework
 
 import ru.evotor.framework.mapper.QuantityMapper
+import ru.evotor.framework.mapper.VolumeMapper
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -10,10 +11,7 @@ class Volume(
         volumeUnit: UnitOfMeasurement = UnitOfMeasurement.Liter()
 ) : Quantity(
         value,
-        if (volumeUnit.type == UnitOfMeasurement.Type.VOLUME_UNIT)
-            volumeUnit
-        else
-            throw IllegalArgumentException("Неправильная единица измерения. Укажите единицу измерения типа \"VOLUME_UNIT\".")
+        VolumeMapper.checkUnitOfMeasurement(volumeUnit)
 ) {
     constructor(value: String, volumeUnit: UnitOfMeasurement = UnitOfMeasurement.Liter()) : this(BigDecimal(value), volumeUnit)
 

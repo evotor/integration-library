@@ -2,12 +2,14 @@ package ru.evotor.framework.payment
 
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.UnitOfMeasurement
+import ru.evotor.framework.payment.mapper.AmountOfRublesMapper
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-private const val SCALE = 2
-
-class AmountOfRubles(value: BigDecimal) : Quantity(value.setScale(SCALE), UnitOfMeasurement.Ruble()) {
+class AmountOfRubles(value: BigDecimal) : Quantity(
+        AmountOfRublesMapper.getInitialValue(value),
+        UnitOfMeasurement.Ruble()
+) {
     constructor(value: String) : this(BigDecimal(value))
 
     constructor(value: Int) : this(BigDecimal(value))

@@ -8,6 +8,12 @@ import ru.evotor.framework.core.safeGetInt
 import java.math.BigDecimal
 
 internal object VolumeMapper {
+    fun checkUnitOfMeasurement(unitOfMeasurement: UnitOfMeasurement) =
+            if (unitOfMeasurement.type == UnitOfMeasurement.Type.VOLUME_UNIT)
+                unitOfMeasurement
+            else
+                throw IllegalArgumentException("Неправильная единица измерения. Укажите единицу измерения типа \"VOLUME_UNIT\".")
+
     fun read(
             cursor: Cursor,
             columnExactValue: String,

@@ -6,6 +6,10 @@ import ru.evotor.framework.payment.AmountOfRubles
 import java.math.BigDecimal
 
 internal object AmountOfRublesMapper {
+    private const val SCALE = 2
+
+    fun getInitialValue(value: BigDecimal): BigDecimal = value.setScale(SCALE)
+
     fun read(cursor: Cursor, columnName: String): AmountOfRubles? {
         return AmountOfRubles(
                 value = cursor.safeGetBigDecimal(columnName)

@@ -8,14 +8,7 @@ import java.math.RoundingMode
 open class Quantity(
         value: BigDecimal,
         val unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()
-) : BigDecimal(
-        value.scale().let { sourceScale ->
-            val resultScale = if (sourceScale < MIN_SCALE) MIN_SCALE else if (sourceScale > MAX_SCALE) MAX_SCALE else sourceScale
-            return@let if (resultScale != sourceScale) value.setScale(resultScale, ROUND_HALF_UP) else value
-        }.let { newValue ->
-            newValue.toPlainString()
-        }
-) {
+) : BigDecimal(QuantityMapper.getInitialValue(value)) {
     constructor(value: String, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
     constructor(value: Int, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)

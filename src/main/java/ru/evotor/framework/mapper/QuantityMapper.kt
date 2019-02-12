@@ -8,6 +8,13 @@ import java.math.BigDecimal
 internal object QuantityMapper {
     val exactValueConverter = { exactValue: BigDecimal -> exactValue.multiply(BigDecimal(1000)).setScale(0).longValueExact() }
 
+    fun getInitialValue(value: BigDecimal): String = value.scale().let { sourceScale ->
+        val resultScale = if (sourceScale < Quantity.MIN_SCALE) Quantity.MIN_SCALE else if (sourceScale > Quantity.MAX_SCALE) Quantity.MAX_SCALE else sourceScale
+        return@let if (resultScale != sourceScale) value.setScale(resultScale, BigDecimal.ROUND_HALF_UP) else value
+    }.let { newValue ->
+        newValue.toPlainString()
+    }
+
     fun read(
             cursor: Cursor,
             columnExactValue: String,
