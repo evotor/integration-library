@@ -41,7 +41,7 @@ internal object ProductMapper {
 
     fun readQuantity(cursor: Cursor): Quantity? = QuantityMapper.read(
             cursor,
-            InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
+            InventoryContract.Product.QUANTITY_EXACT_VALUE,
             InventoryContract.Product.QUANTITY_SCALE,
             InventoryContract.Product.UNIT_OF_MEASUREMENT_VARIATION_ID,
             InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,

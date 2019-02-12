@@ -39,7 +39,7 @@ internal object PositionMapper {
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::vatRate),
             quantity = QuantityMapper.read(
                     cursor,
-                    ReceiptContract.Position.QUANTITY_UNSCALED_VALUE,
+                    ReceiptContract.Position.QUANTITY_EXACT_VALUE,
                     ReceiptContract.Position.QUANTITY_SCALE,
                     ReceiptContract.Position.UNIT_OF_MEASUREMENT_VARIATION_ID,
                     ReceiptContract.Position.UNIT_OF_MEASUREMENT_NAME,

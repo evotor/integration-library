@@ -47,14 +47,12 @@ data class StrongAlcohol internal constructor(
         val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, SortOrder, StrongAlcohol>(
-                InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
-                InventoryContract.Product.QUANTITY_SCALE,
+                InventoryContract.Product.QUANTITY_EXACT_VALUE,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
         ))
         val tareVolume = addInnerFilterBuilder(Volume.Filter<Query, SortOrder, StrongAlcohol>(
-                InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
-                InventoryContract.Product.TARE_VOLUME_SCALE,
+                InventoryContract.Product.TARE_VOLUME_EXACT_VALUE,
                 InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME
         ))
         val alcoholPercentage = addFieldFilter<Float?>(InventoryContract.Product.ALCOHOL_PERCENTAGE)
@@ -70,14 +68,12 @@ data class StrongAlcohol internal constructor(
             val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>(
-                    InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
-                    InventoryContract.Product.QUANTITY_SCALE,
+                    InventoryContract.Product.QUANTITY_EXACT_VALUE,
                     InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
                     InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
             ))
             val tareVolume = addInnerSortOrder(Volume.Filter.SortOrder<SortOrder>(
-                    InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
-                    InventoryContract.Product.TARE_VOLUME_SCALE,
+                    InventoryContract.Product.TARE_VOLUME_EXACT_VALUE,
                     InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME
             ))
             val alcoholPercentage = addFieldSorter(InventoryContract.Product.ALCOHOL_PERCENTAGE)

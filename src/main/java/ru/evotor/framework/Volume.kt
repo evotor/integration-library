@@ -1,5 +1,6 @@
 package ru.evotor.framework
 
+import ru.evotor.framework.mapper.QuantityMapper
 import ru.evotor.query.FilterBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -51,23 +52,19 @@ class Volume(
     override fun negate() = super.negate().let { Volume(it, it.unitOfMeasurement) }
 
     class Filter<Q, S : FilterBuilder.SortOrder<S>, R> internal constructor(
-            columnUnscaledValue: String,
-            columnScale: String,
+            columnExactValue: String,
             columnUnitOfMeasurementName: String
     ) : FilterBuilder.Inner<Q, S, R>() {
-        val unscaledValue = addFieldFilter<Long>(columnUnscaledValue)
-        val scale = addFieldFilter<Int>(columnScale)
+        val exactValue = addFieldFilter<BigDecimal, Long>(columnExactValue, QuantityMapper.exactValueConverter)
         val unitOfMeasurement = addInnerFilterBuilder(UnitOfMeasurement.NameOnlyFilter<Q, S, R>(
                 columnUnitOfMeasurementName
         ))
 
         class SortOrder<S : FilterBuilder.SortOrder<S>> internal constructor(
-                columnUnscaledValue: String,
-                columnScale: String,
+                columnExactValue: String,
                 columnUnitOfMeasurementName: String
         ) : FilterBuilder.Inner.SortOrder<S>() {
-            val unscaledValue = addFieldSorter(columnUnscaledValue)
-            val scale = addFieldSorter(columnScale)
+            val exactValue = addFieldSorter(columnExactValue)
             val unitOfMeasurement = addInnerSortOrder(UnitOfMeasurement.NameOnlyFilter.SortOrder<S>(
                     columnUnitOfMeasurementName
             ))

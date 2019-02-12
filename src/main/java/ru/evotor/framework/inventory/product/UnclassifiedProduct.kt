@@ -39,8 +39,7 @@ data class UnclassifiedProduct internal constructor(
         val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
         val quantity = addInnerFilterBuilder(Quantity.Filter<Query, Query.SortOrder, UnclassifiedProduct>(
-                InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
-                InventoryContract.Product.QUANTITY_SCALE,
+                InventoryContract.Product.QUANTITY_EXACT_VALUE,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
         ))
@@ -55,8 +54,7 @@ data class UnclassifiedProduct internal constructor(
             val price = addFieldSorter(InventoryContract.Product.PRICE)
             val vatRate = addFieldSorter(InventoryContract.Product.VAT_RATE)
             val quantity = addInnerSortOrder(Quantity.Filter.SortOrder<SortOrder>(
-                    InventoryContract.Product.QUANTITY_UNSCALED_VALUE,
-                    InventoryContract.Product.QUANTITY_SCALE,
+                    InventoryContract.Product.QUANTITY_EXACT_VALUE,
                     InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
                     InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
             ))

@@ -23,7 +23,7 @@ internal object AlcoholProductMapper {
 
     fun readTareVolume(cursor: Cursor) = VolumeMapper.read(
             cursor,
-            InventoryContract.Product.TARE_VOLUME_UNSCALED_VALUE,
+            InventoryContract.Product.TARE_VOLUME_EXACT_VALUE,
             InventoryContract.Product.TARE_VOLUME_SCALE,
             InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_VARIATION_ID,
             InventoryContract.Product.TARE_VOLUME_UNIT_OF_MEASUREMENT_NAME

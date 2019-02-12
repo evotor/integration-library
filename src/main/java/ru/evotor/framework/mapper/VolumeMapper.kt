@@ -10,15 +10,15 @@ import java.math.BigDecimal
 internal object VolumeMapper {
     fun read(
             cursor: Cursor,
-            columnUnscaledValue: String,
+            columnExactValue: String,
             columnScale: String,
             columnUnitOfMeasurementVariationId: String,
             columnUnitOfMeasurementName: String
     ): Volume? {
         return Volume(
-                value = cursor.safeGetBigDecimal(columnUnscaledValue)
-                        ?.divide(BigDecimal(1000))
+                value = cursor.safeGetBigDecimal(columnExactValue)
                         ?.setScale(cursor.safeGetInt(columnScale) ?: 0)
+                        ?.divide(BigDecimal(1000))
                         ?: return null,
                 volumeUnit = UnitOfMeasurementMapper.read(
                         cursor,
