@@ -1,22 +1,24 @@
 package ru.evotor.framework.kkt.api
 
-import android.app.Activity
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.core.IntegrationManagerImpl
+import ru.evotor.framework.core.IntegrationManagerCallback
+import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
+import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
+import ru.evotor.framework.kkt.event.handler.service.KktIntegrationServiceInternal
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.receipt.Payment
-import ru.evotor.framework.receipt.Position
+import ru.evotor.framework.payment.PaymentType
+import ru.evotor.framework.receipt.SettlementType
+import ru.evotor.framework.receipt.TaxNumber
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -121,21 +123,34 @@ object KktApi {
 
     @JvmStatic
     fun registerCorrectionReceipt(
-            activity: Activity,
+            context: Context,
+            settlementType: SettlementType,
             taxationSystem: TaxationSystem,
-            positions: List<Position>,
-            payments: List<Payment>,
+            sum: BigDecimal,
+            paymentType: PaymentType,
+            taxNumber: TaxNumber,
             correctionType: CorrectionType,
             basisForCorrection: String,
             correctionDescription: String?,
             correctableSettlementDate: Date,
-            prescriptionNumber: String
-    ) = IntegrationManagerImpl(activity.applicationContext)
-            .call(action,
-                    componentNameList[0],
-                    this,
-                    activity,
-                    callback,
-                    Handler(Looper.getMainLooper())
-            )
+            prescriptionNumber: String,
+            callback: IntegrationManagerCallback
+    ) {
+        context.startIntegrationService(
+                KktIntegrationServiceInternal.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
+                CorrectionReceiptRegistrationRequestedEvent(
+                        taxationSystem,
+                        settlementType,
+                        sum,
+                        paymentType,
+                        taxNumber,
+                        correctionType,
+                        basisForCorrection,
+                        correctionDescription,
+                        correctableSettlementDate,
+                        prescriptionNumber
+                ),
+                callback
+        )
+    }
 }
