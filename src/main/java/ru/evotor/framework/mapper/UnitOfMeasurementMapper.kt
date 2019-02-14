@@ -3,7 +3,7 @@ package ru.evotor.framework.mapper
 import android.database.Cursor
 import ru.evotor.framework.UnitOfMeasurement
 import ru.evotor.framework.core.safeGetString
-import ru.evotor.framework.core.safeGetEnum
+import ru.evotor.framework.core.safeGetEnumByName
 import ru.evotor.framework.core.safeGetInt
 import ru.evotor.framework.provider.UnitOfMeasurementContract
 
@@ -13,7 +13,7 @@ internal object UnitOfMeasurementMapper {
             columnVariationId: String,
             columnName: String,
             columnType: String
-    ): UnitOfMeasurement? = cursor.safeGetEnum(columnType, UnitOfMeasurement.Type.values())?.let { type ->
+    ): UnitOfMeasurement? = cursor.safeGetEnumByName(columnType, UnitOfMeasurement.Type::class.java)?.let { type ->
         UnitOfMeasurementMapper.read(
                 cursor,
                 columnVariationId,

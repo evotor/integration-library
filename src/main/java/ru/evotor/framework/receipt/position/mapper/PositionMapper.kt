@@ -2,7 +2,7 @@ package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.core.safeGetEnum
+import ru.evotor.framework.core.safeGetEnumByName
 import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
@@ -27,7 +27,7 @@ internal object PositionMapper {
             productCode = cursor.safeGetString(ReceiptContract.Position.PRODUCT_CODE),
             name = cursor.safeGetString(ReceiptContract.Position.NAME)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::name),
-            type = cursor.safeGetEnum(ReceiptContract.Position.TYPE, Position.Type.values())
+            type = cursor.safeGetEnumByName(ReceiptContract.Position.TYPE, Position.Type::class.java)
                     ?: throw IntegrationLibraryMappingException(Position::class.java, Position::type),
             barcode = cursor.safeGetString(ReceiptContract.Position.BARCODE),
             mark = cursor.safeGetString(ReceiptContract.Position.MARK),

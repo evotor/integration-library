@@ -789,7 +789,7 @@ public class Position implements Parcelable {
                 case VAT_20:
                     builder.setTaxNumber(TaxNumber.VAT_18);
                     break;
-                case VAT_20_118:
+                case VAT_20_120:
                     builder.setTaxNumber(TaxNumber.VAT_18_118);
                     break;
             }
