@@ -5,7 +5,7 @@ import android.database.Cursor
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.receipt.position.VatRate
+import ru.evotor.framework.receipt.VatRate
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.WeakAlcoholMapper

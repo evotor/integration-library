@@ -62,7 +62,7 @@ public final class InventoryContract {
         public static final String VARIATION_ID_UNCLASSIFIED_SERVICE = "SERVICE";
         public static final String VARIATION_ID_WEAK_ALCOHOL = "ALCOHOL_NOT_MARKED";
         public static final String VARIATION_ID_STRONG_ALCOHOL = "ALCOHOL_MARKED";
-        public static final String VARIATION_ID_TOBACCO = "TOBACCO";
+        public static final String VARIATION_ID_TOBACCO = "TOBACCO_MARKED";
     }
 
     public static final class ProductExtension implements AlcoholProductColumns {

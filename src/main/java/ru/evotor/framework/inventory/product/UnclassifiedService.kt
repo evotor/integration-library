@@ -6,7 +6,7 @@ import ru.evotor.framework.inventory.product.extension.Service
 import ru.evotor.framework.inventory.product.mapper.UnclassifiedServiceMapper
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.payment.AmountOfRubles
-import ru.evotor.framework.receipt.position.VatRate
+import ru.evotor.framework.receipt.VatRate
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.util.*
