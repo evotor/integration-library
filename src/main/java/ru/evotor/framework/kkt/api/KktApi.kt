@@ -8,7 +8,7 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
-import ru.evotor.framework.kkt.event.handler.service.KktIntegrationServiceInternal
+import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
 import ru.evotor.framework.payment.AmountOfRubles
 import ru.evotor.framework.payment.PaymentMean
@@ -156,7 +156,7 @@ object KktApi {
             ))
         }
         context.startIntegrationService(
-                KktIntegrationServiceInternal.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
+                KktBacksideIntegrationService.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
                 CorrectionReceiptRegistrationRequestedEvent(
                         settlementType,
                         taxationSystem,
