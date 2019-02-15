@@ -10,11 +10,12 @@ import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktIntegrationServiceInternal
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.payment.PaymentType
+import ru.evotor.framework.payment.AmountOfRubles
+import ru.evotor.framework.payment.PaymentMean
 import ru.evotor.framework.receipt.SettlementType
-import ru.evotor.framework.receipt.TaxNumber
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
+import ru.evotor.framework.receipt.VatRate
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
@@ -126,31 +127,55 @@ object KktApi {
             context: Context,
             settlementType: SettlementType,
             taxationSystem: TaxationSystem,
-            sum: BigDecimal,
-            paymentType: PaymentType,
-            taxNumber: TaxNumber,
             correctionType: CorrectionType,
             basisForCorrection: String,
-            correctionDescription: String?,
-            correctableSettlementDate: Date,
             prescriptionNumber: String,
-            callback: IntegrationManagerCallback
+            correctableSettlementDate: Date,
+            amountPaid: AmountOfRubles,
+            paymentMean: PaymentMean,
+            vatRate: VatRate,
+            correctionDescription: String,
+            callback: DocumentRegistrationCallback
     ) {
+        if (correctableSettlementDate >= Date()) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Указана некорректная дата корректируемого расчёта"
+            ))
+        }
+        if (settlementType == SettlementType.RETURN_OF_INCOME && settlementType == SettlementType.RETURN_OF_OUTCOME) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Указанный тип расчёта не поддерживается"
+            ))
+        }
+        if (amountPaid.compareTo(BigDecimal.ZERO) == 0) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Уплаченная сумма не может быть равной нулю"
+            ))
+        }
         context.startIntegrationService(
                 KktIntegrationServiceInternal.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
                 CorrectionReceiptRegistrationRequestedEvent(
-                        taxationSystem,
                         settlementType,
-                        sum,
-                        paymentType,
-                        taxNumber,
+                        taxationSystem,
                         correctionType,
                         basisForCorrection,
-                        correctionDescription,
+                        prescriptionNumber,
                         correctableSettlementDate,
-                        prescriptionNumber
+                        amountPaid,
+                        paymentMean,
+                        vatRate,
+                        correctionDescription
                 ),
-                callback
+                IntegrationManagerCallback {
+                    it?.result?.error?.let { error ->
+                        callback.onError(DocumentRegistrationException(error.code, error.message))
+                    } ?: run {
+                        callback.onSuccess(null)
+                    }
+                }
         )
     }
 }
