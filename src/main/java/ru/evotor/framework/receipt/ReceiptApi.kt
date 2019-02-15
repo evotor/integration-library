@@ -299,49 +299,30 @@ object ReceiptApi {
         val attributes = cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES)?.let {
             createAttributesFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES))
         }
-        val builder = Position.Builder.newInstance(
+        val builder = Position.Builder.copyFrom(Position(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
+                ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                 cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
                 price,
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000))
-        )
-                .setTaxNumber(cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
-                .setPriceWithDiscountPosition(priceWithDiscountPosition)
-                .setBarcode(cursor.safeGetString(PositionTable.COLUMN_BARCODE))
-                .setMark(cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
-                .setExtraKeys(extraKeys)
-                .setSubPositions(emptyList())
+                priceWithDiscountPosition,
+                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
+                cursor.safeGetString(PositionTable.COLUMN_BARCODE),
+                cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) },
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                extraKeys,
+                emptyList()
+        ))
                 .setAttributes(attributes)
-                .setProductCode(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)))
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
-        val productType = ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)))
-        when (productType) {
-            ProductType.ALCOHOL_MARKED -> {
-                builder.toAlcoholMarked(
-                        cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
-                        cursor.safeGetLong(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.safeGetLong(PositionTable.COLUMN_TARE_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
-                )
-            }
-            ProductType.ALCOHOL_NOT_MARKED -> {
-                builder.toAlcoholNotMarked(
-                        cursor.safeGetLong(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.safeGetLong(PositionTable.COLUMN_TARE_VOLUME)?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
-                )
-            }
-            ProductType.SERVICE -> {
-                builder.toService()
-            }
-            else -> {
-            }
-        }
-        builder.setSettlementMethod(SettlementMethodMapper.read(cursor)
-                ?: throw IntegrationLibraryMappingException(Position::class.java))
+                .setSettlementMethod(SettlementMethodMapper.read(cursor)
+                        ?: throw IntegrationLibraryMappingException(Position::class.java))
         return builder.build()
     }
 
