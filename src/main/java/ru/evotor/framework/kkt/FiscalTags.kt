@@ -40,6 +40,16 @@ object FiscalTags {
     const val SETTLEMENT_TYPE = 1054
 
     /**
+     * Применяемая система налогообложения
+     */
+    const val TAXATION_SYSTEM = 1055
+
+    /**
+     * Ставка НДС
+     */
+    const val VAT_RATE = 1199
+
+    /**
      * Признак агента по предмету расчёта
      */
     const val SETTLEMENT_SUBJECT_AGENT_TYPE = 1222
@@ -93,4 +103,29 @@ object FiscalTags {
      * Операция платёжного агента
      */
     const val PAYMENT_AGENT_OPERATION = 1044
+
+    /**
+     * Тип коррекции
+     */
+    const val CORRECTION_TYPE = 1173
+
+    /**
+     * Основание для коррекции
+     */
+    const val BASIS_FOR_CORRECTION = 1174
+
+    /**
+     * Описание коррекции
+     */
+    const val CORRECTION_DESCRIPTION = 1177
+
+    /**
+     * Дата совершения корректируемого расчета
+     */
+    const val CORRECTABLE_SETTLEMENT_DATE = 1178
+
+    /**
+     * Номер предписания налогового органа
+     */
+    const val PRESCRIPTION_NUMBER = 1179
 }

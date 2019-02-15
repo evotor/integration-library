@@ -21,6 +21,11 @@ class DocumentRegistrationException(
         const val CODE_EMPLOYEE_NOT_AUTHORIZED = -3
 
         /**
+         * Касса выполняет другую операцию
+         */
+        const val CODE_KKT_IS_BUSY = -4
+
+        /**
          * Кассовая смена превысила 24 часа. Необходимо закрыть смену.
          */
         const val CODE_KKT_SESSION_TIME_EXPIRED = -3822
@@ -43,7 +48,7 @@ class DocumentRegistrationException(
         /**
          * Время в кассе сильно разнится со временем в планшете. Необходима синхронизация времени.
          */
-        const val CODE_KKT_DATETIME_IS_DIFFERENT_FROM_TABLET_DATETIME = -4
+        const val CODE_KKT_DATETIME_IS_DIFFERENT_FROM_TABLET_DATETIME = -5
 
         /**
          * Неопознанная ошибка

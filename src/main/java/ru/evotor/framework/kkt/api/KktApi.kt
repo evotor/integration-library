@@ -7,6 +7,8 @@ import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.kkt.FfdVersion
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
@@ -103,7 +105,7 @@ object KktApi {
             }
 
     /**
-     * Установлен ли на терминал пакет обновлений с возможностью пробивать фискальные документы по
+     * Проверяет, установлен ли на терминал пакет обновлений с возможностью пробивать фискальные документы по
      * ставке НДС 20%.
      * @return Boolean или null, если не удалось связаться с кассой.
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
@@ -122,19 +124,53 @@ object KktApi {
                         ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
             }
 
+    /**
+     * Регистрирует чек коррекции.
+     * @param context контекст приложения
+     * @param settlementType тип (признак) расчета
+     * @param taxationSystem применяемая система налогообложения (одна из тех, которые были указаны при регистрации кассы)
+     * @param correctionType тип коррекции
+     * @param basisForCorrection основание для коррекции
+     * @param prescriptionNumber номер предписания налогового органа
+     * @param correctableSettlementDate дата совершения корректируемого расчета
+     * @param amountPaid уплаченная сумма
+     * @param paymentMean платёжное средство, использованное для оплаты
+     * @param vatRate ставка НДС
+     * @param correctionDescription описание коррекции
+     * @param callback
+     */
     @JvmStatic
     fun registerCorrectionReceipt(
             context: Context,
+
+            @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
             settlementType: SettlementType,
+
+            @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
             taxationSystem: TaxationSystem,
+
+            @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
             correctionType: CorrectionType,
+
+            @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
             basisForCorrection: String,
+
+            @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
             prescriptionNumber: String,
+
+            @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
             correctableSettlementDate: Date,
+
             amountPaid: AmountOfRubles,
+
             paymentMean: PaymentMean,
+
+            @FiscalRequisite(FiscalTags.VAT_RATE)
             vatRate: VatRate,
+
+            @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
             correctionDescription: String,
+
             callback: DocumentRegistrationCallback
     ) {
         if (correctableSettlementDate >= Date()) {
