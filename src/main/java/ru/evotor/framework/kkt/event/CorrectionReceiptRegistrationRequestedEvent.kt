@@ -7,7 +7,7 @@ import ru.evotor.framework.payment.PaymentMean
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import java.util.*
 
 class CorrectionReceiptRegistrationRequestedEvent internal constructor(
