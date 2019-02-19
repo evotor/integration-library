@@ -470,6 +470,14 @@ public class Position implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
+        return equals(o, false);
+    }
+
+    public boolean equalsExceptQuantity(Object o) {
+        return equals(o, true);
+    }
+
+    private boolean equals(Object o, boolean exceptQuantity) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -491,7 +499,7 @@ public class Position implements Parcelable {
         if ((priceWithDiscountPosition != null ? priceWithDiscountPosition : BigDecimal.ZERO)
                 .compareTo(position.priceWithDiscountPosition != null ? position.priceWithDiscountPosition : BigDecimal.ZERO) != 0)
             return false;
-        if ((quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
+        if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
         if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
             return false;
