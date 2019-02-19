@@ -5,7 +5,6 @@ import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.payment.AmountOfRubles
-import ru.evotor.framework.receipt.VatRate
 import ru.evotor.framework.receipt.position.mapper.PositionMapper
 import java.util.*
 

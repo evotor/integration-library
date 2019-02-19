@@ -5,7 +5,7 @@ import android.database.Cursor
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.core.*
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.WeakAlcoholMapper
@@ -18,7 +18,7 @@ import java.util.*
 internal object ProductMapper {
     fun read(context: Context, cursor: Cursor) = when (cursor.safeGetString(InventoryContract.Product.VARIATION_ID)) {
         InventoryContract.Product.VARIATION_ID_UNCLASSIFIED_PRODUCT -> UnclassifiedProductMapper.read(cursor)
-        InventoryContract.Product.VARIATION_ID_UNCLASSIFIED_SERVICE -> UnclassifiedServiceMapper.read(cursor)
+        InventoryContract.Product.VARIATION_ID_SERVICE -> ServiceMapper.read(cursor)
         InventoryContract.Product.VARIATION_ID_WEAK_ALCOHOL -> WeakAlcoholMapper.read(context, cursor, true)
         InventoryContract.Product.VARIATION_ID_STRONG_ALCOHOL -> StrongAlcoholMapper.read(context, cursor, true)
         InventoryContract.Product.VARIATION_ID_TOBACCO -> TobaccoMapper.read(cursor)

@@ -14,7 +14,7 @@ import ru.evotor.query.Cursor
 
 object InventoryApi {
     @JvmStatic
-    fun findProductsByBarcode(context: Context, barcode: String): List<Product>? =
+    fun getProductsByBarcode(context: Context, barcode: String): List<Product>? =
             context.contentResolver.query(
                     InventoryContract.Barcode.getProductsByBarcodeUri(barcode),
                     null,
@@ -28,7 +28,7 @@ object InventoryApi {
             }
 
     @JvmStatic
-    fun findBarcodesForProduct(context: Context, productUuid: String): List<String>? =
+    fun getBarcodesForProduct(context: Context, productUuid: String): List<String>? =
             context.contentResolver.query(
                     InventoryContract.Barcode.CONTENT_URI,
                     arrayOf(InventoryContract.Barcode.VALUE),

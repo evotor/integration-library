@@ -4,7 +4,7 @@ import android.content.Context
 import ru.evotor.framework.Volume
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.StrongAlcoholMapper
 import ru.evotor.framework.inventory.product.extension.AlcoholProduct
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct

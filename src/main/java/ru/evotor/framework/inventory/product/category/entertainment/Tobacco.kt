@@ -3,7 +3,7 @@ package ru.evotor.framework.inventory.product.category.entertainment
 import android.content.Context
 import ru.evotor.framework.Quantity
 import ru.evotor.framework.inventory.product.Product
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.inventory.product.category.entertainment.mapper.TobaccoMapper
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
 import ru.evotor.framework.inventory.provider.InventoryContract

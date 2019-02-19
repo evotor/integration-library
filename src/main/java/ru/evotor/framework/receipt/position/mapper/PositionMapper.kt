@@ -5,8 +5,8 @@ import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.safeGetEnumByName
 import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.inventory.product.Product
+import ru.evotor.framework.inventory.product.Service
 import ru.evotor.framework.inventory.product.extension.ExcisableProduct
-import ru.evotor.framework.inventory.product.extension.Service
 import ru.evotor.framework.mapper.QuantityMapper
 import ru.evotor.framework.payment.mapper.AmountOfRublesMapper
 import ru.evotor.framework.receipt.position.Position

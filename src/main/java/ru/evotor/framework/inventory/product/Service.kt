@@ -2,19 +2,18 @@ package ru.evotor.framework.inventory.product
 
 import android.content.Context
 import ru.evotor.framework.Quantity
-import ru.evotor.framework.inventory.product.extension.Service
-import ru.evotor.framework.inventory.product.mapper.UnclassifiedServiceMapper
+import ru.evotor.framework.inventory.product.mapper.ServiceMapper
 import ru.evotor.framework.inventory.provider.InventoryContract
 import ru.evotor.framework.payment.AmountOfRubles
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 import java.util.*
 
 /**
- * Неклассифицированная услуга
+ * Услуга
  */
-data class UnclassifiedService internal constructor(
+data class Service internal constructor(
         override val uuid: UUID,
         override val groupUuid: UUID?,
         override val name: String,
@@ -24,13 +23,13 @@ data class UnclassifiedService internal constructor(
         override val vatRate: VatRate,
         override val quantity: Quantity,
         override val description: String?
-) : Product(), Service {
+) : Product(){
 
     /**
-     * Запрос на получение неклассифицированных услуг из базы данных смарт-терминала
+     * Запрос на получение услуг из базы данных смарт-терминала
      */
-    class Query : FilterBuilder<Query, Query.SortOrder, UnclassifiedService>(
-            InventoryContract.Product.UNCLASSIFIED_SERVICES_URI
+    class Query : FilterBuilder<Query, Query.SortOrder, Service>(
+            InventoryContract.Product.SERVICES_URI
     ) {
         val uuid = addFieldFilter<UUID>(InventoryContract.Product.UUID)
         val groupUuid = addFieldFilter<UUID?>(InventoryContract.Product.GROUP_UUID)
@@ -39,7 +38,7 @@ data class UnclassifiedService internal constructor(
         val vendorCode = addFieldFilter<String?>(InventoryContract.Product.VENDOR_CODE)
         val price = addFieldFilter<AmountOfRubles?>(InventoryContract.Product.PRICE)
         val vatRate = addFieldFilter<VatRate>(InventoryContract.Product.VAT_RATE)
-        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, Query.SortOrder, UnclassifiedService>(
+        val quantity = addInnerFilterBuilder(Quantity.Filter<Query, Query.SortOrder, Service>(
                 InventoryContract.Product.QUANTITY_EXACT_VALUE,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_NAME,
                 InventoryContract.Product.UNIT_OF_MEASUREMENT_TYPE
@@ -62,7 +61,7 @@ data class UnclassifiedService internal constructor(
             val description = addFieldSorter(InventoryContract.Product.DESCRIPTION)
         }
 
-        override fun getValue(context: Context, cursor: Cursor<UnclassifiedService>): UnclassifiedService =
-                UnclassifiedServiceMapper.read(cursor)
+        override fun getValue(context: Context, cursor: Cursor<Service>): Service =
+                ServiceMapper.read(cursor)
     }
 }

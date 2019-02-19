@@ -1,4 +1,4 @@
-package ru.evotor.framework.receipt
+package ru.evotor.framework.receipt.position
 
 enum class VatRate {
     WITHOUT_VAT,

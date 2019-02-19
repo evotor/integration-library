@@ -22,7 +22,7 @@ import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.inventory.product.Product;
 import ru.evotor.framework.inventory.product.UnclassifiedProduct;
-import ru.evotor.framework.inventory.product.UnclassifiedService;
+import ru.evotor.framework.inventory.product.Service;
 import ru.evotor.framework.inventory.product.category.entertainment.StrongAlcohol;
 import ru.evotor.framework.inventory.product.category.entertainment.WeakAlcohol;
 import ru.evotor.framework.receipt.position.SettlementMethod;
@@ -802,7 +802,7 @@ public class Position implements Parcelable {
             if (product instanceof UnclassifiedProduct) {
                 builder.setAlcoParams(null, null, null, null);
                 builder.position.productType = ProductType.NORMAL;
-            } else if (product instanceof UnclassifiedService) {
+            } else if (product instanceof Service) {
                 builder.setAlcoParams(null, null, null, null);
                 builder.position.productType = ProductType.SERVICE;
             } else if (product instanceof WeakAlcohol) {

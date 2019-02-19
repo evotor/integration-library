@@ -3,7 +3,7 @@ package ru.evotor.framework.receipt.position.mapper
 import android.database.Cursor
 import ru.evotor.framework.core.safeGetEnumByName
 import ru.evotor.framework.receipt.TaxNumber
-import ru.evotor.framework.receipt.VatRate
+import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.receipt.provider.ReceiptContract
 
 internal object VatRateMapper {

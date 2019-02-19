@@ -53,13 +53,13 @@ public final class InventoryContract {
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.ru.evotor.framework.inventory.product.Product";
 
         public static final Uri UNCLASSIFIED_PRODUCTS_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_products");
-        public static final Uri UNCLASSIFIED_SERVICES_URI = Uri.withAppendedPath(CONTENT_URI, "unclassified_services");
+        public static final Uri SERVICES_URI = Uri.withAppendedPath(CONTENT_URI, "services");
         public static final Uri WEAK_ALCOHOL_URI = Uri.withAppendedPath(CONTENT_URI, "weak_alcohol");
         public static final Uri STRONG_ALCOHOL_URI = Uri.withAppendedPath(CONTENT_URI, "strong_alcohol");
         public static final Uri TOBACCO_URI = Uri.withAppendedPath(CONTENT_URI, "tobacco");
 
         public static final String VARIATION_ID_UNCLASSIFIED_PRODUCT = "NORMAL";
-        public static final String VARIATION_ID_UNCLASSIFIED_SERVICE = "SERVICE";
+        public static final String VARIATION_ID_SERVICE = "SERVICE";
         public static final String VARIATION_ID_WEAK_ALCOHOL = "ALCOHOL_NOT_MARKED";
         public static final String VARIATION_ID_STRONG_ALCOHOL = "ALCOHOL_MARKED";
         public static final String VARIATION_ID_TOBACCO = "TOBACCO_MARKED";
