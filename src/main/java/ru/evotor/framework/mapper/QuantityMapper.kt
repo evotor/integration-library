@@ -7,18 +7,10 @@ import java.math.BigDecimal
 
 internal object QuantityMapper {
     val exactValueConverter = { exactValue: BigDecimal ->
-        exactValue.multiply(BigDecimal(1000)).setScale(0).longValueExact()
-    }
-
-    fun getInitialValue(value: BigDecimal): String = value.scale().let { sourceScale ->
-        val resultScale = when {
-            sourceScale < Quantity.MIN_SCALE -> Quantity.MIN_SCALE
-            sourceScale > Quantity.MAX_SCALE -> Quantity.MAX_SCALE
-            else -> sourceScale
-        }
-        return@let if (resultScale != sourceScale) value.setScale(resultScale, BigDecimal.ROUND_HALF_UP) else value
-    }.let { newValue ->
-        newValue.toPlainString()
+        exactValue
+                .multiply(BigDecimal(1000))
+                .setScale(0, BigDecimal.ROUND_HALF_UP)
+                .longValueExact()
     }
 
     fun read(
@@ -48,10 +40,4 @@ internal object QuantityMapper {
                 calculationBlock.invoke(target)
             else
                 throw UnsupportedOperationException("Расчёт не удался. Приведите оба значения к одной единице измерения.")
-
-    fun checkScale(scale: Int) =
-            if (scale in Quantity.MIN_SCALE..Quantity.MAX_SCALE)
-                scale
-            else
-                throw IllegalArgumentException("Неправильный масштаб. Укажите масштаб от 0 до 3")
 }

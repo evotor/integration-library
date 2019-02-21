@@ -51,9 +51,21 @@ sealed class UnitOfMeasurement(val name: String, val type: Type) {
         }
     }
 
+    class Milliliter : UnitOfMeasurement(NAME, Type.VOLUME_UNIT) {
+        companion object {
+            const val NAME = "мл"
+        }
+    }
+
     class Liter : UnitOfMeasurement(NAME, Type.VOLUME_UNIT) {
         companion object {
             const val NAME = "л"
+        }
+    }
+
+    class Decalitre : UnitOfMeasurement(NAME, Type.VOLUME_UNIT) {
+        companion object {
+            const val NAME = "дл"
         }
     }
 

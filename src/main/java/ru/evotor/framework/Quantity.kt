@@ -8,7 +8,7 @@ import java.math.RoundingMode
 open class Quantity(
         value: BigDecimal,
         val unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()
-) : BigDecimal(QuantityMapper.getInitialValue(value)) {
+) : BigDecimal(value.toPlainString()) {
     constructor(value: String, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
     constructor(value: Int, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
@@ -17,27 +17,35 @@ open class Quantity(
 
     constructor(value: Double, unitOfMeasurement: UnitOfMeasurement = UnitOfMeasurement.Piece()) : this(BigDecimal(value), unitOfMeasurement)
 
+    @Throws(UnsupportedOperationException::class)
     override fun add(augend: BigDecimal) = QuantityMapper.calculate(this, augend) { Quantity(super.add(it), this.unitOfMeasurement) }
 
+    @Throws(UnsupportedOperationException::class)
     override fun subtract(subtrahend: BigDecimal) = QuantityMapper.calculate(this, subtrahend) { Quantity(super.subtract(it), this.unitOfMeasurement) }
 
+    @Throws(UnsupportedOperationException::class)
     override fun multiply(multiplicand: BigDecimal) = QuantityMapper.calculate(this, multiplicand) { Quantity(super.multiply(it), this.unitOfMeasurement) }
 
+    @Throws(UnsupportedOperationException::class)
     override fun divide(divisor: BigDecimal) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it), this.unitOfMeasurement) }
 
+    @Throws(UnsupportedOperationException::class)
     override fun divide(divisor: BigDecimal, roundingMode: Int) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, roundingMode), this.unitOfMeasurement) }
 
+    @Throws(UnsupportedOperationException::class)
     override fun divide(divisor: BigDecimal, roundingMode: RoundingMode?) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, QuantityMapper.checkScale(scale), roundingMode), this.unitOfMeasurement) }
+    @Throws(UnsupportedOperationException::class)
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: Int) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
 
-    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, QuantityMapper.checkScale(scale), roundingMode), this.unitOfMeasurement) }
+    @Throws(UnsupportedOperationException::class)
+    override fun divide(divisor: BigDecimal, scale: Int, roundingMode: RoundingMode?) = QuantityMapper.calculate(this, divisor) { Quantity(super.divide(it, scale, roundingMode), this.unitOfMeasurement) }
 
-    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = Quantity(super.setScale(QuantityMapper.checkScale(newScale), roundingMode), this.unitOfMeasurement)
+    override fun setScale(newScale: Int, roundingMode: RoundingMode?) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int, roundingMode: Int) = Quantity(super.setScale(QuantityMapper.checkScale(newScale), roundingMode), this.unitOfMeasurement)
+    override fun setScale(newScale: Int, roundingMode: Int) = Quantity(super.setScale(newScale, roundingMode), this.unitOfMeasurement)
 
-    override fun setScale(newScale: Int) = Quantity(super.setScale(QuantityMapper.checkScale(newScale)), this.unitOfMeasurement)
+    override fun setScale(newScale: Int) = Quantity(super.setScale(newScale), this.unitOfMeasurement)
 
     override fun abs() = Quantity(super.abs(), this.unitOfMeasurement)
 
@@ -91,10 +99,5 @@ open class Quantity(
                     columnUnitOfMeasurementType
             ))
         }
-    }
-
-    companion object {
-        const val MIN_SCALE = 0
-        const val MAX_SCALE = 3
     }
 }
