@@ -43,8 +43,8 @@ internal object QuantityMapper {
         )
     }
 
-    fun calculate(source: Quantity, target: BigDecimal, calculationBlock: (Quantity) -> Quantity) =
-            if (target is Quantity && target.unitOfMeasurement == source.unitOfMeasurement)
+    fun calculate(source: Quantity, target: BigDecimal, calculationBlock: (BigDecimal) -> Quantity) =
+            if (target !is Quantity || target.unitOfMeasurement == source.unitOfMeasurement)
                 calculationBlock.invoke(target)
             else
                 throw UnsupportedOperationException("Расчёт не удался. Приведите оба значения к одной единице измерения.")
