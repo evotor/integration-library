@@ -7,8 +7,11 @@ import ru.evotor.framework.core.safeGetLong
 import ru.evotor.framework.core.safeGetPercents
 import ru.evotor.framework.mapper.VolumeMapper
 import java.util.*
+import kotlin.math.roundToLong
 
 internal object AlcoholProductMapper {
+    val alcoholPercentageConverter = { it: Float? -> it?.times(1000)?.roundToLong() ?: 0L }
+
     fun loadExtension(context: Context, productUuid: UUID): Cursor? =
             context.contentResolver
                     .query(
