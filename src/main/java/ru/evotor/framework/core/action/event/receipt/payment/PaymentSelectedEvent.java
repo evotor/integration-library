@@ -8,6 +8,7 @@ import ru.evotor.framework.payment.PaymentPurpose;
 
 public class PaymentSelectedEvent extends PaymentEvent {
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.payment.SELECTED";
+    public static final String NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.payment.SELECTED";
 
     public PaymentSelectedEvent(@NonNull PaymentPurpose paymentPurpose) {
         super(paymentPurpose);
