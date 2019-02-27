@@ -62,7 +62,7 @@ open class Quantity(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Quantity) return false
-        if (!super.equals(other)) return false
+        if (this.stripTrailingZeros() != other.stripTrailingZeros()) return false
 
         if (unitOfMeasurement != other.unitOfMeasurement) return false
 
