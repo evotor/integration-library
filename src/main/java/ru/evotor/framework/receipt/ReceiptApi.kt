@@ -292,48 +292,30 @@ object ReceiptApi {
         val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
             createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
         }
-        val builder = Position.Builder.newInstance(
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
-                cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                price,
-                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000))
-        )
-                .setTaxNumber(cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) })
-                .setPriceWithDiscountPosition(priceWithDiscountPosition)
-                .setBarcode(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)))
-                .setMark(cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) })
-                .setExtraKeys(extraKeys)
-                .setSubPositions(emptyList())
+        val builder = Position.Builder
+                .copyFrom(Position(
+                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
+                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
+                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
+                        ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
+                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
+                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
+                        cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                        cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
+                        price,
+                        priceWithDiscountPosition,
+                        BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
+                        cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
+                        cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) },
+                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                        extraKeys,
+                        emptyList()
+                ))
                 .setAttributes(attributes)
-                .setProductCode(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)))
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
-        val productType = ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)))
-        when (productType) {
-            ProductType.ALCOHOL_MARKED -> {
-                builder.toAlcoholMarked(
-                        cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) }!!,
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
-                )
-            }
-            ProductType.ALCOHOL_NOT_MARKED -> {
-                builder.toAlcoholNotMarked(
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!,
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.optLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME))?.let { BigDecimal(it).divide(BigDecimal(1000)) }!!
-                )
-            }
-            ProductType.SERVICE -> {
-                builder.toService()
-            }
-            else -> {
-            }
-        }
-        builder.setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
         return builder.build()
     }
 
