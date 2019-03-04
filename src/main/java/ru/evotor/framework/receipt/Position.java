@@ -486,26 +486,31 @@ public class Position implements Parcelable {
         if (measureName != null ? !measureName.equals(position.measureName) : position.measureName != null)
             return false;
         if (taxNumber != position.taxNumber) return false;
-        if (price != null ? !price.equals(position.price) : position.price != null) return false;
-        if (priceWithDiscountPosition != null ? !priceWithDiscountPosition.equals(position.priceWithDiscountPosition) : position.priceWithDiscountPosition != null)
+        if ((price != null ? price : BigDecimal.ZERO).compareTo(position.price != null ? position.price : BigDecimal.ZERO) != 0)
             return false;
-        if (quantity != null ? !quantity.equals(position.quantity) : position.quantity != null)
+        if ((priceWithDiscountPosition != null ? priceWithDiscountPosition : BigDecimal.ZERO)
+                .compareTo(position.priceWithDiscountPosition != null ? position.priceWithDiscountPosition : BigDecimal.ZERO) != 0)
+            return false;
+        if ((quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
         if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
             return false;
         if (mark != null ? !mark.equals(position.mark) : position.mark != null) return false;
-        if (alcoholByVolume != null ? !alcoholByVolume.equals(position.alcoholByVolume) : position.alcoholByVolume != null)
+        if ((alcoholByVolume != null ? alcoholByVolume : BigDecimal.ZERO)
+                .compareTo(position.alcoholByVolume != null ? position.alcoholByVolume : BigDecimal.ZERO) != 0)
             return false;
         if (alcoholProductKindCode != null ? !alcoholProductKindCode.equals(position.alcoholProductKindCode) : position.alcoholProductKindCode != null)
             return false;
-        if (tareVolume != null ? !tareVolume.equals(position.tareVolume) : position.tareVolume != null)
+        if ((tareVolume != null ? tareVolume : BigDecimal.ZERO).compareTo(position.tareVolume != null ? position.tareVolume : BigDecimal.ZERO) != 0)
             return false;
         if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
             return false;
         if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
             return false;
-        if (settlementMethod != position.settlementMethod) return false;
-        if (agentRequisites != position.agentRequisites) return false;
+        if (!settlementMethod.equals(position.settlementMethod))
+            return false;
+        if (agentRequisites != null ? !agentRequisites.equals(position.agentRequisites) : position.agentRequisites != null)
+            return false;
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
