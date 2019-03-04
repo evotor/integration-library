@@ -26,7 +26,8 @@ class PrintPaybackReceiptCommand(
         extra: SetExtra?,
         clientPhone: String?,
         clientEmail: String?,
-        receiptDiscount: BigDecimal?
+        receiptDiscount: BigDecimal?,
+        val sellReceiptUuid: String? = null
 ) : PrintReceiptCommand(
         printReceipts,
         extra,
@@ -40,12 +41,14 @@ class PrintPaybackReceiptCommand(
      * @param payments Список оплат
      * @param clientPhone Телефон клиента
      * @param clientEmail Эл.почта клиента
+     * @param sellReceiptUuid Идентифиатор чека продажи, на основании которого осуществляется возврат
      */
     constructor(
             positions: List<Position>,
             payments: List<Payment>,
             clientPhone: String?,
-            clientEmail: String?) : this(
+            clientEmail: String?,
+            sellReceiptUuid: String? = null) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -69,16 +72,23 @@ class PrintPaybackReceiptCommand(
             null,
             clientPhone,
             clientEmail,
-            BigDecimal.ZERO
+            BigDecimal.ZERO,
+            sellReceiptUuid
     )
 
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
         process(activity, callback, NAME)
     }
 
+    override fun toBundle() = super.toBundle().apply {
+        this.putString(KEY_SELL_RECEIPT_UUID, sellReceiptUuid)
+    }
+
     companion object {
 
         const val NAME = "evo.v2.receipt.payback.printReceipt"
+
+        private const val KEY_SELL_RECEIPT_UUID = "SELL_RECEIPT_UUID"
 
         fun create(bundle: Bundle?): PrintPaybackReceiptCommand? {
             if (bundle == null) {
@@ -89,9 +99,9 @@ class PrintPaybackReceiptCommand(
                     getSetExtra(bundle),
                     getClientPhone(bundle),
                     getClientEmail(bundle),
-                    getReceiptDiscount(bundle)
+                    getReceiptDiscount(bundle),
+                    bundle.getString(KEY_SELL_RECEIPT_UUID)
             )
         }
     }
-
 }
