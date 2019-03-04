@@ -3,6 +3,7 @@ package ru.evotor.framework.inventory
 import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
 
+@Deprecated("Используйте ru.evotor.framework.inventory.product.Product или ru.evotor.framework.inventory.ProductGroup")
 sealed class ProductItem(
         val uuid: String,
         val parentUuid: String?,

@@ -1,5 +1,6 @@
 package ru.evotor.framework.inventory
 
+import android.content.Context
 import ru.evotor.framework.receipt.TaxNumber
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
@@ -8,6 +9,7 @@ import java.math.BigDecimal
 /**
  * Created by a.lunkov on 07.03.2018.
  */
+@Deprecated("Используйте ru.evotor.framework.inventory.product.Product.Query или ru.evotor.framework.inventory.ProductGroup.Query")
 class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, ProductItem?>(ProductTable.URI) {
 
     @JvmField
@@ -23,9 +25,9 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     @JvmField
     val type = addFieldFilter<ProductType>(ProductTable.ROW_TYPE)
     @JvmField
-    val price = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_PRICE_OUT, {it.multiply(BigDecimal(100))})
+    val price = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_PRICE_OUT, { it.multiply(BigDecimal(100)) })
     @JvmField
-    val quantity = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_QUANTITY, {it.multiply(BigDecimal(1000))})
+    val quantity = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_QUANTITY, { it.multiply(BigDecimal(1000)) })
     @JvmField
     val description = addFieldFilter<String?>(ProductTable.ROW_DESCRIPTION)
     @JvmField
@@ -33,14 +35,11 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     @JvmField
     val measurePrecision = addFieldFilter<Int>(ProductTable.ROW_MEASURE_PRECISION)
     @JvmField
-    val alcoholByVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_ALCOHOL_BY_VOLUME, {it?.multiply(BigDecimal(1000))})
+    val alcoholByVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_ALCOHOL_BY_VOLUME, { it?.multiply(BigDecimal(1000)) })
     @JvmField
     val alcoholProductKindCode = addFieldFilter<Long?>(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)
     @JvmField
-    val tareVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_TARE_VOLUME, {it?.multiply(BigDecimal(1000))})
-
-    override val currentQuery: ProductQuery
-        get() = this
+    val tareVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_TARE_VOLUME, { it?.multiply(BigDecimal(1000)) })
 
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
@@ -73,12 +72,9 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
         @JvmField
         val tareVolume = addFieldSorter(ProductTable.ROW_TARE_VOLUME)
 
-        override val currentSortOrder: SortOrder
-            get() = this
-
     }
 
-    override fun getValue(cursor: Cursor<ProductItem?>): ProductItem? {
+    override fun getValue(context: Context, cursor: Cursor<ProductItem?>): ProductItem? {
         return ProductMapper.getValueFromCursor(cursor)
     }
 

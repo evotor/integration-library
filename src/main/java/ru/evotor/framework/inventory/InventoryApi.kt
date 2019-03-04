@@ -16,7 +16,7 @@ import java.math.BigDecimal
  * Created by nixan on 06.03.17.
  */
 
-
+@Deprecated("Используйте новое товароучетное апи: ru.evotor.framework.inventory.api.InventoryApi")
 object InventoryApi {
     @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
 

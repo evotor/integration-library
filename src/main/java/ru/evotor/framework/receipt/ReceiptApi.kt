@@ -6,10 +6,11 @@ import android.net.Uri
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
-import ru.evotor.framework.optLong
-import ru.evotor.framework.optString
+import ru.evotor.framework.core.safeGetLong
+import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -17,9 +18,7 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
-import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -49,6 +48,14 @@ object ReceiptApi {
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
     private val CURRENT_BUY_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUY_PATH)
     private val CURRENT_BUYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUYBACK_PATH)
+
+    private const val FISCAL_DOCUMENTS_AUTHORITY = "ru.evotor.framework.document.fiscal"
+
+    private val FISCAL_DOCUMENTS_URI: Uri = Uri.parse("content://$FISCAL_DOCUMENTS_AUTHORITY")
+
+    private const val FISCAL_RECEIPT_PATH = "receipt"
+
+    private val FISCAL_RECEIPT_URI: Uri = Uri.withAppendedPath(FISCAL_DOCUMENTS_URI, FISCAL_RECEIPT_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -241,7 +248,7 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
-            context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
+            context.contentResolver.query(FISCAL_RECEIPT_URI, null, null, arrayOf(receiptUuid), null)
                     ?.let {
                         object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
                             override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
@@ -286,36 +293,36 @@ object ReceiptApi {
         } else {
             price
         }
-        val extraKeys = cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-            createExtraKeysFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_EXTRA_KEYS)))
+        val extraKeys = cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
+            createExtraKeysFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS))
         }
-        val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
-            createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
+        val attributes = cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES)?.let {
+            createAttributesFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES))
         }
-        val builder = Position.Builder
-                .copyFrom(Position(
-                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
-                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
-                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                        ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
-                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
-                        cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
-                        cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                        cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
-                        price,
-                        priceWithDiscountPosition,
-                        BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
-                        cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                        cursor.optString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) },
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
-                        extraKeys,
-                        emptyList()
-                ))
+        val builder = Position.Builder.copyFrom(Position(
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
+                ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
+                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
+                cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
+                price,
+                priceWithDiscountPosition,
+                BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
+                cursor.safeGetString(PositionTable.COLUMN_BARCODE),
+                cursor.safeGetString(PositionTable.COLUMN_MARK)?.let { cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK)) },
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                extraKeys,
+                emptyList()
+        ))
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
-                .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setSettlementMethod(SettlementMethodMapper.read(cursor)
+                        ?: throw IntegrationLibraryMappingException(Position::class.java))
         return builder.build()
     }
 
@@ -401,9 +408,9 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
                 safeValueOf<Receipt.Type>(cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE)))
                         ?: return null,
-                cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
-                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
-                cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
+                cursor.safeGetLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
+                cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
+                cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
                 extra
         )
     }

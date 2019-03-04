@@ -5,4 +5,11 @@ import ru.evotor.framework.FutureFeature
 import java.util.*
 
 @FutureFeature("Нефискальный чек (квитанция)")
-private data class NonFiscalReceipt(override val uuid: UUID) : Document()
+private data class NonFiscalReceipt(
+        override val uuid: UUID
+) : Document() {
+    enum class Type {
+        INVOICE,
+        STRING_UTII
+    }
+}

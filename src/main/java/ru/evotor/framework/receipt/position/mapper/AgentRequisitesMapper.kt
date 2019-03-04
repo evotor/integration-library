@@ -9,15 +9,14 @@ import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.AgentMapper
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.TransactionOperatorMapper
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetList
-import ru.evotor.framework.optString
+import ru.evotor.framework.core.safeGetInt
+import ru.evotor.framework.core.safeGetList
+import ru.evotor.framework.core.safeGetString
 import ru.evotor.framework.receipt.position.AgentRequisites
-import ru.evotor.framework.receipt.position.provider.AgentRequisitesContract
+import ru.evotor.framework.receipt.provider.ReceiptContract
 import java.util.*
 
 internal object AgentRequisitesMapper {
-
     private const val KEY_AGENT = "AGENT"
     private const val KEY_SUBAGENT = "SUBAGENT"
     private const val KEY_PRINCIPAL = "PRINCIPAL"
@@ -104,69 +103,69 @@ internal object AgentRequisitesMapper {
                 subagent = readSubagent(cursor),
                 principal = readPrincipal(cursor) ?: return null,
                 transactionOperator = readTransactionOperator(cursor),
-                operationDescription = cursor.optString(AgentRequisitesContract.COLUMN_OPERATION_DESCRIPTION)
+                operationDescription = cursor.safeGetString(ReceiptContract.Position.OPERATION_DESCRIPTION)
         )
     }
 
     private fun readAgent(cursor: Cursor): Agent? =
-            if (cursor.optString(AgentRequisitesContract.COLUMN_AGENT_IS_NULL)?.toBoolean() != false)
+            if (cursor.safeGetString(ReceiptContract.Position.AGENT_IS_NULL)?.toBoolean() != false)
                 null
             else
                 Agent(
-                        uuid = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_UUID)?.let { UUID.fromString(it) },
-                        type = cursor.safeGetInt(AgentRequisitesContract.COLUMN_AGENT_TYPE)?.let { Agent.Type.values()[it] },
-                        counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_AGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                        fullName = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_FULL_NAME),
-                        shortName = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_SHORT_NAME),
-                        inn = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_INN),
-                        kpp = cursor.optString(AgentRequisitesContract.COLUMN_AGENT_KPP),
-                        phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_AGENT_PHONES),
-                        addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_AGENT_ADDRESSES)
+                        uuid = cursor.safeGetString(ReceiptContract.Position.AGENT_UUID)?.let { UUID.fromString(it) },
+                        type = cursor.safeGetInt(ReceiptContract.Position.AGENT_TYPE)?.let { Agent.Type.values()[it] },
+                        counterpartyType = cursor.safeGetInt(ReceiptContract.Position.AGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
+                        fullName = cursor.safeGetString(ReceiptContract.Position.AGENT_FULL_NAME),
+                        shortName = cursor.safeGetString(ReceiptContract.Position.AGENT_SHORT_NAME),
+                        inn = cursor.safeGetString(ReceiptContract.Position.AGENT_INN),
+                        kpp = cursor.safeGetString(ReceiptContract.Position.AGENT_KPP),
+                        phones = cursor.safeGetList(ReceiptContract.Position.AGENT_PHONES),
+                        addresses = cursor.safeGetList(ReceiptContract.Position.AGENT_ADDRESSES)
                 )
 
     private fun readSubagent(cursor: Cursor): Subagent? {
         return Subagent(
-                uuid = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_UUID)?.let { UUID.fromString(it) },
-                type = Subagent.Type.values()[cursor.safeGetInt(AgentRequisitesContract.COLUMN_SUBAGENT_TYPE)
+                uuid = cursor.safeGetString(ReceiptContract.Position.SUBAGENT_UUID)?.let { UUID.fromString(it) },
+                type = Subagent.Type.values()[cursor.safeGetInt(ReceiptContract.Position.SUBAGENT_TYPE)
                         ?: return null],
-                counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_SUBAGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                fullName = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_FULL_NAME),
-                shortName = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_SHORT_NAME),
-                inn = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_INN),
-                kpp = cursor.optString(AgentRequisitesContract.COLUMN_SUBAGENT_KPP),
-                phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_SUBAGENT_PHONES),
-                addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_SUBAGENT_ADDRESSES)
+                counterpartyType = cursor.safeGetInt(ReceiptContract.Position.SUBAGENT_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
+                fullName = cursor.safeGetString(ReceiptContract.Position.SUBAGENT_FULL_NAME),
+                shortName = cursor.safeGetString(ReceiptContract.Position.SUBAGENT_SHORT_NAME),
+                inn = cursor.safeGetString(ReceiptContract.Position.SUBAGENT_INN),
+                kpp = cursor.safeGetString(ReceiptContract.Position.SUBAGENT_KPP),
+                phones = cursor.safeGetList(ReceiptContract.Position.SUBAGENT_PHONES),
+                addresses = cursor.safeGetList(ReceiptContract.Position.SUBAGENT_ADDRESSES)
         )
     }
 
     private fun readPrincipal(cursor: Cursor): Principal? {
         return Principal(
-                uuid = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_UUID)?.let { UUID.fromString(it) },
-                counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_PRINCIPAL_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                fullName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_FULL_NAME),
-                shortName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME),
-                inn = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_INN)
+                uuid = cursor.safeGetString(ReceiptContract.Position.PRINCIPAL_UUID)?.let { UUID.fromString(it) },
+                counterpartyType = cursor.safeGetInt(ReceiptContract.Position.PRINCIPAL_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
+                fullName = cursor.safeGetString(ReceiptContract.Position.PRINCIPAL_FULL_NAME),
+                shortName = cursor.safeGetString(ReceiptContract.Position.PRINCIPAL_SHORT_NAME),
+                inn = cursor.safeGetString(ReceiptContract.Position.PRINCIPAL_INN)
                         ?: return null,
-                kpp = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_KPP),
-                phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_PRINCIPAL_PHONES)
+                kpp = cursor.safeGetString(ReceiptContract.Position.PRINCIPAL_KPP),
+                phones = cursor.safeGetList(ReceiptContract.Position.PRINCIPAL_PHONES)
                         ?: return null,
-                addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_PRINCIPAL_ADDRESSES)
+                addresses = cursor.safeGetList(ReceiptContract.Position.PRINCIPAL_ADDRESSES)
         )
     }
 
     private fun readTransactionOperator(cursor: Cursor): TransactionOperator? =
-            if (cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_IS_NULL)?.toBoolean() != false)
+            if (cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_IS_NULL)?.toBoolean() != false)
                 null
             else
                 TransactionOperator(
-                        uuid = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_UUID)?.let { UUID.fromString(it) },
-                        counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
-                        fullName = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_FULL_NAME),
-                        shortName = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_SHORT_NAME),
-                        inn = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_INN),
-                        kpp = cursor.optString(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_KPP),
-                        phones = cursor.safeGetList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_PHONES),
-                        addresses = cursor.safeGetList(AgentRequisitesContract.COLUMN_TRANSACTION_OPERATOR_ADDRESSES)
+                        uuid = cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_UUID)?.let { UUID.fromString(it) },
+                        counterpartyType = cursor.safeGetInt(ReceiptContract.Position.TRANSACTION_OPERATOR_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
+                        fullName = cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_FULL_NAME),
+                        shortName = cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_SHORT_NAME),
+                        inn = cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_INN),
+                        kpp = cursor.safeGetString(ReceiptContract.Position.TRANSACTION_OPERATOR_KPP),
+                        phones = cursor.safeGetList(ReceiptContract.Position.TRANSACTION_OPERATOR_PHONES),
+                        addresses = cursor.safeGetList(ReceiptContract.Position.TRANSACTION_OPERATOR_ADDRESSES)
                 )
 
     fun write(agentRequisites: AgentRequisites) = Bundle().apply {
@@ -176,5 +175,4 @@ internal object AgentRequisitesMapper {
         this.putBundle(KEY_TRANSACTION_OPERATOR, agentRequisites.transactionOperator?.toBundle())
         this.putString(KEY_OPERATION_DESCRIPTION, agentRequisites.operationDescription)
     }
-
 }

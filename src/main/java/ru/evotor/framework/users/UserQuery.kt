@@ -1,5 +1,6 @@
 package ru.evotor.framework.users
 
+import android.content.Context
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 
@@ -23,9 +24,6 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
     @JvmField
     val roleTitle = addFieldFilter<String>(UsersTable.ROW_ROLE_TITLE)
 
-    override val currentQuery: UserQuery
-        get() = this
-
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
         @JvmField
@@ -45,12 +43,9 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
         @JvmField
         val roleTitle = addFieldSorter(UsersTable.ROW_ROLE_TITLE)
 
-        override val currentSortOrder: SortOrder
-            get() = this
-
     }
 
-    override fun getValue(cursor: Cursor<User?>): User? {
+    override fun getValue(context: Context, cursor: Cursor<User?>): User? {
         return UserMapper.createUser(cursor)
     }
 

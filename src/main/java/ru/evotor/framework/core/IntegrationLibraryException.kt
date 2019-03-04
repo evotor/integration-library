@@ -1,3 +1,5 @@
 package ru.evotor.framework.core
 
-internal abstract class IntegrationLibraryException(message: String) : RuntimeException(message)
+import java.lang.RuntimeException
+
+internal abstract class IntegrationLibraryException(message: String): RuntimeException(message)

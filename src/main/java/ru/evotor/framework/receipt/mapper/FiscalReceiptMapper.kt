@@ -4,11 +4,12 @@ import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.mapper.FiscalDocumentMapper
-import ru.evotor.framework.safeGetEnum
+import ru.evotor.framework.core.safeGetEnumByOrdinal
+import ru.evotor.framework.core.getEnum
 import ru.evotor.framework.receipt.FiscalReceipt
 import ru.evotor.framework.receipt.SettlementType
-import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.safeGetBoolean
+import ru.evotor.framework.receipt.provider.ReceiptContract
+import ru.evotor.framework.core.safeGetBoolean
 
 internal object FiscalReceiptMapper {
     private const val KEY_SETTLEMENT_TYPE = "SETTLEMENT_TYPE"
@@ -18,7 +19,7 @@ internal object FiscalReceiptMapper {
         FiscalReceipt(
                 documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
-                settlementType = it.safeGetEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
+                settlementType = it.getEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
                         ?: return null,
                 kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
                         ?: return null,
@@ -32,25 +33,22 @@ internal object FiscalReceiptMapper {
 
     fun read(cursor: Cursor) = FiscalReceipt(
             documentNumber = FiscalDocumentMapper.readDocumentNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::documentNumber),
             creationDate = FiscalDocumentMapper.readCreationDate(cursor)
-                    ?: throwOutdatedLibraryException(),
-            settlementType = cursor.safeGetEnum(
-                    FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
-            ) ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::creationDate),
+            settlementType = cursor.safeGetEnumByOrdinal(ReceiptContract.FiscalReceiptColumns.SETTLEMENT_TYPE, SettlementType.values())
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::settlementType),
             kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::kktRegistrationNumber),
             sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::sessionNumber),
             fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::fiscalStorageNumber),
             fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
-                    ?: throwOutdatedLibraryException(),
-            wasPrinted = cursor.safeGetBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::fiscalIdentifier),
+            wasPrinted = cursor.safeGetBoolean(KEY_WAS_PRINTED)
+                    ?: throw IntegrationLibraryMappingException(FiscalReceipt::class.java, FiscalReceipt::wasPrinted)
     )
-
-    private fun throwOutdatedLibraryException(): Nothing =
-            throw IntegrationLibraryMappingException("${FiscalReceipt::class.java.name} field")
 
     fun write(fiscalReceipt: FiscalReceipt) = FiscalDocumentMapper.write(fiscalReceipt).apply {
         this.putInt(KEY_SETTLEMENT_TYPE, fiscalReceipt.settlementType.ordinal)
