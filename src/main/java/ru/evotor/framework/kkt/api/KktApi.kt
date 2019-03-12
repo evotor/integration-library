@@ -179,7 +179,7 @@ object KktApi {
                     "Указана некорректная дата корректируемого расчёта"
             ))
         }
-        if (settlementType == SettlementType.RETURN_OF_INCOME && settlementType == SettlementType.RETURN_OF_OUTCOME) {
+        if (settlementType == SettlementType.RETURN_OF_INCOME || settlementType == SettlementType.RETURN_OF_OUTCOME) {
             return callback.onError(DocumentRegistrationException(
                     DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
                     "Указанный тип расчёта не поддерживается"
