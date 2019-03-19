@@ -85,7 +85,7 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная или табачная марка.
+     * Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     private String mark;
     /**
@@ -399,7 +399,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Алкогольная или табачная марка.
+     * @return Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     @Nullable
     public String getMark() {

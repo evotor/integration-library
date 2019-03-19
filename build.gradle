@@ -68,17 +68,24 @@ allprojects {
 }
 
 dokka {
+    moduleName = 'integration-library'
     outputFormat = 'javadoc'
     outputDirectory = "$buildDir/javadoc"
 
     includes = ['packages.md']
 
-    reportUndocumented = true
+//    reportUndocumented = true
 
-    packageOptions {
-        prefix = "android.support" // will match kotlin.internal and all sub-packages of it
-        suppress = true
-    }
+//    packageOptions {
+//        prefix = "android.support" // will match kotlin.internal and all sub-packages of it
+//        suppress = true
+//    }
+
+//    packageOptions {
+//        prefix = "ru.evotor.pushNotifications" // will match kotlin.internal and all sub-packages of it
+//        suppress = true
+//    }
+
 }
 
 task sourceJar(type: Jar) {
