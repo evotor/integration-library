@@ -110,7 +110,7 @@ public class Position implements Parcelable {
     /**
      * Подпозиции (модификаторы)
      */
-    private List<Position> subPositions = new ArrayList<>();
+    private ArrayList<Position> subPositions = new ArrayList<>();
 
     /**
      * Атрибуты
@@ -216,7 +216,7 @@ public class Position implements Parcelable {
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
-        this.subPositions = subPositions;
+        this.subPositions = subPositions != null ? new ArrayList<>(subPositions) : null;
     }
 
     public Position(Position position) {
@@ -440,7 +440,7 @@ public class Position implements Parcelable {
     /**
      * @return Подпозиции (модификаторы).
      */
-    public List<Position> getSubPositions() {
+    public ArrayList<Position> getSubPositions() {
         return subPositions;
     }
 
@@ -932,7 +932,7 @@ public class Position implements Parcelable {
         }
 
         public Builder setSubPositions(List<Position> subPositions) {
-            position.subPositions = subPositions;
+            position.subPositions = new ArrayList<>(subPositions);
             return this;
         }
 
