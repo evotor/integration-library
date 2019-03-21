@@ -24,6 +24,7 @@ import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -122,6 +123,7 @@ object ReceiptApi {
 
         val printGroups = HashSet<PrintGroup?>()
         val getPositionResults = ArrayList<GetPositionResult>()
+        val getSubpositionResults = ArrayList<GetSubpositionResult>()
         context.contentResolver.query(
                 Uri.withAppendedPath(baseUri, POSITIONS_PATH),
                 null,
@@ -133,18 +135,21 @@ object ReceiptApi {
                 createGetPositionResult(cursor)?.let {
                     getPositionResults.add(it)
                     printGroups.add(it.printGroup)
+                } ?: createGetSubpositionResult(cursor)?.let {
+                    getSubpositionResults.add(it)
                 }
             }
         }
 
-        val positionMap = getPositionResults
-                .associateBy { it.position.uuid }
-
-        for ((position, _, parentUuid) in getPositionResults.filter { it.parentUuid != null }) {
-            positionMap.get(parentUuid)?.position?.subPositions?.add(position)
+        for (getPositionResult in getPositionResults) {
+            val subpositions = getSubpositionResults
+                    .filter { it.parentUuid == getPositionResult.position.uuid }
+                    .map { it.position }
+            getPositionResult.position = Position.Builder
+                    .copyFrom(getPositionResult.position)
+                    .setSubPositions(subpositions)
+                    .build()
         }
-
-        val getPositionResultsWithoutSubPositionsInList = getPositionResults.filter { it.parentUuid == null }
 
         val getPaymentsResults = ArrayList<GetPaymentsResult>()
         context.contentResolver.query(
@@ -196,7 +201,7 @@ object ReceiptApi {
                     ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
             printDocuments.add(Receipt.PrintReceipt(
                     printGroup,
-                    getPositionResultsWithoutSubPositionsInList
+                    getPositionResults
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
@@ -250,11 +255,24 @@ object ReceiptApi {
 
 
     private fun createGetPositionResult(cursor: Cursor): GetPositionResult? {
-        return GetPositionResult(
-                createPosition(cursor) ?: return null,
-                createPrintGroup(cursor),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
-        )
+        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null)
+            GetPositionResult(
+                    createPosition(cursor) ?: return null,
+                    createPrintGroup(cursor)
+            )
+        else
+            null
+    }
+
+    private fun createGetSubpositionResult(cursor: Cursor): GetSubpositionResult? {
+        val parentUuid = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
+        return if (parentUuid != null)
+            GetSubpositionResult(
+                    createPosition(cursor) ?: return null,
+                    parentUuid
+            )
+        else
+            null
     }
 
     private fun createGetPaymentResult(cursor: Cursor): GetPaymentsResult? {
@@ -408,7 +426,8 @@ object ReceiptApi {
         )
     }
 
-    private data class GetPositionResult(val position: Position, val printGroup: PrintGroup?, val parentUuid: String?)
+    private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
+    private data class GetSubpositionResult(val position: Position, val parentUuid: String?)
     private data class GetPaymentsResult(val payment: Payment, val printGroup: PrintGroup?, val value: BigDecimal, val change: BigDecimal)
 
     @Deprecated(message = "Используйте метод getSellReceipt")
