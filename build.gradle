@@ -45,7 +45,7 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+    ext.kotlin_version = '1.3.21'
     repositories {
         jcenter()
         google()
@@ -105,7 +105,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "STDEV-631"
+            version "STDEV-981"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
