@@ -56,7 +56,13 @@ abstract class PayAndPrintReceiptCommand(
         private const val KEY_PAYMENT_DELEGATOR = "paymentDelegator"
 
         internal fun getReceiptUuid(bundle: Bundle): String? = bundle.getString(KEY_RECEIPT_UUID)
-        internal fun getPaymentPerformer(bundle: Bundle): PaymentPerformer? = bundle.getParcelable<PaymentPerformer?>(KEY_PAYMENT_PERFORMER)
-        internal fun getPaymentDelegator(bundle: Bundle): PaymentDelegator? = bundle.getParcelable<PaymentDelegator?>(KEY_PAYMENT_DELEGATOR)
+        internal fun getPaymentPerformer(bundle: Bundle): PaymentPerformer? = bundle.let {
+            it.classLoader = PaymentPerformer::class.java.classLoader
+            it.getParcelable<PaymentPerformer?>(KEY_PAYMENT_PERFORMER)
+        }
+        internal fun getPaymentDelegator(bundle: Bundle): PaymentDelegator? = bundle.let {
+            it.classLoader = PaymentDelegator::class.java.classLoader
+            it.getParcelable<PaymentDelegator?>(KEY_PAYMENT_DELEGATOR)
+        }
     }
 }
