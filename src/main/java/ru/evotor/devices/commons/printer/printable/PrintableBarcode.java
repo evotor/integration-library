@@ -59,6 +59,7 @@ public class PrintableBarcode implements IPrintable {
         EAN8,
         UPCA,
         EAN13,
-        CODE39
+        CODE39,
+        QR_CODE
     }
 }

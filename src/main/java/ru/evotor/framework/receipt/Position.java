@@ -110,7 +110,7 @@ public class Position implements Parcelable {
     /**
      * Подпозиции (модификаторы)
      */
-    private List<Position> subPositions = new ArrayList<>();
+    private ArrayList<Position> subPositions = new ArrayList<>();
 
     /**
      * Атрибуты
@@ -216,7 +216,7 @@ public class Position implements Parcelable {
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
-        this.subPositions = subPositions;
+        this.subPositions = subPositions != null ? new ArrayList<>(subPositions) : null;
     }
 
     public Position(Position position) {
@@ -440,7 +440,7 @@ public class Position implements Parcelable {
     /**
      * @return Подпозиции (модификаторы).
      */
-    public List<Position> getSubPositions() {
+    public ArrayList<Position> getSubPositions() {
         return subPositions;
     }
 
@@ -470,6 +470,14 @@ public class Position implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
+        return equals(o, false);
+    }
+
+    public boolean equalsExceptQuantity(Object o) {
+        return equals(o, true);
+    }
+
+    private boolean equals(Object o, boolean exceptQuantity) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -491,7 +499,7 @@ public class Position implements Parcelable {
         if ((priceWithDiscountPosition != null ? priceWithDiscountPosition : BigDecimal.ZERO)
                 .compareTo(position.priceWithDiscountPosition != null ? position.priceWithDiscountPosition : BigDecimal.ZERO) != 0)
             return false;
-        if ((quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
+        if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
         if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
             return false;
@@ -932,7 +940,7 @@ public class Position implements Parcelable {
         }
 
         public Builder setSubPositions(List<Position> subPositions) {
-            position.subPositions = subPositions;
+            position.subPositions = new ArrayList<>(subPositions);
             return this;
         }
 
