@@ -1,7 +1,10 @@
 package ru.evotor.framework.component
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.IBundlable
+import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 import ru.evotor.framework.payment.PaymentSystem
 
 /**
@@ -18,13 +21,18 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
                        componentName: String?,
                        appUuid: String?,
                        appName: String?
-) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable {
+) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            parcel.readParcelable(PaymentSystem::class.java.classLoader),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
+            PaymentPerformerMapper.fromBundle(parcel.readBundle(PaymentPerformerMapper::class.java.classLoader))
+            ?: throw IllegalStateException()) {
+    }
+
+    private constructor(paymentPerformer: PaymentPerformer) : this(
+            paymentPerformer.paymentSystem,
+            paymentPerformer.packageName,
+            paymentPerformer.componentName,
+            paymentPerformer.appUuid,
+            paymentPerformer.appName) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,11 +48,7 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
         val startPosition = parcel.dataPosition()
 
         // version 1
-        parcel.writeParcelable(paymentSystem, flags)
-        parcel.writeString(packageName)
-        parcel.writeString(componentName)
-        parcel.writeString(appUuid)
-        parcel.writeString(appName)
+        parcel.writeParcelable(toBundle(), flags)
 
         // Go back and write the size
         val parcelableSize = parcel.dataPosition() - startPosition
@@ -102,11 +106,13 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
     }
 
     override fun hashCode(): Int {
-        var result =  paymentSystem?.hashCode() ?: 0
+        var result = paymentSystem?.hashCode() ?: 0
         result = 31 * result + (packageName?.hashCode() ?: 0)
         result = 31 * result + (componentName?.hashCode() ?: 0)
         result = 31 * result + (appUuid?.hashCode() ?: 0)
         result = 31 * result + (appName?.hashCode() ?: 0)
         return result
     }
+
+    override fun toBundle(): Bundle = PaymentPerformerMapper.toBundle(this)
 }

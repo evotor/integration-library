@@ -9,6 +9,8 @@ import ru.evotor.framework.component.PaymentDelegator
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
+import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
+import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 
 /**
  * Команда запуска процесса оплаты и печати текущего чека
@@ -43,8 +45,8 @@ abstract class PayAndPrintReceiptCommand(
     override fun toBundle(): Bundle {
         val bundle = Bundle()
         bundle.putString(KEY_RECEIPT_UUID, receiptUuid)
-        bundle.putParcelable(KEY_PAYMENT_PERFORMER, paymentPerformer)
-        bundle.putParcelable(KEY_PAYMENT_DELEGATOR, paymentDelegator)
+        paymentPerformer?.let { bundle.putBundle(KEY_PAYMENT_PERFORMER, PaymentPerformerMapper.toBundle(it)) }
+        paymentDelegator?.let { bundle.putBundle(KEY_PAYMENT_DELEGATOR, PaymentDelegatorMapper.toBundle(it)) }
         return bundle
     }
 
@@ -56,13 +58,11 @@ abstract class PayAndPrintReceiptCommand(
         private const val KEY_PAYMENT_DELEGATOR = "paymentDelegator"
 
         internal fun getReceiptUuid(bundle: Bundle): String? = bundle.getString(KEY_RECEIPT_UUID)
-        internal fun getPaymentPerformer(bundle: Bundle): PaymentPerformer? = bundle.let {
-            it.classLoader = PaymentPerformer::class.java.classLoader
-            it.getParcelable<PaymentPerformer?>(KEY_PAYMENT_PERFORMER)
+        internal fun getPaymentPerformer(bundle: Bundle): PaymentPerformer? = bundle.getBundle(KEY_PAYMENT_PERFORMER)?.let {
+            PaymentPerformerMapper.fromBundle(it)
         }
-        internal fun getPaymentDelegator(bundle: Bundle): PaymentDelegator? = bundle.let {
-            it.classLoader = PaymentDelegator::class.java.classLoader
-            it.getParcelable<PaymentDelegator?>(KEY_PAYMENT_DELEGATOR)
+        internal fun getPaymentDelegator(bundle: Bundle): PaymentDelegator? = bundle.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
+            PaymentDelegatorMapper.fromBundle(it)
         }
     }
 }

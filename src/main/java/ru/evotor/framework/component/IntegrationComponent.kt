@@ -1,7 +1,10 @@
 package ru.evotor.framework.component
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.IBundlable
+import ru.evotor.framework.core.action.datamapper.IntegrationComponentMapper
 
 /**
  * Компонент интеграционного приложения, данные из манифеста
@@ -16,12 +19,18 @@ open class IntegrationComponent(
         val componentName: String?,
         val appUuid: String?,
         val appName: String?
-) : Parcelable {
+) : Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
+            IntegrationComponentMapper.fromBundle(parcel.readBundle(IntegrationComponent::class.java.classLoader))
+                    ?: throw IllegalStateException()) {
+    }
+
+    private constructor(integrationComponent: IntegrationComponent) : this(
+            integrationComponent.packageName,
+            integrationComponent.componentName,
+            integrationComponent.appUuid,
+            integrationComponent.appName
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -37,10 +46,7 @@ open class IntegrationComponent(
         val startPosition = parcel.dataPosition()
 
         // version 1
-        parcel.writeString(packageName)
-        parcel.writeString(componentName)
-        parcel.writeString(appUuid)
-        parcel.writeString(appName)
+        parcel.writeBundle(toBundle())
 
         // Go back and write the size
         val parcelableSize = parcel.dataPosition() - startPosition
@@ -81,4 +87,6 @@ open class IntegrationComponent(
             }
         }
     }
+
+    override fun toBundle(): Bundle = IntegrationComponentMapper.toBundle(this)
 }
