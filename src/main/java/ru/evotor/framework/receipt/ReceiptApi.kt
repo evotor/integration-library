@@ -24,6 +24,7 @@ import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -137,11 +138,18 @@ object ReceiptApi {
             }
         }
 
-        val positionMap = getPositionResults
-                .associateBy { it.position.uuid }
+        val positionMap = HashMap(getPositionResults.associateBy { it.position.uuid })
 
         for ((position, _, parentUuid) in getPositionResults.filter { it.parentUuid != null }) {
-            positionMap.get(parentUuid)?.position?.subPositions?.add(position)
+            positionMap.get(parentUuid)?.let {
+                positionMap.put(
+                        parentUuid,
+                        it.copy(position = Position.Builder
+                                .copyFrom(it.position)
+                                .setSubPositions(it.position.subPositions.plus(position))
+                                .build())
+                )
+            }
         }
 
         val getPositionResultsWithoutSubPositionsInList = getPositionResults.filter { it.parentUuid == null }
