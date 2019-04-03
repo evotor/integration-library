@@ -1,11 +1,10 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
-import ru.evotor.framework.FLAG_MULTIPLE_VALUES
-import ru.evotor.framework.FiscalRequisite
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.SubagentMapper
-import ru.evotor.framework.receipt.position.AgentRequisites
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalTags
 import java.util.*
 
 /**
@@ -20,7 +19,7 @@ data class Subagent(
         /**
          * Тип (признак) субагента
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_SETTLEMENT_SUBJECT_AGENT_TYPE)
+        @FiscalRequisite(tag = FiscalTags.SETTLEMENT_SUBJECT_AGENT_TYPE)
         val type: Type,
 
         /**
@@ -51,7 +50,7 @@ data class Subagent(
         /**
          * Телефоны
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_PAYMENT_AGENT_PHONE, flags = [FLAG_MULTIPLE_VALUES])
+        @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
         override val phones: List<String>? = null,
 
         /**

@@ -1,11 +1,4 @@
-package ru.evotor.framework
-
-private const val NO_FLAGS = 0
-
-/**
- * Означает, что фискальный реквизит может иметь несколько значений.
- */
-internal const val FLAG_MULTIPLE_VALUES = 2
+package ru.evotor.framework.kkt
 
 /**
  * Означает, что значение анотированной переменной было записано (если она была получена при
@@ -24,5 +17,14 @@ internal annotation class FiscalRequisite(
         /**
          * Флаги
          */
-        vararg val flags: Int = [NO_FLAGS]
-)
+        val flags: Int = NO_FLAGS
+) {
+    companion object {
+        private const val NO_FLAGS = 0
+
+        /**
+         * Означает, что фискальный реквизит может иметь несколько значений.
+         */
+        internal const val FLAG_MULTIPLE_VALUES = 2
+    }
+}

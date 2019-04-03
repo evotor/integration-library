@@ -3,8 +3,9 @@ package ru.evotor.framework.receipt
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.FiscalDocument
-import ru.evotor.framework.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.FutureFeature
+import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.provider.FiscalDocumentContract
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
@@ -16,43 +17,43 @@ data class FiscalReceipt internal constructor(
         /**
          * Номер фискального документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_DOCUMENT_NUMBER)
+        @FiscalRequisite(tag = FiscalTags.DOCUMENT_NUMBER)
         override val documentNumber: Long,
 
         /**
          * Дата и время создания фискального документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_CREATION_DATE)
+        @FiscalRequisite(tag = FiscalTags.CREATION_DATE)
         override val creationDate: Date,
 
         /**
-         * Тип (признак) расчёта
+         * Признак (тип) расчёта
          */
-        @FiscalRequisite(tag = TAG_SETTLEMENT_TYPE)
+        @FiscalRequisite(tag = FiscalTags.SETTLEMENT_TYPE)
         val settlementType: SettlementType,
 
         /**
          * Регистрационный номер ККТ
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_KKT_REGISTRATION_NUMBER)
+        @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
         override val kktRegistrationNumber: Long,
 
         /**
          * Номер аппаратной смены
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_SESSION_NUMBER)
+        @FiscalRequisite(tag = FiscalTags.SESSION_NUMBER)
         override val sessionNumber: Long,
 
         /**
          * Номер фискального накопителя
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_STORAGE_NUMBER)
+        @FiscalRequisite(tag = FiscalTags.FISCAL_STORAGE_NUMBER)
         override val fiscalStorageNumber: Long,
 
         /**
          * Фискальный признак (фискальный идентификатор) документа
          */
-        @FiscalRequisite(tag = FiscalDocument.TAG_FISCAL_IDENTIFIER)
+        @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
         override val fiscalIdentifier: Long,
 
         /**
@@ -61,11 +62,6 @@ data class FiscalReceipt internal constructor(
         val wasPrinted: Boolean
 ) : FiscalDocument(), IBundlable {
     companion object {
-        /**
-         * Фискальный тег "Признак расчёта"
-         */
-        const val TAG_SETTLEMENT_TYPE = 1054
-
         fun from(bundle: Bundle?): FiscalReceipt? = FiscalReceiptMapper.read(bundle)
     }
 
