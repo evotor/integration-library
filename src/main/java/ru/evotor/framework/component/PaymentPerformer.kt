@@ -42,7 +42,8 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
         parcel.writeInt(0)
         val startPosition = parcel.dataPosition()
 
-        // version 1parcel.writeParcelable(paymentSystem, flags)
+        // version 1
+        parcel.writeParcelable(paymentSystem, flags)
         parcel.writeString(packageName)
         parcel.writeString(componentName)
         parcel.writeString(appUuid)
