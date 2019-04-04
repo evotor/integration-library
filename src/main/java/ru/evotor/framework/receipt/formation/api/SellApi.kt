@@ -5,8 +5,8 @@ import ru.evotor.framework.component.PaymentDelegator
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
-import ru.evotor.framework.receipt.event.handler.service.ReceiptBacksideIntegrationService
-import ru.evotor.framework.receipt.formation.event.MoveCurrentReceiptDraftToPaymentStageEvent
+import ru.evotor.framework.receipt.formation.event.handler.service.SellBacksideIntegrationService
+import ru.evotor.framework.receipt.formation.event.CurrentReceiptDraftMovementToPaymentStageRequestedEvent
 
 object SellApi {
     /**
@@ -17,13 +17,13 @@ object SellApi {
      * @param callback
      */
     @JvmStatic
-    fun moveCurrentSellReceiptDraftToPaymentStage(context: Context, paymentPerformer: PaymentPerformer, callback: ReceiptFormationCallback) {
+    fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentPerformer: PaymentPerformer, callback: ReceiptFormationCallback) {
         context.startIntegrationService(
-                ReceiptBacksideIntegrationService.ACTION_MOVE_CURRENT_SELL_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
-                MoveCurrentReceiptDraftToPaymentStageEvent(null, paymentPerformer),
+                SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+                CurrentReceiptDraftMovementToPaymentStageRequestedEvent(null, paymentPerformer),
                 IntegrationManagerCallback {
                     it?.result?.error?.let { error -> callback.onError(ReceiptFormationException(error.code, error.message)) }
-                            ?: run { callback.onSuccess() }
+                            ?: callback.onSuccess()
                 }
         )
     }
@@ -32,17 +32,17 @@ object SellApi {
      * Переходит к процессу оплаты с последующей печатью чека)
      *
      * @param context Контекст приложения
-     * @param paymentDelegator Интеграционный компонент, осуществляющий комбооплату
+     * @param paymentDelegator Интеграционный компонент, осуществляющий делегирование платежей другим приложениям
      * @param callback
      */
     @JvmStatic
-    fun moveCurrentSellReceiptDraftToPaymentStage(context: Context, paymentDelegator: PaymentDelegator, callback: ReceiptFormationCallback) {
+    fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentDelegator: PaymentDelegator, callback: ReceiptFormationCallback) {
         context.startIntegrationService(
-                ReceiptBacksideIntegrationService.ACTION_MOVE_CURRENT_SELL_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
-                MoveCurrentReceiptDraftToPaymentStageEvent(paymentDelegator, null),
+                SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+                CurrentReceiptDraftMovementToPaymentStageRequestedEvent(paymentDelegator, null),
                 IntegrationManagerCallback {
                     it?.result?.error?.let { error -> callback.onError(ReceiptFormationException(error.code, error.message)) }
-                            ?: run { callback.onSuccess() }
+                            ?: callback.onSuccess()
                 }
         )
     }

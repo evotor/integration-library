@@ -7,7 +7,7 @@ import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
 import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 
-class MoveCurrentReceiptDraftToPaymentStageEvent internal constructor(
+class CurrentReceiptDraftMovementToPaymentStageRequestedEvent internal constructor(
         val paymentDelegator: PaymentDelegator?,
         val paymentPerformer: PaymentPerformer?
 ) : IBundlable {
@@ -17,8 +17,8 @@ class MoveCurrentReceiptDraftToPaymentStageEvent internal constructor(
     }
 
     companion object {
-        fun from(bundle: Bundle?): MoveCurrentReceiptDraftToPaymentStageEvent? = bundle?.let {
-            MoveCurrentReceiptDraftToPaymentStageEvent(
+        fun from(bundle: Bundle?): CurrentReceiptDraftMovementToPaymentStageRequestedEvent? = bundle?.let {
+            CurrentReceiptDraftMovementToPaymentStageRequestedEvent(
                     bundle.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
                         PaymentDelegatorMapper.fromBundle(it)
                     },
