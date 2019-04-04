@@ -21,16 +21,10 @@ open class IntegrationComponent(
         val appName: String?
 ) : Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            IntegrationComponentMapper.fromBundle(parcel.readBundle(IntegrationComponent::class.java.classLoader))
-                    ?: throw IllegalStateException()) {
-    }
-
-    private constructor(integrationComponent: IntegrationComponent) : this(
-            integrationComponent.packageName,
-            integrationComponent.componentName,
-            integrationComponent.appUuid,
-            integrationComponent.appName
-    ) {
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -46,7 +40,10 @@ open class IntegrationComponent(
         val startPosition = parcel.dataPosition()
 
         // version 1
-        parcel.writeBundle(toBundle())
+        parcel.writeString(packageName)
+        parcel.writeString(componentName)
+        parcel.writeString(appUuid)
+        parcel.writeString(appName)
 
         // Go back and write the size
         val parcelableSize = parcel.dataPosition() - startPosition
@@ -86,6 +83,8 @@ open class IntegrationComponent(
                 return arrayOfNulls(size)
             }
         }
+
+        fun from(bundle: Bundle?) = IntegrationComponentMapper.fromBundle(bundle)
     }
 
     override fun toBundle(): Bundle = IntegrationComponentMapper.toBundle(this)

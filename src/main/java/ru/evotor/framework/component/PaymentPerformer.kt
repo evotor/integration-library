@@ -23,16 +23,11 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
                        appName: String?
 ) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            PaymentPerformerMapper.fromBundle(parcel.readBundle(PaymentPerformerMapper::class.java.classLoader))
-            ?: throw IllegalStateException()) {
-    }
-
-    private constructor(paymentPerformer: PaymentPerformer) : this(
-            paymentPerformer.paymentSystem,
-            paymentPerformer.packageName,
-            paymentPerformer.componentName,
-            paymentPerformer.appUuid,
-            paymentPerformer.appName) {
+            parcel.readParcelable(PaymentSystem::class.java.classLoader),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -47,8 +42,11 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
         parcel.writeInt(0)
         val startPosition = parcel.dataPosition()
 
-        // version 1
-        parcel.writeParcelable(toBundle(), flags)
+        // version 1parcel.writeParcelable(paymentSystem, flags)
+        parcel.writeString(packageName)
+        parcel.writeString(componentName)
+        parcel.writeString(appUuid)
+        parcel.writeString(appName)
 
         // Go back and write the size
         val parcelableSize = parcel.dataPosition() - startPosition
@@ -88,6 +86,8 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
                 return arrayOfNulls(size)
             }
         }
+
+        fun from(bundle: Bundle?) = PaymentPerformerMapper.fromBundle(bundle)
     }
 
     override fun equals(other: Any?): Boolean {

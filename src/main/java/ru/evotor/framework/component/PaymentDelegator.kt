@@ -21,4 +21,8 @@ class PaymentDelegator(packageName: String?,
     override fun toBundle(): Bundle {
         return PaymentDelegatorMapper.toBundle(this)
     }
+
+    companion object {
+        fun from(bundle: Bundle?) = PaymentDelegatorMapper.fromBundle(bundle)
+    }
 }
