@@ -2,6 +2,7 @@ package ru.evotor.framework.common.event
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.IntegrationLibraryMappingException
 
 abstract class IntegrationEvent internal constructor() : IBundlable {
 
@@ -18,7 +19,7 @@ abstract class IntegrationEvent internal constructor() : IBundlable {
 
         fun from(bundle: Bundle?) = bundle?.let {
             Class
-                    .forName(KEY_CLASS_NAME)
+                    .forName(it.getString(KEY_CLASS_NAME) ?: throw IntegrationLibraryMappingException(IntegrationEvent::class.java.name))
                     .getMethod(FROM_METHOD_NAME, Bundle::class.java)
                     .invoke(it) as IntegrationEvent?
         }
