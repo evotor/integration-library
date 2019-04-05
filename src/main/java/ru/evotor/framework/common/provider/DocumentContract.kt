@@ -1,4 +1,4 @@
-package ru.evotor.framework.provider
+package ru.evotor.framework.common.provider
 
 import android.net.Uri
 

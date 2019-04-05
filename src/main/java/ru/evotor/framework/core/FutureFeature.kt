@@ -1,4 +1,4 @@
-package ru.evotor.framework
+package ru.evotor.framework.core
 
 /**
  * То, что вскоре, возможно, будет реализовано.

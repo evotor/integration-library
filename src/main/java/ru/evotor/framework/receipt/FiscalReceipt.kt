@@ -2,10 +2,10 @@ package ru.evotor.framework.receipt
 
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.FiscalDocument
-import ru.evotor.framework.FiscalRequisite
-import ru.evotor.framework.FutureFeature
-import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.common.FiscalDocument
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.core.FutureFeature
+import ru.evotor.framework.common.provider.FiscalDocumentContract
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.query.Cursor

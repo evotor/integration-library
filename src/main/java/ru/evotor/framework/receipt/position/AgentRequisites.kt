@@ -2,8 +2,8 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.FLAG_MULTIPLE_VALUES
-import ru.evotor.framework.FiscalRequisite
+import ru.evotor.framework.kkt.FLAG_MULTIPLE_VALUES
+import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator

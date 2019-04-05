@@ -1,7 +1,7 @@
-package ru.evotor.framework
+package ru.evotor.framework.common
 
 import android.os.Bundle
-import ru.evotor.framework.mapper.FiscalDocumentMapper
+import ru.evotor.framework.common.mapper.FiscalDocumentMapper
 import java.util.*
 
 abstract class FiscalDocument internal constructor() : Document() {

@@ -1,9 +1,10 @@
-package ru.evotor.framework.mapper
+package ru.evotor.framework.common.mapper
 
 import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.*
-import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.common.FiscalDocument
+import ru.evotor.framework.common.provider.FiscalDocumentContract
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -1,7 +1,7 @@
-package ru.evotor.framework.mapper
+package ru.evotor.framework.common.mapper
 
 import android.os.Bundle
-import ru.evotor.framework.Document
+import ru.evotor.framework.common.Document
 import ru.evotor.framework.safeGetSerializable
 import java.util.*
 

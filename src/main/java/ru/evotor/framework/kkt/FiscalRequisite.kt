@@ -1,4 +1,4 @@
-package ru.evotor.framework
+package ru.evotor.framework.kkt
 
 private const val NO_FLAGS = 0
 

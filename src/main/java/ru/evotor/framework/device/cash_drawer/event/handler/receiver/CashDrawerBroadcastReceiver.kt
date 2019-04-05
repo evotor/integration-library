@@ -3,7 +3,7 @@ package ru.evotor.framework.device.cash_drawer.event.handler.receiver
 import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.core.BroadcastEventReceiver
+import ru.evotor.framework.common.event.handler.receiver.BroadcastEventReceiver
 import ru.evotor.framework.device.cash_drawer.event.CashDrawerOpenedEvent
 
 /**

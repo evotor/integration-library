@@ -1,7 +1,7 @@
 package ru.evotor.framework.receipt.provider
 
 import android.net.Uri
-import ru.evotor.framework.provider.FiscalDocumentContract
+import ru.evotor.framework.common.provider.FiscalDocumentContract
 
 internal object FiscalReceiptContract {
     private const val PATH = "receipt"

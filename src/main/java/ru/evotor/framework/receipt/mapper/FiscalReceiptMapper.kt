@@ -3,7 +3,7 @@ package ru.evotor.framework.receipt.mapper
 import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.mapper.FiscalDocumentMapper
+import ru.evotor.framework.common.mapper.FiscalDocumentMapper
 import ru.evotor.framework.safeGetEnum
 import ru.evotor.framework.receipt.FiscalReceipt
 import ru.evotor.framework.receipt.SettlementType

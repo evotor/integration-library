@@ -1,4 +1,4 @@
-package ru.evotor.framework.core
+package ru.evotor.framework.common.event.handler.service
 
 import android.app.Service
 import android.content.Intent
@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.RemoteException
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.IIntegrationManager
+import ru.evotor.framework.core.IIntegrationManagerResponse
+import ru.evotor.framework.core.IntegrationManager
+import ru.evotor.framework.core.IntegrationResponse
 
 private fun IIntegrationManagerResponse.onEmptyResult() =
         onResult(Bundle().apply { putBoolean(IntegrationManager.KEY_SKIP, true) })
@@ -23,34 +27,34 @@ private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, 
             })
         })
 
-abstract class IntegrationServiceV2 : Service() {
+abstract class IntegrationServiceV2 internal constructor() : Service() {
 
     @Volatile
     private var intentToIntegrationActivity: Intent? = null
 
     private val binder = object : IIntegrationManager.Stub() {
         @Throws(RemoteException::class)
-        override fun call(response: IIntegrationManagerResponse, action: String, bundle: Bundle?) =
-                bundle
-                        ?.let {
-                            onEvent(action, it)
-                        }
-                        ?.let {
-                            response.onResultWithData(it.toBundle())
-                        }
-                        ?: intentToIntegrationActivity?.let {
-                            response.onResultWithIntent(bundle, it)
-                            intentToIntegrationActivity = null
-                        }
-                        ?: response.onEmptyResult()
-
+        override fun call(response: IIntegrationManagerResponse, action: String, bundle: Bundle?) {
+            bundle
+                    ?.let {
+                        onEvent(action, it)
+                    }
+                    ?.let {
+                        response.onResultWithData(it.toBundle())
+                    }
+                    ?: intentToIntegrationActivity?.let {
+                        response.onResultWithIntent(bundle, it)
+                    }
+                    ?: response.onEmptyResult()
+            intentToIntegrationActivity = null
+        }
     }
 
     override fun onBind(intent: Intent): IBinder = binder.asBinder()
 
     abstract fun onEvent(action: String, bundle: Bundle): IBundlable?
 
-    protected fun startIntegtationActivity(intent: Intent): Nothing? {
+    protected fun startIntegrationActivity(intent: Intent): Nothing? {
         intentToIntegrationActivity = intent
         return null
     }

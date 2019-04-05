@@ -1,8 +1,9 @@
-package ru.evotor.framework
+package ru.evotor.framework.common
 
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.mapper.DocumentMapper
+import ru.evotor.framework.core.FutureFeature
+import ru.evotor.framework.common.mapper.DocumentMapper
 import java.util.*
 
 abstract class Document internal constructor(): IBundlable {

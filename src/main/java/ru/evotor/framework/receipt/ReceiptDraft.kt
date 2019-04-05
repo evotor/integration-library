@@ -1,6 +1,6 @@
 package ru.evotor.framework.receipt
 
-import ru.evotor.framework.FutureFeature
+import ru.evotor.framework.core.FutureFeature
 import java.util.*
 
 @FutureFeature("Несформированный чек (до момента регистриции в кассе и/или печати)")
