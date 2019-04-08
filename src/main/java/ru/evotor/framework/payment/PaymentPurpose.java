@@ -1,5 +1,6 @@
 package ru.evotor.framework.payment;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import java.math.BigDecimal;
 
 import ru.evotor.framework.component.PaymentPerformer;
+import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper;
 
 /**
  * Оплата, списком которых может быть оплачен чек. Содержит сумму и цель оплаты (платёжную систему и аккаунт).
@@ -166,7 +168,7 @@ public class PaymentPurpose implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.identifier);
-        dest.writeParcelable(this.paymentPerformer, flags);
+        dest.writeBundle(PaymentPerformerMapper.INSTANCE.toBundle(this.paymentPerformer));
         dest.writeString(this.total.toPlainString());
         dest.writeString(this.accountId);
         dest.writeString(this.userMessage);
@@ -175,7 +177,7 @@ public class PaymentPurpose implements Parcelable {
     protected PaymentPurpose(Parcel in) {
         this.identifier = in.readString();
         this.paymentSystemId = in.readString();
-        this.paymentPerformer = in.readParcelable(PaymentPerformer.class.getClassLoader());
+        this.paymentPerformer = PaymentPerformerMapper.INSTANCE.fromBundle(in.readBundle());
         this.total = new BigDecimal(in.readString());
         this.accountId = in.readString();
         this.userMessage = in.readString();
