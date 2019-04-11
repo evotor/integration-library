@@ -11,7 +11,7 @@ import ru.evotor.framework.core.action.datamapper.IntegrationComponentMapper
  *
  * @property packageName Название пакета
  * @property componentName Название компонента (сервис, активити и т.п.)
- * @property appUuid Уникальный идентификатора приложения в системе Эвотора
+ * @property appUuid Уникальный идентификатор приложения в Облаке Эвотор
  * @property appName Название приложения
  */
 open class IntegrationComponent(

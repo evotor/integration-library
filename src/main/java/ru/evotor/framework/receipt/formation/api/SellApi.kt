@@ -8,9 +8,12 @@ import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.receipt.formation.event.handler.service.SellBacksideIntegrationService
 import ru.evotor.framework.receipt.formation.event.CurrentReceiptDraftMovementToPaymentStageRequestedEvent
 
+/**
+ * Класс содержит методы для оплаты чеков из интерфейса приложения.
+ */
 object SellApi {
     /**
-     * Переходит к процессу оплаты с последующей печатью чека
+     * Переходит к процессу оплаты с последующей печатью чека.
      *
      * @param context Контекст приложения
      * @param paymentPerformer Интеграционный компонент, осуществляющий оплату
@@ -29,7 +32,7 @@ object SellApi {
     }
 
     /**
-     * Переходит к процессу оплаты с последующей печатью чека)
+     * Переходит к процессу оплаты с последующей печатью чека.
      *
      * @param context Контекст приложения
      * @param paymentDelegator Интеграционный компонент, осуществляющий делегирование платежей другим приложениям

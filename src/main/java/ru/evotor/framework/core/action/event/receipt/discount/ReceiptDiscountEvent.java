@@ -9,10 +9,27 @@ import java.math.BigDecimal;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;
 
+/**
+ * Событие, которое возникает при начислении скидки на чек.
+ * <p>
+ * Константы события указывают тип чека, на который начисляется скидка.
+ * <p>
+ * Чтобы приложение получало событие, значение константы необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
+ */
 public class ReceiptDiscountEvent implements IBundlable {
     private static final String TAG = "ReceiptDiscountEvent";
 
+    /**
+     * Скидка начислена на чек продажи.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.sell.receiptDiscount</code>.
+     */
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.receiptDiscount";
+    /**
+     * Скидка начислена на чек возврата.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.payback.receiptDiscount</code>.
+     */
     public static final String NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.receiptDiscount";
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";

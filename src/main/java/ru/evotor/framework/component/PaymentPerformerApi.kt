@@ -9,6 +9,9 @@ import ru.evotor.framework.core.action.event.receipt.payment.system.event.Paymen
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
 
+/**
+ * Класс для получения исполнителей платежей, установленных на смарт-терминале.
+ */
 object PaymentPerformerApi {
 
     private const val METADATA_NAME_APP_UUID = "app_uuid"
@@ -18,6 +21,12 @@ object PaymentPerformerApi {
     private const val CASH_PAYMENT_DESCRIPTION = "Наличные"
     private const val CARD_PAYMENT_DESCRIPTION = "Банковская карта"
 
+    /**
+     * Возвращает список всех установленных на смарт-терминале приложений, способных выполнить оплату.
+     * @param packageManager экземпляр класса PackageManager, необходимого, для получения информации об установленных приложениях.
+     * @return applicationsList список приложений, способных выполнить оплату.
+     * @see PaymentPerformer
+     */
     fun getAllPaymentPerformers(packageManager: PackageManager): List<PaymentPerformer> {
         val eventName = PaymentSystemEvent.NAME_ACTION
         val applicationsList = ArrayList<PaymentPerformer>()

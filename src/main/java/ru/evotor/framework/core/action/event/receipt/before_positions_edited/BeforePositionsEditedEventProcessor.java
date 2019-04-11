@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
+/**
+ * Процессор (класс для обработки) события, которое возникает при намерении изменить позицию чека: {@link BeforePositionsEditedEvent}.
+ */
 public abstract class BeforePositionsEditedEventProcessor extends ActionProcessor {
 
     @Override

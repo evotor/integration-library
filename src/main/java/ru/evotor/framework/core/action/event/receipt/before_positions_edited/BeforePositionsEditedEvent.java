@@ -13,12 +13,39 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 
+/**
+ * Событие, которое возникает при намерении изменить позицию чека.
+ * <p>
+ * Константы события указывают тип чека, позиции которого будут изменены.
+ * <p>
+ * Чтобы приложение получало событие, значение константы необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
+ */
 public class BeforePositionsEditedEvent implements IBundlable {
     private static final String TAG = "PositionsEditedEvent";
 
+    /**
+     * Будут изменены позиции чека продажи.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.sell.beforePositionsEdited</code>.
+     */
     public static final String NAME_SELL_RECEIPT = "evo.v2.receipt.sell.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека возврата.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.payback.beforePositionsEdited</code>.
+     */
     public static final String NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека покупки.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.buy.beforePositionsEdited</code>.
+     */
     public static final String NAME_BUY_RECEIPT = "evo.v2.receipt.buy.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека возврата покупки.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.buyback.beforePositionsEdited</code>.
+     */
     public static final String NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.beforePositionsEdited";
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
