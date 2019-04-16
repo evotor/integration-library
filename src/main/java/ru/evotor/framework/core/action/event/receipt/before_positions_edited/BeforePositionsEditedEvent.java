@@ -14,11 +14,11 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 
 /**
- * Событие, которое возникает при намерении изменить позицию чека.
+ * Событие, которое сообщает об изменении чека пользователем или другим приложением, и предоставляет возможность приложению внести свои изменения.
  * <p>
- * Константы события указывают тип чека, позиции которого будут изменены.
+ * Константы события указывают тип чека, позиции которого будет изменять приложение.
  * <p>
- * Чтобы приложение получало событие, значение константы необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
+ * Чтобы приложение получало событие, значение константы необходимо указать в элементе action intent-фильтра соотвествующей службы.
  */
 public class BeforePositionsEditedEvent implements IBundlable {
     private static final String TAG = "PositionsEditedEvent";
@@ -95,11 +95,20 @@ public class BeforePositionsEditedEvent implements IBundlable {
         return result;
     }
 
+    /**
+     * Возвращает идентификатор чека, позиции которого будут изменены.
+     * @return receiptUuid — идентификатор чека.
+     */
     @NonNull
     public String getReceiptUuid() {
         return receiptUuid;
     }
 
+    /**
+     * Возвращает список сделанных в чеке изменений.
+     * @return changes — список изменений.
+     * @see IChange
+     */
     @NonNull
     public List<IPositionChange> getChanges() {
         return changes;

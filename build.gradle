@@ -55,7 +55,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.16"
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.17"
     }
 }
 // in the individual module build.gradle files
@@ -91,13 +91,23 @@ dokka {
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/dokkaJavadoc"
+
+    includes = ['packages.md']
 }
 
 task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = "html-as-java"
     outputDirectory = "$buildDir/dokkaHtmlasjava"
+
+    includes = ['packages.md']
 }
 
+task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/dokkaHtml"
+
+    includes = ['packages.md']
+}
 
 task sourceJar(type: Jar) {
     classifier "sources"
