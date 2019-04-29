@@ -1,7 +1,10 @@
 package ru.evotor.framework.component
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.IBundlable
+import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 import ru.evotor.framework.payment.PaymentSystem
 
 /**
@@ -18,7 +21,7 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
                        componentName: String?,
                        appUuid: String?,
                        appName: String?
-) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable {
+) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
             parcel.readParcelable(PaymentSystem::class.java.classLoader),
             parcel.readString(),
@@ -84,6 +87,8 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
                 return arrayOfNulls(size)
             }
         }
+
+        fun from(bundle: Bundle?) = PaymentPerformerMapper.fromBundle(bundle)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -102,11 +107,13 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
     }
 
     override fun hashCode(): Int {
-        var result =  paymentSystem?.hashCode() ?: 0
+        var result = paymentSystem?.hashCode() ?: 0
         result = 31 * result + (packageName?.hashCode() ?: 0)
         result = 31 * result + (componentName?.hashCode() ?: 0)
         result = 31 * result + (appUuid?.hashCode() ?: 0)
         result = 31 * result + (appName?.hashCode() ?: 0)
         return result
     }
+
+    override fun toBundle(): Bundle = PaymentPerformerMapper.toBundle(this)
 }
