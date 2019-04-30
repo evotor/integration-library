@@ -2,12 +2,13 @@ package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
+import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptUpdatedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
-import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
+import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
 
 /**
  * Широковещательный приёмник событий чека возврата покупки.
@@ -18,6 +19,7 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_POSITION_ADDED,
         ACTION_POSITION_UPDATED,
         ACTION_POSITION_REMOVED,
+        ACTION_RECEIPT_UPDATED,
         ACTION_RECEIPT_DELETED,
         ACTION_RECEIPT_COMPLETED
 ) {
@@ -47,6 +49,12 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent) = Unit
 
     /**
+     * Обработчик событий обновления чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_UPDATED)
+    override fun handleReceiptUpdatedEvent(context: Context, event: ReceiptUpdatedEvent) = Unit
+
+    /**
      * Обработчик событий удаления чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_DELETED)
@@ -67,6 +75,8 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_POSITION_UPDATED = "evotor.intent.action.receipt.buyback.POSITION_EDITED"
 
         const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.buyback.POSITION_REMOVED"
+
+        const val ACTION_RECEIPT_UPDATED = "evotor.intent.action.receipt.buyback.RECEIPT_UPDATED"
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.buyback.CLEARED"
 
