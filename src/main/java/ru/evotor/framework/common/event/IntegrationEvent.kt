@@ -6,8 +6,11 @@ import ru.evotor.framework.core.IntegrationLibraryMappingException
 
 abstract class IntegrationEvent internal constructor() : IBundlable {
 
-    override fun toBundle() = Bundle().apply {
-        putString(KEY_CLASS_NAME, javaClass.canonicalName)
+    override fun toBundle(): Bundle {
+        val className = javaClass.canonicalName
+        return Bundle().apply {
+            putString(KEY_CLASS_NAME, className)
+        }
     }
 
     abstract class Result internal constructor() : IBundlable
@@ -17,11 +20,13 @@ abstract class IntegrationEvent internal constructor() : IBundlable {
 
         private const val KEY_CLASS_NAME = "CLASS_NAME"
 
+        @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
-            Class
-                    .forName(it.getString(KEY_CLASS_NAME) ?: throw IntegrationLibraryMappingException(IntegrationEvent::class.java.name))
-                    .getMethod(FROM_METHOD_NAME, Bundle::class.java)
-                    .invoke(it) as IntegrationEvent?
+            val className = it.getString(KEY_CLASS_NAME)
+                    ?: throw IntegrationLibraryMappingException(IntegrationEvent::class.java.name)
+            val eventClass = Class.forName(className)
+            val methodFrom = eventClass.getMethod(FROM_METHOD_NAME, Bundle::class.java)
+            methodFrom.invoke(null, it) as IntegrationEvent?
         }
     }
 }
