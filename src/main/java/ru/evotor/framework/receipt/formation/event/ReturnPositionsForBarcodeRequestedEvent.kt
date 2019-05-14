@@ -2,14 +2,15 @@ package ru.evotor.framework.receipt.formation.event
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.Position
 
 data class ReturnPositionsForBarcodeRequestedEvent(
         val barcode: String,
         val creatingNewProduct: Boolean
-) : IBundlable {
+) : IntegrationEvent() {
 
-    override fun toBundle() = Bundle().apply {
+    override fun toBundle() = super.toBundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
         putBoolean(KEY_CREATE_PRODUCT_EXTRA, creatingNewProduct)
     }
@@ -18,6 +19,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         const val KEY_BARCODE_EXTRA = "key_barcode_extra"
         const val KEY_CREATE_PRODUCT_EXTRA = "key_create_product_extra"
 
+        @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
             ReturnPositionsForBarcodeRequestedEvent(
                     barcode = it.getString(KEY_BARCODE_EXTRA)
@@ -29,7 +31,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
     data class Result(
             val positions: List<Position>,
             val iCanCreateNewProduct: Boolean
-    ) : IBundlable {
+    ) : IntegrationEvent.Result() {
 
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
@@ -45,7 +47,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
             const val KEY_EXTRA_POSITIONS_COUNT = "extra_positions_count"
             const val KEY_EXTRA_CAN_CREATE = "extra_can_create_product"
 
-
+            @JvmStatic
             fun from(bundle: Bundle?) = bundle?.let {
                 it.classLoader = Position::class.java.classLoader
                 val count = it.getInt(KEY_EXTRA_POSITIONS_COUNT)
