@@ -23,6 +23,9 @@ import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
+/**
+ * Позиция чека.
+ */
 public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
