@@ -1,15 +1,15 @@
 import junit.framework.Assert
 import org.junit.Test
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
 import ru.evotor.framework.receipt.position.AgentRequisites
 
 class AgentRequisitesTest {
 
     @Test
-    fun createForAgent() = createForAgent("1234", listOf("88005553535", "89876543210"))
+    fun createForAgent() = createForAgent("1234", listOf("89000000000", "89000000001"))
 
     private fun createForAgent(
             principalInn: String,
@@ -26,7 +26,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForCommissioner() = createForCommissioner("1234", listOf("88005553535", "89876543210"))
+    fun createForCommissioner() = createForCommissioner("1234", listOf("89000000000", "89000000001"))
 
     private fun createForCommissioner(
             principalInn: String,
@@ -43,7 +43,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForAttorneyInFact() = createForAttorneyInFact("1234", listOf("88005553535", "89876543210"))
+    fun createForAttorneyInFact() = createForAttorneyInFact("1234", listOf("89000000000", "89000000001"))
 
     private fun createForAttorneyInFact(
             principalInn: String,
@@ -60,7 +60,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForPaymentAgent() = createForPaymentAgent(listOf("+70005226789"), "1234", listOf("88005553535", "89876543210"), "Продал Васе разноцветное дилдо")
+    fun createForPaymentAgent() = createForPaymentAgent(listOf("+70000000000"), "1234", listOf("89000000000", "89000000001"), "Страхование на выгодных условиях")
 
     private fun createForPaymentAgent(
             agentPhones: List<String>,
@@ -79,7 +79,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForPaymentSubagent() = createForPaymentSubagent(listOf("+70005226789"), listOf("+77776668888"), "1234", listOf("88005553535", "89876543210"), "Продал Васе разноцветное дилдо")
+    fun createForPaymentSubagent() = createForPaymentSubagent(listOf("+70000000000"), listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "Страхование на выгодных условиях")
 
     private fun createForPaymentSubagent(
             agentPhones: List<String>,
@@ -99,7 +99,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForBankPaymentAgent() = createForBankPaymentAgent(listOf("+70005226789"), "1234", listOf("88005553535", "89876543210"), "Кредитное бюро \"Фраерок\"", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Продал Васе разноцветное дилдо")
+    fun createForBankPaymentAgent() = createForBankPaymentAgent(listOf("+70000000000"), "1234", listOf("89000000000", "89000000001"), "Страховое агентство", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Страхование на выгодных условиях")
 
     private fun createForBankPaymentAgent(
             agentPhones: List<String>,
@@ -122,7 +122,7 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForBankPaymentSubagent() = createForBankPaymentSubagent(listOf("+70005226789"), listOf("+77776668888"), "1234", listOf("88005553535", "89876543210"), "Кредитное бюро \"Фраерок\"", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Продал Васе разноцветное дилдо")
+    fun createForBankPaymentSubagent() = createForBankPaymentSubagent(listOf("+70000000000"), listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "Страховое агентство", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Страхование на выгодных условиях")
 
     private fun createForBankPaymentSubagent(
             agentPhones: List<String>,
@@ -137,7 +137,7 @@ class AgentRequisitesTest {
     ) = Assert.assertEquals(
             AgentRequisites.createForBankPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, transactionOperatorName, transactionOperatorInn, transactionOperatorPhones, transactionOperatorAddress, operationDescription),
             AgentRequisites(
-                    Agent(null,null, null, null, null, null, null, agentPhones, null),
+                    Agent(null, null, null, null, null, null, null, agentPhones, null),
                     Subagent(null, Subagent.Type.BANK_PAYMENT_SUBAGENT, null, null, null, null, null, subagentPhones, null),
                     Principal(null, null, null, null, principalInn, null, principalPhones, null),
                     TransactionOperator(null, null, transactionOperatorName, null, transactionOperatorInn, null, transactionOperatorPhones, listOf(transactionOperatorAddress)),
