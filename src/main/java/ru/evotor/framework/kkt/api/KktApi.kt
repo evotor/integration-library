@@ -12,8 +12,7 @@ import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.payment.AmountOfRubles
-import ru.evotor.framework.payment.PaymentMean
+import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
@@ -135,7 +134,7 @@ object KktApi {
      * @param prescriptionNumber номер предписания налогового органа
      * @param correctableSettlementDate дата совершения корректируемого расчета
      * @param amountPaid уплаченная сумма
-     * @param paymentMean платёжное средство, использованное для оплаты
+     * @param paymentType платёжное средство, использованное для оплаты
      * @param vatRate ставка НДС
      * @param correctionDescription описание коррекции
      * @param callback
@@ -162,9 +161,9 @@ object KktApi {
             @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
             correctableSettlementDate: Date,
 
-            amountPaid: AmountOfRubles,
+            amountPaid: BigDecimal,
 
-            paymentMean: PaymentMean,
+            paymentType: PaymentType,
 
             @FiscalRequisite(FiscalTags.VAT_RATE)
             vatRate: VatRate,
@@ -202,7 +201,7 @@ object KktApi {
                         prescriptionNumber,
                         correctableSettlementDate,
                         amountPaid,
-                        paymentMean,
+                        paymentType,
                         vatRate,
                         correctionDescription
                 ),

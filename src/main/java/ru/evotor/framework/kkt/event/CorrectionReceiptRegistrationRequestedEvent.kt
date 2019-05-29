@@ -2,12 +2,12 @@ package ru.evotor.framework.kkt.event
 
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.payment.AmountOfRubles
-import ru.evotor.framework.payment.PaymentMean
+import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.receipt.position.VatRate
+import java.math.BigDecimal
 import java.util.*
 
 class CorrectionReceiptRegistrationRequestedEvent internal constructor(
@@ -17,8 +17,8 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         val basisForCorrection: String,
         val prescriptionNumber: String,
         val correctableSettlementDate: Date,
-        val amountPaid: AmountOfRubles,
-        val paymentMean: PaymentMean,
+        val amountPaid: BigDecimal,
+        val paymentType: PaymentType,
         val vatRate: VatRate,
         val correctionDescription: String
 ) : IBundlable {
@@ -26,7 +26,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         private const val KEY_TAXATION_SYSTEM = "TAXATION_SYSTEM"
         private const val KEY_SETTLEMENT_TYPE = "SETTLEMENT_TYPE"
         private const val KEY_AMOUNT_PAID = "MOUNT_PAID"
-        private const val KEY_PAYMENT_MEAN = "PAYMENT_MEAN"
+        private const val KEY_PAYMENT_TYPE = "PAYMENT_TYPE"
         private const val KEY_VAT_RATE = "VAT_RATE"
         private const val KEY_CORRECTION_TYPE = "CORRECTION_TYPE"
         private const val KEY_BASIS_FOR_CORRECTION = "BASIS_FOR_CORRECTION"
@@ -42,8 +42,8 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
                     it.getString(KEY_BASIS_FOR_CORRECTION),
                     it.getString(KEY_PRESCRIPTION_NUMBER),
                     Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
-                    AmountOfRubles(it.getString(KEY_AMOUNT_PAID)),
-                    PaymentMean.valueOf(it.getString(KEY_PAYMENT_MEAN)),
+                    BigDecimal(it.getString(KEY_AMOUNT_PAID)),
+                    PaymentType.valueOf(it.getString(KEY_PAYMENT_TYPE)),
                     VatRate.valueOf(it.getString(KEY_VAT_RATE)),
                     it.getString(KEY_CORRECTION_DESCRIPTION)
             )
@@ -58,7 +58,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         this.putString(KEY_PRESCRIPTION_NUMBER, prescriptionNumber)
         this.putLong(KEY_CORRECTABLE_SETTLEMENT_DATE, correctableSettlementDate.time)
         this.putString(KEY_AMOUNT_PAID, amountPaid.toString())
-        this.putString(KEY_PAYMENT_MEAN, paymentMean.name)
+        this.putString(KEY_PAYMENT_TYPE, paymentType.name)
         this.putString(KEY_VAT_RATE, vatRate.name)
         this.putString(KEY_CORRECTION_DESCRIPTION, correctionDescription)
     }
