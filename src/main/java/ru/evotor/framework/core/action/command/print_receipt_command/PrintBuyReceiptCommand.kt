@@ -19,6 +19,7 @@ import java.util.*
  * @param clientPhone Телефон клиента.
  * @param clientEmail Электронная почта клиента.
  * @param receiptDiscount Скидка на чек.
+ */
 class PrintBuyReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
         extra: SetExtra?,

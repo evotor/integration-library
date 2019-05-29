@@ -10,7 +10,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         val creatingNewProduct: Boolean
 ) : IntegrationEvent() {
 
-    override fun toBundle() = super.toBundle().apply {
+    override fun toBundle() = Bundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
         putBoolean(KEY_CREATE_PRODUCT_EXTRA, creatingNewProduct)
     }
