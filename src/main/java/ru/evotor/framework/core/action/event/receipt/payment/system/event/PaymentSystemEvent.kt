@@ -4,6 +4,13 @@ import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
 
+/**
+ * Родительский класс событий, которые возникают при оплате чека сторонней платёжной систем.
+ *
+ * Констант <code>NAME_ACTION</code> указывает, что чек будет оплачен сторонней платёжной системой.
+ *
+ * Чтобы приложение получало событие, значение константы <code>NAME_ACTION</code> необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
+ */
 abstract class PaymentSystemEvent(
         val operationType: OperationType
 ) : IBundlable {
@@ -19,6 +26,11 @@ abstract class PaymentSystemEvent(
     }
 
     companion object {
+        /**
+         * Оплата чека сторонней платёжной системой.
+         *
+         * Значение константы: <code>evo.v2.receipt.paymentSystem</code>.
+         */
         const val NAME_ACTION = "evo.v2.receipt.paymentSystem"
         const val NAME_PERMISSION = "ru.evotor.permission.PAYMENT_SYSTEM"
         const val META_NAME_PAYMENT_SYSTEM_ID = "ru.evotor.paymentSystem.PAYMENT_SYSTEM_ID"

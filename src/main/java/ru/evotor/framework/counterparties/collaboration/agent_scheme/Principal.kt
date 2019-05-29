@@ -1,11 +1,10 @@
 package ru.evotor.framework.counterparties.collaboration.agent_scheme
 
 import android.os.Bundle
-import ru.evotor.framework.FLAG_MULTIPLE_VALUES
-import ru.evotor.framework.FiscalRequisite
 import ru.evotor.framework.counterparties.Counterparty
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.mapper.PrincipalMapper
-import ru.evotor.framework.receipt.position.AgentRequisites
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalTags
 import java.util.*
 
 /**
@@ -30,13 +29,13 @@ data class Principal(
         /**
          * Наименование краткое
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_PRINCIPAL_NAME)
+        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
         override val shortName: String? = null,
 
         /**
          * ИНН
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_PRINCIPAL_INN)
+        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
         override val inn: String,
 
         /**
@@ -47,7 +46,7 @@ data class Principal(
         /**
          * Телефоны
          */
-        @FiscalRequisite(tag = AgentRequisites.TAG_PRINCIPAL_PHONE, flags = [FLAG_MULTIPLE_VALUES])
+        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
         override val phones: List<String>,
 
         /**

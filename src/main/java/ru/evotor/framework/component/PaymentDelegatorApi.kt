@@ -6,10 +6,19 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import ru.evotor.framework.core.action.event.receipt.payment.combined.event.PaymentDelegatorEvent
 
+/**
+ * Класс для получения делегаторов платежей, установленных на смарт-терминале.
+ */
 object PaymentDelegatorApi {
 
     private const val METADATA_NAME_APP_UUID = "app_uuid"
 
+    /**
+     * Возвращает список всех установленных на смарт-терминале приложений, способных делегировать платежи другим приложениям.
+     * @param packageManager экземпляр класса PackageManager, необходимого, для получения информации об установленных приложениях.
+     * @return applicationsList список приложений, способных делегировать платежи.
+     * @see PaymentDelegator
+     */
     fun getAllPaymentDelegators(packageManager: PackageManager): List<PaymentDelegator> {
         val eventName = PaymentDelegatorEvent.NAME_ACTION
         val applicationsList = ArrayList<PaymentDelegator>()

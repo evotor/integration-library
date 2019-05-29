@@ -14,12 +14,12 @@ import java.util.*
 
 
 /**
- * Команда печати чека возврата
- * @param printReceipts Список печатных чеков
- * @param extra Экстра данные к чеку
- * @param clientPhone Телефон клиента
- * @param clientEmail Эл.почта клиента
- * @param receiptDiscount Скидка на чек
+ * Команда печати чека возврата.
+ * @param printReceipts Список чеков для печати.
+ * @param extra Дополнительные данные к чеку.
+ * @param clientPhone Телефон клиента.
+ * @param clientEmail Электронная почта клиента.
+ * @param receiptDiscount Скидка на чек.
  */
 class PrintPaybackReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -41,6 +41,7 @@ class PrintPaybackReceiptCommand(
      * @param payments Список оплат
      * @param clientPhone Телефон клиента
      * @param clientEmail Эл.почта клиента
+     * @param sellReceiptUuid Идентифиатор чека продажи, на основании которого осуществляется возврат
      */
     constructor(
             positions: List<Position>,

@@ -5,6 +5,10 @@ import ru.evotor.framework.core.action.datamapper.PositionMapper
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.receipt.Position
 
+/**
+ * Изменяет позицию в чеке.
+ * @param position – позиция.
+ */
 data class PositionEdit(val position: Position) : IPositionChange {
 
     override fun toBundle(): Bundle {

@@ -6,7 +6,8 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.receipt.Position
 
 /**
- * Created by a.kuznetsov on 23/05/2017.
+ * Добавляет позицию в чек.
+ * @param position – позиция.
  */
 data class PositionAdd(val position: Position) : IPositionChange {
 

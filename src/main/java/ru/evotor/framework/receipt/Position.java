@@ -23,6 +23,9 @@ import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
+/**
+ * Позиция чека.
+ */
 public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
@@ -85,7 +88,7 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная или табачная марка.
+     * Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     private String mark;
     /**
@@ -399,7 +402,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Алкогольная или табачная марка.
+     * @return Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     @Nullable
     public String getMark() {

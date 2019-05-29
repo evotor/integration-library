@@ -97,6 +97,13 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
         }.start();
     }
 
+    /**
+     * Возвращает количество символов, которые помещаются в одной строке чека.
+     *
+     * @param deviceId указывает устройство, для которого вызывается метод.
+     * @return количество символов в одной строке чека.
+     * @throws DeviceServiceException
+     */
     public int getAllowableSymbolsLineLength(int deviceId) throws DeviceServiceException {
         DeviceServiceOperationOnMainThreadException.throwIfMainThread();
 
@@ -109,6 +116,13 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
         }
     }
 
+    /**
+     * Возвращает доступную для печати ширину бумаги в пикселях.
+     *
+     * @param deviceId указывает устройство, для которого вызывается метод.
+     * @return ширину чековой ленты в пикселях
+     * @throws DeviceServiceException
+     */
     public int getAllowablePixelLineLength(int deviceId) throws DeviceServiceException {
         DeviceServiceOperationOnMainThreadException.throwIfMainThread();
 
@@ -121,6 +135,13 @@ public class PrinterService extends AbstractService implements IPrinterServiceWr
         }
     }
 
+    /**
+     * Печатает указанный массив объектов (текст, изображения, штрихкоды).
+     *
+     * @param deviceId указывает устройство, для которого вызывается метод. ВАЖНО! Печать возможна только на встроенном принтере, поэтому вместо номера устройства всегда передавайте константу <code>ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX</code>.
+     * @param printerDocument массив объектов для печати.
+     * @throws DeviceServiceException
+     */
     public void printDocument(int deviceId, PrinterDocument printerDocument) throws DeviceServiceException {
         DeviceServiceOperationOnMainThreadException.throwIfMainThread();
 

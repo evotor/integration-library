@@ -22,6 +22,9 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
+/**
+ * Команда открытия чека возврата покупки.
+ */
 public class OpenBuybackReceiptCommand implements IBundlable {
 
     public static final String NAME = "evo.v2.receipt.buyback.openReceipt";

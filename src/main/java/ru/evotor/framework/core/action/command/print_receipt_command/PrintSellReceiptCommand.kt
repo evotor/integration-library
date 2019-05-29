@@ -14,12 +14,12 @@ import java.util.*
 
 
 /**
- * Команда печати чека продажи
- * @param printReceipts Список печатных чеков
- * @param extra Экстра данные к чеку
- * @param clientPhone Телефон клиента
- * @param clientEmail Эл.почта клиента
- * @param receiptDiscount Скидка на чек
+ * Команда печати чека продажи.
+ * @param printReceipts Список чеков для печати.
+ * @param extra Дополнительные данные к чеку.
+ * @param clientPhone Телефон клиента.
+ * @param clientEmail Электронная почта клиента.
+ * @param receiptDiscount Скидка на чек.
  */
 class PrintSellReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,

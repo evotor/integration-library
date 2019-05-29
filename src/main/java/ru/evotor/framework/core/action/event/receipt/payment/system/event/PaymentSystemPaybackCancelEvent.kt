@@ -4,6 +4,9 @@ import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.getMoney
 import java.math.BigDecimal
 
+/**
+ * Событие, которое возникает при отмене оплаты чека возврата сторонней платёжной системой.
+ */
 class PaymentSystemPaybackCancelEvent(
         val receiptUuid: String,
         val accountId: String?,
