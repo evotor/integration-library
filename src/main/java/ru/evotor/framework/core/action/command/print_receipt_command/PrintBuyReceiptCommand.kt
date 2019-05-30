@@ -12,6 +12,14 @@ import ru.evotor.framework.sumByBigDecimal
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Команда печати чека покупки.
+ * @param printReceipts Список чеков для печати.
+ * @param extra Дополнительные данные к чеку.
+ * @param clientPhone Телефон клиента.
+ * @param clientEmail Электронная почта клиента.
+ * @param receiptDiscount Скидка на чек.
+ */
 class PrintBuyReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
         extra: SetExtra?,

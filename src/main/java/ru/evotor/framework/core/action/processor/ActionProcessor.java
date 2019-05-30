@@ -65,6 +65,10 @@ public abstract class ActionProcessor {
             response.onError(errorCode, errorMessage, data);
         }
 
+        /**
+         * Пропускает обработку события.
+         * @throws RemoteException
+         */
         public final void skip() throws RemoteException {
             Bundle result = new Bundle();
             result.putBoolean(IntegrationManager.KEY_SKIP, true);

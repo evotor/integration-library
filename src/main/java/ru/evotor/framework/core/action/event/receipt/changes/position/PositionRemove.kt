@@ -3,6 +3,10 @@ package ru.evotor.framework.core.action.event.receipt.changes.position
 import android.os.Bundle
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
+/**
+ * Удаляет позицию из чека.
+ * @param positionUuid – идентификатор позиции, которую требуется удалить.
+ */
 data class PositionRemove(
         private val positionUuid: String
 ) : IPositionChange {

@@ -4,6 +4,10 @@ import android.os.Bundle
 import org.json.JSONObject
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
+/**
+ * Добавляет дополнительные поля в чек.
+ * Дополнительные поля представляют собой валидный объект JSON.
+ */
 data class SetExtra(val extra: JSONObject?) : IChange {
 
     override fun toBundle(): Bundle {

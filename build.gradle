@@ -45,7 +45,7 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+    ext.kotlin_version = '1.3.21'
     repositories {
         jcenter()
         google()
@@ -55,10 +55,10 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.16"
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.17"
     }
 }
+// in the individual module build.gradle files
 
 allprojects {
     repositories {
@@ -68,8 +68,45 @@ allprojects {
 }
 
 dokka {
+    moduleName = 'integration-library'
     outputFormat = 'javadoc'
     outputDirectory = "$buildDir/javadoc"
+
+    includes = ['packages.md']
+
+//    reportUndocumented = true
+
+//    packageOptions {
+//        prefix = "android.support" // will match kotlin.internal and all sub-packages of it
+//        suppress = true
+//    }
+
+//    packageOptions {
+//        prefix = "ru.evotor.pushNotifications" // will match kotlin.internal and all sub-packages of it
+//        suppress = true
+//    }
+
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = "javadoc"
+    outputDirectory = "$buildDir/dokkaJavadoc"
+
+    includes = ['packages.md']
+}
+
+task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = "html-as-java"
+    outputDirectory = "$buildDir/dokkaHtmlasjava"
+
+    includes = ['packages.md']
+}
+
+task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/dokkaHtml"
+
+    includes = ['packages.md']
 }
 
 task sourceJar(type: Jar) {

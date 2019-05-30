@@ -5,11 +5,11 @@ import android.os.Parcelable;
 
 import ru.evotor.devices.commons.printer.printable.IPrintable;
 
+/**
+ * массив объектов для печати.
+ */
 public class PrinterDocument implements Parcelable {
 
-    /**
-     * массив объектов для печати
-     */
     private final IPrintable[] printables;
 
     public PrinterDocument(IPrintable... printables) {

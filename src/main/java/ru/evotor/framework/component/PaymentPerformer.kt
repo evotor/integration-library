@@ -8,13 +8,13 @@ import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 import ru.evotor.framework.payment.PaymentSystem
 
 /**
- * Компонент интеграционного приложения, осуществляющий оплату
+ * Компонент (служба, операция и т.д.) интеграционного приложения, осуществляющий оплату
  *
- * @property paymentSystem Платежная система
- * @property packageName Название пакета
- * @property componentName Название компонента (сервис, активити и т.п.)
- * @property appUuid Уникальный идентификатора приложения в системе Эвотора
- * @property appName Название приложения
+ * @param paymentSystem Платежная система
+ * @param packageName Название пакета
+ * @param componentName Название компонента (служба, операция и т.д.)
+ * @param appUuid Уникальный идентификатора приложения в Облаке Эвотор
+ * @param appName Название приложения
  */
 class PaymentPerformer(val paymentSystem: PaymentSystem?,
                        packageName: String?,

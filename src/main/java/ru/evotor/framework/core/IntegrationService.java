@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
- * Created by a.kuznetsov on 19/04/2017.
+ * Родительский класс интеграционных служб необходимых для обработки и реакции на события смарт-терминала.
  */
 public abstract class IntegrationService extends Service {
 

@@ -14,6 +14,9 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 
+/**
+ * Результат обработки события изменения чека.
+ */
 public class BeforePositionsEditedEventResult implements IBundlable {
 
     private static final String KEY_CHANGES = "changes";
@@ -38,6 +41,9 @@ public class BeforePositionsEditedEventResult implements IBundlable {
         );
     }
 
+    /**
+     * Список сделанных изменений.
+     */
     @NonNull
     private final List<IPositionChange> changes;
     @Nullable

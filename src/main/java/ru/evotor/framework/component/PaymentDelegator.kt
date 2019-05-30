@@ -5,13 +5,12 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
 
 /**
- * Компонент интеграционного приложения, осуществляющий делегирование платежей другим приложениям
- * a.k.a. приложение комбооплаты
+ * Компонент (служба, операция и т.д.) интеграционного приложения, осуществляющий делегирование платежей другим приложениям. Например, приложение "Комбооплата".
  *
- * @property packageName Название пакета
- * @property componentName Название компонента (сервис, активити и т.п.)
- * @property appUuid Уникальный идентификатора приложения в системе Эвотора
- * @property appName Название приложения
+ * @param packageName Название пакета
+ * @param componentName Название компонента (служба, операция и т.д.)
+ * @param appUuid Уникальный идентификатора приложения в Облаке Эвотор
+ * @param appName Название приложения
  */
 class PaymentDelegator(packageName: String?,
                        componentName: String?,
