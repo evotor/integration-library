@@ -2,10 +2,10 @@ package ru.evotor.framework.receipt.event.handler.receiver
 
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
+import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
-import ru.evotor.framework.receipt.event.ReceiptUpdatedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -19,7 +19,7 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_POSITION_ADDED,
         ACTION_POSITION_UPDATED,
         ACTION_POSITION_REMOVED,
-        ACTION_RECEIPT_UPDATED,
+        ACTION_APPLY_DISCOUNT_TO_RECEIPT,
         ACTION_RECEIPT_DELETED,
         ACTION_RECEIPT_COMPLETED
 ) {
@@ -49,10 +49,10 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent) = Unit
 
     /**
-     * Обработчик событий обновления чека.
+     * Обработчик событий применения скидки к чеку
      */
-    @RequiresIntentAction(ACTION_RECEIPT_UPDATED)
-    override fun handleReceiptUpdatedEvent(context: Context, event: ReceiptUpdatedEvent) = Unit
+    @RequiresIntentAction(ACTION_APPLY_DISCOUNT_TO_RECEIPT)
+    override fun handleApplyDiscountToReceiptEvent(context: Context, eventApplyDiscountTo: ApplyDiscountToReceiptEvent) = Unit
 
     /**
      * Обработчик событий удаления чека.
@@ -76,7 +76,7 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.sell.POSITION_REMOVED"
 
-        const val ACTION_RECEIPT_UPDATED = "evotor.intent.action.receipt.sell.RECEIPT_UPDATED"
+        const val ACTION_APPLY_DISCOUNT_TO_RECEIPT = "evotor.intent.action.receipt.sell.APPLY_DISCOUNT_TO_RECEIPT"
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 

@@ -3,10 +3,9 @@ package ru.evotor.framework.receipt.event
 import android.os.Bundle
 
 /**
- * Событие обновления чека.
+ * Событие применения скидки к чеку.
  *
- * Происходит при обновлении незавершенного чека,
- * например, как результат применения скидки на чек.
+ * Происходит в результате применения скидки на чек.
  *
  * Обрабатывать это событие можно с помощью следующих широковещательных приёмников:
  * [ru.evotor.framework.receipt.event.handler.receiver.SellReceiptBroadcastReceiver]
@@ -16,10 +15,10 @@ import android.os.Bundle
  *
  * @param receiptUuid uuid чека
  */
-class ReceiptUpdatedEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
+class ApplyDiscountToReceiptEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
     companion object {
-        fun from(bundle: Bundle?): ReceiptUpdatedEvent? = bundle?.let {
-            ReceiptUpdatedEvent(ReceiptEvent.getReceiptUuid(it) ?: return null)
+        fun from(bundle: Bundle?): ApplyDiscountToReceiptEvent? = bundle?.let {
+            ApplyDiscountToReceiptEvent(ReceiptEvent.getReceiptUuid(it) ?: return null)
         }
     }
 }

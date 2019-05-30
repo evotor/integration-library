@@ -3,10 +3,10 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.BroadcastEventReceiver
+import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
-import ru.evotor.framework.receipt.event.ReceiptUpdatedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -16,7 +16,7 @@ abstract class ReceiptBroadcastReceiver(
         private val actionPositionAdded: String,
         private val actionPositionUpdated: String,
         private val actionPositionRemoved: String,
-        private val actionReceiptUpdated: String,
+        private val actionApplyDiscountToReceipt: String,
         private val actionReceiptDeleted: String,
         private val actionReceiptCompleted: String
 ) : BroadcastEventReceiver() {
@@ -29,7 +29,7 @@ abstract class ReceiptBroadcastReceiver(
 
     protected abstract fun handlePositionRemovedEvent(context: Context, event: PositionRemovedEvent)
 
-    protected abstract fun handleReceiptUpdatedEvent(context: Context, event: ReceiptUpdatedEvent)
+    protected abstract fun handleApplyDiscountToReceiptEvent(context: Context, eventApplyDiscountTo: ApplyDiscountToReceiptEvent)
 
     protected abstract fun handleReceiptDeletedEvent(context: Context, event: ReceiptDeletedEvent)
 
@@ -45,7 +45,7 @@ abstract class ReceiptBroadcastReceiver(
                     ?: return)
             actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.from(bundle)
                     ?: return)
-            actionReceiptUpdated -> handleReceiptUpdatedEvent(context, ReceiptUpdatedEvent.from(bundle)
+            actionApplyDiscountToReceipt -> handleApplyDiscountToReceiptEvent(context, ApplyDiscountToReceiptEvent.from(bundle)
                     ?: return)
             actionReceiptDeleted -> handleReceiptDeletedEvent(context, ReceiptDeletedEvent.from(bundle)
                     ?: return)
