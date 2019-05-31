@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.receipt.changes.receipt
+package ru.evotor.framework.core.action.event.receipt.changes.position
 
 import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.PrintGroupMapper
