@@ -3,10 +3,12 @@ package ru.evotor.framework.receipt.formation.event.handler.service
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
+import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPositionsForBarcodeRequestedEvent
 
 abstract class ReceiptFormationIntegrationService(
-        private val actionBarcodeReceived: String
+        private val actionBarcodeReceived: String,
+        private val actionBuyerRequisitesRequested: String
 ) : IntegrationServiceV2() {
 
     final override fun onEvent(action: String, bundle: Bundle): IBundlable? {
@@ -15,10 +17,16 @@ abstract class ReceiptFormationIntegrationService(
                 return handleEvent(ReturnPositionsForBarcodeRequestedEvent.from(bundle)
                         ?: return null)
             }
+            actionBuyerRequisitesRequested -> {
+                return handleEvent(ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)
+                        ?: return null)
+            }
         }
         return null
     }
 
     open fun handleEvent(event: ReturnPositionsForBarcodeRequestedEvent): ReturnPositionsForBarcodeRequestedEvent.Result? = null
+
+    open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
 }
