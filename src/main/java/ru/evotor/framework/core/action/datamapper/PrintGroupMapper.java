@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.PrintGroup;
+import ru.evotor.framework.receipt.Purchaser;
 import ru.evotor.framework.receipt.TaxationSystem;
 
 public final class PrintGroupMapper {
@@ -15,6 +16,7 @@ public final class PrintGroupMapper {
     private static final String KEY_ORG_ADDRESS = "orgAddress";
     private static final String KEY_TAXATION_SYSTEM = "taxationSystem";
     private static final String KEY_SHOULD_PRINT_RECEIPT = "shouldPrintReceipt";
+    private static final String KEY_PURCHASER = "purchaser";
 
     @Nullable
     public static PrintGroup from(@Nullable Bundle bundle) {
@@ -28,6 +30,7 @@ public final class PrintGroupMapper {
         String orgAddress = bundle.getString(KEY_ORG_ADDRESS);
         String taxationSystem = bundle.getString(KEY_TAXATION_SYSTEM);
         boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
+        Purchaser purchaser = bundle.getParcelable(KEY_PURCHASER);
         return new PrintGroup(
                 identifier,
                 Utils.safeValueOf(PrintGroup.Type.class, type, PrintGroup.Type.CASH_RECEIPT),
@@ -35,7 +38,8 @@ public final class PrintGroupMapper {
                 orgInn,
                 orgAddress,
                 Utils.safeValueOf(TaxationSystem.class, taxationSystem, null),
-                shouldPrintReceipt
+                shouldPrintReceipt,
+                purchaser
         );
     }
 
@@ -52,6 +56,7 @@ public final class PrintGroupMapper {
         bundle.putString(KEY_ORG_ADDRESS, printGroup.getOrgAddress());
         bundle.putString(KEY_TAXATION_SYSTEM, printGroup.getTaxationSystem() == null ? null : printGroup.getTaxationSystem().name());
         bundle.putBoolean(KEY_SHOULD_PRINT_RECEIPT, printGroup.isShouldPrintReceipt());
+        bundle.putParcelable(KEY_PURCHASER, printGroup.getPurchaser());
 
         return bundle;
     }

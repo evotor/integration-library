@@ -21,6 +21,7 @@ import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
+import java.lang.Exception
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -285,6 +286,16 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
+        val purchaserName = try {
+            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_NAME))
+        } catch (e: Exception) {
+            null
+        }
+        val purchaserInn = try {
+            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_INN))
+        } catch (e: Exception) {
+            null
+        }
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -293,7 +304,12 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_INN)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
-                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1
+                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
+                if (purchaserName != null && purchaserInn != null) {
+                    Purchaser(purchaserName, purchaserInn)
+                } else {
+                    null
+                }
         )
     }
 
