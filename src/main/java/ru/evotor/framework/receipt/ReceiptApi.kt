@@ -17,7 +17,6 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
@@ -291,8 +290,8 @@ object ReceiptApi {
         } catch (e: Exception) {
             null
         }
-        val purchaserInn = try {
-            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_INN))
+        val purchaserDocumentNumber = try {
+            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER))
         } catch (e: Exception) {
             null
         }
@@ -316,8 +315,8 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
                 cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
-                if (purchaserName != null && purchaserInn != null) {
-                    Purchaser(purchaserName, purchaserInn, purchaserType)
+                if (purchaserName != null && purchaserDocumentNumber != null) {
+                    Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
                 } else {
                     null
                 }
