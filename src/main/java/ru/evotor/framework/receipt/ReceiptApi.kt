@@ -296,6 +296,17 @@ object ReceiptApi {
         } catch (e: Exception) {
             null
         }
+        val purchaserType = try {
+            cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)).let {
+                if (it < 0) {
+                    null
+                } else {
+                    PurchaserType.values()[it % PurchaserType.values().size]
+                }
+            }
+        } catch (e: Exception) {
+            null
+        }
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -306,7 +317,7 @@ object ReceiptApi {
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
                 cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
                 if (purchaserName != null && purchaserInn != null) {
-                    Purchaser(purchaserName, purchaserInn)
+                    Purchaser(purchaserName, purchaserInn, purchaserType)
                 } else {
                     null
                 }
