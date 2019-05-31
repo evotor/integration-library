@@ -5,16 +5,20 @@ import android.os.Parcelable
 
 data class Purchaser(
         val name: String,
-        val inn: String
+        val documentNumber: String,
+        val type: PurchaserType?
 ) : Parcelable {
 
     private constructor(parcel: Parcel) : this(
             parcel.readString(),
-            parcel.readString())
+            parcel.readString(),
+            if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size])
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeString(inn)
+        parcel.writeString(documentNumber)
+        parcel.writeInt(if (type == null) 0 else 1)
+        type?.let { parcel.writeInt(it.ordinal) }
     }
 
     override fun describeContents(): Int {
@@ -29,4 +33,10 @@ data class Purchaser(
             override fun newArray(size: Int) = arrayOfNulls<Purchaser>(size)
         }
     }
+}
+
+enum class PurchaserType {
+    INDIVIDUAL, // физлицо
+    SOLE_PROPRIETOR, // ИП
+    ENTITY // юрлицо
 }

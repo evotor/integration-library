@@ -8,7 +8,7 @@ import ru.evotor.framework.receipt.formation.event.ReturnPositionsForBarcodeRequ
 
 abstract class ReceiptFormationIntegrationService(
         private val actionBarcodeReceived: String,
-        private val actionBuyerRequisitesRequested: String
+        private val actionPurchaserRequisitesRequested: String
 ) : IntegrationServiceV2() {
 
     final override fun onEvent(action: String, bundle: Bundle): IBundlable? {
@@ -17,7 +17,7 @@ abstract class ReceiptFormationIntegrationService(
                 return handleEvent(ReturnPositionsForBarcodeRequestedEvent.from(bundle)
                         ?: return null)
             }
-            actionBuyerRequisitesRequested -> {
+            actionPurchaserRequisitesRequested -> {
                 return handleEvent(ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)
                         ?: return null)
             }
