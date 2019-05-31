@@ -23,6 +23,7 @@ public final class PrintGroupMapper {
         if (bundle == null) {
             return null;
         }
+        bundle.setClassLoader(Purchaser.class.getClassLoader());
         String identifier = bundle.getString(KEY_IDENTIFIER);
         String type = bundle.getString(KEY_TYPE);
         String orgName = bundle.getString(KEY_ORG_NAME);
@@ -30,7 +31,6 @@ public final class PrintGroupMapper {
         String orgAddress = bundle.getString(KEY_ORG_ADDRESS);
         String taxationSystem = bundle.getString(KEY_TAXATION_SYSTEM);
         boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
-        bundle.setClassLoader(Purchaser.class.getClassLoader());
         Purchaser purchaser = bundle.getParcelable(KEY_PURCHASER);
         return new PrintGroup(
                 identifier,
