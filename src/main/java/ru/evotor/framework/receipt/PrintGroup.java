@@ -56,6 +56,7 @@ public class PrintGroup implements Parcelable {
     @Nullable
     private Purchaser purchaser;
 
+    @Deprecated
     public PrintGroup(
             String identifier,
             Type type,

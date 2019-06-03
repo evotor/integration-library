@@ -285,26 +285,14 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
-        val purchaserName = try {
-            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_NAME))
-        } catch (e: Exception) {
-            null
-        }
-        val purchaserDocumentNumber = try {
-            cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER))
-        } catch (e: Exception) {
-            null
-        }
-        val purchaserType = try {
-            cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)).let {
-                if (it < 0) {
-                    null
-                } else {
-                    PurchaserType.values()[it % PurchaserType.values().size]
-                }
+        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
+        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+        val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+            if (it < 0) {
+                null
+            } else {
+                PurchaserType.values()[it.toInt() % PurchaserType.values().size]
             }
-        } catch (e: Exception) {
-            null
         }
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
