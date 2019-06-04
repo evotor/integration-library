@@ -52,10 +52,9 @@ object ParcelableUtils {
         val dataSize = readInt()
         val startDataPosition = dataPosition()
 
+        reader(this, currentVersion)
         if (currentVersion > version) {
             setDataPosition(startDataPosition + dataSize)
-        } else {
-            reader(this, currentVersion)
         }
 
     }

@@ -21,6 +21,7 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
 
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
+            it.classLoader = PrintGroup::class.java.classLoader
             ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     receiptUuid = it.getString(KEY_RECEIPT_UUID)
                             ?: return null,
