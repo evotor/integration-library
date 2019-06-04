@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import ru.evotor.IBundlable;
 
+/**
+ * Базовый класс для реализации операций приложения, которые используют панель действий (action bar).
+ *
+ * Методы класса упрощают обмен данными между операциями и смарт-терминалом.
+ */
 public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
 
     private IntegrationResponse mIntegrationResponse = null;

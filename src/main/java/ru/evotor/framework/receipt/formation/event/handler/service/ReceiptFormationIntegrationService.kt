@@ -5,6 +5,11 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.receipt.formation.event.ReturnPositionsForBarcodeRequestedEvent
 
+/**
+ * Родительский класс интерфейсов, необходимых для работы с чеками различных типов.
+ *
+ * Например, [ru.evotor.framework.receipt.formation.event.handler.service.SellIntegrationService].
+ */
 abstract class ReceiptFormationIntegrationService(
         private val actionBarcodeReceived: String
 ) : IntegrationServiceV2() {

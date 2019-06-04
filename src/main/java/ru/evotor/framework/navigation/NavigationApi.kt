@@ -2,6 +2,11 @@ package ru.evotor.framework.navigation
 
 import android.content.Intent
 
+/**
+ * Интерфейс для вызова различных окон смарт-терминала.
+ *
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_navigation.html">Вызов окон смарт-терминала</a>
+ */
 object NavigationApi {
     private const val ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
     private const val ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
@@ -22,7 +27,7 @@ object NavigationApi {
     const val EXTRA_PRODUCT_UUID = "productUuid"
 
     /**
-     * ключ для получения uuid продукта при успешном добавлении
+     * Ключ для получения идентификатора созданного товара.
      */
     const val EXTRA_ADDED_PRODUCT_UUID = "addedProductUuid"
 
@@ -123,7 +128,7 @@ object NavigationApi {
     }
 
     /**
-     * форма добавления нового товара
+     * форма создания товара. Товар будет создан
      */
     @JvmStatic
     fun createIntentForNewProduct(productBuilder: NewProductIntentBuilder): Intent {
@@ -139,7 +144,10 @@ object NavigationApi {
     }
 
     /**
-     * Получение uuid продукта при успешном добавлении
+     * Получает идентификатор созданного товара.
+     *
+     * @param intent
+     * @return идентификатор созданного товара.
      */
     @JvmStatic
     fun getProductUuid(intent: Intent): String? {

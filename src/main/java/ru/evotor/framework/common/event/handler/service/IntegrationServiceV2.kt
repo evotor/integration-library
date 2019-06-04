@@ -27,6 +27,11 @@ private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, 
             })
         })
 
+/**
+ * Обновлённая версия класса [ru.evotor.framework.core.IntegrationService].
+ *
+ * Базовый класс, на основе которого реализованы интерфейсы взаимодействия служб со смарт-терминалом, например, [ru.evotor.framework.receipt.formation.event.handler.service.ReceiptFormationIntegrationService]
+ */
 abstract class IntegrationServiceV2 internal constructor() : Service() {
 
     @Volatile
