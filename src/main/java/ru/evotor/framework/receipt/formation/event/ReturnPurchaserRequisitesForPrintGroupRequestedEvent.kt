@@ -61,7 +61,7 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     0 -> Result(emptyMap())
                     else -> {
                         val data = mutableMapOf<PrintGroup?, Purchaser?>()
-                        for (i in 0..count) {
+                        for (i in 0 until count) {
                             val key = it.getParcelable<PrintGroup?>("$KEY_MAP_ENTRIES_KEY_PREFIX$i")
                             val value = it.getParcelable<Purchaser?>("$KEY_MAP_ENTRIES_VALUE_PREFIX$i")
                             data[key] = value
