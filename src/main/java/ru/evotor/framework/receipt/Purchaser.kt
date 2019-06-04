@@ -64,7 +64,7 @@ data class Purchaser(
 }
 
 enum class PurchaserType {
-    INDIVIDUAL, // физлицо
-    SOLE_PROPRIETOR, // ИП
-    ENTITY // юрлицо
+    NATURAL_PERSON, // физлицо
+    ENTREPRENEUR, // ИП
+    LEGAL_ENTITY // юрлицо
 }
