@@ -40,7 +40,7 @@ data class SetPrintGroup(val printGroup: PrintGroup?, val paymentPurposeIds: Lis
             val paymentPurposeIds = bundle.getStringArrayList(KEY_PAYMENT_PURPOSE_ID)
             val positionsUuids = bundle.getStringArrayList(KEY_PAYMENT_POSITIONS_UUIDS)
 
-            if (paymentPurposeIds == null || positionsUuids == null || printGroup == null) {
+            if (paymentPurposeIds == null || positionsUuids == null) {
                 return null
             }
 
