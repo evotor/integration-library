@@ -4,8 +4,9 @@ import android.content.AsyncQueryHandler
 import android.content.Context
 import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
-import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.safeGetList
+import ru.evotor.framework.safeGetString
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SERIAL_NUMBER
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_REGISTER_NUMBER
 
 class AsyncHandler(context: Context, private val callback: (serial: String, reg: String) -> Unit)
     : AsyncQueryHandler(context.contentResolver) {
@@ -14,13 +15,13 @@ class AsyncHandler(context: Context, private val callback: (serial: String, reg:
         cursor?.use {
             it.moveToFirst()
 
-            val serialNumber = it.safeGetList(KktContract.COLUMN_SERIAL_NUMBER)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_SERIAL_NUMBER)
+            val serialNumber = it.safeGetString(COLUMN_SERIAL_NUMBER)
+                    ?: throw IntegrationLibraryMappingException(COLUMN_SERIAL_NUMBER)
 
-            val regNumber = it.safeGetList(KktContract.COLUMN_REGISTER_NUMBER)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_REGISTER_NUMBER)
+            val regNumber = it.safeGetString(COLUMN_REGISTER_NUMBER)
+                    ?: throw IntegrationLibraryMappingException(COLUMN_REGISTER_NUMBER)
 
-            callback(serialNumber[0], regNumber[0])
+            callback(serialNumber, regNumber)
         }
     }
 
