@@ -1,6 +1,7 @@
 package ru.evotor.framework.kkt.api
 
 import android.content.Context
+import android.net.Uri
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
@@ -27,6 +28,10 @@ import java.util.*
  * API для работы с кассой.
  */
 object KktApi {
+
+    private var serialNumber: String? = null
+    private var regNumber: String? = null
+
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
      * @return FfdVersion или null, если не удалось связаться с кассой
@@ -124,6 +129,32 @@ object KktApi {
             }
 
     /**
+     * Возвращает серийный номер ККТ в функцию обратного вызова (асинхронная операция)
+     *
+     * @param context текущий контекст
+     * @param callback функция обратного вызова, получает в качестве параметра серийный номер
+     * или null если попытка завершилась неудачей
+     */
+    @JvmStatic
+    fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
+        callback(it)
+        return
+    } ?: getKktInfo(context) { callback(serialNumber) }
+
+    /**
+     * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
+     *
+     * @param context текущий контекст
+     * @param callback функция обратного вызова, получает в качестве параметра регистрационный номер
+     * или null если попытка завершилась неудачей
+     */
+    @JvmStatic
+    fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
+        callback(it)
+        return
+    } ?: getKktInfo(context) { callback(regNumber) }
+
+    /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
      * @param context контекст приложения
@@ -212,6 +243,26 @@ object KktApi {
                         callback.onSuccess(null)
                     }
                 }
+        )
+    }
+
+    private inline fun getKktInfo(context: Context, crossinline dataReceived: () -> Unit) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
+
+        val asyncHandler = AsyncHandler(context) { serial, reg ->
+            serialNumber = serial
+            regNumber = reg
+            dataReceived()
+        }
+
+        asyncHandler.startQuery(
+                AsyncHandler.KKT_INFO_TOKEN,
+                null,
+                uri,
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
+                null,
+                null,
+                null
         )
     }
 }
