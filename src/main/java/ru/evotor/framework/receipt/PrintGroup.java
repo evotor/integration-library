@@ -20,9 +20,9 @@ public class PrintGroup implements Parcelable {
      */
     private static final int VERSION = 1;
 
-    private static final String DEFAULT_PRINTG_ROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
+    private static final String DEFAULT_PRINT_GROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
 
-    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINTG_ROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, false, null);
+    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null);
 
     /**
      * Идентификатор печатной группы
@@ -239,7 +239,7 @@ public class PrintGroup implements Parcelable {
     }
 
     public boolean isDefault() {
-        return DEFAULT_PRINTG_ROUP_IDENTIFIER.equals(identifier);
+        return DEFAULT_PRINT_GROUP_IDENTIFIER.equals(identifier);
     }
 
 }
