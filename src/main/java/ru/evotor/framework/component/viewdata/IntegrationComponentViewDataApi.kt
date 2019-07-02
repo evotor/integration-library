@@ -39,6 +39,7 @@ object IntegrationComponentViewDataApi {
         }
         val metaData = resolveInfo.serviceInfo.metaData
         val paymentSystemId = getPaymentSystemId(metaData) ?: return null
+        val paymentType = getPaymentType(metaData) ?: PaymentType.ELECTRON
         val packageManager = context.packageManager
         var appUuid: String? = null
         try {
@@ -56,7 +57,7 @@ object IntegrationComponentViewDataApi {
             return null
         }
         val paymentSystem = PaymentSystem(
-                PaymentType.ELECTRON,
+                paymentType,
                 resolveInfo.loadLabel(packageManager).toString(),
                 paymentSystemId
         )
@@ -82,4 +83,10 @@ object IntegrationComponentViewDataApi {
     private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
 
     private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
+
+    private fun getPaymentType(metaData: Bundle) = try {
+        PaymentType.valueOf(metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_TYPE, null))
+    } catch (t: Throwable) {
+        null
+    }
 }
