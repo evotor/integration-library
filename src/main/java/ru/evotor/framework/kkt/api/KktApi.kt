@@ -135,11 +135,23 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра серийный номер
      * или null если попытка завершилась неудачей
      */
+    @Deprecated("Рекомендуется использовать метод без функции обратного вызова в качестве параметра")
     @JvmStatic
     fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
         callback(it)
         return
     } ?: getKktInfo(context) { callback(serialNumber) }
+
+    /**
+     * Возвращает серийный номер ККТ следует вызывать асинхронно
+     * или null если попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     */
+    @JvmStatic
+    fun receiveKktSerialNumber(context: Context) = serialNumber?.let {
+        serialNumber
+    } ?: getKktInfo(context)
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -148,12 +160,23 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра регистрационный номер
      * или null если попытка завершилась неудачей
      */
+    @Deprecated("Рекомендуется использовать метод без функции обратного вызова в качестве параметра")
     @JvmStatic
     fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
         callback(it)
         return
     } ?: getKktInfo(context) { callback(regNumber) }
 
+    /**
+     * Возвращает регистрационный номер ККТ следует вызывать асинхронно
+     * или null если попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     */
+    @JvmStatic
+    fun receiveKktRegNumber(context: Context) = regNumber?.let {
+        regNumber
+    } ?: getKktInfo(context)
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
@@ -264,5 +287,27 @@ object KktApi {
                 null,
                 null
         )
+    }
+
+    private fun getKktInfo(context: Context) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
+
+        val cursor = context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
+                null,
+                null,
+                null
+        )
+
+        cursor?.use {
+            it.moveToFirst()
+
+            serialNumber = it.safeGetList(KktContract.COLUMN_SERIAL_NUMBER)?.get(0)
+                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_SERIAL_NUMBER)
+
+            regNumber = it.safeGetList(KktContract.COLUMN_REGISTER_NUMBER)?.get(0)
+                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_REGISTER_NUMBER)
+        }
     }
 }
