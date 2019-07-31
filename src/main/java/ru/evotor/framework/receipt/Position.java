@@ -869,7 +869,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setFootwearParams(mark);
+            setShoesParams(mark);
             return this;
         }
 
@@ -911,7 +911,7 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setFootwearParams(String mark) {
+        private void setShoesParams(String mark) {
             position.mark = mark;
         }
 
