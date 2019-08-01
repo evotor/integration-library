@@ -135,7 +135,7 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра серийный номер
      * или null если попытка завершилась неудачей
      */
-    @Deprecated("Устаревший с 01.08.19 используйте receiveKktSerialNumber(context: Context): String?")
+    @Deprecated("Устаревший с 01.08.19, используйте receiveKktSerialNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
         callback(it)
@@ -150,7 +150,6 @@ object KktApi {
      * @return строку серийный номер или null
      */
     @JvmStatic
-    @Throws(IntegrationLibraryMappingException::class)
     fun receiveKktSerialNumber(context: Context): String? {
         if (serialNumber == null) getKktInfo(context)
 
@@ -164,7 +163,7 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра регистрационный номер
      * или null если попытка завершилась неудачей
      */
-    @Deprecated("Устаревший с 01.08.19 используйте receiveKktRegNumber(context: Context): String?")
+    @Deprecated("Устаревший с 01.08.19, используйте receiveKktRegNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
         callback(it)
@@ -179,7 +178,6 @@ object KktApi {
      * @return строку регистрационный номер или null
      */
     @JvmStatic
-    @Throws(IntegrationLibraryMappingException::class)
     fun receiveKktRegNumber(context: Context): String? {
         if (regNumber == null) getKktInfo(context)
 
@@ -310,12 +308,8 @@ object KktApi {
 
         cursor?.use {
             it.moveToFirst()
-
-            serialNumber = it.safeGetList(KktContract.COLUMN_SERIAL_NUMBER)?.get(0)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_SERIAL_NUMBER)
-
-            regNumber = it.safeGetList(KktContract.COLUMN_REGISTER_NUMBER)?.get(0)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_REGISTER_NUMBER)
+            serialNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_SERIAL_NUMBER))
+            regNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_REGISTER_NUMBER))
         }
     }
 }
