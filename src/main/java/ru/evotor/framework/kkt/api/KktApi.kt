@@ -135,7 +135,7 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра серийный номер
      * или null если попытка завершилась неудачей
      */
-    @Deprecated("Рекомендуется использовать метод без функции обратного вызова в качестве параметра")
+    @Deprecated("Устаревший с 01.08.19 используйте receiveKktSerialNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
         callback(it)
@@ -143,15 +143,19 @@ object KktApi {
     } ?: getKktInfo(context) { callback(serialNumber) }
 
     /**
-     * Возвращает серийный номер ККТ следует вызывать асинхронно
-     * или null если попытка завершилась неудачей
+     * Возвращает серийный номер ККТ или null если попытка завершилась неудачей,
+     * следует вызывать асинхронно
      *
      * @param context текущий контекст
+     * @return строку серийный номер или null
      */
     @JvmStatic
-    fun receiveKktSerialNumber(context: Context) = serialNumber?.let {
-        serialNumber
-    } ?: getKktInfo(context)
+    @Throws(IntegrationLibraryMappingException::class)
+    fun receiveKktSerialNumber(context: Context): String? {
+        if (serialNumber == null) getKktInfo(context)
+
+        return serialNumber
+    }
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -160,7 +164,7 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра регистрационный номер
      * или null если попытка завершилась неудачей
      */
-    @Deprecated("Рекомендуется использовать метод без функции обратного вызова в качестве параметра")
+    @Deprecated("Устаревший с 01.08.19 используйте receiveKktRegNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
         callback(it)
@@ -168,15 +172,19 @@ object KktApi {
     } ?: getKktInfo(context) { callback(regNumber) }
 
     /**
-     * Возвращает регистрационный номер ККТ следует вызывать асинхронно
-     * или null если попытка завершилась неудачей
+     * Возвращает регистрационный номер ККТ или null если попытка завершилась неудачей,
+     * следует вызывать асинхронно
      *
      * @param context текущий контекст
+     * @return строку регистрационный номер или null
      */
     @JvmStatic
-    fun receiveKktRegNumber(context: Context) = regNumber?.let {
-        regNumber
-    } ?: getKktInfo(context)
+    @Throws(IntegrationLibraryMappingException::class)
+    fun receiveKktRegNumber(context: Context): String? {
+        if (regNumber == null) getKktInfo(context)
+
+        return regNumber
+    }
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
