@@ -5,6 +5,13 @@ import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Purchaser
 
+/**
+ * Событие, с помощью которого смарт-терминал запрашивает у установленных приложений реквизиты покупателя.
+ *
+ * @property receiptUuid Идентификатор чека, в который будут добавлены реквизиты покупателя.
+ * @property printGroups Список печатных групп с реквизитами покупателя.
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_purchase_requisites_event_processing.html">Добавление реквизитов покупателя в чек</a>
+ */
 data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
         val receiptUuid: String,
         val printGroups: List<PrintGroup?>
@@ -30,6 +37,11 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
 
     }
 
+    /**
+     * Результат обработки события, который содержит массив печатных групп с соответствующими реквизитами покупателя.
+     *
+     * @property printGroupsWithPurchaserRequisites Массив печатных групп и соответствующих им объектов с реквизитами покупателя.
+     */
     data class Result(
             val printGroupsWithPurchaserRequisites: Map<PrintGroup?, Purchaser?>?
     ) : IntegrationEvent.Result() {

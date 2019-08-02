@@ -12,8 +12,8 @@ import ru.evotor.framework.receipt.Position
  *
  * Обрабатывая данные, содержащиеся в событии, приложения могут добавлять позиции в чек и / или создавать новые товары.
  *
- * @param barcode строка данных, полученных от сканера штрихкодов.
- * @param creatingNewProduct указывает на необходимость создать новый товар. Сразу после сканирования штрихкода всегда содержит false.
+ * @property barcode строка данных, полученных от сканера штрихкодов.
+ * @property creatingNewProduct указывает на необходимость создать новый товар. Сразу после сканирования штрихкода всегда содержит false.
  * @see <a href="https://developer.evotor.ru/docs/doc_java_return_positions_for_barcode_requested.html">Обработка события сканирования штрихкода</a>
  */
 data class ReturnPositionsForBarcodeRequestedEvent(
@@ -42,8 +42,8 @@ data class ReturnPositionsForBarcodeRequestedEvent(
     /**
      * Результат обработки события сканирования штрихкода.
      *
-     * @param positions список позиций, которые будут добавлены в чек.
-     * @param iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
+     * @property positions список позиций, которые будут добавлены в чек.
+     * @property iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
      */
     data class Result(
             val positions: List<Position>,
