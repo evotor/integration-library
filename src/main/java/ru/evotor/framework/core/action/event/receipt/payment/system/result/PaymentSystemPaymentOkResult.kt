@@ -14,7 +14,7 @@ class PaymentSystemPaymentOkResult(
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RRN, rrn)
-        result.putStringArrayList(KEY_SLIP, if (slip is ArrayList) slip else null)
+        result.putStringArrayList(KEY_SLIP, if (slip is ArrayList) slip else ArrayList(slip))
         result.putString(KEY_PAYMENT_INFO, paymentInfo)
         result.putString(KEY_PAYMENT_TYPE, paymentType.name)
         return result
@@ -33,7 +33,7 @@ class PaymentSystemPaymentOkResult(
             val rrn = bundle.getString(KEY_RRN, null)
             val slip = bundle.getStringArrayList(KEY_SLIP)
             val paymentInfo = bundle.getString(KEY_PAYMENT_INFO, null)
-            val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN);
+            val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN)
             return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType)
 
         }
