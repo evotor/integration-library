@@ -25,6 +25,7 @@ public class PrintGroupRequiredEvent extends PrintGroupEvent {
      * Значение константы: <code>evo.v2.receipt.buy.printGroup.REQUIRED</code>.
      */
     public static final String NAME_BUY_RECEIPT = "evo.v2.receipt.buy.printGroup.REQUIRED";
+    public static final String NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.printGroup.REQUIRED";
 
     public PrintGroupRequiredEvent(@Nullable PaymentSystem paymentSystem) {
         super(paymentSystem);
