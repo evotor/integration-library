@@ -76,6 +76,11 @@ public abstract class IntegrationService extends Service {
 
     }
 
+    /**
+     * Создаёт обработчик.
+     *
+     * @return коллекция пар "Событие":"Обработчик события".
+     */
     @Nullable
     protected abstract Map<String, ActionProcessor> createProcessors();
 }

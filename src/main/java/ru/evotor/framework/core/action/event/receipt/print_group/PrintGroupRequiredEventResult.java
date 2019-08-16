@@ -14,6 +14,9 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup;
 
+/**
+ * Результат обработки события {@link PrintGroupRequiredEvent}.
+ */
 public class PrintGroupRequiredEventResult implements IBundlable {
 
     private static final String KEY_RECEIPT_EXTRA = "extra";
@@ -59,11 +62,19 @@ public class PrintGroupRequiredEventResult implements IBundlable {
         return bundle;
     }
 
+    /**
+     * Возвращает дополнителье поля чека, которые были указаны при создании результата.
+     * @return список объектов {@link SetExtra}.
+     */
     @Nullable
     public SetExtra getExtra() {
         return extra;
     }
 
+    /**
+     * Возвращает список печатных групп, указанных при создании результата.
+     * @return список объектов {@link SetPrintGroup}.
+     */
     @NonNull
     public List<SetPrintGroup> getSetPrintGroups() {
         return setPrintGroups;
