@@ -27,5 +27,10 @@ public enum ProductType {
     /**
      * Маркированный табак.
      */
-    TOBACCO_MARKED
+    TOBACCO_MARKED,
+
+    /**
+     * Маркированная обувь
+     */
+    SHOES_MARKED
 }
