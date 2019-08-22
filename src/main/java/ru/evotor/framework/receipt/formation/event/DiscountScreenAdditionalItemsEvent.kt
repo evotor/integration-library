@@ -3,7 +3,7 @@ package ru.evotor.framework.receipt.formation.event
 import android.os.Bundle
 import ru.evotor.framework.common.event.IntegrationEvent
 
-data class AdditionalDiscountItemsEvent(
+data class DiscountScreenAdditionalItemsEvent(
         val receiptUuid: String
 ) : IntegrationEvent() {
 
@@ -16,7 +16,7 @@ data class AdditionalDiscountItemsEvent(
 
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
-            AdditionalDiscountItemsEvent(it.getString(KEY_RECEIPT_UUID))
+            DiscountScreenAdditionalItemsEvent(it.getString(KEY_RECEIPT_UUID))
         }
     }
 
