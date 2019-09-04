@@ -35,6 +35,8 @@ abstract class PaymentSystemEvent(
         const val NAME_PERMISSION = "ru.evotor.permission.PAYMENT_SYSTEM"
         const val META_NAME_PAYMENT_SYSTEM_ID = "ru.evotor.paymentSystem.PAYMENT_SYSTEM_ID"
 
+        const val META_NAME_PAYMENT_TYPE = "ru.evotor.paymentSystem.PAYMENT_TYPE"
+
         private val KEY_OPERATION_TYPE = "operationType"
 
         fun create(bundle: Bundle?): PaymentSystemEvent? {
