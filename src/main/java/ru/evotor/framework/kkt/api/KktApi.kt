@@ -135,11 +135,26 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра серийный номер
      * или null если попытка завершилась неудачей
      */
+    @Deprecated("Устаревший с 01.08.19, используйте receiveKktSerialNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
         callback(it)
         return
     } ?: getKktInfo(context) { callback(serialNumber) }
+
+    /**
+     * Возвращает серийный номер ККТ или null если попытка завершилась неудачей,
+     * следует вызывать асинхронно
+     *
+     * @param context текущий контекст
+     * @return строку серийный номер или null
+     */
+    @JvmStatic
+    fun receiveKktSerialNumber(context: Context): String? {
+        if (serialNumber == null) getKktInfo(context)
+
+        return serialNumber
+    }
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -148,12 +163,26 @@ object KktApi {
      * @param callback функция обратного вызова, получает в качестве параметра регистрационный номер
      * или null если попытка завершилась неудачей
      */
+    @Deprecated("Устаревший с 01.08.19, используйте receiveKktRegNumber(context: Context): String?")
     @JvmStatic
     fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
         callback(it)
         return
     } ?: getKktInfo(context) { callback(regNumber) }
 
+    /**
+     * Возвращает регистрационный номер ККТ или null если попытка завершилась неудачей,
+     * следует вызывать асинхронно
+     *
+     * @param context текущий контекст
+     * @return строку регистрационный номер или null
+     */
+    @JvmStatic
+    fun receiveKktRegNumber(context: Context): String? {
+        if (regNumber == null) getKktInfo(context)
+
+        return regNumber
+    }
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
@@ -264,5 +293,23 @@ object KktApi {
                 null,
                 null
         )
+    }
+
+    private fun getKktInfo(context: Context) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
+
+        val cursor = context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
+                null,
+                null,
+                null
+        )
+
+        cursor?.use {
+            it.moveToFirst()
+            serialNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_SERIAL_NUMBER))
+            regNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_REGISTER_NUMBER))
+        }
     }
 }

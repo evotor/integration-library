@@ -47,6 +47,7 @@ object PaymentPerformerApi {
             return null
         }
         val paymentSystemId = getPaymentSystemId(resolveInfo.serviceInfo.metaData) ?: return null
+        val paymentType = getPaymentType(resolveInfo.serviceInfo.metaData) ?: PaymentType.ELECTRON
         val appUuid: String?
         try {
             val packageInfo = packageManager.getPackageInfo(resolveInfo.serviceInfo.packageName, PackageManager.GET_META_DATA or PackageManager.GET_PERMISSIONS)
@@ -59,7 +60,7 @@ object PaymentPerformerApi {
 
         return PaymentPerformer(
                 PaymentSystem(
-                        PaymentType.ELECTRON,
+                        paymentType,
                         resolveInfo.loadLabel(packageManager).toString(),
                         paymentSystemId
                 ),
@@ -78,6 +79,12 @@ object PaymentPerformerApi {
             else null
 
     private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
+
+    private fun getPaymentType(metaData: Bundle) = try {
+        PaymentType.valueOf(metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_TYPE, null))
+    } catch (t: Throwable) {
+        null
+    }
 
     private fun getDefaultCashPaymentPerformer() = PaymentPerformer(
             PaymentSystem(
