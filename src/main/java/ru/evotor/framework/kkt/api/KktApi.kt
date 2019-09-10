@@ -1,7 +1,7 @@
 package ru.evotor.framework.kkt.api
 
 import android.content.Context
-import android.net.Uri
+import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
@@ -29,8 +29,8 @@ import java.util.*
  */
 object KktApi {
 
-    private var serialNumber: String? = null
-    private var regNumber: String? = null
+    private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.getString(cursor.getColumnIndex(name)) }
+    private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.safeGetBoolean(name) }
 
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
@@ -38,21 +38,15 @@ object KktApi {
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученную версию ФФД
      */
     @JvmStatic
-    fun getRegisteredFfdVersion(context: Context): FfdVersion? = context.contentResolver.query(
-            KktContract.BASE_URI,
-            arrayOf(KktContract.COLUMN_SUPPORTED_FFD_VERSION),
-            null,
-            null,
-            null
-    )?.use { cursor ->
-        cursor.moveToFirst()
-        cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
-            if (version !in 0..FfdVersion.values().size) {
-                throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
+    fun getRegisteredFfdVersion(context: Context): FfdVersion? =
+            getValue(context, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
+                cursor.safeGetInt(name)?.let { version ->
+                    if (version !in 0..FfdVersion.values().size) {
+                        throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
+                    }
+                    FfdVersion.values()[version]
+                }
             }
-            FfdVersion.values()[version]
-        }
-    }
 
     /**
      * Получает список типов агентов, которые были указаны при регистрации кассы.
@@ -63,15 +57,8 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_AGENT_TYPES),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
+            getValue(context, KktContract.COLUMN_REGISTERED_AGENT_TYPES) { cursor, name ->
+                cursor.safeGetList(name)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Agent.Type::class.java.name)
@@ -90,15 +77,8 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
+            getValue(context, KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES) { cursor, name ->
+                cursor.safeGetList(name)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Subagent.Type::class.java.name)
@@ -116,17 +96,7 @@ object KktApi {
      */
     @JvmStatic
     fun isVatRate20Available(context: Context): Boolean? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE)
-                        ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
-            }
+            getValue(context, KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE, booleanGetter)
 
     /**
      * Возвращает серийный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -137,10 +107,9 @@ object KktApi {
      */
     @Deprecated("Устаревший с 01.08.19, используйте receiveKktSerialNumber(context: Context): String?")
     @JvmStatic
-    fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
-        callback(it)
-        return
-    } ?: getKktInfo(context) { callback(serialNumber) }
+    fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) {
+        callback(receiveKktSerialNumber(context))
+    }
 
     /**
      * Возвращает серийный номер ККТ или null если попытка завершилась неудачей,
@@ -150,11 +119,8 @@ object KktApi {
      * @return строку серийный номер или null
      */
     @JvmStatic
-    fun receiveKktSerialNumber(context: Context): String? {
-        if (serialNumber == null) getKktInfo(context)
-
-        return serialNumber
-    }
+    fun receiveKktSerialNumber(context: Context): String? =
+            getValue(context, KktContract.COLUMN_SERIAL_NUMBER, stringGetter)
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -165,10 +131,9 @@ object KktApi {
      */
     @Deprecated("Устаревший с 01.08.19, используйте receiveKktRegNumber(context: Context): String?")
     @JvmStatic
-    fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
-        callback(it)
-        return
-    } ?: getKktInfo(context) { callback(regNumber) }
+    fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) {
+        callback(receiveKktRegNumber(context))
+    }
 
     /**
      * Возвращает регистрационный номер ККТ или null если попытка завершилась неудачей,
@@ -178,11 +143,22 @@ object KktApi {
      * @return строку регистрационный номер или null
      */
     @JvmStatic
-    fun receiveKktRegNumber(context: Context): String? {
-        if (regNumber == null) getKktInfo(context)
+    fun receiveKktRegNumber(context: Context): String? =
+            getValue(context, KktContract.COLUMN_REGISTER_NUMBER, stringGetter)
 
-        return regNumber
-    }
+    /**
+     * Проверяет, готова ли касса для работы в разъездной торговле.
+     * Результатом является логическое "И" всех необходимых условий.
+     *
+     * @param context текущий контекст
+     * @return  true    - если все условия для работы в разъездной торговле выполнены,
+     *          false   - если хотя бы одно условие не выполнено
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
+     */
+    @JvmStatic
+    fun isKktReadyForDelivery(context: Context): Boolean? =
+            getValue(context, KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
+
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
@@ -275,41 +251,16 @@ object KktApi {
         )
     }
 
-    private inline fun getKktInfo(context: Context, crossinline dataReceived: () -> Unit) {
-        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
-
-        val asyncHandler = AsyncHandler(context) { serial, reg ->
-            serialNumber = serial
-            regNumber = reg
-            dataReceived()
-        }
-
-        asyncHandler.startQuery(
-                AsyncHandler.KKT_INFO_TOKEN,
-                null,
-                uri,
-                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
+    private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
+        return context.contentResolver.query(
+                KktContract.BASE_URI,
+                arrayOf(valueName),
                 null,
                 null,
                 null
-        )
-    }
-
-    private fun getKktInfo(context: Context) {
-        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
-
-        val cursor = context.contentResolver.query(
-                uri,
-                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
-                null,
-                null,
-                null
-        )
-
-        cursor?.use {
+        )?.use {
             it.moveToFirst()
-            serialNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_SERIAL_NUMBER))
-            regNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_REGISTER_NUMBER))
+            parser(it, valueName) ?: throw IntegrationLibraryMappingException(valueName)
         }
     }
 }
