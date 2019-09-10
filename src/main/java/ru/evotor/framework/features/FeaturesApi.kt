@@ -46,7 +46,7 @@ object FeaturesApi {
 
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
-                    Uri.parse("${FeaturesContract.BASE_PATH}/$path"),
+                    Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
                     null,
                     null,
                     null,

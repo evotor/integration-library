@@ -1,7 +1,12 @@
 package ru.evotor.framework.features.provider
 
+import android.net.Uri
+
 object FeaturesContract {
-    const val BASE_PATH = "content://ru.evotor.paidupdates.FeaturesContentProvider"
+
+    const val AUTHORITY = "ru.evotor.paidupdates.FeaturesContentProvider"
+    const val BASE_PATH = "content://$AUTHORITY"
+    val BASE_URI: Uri = Uri.parse(BASE_PATH)
 
     const val PATH_VAT20 = "vat20"
     const val PATH_FFD105 = "ffd105"

@@ -3,7 +3,8 @@ package ru.evotor.framework.kkt.provider
 import android.net.Uri
 
 object KktContract {
-    val BASE_URI: Uri = Uri.parse("content://ru.evotor.evotorpos.kkt")
+    const val AUTHORITY = "ru.evotor.evotorpos.kkt"
+    val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 
     const val COLUMN_SUPPORTED_FFD_VERSION = "SUPPORTED_FFD_VERSION"
     const val COLUMN_REGISTERED_AGENT_TYPES = "REGISTERED_AGENT_TYPES"
