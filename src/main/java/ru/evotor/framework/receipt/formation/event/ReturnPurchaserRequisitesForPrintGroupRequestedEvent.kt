@@ -25,7 +25,8 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
             ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     receiptUuid = it.getString(KEY_RECEIPT_UUID)
                             ?: return null,
-                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS))
+                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
+                            ?: return null)
         }
 
     }
@@ -60,13 +61,13 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     -1 -> Result(null)
                     0 -> Result(emptyMap())
                     else -> {
-                        val data = mutableMapOf<PrintGroup?, Purchaser?>()
+                        val printGroupsWithPurchaserRequisites = mutableMapOf<PrintGroup?, Purchaser?>()
                         for (i in 0 until count) {
                             val key = it.getParcelable<PrintGroup?>("$KEY_MAP_ENTRIES_KEY_PREFIX$i")
                             val value = it.getParcelable<Purchaser?>("$KEY_MAP_ENTRIES_VALUE_PREFIX$i")
-                            data[key] = value
+                            printGroupsWithPurchaserRequisites[key] = value
                         }
-                        Result(data)
+                        Result(printGroupsWithPurchaserRequisites)
                     }
                 }
             }
