@@ -11,18 +11,18 @@ class CurrentReceiptDraftMovementToPaymentStageRequestedEvent internal construct
         val paymentDelegator: PaymentDelegator?,
         val paymentPerformer: PaymentPerformer?
 ) : IBundlable {
-    override fun toBundle(): Bundle  = Bundle().apply {
+    override fun toBundle(): Bundle = Bundle().apply {
         paymentDelegator?.let { putBundle(KEY_PAYMENT_DELEGATOR, PaymentDelegatorMapper.toBundle(it)) }
         paymentPerformer?.let { putBundle(KEY_PAYMENT_PERFORMER, PaymentPerformerMapper.toBundle(it)) }
     }
 
     companion object {
-        fun from(bundle: Bundle?): CurrentReceiptDraftMovementToPaymentStageRequestedEvent? = bundle?.let {
+        fun from(bundle: Bundle?): CurrentReceiptDraftMovementToPaymentStageRequestedEvent? = bundle?.let { b ->
             CurrentReceiptDraftMovementToPaymentStageRequestedEvent(
-                    bundle.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
+                    b.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
                         PaymentDelegatorMapper.fromBundle(it)
                     },
-                    bundle.getBundle(KEY_PAYMENT_PERFORMER)?.let {
+                    b.getBundle(KEY_PAYMENT_PERFORMER)?.let {
                         PaymentPerformerMapper.fromBundle(it)
                     }
             )
