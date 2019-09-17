@@ -19,19 +19,25 @@ import java.util.*
  * @param clientPhone Телефон клиента.
  * @param clientEmail Электронная почта клиента.
  * @param receiptDiscount Скидка на чек.
+ * @param paymentAddress Адрес места расчёта
+ * @param paymentPlace Место расчёта
  */
 class PrintBuyReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
         extra: SetExtra?,
         clientPhone: String?,
         clientEmail: String?,
-        receiptDiscount: BigDecimal?
+        receiptDiscount: BigDecimal?,
+        paymentAddress: String? = null,
+        paymentPlace: String? = null
 ) : PrintReceiptCommand(
         printReceipts,
         extra,
         clientPhone,
         clientEmail,
-        receiptDiscount
+        receiptDiscount,
+        paymentAddress,
+        paymentPlace
 ) {
 
     /**
@@ -39,12 +45,16 @@ class PrintBuyReceiptCommand(
      * @param payments Список оплат
      * @param clientPhone Телефон клиента
      * @param clientEmail Эл.почта клиента
+     * @param paymentAddress Адрес места расчёта
+     * @param paymentPlace Место расчёта
      */
     constructor(
             positions: List<Position>,
             payments: List<Payment>,
             clientPhone: String?,
-            clientEmail: String?) : this(
+            clientEmail: String?,
+            paymentAddress: String? = null,
+            paymentPlace: String? = null) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -68,7 +78,9 @@ class PrintBuyReceiptCommand(
             null,
             clientPhone,
             clientEmail,
-            BigDecimal.ZERO
+            BigDecimal.ZERO,
+            paymentAddress,
+            paymentPlace
     )
 
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
@@ -88,7 +100,9 @@ class PrintBuyReceiptCommand(
                     getSetExtra(bundle),
                     getClientPhone(bundle),
                     getClientEmail(bundle),
-                    getReceiptDiscount(bundle)
+                    getReceiptDiscount(bundle),
+                    getPaymentAddress(bundle),
+                    getPaymentPlace(bundle)
             )
         }
     }
