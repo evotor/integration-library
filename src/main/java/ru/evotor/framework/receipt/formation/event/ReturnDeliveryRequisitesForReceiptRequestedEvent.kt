@@ -12,7 +12,7 @@ data class ReturnDeliveryRequisitesForReceiptRequestedEvent(
     override fun toBundle() = Bundle().apply {
         putString(KEY_RECEIPT_UUID, receiptUuid)
         putString(KEY_EXTRA_ADDRESS, paymentAddress)
-        putString(KEY_RECEIPT_UUID, paymentPlace)
+        putString(KEY_EXTRA_PLACE, paymentPlace)
     }
 
     companion object {
