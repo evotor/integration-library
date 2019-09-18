@@ -136,7 +136,7 @@ object ReceiptApi {
                 .associateBy { it.position.uuid }
 
         for ((position, _, parentUuid) in getPositionResults.filter { it.parentUuid != null }) {
-            positionMap[parentUuid]?.position?.subPositions?.add(position)
+            positionMap[parentUuid]?.position?.subPositions?.plus(position)
         }
 
         val getPositionResultsWithoutSubPositionsInList = getPositionResults.filter { it.parentUuid == null }
