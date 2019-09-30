@@ -75,18 +75,6 @@ dokka {
 
     includes = ['packages.md']
 
-//    reportUndocumented = true
-
-//    packageOptions {
-//        prefix = "android.support" // will match kotlin.internal and all sub-packages of it
-//        suppress = true
-//    }
-
-//    packageOptions {
-//        prefix = "ru.evotor.pushNotifications" // will match kotlin.internal and all sub-packages of it
-//        suppress = true
-//    }
-
 }
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
