@@ -43,6 +43,9 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_PURCHASER_REQUISITES)
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
+    /**
+     * Запускает приложение по нажатию кнопки на экране оплаты чека.
+     */
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): IBundlable? = null
 
