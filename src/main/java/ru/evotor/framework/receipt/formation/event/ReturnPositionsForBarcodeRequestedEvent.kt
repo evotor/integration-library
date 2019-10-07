@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event
 
 import android.os.Bundle
-import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.Position
 
@@ -53,7 +52,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
             putInt(KEY_EXTRA_POSITIONS_COUNT, positions.size)
-            for (i in 0 until positions.size) {
+            for (i in positions.indices) {
                 putParcelable(KEY_EXTRA_POSITIONS + i, positions[i])
             }
             putBoolean(KEY_EXTRA_CAN_CREATE, iCanCreateNewProduct)
@@ -70,7 +69,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                 val count = it.getInt(KEY_EXTRA_POSITIONS_COUNT)
                 val positions = mutableListOf<Position>()
                 for (i in 0 until count) {
-                    positions.add(it.getParcelable(KEY_EXTRA_POSITIONS + i))
+                    positions.add(it.getParcelable(KEY_EXTRA_POSITIONS + i) ?: return null)
                 }
                 val iCanCreateNewProduct = it.getBoolean(KEY_EXTRA_CAN_CREATE)
                 Result(positions, iCanCreateNewProduct)
