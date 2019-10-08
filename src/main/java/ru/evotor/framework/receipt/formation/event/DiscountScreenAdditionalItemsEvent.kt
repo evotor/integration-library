@@ -16,7 +16,10 @@ data class DiscountScreenAdditionalItemsEvent(
 
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
-            DiscountScreenAdditionalItemsEvent(it.getString(KEY_RECEIPT_UUID))
+            DiscountScreenAdditionalItemsEvent(
+                    receiptUuid = it.getString(KEY_RECEIPT_UUID)
+                            ?: return null
+            )
         }
     }
 
