@@ -45,9 +45,9 @@ object FeaturesApi {
     fun isPurchaserActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PURCHASER)
 
     /**
-     * Проверяет активна ли функция "Развозная торговля" на данном терминале
+     * Проверяет активна ли функция "Развозная торговля" на данном терминале.
      *
-     * @return true если функция активна, false соответственно если функция не активна
+     * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isDeliveryActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DELIVERY)
 

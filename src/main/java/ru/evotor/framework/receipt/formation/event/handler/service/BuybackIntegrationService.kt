@@ -28,6 +28,14 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_PURCHASER_REQUISITES)
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
+    /**
+     * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.
+     *
+     * @param event Событие, с помощью которого, смарт-терминал сообщает прилоежниям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
+     * @return [ReturnDeliveryRequisitesForReceiptRequestedEvent.Result]
+     *
+     * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Оформление чека при развозной или разносной торговле"</a>
+     */
     @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
@@ -39,6 +47,12 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.PURCHASER_REQUISITES`.
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.buyback.PURCHASER_REQUISITES"
+
+        /**
+         * Запрос адреса и места расчёта для добавления в чек.
+         *
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.DELIVERY_REQUISITES`.
+         */
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.buyback.DELIVERY_REQUISITES"
 
         /**

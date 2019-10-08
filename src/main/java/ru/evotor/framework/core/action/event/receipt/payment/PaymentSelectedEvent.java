@@ -16,7 +16,7 @@ import ru.evotor.framework.payment.PaymentPurpose;
  * Для обработки события используется обработчик {@link PaymentSelectedEventProcessor}.
  * Обрабатывая событие приложение возвращает смарт-терминалу результат {@link PaymentSelectedEventResult}.
  * <p>
- * Константы {@value NAME_SELL_RECEIPT} и {@value NAME_PAYBACK_RECEIPT}  события указывает тип чека, платежи которого будут разделены.
+ * Константы {@value NAME_SELL_RECEIPT} и {@value NAME_PAYBACK_RECEIPT} события указывают тип чека, платежи которого будут разделены.
  * <p>
  * Чтобы приложение получало событие, значение константы необходимо указать в элементе <code>action</code> intent-фильтра соотвествующей службы.
  *
