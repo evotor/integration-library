@@ -22,7 +22,7 @@ import ru.evotor.framework.common.event.IntegrationEvent
  *
  * Чтобы подписать службу на получение события, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.DELIVERY_REQUISITES`.
  *
- * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Оформление чека при развозной или разносной торговле"</a>
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
  */
 data class ReturnDeliveryRequisitesForReceiptRequestedEvent(
         val receiptUuid: String,

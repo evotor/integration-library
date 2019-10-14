@@ -42,7 +42,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
      * @param event Событие, с помощью которого, смарт-терминал сообщает прилоежниям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
      * @return [ReturnDeliveryRequisitesForReceiptRequestedEvent.Result]
      *
-     * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Оформление чека при развозной или разносной торговле"</a>
+     * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
      */
     @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
