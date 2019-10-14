@@ -329,7 +329,7 @@ object ReceiptApi {
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                        ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
+                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)),ProductType.NORMAL),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
