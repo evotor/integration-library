@@ -25,7 +25,7 @@ import java.math.BigDecimal
 import java.util.*
 
 /**
- * API для работы с кассой.
+ * Интерфейс для работы с кассой.
  */
 object KktApi {
 

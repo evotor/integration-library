@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import ru.evotor.IBundlable;
 
+@Deprecated // 23.09.2019
 public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
 
     private IntegrationResponse mIntegrationResponse = null;

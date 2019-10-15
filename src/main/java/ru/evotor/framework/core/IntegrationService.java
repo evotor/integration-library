@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
- * Родительский класс интеграционных служб необходимых для обработки и реакции на события смарт-терминала.
+ * Базовый класс для реализации служб приложения.
+ *
+ * Методы класса упрощают обмен данными между службами и смарт-терминалом.
  */
 public abstract class IntegrationService extends Service {
 
@@ -74,6 +76,11 @@ public abstract class IntegrationService extends Service {
 
     }
 
+    /**
+     * Создаёт обработчик.
+     *
+     * @return коллекция пар "Событие":"Обработчик события".
+     */
     @Nullable
     protected abstract Map<String, ActionProcessor> createProcessors();
 }

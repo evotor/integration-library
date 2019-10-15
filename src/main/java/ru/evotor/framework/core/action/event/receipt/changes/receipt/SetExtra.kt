@@ -5,8 +5,7 @@ import org.json.JSONObject
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
 /**
- * Добавляет дополнительные поля в чек.
- * Дополнительные поля представляют собой валидный объект JSON.
+ * Добавляет в чек дополнительные поля в виде валидного JSON-объекта.
  */
 data class SetExtra(val extra: JSONObject?) : IChange {
 

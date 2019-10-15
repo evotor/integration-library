@@ -13,6 +13,9 @@ import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 import ru.evotor.framework.payment.PaymentPurpose;
 
+/**
+ * Результат обработки события {@link PaymentSelectedEvent}.
+ */
 public class PaymentSelectedEventResult implements IBundlable {
 
     private static final String KEY_RECEIPT_EXTRA = "extra";
@@ -69,11 +72,19 @@ public class PaymentSelectedEventResult implements IBundlable {
         return bundle;
     }
 
+    /**
+     * Возвращает дополнителье поля чека, которые были указаны при создании результата.
+     * @return список объектов {@link SetExtra}.
+     */
     @Nullable
     public SetExtra getExtra() {
         return extra;
     }
 
+    /**
+     * Возвращает список платежей, указанных при создании результата.
+     * @return список объектов {@link PaymentPurpose}.
+     */
     @NonNull
     public List<PaymentPurpose> getPaymentPurposes() {
         return paymentPurposes;

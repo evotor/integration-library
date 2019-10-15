@@ -11,7 +11,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode version
         versionName "0.4.5"
@@ -32,6 +32,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
+//    compile 'com.android.support:support-annotations:28.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile 'com.github.evotor:push-notifications:v0.2.1'
     compile 'com.github.evotor:query-api:1.0.0'
@@ -73,18 +74,6 @@ dokka {
     outputDirectory = "$buildDir/javadoc"
 
     includes = ['packages.md']
-
-//    reportUndocumented = true
-
-//    packageOptions {
-//        prefix = "android.support" // will match kotlin.internal and all sub-packages of it
-//        suppress = true
-//    }
-
-//    packageOptions {
-//        prefix = "ru.evotor.pushNotifications" // will match kotlin.internal and all sub-packages of it
-//        suppress = true
-//    }
 
 }
 
