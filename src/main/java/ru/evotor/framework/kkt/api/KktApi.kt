@@ -21,6 +21,7 @@ import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
+import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 import java.util.*
 
@@ -31,6 +32,8 @@ object KktApi {
 
     private var serialNumber: String? = null
     private var regNumber: String? = null
+
+    private var fsSerialNumber: String? = null
 
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
@@ -183,6 +186,21 @@ object KktApi {
 
         return regNumber
     }
+
+    /**
+     * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсуствует
+     * или попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     * @return серийный номер фискального накопителя или null
+     */
+    @JvmStatic
+    fun getFsSerialNumber(context: Context): String? {
+        if (fsSerialNumber == null) getKktFsInfo(context)
+
+        return fsSerialNumber
+    }
+
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
@@ -310,6 +328,22 @@ object KktApi {
             it.moveToFirst()
             serialNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_SERIAL_NUMBER))
             regNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_REGISTER_NUMBER))
+        }
+    }
+
+    private fun getKktFsInfo(context: Context) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_INFO}")
+        val cursor = context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER),
+                null,
+                null,
+                null
+        )
+
+        cursor?.use {
+            it.moveToFirst()
+            fsSerialNumber = it.safeGetString(KktContract.COLUMN_SERIAL_NUMBER)
         }
     }
 }
