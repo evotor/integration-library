@@ -52,6 +52,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_KKM_IS_NOT_AVAILABLE = -10;
 
+    /**
+     * Операция недопустима (возможно не оплачены какие-либо дополнения, опции)
+     */
+    public static final int ERROR_NOT_ALLOWED_OPERATION = -11;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
