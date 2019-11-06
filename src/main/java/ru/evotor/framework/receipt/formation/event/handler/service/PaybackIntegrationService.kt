@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
-import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent

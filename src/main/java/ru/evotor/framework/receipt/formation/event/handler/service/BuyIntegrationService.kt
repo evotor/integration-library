@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
-import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
@@ -23,7 +22,7 @@ abstract class BuyIntegrationService : IntegrationServiceV2() {
 
     companion object {
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.buy.PURCHASER_REQUISITES"
-        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS ="ru.evotor.event.buy.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.buy.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
         const val PERMISSION = "ru.evotor.permission.BUY_INTEGRATION_SERVICE"
     }
 }
