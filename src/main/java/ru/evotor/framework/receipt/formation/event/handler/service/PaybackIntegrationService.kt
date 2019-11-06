@@ -24,7 +24,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     companion object {
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.payback.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.payback.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
-
         const val PERMISSION = "ru.evotor.permission.PAYBACK_INTEGRATION_SERVICE"
     }
 }

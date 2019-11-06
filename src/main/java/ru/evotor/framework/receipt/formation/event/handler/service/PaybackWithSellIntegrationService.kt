@@ -7,7 +7,7 @@ import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
-abstract class PaybackBySumIntegrationService : IntegrationServiceV2() {
+abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
 
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
@@ -22,8 +22,9 @@ abstract class PaybackBySumIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): IBundlable? = null
 
     companion object {
-        const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.paybackBySum.PURCHASER_REQUISITES"
-        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.paybackBySum.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
-        const val PERMISSION = "ru.evotor.permission.PAYBACK_BY_SUM_INTEGRATION_SERVICE"
+        const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.paybackWithSell.PURCHASER_REQUISITES"
+        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.paybackWithSell.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+
+        const val PERMISSION = "ru.evotor.permission.PAYBACK_WITH_SELL_INTEGRATION_SERVICE"
     }
 }
