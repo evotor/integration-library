@@ -873,20 +873,6 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder toMedicineMarked(
-                @NonNull String mark
-        ){
-            position.productType = ProductType.MEDICINE_MARKED;
-            setAlcoParams(
-                    null,
-                    null,
-                    null,
-                    null
-            );
-            setMarkedParams(mark);
-            return this;
-        }
-
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
