@@ -1,6 +1,7 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
+import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
@@ -8,7 +9,7 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
 
 abstract class PaybackIntegrationService : IntegrationServiceV2() {
 
-    final override fun onEvent(action: String, bundle: Bundle) = when (action) {
+    final override fun onEvent(action: String, bundle: Bundle): IBundlable? = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
@@ -18,7 +19,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
-    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): DiscountScreenAdditionalItemsEvent? = null
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     companion object {
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.payback.PURCHASER_REQUISITES"

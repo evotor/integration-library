@@ -15,7 +15,7 @@ abstract class BuyIntegrationService : IntegrationServiceV2() {
     }
 
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
-    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): DiscountScreenAdditionalItemsEvent? = null
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     @RequiresIntentAction(ACTION_PURCHASER_REQUISITES)
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
