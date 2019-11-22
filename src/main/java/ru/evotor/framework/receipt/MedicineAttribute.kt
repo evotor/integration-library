@@ -6,9 +6,28 @@ import android.os.Parcelable
 import ru.evotor.IBundlable
 
 data class MedicineAttribute(
+
+        /**
+         * Наименование льготы.
+         * Применяется к каждой печатной группе в составе тега 1084
+         * Наименование дополнительного реквизита пользователя (тег 1085)
+         */
         val exemptionName: String,
+
+        /**
+         * Значение льготы
+         * Применяется к каждой печатной группе в составе тега 1084
+         * Значение дополнительного реквизита пользователя (тег 1086)
+         */
         val exemptionValue: String,
+
+        /**
+         * Доля в упаковке
+         * Применяется к каждой позиции с типом "Маркируемые лекарства" ( MEDICINE_MARKED )
+         * Дополнительный реквизит предмета расчета (тег 1191)
+         */
         val proportionValue: String
+
 ) : Parcelable, IBundlable {
 
     private constructor(parcel: Parcel) : this(
