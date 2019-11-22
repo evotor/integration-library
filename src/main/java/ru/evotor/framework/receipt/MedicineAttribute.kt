@@ -6,39 +6,21 @@ import android.os.Parcelable
 import ru.evotor.IBundlable
 
 data class MedicineAttribute(
-
         /**
-         * Наименование льготы.
-         * Применяется к каждой печатной группе в составе тега 1084
-         * Наименование дополнительного реквизита пользователя (тег 1085)
-         */
-        val exemptionName: String,
-
-        /**
-         * Значение льготы
+         * Идентификатор субъекта обращения
          * Применяется к каждой печатной группе в составе тега 1084
          * Значение дополнительного реквизита пользователя (тег 1086)
          */
-        val exemptionValue: String,
-
-        /**
-         * Доля в упаковке
-         * Применяется к каждой позиции с типом "Маркируемые лекарства" ( MEDICINE_MARKED )
-         * Дополнительный реквизит предмета расчета (тег 1191)
-         */
-        val proportionValue: String
+        val subjectId: String
 
 ) : Parcelable, IBundlable {
 
     private constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString())
+            parcel.readString()
+    )
 
     override fun writeToParcel(parcel: Parcel, flag: Int) {
-        parcel.writeString(exemptionName)
-        parcel.writeString(exemptionValue)
-        parcel.writeString(proportionValue)
+        parcel.writeString(subjectId)
     }
 
     override fun describeContents(): Int {
@@ -47,9 +29,7 @@ data class MedicineAttribute(
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
-            putString(KEY_EXEMPTION_NAME, exemptionName)
-            putString(KEY_EXEMPTION_VALUE, exemptionValue)
-            putString(KEY_PROPORTION_VALUE, proportionValue)
+            putString(KEY_SUBJECT_ID, subjectId)
         }
     }
 
@@ -60,16 +40,13 @@ data class MedicineAttribute(
             override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
         }
 
-        private const val KEY_EXEMPTION_NAME = "EXEMPTION_NAME"
-        private const val KEY_EXEMPTION_VALUE = "EXEMPTION_VALUE"
-        private const val KEY_PROPORTION_VALUE = "PROPORTION_VALUE"
+        private const val KEY_SUBJECT_ID = "SUBJECT_ID"
 
         fun fromBundle(bundle: Bundle?): MedicineAttribute? {
             return bundle?.let {
                 MedicineAttribute(
-                        it.getString(KEY_EXEMPTION_NAME),
-                        it.getString(KEY_EXEMPTION_VALUE),
-                        it.getString(KEY_PROPORTION_VALUE) )
+                        it.getString(KEY_SUBJECT_ID)
+                )
             }
         }
     }
