@@ -18,7 +18,7 @@ public class PrintGroup implements Parcelable {
     /**
      * Текущая версия объекта PrintGroup
      */
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     private static final String DEFAULT_PRINT_GROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
 
@@ -169,7 +169,7 @@ public class PrintGroup implements Parcelable {
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
         dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
 
-        ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
+        ParcelableUtils.writeExpand(dest, 1, new Function1<Parcel, Unit>() {
             @Override
             public Unit invoke(Parcel parcel) {
                 parcel.writeParcelable(PrintGroup.this.purchaser, flags);
@@ -177,7 +177,7 @@ public class PrintGroup implements Parcelable {
             }
         });
 
-        ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
+        ParcelableUtils.writeExpand(dest, 2, new Function1<Parcel, Unit>() {
             @Override
             public Unit invoke(Parcel parcel) {
                 parcel.writeParcelable(PrintGroup.this.medicineAttribute,flags);
@@ -217,7 +217,7 @@ public class PrintGroup implements Parcelable {
             @Override
             public Unit invoke(Parcel parcel, Integer version) {
                 switch (version) {
-                    case 1: {
+                    case 2: {
                         PrintGroup.this.medicineAttribute = parcel.readParcelable(MedicineAttribute.class.getClassLoader());
                     }
                 }
