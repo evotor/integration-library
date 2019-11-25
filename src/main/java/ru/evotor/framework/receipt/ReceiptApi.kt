@@ -285,6 +285,7 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
+        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
         val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
@@ -305,6 +306,11 @@ object ReceiptApi {
                 cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
                 if (purchaserName != null && purchaserDocumentNumber != null) {
                     Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
+                } else {
+                    null
+                },
+                if (subjectId != null){
+                    MedicineAttribute(subjectId)
                 } else {
                     null
                 }
