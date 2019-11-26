@@ -169,17 +169,12 @@ public class PrintGroup implements Parcelable {
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
         dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
 
-        ParcelableUtils.writeExpand(dest, 1, new Function1<Parcel, Unit>() {
+        ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
             @Override
             public Unit invoke(Parcel parcel) {
+                /** version = 1*/
                 parcel.writeParcelable(PrintGroup.this.purchaser, flags);
-                return Unit.INSTANCE;
-            }
-        });
-
-        ParcelableUtils.writeExpand(dest, 2, new Function1<Parcel, Unit>() {
-            @Override
-            public Unit invoke(Parcel parcel) {
+                /** version = 2*/
                 parcel.writeParcelable(PrintGroup.this.medicineAttribute,flags);
                 return Unit.INSTANCE;
             }
@@ -207,24 +202,17 @@ public class PrintGroup implements Parcelable {
                 switch (version) {
                     case 1: {
                         PrintGroup.this.purchaser = parcel.readParcelable(Purchaser.class.getClassLoader());
+                        break;
                     }
-                }
-                return Unit.INSTANCE;
-            }
-        });
-
-        ParcelableUtils.readExpand(in, VERSION, new Function2<Parcel, Integer, Unit>() {
-            @Override
-            public Unit invoke(Parcel parcel, Integer version) {
-                switch (version) {
                     case 2: {
+                        PrintGroup.this.purchaser = parcel.readParcelable(Purchaser.class.getClassLoader());
                         PrintGroup.this.medicineAttribute = parcel.readParcelable(MedicineAttribute.class.getClassLoader());
+                        break;
                     }
                 }
                 return Unit.INSTANCE;
             }
         });
-
     }
 
     public static final Parcelable.Creator<PrintGroup> CREATOR = new Parcelable.Creator<PrintGroup>() {
