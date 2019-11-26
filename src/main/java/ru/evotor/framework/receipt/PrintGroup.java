@@ -172,9 +172,9 @@ public class PrintGroup implements Parcelable {
         ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
             @Override
             public Unit invoke(Parcel parcel) {
-                /** version = 1*/
+                /* version = 1*/
                 parcel.writeParcelable(PrintGroup.this.purchaser, flags);
-                /** version = 2*/
+                /* version = 2*/
                 parcel.writeParcelable(PrintGroup.this.medicineAttribute,flags);
                 return Unit.INSTANCE;
             }
