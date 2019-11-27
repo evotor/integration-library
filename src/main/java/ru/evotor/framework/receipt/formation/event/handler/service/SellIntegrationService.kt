@@ -15,6 +15,7 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
         ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
 

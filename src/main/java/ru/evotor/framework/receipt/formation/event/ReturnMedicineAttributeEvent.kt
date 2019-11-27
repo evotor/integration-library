@@ -56,7 +56,8 @@ class ReturnMedicineAttributeEvent(
             @JvmStatic
             fun from(bundle: Bundle?) = bundle?.let {
                 it.classLoader = PrintGroup::class.java.classLoader
-                when (val count = it.getInt(KEY_MAP_ENTRIES_COUNT)) {
+                val count = it.getInt(KEY_MAP_ENTRIES_COUNT)
+                when (count) {
                     -1 -> Result(null)
                     0 -> Result(emptyMap())
                     else -> {
