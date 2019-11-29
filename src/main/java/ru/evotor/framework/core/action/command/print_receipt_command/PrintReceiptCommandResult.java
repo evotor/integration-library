@@ -53,7 +53,7 @@ public class PrintReceiptCommandResult implements IBundlable {
     public static final int ERROR_KKM_IS_NOT_AVAILABLE = -10;
 
     /**
-     * Операция запрещена сторонней интеграцией
+     * Операция запрещена
      */
     public static final int ERROR_OPERATION_DENIED = -11;
 
