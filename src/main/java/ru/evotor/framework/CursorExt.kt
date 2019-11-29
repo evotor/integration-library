@@ -44,6 +44,23 @@ internal fun Cursor.safeGetInt(columnIndex: Int): Int? {
     return getInt(columnIndex)
 }
 
+internal fun Cursor.safeGetLong(columnName: String): Long? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return safeGetLong(index)
+}
+
+internal fun Cursor.safeGetLong(columnIndex: Int): Long? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getLong(columnIndex)
+}
+
 internal fun Cursor.safeGetList(columnName: String): List<String>? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
