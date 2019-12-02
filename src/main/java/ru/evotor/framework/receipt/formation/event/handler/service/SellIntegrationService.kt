@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
-import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
@@ -24,7 +23,7 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
-    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): IBundlable? = null
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     companion object {
         const val ACTION_BARCODE_RECEIVED = "ru.evotor.event.sell.BARCODE_RECEIVED"
