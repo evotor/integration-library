@@ -2,6 +2,7 @@ package ru.evotor.framework.kkt.api
 
 import android.content.Context
 import android.net.Uri
+import ru.evotor.framework.*
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
@@ -199,6 +200,30 @@ object KktApi {
         if (fsSerialNumber == null) getKktFsInfo(context)
 
         return fsSerialNumber
+    }
+
+
+    /**
+     * Возвращает количество наличности в денежном ящике кассы или null, если не удалось получить данные
+     *
+     * @param context текущий контекст
+     * @return BigDecimal количество наличности в денежном ящике кассы или null, если не удалось получить данные
+     */
+    @JvmStatic
+    fun getCurrentCashSum(context: Context): BigDecimal? {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_COUNTERS}")
+        return context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_CURRENT_CASH_SUM),
+                null,
+                null,
+                null
+        )?.use { cursor ->
+            cursor.moveToFirst()
+            cursor.safeGetLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
+                BigDecimal(it).divide(BigDecimal(100))
+            }
+        }
     }
 
     /**
