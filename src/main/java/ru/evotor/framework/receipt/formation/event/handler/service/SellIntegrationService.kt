@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
-import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
@@ -49,7 +48,7 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
      * Запускает приложение по нажатию кнопки на экране оплаты чека.
      */
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
-    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): IBundlable? = null
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     /**
      * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.

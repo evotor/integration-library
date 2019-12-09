@@ -4,6 +4,7 @@ import android.os.Bundle
 import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
+import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
 import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
@@ -14,6 +15,7 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
 
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
@@ -27,6 +29,9 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
      */
     @RequiresIntentAction(ACTION_PURCHASER_REQUISITES)
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
+
+    @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     /**
      * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.
@@ -47,6 +52,7 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.PURCHASER_REQUISITES`.
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.buyback.PURCHASER_REQUISITES"
+        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.buyback.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
 
         /**
          * Запрос адреса и места расчёта для добавления в чек.

@@ -910,11 +910,11 @@ public class Position implements Parcelable {
             position.tareVolume = tareVolume;
         }
 
-        private void setTobaccoParams(String mark) {
+        private void setShoesParams(String mark) {
             position.mark = mark;
         }
 
-        private void setShoesParams(String mark) {
+        private void setTobaccoParams(String mark) {
             position.mark = mark;
         }
 

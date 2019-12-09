@@ -13,7 +13,7 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
  */
 abstract class PaybackIntegrationService : IntegrationServiceV2() {
 
-    final override fun onEvent(action: String, bundle: Bundle) = when (action) {
+    final override fun onEvent(action: String, bundle: Bundle): IBundlable? = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
@@ -34,7 +34,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
      * Запускает приложение по нажатию кнопки на экране оплаты чека.
      */
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
-    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): IBundlable? = null
+    open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
     /**
      * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.

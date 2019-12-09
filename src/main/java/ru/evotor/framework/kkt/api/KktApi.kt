@@ -1,6 +1,8 @@
 package ru.evotor.framework.kkt.api
 
 import android.content.Context
+import android.net.Uri
+import ru.evotor.framework.*
 import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
@@ -21,6 +23,7 @@ import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
+import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 import java.util.*
 
@@ -31,6 +34,8 @@ object KktApi {
 
     private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.getString(cursor.getColumnIndex(name)) }
     private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.safeGetBoolean(name) }
+
+    private var fsSerialNumber: String? = null
 
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
@@ -160,6 +165,44 @@ object KktApi {
             getValue(context, KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
 
     /**
+     * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсуствует
+     * или попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     * @return серийный номер фискального накопителя или null
+     */
+    @JvmStatic
+    fun getFsSerialNumber(context: Context): String? {
+        if (fsSerialNumber == null) getKktFsInfo(context)
+
+        return fsSerialNumber
+    }
+
+
+    /**
+     * Возвращает количество наличности в денежном ящике кассы или null, если не удалось получить данные
+     *
+     * @param context текущий контекст
+     * @return BigDecimal количество наличности в денежном ящике кассы или null, если не удалось получить данные
+     */
+    @JvmStatic
+    fun getCurrentCashSum(context: Context): BigDecimal? {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_COUNTERS}")
+        return context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_CURRENT_CASH_SUM),
+                null,
+                null,
+                null
+        )?.use { cursor ->
+            cursor.moveToFirst()
+            cursor.safeGetLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
+                BigDecimal(it).divide(BigDecimal(100))
+            }
+        }
+    }
+
+    /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
      * @param context контекст приложения
@@ -261,6 +304,22 @@ object KktApi {
         )?.use {
             it.moveToFirst()
             parser(it, valueName) ?: throw IntegrationLibraryMappingException(valueName)
+        }
+    }
+
+    private fun getKktFsInfo(context: Context) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_INFO}")
+        val cursor = context.contentResolver.query(
+                uri,
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER),
+                null,
+                null,
+                null
+        )
+
+        cursor?.use {
+            it.moveToFirst()
+            fsSerialNumber = it.safeGetString(KktContract.COLUMN_SERIAL_NUMBER)
         }
     }
 }

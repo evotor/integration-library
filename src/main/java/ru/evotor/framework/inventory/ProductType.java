@@ -32,5 +32,5 @@ public enum ProductType {
     /**
      * Маркированная обувь
      */
-    SHOES_MARKED
+    SHOES_MARKED,
 }
