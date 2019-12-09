@@ -53,7 +53,7 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     /**
      * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.
      *
-     * @param event Событие, с помощью которого, смарт-терминал сообщает прилоежниям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
+     * @param event Событие, с помощью которого, смарт-терминал сообщает приложениям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
      * @return [ReturnDeliveryRequisitesForReceiptRequestedEvent.Result]
      *
      * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
@@ -81,7 +81,7 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
         /**
          * Запрос адреса и места расчёта для добавления в чек.
          *
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.DELIVERY_REQUISITES`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.DELIVERY_REQUISITES`.
          */
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.sell.DELIVERY_REQUISITES"
 

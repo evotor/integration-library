@@ -1,7 +1,6 @@
 package ru.evotor.framework.receipt.formation.event.handler.service
 
 import android.os.Bundle
-import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
@@ -36,7 +35,7 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
     /**
      * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.
      *
-     * @param event Событие, с помощью которого, смарт-терминал сообщает прилоежниям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
+     * @param event Событие, с помощью которого, смарт-терминал сообщает приложениям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
      * @return [ReturnDeliveryRequisitesForReceiptRequestedEvent.Result]
      *
      * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
@@ -49,7 +48,7 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
         /**
          * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек возврата покупки.
          *
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.PURCHASER_REQUISITES`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.PURCHASER_REQUISITES`.
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.buyback.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.buyback.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
@@ -62,7 +61,7 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.buyback.DELIVERY_REQUISITES"
 
         /**
-         * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.BuybackIntegrationServicebackIntegrationService].
+         * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.BuybackIntegrationService].
          *
          * Чтобы выдать разрешение, в элементе `uses-permission` манифеста приложения, укажите значение `ru.evotor.permission.BUYBACK_INTEGRATION_SERVICE`.
          */
