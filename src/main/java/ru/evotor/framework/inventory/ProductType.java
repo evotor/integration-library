@@ -34,4 +34,9 @@ public enum ProductType {
      * Маркированная обувь
      */
     SHOES_MARKED,
+
+    /**
+     * Маркированные лекарства
+     */
+    MEDICINE_MARKED,
 }
