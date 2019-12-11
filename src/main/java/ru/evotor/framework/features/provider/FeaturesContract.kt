@@ -12,6 +12,8 @@ object FeaturesContract {
     const val PATH_FFD105 = "ffd105"
     const val PATH_TOBACCOMARK = "tobaccomark"
     const val PATH_PURCHASER = "purchaser"
+    const val PATH_DOCUMENT_CLEAN = "documentClean"
+    const val PATH_MANAGEMENT_REPORTS = "managementReports"
     const val PATH_DELIVERY = "delivery"
 
     const val COLUMN_IS_ACTIVE = "is_active"
