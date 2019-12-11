@@ -10,8 +10,7 @@ object ParcelableUtils {
     private const val MAGIC_NUMBER = 8800
 
     @JvmStatic
-    fun Parcel.writeExpand(version: Int, writer: (Parcel) -> Unit) {
-
+    fun writeExpand(parcel: Parcel, version: Int, writer: (Parcel) -> Unit) = with(parcel) {
         writeInt(MAGIC_NUMBER)
         writeInt(version)
         // Determine position in parcel for writing data size
@@ -33,11 +32,11 @@ object ParcelableUtils {
         writeInt(dataSize)
         // Go back to the end of parcel
         setDataPosition(endOfDataPosition)
-
     }
 
+
     @JvmStatic
-    fun Parcel.readExpand(version: Int, reader: (Parcel, Int) -> Unit) {
+    fun readExpand(parcel: Parcel, version: Int, reader: (Parcel, Int) -> Unit) = with(parcel) {
 
         val startReadingPosition = dataPosition()
 
