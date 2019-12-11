@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
+import ru.evotor.framework.ParcelableUtils
 
 data class MedicineAttribute(
         /**
@@ -15,12 +16,11 @@ data class MedicineAttribute(
 
 ) : Parcelable, IBundlable {
 
-    private constructor(parcel: Parcel) : this(
-            parcel.readString()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flag: Int) {
-        parcel.writeString(subjectId)
+    override fun writeToParcel(dest: Parcel, flag: Int) {
+        ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
+            /* version = 1*/
+            parcel.writeString(subjectId)
+        }
     }
 
     override fun describeContents(): Int {
@@ -36,9 +36,14 @@ data class MedicineAttribute(
     companion object {
         @JvmField
         val CREATOR = object : Parcelable.Creator<MedicineAttribute> {
-            override fun createFromParcel(parcel: Parcel): MedicineAttribute = MedicineAttribute(parcel)
+            override fun createFromParcel(parcel: Parcel): MedicineAttribute = create(parcel)
             override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
         }
+
+        /**
+         * Текущая версия объекта MedicineAttribute.
+         */
+        private const val VERSION = 1
 
         private const val KEY_SUBJECT_ID = "SUBJECT_ID"
 
@@ -47,6 +52,19 @@ data class MedicineAttribute(
                 MedicineAttribute(
                         it.getString(KEY_SUBJECT_ID)
                 )
+            }
+        }
+
+        private fun create(parcel: Parcel): MedicineAttribute {
+            var subjectId: String? = null
+            ParcelableUtils.readExpand(parcel, VERSION) { parcel, version ->
+                if (version >= 1) {
+                    subjectId = parcel.readString()
+                }
+            }
+            subjectId.let {
+                checkNotNull(it)
+                return MedicineAttribute(it)
             }
         }
     }
