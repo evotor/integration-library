@@ -15,6 +15,7 @@ object FeaturesContract {
     const val PATH_DOCUMENT_CLEAN = "documentClean"
     const val PATH_MANAGEMENT_REPORTS = "managementReports"
     const val PATH_DELIVERY = "delivery"
+    const val PATH_SHORT_CHECK = "short_check"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 
