@@ -32,15 +32,15 @@ public class Position implements Parcelable {
      */
     private static final int VERSION = 3;
     /**
-     * Magic number для идентификации использования версионирования объекта
+     * Магическое число для идентификации использования версионирования объекта.
      */
     private static final int MAGIC_NUMBER = 8800;
     /**
-     * UUID позиции
+     * Идентификатор позиции в формате UUID.
      */
     private String uuid;
     /**
-     * UUID товара.
+     * Идентификатор товара в формате UUID.
      */
     @Nullable
     private String productUuid;
@@ -50,15 +50,15 @@ public class Position implements Parcelable {
     @Nullable
     private String productCode;
     /**
-     * Вид товара.
+     * Тип товара.
      */
     private ProductType productType;
     /**
-     * Наименование.
+     * Название.
      */
     private String name;
     /**
-     * Наименование единицы измерения.
+     * Единицы измерения.
      */
     private String measureName;
     /**
@@ -66,7 +66,7 @@ public class Position implements Parcelable {
      */
     private int measurePrecision;
     /**
-     * НДС
+     * Ставка НДС.
      */
     @Nullable
     private TaxNumber taxNumber;
@@ -124,8 +124,11 @@ public class Position implements Parcelable {
     private Map<String, AttributeValue> attributes;
 
     /**
-     * Признак способа расчета
-     * По умолчанию это 'Полный расчет'
+     * Признак способа расчёта.
+     *
+     * Указывается для каждой позиции чека.
+     *
+     * Значение по умолчанию – [Полный расчёт]{@link ru.evotor.framework.receipt.position.SettlementMethod.FullSettlement}.
      */
     @NonNull
     private SettlementMethod settlementMethod = new SettlementMethod.FullSettlement();

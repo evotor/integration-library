@@ -11,12 +11,12 @@ import kotlin.jvm.functions.Function2;
 import ru.evotor.framework.ParcelableUtils;
 
 /**
- * Описание характеристик печатной группы - отдельного печатного документа в рамках одного чека
+ * Печатная группа – элемент кассового чека, содержащий данные об организации, которая осуществляет торговую операцию.
  */
 public class PrintGroup implements Parcelable {
 
     /**
-     * Текущая версия объекта PrintGroup
+     * Текущая версия объекта PrintGroup.
      */
     private static final int VERSION = 2;
 
@@ -25,7 +25,7 @@ public class PrintGroup implements Parcelable {
     public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null);
 
     /**
-     * Идентификатор печатной группы
+     * Идентификатор печатной группы.
      */
     private String identifier;
     /**
@@ -33,29 +33,29 @@ public class PrintGroup implements Parcelable {
      */
     private Type type;
     /**
-     * Название организации
+     * Название организации, на которую зарегестрированная касса.
      */
     private String orgName;
     /**
-     * ИНН организации
+     * ИНН организации, на которую зарегестрированная касса.
      */
     private String orgInn;
     /**
-     * Адрес организации
+     * Адрес организации, на которую зарегестрированная касса.
      */
     private String orgAddress;
     /**
-     * Система налогооблажения
+     * Система налогообложения, которая применялась при расчёте.
      */
     private TaxationSystem taxationSystem;
 
     /**
-     * Печатать/не печатать чек
+     * Флаг, указывающий необходимость печати чека.
      */
     private boolean shouldPrintReceipt;
 
     /**
-     * Реквизиты покупателя
+     * Реквизиты покупателя.
      */
     @Nullable
     private Purchaser purchaser;

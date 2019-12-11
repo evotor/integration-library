@@ -3,13 +3,15 @@ package ru.evotor.framework.users
 import android.content.Context
 import android.database.Cursor
 
-
+/**
+ * Интерфейс для получения данных сотрудников, работающих со смарт-терминалом.
+ */
 object UserApi {
 
     /**
-     * Получить данные всех пользователей.
-     * @param context контекст приложения
-     * @return список пользователей
+     * Возвращает данные всех сотрудников, которые могут работать со смарт-терминалом.
+     * @param context контекст приложения.
+     * @return список [сотрудников][ru.evotor.framework.users.User]
      */
     @JvmStatic
     fun getAllUsers(context: Context): List<User>? {
@@ -32,9 +34,9 @@ object UserApi {
     }
 
     /**
-     * Получить данные авторизованного пользователя.
-     * @param context контекст приложения
-     * @return авторизованный пользователь или null, если пользователь не авторизован
+     * Возвращает данные авторизованного сотрудника.
+     * @param context контекст приложения.
+     * @return данные авторизованного [сотрудника][ru.evotor.framework.users.User] или `null`, если сотрудник не авторизован.
      */
     @JvmStatic
     fun getAuthenticatedUser(context: Context): User? {
@@ -55,9 +57,9 @@ object UserApi {
     }
 
     /**
-     * Получить список всех доступных прав.
-     * @param context контекст приложения
-     * @return список всех прав системы
+     * Возвращает список всех доступкных прав с идентификаторами соответствующих ролей.
+     * @param context контекст приложения.
+     * @return список всех [прав][Grant] смарт-терминала.
      */
     @JvmStatic
     fun getAllGrants(context: Context): List<Grant>? {
@@ -80,9 +82,9 @@ object UserApi {
     }
 
     /**
-     * Получить список прав авторизованного пользователя.
-     * @param context контекст приложения
-     * @return список прав авторизованного пользователя
+     * Возвращает список прав авторизованного пользователя.
+     * @param context контекст приложения.
+     * @return список [прав][Grant] авторизованного пользователя.
      */
     @JvmStatic
     fun getGrantsOfAuthenticatedUser(context: Context): List<Grant>? {

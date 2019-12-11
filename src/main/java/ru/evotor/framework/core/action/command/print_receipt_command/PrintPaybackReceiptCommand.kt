@@ -20,6 +20,8 @@ import java.util.*
  * @param clientPhone Телефон клиента.
  * @param clientEmail Электронная почта клиента.
  * @param receiptDiscount Скидка на чек.
+ * @param paymentAddress Адрес места расчёта
+ * @param paymentPlace Место расчёта
  */
 class PrintPaybackReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -27,13 +29,17 @@ class PrintPaybackReceiptCommand(
         clientPhone: String?,
         clientEmail: String?,
         receiptDiscount: BigDecimal?,
-        val sellReceiptUuid: String? = null
+        val sellReceiptUuid: String? = null,
+        paymentAddress: String? = null,
+        paymentPlace: String? = null
 ) : PrintReceiptCommand(
         printReceipts,
         extra,
         clientPhone,
         clientEmail,
-        receiptDiscount
+        receiptDiscount,
+        paymentAddress,
+        paymentPlace
 ) {
 
     /**
@@ -42,13 +48,17 @@ class PrintPaybackReceiptCommand(
      * @param clientPhone Телефон клиента
      * @param clientEmail Эл.почта клиента
      * @param sellReceiptUuid Идентифиатор чека продажи, на основании которого осуществляется возврат
+     * @param paymentAddress Адрес места расчёта
+     * @param paymentPlace Место расчёта
      */
     constructor(
             positions: List<Position>,
             payments: List<Payment>,
             clientPhone: String?,
             clientEmail: String?,
-            sellReceiptUuid: String? = null) : this(
+            sellReceiptUuid: String? = null,
+            paymentAddress: String? = null,
+            paymentPlace: String? = null) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -73,7 +83,9 @@ class PrintPaybackReceiptCommand(
             clientPhone,
             clientEmail,
             BigDecimal.ZERO,
-            sellReceiptUuid
+            sellReceiptUuid,
+            paymentAddress,
+            paymentPlace
     )
 
     fun process(activity: Activity, callback: IntegrationManagerCallback) {
@@ -100,7 +112,9 @@ class PrintPaybackReceiptCommand(
                     getClientPhone(bundle),
                     getClientEmail(bundle),
                     getReceiptDiscount(bundle),
-                    bundle.getString(KEY_SELL_RECEIPT_UUID)
+                    bundle.getString(KEY_SELL_RECEIPT_UUID),
+                    getPaymentAddress(bundle),
+                    getPaymentPlace(bundle)
             )
         }
     }
