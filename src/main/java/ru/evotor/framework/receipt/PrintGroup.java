@@ -169,7 +169,7 @@ public class PrintGroup implements Parcelable {
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
         dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
 
-        ParcelableUtils.writeExpand(dest, 1, new Function1<Parcel, Unit>() {
+        ParcelableUtils.writeExpand(dest, 2, new Function1<Parcel, Unit>() {
             @Override
             public Unit invoke(Parcel parcel) {
                 /* version = 1*/
@@ -202,7 +202,7 @@ public class PrintGroup implements Parcelable {
             return;
         }
 
-        ParcelableUtils.readExpand(in, 1, new Function2<Parcel, Integer, Unit>() {
+        ParcelableUtils.readExpand(in, 2, new Function2<Parcel, Integer, Unit>() {
             @Override
             public Unit invoke(Parcel parcel, Integer version) {
                 if (version >= 1) {
