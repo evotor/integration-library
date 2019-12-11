@@ -7,6 +7,11 @@ import android.support.annotation.Nullable;
 
 import ru.evotor.IBundlable;
 
+/**
+ * Базовый класс для реализации операций приложения.
+ *
+ * Методы класса упрощают обмен данными между операциями и смарт-терминалом.
+ */
 public abstract class IntegrationActivity extends Activity {
 
     private IntegrationResponse mIntegrationResponse = null;

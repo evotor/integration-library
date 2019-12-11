@@ -5,7 +5,9 @@ import android.os.Parcelable
 import java.math.BigDecimal
 
 /**
- * Способ расчета
+ * Признак способа расчёта, который записывается в тег 1214 фискального документа.
+ *
+ * Признак способа расчёта необходимо указывать для каждой позиции чека.
  */
 sealed class SettlementMethod : Parcelable {
 
@@ -33,7 +35,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Полная предварительная оплата до момента передачи предмета расчета
+     * Предоплата 100% – полная предварительная оплата до момента передачи предмета расчёта.
      */
     class FullPrepayment() : SettlementMethod() {
 
@@ -81,7 +83,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Частичная предварительная оплата до момента передачи предмета расчета
+     * Предоплата – частичная предварительная оплата до момента передачи предмета расчёта.
      */
     class PartialPrepayment() : SettlementMethod() {
 
@@ -129,7 +131,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Аванс
+     * Аванс.
      */
     class AdvancePayment() : SettlementMethod() {
 
@@ -177,8 +179,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Полная оплата, в том числе с учетом аванса (предварительной оплаты) в момент передачи
-     * предмета расчета (полный расчёт)
+     * Полный расчёт – полная оплата, в том числе с учётом аванса (предварительной оплаты) в момент передачи предмета расчёта.
      */
     class FullSettlement() : SettlementMethod() {
 
@@ -226,9 +227,9 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Частичная оплата предмета расчета в момент его передачи с последующей оплатой в кредит
-     * (частичный расчёт и кредит)
-     * @param amount сумма первичного взноса
+     * Частичный расчёт и кредит – частичная оплата предмета расчёта в момент его передачи с последующей оплатой в кредит.
+     *
+     * @property amount Сумма первичного взноса.
      */
     class PartialSettlement(val amount: BigDecimal) : SettlementMethod() {
 
@@ -280,7 +281,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Передача предмета расчета без его оплаты в момент его передачи с последующей оплатой в кредит
+     * Передача в кредит – передача предмета расчёта без его оплаты в момент его передачи с последующей оплатой в кредит.
      */
     class Lend() : SettlementMethod() {
 
@@ -328,7 +329,7 @@ sealed class SettlementMethod : Parcelable {
     }
 
     /**
-     * Оплата предмета расчета после его передачи с оплатой в кредит (оплата кредита)
+     * Оплата кредита – оплата предмета расчёта после его передачи с оплатой в кредит.
      */
     class LoanPayment() : SettlementMethod() {
 

@@ -8,6 +8,9 @@ import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
 import ru.evotor.framework.payment.PaymentSystem;
 
+/**
+ * Родительский класс события разделения чека на несколько печатныъ групп {@link PrintGroupRequiredEvent}.
+ */
 public abstract class PrintGroupEvent implements IBundlable {
     private static final String KEY_SELECTED_PAYMENT_SYSTEM = "paymentSystem";
 

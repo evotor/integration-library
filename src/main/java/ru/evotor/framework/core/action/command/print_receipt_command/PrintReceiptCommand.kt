@@ -26,13 +26,17 @@ import java.util.*
  * @param clientPhone Телефон клиента.
  * @param clientEmail Электронная почта клиента.
  * @param receiptDiscount Скидка на чек.
+ * @param paymentAddress Адрес места расчёта
+ * @param paymentPlace Место расчёта
  */
 abstract class PrintReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
         val extra: SetExtra?,
         val clientPhone: String?,
         val clientEmail: String?,
-        val receiptDiscount: BigDecimal?
+        val receiptDiscount: BigDecimal?,
+        val paymentAddress: String? = null,
+        val paymentPlace: String? = null
 ) : IBundlable {
 
     internal fun process(activity: Activity, callback: IntegrationManagerCallback, action: String) {
@@ -57,6 +61,8 @@ abstract class PrintReceiptCommand(
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
         bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
+        bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         return bundle
     }
 
@@ -73,6 +79,8 @@ abstract class PrintReceiptCommand(
         private const val KEY_CLIENT_EMAIL = "clientEmail"
         private const val KEY_CLIENT_PHONE = "clientPhone"
         private const val KEY_RECEIPT_DISCOUNT = "receiptDiscount"
+        private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
+        private const val KEY_PAYMENT_PLACE = "paymentPlace"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
@@ -94,6 +102,14 @@ abstract class PrintReceiptCommand(
 
         internal fun getReceiptDiscount(bundle: Bundle): BigDecimal? {
             return bundle.getMoney(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO)
+        }
+
+        internal fun getPaymentAddress(bundle: Bundle): String? {
+            return bundle.getString(KEY_PAYMENT_ADDRESS, null)
+        }
+
+        internal fun getPaymentPlace(bundle: Bundle): String? {
+            return bundle.getString(KEY_PAYMENT_PLACE, null)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

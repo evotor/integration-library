@@ -11,10 +11,10 @@ import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
- * Агентские реквизиты
+ * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.evotor.ru/docs/doc_agency_agreement.html).
  *
- * ВАЖНО! При создании агентских реквизитов на устройстве агента или субагента необходимо
- * использовать только те типы агента или субагента, которые были указаны при регистрации кассы.
+ * ВАЖНО! При создании реквизитов агента на устройстве агента или субагента,
+ * используйте только те типы агента или субагента, которые были указаны при регистрации кассы.
  *
  * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredAgentTypes]
  * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
