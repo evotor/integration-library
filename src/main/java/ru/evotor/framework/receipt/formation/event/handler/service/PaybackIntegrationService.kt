@@ -13,8 +13,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     final override fun onEvent(action: String, bundle: Bundle): IBundlable? = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
-        ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
-
         else -> null
     }
 
@@ -24,13 +22,10 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
-    @RequiresIntentAction(ACTION_MEDICINE_ATTRIBUTES)
-    open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
     companion object {
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.payback.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.payback.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
-        const val ACTION_MEDICINE_ATTRIBUTES = "ru.evotor.event.payback.MEDICINE_ATTRIBUTES"
         const val PERMISSION = "ru.evotor.permission.PAYBACK_INTEGRATION_SERVICE"
     }
 }
