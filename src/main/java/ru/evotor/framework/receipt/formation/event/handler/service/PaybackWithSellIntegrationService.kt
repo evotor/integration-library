@@ -8,7 +8,7 @@ import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForRe
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
 /**
- * Служба для работы с чеком возврата на основании чека покупки.
+ * Служба для работы с чеком возврата на основании чека продажи.
  */
 abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
 

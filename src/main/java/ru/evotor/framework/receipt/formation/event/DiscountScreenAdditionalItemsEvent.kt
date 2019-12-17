@@ -8,7 +8,15 @@ import ru.evotor.framework.common.event.IntegrationEvent
  *
  * Подпишитесь на это событие чтобы запускать операции или службы своего приложения.
  *
- * Обрабатывайте событие с помощью соответствующих методов служб [ru.evotor.framework.receipt.formation.event.handler.service.SellIntegrationService] и [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].
+ * Обрабатывайте событие с помощью соответствующих методов служб:
+ *
+ * [ru.evotor.framework.receipt.formation.event.handler.service.SellIntegrationService]
+ * [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService]
+ * [ru.evotor.framework.receipt.formation.event.handler.service.PaybackWithSellIntegrationService]
+ * [ru.evotor.framework.receipt.formation.event.handler.service.BuyIntegrationService]
+ * [ru.evotor.framework.receipt.formation.event.handler.service.BuybackWithBuyIntegrationService]
+ * [ru.evotor.framework.receipt.formation.event.handler.service.BuybackIntegrationService]
+ *
  */
 data class DiscountScreenAdditionalItemsEvent(
         val receiptUuid: String

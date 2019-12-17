@@ -19,6 +19,9 @@ abstract class BuyIntegrationService : IntegrationServiceV2() {
         else -> null
     }
 
+    /**
+     * Запускает приложение по нажатию кнопки на экране оплаты чека.
+     */
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
