@@ -5,6 +5,13 @@ import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.MedicineAttribute
 import ru.evotor.framework.receipt.PrintGroup
 
+/**
+ * Событие, с помощью которого смарт-терминал запрашивает у установленных приложений данные для добавления маркированных лекарств в чек.
+ *
+ * @property receiptUuid Идентификатор чека, в который будут добавлены маркированные лекарства.
+ * @property printGroups Список печатных групп с маркированными лекарствами.
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_medicine_attribute_event_processing.html">Добавление маркированных лекарств в чек</a>
+ */
 class ReturnMedicineAttributeEvent(
 
         val receiptUuid: String,

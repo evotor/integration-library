@@ -55,7 +55,7 @@ object FeaturesApi {
      * Проверяет, активна ли функция "Компактный чек" на данном терминале
      * Требуется версия прошивки ФР >= 5086
      *
-     * @return true если функция активна, false соответственно если функция не активна
+     * @return `true` если функция активна, `false` соответственно если функция не активна
      */
     fun isShortCheckActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHORT_CHECK)
 

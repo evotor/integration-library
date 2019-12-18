@@ -82,6 +82,12 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.sell.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.sell.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+
+        /**
+         * Запрос данных для добавления в чек продажи [маркированных лекарств][ru.evotor.framework.receipt.MedicineAttribute].
+         *
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.MEDICINE_ATTRIBUTES`.
+         */
         const val ACTION_MEDICINE_ATTRIBUTES = "ru.evotor.event.sell.MEDICINE_ATTRIBUTES"
 
         /**
