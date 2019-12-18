@@ -344,8 +344,10 @@ object KktApi {
             @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
             correctionDescription: String,
 
+            @FiscalRequisite(FiscalTags.PAYMENT_ADDRESS)
             paymentAddress: String,
 
+            @FiscalRequisite(FiscalTags.PAYMENT_PLACE)
             paymentPlace: String,
 
             callback: DocumentRegistrationCallback
