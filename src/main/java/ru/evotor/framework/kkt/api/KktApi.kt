@@ -382,9 +382,9 @@ object KktApi {
                         amountPaid,
                         paymentType,
                         vatRate,
+                        correctionDescription,
                         paymentAddress,
-                        paymentPlace,
-                        correctionDescription
+                        paymentPlace
                 ),
                 IntegrationManagerCallback {
                     it?.result?.error?.let { error ->
