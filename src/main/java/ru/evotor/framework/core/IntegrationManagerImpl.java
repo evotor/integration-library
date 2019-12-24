@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.os.OperationCanceledException;
 import android.os.RemoteException;
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,12 @@ import ru.evotor.IBundlable;
 
 public class IntegrationManagerImpl implements IntegrationManager {
 
+    private static final ConcurrentHashMap<ComponentName, Pair<IntegrationManagerServiceConnection, IIntegrationManager>> connectionPool = new ConcurrentHashMap<>();
+
     private static final String TAG = "IntegrationManager";
 
     private Context context;
     private final Handler mainHandler;
-
-    private final ConcurrentHashMap<ComponentName, IIntegrationManager> connectionPool = new ConcurrentHashMap<>();
 
     public IntegrationManagerImpl(Context context) {
         this.context = context;
@@ -191,19 +192,47 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private IIntegrationManager getService(ComponentName componentName) {
-            IIntegrationManager manager = connectionPool.get(componentName);
+            IIntegrationManager manager = getFromPool(componentName);
             if (manager != null) {
                 return manager;
             }
 
             synchronized (connectionPool) {
-                manager = connectionPool.get(componentName);
+                manager = getFromPool(componentName);
                 if (manager != null) {
                     return manager;
                 }
 
                 connect(componentName);
-                return connectionPool.get(componentName);
+                return getFromPool(componentName);
+            }
+        }
+
+        private IIntegrationManager getFromPool(ComponentName componentName) {
+            Pair<IntegrationManagerServiceConnection, IIntegrationManager> pair = connectionPool.get(componentName);
+            if (pair == null) {
+                return null;
+            }
+
+            IntegrationManagerServiceConnection connection = pair.first;
+            if (!connection.disconnected) {
+                return pair.second;
+            }
+
+            synchronized (connectionPool) {
+                pair = connectionPool.get(componentName);
+                if (pair == null) {
+                    return null;
+                }
+                connection = pair.first;
+                if (!connection.disconnected) {
+                    return pair.second;
+
+                }
+
+                context.unbindService(connection);
+                connectionPool.remove(componentName);
+                return null;
             }
         }
 
@@ -212,18 +241,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             Intent intent = new Intent();
             intent.setComponent(componentName);
             final CountDownLatch connectLatch = new CountDownLatch(1);
-            ServiceConnection connection = new ServiceConnection() {
-                public void onServiceConnected(ComponentName name, IBinder binder) {
-                    connectionPool.put(name, IIntegrationManager.Stub.asInterface(binder));
-                    connectLatch.countDown();
-                }
-
-                public void onServiceDisconnected(ComponentName name) {
-                    connectionPool.remove(name);
-                    context.unbindService(this);
-                    connectLatch.countDown();
-                }
-            };
+            IntegrationManagerServiceConnection connection = new IntegrationManagerServiceConnection(connectLatch);
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
@@ -349,5 +367,25 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         return intentList;
+    }
+
+    private static class IntegrationManagerServiceConnection implements ServiceConnection {
+        private final CountDownLatch connectLatch;
+        private volatile boolean disconnected = false;
+
+        private IntegrationManagerServiceConnection(CountDownLatch connectLatch) {
+            this.connectLatch = connectLatch;
+        }
+
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            connectionPool.put(name, new Pair<>(this, IIntegrationManager.Stub.asInterface(binder)));
+            connectLatch.countDown();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            connectionPool.remove(name);
+            connectLatch.countDown();
+            disconnected = true;
+        }
     }
 }
