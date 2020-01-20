@@ -40,7 +40,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
     private final ConcurrentHashMap<ComponentName, IIntegrationManager> connectionPool = new ConcurrentHashMap<>();
 
     public IntegrationManagerImpl(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         this.mainHandler = new Handler(context.getMainLooper());
     }
 
