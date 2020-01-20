@@ -5,12 +5,21 @@ import android.database.Cursor
 import android.net.Uri
 import ru.evotor.framework.Utils
 
+/**
+ * Интерфейс для получения данных платёжных систем, доступных пользователю смарт-терминала.
+ */
 object PaymentSystemApi {
 
     const val AUTHORITY = "ru.evotor.evotorpos.paymentSystem"
 
     @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
 
+    /**
+     * Возвращает список платёжных систем и соответствующих им аккаунтов, доступных пользователю смарт-терминала.
+     *
+     * @param context Контекст приложения.
+     * @return paymentSystemList Список [платёжных ситем][PaymentSystem] и соответствуюзих им [аккаунтов][PaymentAccount].
+     */
     @JvmStatic
     fun getPaymentSystems(context: Context): List<Pair<PaymentSystem, List<PaymentAccount>>> {
         val paymentSystemList = mutableListOf<Pair<PaymentSystem, MutableList<PaymentAccount>>>()

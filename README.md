@@ -23,7 +23,7 @@ dependencies {
 и укажите minSdkVersion проекта:
 ```
 defaultConfig {
-        minSdkVersion 22
+        minSdkVersion 23
 	...
 }
 ```

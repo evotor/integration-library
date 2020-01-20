@@ -5,6 +5,13 @@ import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Purchaser
 
+/**
+ * Событие, с помощью которого смарт-терминал запрашивает у установленных приложений реквизиты покупателя.
+ *
+ * @property receiptUuid Идентификатор чека, в который будут добавлены реквизиты покупателя.
+ * @property printGroups Список печатных групп с реквизитами покупателя.
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_purchase_requisites_event_processing.html">Добавление реквизитов покупателя в чек</a>
+ */
 data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
         val receiptUuid: String,
         val printGroups: List<PrintGroup?>
@@ -25,11 +32,17 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
             ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     receiptUuid = it.getString(KEY_RECEIPT_UUID)
                             ?: return null,
-                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS))
+                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
+                            ?: return null)
         }
 
     }
 
+    /**
+     * Результат обработки события, который содержит массив печатных групп с соответствующими реквизитами покупателя.
+     *
+     * @property printGroupsWithPurchaserRequisites Массив печатных групп и соответствующих им объектов с реквизитами покупателя.
+     */
     data class Result(
             val printGroupsWithPurchaserRequisites: Map<PrintGroup?, Purchaser?>?
     ) : IntegrationEvent.Result() {
@@ -60,13 +73,13 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
                     -1 -> Result(null)
                     0 -> Result(emptyMap())
                     else -> {
-                        val data = mutableMapOf<PrintGroup?, Purchaser?>()
+                        val printGroupsWithPurchaserRequisites = mutableMapOf<PrintGroup?, Purchaser?>()
                         for (i in 0 until count) {
                             val key = it.getParcelable<PrintGroup?>("$KEY_MAP_ENTRIES_KEY_PREFIX$i")
                             val value = it.getParcelable<Purchaser?>("$KEY_MAP_ENTRIES_VALUE_PREFIX$i")
-                            data[key] = value
+                            printGroupsWithPurchaserRequisites[key] = value
                         }
-                        Result(data)
+                        Result(printGroupsWithPurchaserRequisites)
                     }
                 }
             }
