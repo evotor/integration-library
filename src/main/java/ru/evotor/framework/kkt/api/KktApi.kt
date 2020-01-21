@@ -2,6 +2,8 @@ package ru.evotor.framework.kkt.api
 
 import android.content.Context
 import android.net.Uri
+import ru.evotor.framework.*
+import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
@@ -21,16 +23,19 @@ import ru.evotor.framework.receipt.position.VatRate
 import ru.evotor.framework.safeGetBoolean
 import ru.evotor.framework.safeGetInt
 import ru.evotor.framework.safeGetList
+import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 import java.util.*
 
 /**
- * API для работы с кассой.
+ * Интерфейс для работы с кассой.
  */
 object KktApi {
 
-    private var serialNumber: String? = null
-    private var regNumber: String? = null
+    private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.getString(cursor.getColumnIndex(name)) }
+    private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.safeGetBoolean(name) }
+
+    private var fsSerialNumber: String? = null
 
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
@@ -38,21 +43,15 @@ object KktApi {
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученную версию ФФД
      */
     @JvmStatic
-    fun getRegisteredFfdVersion(context: Context): FfdVersion? = context.contentResolver.query(
-            KktContract.BASE_URI,
-            arrayOf(KktContract.COLUMN_SUPPORTED_FFD_VERSION),
-            null,
-            null,
-            null
-    )?.use { cursor ->
-        cursor.moveToFirst()
-        cursor.safeGetInt(KktContract.COLUMN_SUPPORTED_FFD_VERSION)?.let { version ->
-            if (version !in 0..FfdVersion.values().size) {
-                throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
+    fun getRegisteredFfdVersion(context: Context): FfdVersion? =
+            getValue(context, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
+                cursor.safeGetInt(name)?.let { version ->
+                    if (version !in 0..FfdVersion.values().size) {
+                        throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
+                    }
+                    FfdVersion.values()[version]
+                }
             }
-            FfdVersion.values()[version]
-        }
-    }
 
     /**
      * Получает список типов агентов, которые были указаны при регистрации кассы.
@@ -63,15 +62,8 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_AGENT_TYPES),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_AGENT_TYPES)?.map { item ->
+            getValue(context, KktContract.COLUMN_REGISTERED_AGENT_TYPES) { cursor, name ->
+                cursor.safeGetList(name)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Agent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Agent.Type::class.java.name)
@@ -90,15 +82,8 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetList(KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES)?.map { item ->
+            getValue(context, KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES) { cursor, name ->
+                cursor.safeGetList(name)?.map { item ->
                     item.toInt().let { index ->
                         if (index !in 0..Subagent.Type.values().size) {
                             throw IntegrationLibraryMappingException(Subagent.Type::class.java.name)
@@ -116,17 +101,7 @@ object KktApi {
      */
     @JvmStatic
     fun isVatRate20Available(context: Context): Boolean? =
-            context.contentResolver.query(
-                    KktContract.BASE_URI,
-                    arrayOf(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE),
-                    null,
-                    null,
-                    null
-            )?.use { cursor ->
-                cursor.moveToFirst()
-                cursor.safeGetBoolean(KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE)
-                        ?: throw IntegrationLibraryMappingException(KktApi::isVatRate20Available.name)
-            }
+            getValue(context, KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE, booleanGetter)
 
     /**
      * Возвращает серийный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -137,10 +112,9 @@ object KktApi {
      */
     @Deprecated("Устаревший с 01.08.19, используйте receiveKktSerialNumber(context: Context): String?")
     @JvmStatic
-    fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) = serialNumber?.let {
-        callback(it)
-        return
-    } ?: getKktInfo(context) { callback(serialNumber) }
+    fun receiveKktSerialNumber(context: Context, callback: (String?) -> Unit) {
+        callback(receiveKktSerialNumber(context))
+    }
 
     /**
      * Возвращает серийный номер ККТ или null если попытка завершилась неудачей,
@@ -150,11 +124,8 @@ object KktApi {
      * @return строку серийный номер или null
      */
     @JvmStatic
-    fun receiveKktSerialNumber(context: Context): String? {
-        if (serialNumber == null) getKktInfo(context)
-
-        return serialNumber
-    }
+    fun receiveKktSerialNumber(context: Context): String? =
+            getValue(context, KktContract.COLUMN_SERIAL_NUMBER, stringGetter)
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -165,10 +136,9 @@ object KktApi {
      */
     @Deprecated("Устаревший с 01.08.19, используйте receiveKktRegNumber(context: Context): String?")
     @JvmStatic
-    fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) = regNumber?.let {
-        callback(it)
-        return
-    } ?: getKktInfo(context) { callback(regNumber) }
+    fun receiveKktRegNumber(context: Context, callback: (String?) -> Unit) {
+        callback(receiveKktRegNumber(context))
+    }
 
     /**
      * Возвращает регистрационный номер ККТ или null если попытка завершилась неудачей,
@@ -178,11 +148,62 @@ object KktApi {
      * @return строку регистрационный номер или null
      */
     @JvmStatic
-    fun receiveKktRegNumber(context: Context): String? {
-        if (regNumber == null) getKktInfo(context)
+    fun receiveKktRegNumber(context: Context): String? =
+            getValue(context, KktContract.COLUMN_REGISTER_NUMBER, stringGetter)
 
-        return regNumber
+    /**
+     * Проверяет, готова ли касса для работы в разъездной торговле.
+     * Результатом является логическое "И" всех необходимых условий.
+     *
+     * @param context текущий контекст
+     * @return  true    - если все условия для работы в разъездной торговле выполнены,
+     *          false   - если хотя бы одно условие не выполнено
+     * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
+     */
+    @JvmStatic
+    fun isKktReadyForDelivery(context: Context): Boolean? =
+            getValue(context, KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
+
+    /**
+     * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсуствует
+     * или попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     * @return серийный номер фискального накопителя или null
+     */
+    @JvmStatic
+    fun getFsSerialNumber(context: Context): String? {
+        if (fsSerialNumber == null) getKktFsInfo(context)
+
+        return fsSerialNumber
     }
+
+
+    // WIP
+//    /**
+//     *
+//     * Возвращает количество наличности в денежном ящике кассы или null, если не удалось получить данные
+//     *
+//     * @param context текущий контекст
+//     * @return BigDecimal количество наличности в денежном ящике кассы или null, если не удалось получить данные
+//     */
+//    @JvmStatic
+//    fun getCurrentCashSum(context: Context): BigDecimal? {
+//        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_COUNTERS}")
+//        return context.contentResolver.query(
+//                uri,
+//                arrayOf(KktContract.COLUMN_CURRENT_CASH_SUM),
+//                null,
+//                null,
+//                null
+//        )?.use { cursor ->
+//            cursor.moveToFirst()
+//            cursor.safeGetLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
+//                BigDecimal(it).divide(BigDecimal(100))
+//            }
+//        }
+//    }
+
     /**
      * Печатает чек коррекции.
      * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
@@ -275,32 +296,126 @@ object KktApi {
         )
     }
 
-    private inline fun getKktInfo(context: Context, crossinline dataReceived: () -> Unit) {
-        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
+    /**
+     * Печатает чек коррекции.
+     * ВАЖНО! Чек коррекции необходимо печатать в промежутке между документом открытия смены и отчётом о закрытии смены.
+     * @param context контекст приложения
+     * @param settlementType тип (признак) расчета
+     * @param taxationSystem применяемая система налогообложения (одна из тех, которые были указаны при регистрации кассы)
+     * @param correctionType тип коррекции
+     * @param basisForCorrection основание для коррекции
+     * @param prescriptionNumber номер предписания налогового органа
+     * @param correctableSettlementDate дата совершения корректируемого расчета
+     * @param amountPaid уплаченная сумма
+     * @param paymentType платёжное средство, использованное для оплаты
+     * @param vatRate ставка НДС
+     * @param correctionDescription описание коррекции
+     * @param paymentAddress адрес места расчёта
+     * @param paymentPlace наименование места расчёта
+     * @param callback
+     */
+    @JvmStatic
+    fun registerCorrectionReceipt(
+            context: Context,
 
-        val asyncHandler = AsyncHandler(context) { serial, reg ->
-            serialNumber = serial
-            regNumber = reg
-            dataReceived()
+            @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
+            settlementType: SettlementType,
+
+            @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
+            taxationSystem: TaxationSystem,
+
+            @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
+            correctionType: CorrectionType,
+
+            @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
+            basisForCorrection: String,
+
+            @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
+            prescriptionNumber: String,
+
+            @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
+            correctableSettlementDate: Date,
+
+            amountPaid: BigDecimal,
+
+            paymentType: PaymentType,
+
+            @FiscalRequisite(FiscalTags.VAT_RATE)
+            vatRate: VatRate,
+
+            @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
+            correctionDescription: String,
+
+            @FiscalRequisite(FiscalTags.PAYMENT_ADDRESS)
+            paymentAddress: String,
+
+            @FiscalRequisite(FiscalTags.PAYMENT_PLACE)
+            paymentPlace: String,
+
+            callback: DocumentRegistrationCallback
+    ) {
+        if (correctableSettlementDate >= Date()) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Указана некорректная дата корректируемого расчёта"
+            ))
         }
-
-        asyncHandler.startQuery(
-                AsyncHandler.KKT_INFO_TOKEN,
-                null,
-                uri,
-                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
-                null,
-                null,
-                null
+        if (settlementType == SettlementType.RETURN_OF_INCOME || settlementType == SettlementType.RETURN_OF_OUTCOME) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Указанный тип расчёта не поддерживается"
+            ))
+        }
+        if (amountPaid.compareTo(BigDecimal.ZERO) == 0) {
+            return callback.onError(DocumentRegistrationException(
+                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
+                    "Уплаченная сумма не может быть равной нулю"
+            ))
+        }
+        context.startIntegrationService(
+                KktBacksideIntegrationService.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
+                CorrectionReceiptRegistrationRequestedEvent(
+                        settlementType,
+                        taxationSystem,
+                        correctionType,
+                        basisForCorrection,
+                        prescriptionNumber,
+                        correctableSettlementDate,
+                        amountPaid,
+                        paymentType,
+                        vatRate,
+                        correctionDescription,
+                        paymentAddress,
+                        paymentPlace
+                ),
+                IntegrationManagerCallback {
+                    it?.result?.error?.let { error ->
+                        callback.onError(DocumentRegistrationException(error.code, error.message))
+                    } ?: run {
+                        callback.onSuccess(null)
+                    }
+                }
         )
     }
 
-    private fun getKktInfo(context: Context) {
-        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_INFO}")
+    private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
+        return context.contentResolver.query(
+                KktContract.BASE_URI,
+                arrayOf(valueName),
+                null,
+                null,
+                null
+        )?.use {
+            it.moveToFirst()
+            parser(it, valueName) ?: throw IntegrationLibraryMappingException(valueName)
+        }
+    }
 
+    private fun getKktFsInfo(context: Context) {
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_INFO}")
         val cursor = context.contentResolver.query(
                 uri,
-                arrayOf(KktContract.COLUMN_SERIAL_NUMBER, KktContract.COLUMN_REGISTER_NUMBER),
+                arrayOf(KktContract.COLUMN_SERIAL_NUMBER),
                 null,
                 null,
                 null
@@ -308,8 +423,7 @@ object KktApi {
 
         cursor?.use {
             it.moveToFirst()
-            serialNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_SERIAL_NUMBER))
-            regNumber = it.getString(it.getColumnIndex(KktContract.COLUMN_REGISTER_NUMBER))
+            fsSerialNumber = it.safeGetString(KktContract.COLUMN_SERIAL_NUMBER)
         }
     }
 }

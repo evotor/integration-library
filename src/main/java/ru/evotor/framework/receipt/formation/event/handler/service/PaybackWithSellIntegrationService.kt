@@ -8,9 +8,9 @@ import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForRe
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
 /**
- * Служба для работы с чеком возврата покупки.
+ * Служба для работы с чеком возврата на основании чека покупки.
  */
-abstract class BuybackIntegrationService : IntegrationServiceV2() {
+abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
 
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
@@ -18,7 +18,6 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
-
     /**
      * Возвращает смарт-терминалу массив печатных групп с соответствующими реквизитами покупателя.
      *
@@ -29,6 +28,9 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_PURCHASER_REQUISITES)
     open fun handleEvent(event: ReturnPurchaserRequisitesForPrintGroupRequestedEvent): ReturnPurchaserRequisitesForPrintGroupRequestedEvent.Result? = null
 
+    /**
+     * Запускает приложение по нажатию кнопки на экране оплаты чека.
+     */
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
@@ -44,27 +46,21 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
     companion object {
-
-        /**
-         * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек возврата покупки.
-         *
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.PURCHASER_REQUISITES`.
-         */
-        const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.buyback.PURCHASER_REQUISITES"
-        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.buyback.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+        const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.paybackWithSell.PURCHASER_REQUISITES"
+        const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.paybackWithSell.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
 
         /**
          * Запрос адреса и места расчёта для добавления в чек.
          *
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.buyback.DELIVERY_REQUISITES`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.paybackWithSell.DELIVERY_REQUISITES`.
          */
-        const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.buyback.DELIVERY_REQUISITES"
+        const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.paybackWithSell.DELIVERY_REQUISITES"
 
         /**
-         * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.BuybackIntegrationService].
+         * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].
          *
-         * Чтобы выдать разрешение, в элементе `uses-permission` манифеста приложения, укажите значение `ru.evotor.permission.BUYBACK_INTEGRATION_SERVICE`.
+         * Чтобы выдать разрешение, в элементе `uses-permission` манифеста приложения, укажите значение `ru.evotor.permission.PAYBACK_WITH_SELL_INTEGRATION_SERVICE`.
          */
-        const val PERMISSION = "ru.evotor.permission.BUYBACK_INTEGRATION_SERVICE"
+        const val PERMISSION = "ru.evotor.permission.PAYBACK_WITH_SELL_INTEGRATION_SERVICE"
     }
 }

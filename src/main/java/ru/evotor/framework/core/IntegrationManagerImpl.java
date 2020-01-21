@@ -41,7 +41,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
     private final Handler mainHandler;
 
     public IntegrationManagerImpl(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         this.mainHandler = new Handler(context.getMainLooper());
     }
 

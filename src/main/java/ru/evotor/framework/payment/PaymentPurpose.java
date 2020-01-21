@@ -10,41 +10,47 @@ import java.math.BigDecimal;
 
 import ru.evotor.framework.component.PaymentPerformer;
 import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper;
+import ru.evotor.framework.core.action.event.receipt.payment.PaymentEvent;
 
 /**
- * Оплата, списком которых может быть оплачен чек. Содержит сумму и цель оплаты (платёжную систему и аккаунт).
+ * Платёж, которым покупатель оплачивает чек.
+ * Список платежей необходимо возвращать, например, при разделении чека на несколько платежей (см. {@link ru.evotor.framework.core.action.event.receipt.payment.PaymentSelectedEventResult})
+ * <p>
+ * Содержит сумму и цель оплаты (платёжную систему и аккаунт).
+ * <p>
+ * Вы можете получить платёж с помощью метода {@link PaymentEvent#getPaymentPurpose()}.
  */
 public class PaymentPurpose implements Parcelable {
 
     /**
-     * Собственный идентификатор оплаты
+     * Идентификатор платежа.
      */
     @Nullable
     private final String identifier;
     /**
-     * Идентификатор платёжной системы
+     * Идентификатор платёжной системы.
      * @deprecated To define payment paymentSystem use {@link #paymentPerformer} instead
      */
     @Nullable
     @Deprecated
     private final String paymentSystemId;
     /**
-     * Интеграционное приложение, осуществляющее оплату определенной платежной системой
+     * Компонент (служба, операция и т.д.) приложения, который будет выполнять оплату.
      */
     @NonNull
     private final PaymentPerformer paymentPerformer;
     /**
-     * Сумма к оплате
+     * Сумма платежа.
      */
     @NonNull
     private final BigDecimal total;
     /**
-     * Идентификатор аккаунта в рамках платёжной системы
+     * Идентификатор аккаунта в рамках платёжной системы.
      */
     @Nullable
     private final String accountId;
     /**
-     * Сообщение, которое будет показано пользователю в момент оплаты
+     * Сообщение, которое будет показано пользователю в момент оплаты.
      */
     @Nullable
     private final String userMessage;
