@@ -59,6 +59,13 @@ object FeaturesApi {
      */
     fun isShortCheckActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHORT_CHECK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка алкоголя" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isAlcoMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ALCO_MARK)
+
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
