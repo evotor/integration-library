@@ -17,6 +17,7 @@ object FeaturesContract {
     const val PATH_DELIVERY = "delivery"
     const val PATH_SHORT_CHECK = "short_check"
     const val PATH_ALCO_MARK = "alco_mark"
+    const val PATH_BACKUPS = "backups"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 
