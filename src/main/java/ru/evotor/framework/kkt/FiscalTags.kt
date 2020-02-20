@@ -128,4 +128,14 @@ object FiscalTags {
      * Номер предписания налогового органа
      */
     const val PRESCRIPTION_NUMBER = 1179
+
+    /**
+     * Адрес места расчёта
+     */
+    const val PAYMENT_ADDRESS = 1009
+
+    /**
+     * Описание места расчёта
+     */
+    const val PAYMENT_PLACE = 1187
 }
