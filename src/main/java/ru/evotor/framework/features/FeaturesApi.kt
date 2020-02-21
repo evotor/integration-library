@@ -67,7 +67,7 @@ object FeaturesApi {
     fun isAlcoMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ALCO_MARK)
 
     /**
-     * Проверяет, активна ли функция "Бэкапы" на данном терминале
+     * Проверяет, активна ли функция "Резервное копирование" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
