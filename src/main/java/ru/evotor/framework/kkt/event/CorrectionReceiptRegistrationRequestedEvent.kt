@@ -42,7 +42,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
             CorrectionReceiptRegistrationRequestedEvent(
                     SettlementType.valueOf(it.getString(KEY_SETTLEMENT_TYPE)),
                     TaxationSystem.valueOf(it.getString(KEY_TAXATION_SYSTEM)),
-                    CorrectionType.values()[it.getInt(KEY_CORRECTION_TYPE)],
+                    getCorrectionType(it),
                     it.getString(KEY_BASIS_FOR_CORRECTION),
                     it.getString(KEY_PRESCRIPTION_NUMBER),
                     Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
@@ -53,6 +53,16 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
                     it.getString(KEY_PAYMENT_ADDRESS),
                     it.getString(KEY_PAYMENT_PLACE)
             )
+        }
+
+        private fun getCorrectionType(bundle: Bundle): CorrectionType {
+            val incorrectOrdinal = -1
+            val ordinal = bundle.getInt(KEY_CORRECTION_TYPE, incorrectOrdinal)
+            return if (ordinal != incorrectOrdinal) {
+                CorrectionType.values()[ordinal]
+            } else {
+                CorrectionType.valueOf(bundle.getString(KEY_CORRECTION_TYPE))
+            }
         }
     }
 
