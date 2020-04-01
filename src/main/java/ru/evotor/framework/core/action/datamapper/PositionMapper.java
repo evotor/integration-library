@@ -15,6 +15,7 @@ import java.util.Set;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.receipt.position.LegalPersonAttributes;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
@@ -45,6 +46,7 @@ public final class PositionMapper {
     private static final String KEY_ATTRIBUTES = "attributes";
     private static final String KEY_SETTLEMENT_METHOD = "settlementMethod";
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
+    private static final String KEY_LEGAL_PERSON_REQUISITES = "legalPersonRequisites";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -95,6 +97,9 @@ public final class PositionMapper {
         AgentRequisites agentRequisites =
                 AgentRequisites.Companion.from(bundle.getBundle(KEY_AGENT_REQUISITES));
 
+        final LegalPersonAttributes legalPersonAttributes =
+                LegalPersonAttributes.from(bundle.getBundle(KEY_LEGAL_PERSON_REQUISITES));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -125,6 +130,7 @@ public final class PositionMapper {
         builder.setAttributes(attributes);
         builder.setSettlementMethod(settlementMethod);
         builder.setAgentRequisites(agentRequisites);
+        builder.setLegalPersonAttributes(legalPersonAttributes);
         return builder.build();
     }
 
@@ -171,10 +177,13 @@ public final class PositionMapper {
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
         bundle.putBundle(KEY_SETTLEMENT_METHOD, SettlementMethodMapper.toBundle(position.getSettlementMethod()));
         bundle.putBundle(KEY_AGENT_REQUISITES, position.getAgentRequisites() != null ? position.getAgentRequisites().toBundle() : null);
-        return bundle;
-    }
 
-    private PositionMapper() {
+        final LegalPersonAttributes legalPersonAttributes = position.getLegalPersonAttributes();
+        final Bundle legalPersonAttributesBundle =
+                legalPersonAttributes != null ? legalPersonAttributes.toBundle() : null;
+        bundle.putBundle(KEY_LEGAL_PERSON_REQUISITES, legalPersonAttributesBundle);
+
+        return bundle;
     }
 
 }

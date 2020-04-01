@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
+import ru.evotor.framework.receipt.position.LegalPersonAttributes;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
@@ -140,6 +142,12 @@ public class Position implements Parcelable {
     private AgentRequisites agentRequisites;
 
     /**
+     * Дополнительные атрибуты для продажи Юр. лицу или ИП.
+     */
+    @Nullable
+    private LegalPersonAttributes legalPersonAttributes;
+
+    /**
      * Deprecated since 16.02.2018. Use position Builder.
      */
     @Deprecated
@@ -249,6 +257,7 @@ public class Position implements Parcelable {
         this.attributes = position.getAttributes();
         this.settlementMethod = position.getSettlementMethod();
         this.agentRequisites = position.getAgentRequisites();
+        this.legalPersonAttributes = position.getLegalPersonAttributes();
     }
 
     /**
@@ -474,6 +483,14 @@ public class Position implements Parcelable {
         return agentRequisites;
     }
 
+    /**
+     * @return Дополнительные атрибуты для продажи Юр. лицу или ИП.
+     */
+    @Nullable
+    public LegalPersonAttributes getLegalPersonAttributes() {
+        return legalPersonAttributes;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -525,6 +542,9 @@ public class Position implements Parcelable {
             return false;
         if (agentRequisites != null ? !agentRequisites.equals(position.agentRequisites) : position.agentRequisites != null)
             return false;
+        if (!Objects.equals(legalPersonAttributes, position.legalPersonAttributes))
+            return false;
+
         return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
     }
 
@@ -551,6 +571,7 @@ public class Position implements Parcelable {
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (settlementMethod != null ? settlementMethod.hashCode() : 0);
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
+        result = 31 * result + (legalPersonAttributes != null ? legalPersonAttributes.hashCode() : 0);
         return result;
     }
 
@@ -578,6 +599,7 @@ public class Position implements Parcelable {
                 ", attributes=" + attributes +
                 ", settlementMethod=" + settlementMethod +
                 ", agentRequisites=" + agentRequisites +
+                ", legalPersonAttributes=" + legalPersonAttributes +
                 '}';
     }
 
@@ -1002,6 +1024,11 @@ public class Position implements Parcelable {
 
         public Builder setAgentRequisites(@Nullable AgentRequisites agentRequisites) {
             position.agentRequisites = agentRequisites;
+            return this;
+        }
+
+        public Builder setLegalPersonAttributes(@Nullable  LegalPersonAttributes attributes) {
+            position.legalPersonAttributes = attributes;
             return this;
         }
 

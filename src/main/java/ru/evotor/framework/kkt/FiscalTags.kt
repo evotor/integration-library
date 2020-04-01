@@ -138,4 +138,19 @@ object FiscalTags {
      * Описание места расчёта
      */
     const val PAYMENT_PLACE = 1187
+
+    /**
+     * Акциз
+     */
+    const val EXCISE = 1229
+
+    /**
+     * Код страны происхождения товара
+     */
+    const val COUNTRY_ORIGIN_CODE = 1230
+
+    /**
+     * Номер таможенной декларации
+     */
+    const val CUSTOM_DECLARATION_NUMBER = 1231
 }
