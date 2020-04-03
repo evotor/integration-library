@@ -66,6 +66,13 @@ object FeaturesApi {
      */
     fun isAlcoMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ALCO_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Внешний УТМ" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM)
+
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
