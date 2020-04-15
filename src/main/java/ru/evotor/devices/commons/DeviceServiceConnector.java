@@ -14,6 +14,9 @@ import ru.evotor.devices.commons.services.IScalesServiceWrapper;
 import ru.evotor.devices.commons.services.PrinterService;
 import ru.evotor.devices.commons.services.ScalesService;
 
+/**
+ * Класс, необходимый для инициализации встроенного или подключённого оборудования.
+ */
 public class DeviceServiceConnector {
 
     protected static final String TAG = "DeviceServiceConnector";
@@ -35,6 +38,10 @@ public class DeviceServiceConnector {
         return connectionWrappers;
     }
 
+    /**
+     * Получает событие о подключении оборудования.
+     * @param connectionWrapper интерфейс для выполнения дейтвий при подключении и отключении принтера и весов.
+     */
     public static void addConnectionWrapper(ConnectionWrapper connectionWrapper) {
         connectionWrappers.add(connectionWrapper);
     }
@@ -48,6 +55,12 @@ public class DeviceServiceConnector {
     }
 
 
+    /**
+     * Получает экземпляр службы принтера. Не может принимать значение <code>null</code>.
+     *
+     * @return экземпляр службы принтера.
+     * @throws ServiceNotConnectedException
+     */
     public static IPrinterServiceWrapper getPrinterService() throws ServiceNotConnectedException {
         DeviceServiceOperationOnMainThreadException.throwIfMainThread();
         printerService.waitInitService(context);
@@ -60,6 +73,10 @@ public class DeviceServiceConnector {
         return scalesService;
     }
 
+    /**
+     * Инициализирует встроенное и подключённое оборудование
+     * @param appContext контекст приложения.
+     */
     public static void startInitConnections(final Context appContext) {
         startInitConnections(appContext, false);
     }

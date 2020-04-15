@@ -23,21 +23,24 @@ import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 
+/**
+ * Позиция чека.
+ */
 public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
     private static final int VERSION = 3;
     /**
-     * Magic number для идентификации использования версионирования объекта
+     * Магическое число для идентификации использования версионирования объекта.
      */
     private static final int MAGIC_NUMBER = 8800;
     /**
-     * UUID позиции
+     * Идентификатор позиции в формате UUID.
      */
     private String uuid;
     /**
-     * UUID товара.
+     * Идентификатор товара в формате UUID.
      */
     @Nullable
     private String productUuid;
@@ -47,15 +50,15 @@ public class Position implements Parcelable {
     @Nullable
     private String productCode;
     /**
-     * Вид товара.
+     * Тип товара.
      */
     private ProductType productType;
     /**
-     * Наименование.
+     * Название.
      */
     private String name;
     /**
-     * Наименование единицы измерения.
+     * Единицы измерения.
      */
     private String measureName;
     /**
@@ -63,7 +66,7 @@ public class Position implements Parcelable {
      */
     private int measurePrecision;
     /**
-     * НДС
+     * Ставка НДС.
      */
     @Nullable
     private TaxNumber taxNumber;
@@ -85,7 +88,7 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная или табачная марка.
+     * Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     private String mark;
     /**
@@ -121,8 +124,11 @@ public class Position implements Parcelable {
     private Map<String, AttributeValue> attributes;
 
     /**
-     * Признак способа расчета
-     * По умолчанию это 'Полный расчет'
+     * Признак способа расчёта.
+     *
+     * Указывается для каждой позиции чека.
+     *
+     * Значение по умолчанию – [Полный расчёт]{@link ru.evotor.framework.receipt.position.SettlementMethod.FullSettlement}.
      */
     @NonNull
     private SettlementMethod settlementMethod = new SettlementMethod.FullSettlement();
@@ -216,7 +222,7 @@ public class Position implements Parcelable {
         if (extraKeys != null) {
             this.extraKeys.addAll(extraKeys);
         }
-        this.subPositions = subPositions;
+        this.subPositions = subPositions != null ? new ArrayList<>(subPositions) : null;
     }
 
     public Position(Position position) {
@@ -399,7 +405,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Алкогольная или табачная марка.
+     * @return Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     @Nullable
     public String getMark() {
@@ -470,6 +476,14 @@ public class Position implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
+        return equals(o, false);
+    }
+
+    public boolean equalsExceptQuantity(Object o) {
+        return equals(o, true);
+    }
+
+    private boolean equals(Object o, boolean exceptQuantity) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -491,7 +505,7 @@ public class Position implements Parcelable {
         if ((priceWithDiscountPosition != null ? priceWithDiscountPosition : BigDecimal.ZERO)
                 .compareTo(position.priceWithDiscountPosition != null ? position.priceWithDiscountPosition : BigDecimal.ZERO) != 0)
             return false;
-        if ((quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
+        if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
         if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
             return false;
@@ -848,6 +862,33 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toShoesMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.SHOES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setShoesParams(mark);
+            return this;
+        }
+        public Builder toMedicineMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.MEDICINE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setMedicineParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -882,7 +923,15 @@ public class Position implements Parcelable {
             position.tareVolume = tareVolume;
         }
 
+        private void setShoesParams(String mark) {
+            position.mark = mark;
+        }
+
         private void setTobaccoParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setMedicineParams(String mark) {
             position.mark = mark;
         }
 

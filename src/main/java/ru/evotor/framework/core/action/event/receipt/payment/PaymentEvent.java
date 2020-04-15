@@ -9,6 +9,9 @@ import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
 import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;
 import ru.evotor.framework.payment.PaymentPurpose;
 
+/**
+ * Родительский класс события выбора оплаты чека {@link PaymentSelectedEvent}.
+ */
 public abstract class PaymentEvent implements IBundlable {
     private static final String KEY_SELECTED_PAYMENT_PURPOSE = "paymentPurpose";
     private static final String KEY_SELECTED_PAYMENT_SYSTEM = "paymentSystem";
@@ -25,6 +28,10 @@ public abstract class PaymentEvent implements IBundlable {
         return bundle == null ? null : PaymentPurposeMapper.from(bundle.getBundle(KEY_SELECTED_PAYMENT_PURPOSE));
     }
 
+    /**
+     * Возвращает платёж, которым покупатель оплачивает чек.
+     * @return {@link PaymentPurpose}
+     */
     @NonNull
     public PaymentPurpose getPaymentPurpose() {
         return paymentPurpose;

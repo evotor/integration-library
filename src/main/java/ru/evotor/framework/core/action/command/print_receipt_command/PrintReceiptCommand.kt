@@ -20,19 +20,23 @@ import java.math.BigDecimal
 import java.util.*
 
 /**
- * Команда печати чека продажи
- * @param printReceipts Список печатных чеков
- * @param extra Экстра данные к чеку
- * @param clientPhone Телефон клиента
- * @param clientEmail Эл.почта клиента
- * @param receiptDiscount Скидка на чек
+ * Родительский класс команд печати чеков различных типов.
+ * @param printReceipts Список чеков для печати.
+ * @param extra Дополнительные данные к чеку.
+ * @param clientPhone Телефон клиента.
+ * @param clientEmail Электронная почта клиента.
+ * @param receiptDiscount Скидка на чек.
+ * @param paymentAddress Адрес места расчёта
+ * @param paymentPlace Место расчёта
  */
 abstract class PrintReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
         val extra: SetExtra?,
         val clientPhone: String?,
         val clientEmail: String?,
-        val receiptDiscount: BigDecimal?
+        val receiptDiscount: BigDecimal?,
+        val paymentAddress: String? = null,
+        val paymentPlace: String? = null
 ) : IBundlable {
 
     internal fun process(activity: Activity, callback: IntegrationManagerCallback, action: String) {
@@ -57,17 +61,26 @@ abstract class PrintReceiptCommand(
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
         bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
+        bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         return bundle
     }
 
     companion object {
 
+        /**
+         * Разрешение для отправки чеков по СМС или электронной почте.
+         *
+         * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
+         */
         const val NAME_PERMISSION = "ru.evotor.permission.receipt.print.INTERNET_RECEIPT"
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
         private const val KEY_CLIENT_EMAIL = "clientEmail"
         private const val KEY_CLIENT_PHONE = "clientPhone"
         private const val KEY_RECEIPT_DISCOUNT = "receiptDiscount"
+        private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
+        private const val KEY_PAYMENT_PLACE = "paymentPlace"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
@@ -89,6 +102,14 @@ abstract class PrintReceiptCommand(
 
         internal fun getReceiptDiscount(bundle: Bundle): BigDecimal? {
             return bundle.getMoney(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO)
+        }
+
+        internal fun getPaymentAddress(bundle: Bundle): String? {
+            return bundle.getString(KEY_PAYMENT_ADDRESS, null)
+        }
+
+        internal fun getPaymentPlace(bundle: Bundle): String? {
+            return bundle.getString(KEY_PAYMENT_PLACE, null)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

@@ -17,13 +17,14 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
+import java.lang.Exception
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
@@ -122,6 +123,7 @@ object ReceiptApi {
 
         val printGroups = HashSet<PrintGroup?>()
         val getPositionResults = ArrayList<GetPositionResult>()
+        val getSubpositionResults = ArrayList<GetSubpositionResult>()
         context.contentResolver.query(
                 Uri.withAppendedPath(baseUri, POSITIONS_PATH),
                 null,
@@ -133,18 +135,21 @@ object ReceiptApi {
                 createGetPositionResult(cursor)?.let {
                     getPositionResults.add(it)
                     printGroups.add(it.printGroup)
+                } ?: createGetSubpositionResult(cursor)?.let {
+                    getSubpositionResults.add(it)
                 }
             }
         }
 
-        val positionMap = getPositionResults
-                .associateBy { it.position.uuid }
-
-        for ((position, _, parentUuid) in getPositionResults.filter { it.parentUuid != null }) {
-            positionMap.get(parentUuid)?.position?.subPositions?.add(position)
+        for (getPositionResult in getPositionResults) {
+            val subpositions = getSubpositionResults
+                    .filter { it.parentUuid == getPositionResult.position.uuid }
+                    .map { it.position }
+            getPositionResult.position = Position.Builder
+                    .copyFrom(getPositionResult.position)
+                    .setSubPositions(subpositions)
+                    .build()
         }
-
-        val getPositionResultsWithoutSubPositionsInList = getPositionResults.filter { it.parentUuid == null }
 
         val getPaymentsResults = ArrayList<GetPaymentsResult>()
         context.contentResolver.query(
@@ -196,7 +201,7 @@ object ReceiptApi {
                     ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
             printDocuments.add(Receipt.PrintReceipt(
                     printGroup,
-                    getPositionResultsWithoutSubPositionsInList
+                    getPositionResults
                             .filter { it.printGroup == printGroup }
                             .map { it.position },
                     payments.mapValues { it.value.value },
@@ -250,11 +255,24 @@ object ReceiptApi {
 
 
     private fun createGetPositionResult(cursor: Cursor): GetPositionResult? {
-        return GetPositionResult(
-                createPosition(cursor) ?: return null,
-                createPrintGroup(cursor),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
-        )
+        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null)
+            GetPositionResult(
+                    createPosition(cursor) ?: return null,
+                    createPrintGroup(cursor)
+            )
+        else
+            null
+    }
+
+    private fun createGetSubpositionResult(cursor: Cursor): GetSubpositionResult? {
+        val parentUuid = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
+        return if (parentUuid != null)
+            GetSubpositionResult(
+                    createPosition(cursor) ?: return null,
+                    parentUuid
+            )
+        else
+            null
     }
 
     private fun createGetPaymentResult(cursor: Cursor): GetPaymentsResult? {
@@ -267,6 +285,16 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
+        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
+        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+        val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+            if (it < 0) {
+                null
+            } else {
+                PurchaserType.values()[it.toInt() % PurchaserType.values().size]
+            }
+        }
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -275,7 +303,17 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_INN)),
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
-                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1
+                cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
+                if (purchaserName != null && purchaserDocumentNumber != null) {
+                    Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
+                } else {
+                    null
+                },
+                if (subjectId != null){
+                    MedicineAttribute(subjectId)
+                } else {
+                    null
+                }
         )
     }
 
@@ -297,7 +335,7 @@ object ReceiptApi {
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                        ProductType.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE))),
+                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)),ProductType.NORMAL),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
@@ -408,7 +446,8 @@ object ReceiptApi {
         )
     }
 
-    private data class GetPositionResult(val position: Position, val printGroup: PrintGroup?, val parentUuid: String?)
+    private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
+    private data class GetSubpositionResult(val position: Position, val parentUuid: String?)
     private data class GetPaymentsResult(val payment: Payment, val printGroup: PrintGroup?, val value: BigDecimal, val change: BigDecimal)
 
     @Deprecated(message = "Используйте метод getSellReceipt")

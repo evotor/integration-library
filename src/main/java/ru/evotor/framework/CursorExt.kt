@@ -1,9 +1,10 @@
 package ru.evotor.framework
 
+import android.database.Cursor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-internal fun android.database.Cursor.safeGetBoolean(columnName: String): Boolean? {
+internal fun Cursor.safeGetBoolean(columnName: String): Boolean? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -12,7 +13,7 @@ internal fun android.database.Cursor.safeGetBoolean(columnName: String): Boolean
     return safeGetBoolean(index)
 }
 
-internal fun android.database.Cursor.safeGetBoolean(columnIndex: Int): Boolean? {
+internal fun Cursor.safeGetBoolean(columnIndex: Int): Boolean? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -26,7 +27,7 @@ internal fun android.database.Cursor.safeGetBoolean(columnIndex: Int): Boolean? 
     }
 }
 
-internal fun android.database.Cursor.safeGetInt(columnName: String): Int? {
+internal fun Cursor.safeGetInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -35,7 +36,7 @@ internal fun android.database.Cursor.safeGetInt(columnName: String): Int? {
     return safeGetInt(index)
 }
 
-internal fun android.database.Cursor.safeGetInt(columnIndex: Int): Int? {
+internal fun Cursor.safeGetInt(columnIndex: Int): Int? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -43,7 +44,24 @@ internal fun android.database.Cursor.safeGetInt(columnIndex: Int): Int? {
     return getInt(columnIndex)
 }
 
-internal fun android.database.Cursor.safeGetList(columnName: String): List<String>? {
+internal fun Cursor.safeGetLong(columnName: String): Long? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
+    }
+
+    return safeGetLong(index)
+}
+
+internal fun Cursor.safeGetLong(columnIndex: Int): Long? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getLong(columnIndex)
+}
+
+internal fun Cursor.safeGetList(columnName: String): List<String>? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -52,7 +70,7 @@ internal fun android.database.Cursor.safeGetList(columnName: String): List<Strin
     return safeGetList(index)
 }
 
-internal fun android.database.Cursor.safeGetList(columnIndex: Int): List<String>? {
+internal fun Cursor.safeGetList(columnIndex: Int): List<String>? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -61,7 +79,7 @@ internal fun android.database.Cursor.safeGetList(columnIndex: Int): List<String>
 
 }
 
-internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnName: String, values: Array<T>): T? {
+internal fun <T : Enum<*>> Cursor.safeGetEnum(columnName: String, values: Array<T>): T? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
@@ -70,7 +88,7 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnName: Strin
     return safeGetEnum(index, values)
 }
 
-internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnIndex: Int, values: Array<T>): T? {
+internal fun <T : Enum<*>> Cursor.safeGetEnum(columnIndex: Int, values: Array<T>): T? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -83,4 +101,11 @@ internal fun <T : Enum<*>> android.database.Cursor.safeGetEnum(columnIndex: Int,
         }
     }
 
+}
+
+internal fun Cursor.safeGetString(columnName: String) = getColumnIndex(columnName).let {
+    when(it) {
+        -1 -> null
+        else -> getString(it)
+    }
 }

@@ -5,6 +5,15 @@ import ru.evotor.framework.core.action.datamapper.PrintGroupMapper
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.receipt.PrintGroup
 
+/**
+ * Указывает печатную группу и соответствующие ей идентификаторы платежей и позиций.
+ * Передавайте список объектов [SetPrintGroup] в результате обработки события [ru.evotor.framework.core.action.event.receipt.print_group.PrintGroupRequiredEvent],
+ * чтобы указать на какие печатные группы будет разделён чек.
+ *
+ * @param PrintGroup печатная группа чека.
+ * @param paymentPurposeIds список платежей, которые относятся к печатной группе.
+ * @param positionUuids список позиций, входящих в печатную группу.
+ */
 data class SetPrintGroup(val printGroup: PrintGroup?, val paymentPurposeIds: List<String>, val positionUuids: List<String>) : IChange {
 
     override fun toBundle(): Bundle {
@@ -40,7 +49,7 @@ data class SetPrintGroup(val printGroup: PrintGroup?, val paymentPurposeIds: Lis
             val paymentPurposeIds = bundle.getStringArrayList(KEY_PAYMENT_PURPOSE_ID)
             val positionsUuids = bundle.getStringArrayList(KEY_PAYMENT_POSITIONS_UUIDS)
 
-            if (paymentPurposeIds == null || positionsUuids == null || printGroup == null) {
+            if (paymentPurposeIds == null || positionsUuids == null) {
                 return null
             }
 

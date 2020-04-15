@@ -1,14 +1,17 @@
 package ru.evotor.framework.component
 
+import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.IBundlable
+import ru.evotor.framework.core.action.datamapper.IntegrationComponentMapper
 
 /**
  * Компонент интеграционного приложения, данные из манифеста
  *
  * @property packageName Название пакета
  * @property componentName Название компонента (сервис, активити и т.п.)
- * @property appUuid Уникальный идентификатора приложения в системе Эвотора
+ * @property appUuid Уникальный идентификатор приложения в Облаке Эвотор
  * @property appName Название приложения
  */
 open class IntegrationComponent(
@@ -16,7 +19,7 @@ open class IntegrationComponent(
         val componentName: String?,
         val appUuid: String?,
         val appName: String?
-) : Parcelable {
+) : Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
@@ -80,5 +83,9 @@ open class IntegrationComponent(
                 return arrayOfNulls(size)
             }
         }
+
+        fun from(bundle: Bundle?) = IntegrationComponentMapper.fromBundle(bundle)
     }
+
+    override fun toBundle(): Bundle = IntegrationComponentMapper.toBundle(this)
 }

@@ -4,6 +4,9 @@ import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.getMoney
 import java.math.BigDecimal
 
+/**
+ * Событие, которое возникает при оплате чека продажи сторонней платёжной системой.
+ */
 class PaymentSystemSellEvent(
         val receiptUuid: String,
         val accoundId: String?,
