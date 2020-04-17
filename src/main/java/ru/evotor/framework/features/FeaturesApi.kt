@@ -85,7 +85,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCOMARK)
+    fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHOES_MARK)
 
 
     private fun isFeatureActive(context: Context, path: String): Boolean =
