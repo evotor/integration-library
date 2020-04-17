@@ -73,6 +73,21 @@ object FeaturesApi {
      */
     fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка лекарств" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isMedicineMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICINE_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка обуви" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCOMARK)
+
+
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
