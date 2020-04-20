@@ -87,6 +87,20 @@ object FeaturesApi {
      */
     fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHOES_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Управленческие отчёты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isManagementReportsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MANAGEMENT_REPORTS)
+
+    /**
+     * Проверяет, активна ли функция "Удаление документов" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isDocumentCleanActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DOCUMENT_CLEAN)
+
 
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
