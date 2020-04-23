@@ -6,16 +6,10 @@ import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 
 /**
- * Дополнительные атрибуты для продажи Юр. лицу или ИП.
- * Применяются к позиции чека продажи.
+ * Данные об импорте продукции
+ * Применяются к позиции чека.
  */
-data class LegalPersonAttributes(
-        /**
-         * Акциз
-         * Тег 1229
-         */
-        @FiscalRequisite(tag = FiscalTags.EXCISE)
-        val excise: String? = null,
+data class ImportationData(
         /**
          * Код страны происхождения товара
          * Тег 1230
@@ -31,21 +25,18 @@ data class LegalPersonAttributes(
 ) : IBundlable {
 
     override fun toBundle(): Bundle = Bundle().apply {
-        putString(KEY_EXCISE, excise)
         putString(KEY_COUNTRY_ORIGIN_CODE, countryOriginCode)
         putString(KEY_CUSTOM_DECLARATION_NUMBER, customsDeclarationNumber)
     }
 
-    companion object  {
-        private const val KEY_EXCISE = "EXCISE"
+    companion object {
         private const val KEY_COUNTRY_ORIGIN_CODE = "COUNTRY_ORIGIN_CODE"
         private const val KEY_CUSTOM_DECLARATION_NUMBER = "CUSTOM_DECLARATION_NUMBER"
 
         @JvmStatic
-        fun from(bundle: Bundle?): LegalPersonAttributes? {
+        fun from(bundle: Bundle?): ImportationData? {
             return bundle?.let {
-                LegalPersonAttributes(
-                        it.getString(KEY_EXCISE),
+                ImportationData(
                         it.getString(KEY_COUNTRY_ORIGIN_CODE),
                         it.getString(KEY_CUSTOM_DECLARATION_NUMBER)
                 )

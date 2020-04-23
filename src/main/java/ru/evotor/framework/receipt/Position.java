@@ -21,9 +21,11 @@ import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
-import ru.evotor.framework.receipt.position.LegalPersonAttributes;
-import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.kkt.FiscalRequisite;
+import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
+import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.SettlementMethod;
 
 /**
  * Позиция чека.
@@ -32,7 +34,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -127,9 +129,9 @@ public class Position implements Parcelable {
 
     /**
      * Признак способа расчёта.
-     *
+     * <p>
      * Указывается для каждой позиции чека.
-     *
+     * <p>
      * Значение по умолчанию – [Полный расчёт]{@link ru.evotor.framework.receipt.position.SettlementMethod.FullSettlement}.
      */
     @NonNull
@@ -142,54 +144,18 @@ public class Position implements Parcelable {
     private AgentRequisites agentRequisites;
 
     /**
-     * Дополнительные атрибуты для продажи Юр. лицу или ИП.
+     * Данные об импорте продукции
      */
     @Nullable
-    private LegalPersonAttributes legalPersonAttributes;
+    private ImportationData importationData;
 
     /**
-     * Deprecated since 16.02.2018. Use position Builder.
+     * Акциз
+     * Тег 1229
      */
-    @Deprecated
-    public Position(
-            String uuid,
-            @Nullable String productUuid,
-            @Nullable String productCode,
-            ProductType productType,
-            String name,
-            String measureName,
-            int measurePrecision,
-            BigDecimal price,
-            BigDecimal priceWithDiscountPosition,
-            BigDecimal quantity,
-            @Nullable String barcode,
-            String mark,
-            @Nullable BigDecimal alcoholByVolume,
-            @Nullable Long alcoholProductKindCode,
-            @Nullable BigDecimal tareVolume,
-            Set<ExtraKey> extraKeys,
-            List<Position> subPositions
-    ) {
-        this(
-                uuid,
-                productUuid,
-                productCode,
-                productType,
-                name,
-                measureName,
-                measurePrecision,
-                null,
-                price,
-                priceWithDiscountPosition,
-                quantity,
-                barcode,
-                mark,
-                alcoholByVolume,
-                alcoholProductKindCode,
-                tareVolume, extraKeys,
-                subPositions
-        );
-    }
+    @FiscalRequisite(tag = FiscalTags.EXCISE)
+    @Nullable
+    private BigDecimal excise;
 
     public Position(
             String uuid,
@@ -257,7 +223,8 @@ public class Position implements Parcelable {
         this.attributes = position.getAttributes();
         this.settlementMethod = position.getSettlementMethod();
         this.agentRequisites = position.getAgentRequisites();
-        this.legalPersonAttributes = position.getLegalPersonAttributes();
+        this.importationData = position.getImportationData();
+        this.excise = position.getExcise();
     }
 
     /**
@@ -484,11 +451,20 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Дополнительные атрибуты для продажи Юр. лицу или ИП.
+     * @return Данные об импорте продукции
      */
     @Nullable
-    public LegalPersonAttributes getLegalPersonAttributes() {
-        return legalPersonAttributes;
+    public ImportationData getImportationData() {
+        return importationData;
+    }
+
+    /**
+     * @return Акциз. Тег 1229
+     */
+    @FiscalRequisite(tag = FiscalTags.EXCISE)
+    @Nullable
+    public BigDecimal getExcise() {
+        return excise;
     }
 
     @Override
@@ -507,14 +483,14 @@ public class Position implements Parcelable {
         Position position = (Position) o;
 
         if (measurePrecision != position.measurePrecision) return false;
-        if (uuid != null ? !uuid.equals(position.uuid) : position.uuid != null) return false;
-        if (productUuid != null ? !productUuid.equals(position.productUuid) : position.productUuid != null)
+        if (!Objects.equals(uuid, position.uuid)) return false;
+        if (!Objects.equals(productUuid, position.productUuid))
             return false;
-        if (productCode != null ? !productCode.equals(position.productCode) : position.productCode != null)
+        if (!Objects.equals(productCode, position.productCode))
             return false;
         if (productType != position.productType) return false;
-        if (name != null ? !name.equals(position.name) : position.name != null) return false;
-        if (measureName != null ? !measureName.equals(position.measureName) : position.measureName != null)
+        if (!Objects.equals(name, position.name)) return false;
+        if (!Objects.equals(measureName, position.measureName))
             return false;
         if (taxNumber != position.taxNumber) return false;
         if ((price != null ? price : BigDecimal.ZERO).compareTo(position.price != null ? position.price : BigDecimal.ZERO) != 0)
@@ -524,28 +500,30 @@ public class Position implements Parcelable {
             return false;
         if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
-        if (barcode != null ? !barcode.equals(position.barcode) : position.barcode != null)
+        if (!Objects.equals(barcode, position.barcode))
             return false;
-        if (mark != null ? !mark.equals(position.mark) : position.mark != null) return false;
+        if (!Objects.equals(mark, position.mark)) return false;
         if ((alcoholByVolume != null ? alcoholByVolume : BigDecimal.ZERO)
                 .compareTo(position.alcoholByVolume != null ? position.alcoholByVolume : BigDecimal.ZERO) != 0)
             return false;
-        if (alcoholProductKindCode != null ? !alcoholProductKindCode.equals(position.alcoholProductKindCode) : position.alcoholProductKindCode != null)
+        if (!Objects.equals(alcoholProductKindCode, position.alcoholProductKindCode))
             return false;
         if ((tareVolume != null ? tareVolume : BigDecimal.ZERO).compareTo(position.tareVolume != null ? position.tareVolume : BigDecimal.ZERO) != 0)
             return false;
-        if (extraKeys != null ? !extraKeys.equals(position.extraKeys) : position.extraKeys != null)
+        if (!Objects.equals(extraKeys, position.extraKeys))
             return false;
-        if (attributes != null ? !attributes.equals(position.attributes) : position.attributes != null)
+        if (!Objects.equals(attributes, position.attributes))
             return false;
         if (!settlementMethod.equals(position.settlementMethod))
             return false;
-        if (agentRequisites != null ? !agentRequisites.equals(position.agentRequisites) : position.agentRequisites != null)
+        if (!Objects.equals(agentRequisites, position.agentRequisites))
             return false;
-        if (!Objects.equals(legalPersonAttributes, position.legalPersonAttributes))
+        if (!Objects.equals(importationData, position.importationData))
+            return false;
+        if (!Objects.equals(excise, position.excise))
             return false;
 
-        return subPositions != null ? subPositions.equals(position.subPositions) : position.subPositions == null;
+        return Objects.equals(subPositions, position.subPositions);
     }
 
     @Override
@@ -571,7 +549,8 @@ public class Position implements Parcelable {
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (settlementMethod != null ? settlementMethod.hashCode() : 0);
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
-        result = 31 * result + (legalPersonAttributes != null ? legalPersonAttributes.hashCode() : 0);
+        result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
+        result = 31 * result + (excise != null ? excise.hashCode() : 0);
         return result;
     }
 
@@ -599,7 +578,8 @@ public class Position implements Parcelable {
                 ", attributes=" + attributes +
                 ", settlementMethod=" + settlementMethod +
                 ", agentRequisites=" + agentRequisites +
-                ", legalPersonAttributes=" + legalPersonAttributes +
+                ", importationData=" + importationData +
+                ", excise=" + excise +
                 '}';
     }
 
@@ -664,6 +644,8 @@ public class Position implements Parcelable {
         dest.writeParcelable(this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
+        dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
+        dest.writeSerializable(this.excise);
     }
 
     protected Position(Parcel in) {
@@ -723,6 +705,13 @@ public class Position implements Parcelable {
                 readSettlementMethodField(in);
                 readAgentRequisitesField(in);
             }
+            case 4: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -753,6 +742,10 @@ public class Position implements Parcelable {
 
     private void readAgentRequisitesField(Parcel in) {
         this.agentRequisites = AgentRequisites.Companion.from(in.readBundle(AgentRequisites.class.getClassLoader()));
+    }
+
+    private void readImportationData(Parcel in) {
+        this.importationData = ImportationData.Companion.from(in.readBundle(ImportationData.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -897,6 +890,7 @@ public class Position implements Parcelable {
             setShoesParams(mark);
             return this;
         }
+
         public Builder toMedicineMarked(
                 @NonNull String mark
         ) {
@@ -1027,8 +1021,13 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setLegalPersonAttributes(@Nullable  LegalPersonAttributes attributes) {
-            position.legalPersonAttributes = attributes;
+        public Builder setImportationData(@Nullable ImportationData importationData) {
+            position.importationData = importationData;
+            return this;
+        }
+
+        public Builder setExcise(@Nullable BigDecimal excise) {
+            position.excise = excise;
             return this;
         }
 
