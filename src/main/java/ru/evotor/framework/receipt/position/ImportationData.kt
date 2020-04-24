@@ -15,13 +15,13 @@ data class ImportationData(
          * Тег 1230
          */
         @FiscalRequisite(tag = FiscalTags.COUNTRY_ORIGIN_CODE)
-        val countryOriginCode: String? = null,
+        val countryOriginCode: String,
         /**
          * Номер таможенной декларации
          * Тег 1231
          */
         @FiscalRequisite(tag = FiscalTags.CUSTOM_DECLARATION_NUMBER)
-        val customsDeclarationNumber: String? = null
+        val customsDeclarationNumber: String
 ) : IBundlable {
 
     override fun toBundle(): Bundle = Bundle().apply {
