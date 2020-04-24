@@ -101,7 +101,7 @@ public final class PositionMapper {
         final ImportationData importationData =
                 ImportationData.from(bundle.getBundle(KEY_IMPORTATION_DATA));
 
-        final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_PRICE);
+        final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
