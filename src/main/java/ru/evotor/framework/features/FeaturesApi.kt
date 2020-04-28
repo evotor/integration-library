@@ -101,6 +101,13 @@ object FeaturesApi {
      */
     fun isDocumentCleanActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DOCUMENT_CLEAN)
 
+    /**
+     * Проверяет, активна ли функция "Резервное копирование" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isBackupsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BACKUPS)
+
 
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
