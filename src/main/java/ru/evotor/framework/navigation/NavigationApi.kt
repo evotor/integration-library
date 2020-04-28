@@ -22,6 +22,9 @@ object NavigationApi {
     private const val ACTION_CHANGE_USER = "evotor.intent.action.user.CHANGE"
     private const val ACTION_PRODUCT_LIST = "evotor.intent.action.commodity.SELECT"
 
+    // extras for edit sell intent
+    const val EXTRA_CLOSE_AFTER_OPERATION = "closeAfterOperation"
+
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
     const val EXTRA_PRODUCT_UUID = "productUuid"
@@ -34,11 +37,15 @@ object NavigationApi {
     /**
      * Создаёт `intent`, который открывает окно редактирования чека продажи.
      *
+     * @param closeAfterOperation нужно ли закрыть окно редактирования чека продажи после того,
+     * как чек был успешно зарегистрирован
      * @return intent
      */
     @JvmStatic
-    fun createIntentForSellReceiptEdit(): Intent {
-        return Intent(ACTION_EDIT_SELL)
+    fun createIntentForSellReceiptEdit(
+            closeAfterOperation: Boolean = false
+    ): Intent {
+        return Intent(ACTION_EDIT_SELL).apply { putExtra(EXTRA_CLOSE_AFTER_OPERATION, closeAfterOperation) }
     }
 
     /**
