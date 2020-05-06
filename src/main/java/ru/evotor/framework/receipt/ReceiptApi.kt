@@ -17,6 +17,7 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.receipt.position.mapper.PreferentialDiscountMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
@@ -384,6 +385,7 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setPreferentialDiscount(PreferentialDiscountMapper.readFromCursor(cursor))
         return builder.build()
     }
 

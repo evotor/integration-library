@@ -20,6 +20,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.PreferentialDiscount;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
@@ -48,6 +49,7 @@ public final class PositionMapper {
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
     private static final String KEY_IMPORTATION_DATA = "importationData";
     private static final String KEY_EXCISE = "excise";
+    private static final String KEY_PREFERENTIAL_DISCOUNT = "preferentialDiscount";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -102,6 +104,10 @@ public final class PositionMapper {
                 ImportationData.from(bundle.getBundle(KEY_IMPORTATION_DATA));
 
         final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
+
+        PreferentialDiscount preferentialDiscount =
+                PreferentialDiscount.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_DISCOUNT));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -134,6 +140,7 @@ public final class PositionMapper {
         builder.setAgentRequisites(agentRequisites);
         builder.setImportationData(importationData);
         builder.setExcise(excise);
+        builder.setPreferentialDiscount(preferentialDiscount);
         return builder.build();
     }
 

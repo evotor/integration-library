@@ -25,6 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.PreferentialDiscount;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 /**
@@ -34,7 +35,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 4;
+    private static final int VERSION = 5;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -142,6 +143,12 @@ public class Position implements Parcelable {
      */
     @Nullable
     private AgentRequisites agentRequisites;
+
+    /**
+     * Тип и сумма льготы для лекарственных препаратов
+     */
+    @Nullable
+    private PreferentialDiscount preferentialDiscount;
 
     /**
      * Данные об импорте продукции
@@ -467,6 +474,14 @@ public class Position implements Parcelable {
         return excise;
     }
 
+    /**
+     * @return Льгота для лекарственных препаратов
+     */
+    @Nullable
+    public PreferentialDiscount getPreferentialDiscount() {
+        return preferentialDiscount;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -520,6 +535,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(importationData, position.importationData))
             return false;
+        if (!Objects.equals(preferentialDiscount, position.preferentialDiscount))
+            return false;
         if (!Objects.equals(excise, position.excise))
             return false;
 
@@ -551,6 +568,7 @@ public class Position implements Parcelable {
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
+        result = 31 * result + (preferentialDiscount != null ? preferentialDiscount.hashCode() : 0);
         return result;
     }
 
@@ -580,6 +598,7 @@ public class Position implements Parcelable {
                 ", agentRequisites=" + agentRequisites +
                 ", importationData=" + importationData +
                 ", excise=" + excise +
+                ", preferentialDiscount=" + preferentialDiscount +
                 '}';
     }
 
@@ -644,8 +663,11 @@ public class Position implements Parcelable {
         dest.writeParcelable(this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
+        //ImportationData
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
+        //Preferential discount
+        dest.writeBundle(this.preferentialDiscount != null ? this.preferentialDiscount.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -712,6 +734,14 @@ public class Position implements Parcelable {
                 readImportationData(in);
                 this.excise = (BigDecimal) in.readSerializable();
             }
+            case 5: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                readPreferentialDiscount(in);
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -746,6 +776,10 @@ public class Position implements Parcelable {
 
     private void readImportationData(Parcel in) {
         this.importationData = ImportationData.Companion.from(in.readBundle(ImportationData.class.getClassLoader()));
+    }
+
+    private void readPreferentialDiscount(Parcel in) {
+        this.preferentialDiscount = PreferentialDiscount.Companion.from(in.readBundle(PreferentialDiscount.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1028,6 +1062,11 @@ public class Position implements Parcelable {
 
         public Builder setExcise(@Nullable BigDecimal excise) {
             position.excise = excise;
+            return this;
+        }
+
+        public Builder setPreferentialDiscount(@Nullable PreferentialDiscount preferentialDiscount) {
+            position.preferentialDiscount = preferentialDiscount;
             return this;
         }
 
