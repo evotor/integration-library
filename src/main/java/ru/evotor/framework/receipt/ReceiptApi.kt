@@ -20,7 +20,6 @@ import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
-import java.lang.Exception
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -216,6 +215,37 @@ object ReceiptApi {
         )
     }
 
+
+    /**
+     * Получить заголовок текущего открытого чека.
+     * @param context контекст приложения
+     * @param type тип чека
+     * @return чек или null, если чек закрыт
+     */
+    @JvmStatic
+    fun getReceiptHeader(context: Context, type: Receipt.Type): Receipt.Header? {
+        val baseUri = when (type) {
+            Receipt.Type.SELL -> CURRENT_SELL_RECEIPT_URI
+            Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
+            Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
+            Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
+        }
+
+        return context.contentResolver.query(
+                baseUri,
+                null,
+                null,
+                null,
+                null
+        )?.use {
+            if (it.moveToNext()) {
+                createReceiptHeader(it)
+            } else {
+                null
+            }
+        }
+    }
+
     /**
      * Запрос списка заголовков чека
      * @param context контекст приложения
@@ -309,7 +339,7 @@ object ReceiptApi {
                 } else {
                     null
                 },
-                if (subjectId != null){
+                if (subjectId != null) {
                     MedicineAttribute(subjectId)
                 } else {
                     null
@@ -335,7 +365,7 @@ object ReceiptApi {
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)),ProductType.NORMAL),
+                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
