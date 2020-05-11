@@ -16,6 +16,7 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
+import ru.evotor.framework.receipt.position.PreferentialDiscount
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialDiscountMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
@@ -317,6 +318,13 @@ object ReceiptApi {
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
         val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+        val preferentialDiscountType: PreferentialDiscount.PreferentialDiscountType? =
+                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_DISCOUNT_TYPE)?.let {
+                    PreferentialDiscount.PreferentialDiscountType.valueOf(it)
+                }
+        val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
+        val documentDate: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_DATE)
+        val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
         val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
@@ -341,7 +349,13 @@ object ReceiptApi {
                     null
                 },
                 if (subjectId != null) {
-                    MedicineAttribute(subjectId)
+                    MedicineAttribute(
+                            subjectId = subjectId,
+                            preferentialDiscountType = preferentialDiscountType,
+                            documentNumber = documentNumber,
+                            documentDate = documentDate,
+                            serialNumber = serialNumber
+                    )
                 } else {
                     null
                 }
