@@ -71,6 +71,7 @@ public final class PositionMapper {
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
         String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
+        String classificationCode = bundle.getString(KEY_CLASSIFICATION_CODE);
 
         Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
         Set<ExtraKey> extraKeys = new HashSet<>();
@@ -135,6 +136,7 @@ public final class PositionMapper {
         builder.setAgentRequisites(agentRequisites);
         builder.setImportationData(importationData);
         builder.setExcise(excise);
+        builder.setClassificationCode(classificationCode);
         return builder.build();
     }
 

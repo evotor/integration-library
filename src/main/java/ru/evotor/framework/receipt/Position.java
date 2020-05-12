@@ -158,8 +158,9 @@ public class Position implements Parcelable {
     private BigDecimal excise;
 
     /**
-     * Классификационный код
-     * Тег 1162
+     * Классификационный код (Номенклатурный код)
+     * Значение будет записано в тег 1162 только для немаркированных товаров.
+     * Строка штрихкода в формате EAN-13
      */
     @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
     @Nullable
