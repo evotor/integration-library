@@ -36,7 +36,8 @@ sealed class ProductItem(
             val measurePrecision: Int,
             val alcoholByVolume: BigDecimal?,
             val alcoholProductKindCode: Long?,
-            val tareVolume: BigDecimal?
+            val tareVolume: BigDecimal?,
+            val classificationCode: String?
     ) : ProductItem(
             uuid,
             parentUuid,

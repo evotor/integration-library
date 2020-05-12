@@ -48,6 +48,7 @@ public final class PositionMapper {
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
     private static final String KEY_IMPORTATION_DATA = "importationData";
     private static final String KEY_EXCISE = "excise";
+    private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -189,6 +190,10 @@ public final class PositionMapper {
         final BigDecimal excise = position.getExcise();
         if (excise != null) {
             bundle.putString(KEY_EXCISE, excise.toPlainString());
+        }
+        final String classificationCode = position.getClassificationCode();
+        if (classificationCode != null) {
+            bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
         return bundle;
     }
