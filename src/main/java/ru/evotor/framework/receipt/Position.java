@@ -478,7 +478,7 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Классификационный код. Тег 1162
+     * @return Классификационный код. Тег 1162 для обычного товара.
      */
     @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
     @Nullable
