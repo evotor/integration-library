@@ -363,7 +363,9 @@ object ReceiptApi {
         }
 
         val classificationCode = cursor.optString(PositionTable.COLUMN_CLASSIFICATION_CODE)
-        val excise = BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_EXCISE)))
+        val excise = cursor.optLong(PositionTable.COLUMN_EXCISE)?.let {
+            BigDecimal(it)
+        }
 
         val importationData = createImportationData(
                 cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
