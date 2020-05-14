@@ -105,6 +105,11 @@ object FiscalTags {
     const val PAYMENT_AGENT_OPERATION = 1044
 
     /**
+     * Код товара
+     */
+    const val PRODUCT_CODE = 1162
+
+    /**
      * Тип коррекции
      */
     const val CORRECTION_TYPE = 1173
