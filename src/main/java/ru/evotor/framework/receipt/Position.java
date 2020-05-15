@@ -669,7 +669,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
-        dest.writeSerializable(this.classificationCode);
+        dest.writeString(this.classificationCode);
     }
 
     protected Position(Parcel in) {
