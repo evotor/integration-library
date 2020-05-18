@@ -50,6 +50,7 @@ public final class PositionMapper {
     private static final String KEY_IMPORTATION_DATA = "importationData";
     private static final String KEY_EXCISE = "excise";
     private static final String KEY_PREFERENTIAL_DISCOUNT = "preferentialDiscount";
+    private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -72,6 +73,7 @@ public final class PositionMapper {
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
         String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
+        String classificationCode = bundle.getString(KEY_CLASSIFICATION_CODE);
 
         Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
         Set<ExtraKey> extraKeys = new HashSet<>();
@@ -141,6 +143,7 @@ public final class PositionMapper {
         builder.setImportationData(importationData);
         builder.setExcise(excise);
         builder.setPreferentialDiscount(preferentialDiscount);
+        builder.setClassificationCode(classificationCode);
         return builder.build();
     }
 
@@ -196,6 +199,10 @@ public final class PositionMapper {
         final BigDecimal excise = position.getExcise();
         if (excise != null) {
             bundle.putString(KEY_EXCISE, excise.toPlainString());
+        }
+        final String classificationCode = position.getClassificationCode();
+        if (classificationCode != null) {
+            bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
         return bundle;
     }

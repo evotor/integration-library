@@ -16,6 +16,7 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
+import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.PreferentialDiscount
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialDiscountMapper
@@ -375,6 +376,17 @@ object ReceiptApi {
         val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
             createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
         }
+
+        val classificationCode = cursor.optString(PositionTable.COLUMN_CLASSIFICATION_CODE)
+        val excise = cursor.optLong(PositionTable.COLUMN_EXCISE)?.let {
+            BigDecimal(it)
+        }
+
+        val importationData = createImportationData(
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
+        )
+
         val builder = Position.Builder
                 .copyFrom(Position(
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
@@ -400,8 +412,20 @@ object ReceiptApi {
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
                 .setPreferentialDiscount(PreferentialDiscountMapper.readFromCursor(cursor))
+                .setClassificationCode(classificationCode)
+                .setImportationData(importationData)
+                .setExcise(excise)
         return builder.build()
     }
+
+    private fun createImportationData(countryOriginCode: String?, customsDeclarationNumber: String?): ImportationData? {
+        return if (countryOriginCode.isNullOrBlank() || customsDeclarationNumber.isNullOrBlank()) {
+            null
+        } else {
+            ImportationData(countryOriginCode, customsDeclarationNumber)
+        }
+    }
+
 
     private fun createAttributesFromDBFormat(value: String?): Map<String, AttributeValue> {
         if (value == null) return emptyMap()

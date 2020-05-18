@@ -101,6 +101,13 @@ object FeaturesApi {
      */
     fun isDocumentCleanActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DOCUMENT_CLEAN)
 
+    /**
+     * Проверяет, активна ли функция "Тег 1162 для обычного товара" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isClassificationCodeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
+
 
     private fun isFeatureActive(context: Context, path: String): Boolean =
             context.contentResolver.query(
