@@ -25,7 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.PreferentialDiscount;
+import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 /**
@@ -148,7 +148,7 @@ public class Position implements Parcelable {
      * Тип и сумма льготы для лекарственных препаратов
      */
     @Nullable
-    private PreferentialDiscount preferentialDiscount;
+    private PreferentialMedicine preferentialMedicine;
 
     /**
      * Данные об импорте продукции
@@ -488,8 +488,8 @@ public class Position implements Parcelable {
      * @return Льгота для лекарственных препаратов
      */
     @Nullable
-    public PreferentialDiscount getPreferentialDiscount() {
-        return preferentialDiscount;
+    public PreferentialMedicine getPreferentialMedicine() {
+        return preferentialMedicine;
     }
 
     /**
@@ -554,7 +554,7 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(importationData, position.importationData))
             return false;
-        if (!Objects.equals(preferentialDiscount, position.preferentialDiscount))
+        if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
             return false;
         if (!Objects.equals(excise, position.excise))
             return false;
@@ -589,7 +589,7 @@ public class Position implements Parcelable {
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
-        result = 31 * result + (preferentialDiscount != null ? preferentialDiscount.hashCode() : 0);
+        result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         return result;
     }
@@ -620,7 +620,7 @@ public class Position implements Parcelable {
                 ", agentRequisites=" + agentRequisites +
                 ", importationData=" + importationData +
                 ", excise=" + excise +
-                ", preferentialDiscount=" + preferentialDiscount +
+                ", preferentialMedicine=" + preferentialMedicine +
                 ", classificationCode=" + classificationCode +
                 '}';
     }
@@ -690,7 +690,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
         //Preferential discount
-        dest.writeBundle(this.preferentialDiscount != null ? this.preferentialDiscount.toBundle() : null);
+        dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         dest.writeString(this.classificationCode);
     }
 
@@ -811,7 +811,7 @@ public class Position implements Parcelable {
     }
 
     private void readPreferentialDiscount(Parcel in) {
-        this.preferentialDiscount = PreferentialDiscount.Companion.from(in.readBundle(PreferentialDiscount.class.getClassLoader()));
+        this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1098,8 +1098,8 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setPreferentialDiscount(@Nullable PreferentialDiscount preferentialDiscount) {
-            position.preferentialDiscount = preferentialDiscount;
+        public Builder setPreferentialDiscount(@Nullable PreferentialMedicine preferentialMedicine) {
+            position.preferentialMedicine = preferentialMedicine;
             return this;
         }
 

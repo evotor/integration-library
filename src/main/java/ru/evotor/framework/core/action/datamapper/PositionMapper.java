@@ -20,7 +20,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.PreferentialDiscount;
+import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
@@ -107,8 +107,8 @@ public final class PositionMapper {
 
         final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
 
-        PreferentialDiscount preferentialDiscount =
-                PreferentialDiscount.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_DISCOUNT));
+        PreferentialMedicine preferentialMedicine =
+                PreferentialMedicine.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_DISCOUNT));
 
         if (quantity == null ||
                 price == null ||
@@ -142,7 +142,7 @@ public final class PositionMapper {
         builder.setAgentRequisites(agentRequisites);
         builder.setImportationData(importationData);
         builder.setExcise(excise);
-        builder.setPreferentialDiscount(preferentialDiscount);
+        builder.setPreferentialDiscount(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
         return builder.build();
     }

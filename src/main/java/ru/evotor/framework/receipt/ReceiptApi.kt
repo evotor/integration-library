@@ -17,9 +17,9 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
-import ru.evotor.framework.receipt.position.PreferentialDiscount
+import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.mapper.PreferentialDiscountMapper
+import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
@@ -319,12 +319,12 @@ object ReceiptApi {
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
         val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
-        val preferentialDiscountType: PreferentialDiscount.PreferentialDiscountType? =
-                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_DISCOUNT_TYPE)?.let {
-                    PreferentialDiscount.PreferentialDiscountType.valueOf(it)
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
+                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
                 }
         val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
-        val documentDate: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_DATE)
+        val documentDate: Date? = Date(cursor.optLong(PrintGroupSubTable.COLUMN_DOCUMENT_DATE) ?: 0)
         val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
@@ -352,7 +352,7 @@ object ReceiptApi {
                 if (subjectId != null) {
                     MedicineAttribute(
                             subjectId = subjectId,
-                            preferentialDiscountType = preferentialDiscountType,
+                            preferentialMedicineType = preferentialMedicineType,
                             documentNumber = documentNumber,
                             documentDate = documentDate,
                             serialNumber = serialNumber
@@ -411,7 +411,7 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
-                .setPreferentialDiscount(PreferentialDiscountMapper.readFromCursor(cursor))
+                .setPreferentialDiscount(PreferentialMedicineMapper.readFromCursor(cursor))
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)

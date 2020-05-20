@@ -161,20 +161,20 @@ object FiscalTags {
 
     /**
      * продажа лекарств
-     * дополнительный реквизит пользователя, структурный тег, в него входит 1085 и 1086. Указывается для всего чека
+     * дополнительный реквизит, структурный тег, в него входит 1085 и 1086. Указывается для всего чека
      */
-    const val COMPOUND_ADDITIONAL_REQUISITE = 1084
+    const val MEDICINE_COMPOUND_ADDITIONAL_REQUISITE = 1084
 
     /**
      * продажа лекарств
-     * наименование дополнительного реквизита пользователя.
+     * наименование дополнительного реквизита.
      */
-    const val ADDITIONAL_REQUISITE_TITLE = 1085
+    const val MEDICINE_ADDITIONAL_REQUISITE_TITLE = 1085
 
     /**
      * продажа лекарств
-     * значение дополнительного реквизита пользователя.
+     * значение дополнительного реквизита.
      */
-    const val ADDITIONAL_REQUISITE_VALUE = 1086
+    const val MEDICINE_ADDITIONAL_REQUISITE_VALUE = 1086
 
 }
