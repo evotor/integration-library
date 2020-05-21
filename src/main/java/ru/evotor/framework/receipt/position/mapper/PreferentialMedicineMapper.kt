@@ -17,11 +17,11 @@ internal object PreferentialMedicineMapper {
 
     internal fun readFromCursor(cursor: Cursor): PreferentialMedicine =
             PreferentialMedicine(
-                    type = cursor.safeGetInt(PositionTable.COLUMN_PREFERENTIAL_DISCOUNT)?.let {
+                    type = cursor.safeGetInt(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
                         PreferentialMedicine.PreferentialMedicineType.values()[it]
 
                     } ?: PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE,
-                    discountValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_DISCOUNT_AMOUNT)?.toBigDecimalOrNull()
+                    discountValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE_AMOUNT)?.toBigDecimalOrNull()
                             ?: BigDecimal.ZERO
             )
 

@@ -49,7 +49,7 @@ public final class PositionMapper {
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
     private static final String KEY_IMPORTATION_DATA = "importationData";
     private static final String KEY_EXCISE = "excise";
-    private static final String KEY_PREFERENTIAL_DISCOUNT = "preferentialDiscount";
+    private static final String KEY_PREFERENTIAL_MEDICINE = "preferentialMedicine";
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     @Nullable
@@ -108,7 +108,7 @@ public final class PositionMapper {
         final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
 
         PreferentialMedicine preferentialMedicine =
-                PreferentialMedicine.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_DISCOUNT));
+                PreferentialMedicine.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
         if (quantity == null ||
                 price == null ||
@@ -142,7 +142,7 @@ public final class PositionMapper {
         builder.setAgentRequisites(agentRequisites);
         builder.setImportationData(importationData);
         builder.setExcise(excise);
-        builder.setPreferentialDiscount(preferentialMedicine);
+        builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
         return builder.build();
     }

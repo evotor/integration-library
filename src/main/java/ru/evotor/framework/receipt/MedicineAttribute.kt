@@ -62,7 +62,7 @@ data class MedicineAttribute(
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_SUBJECT_ID, subjectId)
-            putString(KEY_PREFERENTIAL_DISCOUNT_TYPE, preferentialMedicineType?.name)
+            putString(KEY_PREFERENTIAL_MEDICINE_TYPE, preferentialMedicineType?.name)
             putString(KEY_DOCUMENT_NUMBER, documentNumber)
             putLong(KEY_DOCUMENT_DATE, documentDate?.time ?: 0)
             putString(KEY_SERIAL_NUMBER, serialNumber)
@@ -81,9 +81,10 @@ data class MedicineAttribute(
          */
         private const val VERSION = 2
         private const val KEY_SUBJECT_ID = "SUBJECT_ID"
-        private const val KEY_PREFERENTIAL_DISCOUNT_TYPE = "PREFERENTIAL_DISCOUNT_TYPE"
+        private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PREFERENTIAL_MEDICINE_TYPE"
         private const val KEY_DOCUMENT_NUMBER = "DOCUMENT_NUMBER"
         private const val KEY_DOCUMENT_DATE = "DOCUMENT_DATE"
+
         private const val KEY_SERIAL_NUMBER = "SERIAL_NUMBER"
 
         fun fromBundle(bundle: Bundle?): MedicineAttribute? {
@@ -91,9 +92,8 @@ data class MedicineAttribute(
                 val subjectId = it.getString(KEY_SUBJECT_ID) ?: return@let null
                 MedicineAttribute(
                         subjectId = subjectId,
-                        preferentialMedicineType = it.getString(KEY_PREFERENTIAL_DISCOUNT_TYPE)?.let { s ->
-                            PreferentialMedicineType.valueOf(s)
-                        },
+                        preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java,
+                                it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE), PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
                         documentNumber = it.getString(KEY_DOCUMENT_NUMBER),
                         documentDate = Date(it.getLong(KEY_DOCUMENT_DATE)),
                         serialNumber = it.getString(KEY_SERIAL_NUMBER)

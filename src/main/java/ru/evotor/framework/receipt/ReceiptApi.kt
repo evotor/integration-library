@@ -411,7 +411,7 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
-                .setPreferentialDiscount(PreferentialMedicineMapper.readFromCursor(cursor))
+                .setPreferentialMedicine(PreferentialMedicineMapper.readFromCursor(cursor))
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)

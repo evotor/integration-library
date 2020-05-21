@@ -689,7 +689,7 @@ public class Position implements Parcelable {
         //ImportationData
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
-        //Preferential discount
+        //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         dest.writeString(this.classificationCode);
     }
@@ -1098,7 +1098,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setPreferentialDiscount(@Nullable PreferentialMedicine preferentialMedicine) {
+        public Builder setPreferentialMedicine(@Nullable PreferentialMedicine preferentialMedicine) {
             position.preferentialMedicine = preferentialMedicine;
             return this;
         }
