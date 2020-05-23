@@ -17,7 +17,9 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
+import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
@@ -317,6 +319,13 @@ object ReceiptApi {
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
         val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
+                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
+                }
+        val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
+        val documentDate: Date? = Date(cursor.optLong(PrintGroupSubTable.COLUMN_DOCUMENT_DATE) ?: 0)
+        val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
         val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
@@ -341,7 +350,13 @@ object ReceiptApi {
                     null
                 },
                 if (subjectId != null) {
-                    MedicineAttribute(subjectId)
+                    MedicineAttribute(
+                            subjectId = subjectId,
+                            preferentialMedicineType = preferentialMedicineType,
+                            documentNumber = documentNumber,
+                            documentDate = documentDate,
+                            serialNumber = serialNumber
+                    )
                 } else {
                     null
                 }
@@ -396,6 +411,7 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setPreferentialMedicine(PreferentialMedicineMapper.readFromCursor(cursor))
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)
