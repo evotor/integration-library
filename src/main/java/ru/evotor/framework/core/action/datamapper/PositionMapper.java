@@ -24,32 +24,57 @@ import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
+
     public static final String KEY_POSITION = "position";
 
     private static final String KEY_UUID = "uuid";
+
     private static final String KEY_PRODUCT_UUID = "productUuid";
+
     private static final String KEY_PRODUCT_CODE = "productCode";
+
     private static final String KEY_PRODUCT_TYPE = "productType";
+
     private static final String KEY_PRICE = "price";
+
     private static final String KEY_PRICE_WITH_DISCOUNT_POSITION = "priceWithDiscountPosition";
+
     private static final String KEY_QUANTITY = "quantity";
+
     private static final String KEY_NAME = "name";
+
     private static final String KEY_MEASURE_NAME = "measureName";
+
     private static final String KEY_MEASURE_PRECISION = "measurePrecision";
+
     private static final String KEY_TAX_NUMBER = "taxNumber";
+
     private static final String KEY_BARCODE = "barcode";
+
     private static final String KEY_MARK = "mark";
+
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
+
     private static final String KEY_ALCOHOL_PRODUCT_KIND_CODE = "alcoholProductKindCode";
+
     private static final String KEY_TARE_VOLUME = "tareVolume";
+
     private static final String KEY_EXTRA_KEYS = "extraKeys";
+
     private static final String KEY_SUB_POSITION = "subPosition";
+
     private static final String KEY_ATTRIBUTES = "attributes";
+
     private static final String KEY_SETTLEMENT_METHOD = "settlementMethod";
+
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
+
     private static final String KEY_IMPORTATION_DATA = "importationData";
+
     private static final String KEY_EXCISE = "excise";
+
     private static final String KEY_PREFERENTIAL_MEDICINE = "preferentialMedicine";
+
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     @Nullable
@@ -108,7 +133,7 @@ public final class PositionMapper {
         final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
 
         PreferentialMedicine preferentialMedicine =
-                PreferentialMedicine.Companion.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
+                PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
         if (quantity == null ||
                 price == null ||
@@ -152,6 +177,7 @@ public final class PositionMapper {
         if (position == null) {
             return null;
         }
+
         Bundle bundle = new Bundle();
         bundle.putString(KEY_UUID, position.getUuid());
         bundle.putString(KEY_PRODUCT_UUID, position.getProductUuid());
@@ -195,6 +221,9 @@ public final class PositionMapper {
         final Bundle importationDataBundle =
                 importationData != null ? importationData.toBundle() : null;
         bundle.putBundle(KEY_IMPORTATION_DATA, importationDataBundle);
+
+        final PreferentialMedicine preferentialMedicine = position.getPreferentialMedicine();
+        bundle.putBundle(KEY_PREFERENTIAL_MEDICINE, preferentialMedicine != null ? preferentialMedicine.toBundle() : null);
 
         final BigDecimal excise = position.getExcise();
         if (excise != null) {

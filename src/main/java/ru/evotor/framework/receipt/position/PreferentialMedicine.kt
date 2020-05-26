@@ -10,9 +10,10 @@ import java.math.BigDecimal
  */
 data class PreferentialMedicine(
         val type : PreferentialMedicineType,
-        val discountValue: BigDecimal
+        val preferentialValue: BigDecimal
 ) : IBundlable{
     companion object{
+        @JvmStatic
         fun from(bundle: Bundle?): PreferentialMedicine? = PreferentialMedicineMapper.readFromBundle(bundle)
     }
     override fun toBundle(): Bundle = PreferentialMedicineMapper.writeToBundle(this)
