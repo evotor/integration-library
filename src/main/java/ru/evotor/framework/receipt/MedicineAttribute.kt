@@ -40,6 +40,7 @@ data class MedicineAttribute(
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(subjectId)
             parcel.writeString(preferentialMedicineType?.name)
+            parcel.writeParcelable(medicineAdditionalDetails, flag)
         }
     }
 
@@ -51,6 +52,7 @@ data class MedicineAttribute(
         return Bundle().apply {
             putString(KEY_SUBJECT_ID, subjectId)
             putString(KEY_PREFERENTIAL_MEDICINE_TYPE, preferentialMedicineType?.name)
+            putBundle(KEY_MEDICINE_ADDITIONAL_DETAILS, medicineAdditionalDetails?.toBundle())
         }
     }
 
@@ -76,7 +78,7 @@ data class MedicineAttribute(
                         subjectId = subjectId,
                         preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java,
                                 it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE), PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                        medicineAdditionalDetails = it.getParcelable(KEY_MEDICINE_ADDITIONAL_DETAILS)
+                        medicineAdditionalDetails = MedicineAdditionalDetails.fromBundle(it.getBundle(KEY_MEDICINE_ADDITIONAL_DETAILS))
                 )
             }
         }
