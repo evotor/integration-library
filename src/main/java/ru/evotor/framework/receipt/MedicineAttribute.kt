@@ -27,21 +27,12 @@ data class MedicineAttribute(
          * Необходим для формирования тега 1085
          */
         val preferentialMedicineType: PreferentialMedicineType? = null,
+
         /**
-         * Номер документа, не более 200 символов;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
+         * Дополнительные реквизиты пользователя (тег 1086)
+         * обязательны для рецепта с полной, либо частичной льготой
          */
-        val documentNumber: String? = null,
-        /**
-         * Дата документа в формате ГГММДД;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
-         */
-        val documentDate: Date? = null,
-        /**
-         * номер серии льготного рецепта;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
-         */
-        val serialNumber: String? = null
+        val medicineAdditionalDetails: MedicineAdditionalDetails? = null
 
 ) : Parcelable, IBundlable {
 
@@ -49,9 +40,7 @@ data class MedicineAttribute(
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(subjectId)
             parcel.writeString(preferentialMedicineType?.name)
-            parcel.writeString(documentNumber)
-            parcel.writeLong(documentDate?.time ?: 0)
-            parcel.writeString(serialNumber)
+            parcel.writeParcelable(medicineAdditionalDetails, flag)
         }
     }
 
@@ -63,9 +52,7 @@ data class MedicineAttribute(
         return Bundle().apply {
             putString(KEY_SUBJECT_ID, subjectId)
             putString(KEY_PREFERENTIAL_MEDICINE_TYPE, preferentialMedicineType?.name)
-            putString(KEY_DOCUMENT_NUMBER, documentNumber)
-            putLong(KEY_DOCUMENT_DATE, documentDate?.time ?: 0)
-            putString(KEY_SERIAL_NUMBER, serialNumber)
+            putBundle(KEY_MEDICINE_ADDITIONAL_DETAILS, medicineAdditionalDetails?.toBundle())
         }
     }
 
@@ -82,10 +69,7 @@ data class MedicineAttribute(
         private const val VERSION = 2
         private const val KEY_SUBJECT_ID = "SUBJECT_ID"
         private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PREFERENTIAL_MEDICINE_TYPE"
-        private const val KEY_DOCUMENT_NUMBER = "DOCUMENT_NUMBER"
-        private const val KEY_DOCUMENT_DATE = "DOCUMENT_DATE"
-
-        private const val KEY_SERIAL_NUMBER = "SERIAL_NUMBER"
+        private const val KEY_MEDICINE_ADDITIONAL_DETAILS = "MEDICINE_ADDITIONAL_DETAILS"
 
         fun fromBundle(bundle: Bundle?): MedicineAttribute? {
             return bundle?.let {
@@ -94,9 +78,7 @@ data class MedicineAttribute(
                         subjectId = subjectId,
                         preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java,
                                 it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE), PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                        documentNumber = it.getString(KEY_DOCUMENT_NUMBER),
-                        documentDate = Date(it.getLong(KEY_DOCUMENT_DATE)),
-                        serialNumber = it.getString(KEY_SERIAL_NUMBER)
+                        medicineAdditionalDetails = MedicineAdditionalDetails.fromBundle(it.getBundle(KEY_MEDICINE_ADDITIONAL_DETAILS))
                 )
             }
         }
@@ -114,9 +96,7 @@ data class MedicineAttribute(
                                 subjectId = parcel.readString(),
                                 preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
                                         PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                                documentNumber = parcel.readString(),
-                                documentDate = Date(parcel.readLong()),
-                                serialNumber = parcel.readString()
+                                medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
                         )
                     }
                 }

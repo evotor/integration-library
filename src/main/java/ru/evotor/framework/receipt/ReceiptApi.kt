@@ -318,14 +318,6 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
-        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
-        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
-                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_MEDICINE_TYPE)?.let {
-                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
-                }
-        val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
-        val documentDate: Date? = Date(cursor.optLong(PrintGroupSubTable.COLUMN_DOCUMENT_DATE) ?: 0)
-        val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
         val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
@@ -335,6 +327,18 @@ object ReceiptApi {
                 PurchaserType.values()[it.toInt() % PurchaserType.values().size]
             }
         }
+        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
+                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
+                }
+        val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
+        val documentDate: Date? = cursor.optLong(PrintGroupSubTable.COLUMN_DOCUMENT_DATE)?.let { Date(it) }
+        val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
+        val medicineAdditionalDetails: MedicineAdditionalDetails? =
+                if (documentDate != null && documentNumber != null && serialNumber != null)
+                    MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
+                else null
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -353,9 +357,7 @@ object ReceiptApi {
                     MedicineAttribute(
                             subjectId = subjectId,
                             preferentialMedicineType = preferentialMedicineType,
-                            documentNumber = documentNumber,
-                            documentDate = documentDate,
-                            serialNumber = serialNumber
+                            medicineAdditionalDetails = medicineAdditionalDetails
                     )
                 } else {
                     null

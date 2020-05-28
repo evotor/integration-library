@@ -145,12 +145,6 @@ public class Position implements Parcelable {
     private AgentRequisites agentRequisites;
 
     /**
-     * Тип и сумма льготы для лекарственных препаратов
-     */
-    @Nullable
-    private PreferentialMedicine preferentialMedicine;
-
-    /**
      * Данные об импорте продукции
      */
     @Nullable
@@ -172,6 +166,12 @@ public class Position implements Parcelable {
     @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
     @Nullable
     private String classificationCode;
+
+    /**
+     * Тип и сумма льготы для лекарственных препаратов
+     */
+    @Nullable
+    private PreferentialMedicine preferentialMedicine;
 
     public Position(
             String uuid,
@@ -242,6 +242,7 @@ public class Position implements Parcelable {
         this.importationData = position.getImportationData();
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
+        this.preferentialMedicine = position.getPreferentialMedicine();
     }
 
     /**
@@ -485,20 +486,20 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Льгота для лекарственных препаратов
-     */
-    @Nullable
-    public PreferentialMedicine getPreferentialMedicine() {
-        return preferentialMedicine;
-    }
-
-    /**
      * @return Классификационный код. Тег 1162 для обычного товара.
      */
     @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
     @Nullable
     public String getClassificationCode() {
         return classificationCode;
+    }
+
+    /**
+     * @return Льгота для лекарственных препаратов
+     */
+    @Nullable
+    public PreferentialMedicine getPreferentialMedicine() {
+        return preferentialMedicine;
     }
 
     @Override
@@ -554,11 +555,13 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(importationData, position.importationData))
             return false;
+        if (!Objects.equals(excise, position.excise)) {
+            return false;
+        }
+        if (!Objects.equals(classificationCode, position.classificationCode)) {
+            return false;
+        }
         if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
-            return false;
-        if (!Objects.equals(excise, position.excise))
-            return false;
-        if (!Objects.equals(classificationCode, position.classificationCode))
             return false;
 
         return Objects.equals(subPositions, position.subPositions);
@@ -589,8 +592,8 @@ public class Position implements Parcelable {
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
-        result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
+        result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         return result;
     }
 
@@ -620,8 +623,8 @@ public class Position implements Parcelable {
                 ", agentRequisites=" + agentRequisites +
                 ", importationData=" + importationData +
                 ", excise=" + excise +
-                ", preferentialMedicine=" + preferentialMedicine +
                 ", classificationCode=" + classificationCode +
+                ", preferentialMedicine=" + preferentialMedicine +
                 '}';
     }
 
@@ -689,9 +692,9 @@ public class Position implements Parcelable {
         //ImportationData
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
+        dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
-        dest.writeString(this.classificationCode);
     }
 
     protected Position(Parcel in) {
@@ -772,7 +775,8 @@ public class Position implements Parcelable {
                 readAgentRequisitesField(in);
                 readImportationData(in);
                 this.excise = (BigDecimal) in.readSerializable();
-                readPreferentialDiscount(in);
+                this.classificationCode = in.readString();
+                readPreferentialMedicine(in);
             }
         }
 
@@ -810,7 +814,7 @@ public class Position implements Parcelable {
         this.importationData = ImportationData.Companion.from(in.readBundle(ImportationData.class.getClassLoader()));
     }
 
-    private void readPreferentialDiscount(Parcel in) {
+    private void readPreferentialMedicine(Parcel in) {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
