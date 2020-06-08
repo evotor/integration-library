@@ -69,9 +69,9 @@ object FeaturesApi {
     /**
      * Проверяет, активна ли функция "Внешний УТМ" на данном терминале
      *
-     * @return `true` если функция активна; `false` если функция не активна.
+     * @return `true` если функция активна или данных о фиче нет; `false` если функция не активна.
      */
-    fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM)
+    fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM, true)
 
     /**
      * Проверяет, активна ли функция "Маркировка лекарств" на данном терминале
@@ -109,7 +109,7 @@ object FeaturesApi {
     fun isClassificationCodeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
 
 
-    private fun isFeatureActive(context: Context, path: String): Boolean =
+    private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
                     null,
@@ -119,5 +119,5 @@ object FeaturesApi {
             )?.use {
                 it.moveToFirst()
                 it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
-            } ?: false
+            } ?: defaultValue
 }
