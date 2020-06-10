@@ -723,11 +723,13 @@ public class Position implements Parcelable {
             case 2: {
                 readAttributesField(in);
                 readSettlementMethodField(in);
+                break;
             }
             case 3: {
                 readAttributesField(in);
                 readSettlementMethodField(in);
                 readAgentRequisitesField(in);
+                break;
             }
             case 4: {
                 readAttributesField(in);
@@ -735,6 +737,7 @@ public class Position implements Parcelable {
                 readAgentRequisitesField(in);
                 readImportationData(in);
                 this.excise = (BigDecimal) in.readSerializable();
+                break;
             }
             case 5: {
                 readAttributesField(in);
@@ -743,6 +746,7 @@ public class Position implements Parcelable {
                 readImportationData(in);
                 this.excise = (BigDecimal) in.readSerializable();
                 this.classificationCode = in.readString();
+                break;
             }
         }
 
