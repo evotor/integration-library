@@ -9,7 +9,7 @@ import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 
 /**
- * Команда снятия Z отчета
+ * Команда снятия и печати Z-отчёта.
  */
 class PrintZReportCommand() : IBundlable {
 
@@ -33,6 +33,11 @@ class PrintZReportCommand() : IBundlable {
     }
 
     companion object {
+        /**
+         * Разрешение для снятия и печати Z-отчёта.
+         *
+         * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
+         */
         const val NAME_PERMISSION = "ru.evotor.permission.PRINT_Z_REPORT"
         const val NAME = "evo.v2.zreport.print"
 

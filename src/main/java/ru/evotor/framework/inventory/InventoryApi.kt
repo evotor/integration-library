@@ -9,6 +9,7 @@ import ru.evotor.framework.inventory.field.DictionaryField
 import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
 import ru.evotor.framework.inventory.field.TextField
+import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
 
@@ -18,7 +19,8 @@ import java.math.BigDecimal
 
 
 object InventoryApi {
-    @JvmField val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
+    @JvmField
+    val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.inventory")
 
     const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
 
@@ -42,6 +44,21 @@ object InventoryApi {
 
         return barcodesList
     }
+
+    @JvmStatic
+    fun getAlcoCodesForProduct(context: Context, productUuid: String): List<String>? =
+            context.contentResolver.query(
+                    AlcoCodeTable.URI,
+                    arrayOf(AlcoCodeTable.COLUMN_ALCO_CODE),
+                    "${AlcoCodeTable.COLUMN_COMMODITY_UUID} = ?",
+                    arrayOf(productUuid),
+                    null
+            )?.let {
+                (object : ru.evotor.query.Cursor<String>(it) {
+                    override fun getValue() = getString(getColumnIndex(AlcoCodeTable.COLUMN_ALCO_CODE))
+
+                }).toList()
+            }
 
     @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
@@ -74,7 +91,8 @@ object InventoryApi {
                                         alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                                         alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
-                                        taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT)
+                                        taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
+                                        classificationCode = cursor.optString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE))
                                 )
                             }
                         }
@@ -86,6 +104,31 @@ object InventoryApi {
                 }
         return null
     }
+
+    @JvmStatic
+    fun getProductsByAlcoCode(context: Context, alcoCode: String): List<ProductItem.Product?>? =
+            context.contentResolver.query(
+                    AlcoCodeTable.URI,
+                    arrayOf(AlcoCodeTable.COLUMN_COMMODITY_UUID),
+                    "${AlcoCodeTable.COLUMN_ALCO_CODE} = ?",
+                    arrayOf(alcoCode),
+                    null
+            )?.use {
+                ArrayList<ProductItem.Product?>().apply {
+                    fun addValue() = this.add(
+                            getProductByUuid(
+                                    context,
+                                    it.getString(it.getColumnIndex(AlcoCodeTable.COLUMN_COMMODITY_UUID))
+                            ) as ProductItem.Product?
+                    )
+                    if (it.moveToFirst()) {
+                        addValue()
+                        while (it.moveToNext()) {
+                            addValue()
+                        }
+                    }
+                }
+            }
 
     @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {

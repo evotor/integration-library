@@ -3,12 +3,29 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.Nullable;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
+import ru.evotor.framework.ParcelableUtils;
+
 /**
- * Описание характеристик печатной группы - отдельного печатного документа в рамках одного чека
+ * Печатная группа – элемент кассового чека, содержащий данные об организации, которая осуществляет торговую операцию.
  */
 public class PrintGroup implements Parcelable {
+
     /**
-     * Идентификатор печатной группы
+     * Текущая версия объекта PrintGroup.
+     */
+    private static final int VERSION = 2;
+
+    private static final String DEFAULT_PRINT_GROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
+
+    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null);
+
+    /**
+     * Идентификатор печатной группы.
      */
     private String identifier;
     /**
@@ -16,27 +33,40 @@ public class PrintGroup implements Parcelable {
      */
     private Type type;
     /**
-     * Название организации
+     * Название организации, на которую зарегестрированная касса.
      */
     private String orgName;
     /**
-     * ИНН организации
+     * ИНН организации, на которую зарегестрированная касса.
      */
     private String orgInn;
     /**
-     * Адрес организации
+     * Адрес организации, на которую зарегестрированная касса.
      */
     private String orgAddress;
     /**
-     * Система налогооблажения
+     * Система налогообложения, которая применялась при расчёте.
      */
     private TaxationSystem taxationSystem;
 
     /**
-     * Печатать/не печатать чек
+     * Флаг, указывающий необходимость печати чека.
      */
     private boolean shouldPrintReceipt;
 
+    /**
+     * Реквизиты покупателя.
+     */
+    @Nullable
+    private Purchaser purchaser;
+
+    /**
+     * Аттрибуты маркированных лекарств
+     */
+    @Nullable
+    private MedicineAttribute medicineAttribute;
+
+    @Deprecated
     public PrintGroup(
             String identifier,
             Type type,
@@ -46,6 +76,20 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt
     ) {
+        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null);
+    }
+
+    public PrintGroup(
+            String identifier,
+            Type type,
+            String orgName,
+            String orgInn,
+            String orgAddress,
+            TaxationSystem taxationSystem,
+            boolean shouldPrintReceipt,
+            @Nullable Purchaser purchaser,
+            @Nullable MedicineAttribute medicineAttribute
+    ) {
         this.identifier = identifier;
         this.type = type;
         this.orgName = orgName;
@@ -53,6 +97,8 @@ public class PrintGroup implements Parcelable {
         this.orgAddress = orgAddress;
         this.taxationSystem = taxationSystem;
         this.shouldPrintReceipt = shouldPrintReceipt;
+        this.purchaser = purchaser;
+        this.medicineAttribute = medicineAttribute;
     }
 
     public String getIdentifier() {
@@ -83,6 +129,16 @@ public class PrintGroup implements Parcelable {
         return shouldPrintReceipt;
     }
 
+    @Nullable
+    public Purchaser getPurchaser() {
+        return purchaser;
+    }
+
+    @Nullable
+    public MedicineAttribute getMedicineAttribute() {
+        return medicineAttribute;
+    }
+
     public enum Type {
         /**
          * Кассовый чек, напечатанный средствами ККМ
@@ -104,7 +160,7 @@ public class PrintGroup implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, final int flags) {
         dest.writeString(this.identifier);
         dest.writeInt(this.type == null ? -1 : this.type.ordinal());
         dest.writeString(this.orgName);
@@ -112,6 +168,17 @@ public class PrintGroup implements Parcelable {
         dest.writeString(this.orgAddress);
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
         dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
+
+        ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
+            @Override
+            public Unit invoke(Parcel parcel) {
+                /* version = 1*/
+                parcel.writeParcelable(PrintGroup.this.purchaser, flags);
+                /* version = 2*/
+                parcel.writeParcelable(PrintGroup.this.medicineAttribute, flags);
+                return Unit.INSTANCE;
+            }
+        });
     }
 
     protected PrintGroup(Parcel in) {
@@ -128,6 +195,22 @@ public class PrintGroup implements Parcelable {
         } catch (Exception e) {
             return;
         }
+
+        ParcelableUtils.readExpand(in, VERSION, new Function2<Parcel, Integer, Unit>() {
+            @Override
+            public Unit invoke(Parcel parcel, Integer version) {
+                if (version >= 1) {
+                    PrintGroup.this.purchaser = parcel.readParcelable(Purchaser.class.getClassLoader());
+                }
+
+                if (version >= 2) {
+                    PrintGroup.this.medicineAttribute = parcel.readParcelable(MedicineAttribute.class.getClassLoader());
+                }
+
+                return Unit.INSTANCE;
+            }
+        });
+
     }
 
     public static final Parcelable.Creator<PrintGroup> CREATOR = new Parcelable.Creator<PrintGroup>() {
@@ -157,7 +240,11 @@ public class PrintGroup implements Parcelable {
         if (orgAddress != null ? !orgAddress.equals(that.orgAddress) : that.orgAddress != null)
             return false;
         if (shouldPrintReceipt != that.shouldPrintReceipt) return false;
-        return taxationSystem == that.taxationSystem;
+        if (taxationSystem != that.taxationSystem) return false;
+        if (purchaser != null ? !purchaser.equals(that.purchaser) : that.purchaser != null)
+            return false;
+
+        return medicineAttribute != null ? medicineAttribute.equals(that.medicineAttribute) : that.medicineAttribute == null;
     }
 
     @Override
@@ -168,6 +255,15 @@ public class PrintGroup implements Parcelable {
         result = 31 * result + (orgInn != null ? orgInn.hashCode() : 0);
         result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
         result = 31 * result + (taxationSystem != null ? taxationSystem.hashCode() : 0);
+        result = 31 * result + (shouldPrintReceipt ? 1 : 0);
+        result = 31 * result + (purchaser != null ? purchaser.hashCode() : 0);
+        result = 31 * result + (medicineAttribute != null ? medicineAttribute.hashCode() : 0);
+
         return result;
     }
+
+    public boolean isDefault() {
+        return DEFAULT_PRINT_GROUP_IDENTIFIER.equals(identifier);
+    }
+
 }

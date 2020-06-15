@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import ru.evotor.framework.ColorUtils
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
@@ -39,6 +38,7 @@ object IntegrationComponentViewDataApi {
         }
         val metaData = resolveInfo.serviceInfo.metaData
         val paymentSystemId = getPaymentSystemId(metaData) ?: return null
+        val paymentType = getPaymentType(metaData) ?: PaymentType.ELECTRON
         val packageManager = context.packageManager
         var appUuid: String? = null
         try {
@@ -56,7 +56,7 @@ object IntegrationComponentViewDataApi {
             return null
         }
         val paymentSystem = PaymentSystem(
-                PaymentType.ELECTRON,
+                paymentType,
                 resolveInfo.loadLabel(packageManager).toString(),
                 paymentSystemId
         )
@@ -70,7 +70,7 @@ object IntegrationComponentViewDataApi {
         val backgroundColor =  if (metaData.containsKey(BACKGROUND_COLOR_KEY))
             metaData.getInt(BACKGROUND_COLOR_KEY)
         else
-            ContextCompat.getColor(context, R.color.white)
+            context.getColor(R.color.white)
         return PaymentPerformerViewData(
                 paymentPerformer,
                 resolveInfo.loadIcon(packageManager),
@@ -82,4 +82,10 @@ object IntegrationComponentViewDataApi {
     private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
 
     private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
+
+    private fun getPaymentType(metaData: Bundle) = try {
+        PaymentType.valueOf(metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_TYPE, null))
+    } catch (t: Throwable) {
+        null
+    }
 }

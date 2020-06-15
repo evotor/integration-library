@@ -1,32 +1,41 @@
 package ru.evotor.framework.inventory;
 
 /**
- * Created by a.kuznetsov on 30/04/2017.
+ * Тип товара.
  */
-
 public enum ProductType {
     /**
-     * Товар
+     * Обычный товар.
      */
     NORMAL,
 
     /**
-     * Маркированный алкоголь
+     * Маркированный алкоголь.
      */
     ALCOHOL_MARKED,
 
     /**
-     * Немаркированный алкоголь
+     * Немаркированный алкоголь.
      */
     ALCOHOL_NOT_MARKED,
 
     /**
-     * Услуга
+     * Услуга.
      */
     SERVICE,
 
     /**
-     * Маркированный табак
+     * Маркированный табак.
      */
-    TOBACCO_MARKED
+    TOBACCO_MARKED,
+
+    /**
+     * Маркированная обувь
+     */
+    SHOES_MARKED,
+
+    /**
+     * Маркированные лекарства
+     */
+    MEDICINE_MARKED,
 }

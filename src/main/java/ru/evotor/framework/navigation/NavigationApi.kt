@@ -2,6 +2,11 @@ package ru.evotor.framework.navigation
 
 import android.content.Intent
 
+/**
+ * Интерфейс для вызова различных окон смарт-терминала.
+ *
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_navigation.html">Вызов окон смарт-терминала</a>
+ */
 object NavigationApi {
     private const val ACTION_EDIT_SELL = "evotor.intent.action.edit.SELL"
     private const val ACTION_EDIT_PAYBACK = "evotor.intent.action.edit.PAYBACK"
@@ -17,25 +22,36 @@ object NavigationApi {
     private const val ACTION_CHANGE_USER = "evotor.intent.action.user.CHANGE"
     private const val ACTION_PRODUCT_LIST = "evotor.intent.action.commodity.SELECT"
 
+    // extras for edit sell intent
+    const val EXTRA_CLOSE_AFTER_OPERATION = "closeAfterOperation"
+
     // extras for new/edit commodity intent
     const val EXTRA_BARCODE = "barcode"
     const val EXTRA_PRODUCT_UUID = "productUuid"
 
     /**
-     * ключ для получения uuid продукта при успешном добавлении
+     * Ключ для получения идентификатора созданного товара.
      */
     const val EXTRA_ADDED_PRODUCT_UUID = "addedProductUuid"
 
     /**
-     * форма наполнения чека продажи
+     * Создаёт `intent`, который открывает окно редактирования чека продажи.
+     *
+     * @param closeAfterOperation нужно ли закрыть окно редактирования чека продажи после того,
+     * как чек был успешно зарегистрирован
+     * @return intent
      */
     @JvmStatic
-    fun createIntentForSellReceiptEdit(): Intent {
-        return Intent(ACTION_EDIT_SELL)
+    fun createIntentForSellReceiptEdit(
+            closeAfterOperation: Boolean = false
+    ): Intent {
+        return Intent(ACTION_EDIT_SELL).apply { putExtra(EXTRA_CLOSE_AFTER_OPERATION, closeAfterOperation) }
     }
 
     /**
-     * форма наполнения чека возврата
+     * Создаёт `intent`, который открывает окно редактирования чека возврата.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForPaybackReceiptEdit(): Intent {
@@ -43,7 +59,9 @@ object NavigationApi {
     }
 
     /**
-     * форма наполнения чека покупки
+     * Создаёт `intent`, который открывает окно редактирования чека покупки.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForBuyReceiptEdit(): Intent {
@@ -51,7 +69,9 @@ object NavigationApi {
     }
 
     /**
-     * форма наполнения чека возврата покупки
+     * Создаёт `intent`, который открывает окно редактирования чека возврата покупки.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForBuybackReceiptEdit(): Intent {
@@ -59,7 +79,9 @@ object NavigationApi {
     }
 
     /**
-     * форма оплаты чека продажи
+     * Создаёт `intent`, который открывает окно оплаты чека продажи.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForSellReceiptPayment(): Intent {
@@ -67,7 +89,9 @@ object NavigationApi {
     }
 
     /**
-     * форма оплаты чека возврата
+     * Создаёт `intent`, который открывает окно оплаты чека возврата.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForPaybackReceiptPayment(): Intent {
@@ -75,7 +99,9 @@ object NavigationApi {
     }
 
     /**
-     * форма оплаты чека покупки
+     * Создаёт `intent`, который открывает окно оплаты чека покупки.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForBuyReceiptPayment(): Intent {
@@ -83,7 +109,9 @@ object NavigationApi {
     }
 
     /**
-     * форма оплаты чека возврата покупки
+     * Создаёт `intent`, который открывает окно оплаты чека возврата покупки.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForBuybackReceiptPayment(): Intent {
@@ -91,7 +119,9 @@ object NavigationApi {
     }
 
     /**
-     * форма настроек кассового чека
+     * Создаёт `intent`, который открывает окно настроек кассового чека.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForCashReceiptSettings(): Intent {
@@ -99,7 +129,9 @@ object NavigationApi {
     }
 
     /**
-     * форма кассового отчёта
+     * Создаёт `intent`, который открывает окно кассового отчёта.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForCashRegisterReport(): Intent {
@@ -107,7 +139,9 @@ object NavigationApi {
     }
 
     /**
-     * форма смены пользователей
+     * Создаёт `intent`, который открывает окно смены пользователей смарт-терминала.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForChangeUser(): Intent {
@@ -115,7 +149,9 @@ object NavigationApi {
     }
 
     /**
-     * форма списка товаров
+     * Создаёт `intent`, который открывает окно со списком товаров.
+     *
+     * @return intent
      */
     @JvmStatic
     fun createIntentForProductList(): Intent {
@@ -123,7 +159,9 @@ object NavigationApi {
     }
 
     /**
-     * форма добавления нового товара
+     * Создаёт `intent`, который открывает окно создания нового товара.
+     *
+     * @param productBuilder экземпляр класса [NewProductIntentBuilder]. Позволяет задать штрихкод нового товара.
      */
     @JvmStatic
     fun createIntentForNewProduct(productBuilder: NewProductIntentBuilder): Intent {
@@ -131,7 +169,9 @@ object NavigationApi {
     }
 
     /**
-     * форма редактирования товара
+     * Создаёт `intent`, который открывает окно редактирования товара.
+     *
+     * @param productBuilder экземпляр класса [EditProductIntentBuilder]. Позволяет указать штрихкод товара, который необходимо отредактировать.
      */
     @JvmStatic
     fun createIntentForEditProduct(productBuilder: EditProductIntentBuilder): Intent {
@@ -139,16 +179,31 @@ object NavigationApi {
     }
 
     /**
-     * Получение uuid продукта при успешном добавлении
+     * Получает идентификатор созданного товара.
+     *
+     * @param intent
+     * @return идентификатор созданного товара.
      */
     @JvmStatic
     fun getProductUuid(intent: Intent): String? {
         return intent.getStringExtra(EXTRA_ADDED_PRODUCT_UUID)
     }
 
+    /**
+     * Вспомогательный класс, экземпляр которого передаётся в качестве параметра метода [createIntentForNewProduct].
+     *
+     * Позволяет задать штрихкод нового товара с помощью метода [setBarcode].
+     */
     class NewProductIntentBuilder {
         private var barcode: String? = null
 
+        /**
+         * Задаёт штрихкод нового товара.
+         *
+         * Приложения могут получить штрихкод товара в событии [ru.evotor.framework.receipt.formation.event.ReturnPositionsForBarcodeRequestedEvent] или широковещательном сообщении [ru.evotor.framework.device.scanner.event.BarcodeReceivedEvent].
+         *
+         * @param barcode строка штрихкода. Если передать `null`, смарт-терминал предложит пользователю воспользоваться сканером штрихкодов или указать штрихкод вручную.
+         */
         fun setBarcode(barcode: String?): NewProductIntentBuilder {
             this.barcode = barcode
             return this
@@ -162,9 +217,19 @@ object NavigationApi {
         }
     }
 
+    /**
+     * Вспомогательный класс, экземпляр которого передаётся в качестве параметра метода [createIntentForEditProduct].
+     *
+     * Позволяет указать идентификатор редактируемого товара с помощью метода [setUuid].
+     */
     class EditProductIntentBuilder {
         private lateinit var uuid: String
 
+        /**
+         * Указывает идентификатор товара, который необходимо отредактировать.
+         *
+         * @param uuid строка идентификатора товара.
+         */
         fun setUuid(uuid: String): EditProductIntentBuilder {
             this.uuid = uuid
             return this
