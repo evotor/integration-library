@@ -63,6 +63,12 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
+    /**
+     * Возвращает смарт-терминалу дополнительные реквизиты пользователя, при торговле лекарственными препаратами
+     *
+     * @param event Событие, с помощью которого, смарт-терминал сообщает приложениям о необходимости внести  дополнительные реквизиты пользователя, при торговле лекарственными препаратами
+     * @return [ReturnMedicineAttributeEvent.Result]
+     */
     @RequiresIntentAction(ACTION_MEDICINE_ATTRIBUTES)
     open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
@@ -82,6 +88,12 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.sell.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.sell.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+
+        /**
+         * Запрос дополнительных реквизитов пользователя, необходимых для добавления в чек при продаже лекарственных препаратов
+         *
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.MEDICINE_ATTRIBUTES`.
+         */
         const val ACTION_MEDICINE_ATTRIBUTES = "ru.evotor.event.sell.MEDICINE_ATTRIBUTES"
 
         /**
