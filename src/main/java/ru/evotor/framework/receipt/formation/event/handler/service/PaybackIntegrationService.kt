@@ -6,6 +6,7 @@ import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
 import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
+import ru.evotor.framework.receipt.formation.event.ReturnMedicineAttributeEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
 /**
@@ -17,6 +18,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
 
@@ -47,6 +49,15 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
+    /**
+     * Возвращает смарт-терминалу дополнительные реквизиты пользователя, при торговле лекарственными препаратами
+     *
+     * @param event Событие, с помощью которого, смарт-терминал сообщает приложениям о необходимости внести  дополнительные реквизиты пользователя, при торговле лекарственными препаратами
+     * @return [ReturnMedicineAttributeEvent.Result]
+     */
+    @RequiresIntentAction(ACTION_MEDICINE_ATTRIBUTES)
+    open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
+
     companion object {
 
         /**
@@ -63,6 +74,14 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.payback.DELIVERY_REQUISITES`.
          */
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.payback.DELIVERY_REQUISITES"
+
+        /**
+         * Запрос дополнительных реквизитов пользователя, необходимых для добавления в чек при возврате лекарственных препаратов
+         *
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.payback.MEDICINE_ATTRIBUTES`.
+         */
+        const val ACTION_MEDICINE_ATTRIBUTES = "ru.evotor.event.payback.MEDICINE_ATTRIBUTES"
+
 
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].
