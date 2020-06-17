@@ -6,7 +6,7 @@ import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 
 /**
- * Данные об импорте продукции
+ * Данные об импорте продукции.
  * Применяются к позиции чека.
  */
 data class ImportationData(

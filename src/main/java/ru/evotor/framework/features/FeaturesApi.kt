@@ -5,9 +5,9 @@ import android.net.Uri
 import ru.evotor.framework.features.provider.FeaturesContract
 
 /**
- * Интерфейс для проверки статуса функций, которые активируются после приобретения (продления подписки) и установки приложения "Пакет обновлений".
+ * Интерфейс для проверки состояния функций, которые активируются после приобретения (продления подписки) и установки приложения "Смарт-терминал Плюс" (ранее "Пакет обновлноений").
  *
- * Установка и оплата приложения "Пакет обновлений" активирует:
+ * Установка и оплата приложения "Смарт-терминал Плюс" активирует:
  *
  * возможность работать по ставке НДС 20%;
  * поддержку ФФД 1.05;
@@ -17,42 +17,42 @@ import ru.evotor.framework.features.provider.FeaturesContract
 object FeaturesApi {
 
     /**
-     * Проверяет, активна ли на смарт-терминале функция "НДС 20%".
+     * Проверяет состояние функции "НДС 20%".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isVat20Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT20)
 
     /**
-     * Проверяет, активна ли на смарт-терминале функция "Переход на ФФД 1.05".
+     * Проверяет состояние функции "Переход на ФФД 1.05".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isFfd105Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FFD105)
 
     /**
-     * Проверяет, активна ли на смарт-терминале функция "Маркировка табака".
+     * Проверяет состояние функции "Маркировка табака".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isTobaccomarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCOMARK)
 
     /**
-     * Проверяет, активна ли на смарт-терминале функция "Реквизиты покупателя".
+     * Проверяет состояние функции "Реквизиты покупателя".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isPurchaserActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PURCHASER)
 
     /**
-     * Проверяет, активна ли функция "Развозная торговля" на данном терминале.
+     * Проверяет состояние функции "Развозная торговля".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isDeliveryActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DELIVERY)
 
     /**
-     * Проверяет, активна ли функция "Компактный чек" на данном терминале
+     * Проверяет состояние функции "Компактный чек".
      * Требуется версия прошивки ФР >= 5086
      *
      * @return `true` если функция активна, `false` соответственно если функция не активна
@@ -60,42 +60,42 @@ object FeaturesApi {
     fun isShortCheckActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHORT_CHECK)
 
     /**
-     * Проверяет, активна ли функция "Маркировка алкоголя" на данном терминале
+     * Проверяет состояние функции "Маркировка алкоголя".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isAlcoMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ALCO_MARK)
 
     /**
-     * Проверяет, активна ли функция "Внешний УТМ" на данном терминале
+     * Проверяет состояние функции "Внешний УТМ".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM)
 
     /**
-     * Проверяет, активна ли функция "Маркировка лекарств" на данном терминале
+     * Проверяет состояние функции "Маркировка лекарств".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isMedicineMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICINE_MARK)
 
     /**
-     * Проверяет, активна ли функция "Маркировка обуви" на данном терминале
+     * Проверяет состояние функции "Маркировка обуви".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHOES_MARK)
 
     /**
-     * Проверяет, активна ли функция "Управленческие отчёты" на данном терминале
+     * Проверяет состояние функции "Управленческие отчёты".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isManagementReportsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MANAGEMENT_REPORTS)
 
     /**
-     * Проверяет, активна ли функция "Удаление документов" на данном терминале
+     * Проверяет состояние функции "Удаление документов".
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
