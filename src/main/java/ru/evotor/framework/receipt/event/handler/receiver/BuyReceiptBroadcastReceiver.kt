@@ -12,7 +12,7 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
 
 /**
  * Широковещательный приёмник событий чека покупки.
- * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class BuyReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         ACTION_RECEIPT_CREATED,

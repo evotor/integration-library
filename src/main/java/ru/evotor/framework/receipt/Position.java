@@ -34,7 +34,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 4;
+    private static final int VERSION = 5;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -157,6 +157,15 @@ public class Position implements Parcelable {
     @Nullable
     private BigDecimal excise;
 
+    /**
+     * Классификационный код (Номенклатурный код)
+     * Значение будет записано в тег 1162 только для немаркированных товаров.
+     * Строка штрихкода в формате EAN-13
+     */
+    @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
+    @Nullable
+    private String classificationCode;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -225,6 +234,7 @@ public class Position implements Parcelable {
         this.agentRequisites = position.getAgentRequisites();
         this.importationData = position.getImportationData();
         this.excise = position.getExcise();
+        this.classificationCode = position.getClassificationCode();
     }
 
     /**
@@ -467,6 +477,15 @@ public class Position implements Parcelable {
         return excise;
     }
 
+    /**
+     * @return Классификационный код. Тег 1162 для обычного товара.
+     */
+    @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
+    @Nullable
+    public String getClassificationCode() {
+        return classificationCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -522,6 +541,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(excise, position.excise))
             return false;
+        if (!Objects.equals(classificationCode, position.classificationCode))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -551,6 +572,7 @@ public class Position implements Parcelable {
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
+        result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         return result;
     }
 
@@ -580,6 +602,7 @@ public class Position implements Parcelable {
                 ", agentRequisites=" + agentRequisites +
                 ", importationData=" + importationData +
                 ", excise=" + excise +
+                ", classificationCode=" + classificationCode +
                 '}';
     }
 
@@ -646,6 +669,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
+        dest.writeString(this.classificationCode);
     }
 
     protected Position(Parcel in) {
@@ -699,11 +723,13 @@ public class Position implements Parcelable {
             case 2: {
                 readAttributesField(in);
                 readSettlementMethodField(in);
+                break;
             }
             case 3: {
                 readAttributesField(in);
                 readSettlementMethodField(in);
                 readAgentRequisitesField(in);
+                break;
             }
             case 4: {
                 readAttributesField(in);
@@ -711,6 +737,16 @@ public class Position implements Parcelable {
                 readAgentRequisitesField(in);
                 readImportationData(in);
                 this.excise = (BigDecimal) in.readSerializable();
+                break;
+            }
+            case 5: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                this.classificationCode = in.readString();
+                break;
             }
         }
 
@@ -784,6 +820,7 @@ public class Position implements Parcelable {
 
             builder.position.productType = product.getType();
             builder.position.productCode = product.getCode();
+            builder.position.classificationCode = product.getClassificationCode();
 
             return builder;
         }
@@ -1033,6 +1070,11 @@ public class Position implements Parcelable {
 
         public Builder setProductCode(@Nullable String productCode) {
             position.productCode = productCode;
+            return this;
+        }
+
+        public Builder setClassificationCode(@Nullable String classificationCode) {
+            position.classificationCode = classificationCode;
             return this;
         }
 
