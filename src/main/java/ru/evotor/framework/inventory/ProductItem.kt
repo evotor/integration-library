@@ -3,6 +3,9 @@ package ru.evotor.framework.inventory
 import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
 
+/**
+ * Класс, описывающий товары и группы товаров, которые хранятся в базе данных смарт-терминала.
+ */
 sealed class ProductItem(
         val uuid: String,
         val parentUuid: String?,

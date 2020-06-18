@@ -61,7 +61,7 @@ public class PrintGroup implements Parcelable {
     private Purchaser purchaser;
 
     /**
-     * Аттрибуты маркированных лекарств
+     * Аттрибуты маркированных лекарств.
      */
     @Nullable
     private MedicineAttribute medicineAttribute;

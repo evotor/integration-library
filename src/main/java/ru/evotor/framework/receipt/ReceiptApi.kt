@@ -26,6 +26,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+/**
+ * Интерфейс для работы с чеками.
+ */
+
 object ReceiptApi {
     @Deprecated(message = "Используйте методы API")
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
@@ -51,6 +55,12 @@ object ReceiptApi {
     private val CURRENT_BUY_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUY_PATH)
     private val CURRENT_BUYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUYBACK_PATH)
 
+    /**
+     * Получить позиции чека по штрихкоду.
+     * @param context контекст приложения.
+     * @param barcode штрихкод товара в позиции.
+     * @return positionsList список [позиций][ru.evotor.framework.receipt.Position] чека.
+     */
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
@@ -74,9 +84,9 @@ object ReceiptApi {
 
     /**
      * Получить текущий открытый чек.
-     * @param context контекст приложения
-     * @param type тип чека
-     * @return чек или null, если чек закрыт
+     * @param context контекст приложения.
+     * @param type тип чека.
+     * @return [чек][ru.evotor.framework.receipt.Receipt] или `null`, если чек закрыт
      */
     @JvmStatic
     fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
@@ -84,10 +94,10 @@ object ReceiptApi {
     }
 
     /**
-     * Получить чек по uuid. Чек может быть уже закрыт
-     * @param context контекст приложения
-     * @param uuid uuid чека
-     * @return чек или null, если чек не найден
+     * Получить чек по идентификатору. Чек может быть закрыт.
+     * @param context контекст приложения.
+     * @param uuid идентификатор чека
+     * @return [чек][ru.evotor.framework.receipt.Receipt] или `null`, если чек не найден
      */
     @JvmStatic
     fun getReceipt(context: Context, uuid: String): Receipt? {
@@ -221,7 +231,7 @@ object ReceiptApi {
      * Получить заголовок текущего открытого чека.
      * @param context контекст приложения
      * @param type тип чека
-     * @return чек или null, если чек закрыт
+     * @return [заголовок чека][ru.evotor.framework.receipt.Receipt.Header] или `null`, если чек закрыт.
      */
     @JvmStatic
     fun getReceiptHeader(context: Context, type: Receipt.Type): Receipt.Header? {
@@ -248,10 +258,10 @@ object ReceiptApi {
     }
 
     /**
-     * Запрос списка заголовков чека
-     * @param context контекст приложения
-     * @param type фильтр по типу чека
-     * @return курсор с заголовками чека
+     * Получить заголовки чека.
+     * @param context контекст приложения.
+     * @param type тип чека.
+     * @return курсор с [заголовками чека][ru.evotor.framework.receipt.Receipt.Header].
      */
     @JvmStatic
     fun getReceiptHeaders(context: Context, type: Receipt.Type? = null): ru.evotor.query.Cursor<Receipt.Header?>? {
@@ -271,9 +281,10 @@ object ReceiptApi {
     }
 
     /**
-     * Получить фискальные чеки по идентификатору ["чека"][ru.evotor.framework.receipt.Receipt].
-     * @param context контекст приложения
-     * @param receiptUuid uuid ["чека"][ru.evotor.framework.receipt.Receipt]
+     * Получить фискальные чеки по идентификатору [чека][ru.evotor.framework.receipt.Receipt].
+     * @param context контекст приложения.
+     * @param receiptUuid идентификатор [чека][ru.evotor.framework.receipt.Receipt].
+     * @return курсор с [данными фискального чека][ru.evotor.framework.receipt.FiscalReceipt].
      */
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =

@@ -14,6 +14,7 @@ import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
 
 /**
+ * Итерфейс для работы с товарами [ru.evotor.framework.inventory.ProductItem] и группами товаров, которые хранятся в базе данных смарт-терминала.
  * Created by nixan on 06.03.17.
  */
 
@@ -24,6 +25,12 @@ object InventoryApi {
 
     const val BROADCAST_ACTION_PRODUCTS_UPDATED = "evotor.intent.action.inventory.PRODUCTS_UPDATED"
 
+    /**
+     * Получить список штрихкодов товара.
+     * @param context контекст приложения.
+     * @param productUuid идентификатор товара.
+     * @return barcodesList список штрихкодов товара.
+     */
     @JvmStatic
     fun getAllBarcodesForProduct(context: Context, productUuid: String): List<String> {
         val barcodesList = ArrayList<String>()
@@ -45,6 +52,12 @@ object InventoryApi {
         return barcodesList
     }
 
+    /**
+     * Получить список кодов алкогольной продукции.
+     * @param context контекст приложения.
+     * @param productUuid идентификатор товара.
+     * @return список кодов алкогольной продукции.
+     */
     @JvmStatic
     fun getAlcoCodesForProduct(context: Context, productUuid: String): List<String>? =
             context.contentResolver.query(
@@ -60,6 +73,12 @@ object InventoryApi {
                 }).toList()
             }
 
+    /**
+     * Получить товар или группу товаров по идентификатору.
+     * @param context контекст приложения.
+     * @param uuid идентификатор товара.
+     * @return  товар [ru.evotor.framework.inventory.ProductItem.Product], группу товаров [ru.evotor.framework.inventory.ProductItem.ProductGroup] или `null`.
+     */
     @JvmStatic
     fun getProductByUuid(context: Context, uuid: String): ProductItem? {
         if (uuid.isBlank()) return null
@@ -105,6 +124,12 @@ object InventoryApi {
         return null
     }
 
+    /**
+     * Получить товары по коду алкогольной продукции.
+     * @param context контекст приложения.
+     * @param alcoCode код алкогольной продукции.
+     * @return список товаров [ru.evotor.framework.inventory.ProductItem.Product].
+     */
     @JvmStatic
     fun getProductsByAlcoCode(context: Context, alcoCode: String): List<ProductItem.Product?>? =
             context.contentResolver.query(
@@ -130,6 +155,12 @@ object InventoryApi {
                 }
             }
 
+    /**
+     * Получить дополнительные поля товара.
+     * @param context контекст приложения.
+     * @param productUuid идентификатор товара.
+     * @return result список дополнительных полей товара [ru.evotor.framework.inventory.ProductExtra].
+     */
     @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
         val result = ArrayList<ProductExtra>()
@@ -162,6 +193,12 @@ object InventoryApi {
         )
     }
 
+    /**
+     * Получить дополнительное поле товара.
+     * @param context контекст приложения.
+     * @param fieldUuid идентификатор поля.
+     * @return поле товара или `null`.
+     */
     @JvmStatic
     fun getField(context: Context, fieldUuid: String): Field? {
         context.contentResolver
