@@ -15,11 +15,12 @@ import java.util.Set;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
-import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.ExtraKey;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
+import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
     public static final String KEY_POSITION = "position";
@@ -45,6 +46,9 @@ public final class PositionMapper {
     private static final String KEY_ATTRIBUTES = "attributes";
     private static final String KEY_SETTLEMENT_METHOD = "settlementMethod";
     private static final String KEY_AGENT_REQUISITES = "agentRequisites";
+    private static final String KEY_IMPORTATION_DATA = "importationData";
+    private static final String KEY_EXCISE = "excise";
+    private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -67,6 +71,7 @@ public final class PositionMapper {
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
         String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
+        String classificationCode = bundle.getString(KEY_CLASSIFICATION_CODE);
 
         Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
         Set<ExtraKey> extraKeys = new HashSet<>();
@@ -95,10 +100,14 @@ public final class PositionMapper {
         AgentRequisites agentRequisites =
                 AgentRequisites.Companion.from(bundle.getBundle(KEY_AGENT_REQUISITES));
 
+        final ImportationData importationData =
+                ImportationData.from(bundle.getBundle(KEY_IMPORTATION_DATA));
+
+        final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
-                ) {
+        ) {
             return null;
         }
 
@@ -125,6 +134,9 @@ public final class PositionMapper {
         builder.setAttributes(attributes);
         builder.setSettlementMethod(settlementMethod);
         builder.setAgentRequisites(agentRequisites);
+        builder.setImportationData(importationData);
+        builder.setExcise(excise);
+        builder.setClassificationCode(classificationCode);
         return builder.build();
     }
 
@@ -171,10 +183,21 @@ public final class PositionMapper {
         bundle.putBundle(KEY_ATTRIBUTES, PositionAttributesMapper.toBundle(position.getAttributes()));
         bundle.putBundle(KEY_SETTLEMENT_METHOD, SettlementMethodMapper.toBundle(position.getSettlementMethod()));
         bundle.putBundle(KEY_AGENT_REQUISITES, position.getAgentRequisites() != null ? position.getAgentRequisites().toBundle() : null);
-        return bundle;
-    }
 
-    private PositionMapper() {
+        final ImportationData importationData = position.getImportationData();
+        final Bundle importationDataBundle =
+                importationData != null ? importationData.toBundle() : null;
+        bundle.putBundle(KEY_IMPORTATION_DATA, importationDataBundle);
+
+        final BigDecimal excise = position.getExcise();
+        if (excise != null) {
+            bundle.putString(KEY_EXCISE, excise.toPlainString());
+        }
+        final String classificationCode = position.getClassificationCode();
+        if (classificationCode != null) {
+            bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
+        }
+        return bundle;
     }
 
 }

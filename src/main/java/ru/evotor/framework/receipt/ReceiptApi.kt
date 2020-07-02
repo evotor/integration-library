@@ -16,11 +16,11 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
+import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeValueOf
-import java.lang.Exception
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -216,6 +216,37 @@ object ReceiptApi {
         )
     }
 
+
+    /**
+     * Получить заголовок текущего открытого чека.
+     * @param context контекст приложения
+     * @param type тип чека
+     * @return чек или null, если чек закрыт
+     */
+    @JvmStatic
+    fun getReceiptHeader(context: Context, type: Receipt.Type): Receipt.Header? {
+        val baseUri = when (type) {
+            Receipt.Type.SELL -> CURRENT_SELL_RECEIPT_URI
+            Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
+            Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
+            Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
+        }
+
+        return context.contentResolver.query(
+                baseUri,
+                null,
+                null,
+                null,
+                null
+        )?.use {
+            if (it.moveToNext()) {
+                createReceiptHeader(it)
+            } else {
+                null
+            }
+        }
+    }
+
     /**
      * Запрос списка заголовков чека
      * @param context контекст приложения
@@ -309,7 +340,7 @@ object ReceiptApi {
                 } else {
                     null
                 },
-                if (subjectId != null){
+                if (subjectId != null) {
                     MedicineAttribute(subjectId)
                 } else {
                     null
@@ -330,12 +361,23 @@ object ReceiptApi {
         val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
             createAttributesFromDBFormat(cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_ATTRIBUTES)))
         }
+
+        val classificationCode = cursor.optString(PositionTable.COLUMN_CLASSIFICATION_CODE)
+        val excise = cursor.optLong(PositionTable.COLUMN_EXCISE)?.let {
+            BigDecimal(it)
+        }
+
+        val importationData = createImportationData(
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
+        )
+
         val builder = Position.Builder
                 .copyFrom(Position(
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)),ProductType.NORMAL),
+                        safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
@@ -354,8 +396,20 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setClassificationCode(classificationCode)
+                .setImportationData(importationData)
+                .setExcise(excise)
         return builder.build()
     }
+
+    private fun createImportationData(countryOriginCode: String?, customsDeclarationNumber: String?): ImportationData? {
+        return if (countryOriginCode.isNullOrBlank() || customsDeclarationNumber.isNullOrBlank()) {
+            null
+        } else {
+            ImportationData(countryOriginCode, customsDeclarationNumber)
+        }
+    }
+
 
     private fun createAttributesFromDBFormat(value: String?): Map<String, AttributeValue> {
         if (value == null) return emptyMap()

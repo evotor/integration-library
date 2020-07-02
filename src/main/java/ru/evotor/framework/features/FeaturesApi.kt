@@ -69,11 +69,47 @@ object FeaturesApi {
     /**
      * Проверяет, активна ли функция "Внешний УТМ" на данном терминале
      *
+     * @return `true` если функция активна или данных о фиче нет; `false` если функция не активна.
+     */
+    fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM, true)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка лекарств" на данном терминале
+     *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isExternalUtmActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXTERNAL_UTM)
+    fun isMedicineMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICINE_MARK)
 
-    private fun isFeatureActive(context: Context, path: String): Boolean =
+    /**
+     * Проверяет, активна ли функция "Маркировка обуви" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isShoesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SHOES_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Управленческие отчёты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isManagementReportsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MANAGEMENT_REPORTS)
+
+    /**
+     * Проверяет, активна ли функция "Удаление документов" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isDocumentCleanActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DOCUMENT_CLEAN)
+
+    /**
+     * Проверяет, активна ли функция "Тег 1162 для обычного товара" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isClassificationCodeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
+
+
+    private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
                     null,
@@ -83,5 +119,5 @@ object FeaturesApi {
             )?.use {
                 it.moveToFirst()
                 it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
-            } ?: false
+            } ?: defaultValue
 }

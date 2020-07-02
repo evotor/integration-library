@@ -105,6 +105,11 @@ object FiscalTags {
     const val PAYMENT_AGENT_OPERATION = 1044
 
     /**
+     * Код товара
+     */
+    const val PRODUCT_CODE = 1162
+
+    /**
      * Тип коррекции
      */
     const val CORRECTION_TYPE = 1173
@@ -138,4 +143,19 @@ object FiscalTags {
      * Описание места расчёта
      */
     const val PAYMENT_PLACE = 1187
+
+    /**
+     * Акциз
+     */
+    const val EXCISE = 1229
+
+    /**
+     * Код страны происхождения товара
+     */
+    const val COUNTRY_ORIGIN_CODE = 1230
+
+    /**
+     * Номер таможенной декларации
+     */
+    const val CUSTOM_DECLARATION_NUMBER = 1231
 }
