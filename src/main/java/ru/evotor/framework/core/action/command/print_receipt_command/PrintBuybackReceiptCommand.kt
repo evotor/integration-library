@@ -57,7 +57,8 @@ class PrintBuybackReceiptCommand(
             clientPhone: String?,
             clientEmail: String?,
             paymentAddress: String? = null,
-            paymentPlace: String? = null) : this(
+            paymentPlace: String? = null,
+            userUuid: String? = null) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -83,7 +84,8 @@ class PrintBuybackReceiptCommand(
             clientEmail,
             BigDecimal.ZERO,
             paymentAddress,
-            paymentPlace
+            paymentPlace,
+            userUuid
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
