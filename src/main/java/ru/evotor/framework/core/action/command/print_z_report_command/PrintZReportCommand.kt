@@ -12,8 +12,11 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 
 /**
  * Команда снятия и печати Z-отчёта.
+ * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
-class PrintZReportCommand() : IBundlable {
+class PrintZReportCommand(
+        val userUuid: String? = null
+) : IBundlable {
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
@@ -31,7 +34,9 @@ class PrintZReportCommand() : IBundlable {
     }
 
     override fun toBundle(): Bundle {
-        return Bundle()
+        return Bundle().apply {
+            putString(KEY_USER_UUID, userUuid)
+        }
     }
 
     companion object {
@@ -43,11 +48,19 @@ class PrintZReportCommand() : IBundlable {
         const val NAME_PERMISSION = "ru.evotor.permission.PRINT_Z_REPORT"
         const val NAME = "evo.v2.zreport.print"
 
+        private const val KEY_USER_UUID = "userUuid"
+
         fun create(bundle: Bundle?): PrintZReportCommand? {
             if (bundle == null) {
                 return null
             }
-            return PrintZReportCommand()
+            return PrintZReportCommand(
+                    userUuid = getUserUuid(bundle)
+            )
+        }
+
+        internal fun getUserUuid(bundle: Bundle): String? {
+            return bundle.getString(KEY_USER_UUID, null)
         }
     }
 }
