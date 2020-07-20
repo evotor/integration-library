@@ -1,10 +1,12 @@
 package ru.evotor.framework.core.action.command.print_z_report_command
 
-import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 
@@ -13,16 +15,16 @@ import ru.evotor.framework.core.IntegrationManagerImpl
  */
 class PrintZReportCommand() : IBundlable {
 
-    fun process(activity: Activity, callback: IntegrationManagerCallback) {
-        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, activity.applicationContext)
+    fun process(context: Context, callback: IntegrationManagerCallback) {
+        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
-        IntegrationManagerImpl(activity.applicationContext)
+        IntegrationManagerImpl(context.applicationContext)
                 .call(NAME,
                         componentNameList[0],
                         this,
-                        activity,
+                        ICanStartActivity { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
                         callback,
                         Handler(Looper.getMainLooper())
                 )

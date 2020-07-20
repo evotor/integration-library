@@ -1,11 +1,13 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
-import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.calculator.MoneyCalculator
+import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
@@ -39,16 +41,16 @@ abstract class PrintReceiptCommand(
         val paymentPlace: String? = null
 ) : IBundlable {
 
-    internal fun process(activity: Activity, callback: IntegrationManagerCallback, action: String) {
-        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, activity.applicationContext)
+    internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
+        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
-        IntegrationManagerImpl(activity.applicationContext)
+        IntegrationManagerImpl(context.applicationContext)
                 .call(action,
                         componentNameList[0],
                         this,
-                        activity,
+                        ICanStartActivity { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
                         callback,
                         Handler(Looper.getMainLooper())
                 )
@@ -60,7 +62,8 @@ abstract class PrintReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
-        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString()
+                ?: BigDecimal.ZERO.toPlainString())
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         return bundle
