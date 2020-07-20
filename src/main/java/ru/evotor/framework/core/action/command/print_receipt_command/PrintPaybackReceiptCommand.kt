@@ -22,6 +22,7 @@ import java.util.*
  * @param receiptDiscount Скидка на чек.
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
+ * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 class PrintPaybackReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -31,15 +32,17 @@ class PrintPaybackReceiptCommand(
         receiptDiscount: BigDecimal?,
         val sellReceiptUuid: String? = null,
         paymentAddress: String? = null,
-        paymentPlace: String? = null
+        paymentPlace: String? = null,
+        userUuid: String? = null
 ) : PrintReceiptCommand(
-        printReceipts,
-        extra,
-        clientPhone,
-        clientEmail,
-        receiptDiscount,
-        paymentAddress,
-        paymentPlace
+        printReceipts = printReceipts,
+        extra = extra,
+        clientPhone = clientPhone,
+        clientEmail = clientEmail,
+        receiptDiscount = receiptDiscount,
+        paymentAddress = paymentAddress,
+        paymentPlace = paymentPlace,
+        userUuid = userUuid
 ) {
 
     /**
@@ -107,14 +110,15 @@ class PrintPaybackReceiptCommand(
                 return null
             }
             return PrintPaybackReceiptCommand(
-                    getPrintReceipts(bundle),
-                    getSetExtra(bundle),
-                    getClientPhone(bundle),
-                    getClientEmail(bundle),
-                    getReceiptDiscount(bundle),
-                    bundle.getString(KEY_SELL_RECEIPT_UUID),
-                    getPaymentAddress(bundle),
-                    getPaymentPlace(bundle)
+                    printReceipts = getPrintReceipts(bundle),
+                    extra = getSetExtra(bundle),
+                    clientPhone = getClientPhone(bundle),
+                    clientEmail = getClientEmail(bundle),
+                    receiptDiscount = getReceiptDiscount(bundle),
+                    sellReceiptUuid = bundle.getString(KEY_SELL_RECEIPT_UUID),
+                    paymentAddress = getPaymentAddress(bundle),
+                    paymentPlace = getPaymentPlace(bundle),
+                    userUuid = getUserUuid(bundle)
             )
         }
     }
