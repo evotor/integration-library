@@ -41,26 +41,41 @@ data class ReturnPositionsForBarcodeRequestedEvent(
     /**
      * Результат обработки события сканирования штрихкода.
      *
-     * @property positions список позиций, которые будут добавлены в чек.
+     * @property positionsList список позиций, которые будут добавлены в чек
      * @property iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
      */
     data class Result(
-            val positions: List<Position>,
-            val iCanCreateNewProduct: Boolean
+            val iCanCreateNewProduct: Boolean,
+            val positionsList: List<List<Position>>
     ) : IntegrationEvent.Result() {
+
+        @Deprecated("Используйте основной конструктор")
+        constructor(
+                positions: List<Position>,
+                iCanCreateNewProduct: Boolean
+        ) : this(iCanCreateNewProduct, listOf(positions))
 
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
-            putInt(KEY_EXTRA_POSITIONS_COUNT, positions.size)
-            for (i in positions.indices) {
-                putParcelable(KEY_EXTRA_POSITIONS + i, positions[i])
+            if (!positionsList.isNullOrEmpty()) {
+                putInt(KEY_EXTRA_POSITIONS_LIST_COUNT, positionsList.size)
+                for (i in positionsList.indices) {
+                    putInt(KEY_EXTRA_SUB_POSITIONS_COUNT + i, positionsList[i].size)
+                    for (j in positionsList[i].indices) {
+                        putParcelable(KEY_EXTRA_SUB_POSITIONS_LIST + j, positionsList[i][j])
+                    }
+                }
             }
+
             putBoolean(KEY_EXTRA_CAN_CREATE, iCanCreateNewProduct)
         }
 
         companion object {
-            const val KEY_EXTRA_POSITIONS = "extra_position_"
-            const val KEY_EXTRA_POSITIONS_COUNT = "extra_positions_count"
+            private const val KEY_EXTRA_POSITIONS = "extra_position_"
+            private const val KEY_EXTRA_POSITIONS_COUNT = "extra_positions_count"
+            const val KEY_EXTRA_POSITIONS_LIST_COUNT = "extra_positions_list_count"
+            const val KEY_EXTRA_SUB_POSITIONS_LIST = "extra_sub_positions_list_"
+            const val KEY_EXTRA_SUB_POSITIONS_COUNT = "extra_sub_positions_count"
             const val KEY_EXTRA_CAN_CREATE = "extra_can_create_product"
 
             @JvmStatic
@@ -68,11 +83,32 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                 it.classLoader = Position::class.java.classLoader
                 val count = it.getInt(KEY_EXTRA_POSITIONS_COUNT)
                 val positions = mutableListOf<Position>()
+
                 for (i in 0 until count) {
                     positions.add(it.getParcelable(KEY_EXTRA_POSITIONS + i) ?: return null)
                 }
+
                 val iCanCreateNewProduct = it.getBoolean(KEY_EXTRA_CAN_CREATE)
-                Result(positions, iCanCreateNewProduct)
+
+                val listCount = it.getInt(KEY_EXTRA_POSITIONS_LIST_COUNT)
+                val positionsList = mutableListOf<List<Position>>()
+                positionsList.add(positions)
+
+                if (listCount != 0) {
+                    for (i in 0 until listCount) {
+                        val subListCount = it.getInt(KEY_EXTRA_SUB_POSITIONS_COUNT + i)
+                        val subList = mutableListOf<Position>()
+                        for (j in 0 until subListCount) {
+                            subList.add(
+                                    it.getParcelable(KEY_EXTRA_SUB_POSITIONS_LIST + j)
+                                            ?: return null
+                            )
+                        }
+                        positionsList.add(subList)
+                    }
+                }
+
+                Result(iCanCreateNewProduct, positionsList)
             }
 
         }
