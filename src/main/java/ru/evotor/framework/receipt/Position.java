@@ -781,6 +781,7 @@ public class Position implements Parcelable {
                 this.excise = (BigDecimal) in.readSerializable();
                 this.classificationCode = in.readString();
                 readPreferentialMedicine(in);
+                break;
             }
         }
 

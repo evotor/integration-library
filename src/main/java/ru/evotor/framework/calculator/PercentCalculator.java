@@ -21,7 +21,7 @@ public abstract class PercentCalculator {
     }
 
     public static BigDecimal toBigDecimal(double value) {
-        BigDecimal bigDecimalValue = new BigDecimal(value);
+        BigDecimal bigDecimalValue = BigDecimal.valueOf(value);
         return bigDecimalValue.setScale(PERCENT_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
   

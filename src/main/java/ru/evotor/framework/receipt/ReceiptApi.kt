@@ -57,19 +57,14 @@ object ReceiptApi {
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
-        val cursor: Cursor? = context.contentResolver.query(
+        context.contentResolver.query(
                 Uri.withAppendedPath(PositionTable.URI, barcode),
                 null, null, null, null)
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    createPosition(cursor)?.let { positionsList.add(it) }
+                ?.use { cursor ->
+                    while (cursor.moveToNext()) {
+                        createPosition(cursor)?.let { positionsList.add(it) }
+                    }
                 }
-            } finally {
-                cursor.close()
-            }
-        }
 
         return positionsList
     }
@@ -81,9 +76,7 @@ object ReceiptApi {
      * @return чек или null, если чек закрыт
      */
     @JvmStatic
-    fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
-        return getReceipt(context, type, null)
-    }
+    fun getReceipt(context: Context, type: Receipt.Type): Receipt? = getReceipt(context, type, null)
 
     /**
      * Получить чек по uuid. Чек может быть уже закрыт
@@ -92,9 +85,7 @@ object ReceiptApi {
      * @return чек или null, если чек не найден
      */
     @JvmStatic
-    fun getReceipt(context: Context, uuid: String): Receipt? {
-        return getReceipt(context, null, uuid)
-    }
+    fun getReceipt(context: Context, uuid: String): Receipt? = getReceipt(context, null, uuid)
 
     private fun getReceipt(context: Context, type: Receipt.Type?, uuid: String? = null): Receipt? {
         if (type == null && uuid == null) {
@@ -263,11 +254,9 @@ object ReceiptApi {
                 type?.let { "${ReceiptHeaderTable.COLUMN_TYPE} = ?" },
                 type?.let { arrayOf(it.name) },
                 null
-        )?.let {
+        )?.use{
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
-                override fun getValue(): Receipt.Header? {
-                    return createReceiptHeader(this)
-                }
+                override fun getValue(): Receipt.Header? = createReceiptHeader(this)
             }
         }
     }
@@ -280,7 +269,7 @@ object ReceiptApi {
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
             context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
-                    ?.let {
+                    ?.use {
                         object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
                             override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
                         }

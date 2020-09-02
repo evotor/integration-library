@@ -31,7 +31,7 @@ public abstract class MoneyCalculator {
     }
 
     public static BigDecimal toBigDecimal(double value) {
-        BigDecimal bigDecimalValue = new BigDecimal(value);
+        BigDecimal bigDecimalValue = BigDecimal.valueOf(value);
         return bigDecimalValue.setScale(MONEY_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 

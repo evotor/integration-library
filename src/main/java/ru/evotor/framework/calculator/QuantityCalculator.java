@@ -27,7 +27,7 @@ public abstract class QuantityCalculator {
 
     @NonNull
     public static BigDecimal toBigDecimal(double value) {
-        return round(new BigDecimal(value));
+        return round(BigDecimal.valueOf(value));
     }
 
     @NonNull

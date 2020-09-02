@@ -1,7 +1,6 @@
 package ru.evotor.framework.users
 
 import android.content.Context
-import android.database.Cursor
 
 /**
  * Интерфейс для получения данных сотрудников, работающих со смарт-терминалом.
@@ -17,18 +16,12 @@ object UserApi {
     fun getAllUsers(context: Context): List<User>? {
         context.contentResolver
                 .query(UsersTable.URI, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val users = ArrayList<User>()
-                    try {
-                        while (cursor.moveToNext()) {
-                            users.add(UserMapper.createUser(cursor))
-                        }
-                        return users
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        cursor.close()
+                    while (cursor.moveToNext()) {
+                        users.add(UserMapper.createUser(cursor))
                     }
+                    return users
                 }
         return null
     }
@@ -42,15 +35,9 @@ object UserApi {
     fun getAuthenticatedUser(context: Context): User? {
         context.contentResolver
                 .query(UsersTable.URI_AUTHENTICATED, null, null, null, null)
-                ?.let { cursor ->
-                    try {
-                        if (cursor.moveToFirst()) {
-                            return UserMapper.createUser(cursor)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        cursor.close()
+                ?.use { cursor ->
+                    if (cursor.moveToFirst()) {
+                        return UserMapper.createUser(cursor)
                     }
                 }
         return null
@@ -65,18 +52,12 @@ object UserApi {
     fun getAllGrants(context: Context): List<Grant>? {
         context.contentResolver
                 .query(GrantsTable.URI, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val grants = ArrayList<Grant>()
-                    try {
-                        while (cursor.moveToNext()) {
-                            grants.add(UserMapper.createGrant(cursor))
-                        }
-                        return grants
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        cursor.close()
+                    while (cursor.moveToNext()) {
+                        grants.add(UserMapper.createGrant(cursor))
                     }
+                    return grants
                 }
         return null
     }
@@ -88,24 +69,15 @@ object UserApi {
      */
     @JvmStatic
     fun getGrantsOfAuthenticatedUser(context: Context): List<Grant>? {
-
         context.contentResolver
                 .query(GrantsTable.URI_GRANTS_OF_AUTHENTICATED_USER, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val grants = ArrayList<Grant>()
-                    try {
-                        while (cursor.moveToNext()) {
-                            grants.add(UserMapper.createGrant(cursor))
-                        }
-                        return grants
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        cursor.close()
+                    while (cursor.moveToNext()) {
+                        grants.add(UserMapper.createGrant(cursor))
                     }
+                    return grants
                 }
         return null
     }
-
-
 }
