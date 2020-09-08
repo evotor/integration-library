@@ -113,21 +113,21 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isTyresMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
+    fun isTyresMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TYRES_MARK)
 
     /**
      * Проверяет, активна ли функция "Маркировка парфюмерии" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isPerfumeMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
+    fun isPerfumeMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PERFUMES_MARK)
 
     /**
      * Проверяет, активна ли функция "Маркировка фототоваров" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isPhotosMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CLASSIFICATION_CODE)
+    fun isPhotosMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PHOTOS_MARK)
 
 
 
