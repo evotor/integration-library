@@ -1,6 +1,6 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
-import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
@@ -22,6 +22,7 @@ import java.util.*
  * @param receiptDiscount Скидка на чек.
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
+ * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 class PrintSellReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -30,15 +31,17 @@ class PrintSellReceiptCommand(
         clientEmail: String?,
         receiptDiscount: BigDecimal?,
         paymentAddress: String? = null,
-        paymentPlace: String? = null
+        paymentPlace: String? = null,
+        userUuid: String? = null
 ) : PrintReceiptCommand(
-        printReceipts,
-        extra,
-        clientPhone,
-        clientEmail,
-        receiptDiscount,
-        paymentAddress,
-        paymentPlace
+        printReceipts = printReceipts,
+        extra = extra,
+        clientPhone = clientPhone,
+        clientEmail = clientEmail,
+        receiptDiscount = receiptDiscount,
+        paymentAddress = paymentAddress,
+        paymentPlace = paymentPlace,
+        userUuid = userUuid
 ) {
 
     /**
@@ -55,7 +58,9 @@ class PrintSellReceiptCommand(
             clientPhone: String?,
             clientEmail: String?,
             paymentAddress: String? = null,
-            paymentPlace: String? = null) : this(
+            paymentPlace: String? = null,
+            userUuid: String? = null
+    ) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -81,11 +86,12 @@ class PrintSellReceiptCommand(
             clientEmail,
             BigDecimal.ZERO,
             paymentAddress,
-            paymentPlace
+            paymentPlace,
+            userUuid
     )
 
-    fun process(activity: Activity, callback: IntegrationManagerCallback) {
-        process(activity, callback, NAME)
+    fun process(context: Context, callback: IntegrationManagerCallback) {
+        process(context, callback, NAME)
     }
 
     companion object {
@@ -97,13 +103,14 @@ class PrintSellReceiptCommand(
                 return null
             }
             return PrintSellReceiptCommand(
-                    getPrintReceipts(bundle),
-                    getSetExtra(bundle),
-                    getClientPhone(bundle),
-                    getClientEmail(bundle),
-                    getReceiptDiscount(bundle),
-                    getPaymentAddress(bundle),
-                    getPaymentPlace(bundle)
+                    printReceipts = getPrintReceipts(bundle),
+                    extra = getSetExtra(bundle),
+                    clientPhone = getClientPhone(bundle),
+                    clientEmail = getClientEmail(bundle),
+                    receiptDiscount = getReceiptDiscount(bundle),
+                    paymentAddress = getPaymentAddress(bundle),
+                    paymentPlace = getPaymentPlace(bundle),
+                    userUuid = getUserUuid(bundle)
             )
         }
     }

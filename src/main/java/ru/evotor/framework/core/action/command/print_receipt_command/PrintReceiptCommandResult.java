@@ -57,6 +57,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_OPERATION_DENIED = -11;
 
+    /**
+     * Пользователь не найден на терминале
+     */
+    public static final int ERROR_CODE_USER_NOT_FOUND = -12;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {

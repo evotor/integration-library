@@ -1,11 +1,13 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
-import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.calculator.MoneyCalculator
+import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
@@ -28,6 +30,7 @@ import java.util.*
  * @param receiptDiscount Скидка на чек.
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
+ * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 abstract class PrintReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,
@@ -35,20 +38,21 @@ abstract class PrintReceiptCommand(
         val clientPhone: String?,
         val clientEmail: String?,
         val receiptDiscount: BigDecimal?,
-        val paymentAddress: String? = null,
-        val paymentPlace: String? = null
+        val paymentAddress: String?,
+        val paymentPlace: String?,
+        val userUuid: String?
 ) : IBundlable {
 
-    internal fun process(activity: Activity, callback: IntegrationManagerCallback, action: String) {
-        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, activity.applicationContext)
+    internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
+        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
-        IntegrationManagerImpl(activity.applicationContext)
+        IntegrationManagerImpl(context.applicationContext)
                 .call(action,
                         componentNameList[0],
                         this,
-                        activity,
+                        ICanStartActivity { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
                         callback,
                         Handler(Looper.getMainLooper())
                 )
@@ -60,9 +64,11 @@ abstract class PrintReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
-        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString() ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString()
+                ?: BigDecimal.ZERO.toPlainString())
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
+        bundle.putString(KEY_USER_UUID, userUuid)
         return bundle
     }
 
@@ -81,6 +87,7 @@ abstract class PrintReceiptCommand(
         private const val KEY_RECEIPT_DISCOUNT = "receiptDiscount"
         private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
         private const val KEY_PAYMENT_PLACE = "paymentPlace"
+        private const val KEY_USER_UUID = "userUuid"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
@@ -110,6 +117,10 @@ abstract class PrintReceiptCommand(
 
         internal fun getPaymentPlace(bundle: Bundle): String? {
             return bundle.getString(KEY_PAYMENT_PLACE, null)
+        }
+
+        internal fun getUserUuid(bundle: Bundle): String? {
+            return bundle.getString(KEY_USER_UUID, null)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
