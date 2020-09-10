@@ -17,11 +17,15 @@ object UserApi {
         context.contentResolver
                 .query(UsersTable.URI, null, null, null, null)
                 ?.use { cursor ->
-                    val users = ArrayList<User>()
-                    while (cursor.moveToNext()) {
-                        users.add(UserMapper.createUser(cursor))
+                    try {
+                        val users = ArrayList<User>()
+                        while (cursor.moveToNext()) {
+                            users.add(UserMapper.createUser(cursor))
+                        }
+                        return users
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                    return users
                 }
         return null
     }
@@ -36,8 +40,12 @@ object UserApi {
         context.contentResolver
                 .query(UsersTable.URI_AUTHENTICATED, null, null, null, null)
                 ?.use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        return UserMapper.createUser(cursor)
+                    try {
+                        if (cursor.moveToFirst()) {
+                            return UserMapper.createUser(cursor)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
         return null
@@ -53,11 +61,15 @@ object UserApi {
         context.contentResolver
                 .query(GrantsTable.URI, null, null, null, null)
                 ?.use { cursor ->
-                    val grants = ArrayList<Grant>()
-                    while (cursor.moveToNext()) {
-                        grants.add(UserMapper.createGrant(cursor))
+                    try {
+                        val grants = ArrayList<Grant>()
+                        while (cursor.moveToNext()) {
+                            grants.add(UserMapper.createGrant(cursor))
+                        }
+                        return grants
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                    return grants
                 }
         return null
     }
@@ -72,11 +84,15 @@ object UserApi {
         context.contentResolver
                 .query(GrantsTable.URI_GRANTS_OF_AUTHENTICATED_USER, null, null, null, null)
                 ?.use { cursor ->
-                    val grants = ArrayList<Grant>()
-                    while (cursor.moveToNext()) {
-                        grants.add(UserMapper.createGrant(cursor))
+                    try {
+                        val grants = ArrayList<Grant>()
+                        while (cursor.moveToNext()) {
+                            grants.add(UserMapper.createGrant(cursor))
+                        }
+                        return grants
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                    return grants
                 }
         return null
     }

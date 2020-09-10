@@ -254,7 +254,7 @@ object ReceiptApi {
                 type?.let { "${ReceiptHeaderTable.COLUMN_TYPE} = ?" },
                 type?.let { arrayOf(it.name) },
                 null
-        )?.use{
+        )?.let {
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
                 override fun getValue(): Receipt.Header? = createReceiptHeader(this)
             }
@@ -269,7 +269,7 @@ object ReceiptApi {
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
             context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
-                    ?.use {
+                    ?.let {
                         object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
                             override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
                         }
