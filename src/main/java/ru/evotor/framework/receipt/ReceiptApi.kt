@@ -57,19 +57,14 @@ object ReceiptApi {
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
-        val cursor: Cursor? = context.contentResolver.query(
+        context.contentResolver.query(
                 Uri.withAppendedPath(PositionTable.URI, barcode),
                 null, null, null, null)
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    createPosition(cursor)?.let { positionsList.add(it) }
+                ?.use { cursor ->
+                    while (cursor.moveToNext()) {
+                        createPosition(cursor)?.let { positionsList.add(it) }
+                    }
                 }
-            } finally {
-                cursor.close()
-            }
-        }
 
         return positionsList
     }
@@ -81,9 +76,7 @@ object ReceiptApi {
      * @return чек или null, если чек закрыт
      */
     @JvmStatic
-    fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
-        return getReceipt(context, type, null)
-    }
+    fun getReceipt(context: Context, type: Receipt.Type): Receipt? = getReceipt(context, type, null)
 
     /**
      * Получить чек по uuid. Чек может быть уже закрыт
@@ -92,9 +85,7 @@ object ReceiptApi {
      * @return чек или null, если чек не найден
      */
     @JvmStatic
-    fun getReceipt(context: Context, uuid: String): Receipt? {
-        return getReceipt(context, null, uuid)
-    }
+    fun getReceipt(context: Context, uuid: String): Receipt? = getReceipt(context, null, uuid)
 
     private fun getReceipt(context: Context, type: Receipt.Type?, uuid: String? = null): Receipt? {
         if (type == null && uuid == null) {
@@ -265,9 +256,7 @@ object ReceiptApi {
                 null
         )?.let {
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
-                override fun getValue(): Receipt.Header? {
-                    return createReceiptHeader(this)
-                }
+                override fun getValue(): Receipt.Header? = createReceiptHeader(this)
             }
         }
     }
@@ -318,27 +307,8 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
-        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
-        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
-        val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
-            if (it < 0) {
-                null
-            } else {
-                PurchaserType.values()[it.toInt() % PurchaserType.values().size]
-            }
-        }
-        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
-        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
-                cursor.optString(PrintGroupSubTable.KEY_PREFERENTIAL_MEDICINE_TYPE)?.let {
-                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
-                }
-        val documentNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_DOCUMENT_NUMBER)
-        val documentDate: Date? = cursor.optLong(PrintGroupSubTable.COLUMN_DOCUMENT_DATE)?.let { Date(it) }
-        val serialNumber: String? = cursor.optString(PrintGroupSubTable.COLUMN_SERIAL_NUMBER)
-        val medicineAdditionalDetails: MedicineAdditionalDetails? =
-                if (documentDate != null && documentNumber != null && serialNumber != null)
-                    MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
-                else null
+        val purchaser = createPurchaser(cursor)
+        val medicineAttribute = createMedicineAttribute(cursor)
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -348,20 +318,52 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
                 cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
-                if (purchaserName != null && purchaserDocumentNumber != null) {
-                    Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
-                } else {
+                purchaser,
+                medicineAttribute
+        )
+    }
+
+    private fun createPurchaser(cursor: Cursor): Purchaser? {
+        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
+        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+
+        return if (purchaserName != null && purchaserDocumentNumber != null) {
+            val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+                if (it < 0) {
                     null
-                },
-                if (subjectId != null) {
-                    MedicineAttribute(
-                            subjectId = subjectId,
-                            preferentialMedicineType = preferentialMedicineType,
-                            medicineAdditionalDetails = medicineAdditionalDetails
-                    )
                 } else {
-                    null
+                    PurchaserType.values()[it.toInt() % PurchaserType.values().size]
                 }
+            }
+            Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
+        } else {
+            null
+        }
+    }
+
+    private fun createMedicineAttribute(cursor: Cursor): MedicineAttribute? {
+        val oldSubjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+
+        val subjectId = oldSubjectId ?: cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID) ?: return null
+
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType =
+                cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
+                } ?: PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE
+
+        val documentNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
+        val documentDate: Date? = cursor.optLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }
+        val serialNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
+
+        val medicineAdditionalDetails: MedicineAdditionalDetails? =
+                if (documentDate != null && documentNumber != null && serialNumber != null)
+                    MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
+                else null
+
+        return MedicineAttribute(
+                subjectId = subjectId,
+                preferentialMedicineType = preferentialMedicineType,
+                medicineAdditionalDetails = medicineAdditionalDetails
         )
     }
 
