@@ -9,10 +9,10 @@ import ru.evotor.framework.Utils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.PreferentialMedicine.PreferentialMedicineType
-import java.util.*
 
 /**
- * Дополнительные реквизиты пользователя, которые необходимы для формирования структурного тега 1084 (состоит из тегов 1085 и 1086)
+ * Дополнительные реквизиты пользователя, которые необходимы для формирования структурного тега 1084
+ * (состоит из тегов 1085 и 1086)
  * Применяется к каждой печатной группе
  */
 data class MedicineAttribute(
@@ -20,18 +20,21 @@ data class MedicineAttribute(
          * Идентификатор субъекта обращения
          * Значение дополнительного реквизита пользователя (тег 1086)
          */
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_VALUE)
         val subjectId: String,
         /**
          * Тип льготы рецепта
          * При наличии рецепта обязателен к заполнению
          * Необходим для формирования тега 1085
          */
-        val preferentialMedicineType: PreferentialMedicineType? = null,
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_TITLE)
+        val preferentialMedicineType: PreferentialMedicineType = PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE,
 
         /**
          * Дополнительные реквизиты пользователя (тег 1086)
          * обязательны для рецепта с полной, либо частичной льготой
          */
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_VALUE)
         val medicineAdditionalDetails: MedicineAdditionalDetails? = null
 
 ) : Parcelable, IBundlable {
@@ -39,19 +42,17 @@ data class MedicineAttribute(
     override fun writeToParcel(dest: Parcel, flag: Int) {
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(subjectId)
-            parcel.writeString(preferentialMedicineType?.name)
+            parcel.writeString(preferentialMedicineType.name)
             parcel.writeParcelable(medicineAdditionalDetails, flag)
         }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_SUBJECT_ID, subjectId)
-            putString(KEY_PREFERENTIAL_MEDICINE_TYPE, preferentialMedicineType?.name)
+            putString(KEY_PREFERENTIAL_MEDICINE_TYPE, preferentialMedicineType.name)
             putBundle(KEY_MEDICINE_ADDITIONAL_DETAILS, medicineAdditionalDetails?.toBundle())
         }
     }
@@ -87,12 +88,12 @@ data class MedicineAttribute(
             var medicineAttribute: MedicineAttribute? = null
 
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                when (version) {
+                medicineAttribute = when (version) {
                     1 -> {
-                        medicineAttribute = MedicineAttribute(parcel.readString())
+                        MedicineAttribute(parcel.readString())
                     }
                     else -> {
-                        medicineAttribute = MedicineAttribute(
+                        MedicineAttribute(
                                 subjectId = parcel.readString(),
                                 preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
                                         PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),

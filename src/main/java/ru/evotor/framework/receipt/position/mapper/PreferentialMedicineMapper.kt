@@ -24,12 +24,13 @@ internal object PreferentialMedicineMapper {
     }
 
     fun readFromBundle(bundle: Bundle?): PreferentialMedicine? = bundle?.let {
-        val type = it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE) ?: return@let null
+        val type = it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE)
+                ?: PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE.name
         PreferentialMedicine(
                 type = PreferentialMedicine.PreferentialMedicineType.valueOf(type),
-                preferentialValue = BundleUtils.getBigDecimal(it, KEY_PREFERENTIAL_MEDICINE_VALUE) ?: BigDecimal.ZERO
+                preferentialValue = BundleUtils.getBigDecimal(it, KEY_PREFERENTIAL_MEDICINE_VALUE)
+                        ?: BigDecimal.ZERO
         )
-
     }
 
     fun writeToBundle(preferentialMedicine: PreferentialMedicine) = Bundle().apply {
