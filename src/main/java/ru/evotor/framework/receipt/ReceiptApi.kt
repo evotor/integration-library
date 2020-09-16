@@ -3,6 +3,7 @@ package ru.evotor.framework.receipt
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.support.annotation.WorkerThread
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
@@ -28,7 +29,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+@WorkerThread
 object ReceiptApi {
+
     @Deprecated(message = "Используйте методы API")
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
@@ -342,7 +345,7 @@ object ReceiptApi {
     }
 
     private fun createMedicineAttribute(cursor: Cursor): MedicineAttribute? {
-        val oldSubjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
+        val oldSubjectId = cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID)
 
         val subjectId = oldSubjectId ?: cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID) ?: return null
 
