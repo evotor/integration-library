@@ -345,14 +345,12 @@ object ReceiptApi {
     }
 
     private fun createMedicineAttribute(cursor: Cursor): MedicineAttribute? {
-        val oldSubjectId = cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID)
+        val subjectId = cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID) ?: return null
 
-        val subjectId = oldSubjectId ?: cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID) ?: return null
-
-        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType =
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
                 cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
                     PreferentialMedicine.PreferentialMedicineType.valueOf(it)
-                } ?: PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE
+                }
 
         val documentNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
         val documentDate: Date? = cursor.optLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }

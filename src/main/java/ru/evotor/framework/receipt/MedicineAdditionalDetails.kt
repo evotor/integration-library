@@ -34,9 +34,7 @@ class MedicineAdditionalDetails(
         }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     override fun toBundle(): Bundle {
         return Bundle().apply {

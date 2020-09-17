@@ -11,10 +11,4 @@ object PrintGroupSubTable {
     const val COLUMN_PURCHASER_NAME = "PURCHASER_NAME"
     const val COLUMN_PURCHASER_DOCUMENT_NUMBER = "PURCHASER_DOCUMENT_NUMBER"
     const val COLUMN_PURCHASER_TYPE = "PURCHASER_TYPE"
-    @Deprecated(
-            level = DeprecationLevel.WARNING,
-            message = "Будет удалено из PrintGroupSubTable и перенесено в MedicineAttributeSubTable",
-            replaceWith = ReplaceWith(expression = "MedicineAttributeSubTable.COLUMN_SUBJECT_ID",
-                    imports = ["ru.evotor.framework.receipt.MedicineAttributeSubTable"]))
-    const val COLUMN_SUBJECT_ID = "SUBJECT_ID"
 }
