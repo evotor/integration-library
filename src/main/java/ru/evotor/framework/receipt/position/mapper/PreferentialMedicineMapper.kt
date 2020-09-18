@@ -7,16 +7,17 @@ import ru.evotor.framework.core.action.datamapper.BundleUtils
 import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.PreferentialMedicine
-import ru.evotor.framework.safeGetInt
+import ru.evotor.framework.safeGetString
 
 internal object PreferentialMedicineMapper {
 
     private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PreferentialMedicineType"
     private const val KEY_PREFERENTIAL_MEDICINE_VALUE = "PreferentialMedicineValue"
 
-    internal fun readFromCursor(cursor: Cursor): PreferentialMedicine? = cursor.safeGetInt(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
+    internal fun readFromCursor(cursor: Cursor): PreferentialMedicine? = cursor.safeGetString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
         PreferentialMedicine(
-                type = PreferentialMedicine.PreferentialMedicineType.values()[it],
+                type = Utils.safeValueOf(PreferentialMedicine.PreferentialMedicineType::class.java,
+                        it, null),
                 preferentialValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE_AMOUNT)?.toBigDecimalOrNull()
         )
     }
