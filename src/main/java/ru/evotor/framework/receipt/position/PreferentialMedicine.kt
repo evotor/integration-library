@@ -13,7 +13,7 @@ data class PreferentialMedicine(
         /**
          * Тип льготы
          */
-        val type : PreferentialMedicineType,
+        val type: PreferentialMedicineType,
         /**
          * Сумма льготы.
          * Указывается только в случае рецепта с частичной льготой [PreferentialMedicineType.PARTIAL_PREFERENTIAL_MEDICINE]
@@ -22,12 +22,15 @@ data class PreferentialMedicine(
          * Например, при субсидии 123 руб 00 коп значение 123.00
          */
         val preferentialValue: BigDecimal? = null
-) : IBundlable{
-    companion object{
+) : IBundlable {
+
+    override fun toBundle(): Bundle = PreferentialMedicineMapper.writeToBundle(this)
+
+    companion object {
+
         @JvmStatic
         fun from(bundle: Bundle?): PreferentialMedicine? = PreferentialMedicineMapper.readFromBundle(bundle)
     }
-    override fun toBundle(): Bundle = PreferentialMedicineMapper.writeToBundle(this)
 
     /**
      * Тип льготы
