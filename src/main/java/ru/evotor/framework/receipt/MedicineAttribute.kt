@@ -58,16 +58,11 @@ data class MedicineAttribute(
     }
 
     companion object {
-        @JvmField
-        val CREATOR = object : Parcelable.Creator<MedicineAttribute> {
-            override fun createFromParcel(parcel: Parcel): MedicineAttribute = create(parcel)
-            override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
-        }
 
         /**
          * Текущая версия объекта MedicineAttribute.
          */
-        private const val VERSION = 2
+        private const val VERSION = 3
         private const val KEY_SUBJECT_ID = "SUBJECT_ID"
         private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PREFERENTIAL_MEDICINE_TYPE"
         private const val KEY_MEDICINE_ADDITIONAL_DETAILS = "MEDICINE_ADDITIONAL_DETAILS"
@@ -84,6 +79,12 @@ data class MedicineAttribute(
             }
         }
 
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<MedicineAttribute> {
+            override fun createFromParcel(parcel: Parcel): MedicineAttribute = create(parcel)
+            override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
+        }
+
         private fun create(dest: Parcel): MedicineAttribute {
             var medicineAttribute: MedicineAttribute? = null
 
@@ -92,7 +93,15 @@ data class MedicineAttribute(
                     1 -> {
                         MedicineAttribute(parcel.readString())
                     }
-                    else -> {
+                    2 -> {
+                        MedicineAttribute(
+                                subjectId = parcel.readString(),
+                                preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                                        PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
+                                medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
+                        )
+                    }
+                    3 -> {
                         MedicineAttribute(
                                 subjectId = parcel.readString(),
                                 preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
@@ -100,6 +109,7 @@ data class MedicineAttribute(
                                 medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
                         )
                     }
+                    else -> null
                 }
             }
             checkNotNull(medicineAttribute)
