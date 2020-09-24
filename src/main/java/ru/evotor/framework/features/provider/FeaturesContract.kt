@@ -21,6 +21,10 @@ object FeaturesContract {
     const val PATH_MEDICINE_MARK = "medicine_mark"
     const val PATH_SHOES_MARK = "shoes_mark"
     const val PATH_CLASSIFICATION_CODE = "classification_code"
+    const val PATH_TYRES_MARK = "tyres_mark"
+    const val PATH_PERFUMES_MARK = "perfumes_mark"
+    const val PATH_PHOTOS_MARK = "photos_mark"
+
 
     const val COLUMN_IS_ACTIVE = "is_active"
 

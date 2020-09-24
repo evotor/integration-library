@@ -981,6 +981,48 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toTyresMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.TYRES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTyresParams(mark);
+            return this;
+        }
+
+        public Builder toPerfumeMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.PERFUME_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPerfumesParams(mark);
+            return this;
+        }
+
+        public Builder toPhotosMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.PHOTOS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPhotosParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1024,6 +1066,18 @@ public class Position implements Parcelable {
         }
 
         private void setMedicineParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setTyresParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setPerfumesParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setPhotosParams(String mark) {
             position.mark = mark;
         }
 

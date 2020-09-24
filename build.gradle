@@ -6,7 +6,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka-android'
 
 android {
-    def version = 13
+    def version = 14
 
     compileSdkVersion 25
     buildToolsVersion "29.0.3"
@@ -15,7 +15,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 25
         versionCode version
-        versionName "0.4.6"
+        versionName "0.4.7_new_product_types"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
