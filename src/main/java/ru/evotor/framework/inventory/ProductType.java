@@ -38,4 +38,19 @@ public enum ProductType {
      * Маркированные лекарства
      */
     MEDICINE_MARKED,
+
+    /**
+     * Шины
+     */
+    TYRES_MARKED,
+
+    /**
+     * Парфюмерия (духи, туалетная вода)
+     */
+    PERFUME_MARKED,
+
+    /**
+     * Фототовары (фотокамеры, лампы-вспышки)
+     */
+    PHOTOS_MARKED
 }
