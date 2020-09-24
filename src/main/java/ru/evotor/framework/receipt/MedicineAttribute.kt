@@ -89,27 +89,24 @@ data class MedicineAttribute(
             var medicineAttribute: MedicineAttribute? = null
 
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                medicineAttribute = when (version) {
-                    1 -> {
-                        MedicineAttribute(parcel.readString())
-                    }
-                    2 -> {
-                        MedicineAttribute(
-                                subjectId = parcel.readString(),
-                                preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
-                                        PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                                medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
-                        )
-                    }
-                    3 -> {
-                        MedicineAttribute(
-                                subjectId = parcel.readString(),
-                                preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
-                                        null),
-                                medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
-                        )
-                    }
-                    else -> null
+                if (version >= 1) {
+                    medicineAttribute = MedicineAttribute(parcel.readString())
+                }
+                if (version >= 2) {
+                    medicineAttribute = MedicineAttribute(
+                            subjectId = parcel.readString(),
+                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                                    PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
+                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
+                    )
+                }
+                if (version >= 3) {
+                    medicineAttribute = MedicineAttribute(
+                            subjectId = parcel.readString(),
+                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                                    null),
+                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
+                    )
                 }
             }
             checkNotNull(medicineAttribute)

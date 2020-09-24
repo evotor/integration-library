@@ -23,6 +23,7 @@ import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
+import ru.evotor.framework.safeGetLong
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
@@ -331,12 +332,8 @@ object ReceiptApi {
         val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
 
         return if (purchaserName != null && purchaserDocumentNumber != null) {
-            val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
-                if (it < 0) {
-                    null
-                } else {
-                    PurchaserType.values()[it.toInt() % PurchaserType.values().size]
-                }
+            val purchaserType = cursor.safeGetLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+                PurchaserType.values()[it.toInt()]
             }
             Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
         } else {
