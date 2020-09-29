@@ -44,8 +44,9 @@ data class ReturnPositionsForBarcodeRequestedEvent(
      * @property positionsList список позиций, которые будут добавлены в чек
      * @property iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
      */
-    data class Result(
+    data class Result private constructor(
             val iCanCreateNewProduct: Boolean,
+            val positions: List<Position>,
             val positionsList: List<List<Position>>
     ) : IntegrationEvent.Result() {
 
@@ -53,10 +54,21 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         constructor(
                 positions: List<Position>,
                 iCanCreateNewProduct: Boolean
-        ) : this(iCanCreateNewProduct, listOf(positions))
+        ) : this(iCanCreateNewProduct, positions, emptyList())
+
+        constructor(
+                iCanCreateNewProduct: Boolean,
+                positionsList: List<List<Position>>
+        ) : this(iCanCreateNewProduct, emptyList(), positionsList)
 
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
+            putInt(KEY_EXTRA_POSITIONS_COUNT, positions.size)
+            if (!positions.isNullOrEmpty()) {
+                for (i in positions.indices) {
+                    putParcelable(KEY_EXTRA_POSITIONS + i, positions[i])
+                }
+            }
             if (!positionsList.isNullOrEmpty()) {
                 putInt(KEY_EXTRA_POSITIONS_LIST_COUNT, positionsList.size)
                 for (i in positionsList.indices) {
