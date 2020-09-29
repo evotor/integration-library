@@ -42,10 +42,15 @@ data class ReturnPositionsForBarcodeRequestedEvent(
      * Результат обработки события сканирования штрихкода.
      *
      * @property positionsList список позиций, которые будут добавлены в чек
+     * @property positions список позиций, которые будут добавлены в чек вместе
      * @property iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
      */
-    data class Result private constructor(
+    data class Result(
             val iCanCreateNewProduct: Boolean,
+            @Deprecated("""Использовать для обратной совместимости.
+                    На старых версиях кассы (с приложением ЭвоторПос ниже 6.35) будут браться значения отсюда,
+                    на новых версиях кассы (с приложением ЭвоторПос выше 6.35) будут браться из @property positionsList
+                    Будет удалено после обновления рынка.""")
             val positions: List<Position>,
             val positionsList: List<List<Position>>
     ) : IntegrationEvent.Result() {
@@ -55,11 +60,6 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                 positions: List<Position>,
                 iCanCreateNewProduct: Boolean
         ) : this(iCanCreateNewProduct, positions, emptyList())
-
-        constructor(
-                iCanCreateNewProduct: Boolean,
-                positionsList: List<List<Position>>
-        ) : this(iCanCreateNewProduct, emptyList(), positionsList)
 
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
@@ -74,7 +74,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                 for (i in positionsList.indices) {
                     putInt(KEY_EXTRA_SUB_POSITIONS_COUNT + i, positionsList[i].size)
                     for (j in positionsList[i].indices) {
-                        putParcelable(KEY_EXTRA_SUB_POSITIONS_LIST + j, positionsList[i][j])
+                        putParcelable("${KEY_EXTRA_SUB_POSITIONS_LIST}_${i}_${j}", positionsList[i][j]) // KEY_EXTRA_SUB_POSITIONS_LIST0
                     }
                 }
             }
@@ -104,7 +104,6 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
                 val listCount = it.getInt(KEY_EXTRA_POSITIONS_LIST_COUNT)
                 val positionsList = mutableListOf<List<Position>>()
-                positionsList.add(positions)
 
                 if (listCount != 0) {
                     for (i in 0 until listCount) {
@@ -112,7 +111,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                         val subList = mutableListOf<Position>()
                         for (j in 0 until subListCount) {
                             subList.add(
-                                    it.getParcelable(KEY_EXTRA_SUB_POSITIONS_LIST + j)
+                                    it.getParcelable("${KEY_EXTRA_SUB_POSITIONS_LIST}_${i}_${j}")
                                             ?: return null
                             )
                         }
@@ -120,7 +119,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                     }
                 }
 
-                Result(iCanCreateNewProduct, positionsList)
+                Result(iCanCreateNewProduct, positions, positionsList)
             }
 
         }
