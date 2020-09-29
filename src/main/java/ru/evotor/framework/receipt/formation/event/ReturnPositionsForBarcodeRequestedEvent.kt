@@ -41,8 +41,8 @@ data class ReturnPositionsForBarcodeRequestedEvent(
     /**
      * Результат обработки события сканирования штрихкода.
      *
-     * @property positionsList список позиций, которые будут добавлены в чек
-     * @property positions список позиций, которые будут добавлены в чек вместе
+     * @property positionsList список позиций, которые будут добавлены в чек раздельно
+     * @property positions список позиций, которые будут добавлены в чек вместе  (использовать для обратной совместимости)
      * @property iCanCreateNewProduct указывает, будет приложение создавать товар на основе отсканированного штрихкода или нет.
      */
     data class Result(
