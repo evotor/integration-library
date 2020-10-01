@@ -9,29 +9,32 @@ import ru.evotor.framework.Utils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.PreferentialMedicine.PreferentialMedicineType
-import java.util.*
 
 /**
- * Дополнительные реквизиты пользователя, которые необходимы для формирования структурного тега 1084 (состоит из тегов 1085 и 1086)
+ * Дополнительные реквизиты пользователя, которые необходимы для формирования структурного тега 1084
+ * (состоит из тегов 1085 и 1086)
  * Применяется к каждой печатной группе
  */
 data class MedicineAttribute(
         /**
-         * Идентификатор субъекта обращения
+         * Часть композитного тега: идентификатор субъекта обращения
          * Значение дополнительного реквизита пользователя (тег 1086)
          */
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_VALUE)
         val subjectId: String,
         /**
          * Тип льготы рецепта
          * При наличии рецепта обязателен к заполнению
          * Необходим для формирования тега 1085
          */
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_TITLE)
         val preferentialMedicineType: PreferentialMedicineType? = null,
 
         /**
-         * Дополнительные реквизиты пользователя (тег 1086)
+         * Часть композитного тега: дополнительные реквизиты пользователя (тег 1086)
          * обязательны для рецепта с полной, либо частичной льготой
          */
+        @FiscalRequisite(tag = FiscalTags.MEDICINE_ADDITIONAL_REQUISITE_VALUE)
         val medicineAdditionalDetails: MedicineAdditionalDetails? = null
 
 ) : Parcelable, IBundlable {
@@ -44,9 +47,7 @@ data class MedicineAttribute(
         }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
@@ -57,16 +58,11 @@ data class MedicineAttribute(
     }
 
     companion object {
-        @JvmField
-        val CREATOR = object : Parcelable.Creator<MedicineAttribute> {
-            override fun createFromParcel(parcel: Parcel): MedicineAttribute = create(parcel)
-            override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
-        }
 
         /**
          * Текущая версия объекта MedicineAttribute.
          */
-        private const val VERSION = 2
+        private const val VERSION = 3
         private const val KEY_SUBJECT_ID = "SUBJECT_ID"
         private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PREFERENTIAL_MEDICINE_TYPE"
         private const val KEY_MEDICINE_ADDITIONAL_DETAILS = "MEDICINE_ADDITIONAL_DETAILS"
@@ -77,28 +73,40 @@ data class MedicineAttribute(
                 MedicineAttribute(
                         subjectId = subjectId,
                         preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java,
-                                it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE), PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
+                                it.getString(KEY_PREFERENTIAL_MEDICINE_TYPE), null),
                         medicineAdditionalDetails = MedicineAdditionalDetails.fromBundle(it.getBundle(KEY_MEDICINE_ADDITIONAL_DETAILS))
                 )
             }
+        }
+
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<MedicineAttribute> {
+            override fun createFromParcel(parcel: Parcel): MedicineAttribute = create(parcel)
+            override fun newArray(size: Int): Array<MedicineAttribute?> = arrayOfNulls(size)
         }
 
         private fun create(dest: Parcel): MedicineAttribute {
             var medicineAttribute: MedicineAttribute? = null
 
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                when (version) {
-                    1 -> {
-                        medicineAttribute = MedicineAttribute(parcel.readString())
-                    }
-                    else -> {
-                        medicineAttribute = MedicineAttribute(
-                                subjectId = parcel.readString(),
-                                preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
-                                        PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                                medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
-                        )
-                    }
+                if (version >= 1) {
+                    medicineAttribute = MedicineAttribute(parcel.readString())
+                }
+                if (version >= 2) {
+                    medicineAttribute = MedicineAttribute(
+                            subjectId = parcel.readString(),
+                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                                    PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
+                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
+                    )
+                }
+                if (version >= 3) {
+                    medicineAttribute = MedicineAttribute(
+                            subjectId = parcel.readString(),
+                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                                    null),
+                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
+                    )
                 }
             }
             checkNotNull(medicineAttribute)
