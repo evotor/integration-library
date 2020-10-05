@@ -18,6 +18,8 @@ object KktContract {
     const val COLUMN_REGISTER_NUMBER = "REGISTER_NUMBER"
 
     const val PATH_KKT_FS_INFO = ".FsInfo"
+    const val COLUMN_FS_SERIAL_NUMBER = "SERIAL_NUMBER"
+    const val COLUMN_FS_ACTIVATION_DATE = "FS_ACTIVATION_DATE"
 
     const val PATH_KKT_COUNTERS = ".Counters"
     const val COLUMN_CURRENT_CASH_SUM = "CURRENT_CASH_SUM"

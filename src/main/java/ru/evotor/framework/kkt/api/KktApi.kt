@@ -1,9 +1,9 @@
 package ru.evotor.framework.kkt.api
 
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import ru.evotor.framework.*
-import android.database.Cursor
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
@@ -20,10 +20,6 @@ import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.receipt.position.VatRate
-import ru.evotor.framework.safeGetBoolean
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetList
-import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 import java.util.*
 
@@ -36,6 +32,7 @@ object KktApi {
     private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.safeGetBoolean(name) }
 
     private var fsSerialNumber: String? = null
+    private var fsActivationDate: Date? = null
 
     /**
      * Получает версию ФФД, на которую была зарегистрирована касса.
@@ -165,7 +162,7 @@ object KktApi {
             getValue(context, KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
 
     /**
-     * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсуствует
+     * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсутствует
      * или попытка завершилась неудачей
      *
      * @param context текущий контекст
@@ -176,6 +173,20 @@ object KktApi {
         if (fsSerialNumber == null) getKktFsInfo(context)
 
         return fsSerialNumber
+    }
+
+    /**
+     * Возвращает дату активации фискального накопителя или null, если фискальный накопитель отсутствует
+     * или попытка завершилась неудачей
+     *
+     * @param context текущий контекст
+     * @return серийный номер фискального накопителя или null
+     */
+    @JvmStatic
+    fun getFsActivationDate(context: Context): Date? {
+        if (fsActivationDate == null) getKktFsInfo(context)
+
+        return fsActivationDate
     }
 
 
@@ -415,7 +426,10 @@ object KktApi {
         val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_INFO}")
         val cursor = context.contentResolver.query(
                 uri,
-                arrayOf(KktContract.COLUMN_SERIAL_NUMBER),
+                arrayOf(
+                        KktContract.COLUMN_FS_SERIAL_NUMBER,
+                        KktContract.COLUMN_FS_ACTIVATION_DATE
+                ),
                 null,
                 null,
                 null
@@ -423,7 +437,8 @@ object KktApi {
 
         cursor?.use {
             it.moveToFirst()
-            fsSerialNumber = it.safeGetString(KktContract.COLUMN_SERIAL_NUMBER)
+            fsSerialNumber = it.safeGetString(KktContract.COLUMN_FS_SERIAL_NUMBER)
+            fsActivationDate = it.safeGetLong(KktContract.COLUMN_FS_ACTIVATION_DATE)?.let { milliseconds -> Date(milliseconds) }
         }
     }
 }
