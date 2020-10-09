@@ -24,7 +24,7 @@ object FeaturesContract {
     const val PATH_TYRES_MARK = "tyres_mark"
     const val PATH_PERFUMES_MARK = "perfumes_mark"
     const val PATH_PHOTOS_MARK = "photos_mark"
-
+    const val PATH_SLIP_AMOUNT = "slip_amount"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 
