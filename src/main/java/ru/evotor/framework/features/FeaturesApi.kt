@@ -134,7 +134,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isSlipAmountActivee(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SLIP_AMOUNT)
+    fun isSlipAmountActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SLIP_AMOUNT)
 
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
