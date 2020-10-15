@@ -89,25 +89,31 @@ data class MedicineAttribute(
             var medicineAttribute: MedicineAttribute? = null
 
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
+
+                var subjectId: String? = null
+                var preferentialMedicineType: PreferentialMedicineType? = null
+                var medicineAdditionalDetails: MedicineAdditionalDetails? = null
+
                 if (version >= 1) {
-                    medicineAttribute = MedicineAttribute(parcel.readString())
+                    subjectId = parcel.readString()
                 }
                 if (version >= 2) {
-                    medicineAttribute = MedicineAttribute(
-                            subjectId = parcel.readString(),
-                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
-                                    PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
-                    )
+                    preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
+                            null)
+                    medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
                 }
                 if (version >= 3) {
-                    medicineAttribute = MedicineAttribute(
-                            subjectId = parcel.readString(),
-                            preferentialMedicineType = Utils.safeValueOf(PreferentialMedicineType::class.java, parcel.readString(),
-                                    null),
-                            medicineAdditionalDetails = parcel.readParcelable(MedicineAdditionalDetails::class.java.classLoader)
-                    )
+                    // Во второй версии поменялся тип, здесь оставлено для обратной совместимости
+                    // так как некоторые приложения могли использовать 3ю версию.
+                    // Должна быть пустой
                 }
+
+                checkNotNull(subjectId)
+                medicineAttribute = MedicineAttribute(
+                        subjectId = subjectId,
+                        preferentialMedicineType = preferentialMedicineType,
+                        medicineAdditionalDetails = medicineAdditionalDetails
+                )
             }
             checkNotNull(medicineAttribute)
             return medicineAttribute as MedicineAttribute
