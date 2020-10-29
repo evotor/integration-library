@@ -52,5 +52,10 @@ public enum ProductType {
     /**
      * Фототовары (фотокамеры, лампы-вспышки)
      */
-    PHOTOS_MARKED
+    PHOTOS_MARKED,
+
+    /**
+     * Легкая промышленность (одежда, белье)
+     */
+    CLOTHES_MARKED
 }
