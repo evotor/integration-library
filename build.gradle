@@ -6,7 +6,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka-android'
 
 android {
-    def version = 12
+    def version = 14
 
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -15,7 +15,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 25
         versionCode version
-        versionName "0.4.5"
+        versionName "0.4.7_new_product_types"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
@@ -116,7 +116,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "STDEV-1901"
+            version "MRK-166"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"

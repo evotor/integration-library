@@ -3,11 +3,13 @@ package ru.evotor.framework.payment
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.support.annotation.WorkerThread
 import ru.evotor.framework.Utils
 
 /**
  * Интерфейс для получения данных платёжных систем, доступных пользователю смарт-терминала.
  */
+@WorkerThread
 object PaymentSystemApi {
 
     const val AUTHORITY = "ru.evotor.evotorpos.paymentSystem"

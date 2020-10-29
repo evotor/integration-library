@@ -158,4 +158,28 @@ object FiscalTags {
      * Номер таможенной декларации
      */
     const val CUSTOM_DECLARATION_NUMBER = 1231
+
+    /**
+     * Льгота для позиции, используется при продаже лекарственных препаратов
+     */
+    const val MEDICINE_PREFERENTIAL_REQUISITE = 1191
+
+    /**
+     * продажа лекарств
+     * дополнительный реквизит, структурный тег, в него входит 1085 и 1086. Указывается для всего чека
+     */
+    const val MEDICINE_COMPOUND_ADDITIONAL_REQUISITE = 1084
+
+    /**
+     * продажа лекарств
+     * наименование дополнительного реквизита.
+     */
+    const val MEDICINE_ADDITIONAL_REQUISITE_TITLE = 1085
+
+    /**
+     * продажа лекарств
+     * значение дополнительного реквизита.
+     */
+    const val MEDICINE_ADDITIONAL_REQUISITE_VALUE = 1086
+
 }

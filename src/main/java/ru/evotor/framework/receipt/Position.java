@@ -25,6 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 /**
@@ -34,7 +35,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 5;
+    private static final int VERSION = 6;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -166,6 +167,14 @@ public class Position implements Parcelable {
     @Nullable
     private String classificationCode;
 
+    /**
+     * Тип и сумма льготы для лекарственных препаратов
+     * Значения будут записаны в тэг 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_PREFERENTIAL_REQUISITE)
+    @Nullable
+    private PreferentialMedicine preferentialMedicine;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -235,6 +244,7 @@ public class Position implements Parcelable {
         this.importationData = position.getImportationData();
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
+        this.preferentialMedicine = position.getPreferentialMedicine();
     }
 
     /**
@@ -486,6 +496,15 @@ public class Position implements Parcelable {
         return classificationCode;
     }
 
+    /**
+     * @return Льгота для лекарственных препаратов
+     */
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_PREFERENTIAL_REQUISITE)
+    @Nullable
+    public PreferentialMedicine getPreferentialMedicine() {
+        return preferentialMedicine;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -539,9 +558,13 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(importationData, position.importationData))
             return false;
-        if (!Objects.equals(excise, position.excise))
+        if (!Objects.equals(excise, position.excise)) {
             return false;
-        if (!Objects.equals(classificationCode, position.classificationCode))
+        }
+        if (!Objects.equals(classificationCode, position.classificationCode)) {
+            return false;
+        }
+        if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
             return false;
 
         return Objects.equals(subPositions, position.subPositions);
@@ -573,6 +596,7 @@ public class Position implements Parcelable {
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
+        result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         return result;
     }
 
@@ -603,6 +627,7 @@ public class Position implements Parcelable {
                 ", importationData=" + importationData +
                 ", excise=" + excise +
                 ", classificationCode=" + classificationCode +
+                ", preferentialMedicine=" + preferentialMedicine +
                 '}';
     }
 
@@ -667,9 +692,12 @@ public class Position implements Parcelable {
         dest.writeParcelable(this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
+        //ImportationData
         dest.writeBundle(this.importationData != null ? this.importationData.toBundle() : null);
         dest.writeSerializable(this.excise);
         dest.writeString(this.classificationCode);
+        //Preferential medicine
+        dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -748,6 +776,16 @@ public class Position implements Parcelable {
                 this.classificationCode = in.readString();
                 break;
             }
+            case 6: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                this.classificationCode = in.readString();
+                readPreferentialMedicine(in);
+                break;
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -782,6 +820,10 @@ public class Position implements Parcelable {
 
     private void readImportationData(Parcel in) {
         this.importationData = ImportationData.Companion.from(in.readBundle(ImportationData.class.getClassLoader()));
+    }
+
+    private void readPreferentialMedicine(Parcel in) {
+        this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -942,6 +984,48 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toTyresMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.TYRES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTyresParams(mark);
+            return this;
+        }
+
+        public Builder toPerfumeMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.PERFUME_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPerfumesParams(mark);
+            return this;
+        }
+
+        public Builder toPhotosMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.PHOTOS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPhotosParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -985,6 +1069,18 @@ public class Position implements Parcelable {
         }
 
         private void setMedicineParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setTyresParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setPerfumesParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setPhotosParams(String mark) {
             position.mark = mark;
         }
 
@@ -1065,6 +1161,11 @@ public class Position implements Parcelable {
 
         public Builder setExcise(@Nullable BigDecimal excise) {
             position.excise = excise;
+            return this;
+        }
+
+        public Builder setPreferentialMedicine(@Nullable PreferentialMedicine preferentialMedicine) {
+            position.preferentialMedicine = preferentialMedicine;
             return this;
         }
 

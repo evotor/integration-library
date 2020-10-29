@@ -5,11 +5,16 @@ import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.MedicineAttribute
 import ru.evotor.framework.receipt.PrintGroup
 
+/**
+ * Событие, с помощью которого смарт-терминал запрашивает у установленных приложений реквизиты пользователя, при торговле лекарственными препаратами
+ *
+ * @property receiptUuid Идентификатор чека, в который будут добавлены медицинские аттрибуты.
+ * @property printGroups Список печатных групп с реквизитами покупателя.
+ * @see <a href="https://developer.evotor.ru/docs/doc_java_medicine_attribute_event_processing.html">Добавление реквизитов покупателя в чек</a>
+ */
 class ReturnMedicineAttributeEvent(
-
         val receiptUuid: String,
         val printGroups: List<PrintGroup?>
-
 ) : IntegrationEvent() {
 
     override fun toBundle(): Bundle = Bundle().apply {
@@ -27,11 +32,16 @@ class ReturnMedicineAttributeEvent(
             ReturnMedicineAttributeEvent(
                     receiptUuid = it.getString(KEY_RECEIPT_UUID)
                             ?: return null,
-                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS))
+                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
+                            ?: return null)
         }
-
     }
 
+    /**
+     * Результат обработки события, который содержит массив печатных групп с соответствующими медицинскими атрибутами.
+     *
+     * @property attributes Массив печатных групп и соответствующих им объектов с медицинскими атрибутами.
+     */
     data class Result(
             val attributes: Map<PrintGroup?, MedicineAttribute?>?
     ) : IntegrationEvent.Result() {

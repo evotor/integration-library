@@ -3,12 +3,14 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.jetbrains.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import ru.evotor.framework.ParcelableUtils;
+import ru.evotor.framework.kkt.FiscalRequisite;
+import ru.evotor.framework.kkt.FiscalTags;
 
 /**
  * Печатная группа – элемент кассового чека, содержащий данные об организации, которая осуществляет торговую операцию.
@@ -63,6 +65,7 @@ public class PrintGroup implements Parcelable {
     /**
      * Аттрибуты маркированных лекарств
      */
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_COMPOUND_ADDITIONAL_REQUISITE)
     @Nullable
     private MedicineAttribute medicineAttribute;
 
@@ -134,6 +137,7 @@ public class PrintGroup implements Parcelable {
         return purchaser;
     }
 
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_COMPOUND_ADDITIONAL_REQUISITE)
     @Nullable
     public MedicineAttribute getMedicineAttribute() {
         return medicineAttribute;

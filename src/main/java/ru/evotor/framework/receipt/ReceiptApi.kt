@@ -3,6 +3,7 @@ package ru.evotor.framework.receipt
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.support.annotation.WorkerThread
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
@@ -17,16 +18,21 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
+import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
+import ru.evotor.framework.safeGetLong
 import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+@WorkerThread
 object ReceiptApi {
+
     @Deprecated(message = "Используйте методы API")
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
@@ -55,19 +61,14 @@ object ReceiptApi {
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
-        val cursor: Cursor? = context.contentResolver.query(
+        context.contentResolver.query(
                 Uri.withAppendedPath(PositionTable.URI, barcode),
                 null, null, null, null)
-
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    createPosition(cursor)?.let { positionsList.add(it) }
+                ?.use { cursor ->
+                    while (cursor.moveToNext()) {
+                        createPosition(cursor)?.let { positionsList.add(it) }
+                    }
                 }
-            } finally {
-                cursor.close()
-            }
-        }
 
         return positionsList
     }
@@ -79,9 +80,7 @@ object ReceiptApi {
      * @return чек или null, если чек закрыт
      */
     @JvmStatic
-    fun getReceipt(context: Context, type: Receipt.Type): Receipt? {
-        return getReceipt(context, type, null)
-    }
+    fun getReceipt(context: Context, type: Receipt.Type): Receipt? = getReceipt(context, type, null)
 
     /**
      * Получить чек по uuid. Чек может быть уже закрыт
@@ -90,9 +89,7 @@ object ReceiptApi {
      * @return чек или null, если чек не найден
      */
     @JvmStatic
-    fun getReceipt(context: Context, uuid: String): Receipt? {
-        return getReceipt(context, null, uuid)
-    }
+    fun getReceipt(context: Context, uuid: String): Receipt? = getReceipt(context, null, uuid)
 
     private fun getReceipt(context: Context, type: Receipt.Type?, uuid: String? = null): Receipt? {
         if (type == null && uuid == null) {
@@ -263,9 +260,7 @@ object ReceiptApi {
                 null
         )?.let {
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
-                override fun getValue(): Receipt.Header? {
-                    return createReceiptHeader(this)
-                }
+                override fun getValue(): Receipt.Header? = createReceiptHeader(this)
             }
         }
     }
@@ -316,16 +311,8 @@ object ReceiptApi {
     }
 
     private fun createPrintGroup(cursor: Cursor): PrintGroup? {
-        val subjectId = cursor.optString(PrintGroupSubTable.COLUMN_SUBJECT_ID)
-        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
-        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
-        val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
-            if (it < 0) {
-                null
-            } else {
-                PurchaserType.values()[it.toInt() % PurchaserType.values().size]
-            }
-        }
+        val purchaser = createPurchaser(cursor)
+        val medicineAttribute = createMedicineAttribute(cursor)
         return PrintGroup(
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_IDENTIFIER))
                         ?: return null,
@@ -335,16 +322,46 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_ORG_ADDRESS)),
                 safeValueOf<TaxationSystem>(cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM))),
                 cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
-                if (purchaserName != null && purchaserDocumentNumber != null) {
-                    Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
-                } else {
-                    null
-                },
-                if (subjectId != null) {
-                    MedicineAttribute(subjectId)
-                } else {
-                    null
+                purchaser,
+                medicineAttribute
+        )
+    }
+
+    private fun createPurchaser(cursor: Cursor): Purchaser? {
+        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
+        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+
+        return if (purchaserName != null && purchaserDocumentNumber != null) {
+            val purchaserType = cursor.safeGetLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+                PurchaserType.values()[it.toInt()]
+            }
+            Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
+        } else {
+            null
+        }
+    }
+
+    private fun createMedicineAttribute(cursor: Cursor): MedicineAttribute? {
+        val subjectId = cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID) ?: return null
+
+        val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
+                cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
                 }
+
+        val documentNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
+        val documentDate: Date? = cursor.optLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }
+        val serialNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
+
+        val medicineAdditionalDetails: MedicineAdditionalDetails? =
+                if (documentDate != null && documentNumber != null && serialNumber != null)
+                    MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
+                else null
+
+        return MedicineAttribute(
+                subjectId = subjectId,
+                preferentialMedicineType = preferentialMedicineType,
+                medicineAdditionalDetails = medicineAdditionalDetails
         )
     }
 
@@ -396,6 +413,7 @@ object ReceiptApi {
                 .setAttributes(attributes)
                 .setAgentRequisites(AgentRequisitesMapper.read(cursor))
                 .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
+                .setPreferentialMedicine(PreferentialMedicineMapper.readFromCursor(cursor))
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)
