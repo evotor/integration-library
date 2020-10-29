@@ -1026,6 +1026,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toClothesMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.CLOTHES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setClothesParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1081,6 +1095,10 @@ public class Position implements Parcelable {
         }
 
         private void setPhotosParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setClothesParams(String mark) {
             position.mark = mark;
         }
 
