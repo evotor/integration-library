@@ -129,7 +129,12 @@ object FeaturesApi {
      */
     fun isPhotosMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PHOTOS_MARK)
 
-
+    /**
+     * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isSlipAmountActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SLIP_AMOUNT)
 
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
