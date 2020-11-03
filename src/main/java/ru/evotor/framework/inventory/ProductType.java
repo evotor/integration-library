@@ -57,5 +57,5 @@ public enum ProductType {
     /**
      * Легкая промышленность (одежда, белье)
      */
-    CLOTHES_MARKED
+    LIGHT_INDUSTRY_MARKED
 }

@@ -1026,17 +1026,17 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder toClothesMarked(
+        public Builder toLightIndustryMarked(
                 @NonNull String mark
         ) {
-            position.productType = ProductType.CLOTHES_MARKED;
+            position.productType = ProductType.LIGHT_INDUSTRY_MARKED;
             setAlcoParams(
                     null,
                     null,
                     null,
                     null
             );
-            setClothesParams(mark);
+            setLightIndustryParams(mark);
             return this;
         }
 
@@ -1098,7 +1098,7 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setClothesParams(String mark) {
+        private void setLightIndustryParams(String mark) {
             position.mark = mark;
         }
 
