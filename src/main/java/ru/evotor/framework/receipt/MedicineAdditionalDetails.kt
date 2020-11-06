@@ -7,7 +7,7 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.ParcelableUtils
 import java.util.*
 
-class MedicineAdditionalDetails(
+data class MedicineAdditionalDetails(
         /**
          * Номер документа, не более 200 символов;
          * Составная часть дополнительного реквизита пользователя (тег 1086)
