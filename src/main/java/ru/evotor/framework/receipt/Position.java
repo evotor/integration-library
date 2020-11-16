@@ -1040,6 +1040,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toAlternativeTobaccoMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.ALTERNATIVE_TOBACCO_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setAlternativeTobaccoParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1099,6 +1113,10 @@ public class Position implements Parcelable {
         }
 
         private void setLightIndustryParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setAlternativeTobaccoParams(String mark)  {
             position.mark = mark;
         }
 
