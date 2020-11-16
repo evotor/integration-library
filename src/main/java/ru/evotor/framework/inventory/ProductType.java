@@ -55,6 +55,11 @@ public enum ProductType {
     PHOTOS_MARKED,
 
     /**
+     * Легкая промышленность (одежда, белье)
+     */
+    LIGHT_INDUSTRY_MARKED,
+
+    /**
      * Альтернативный табак (сигары, кретек, кальянный табак и т.д.)
      */
     ALTERNATIVE_TOBACCO_MARKED

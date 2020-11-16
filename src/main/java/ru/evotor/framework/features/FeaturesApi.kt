@@ -130,6 +130,13 @@ object FeaturesApi {
     fun isPhotosMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PHOTOS_MARK)
 
     /**
+     * Проверяет, активна ли функция "Маркировка легкой промышленности" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isLightIndustryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_LIGHT_INDUSTRY_MARK)
+
+    /**
      * Проверяет, активна ли функция "Маркировка альтернативного табака" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
