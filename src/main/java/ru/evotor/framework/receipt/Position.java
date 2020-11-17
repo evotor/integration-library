@@ -169,7 +169,9 @@ public class Position implements Parcelable {
 
     /**
      * Тип и сумма льготы для лекарственных препаратов
+     * Значения будут записаны в тэг 1191
      */
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_PREFERENTIAL_REQUISITE)
     @Nullable
     private PreferentialMedicine preferentialMedicine;
 
@@ -497,6 +499,7 @@ public class Position implements Parcelable {
     /**
      * @return Льгота для лекарственных препаратов
      */
+    @FiscalRequisite(tag = FiscalTags.MEDICINE_PREFERENTIAL_REQUISITE)
     @Nullable
     public PreferentialMedicine getPreferentialMedicine() {
         return preferentialMedicine;
