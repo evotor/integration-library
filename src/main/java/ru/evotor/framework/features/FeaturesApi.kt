@@ -141,7 +141,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isAlternativeTobaccoMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ALTERNATIVE_TOBACCO_MARK)
+    fun isTobaccoProductsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCO_PRODUCTS_MARK)
 
     /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
