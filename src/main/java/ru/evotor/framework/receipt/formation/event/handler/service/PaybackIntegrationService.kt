@@ -4,10 +4,7 @@ import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
-import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
-import ru.evotor.framework.receipt.formation.event.ReturnMedicineAttributeEvent
-import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
+import ru.evotor.framework.receipt.formation.event.*
 
 /**
  * Служба для работы с чеком возврата.
@@ -19,8 +16,19 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedPaybackEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
+
+    /**
+     * Возвращает смарт-терминалу список позиций созданных на основе данных, полученных от сканера штрихкодов.
+     * Смарт-терминал добавляет полученный список в чек возврата.
+     **
+     * @param event Событие сканирования штрихкода.
+     * @return Результат обработки события. Содержит список позиций для добавления в чек.
+     */
+    @RequiresIntentAction(ACTION_BARCODE_RECEIVED)
+    open fun handleEvent(event: ReturnPositionsForBarcodeRequestedPaybackEvent): ReturnPositionsForBarcodeRequestedPaybackEvent.Result? = null
 
     /**
      * Возвращает смарт-терминалу массив печатных групп с соответствующими реквизитами покупателя.
@@ -82,6 +90,12 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
          */
         const val ACTION_MEDICINE_ATTRIBUTES = "ru.evotor.event.payback.MEDICINE_ATTRIBUTES"
 
+        /**
+         * Действие, которое сообщает о получении данных от сканера штрихкодов.
+         *
+         * Чтобы подписать службу на получение действия, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.payback.BARCODE_RECEIVED`.
+         */
+        const val ACTION_BARCODE_RECEIVED = "ru.evotor.event.payback.BARCODE_RECEIVED"
 
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].
