@@ -16,7 +16,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
-        ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedPaybackEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
 
@@ -28,7 +28,7 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
      * @return Результат обработки события. Содержит список позиций для добавления в чек.
      */
     @RequiresIntentAction(ACTION_BARCODE_RECEIVED)
-    open fun handleEvent(event: ReturnPositionsForBarcodeRequestedPaybackEvent): ReturnPositionsForBarcodeRequestedPaybackEvent.Result? = null
+    open fun handleEvent(event: ReturnPositionsForBarcodeRequestedEvent): ReturnPositionsForBarcodeRequestedEvent.Result? = null
 
     /**
      * Возвращает смарт-терминалу массив печатных групп с соответствующими реквизитами покупателя.
