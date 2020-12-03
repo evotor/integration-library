@@ -182,4 +182,9 @@ object FiscalTags {
      */
     const val MEDICINE_ADDITIONAL_REQUISITE_VALUE = 1086
 
+    /**
+     * мера количества предмета расчета
+     */
+    const val MEASURE_OF_QUANTITY = 2108
+
 }

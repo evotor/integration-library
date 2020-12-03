@@ -34,6 +34,7 @@ sealed class ProductItem(
             val description: String?,
             val measureName: String,
             val measurePrecision: Int,
+            val measureCode: Int,
             val alcoholByVolume: BigDecimal?,
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,

@@ -35,7 +35,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -70,6 +70,11 @@ public class Position implements Parcelable {
      * Точность единицы измерения.
      */
     private int measurePrecision;
+    /**
+     * Код единицы измерения
+     */
+    @FiscalRequisite(tag = FiscalTags.MEASURE_OF_QUANTITY)
+    private int measureCode;
     /**
      * Ставка НДС.
      */
@@ -183,6 +188,7 @@ public class Position implements Parcelable {
             String name,
             String measureName,
             int measurePrecision,
+            int measureCode,
             @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
@@ -202,6 +208,7 @@ public class Position implements Parcelable {
         this.name = name;
         this.measureName = measureName;
         this.measurePrecision = measurePrecision;
+        this.measureCode = measureCode;
         this.taxNumber = taxNumber;
         this.price = price;
         this.priceWithDiscountPosition = priceWithDiscountPosition;
@@ -226,6 +233,7 @@ public class Position implements Parcelable {
                 position.getName(),
                 position.getMeasureName(),
                 position.getMeasurePrecision(),
+                position.getMeasureCode(),
                 position.getTaxNumber(),
                 position.getPrice(),
                 position.getPriceWithDiscountPosition(),
@@ -361,6 +369,13 @@ public class Position implements Parcelable {
      */
     public int getMeasurePrecision() {
         return measurePrecision;
+    }
+
+    /**
+     * @return Точность единицы измерения.
+     */
+    public int getMeasureCode() {
+        return measureCode;
     }
 
     /**
@@ -521,6 +536,7 @@ public class Position implements Parcelable {
         Position position = (Position) o;
 
         if (measurePrecision != position.measurePrecision) return false;
+        if (measureCode != position.measureCode) return false;
         if (!Objects.equals(uuid, position.uuid)) return false;
         if (!Objects.equals(productUuid, position.productUuid))
             return false;
@@ -579,6 +595,7 @@ public class Position implements Parcelable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (measureName != null ? measureName.hashCode() : 0);
         result = 31 * result + measurePrecision;
+        result = 31 * result + measureCode;
         result = 31 * result + (taxNumber != null ? taxNumber.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
@@ -610,6 +627,7 @@ public class Position implements Parcelable {
                 ", name='" + name + '\'' +
                 ", measureName='" + measureName + '\'' +
                 ", measurePrecision=" + measurePrecision +
+                ", measureCode=" + measureCode +
                 ", taxNumber=" + taxNumber +
                 ", price=" + price +
                 ", priceWithDiscountPosition=" + priceWithDiscountPosition +
@@ -698,6 +716,7 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
+        dest.writeInt(this.measureCode);
     }
 
     protected Position(Parcel in) {
@@ -786,6 +805,17 @@ public class Position implements Parcelable {
                 readPreferentialMedicine(in);
                 break;
             }
+            case 7: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                this.classificationCode = in.readString();
+                readPreferentialMedicine(in);
+                this.measureCode = in.readInt();
+                break;
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -863,6 +893,7 @@ public class Position implements Parcelable {
             builder.position.productType = product.getType();
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
+            builder.position.measureCode = product.getMeasureCode();
 
             return builder;
         }
@@ -885,6 +916,7 @@ public class Position implements Parcelable {
                             name,
                             measureName,
                             measurePrecision,
+                            0,
                             null,
                             price,
                             price,
@@ -1157,6 +1189,11 @@ public class Position implements Parcelable {
 
         public Builder setMeasurePrecision(int measurePrecision) {
             position.measurePrecision = measurePrecision;
+            return this;
+        }
+
+        public Builder setMeasureCode(int measureCode) {
+            position.measureCode = measureCode;
             return this;
         }
 

@@ -47,6 +47,8 @@ public final class PositionMapper {
 
     private static final String KEY_MEASURE_PRECISION = "measurePrecision";
 
+    private static final String KEY_MEASURE_CODE = "measureCode";
+
     private static final String KEY_TAX_NUMBER = "taxNumber";
 
     private static final String KEY_BARCODE = "barcode";
@@ -89,6 +91,7 @@ public final class PositionMapper {
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
         int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
+        int measureCode = bundle.getInt(KEY_MEASURE_CODE, 0);
         TaxNumber taxNumber = TaxNumberMapper.from(bundle.getBundle(KEY_TAX_NUMBER));
         BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
@@ -150,6 +153,7 @@ public final class PositionMapper {
                 name,
                 measureName,
                 measurePrecision,
+                measureCode,
                 taxNumber,
                 price,
                 priceWithDiscountPosition,
@@ -186,6 +190,7 @@ public final class PositionMapper {
         bundle.putString(KEY_NAME, position.getName());
         bundle.putString(KEY_MEASURE_NAME, position.getMeasureName());
         bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasurePrecision());
+        bundle.putInt(KEY_MEASURE_CODE, position.getMeasureCode());
         bundle.putBundle(KEY_TAX_NUMBER, TaxNumberMapper.toBundle(position.getTaxNumber()));
         bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
@@ -233,6 +238,7 @@ public final class PositionMapper {
         if (classificationCode != null) {
             bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
+
         return bundle;
     }
 
