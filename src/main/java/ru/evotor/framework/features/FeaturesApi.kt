@@ -129,7 +129,26 @@ object FeaturesApi {
      */
     fun isPhotosMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PHOTOS_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка легкой промышленности" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isLightIndustryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_LIGHT_INDUSTRY_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка альтернативного табака" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isTobaccoProductsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCO_PRODUCTS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isSlipAmountActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SLIP_AMOUNT)
 
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =

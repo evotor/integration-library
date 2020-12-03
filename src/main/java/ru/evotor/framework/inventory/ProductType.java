@@ -52,5 +52,15 @@ public enum ProductType {
     /**
      * Фототовары (фотокамеры, лампы-вспышки)
      */
-    PHOTOS_MARKED
+    PHOTOS_MARKED,
+
+    /**
+     * Легкая промышленность (одежда, белье)
+     */
+    LIGHT_INDUSTRY_MARKED,
+
+    /**
+     * Альтернативный табак (сигары, кретек, кальянный табак и т.д.)
+     */
+    TOBACCO_PRODUCTS_MARKED
 }
