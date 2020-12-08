@@ -30,6 +30,7 @@ sealed class ProductItem(
             val taxNumber: TaxNumber,
             val type: ProductType,
             val price: BigDecimal,
+            val procurementPrice: BigDecimal,
             val quantity: BigDecimal,
             val description: String?,
             val measureName: String,

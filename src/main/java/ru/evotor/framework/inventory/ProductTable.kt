@@ -16,6 +16,7 @@ object ProductTable {
     const val ROW_NAME = "NAME"
     const val ROW_DESCRIPTION = "DESCRIPTION"
     const val ROW_PRICE_OUT = "PRICE_OUT"
+    const val ROW_PROCUREMENT_PRICE = "PROCUREMENT_PRICE"
     const val ROW_QUANTITY = "QUANTITY"
     const val ROW_MEASURE_NAME = "MEASURE_NAME"
     const val ROW_MEASURE_PRECISION = "MEASURE_PRECISION"

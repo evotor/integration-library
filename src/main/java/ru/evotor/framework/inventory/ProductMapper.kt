@@ -30,6 +30,7 @@ internal object ProductMapper {
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                         description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
                         price = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT))).divide(BigDecimal(100)),
+                        procurementPrice = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PROCUREMENT_PRICE))).divide(BigDecimal(100)),
                         quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
                         measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
                         measurePrecision = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
