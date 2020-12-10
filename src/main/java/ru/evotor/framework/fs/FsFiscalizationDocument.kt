@@ -54,7 +54,7 @@ data class FsFiscalizationDocument(
     /**
      * Список систем налогообложения
      */
-    fun gatTaxationSystemsList(): List<TaxationSystem> {
+    fun getTaxationSystemsList(): List<TaxationSystem> {
         val resultList = ArrayList<TaxationSystem>()
         if (isBitSet(taxationSystems, 0)) {
             resultList.add(TaxationSystem.COMMON)
