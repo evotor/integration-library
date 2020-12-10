@@ -11,7 +11,7 @@ import ru.evotor.framework.safeGetString
 import java.util.*
 
 /**
- * Интерфейс для работы с кассой.
+ * Интерфейс для работы с ФН.
  */
 object FsApi {
     private val fsUriPrefix = "${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_REGISTRATION_INFO}"
