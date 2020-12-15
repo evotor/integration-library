@@ -9,6 +9,7 @@ import ru.evotor.framework.inventory.field.DictionaryField
 import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
 import ru.evotor.framework.inventory.field.TextField
+import ru.evotor.framework.optInt
 import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
@@ -93,7 +94,7 @@ object InventoryApi {
                                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
                                         classificationCode = cursor.optString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE)),
-                                        measureCode = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_CODE))
+                                        measureCode = cursor.optInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_CODE))
                                 )
                             }
                         }
