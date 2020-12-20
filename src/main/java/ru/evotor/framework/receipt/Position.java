@@ -375,7 +375,8 @@ public class Position implements Parcelable {
     /**
      * @return Точность единицы измерения.
      */
-    public int getMeasureCode() {
+    @Nullable
+    public Integer getMeasureCode() {
         return measureCode;
     }
 
