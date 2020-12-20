@@ -74,8 +74,8 @@ public class Position implements Parcelable {
      * Код единицы измерения
      */
     @Nullable
-    @FiscalRequisite(tag = FiscalTags.MEASURE_OF_QUANTITY)
-    private int measureCode;
+    @FiscalRequisite(tag = FiscalTags.MEASURE_CODE)
+    private Integer measureCode;
     /**
      * Ставка НДС.
      */
@@ -189,7 +189,7 @@ public class Position implements Parcelable {
             String name,
             String measureName,
             int measurePrecision,
-            int measureCode,
+            @Nullable Integer measureCode,
             @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
@@ -537,7 +537,7 @@ public class Position implements Parcelable {
         Position position = (Position) o;
 
         if (measurePrecision != position.measurePrecision) return false;
-        if (measureCode != position.measureCode) return false;
+        if (!Objects.equals(measureCode, position.measureCode)) return false;
         if (!Objects.equals(uuid, position.uuid)) return false;
         if (!Objects.equals(productUuid, position.productUuid))
             return false;
@@ -596,7 +596,7 @@ public class Position implements Parcelable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (measureName != null ? measureName.hashCode() : 0);
         result = 31 * result + measurePrecision;
-        result = 31 * result + measureCode;
+        result = 31 * result + (measureCode != null ? measureCode.hashCode() : 0);
         result = 31 * result + (taxNumber != null ? taxNumber.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
@@ -884,7 +884,7 @@ public class Position implements Parcelable {
                             name,
                             measureName,
                             measurePrecision,
-                            0,
+                            null,
                             null,
                             price,
                             price,

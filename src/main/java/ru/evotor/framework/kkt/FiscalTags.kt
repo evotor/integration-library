@@ -185,6 +185,6 @@ object FiscalTags {
     /**
      * мера количества предмета расчета
      */
-    const val MEASURE_OF_QUANTITY = 2108
+    const val MEASURE_CODE = 2108
 
 }

@@ -77,7 +77,6 @@ fun android.database.Cursor.optString(columnIndex: Int): String? {
     return getString(columnIndex)
 }
 
-@Deprecated("Это внутренний метод. Он не должен быть публичным")
 fun android.database.Cursor.optInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
@@ -86,7 +85,6 @@ fun android.database.Cursor.optInt(columnName: String): Int? {
     return optInt(index)
 }
 
-@Deprecated("Это внутренний метод. Он не должен быть публичным")
 fun android.database.Cursor.optInt(columnIndex: Int): Int? {
     if (isNull(columnIndex)) {
         return null

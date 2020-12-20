@@ -396,7 +396,7 @@ object ReceiptApi {
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                        cursor.optInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_CODE)) ?: 255,
+                        cursor.optInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_CODE)),
                         cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
                         price,
                         priceWithDiscountPosition,
