@@ -618,6 +618,8 @@ public class Position implements Parcelable {
         dest.writeString(this.productCode);
         dest.writeInt(this.productType == null ? -1 : this.productType.ordinal());
         dest.writeString(this.name);
+        dest.writeString(this.measure.getName());
+        dest.writeInt(this.measure.getPrecision());
         dest.writeInt(this.taxNumber == null ? -1 : this.taxNumber.ordinal());
         dest.writeSerializable(this.price);
         dest.writeSerializable(this.priceWithDiscountPosition);
@@ -671,7 +673,7 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
-        dest.writeBundle(this.measure.toBundle());
+        dest.writeInt(this.measure.getCode() != null ? this.measure.getCode() : Measure.MEASURE_NO_CODE);
     }
 
     protected Position(Parcel in) {
@@ -737,20 +739,11 @@ public class Position implements Parcelable {
             readPreferentialMedicine(in);
         }
         if (version >= 7) {
-            readMeasureField(in);
+            this.measure.setCode(in.readInt());
         }
 
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
-        }
-    }
-
-    private void readMeasureField(Parcel in) {
-        Measure measure = in.readParcelable(Measure.class.getClassLoader());
-        if (measure != null && this.measure.getName() == null){
-            this.measure = Measure.Companion.getDefault();
-        } else {
-            this.measure = measure;
         }
     }
 

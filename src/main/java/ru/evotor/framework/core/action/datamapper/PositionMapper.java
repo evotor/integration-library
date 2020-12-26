@@ -195,7 +195,7 @@ public final class PositionMapper {
         bundle.putString(KEY_NAME, position.getName());
         bundle.putString(KEY_MEASURE_NAME, position.getMeasure().getName());
         bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasure().getPrecision());
-        bundle.putInt(KEY_MEASURE_CODE, position.getMeasure().getCode() != null ? position.getMeasure().getCode() : -1);
+        bundle.putInt(KEY_MEASURE_CODE, position.getMeasure().getCode() != null ? position.getMeasure().getCode() : Measure.MEASURE_NO_CODE);
         bundle.putBundle(KEY_TAX_NUMBER, TaxNumberMapper.toBundle(position.getTaxNumber()));
         bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
