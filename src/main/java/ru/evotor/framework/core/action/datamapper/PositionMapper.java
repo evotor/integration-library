@@ -92,7 +92,7 @@ public final class PositionMapper {
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
         int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
-        int measureCode = bundle.getInt(KEY_MEASURE_CODE, -1);
+        int measureCode = bundle.getInt(KEY_MEASURE_CODE, Measure.MEASURE_NO_CODE);
         TaxNumber taxNumber = TaxNumberMapper.from(bundle.getBundle(KEY_TAX_NUMBER));
         BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
@@ -149,7 +149,7 @@ public final class PositionMapper {
         Measure measure = new Measure(
                 measureName,
                 measurePrecision,
-                measureCode
+                measureCode == Measure.MEASURE_NO_CODE ? measureCode : null
         );
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(

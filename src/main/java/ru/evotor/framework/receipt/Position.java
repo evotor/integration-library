@@ -32,6 +32,17 @@ import ru.evotor.framework.receipt.position.SettlementMethod;
  * Позиция чека.
  */
 public class Position implements Parcelable {
+    public static final Creator<Position> CREATOR = new Creator<Position>() {
+        @Override
+        public Position createFromParcel(Parcel source) {
+            return new Position(source);
+        }
+
+        @Override
+        public Position[] newArray(int size) {
+            return new Position[size];
+        }
+    };
     /**
      * Текущая версия объекта Position
      */
@@ -65,7 +76,7 @@ public class Position implements Parcelable {
     /**
      * Единицы измерения.
      */
-    private Measure measure;
+    private Measure measure = Measure.Companion.getDefault();
     /**
      * Ставка НДС.
      */
@@ -115,7 +126,6 @@ public class Position implements Parcelable {
      * Подпозиции (модификаторы)
      */
     private List<Position> subPositions = new ArrayList<>();
-
     /**
      * Атрибуты
      * ключ - id словаря для вариантов аттрибута
@@ -123,7 +133,6 @@ public class Position implements Parcelable {
      */
     @Nullable
     private Map<String, AttributeValue> attributes;
-
     /**
      * Признак способа расчёта.
      * <p>
@@ -133,19 +142,16 @@ public class Position implements Parcelable {
      */
     @NonNull
     private SettlementMethod settlementMethod = new SettlementMethod.FullSettlement();
-
     /**
      * Реквизиты агента
      */
     @Nullable
     private AgentRequisites agentRequisites;
-
     /**
      * Данные об импорте продукции
      */
     @Nullable
     private ImportationData importationData;
-
     /**
      * Акциз
      * Тег 1229
@@ -153,7 +159,6 @@ public class Position implements Parcelable {
     @FiscalRequisite(tag = FiscalTags.EXCISE)
     @Nullable
     private BigDecimal excise;
-
     /**
      * Классификационный код (Номенклатурный код)
      * Значение будет записано в тег 1162 только для немаркированных товаров.
@@ -162,7 +167,6 @@ public class Position implements Parcelable {
     @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
     @Nullable
     private String classificationCode;
-
     /**
      * Тип и сумма льготы для лекарственных препаратов
      * Значения будут записаны в тэг 1191
@@ -238,6 +242,30 @@ public class Position implements Parcelable {
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
+    }
+
+    protected Position(Parcel in) {
+        this.uuid = in.readString();
+        this.productUuid = in.readString();
+        this.productCode = in.readString();
+        int tmpProductType = in.readInt();
+        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+        this.name = in.readString();
+        this.measure.setName(in.readString());
+        this.measure.setPrecision(in.readInt());
+        int tmpTaxNumber = in.readInt();
+        this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
+        this.price = (BigDecimal) in.readSerializable();
+        this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
+        this.quantity = (BigDecimal) in.readSerializable();
+        this.barcode = in.readString();
+        this.mark = in.readString();
+        this.alcoholByVolume = (BigDecimal) in.readSerializable();
+        this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
+        this.tareVolume = (BigDecimal) in.readSerializable();
+        this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
+        this.subPositions = in.createTypedArrayList(Position.CREATOR);
+        readAdditionalFields(in);
     }
 
     /**
@@ -676,30 +704,6 @@ public class Position implements Parcelable {
         dest.writeInt(this.measure.getCode() != null ? this.measure.getCode() : Measure.MEASURE_NO_CODE);
     }
 
-    protected Position(Parcel in) {
-        this.uuid = in.readString();
-        this.productUuid = in.readString();
-        this.productCode = in.readString();
-        int tmpProductType = in.readInt();
-        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
-        this.name = in.readString();
-        this.measure.setName(in.readString());
-        this.measure.setPrecision(in.readInt());
-        int tmpTaxNumber = in.readInt();
-        this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
-        this.price = (BigDecimal) in.readSerializable();
-        this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
-        this.quantity = (BigDecimal) in.readSerializable();
-        this.barcode = in.readString();
-        this.mark = in.readString();
-        this.alcoholByVolume = (BigDecimal) in.readSerializable();
-        this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
-        this.tareVolume = (BigDecimal) in.readSerializable();
-        this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
-        this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        readAdditionalFields(in);
-    }
-
     private void readAdditionalFields(Parcel in) {
 
         boolean isVersionGreaterThanCurrent = false;
@@ -780,37 +784,28 @@ public class Position implements Parcelable {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
-    public static final Creator<Position> CREATOR = new Creator<Position>() {
-        @Override
-        public Position createFromParcel(Parcel source) {
-            return new Position(source);
-        }
-
-        @Override
-        public Position[] newArray(int size) {
-            return new Position[size];
-        }
-    };
-
     public Measure getMeasure() {
         return measure;
     }
 
     public static final class Builder {
+        private Position position;
+
+        @Deprecated
+        public Builder(Position position) {
+            this.position = new Position(position);
+        }
+
         public static Builder newInstance(
                 @NonNull ProductItem.Product product,
                 @NonNull BigDecimal quantity
         ) {
-            Measure measure = new Measure(
-                    product.getMeasureName(),
-                    product.getMeasurePrecision(),
-                    product.getMeasureCode()
-            );
+
             Builder builder = Builder.newInstance(
                     UUID.randomUUID().toString(),
                     product.getUuid(),
                     product.getName(),
-                    measure,
+                    product.getMeasure(),
                     product.getPrice(),
                     quantity
             );
@@ -862,13 +857,6 @@ public class Position implements Parcelable {
 
         public static Builder copyFrom(Position position) {
             return new Builder(new Position(position));
-        }
-
-        private Position position;
-
-        @Deprecated
-        public Builder(Position position) {
-            this.position = new Position(position);
         }
 
         public Builder toAlcoholMarked(
@@ -1076,7 +1064,7 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setTobaccoProductsParams(String mark)  {
+        private void setTobaccoProductsParams(String mark) {
             position.mark = mark;
         }
 

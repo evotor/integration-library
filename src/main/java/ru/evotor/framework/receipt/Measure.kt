@@ -1,13 +1,12 @@
 package ru.evotor.framework.receipt
 
-import android.database.Cursor
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
+import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
-import ru.evotor.framework.optInt
 
 /**
  * Единица измерения.
@@ -30,12 +29,6 @@ data class Measure(
 
 ) : Parcelable, IBundlable {
 
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readInt(),
-            parcel.readValue(Int::class.java.classLoader) as? Int) {
-    }
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeInt(precision)
@@ -54,16 +47,7 @@ data class Measure(
 
     companion object {
 
-        fun readFromCursor(cursor: Cursor): Measure? {
-            return cursor.let {
-                Measure(
-                        it.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
-                        it.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                        it.optInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_CODE))
-                )
-            }
-        }
-
+        private const val VERSION = 1
         const val MEASURE_NO_CODE = -1
         private const val KEY_MEASURE_NAME = "measureName"
         private const val KEY_MEASURE_PRECISION = "measurePrecision"
@@ -74,14 +58,27 @@ data class Measure(
                 precision = 0,
                 code = 0
         )
-        val CREATOR = object : Parcelable.Creator<Measure> {
-            override fun createFromParcel(parcel: Parcel): Measure {
-                return Measure(parcel)
-            }
 
-            override fun newArray(size: Int): Array<Measure?> {
-                return arrayOfNulls(size)
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<Measure> {
+            override fun createFromParcel(parcel: Parcel): Measure = create(parcel)
+
+            override fun newArray(size: Int): Array<Measure?> = arrayOfNulls(size)
+        }
+
+        private fun create(dest: Parcel): Measure {
+            var measure: Measure? = null
+            ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
+                if (version >= 1) {
+                    measure = Measure(
+                            name = parcel.readString(),
+                            precision = parcel.readInt(),
+                            code = parcel.readValue(Int::class.java.classLoader) as? Int
+                    )
+                }
             }
+            checkNotNull(measure)
+            return measure as Measure
         }
     }
 }
