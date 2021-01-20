@@ -15,7 +15,7 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
 
     override fun toBundle(): Bundle {
         val result = Bundle()
-        result.putString(KEY_RECEIPT_UUID, receiptUuid);
+        result.putString(KEY_RECEIPT_UUID, receiptUuid)
         result.putParcelableArrayList(KEY_MERGES, merges)
         return result
     }
@@ -27,18 +27,21 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
          * Значение константы: <code>evo.v2.receipt.sell.mergingPositions</code>.
          */
         const val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.mergingPositions"
+
         /**
          * Объединение позиций чека возврата.
          *
          * Значение константы: <code>evo.v2.receipt.payback.mergingPositions</code>.
          */
         const val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.mergingPositions"
+
         /**
          * Объединение позиций чека покупки.
          *
          * Значение константы: <code>evo.v2.receipt.buy.mergingPositions</code>.
          */
         const val NAME_BUY_RECEIPT = "evo.v2.receipt.buy.mergingPositions"
+
         /**
          * Объединение позиций чека возврата покупки.
          *
@@ -52,6 +55,7 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
             return bundle?.let {
                 val receiptUuid = bundle.getString("receiptUuid", "")
                 val merges = bundle.getParcelableArrayList<PositionsMerge>(KEY_MERGES)
+                        ?: ArrayList<PositionsMerge>()
                 PositionsMergeEvent(receiptUuid, merges)
             }
         }

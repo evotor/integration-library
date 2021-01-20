@@ -2,6 +2,7 @@ package ru.evotor.framework.kkt.event
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.IntegrationLibraryParsingException
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
@@ -40,16 +41,23 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
 
         fun from(bundle: Bundle?): CorrectionReceiptRegistrationRequestedEvent? = bundle?.let {
             CorrectionReceiptRegistrationRequestedEvent(
-                    SettlementType.valueOf(it.getString(KEY_SETTLEMENT_TYPE)),
-                    TaxationSystem.valueOf(it.getString(KEY_TAXATION_SYSTEM)),
+                    SettlementType.valueOf(it.getString(KEY_SETTLEMENT_TYPE)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
+                    TaxationSystem.valueOf(it.getString(KEY_TAXATION_SYSTEM)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
                     getCorrectionType(it),
-                    it.getString(KEY_BASIS_FOR_CORRECTION),
-                    it.getString(KEY_PRESCRIPTION_NUMBER),
+                    it.getString(KEY_BASIS_FOR_CORRECTION)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                    it.getString(KEY_PRESCRIPTION_NUMBER)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
                     Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
                     BigDecimal(it.getString(KEY_AMOUNT_PAID)),
-                    PaymentType.valueOf(it.getString(KEY_PAYMENT_TYPE)),
-                    VatRate.valueOf(it.getString(KEY_VAT_RATE)),
-                    it.getString(KEY_CORRECTION_DESCRIPTION),
+                    PaymentType.valueOf(it.getString(KEY_PAYMENT_TYPE)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
+                    VatRate.valueOf(it.getString(KEY_VAT_RATE)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
+                    it.getString(KEY_CORRECTION_DESCRIPTION)
+                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
                     it.getString(KEY_PAYMENT_ADDRESS),
                     it.getString(KEY_PAYMENT_PLACE)
             )
@@ -61,7 +69,9 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
             return if (ordinal != incorrectOrdinal) {
                 CorrectionType.values()[ordinal]
             } else {
-                CorrectionType.valueOf(bundle.getString(KEY_CORRECTION_TYPE))
+                val correctionTypeName = bundle.getString(KEY_CORRECTION_TYPE)
+                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                CorrectionType.valueOf(correctionTypeName)
             }
         }
     }

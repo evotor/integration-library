@@ -36,10 +36,10 @@ data class ImportationData(
         @JvmStatic
         fun from(bundle: Bundle?): ImportationData? {
             return bundle?.let {
-                ImportationData(
-                        it.getString(KEY_COUNTRY_ORIGIN_CODE),
-                        it.getString(KEY_CUSTOM_DECLARATION_NUMBER)
-                )
+                val countryOriginCode = it.getString(KEY_COUNTRY_ORIGIN_CODE) ?: return null
+                val customDeclarationNumber = it.getString(KEY_CUSTOM_DECLARATION_NUMBER) ?: return null
+
+                ImportationData(countryOriginCode, customDeclarationNumber)
             }
         }
     }
