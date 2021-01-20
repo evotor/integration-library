@@ -1,9 +1,9 @@
 package ru.evotor.framework.core;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import ru.evotor.IBundlable;
 
 @Deprecated // 23.09.2019

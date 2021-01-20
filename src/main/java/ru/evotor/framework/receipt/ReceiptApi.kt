@@ -3,7 +3,7 @@ package ru.evotor.framework.receipt
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 import org.json.JSONArray
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable

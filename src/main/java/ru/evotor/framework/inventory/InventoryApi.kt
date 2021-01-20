@@ -18,6 +18,7 @@ import java.math.BigDecimal
 
 
 object InventoryApi {
+
     @JvmField
     val BASE_URI: Uri = Uri.parse("content://ru.evotor.evotorpos.inventory")
 
@@ -46,7 +47,7 @@ object InventoryApi {
                     "${AlcoCodeTable.COLUMN_COMMODITY_UUID} = ?",
                     arrayOf(productUuid),
                     null
-            )?.use {
+            )?.let {
                 (object : ru.evotor.query.Cursor<String>(it) {
                     override fun getValue() = getString(getColumnIndex(AlcoCodeTable.COLUMN_ALCO_CODE))
 

@@ -1,7 +1,7 @@
 package ru.evotor.framework.users
 
 import android.content.Context
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 
 /**
  * Интерфейс для получения данных сотрудников, работающих со смарт-терминалом.

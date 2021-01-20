@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.Nullable;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
@@ -46,7 +46,7 @@ public abstract class IntegrationService extends Service {
         }
     };
 
-    private ConcurrentHashMap<String, ActionProcessor> processors = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ActionProcessor> processors = new ConcurrentHashMap<>();
 
     @Override
     public IBinder onBind(Intent intent) {

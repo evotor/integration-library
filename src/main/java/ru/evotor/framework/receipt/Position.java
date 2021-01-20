@@ -2,8 +2,6 @@ package ru.evotor.framework.receipt;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +14,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
@@ -48,7 +48,7 @@ public class Position implements Parcelable {
      * Идентификатор товара в формате UUID.
      */
     @Nullable
-    private String productUuid;
+    private final String productUuid;
     /**
      * Код товара.
      */
@@ -61,7 +61,7 @@ public class Position implements Parcelable {
     /**
      * Название.
      */
-    private String name;
+    private final String name;
     /**
      * Единицы измерения.
      */
@@ -904,7 +904,7 @@ public class Position implements Parcelable {
             return new Builder(new Position(position));
         }
 
-        private Position position;
+        private final Position position;
 
         @Deprecated
         public Builder(Position position) {

@@ -1,10 +1,10 @@
 package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
+import androidx.annotation.Nullable;
 import ru.evotor.framework.component.PaymentPerformer;
 import ru.evotor.framework.payment.PaymentPurpose;
 

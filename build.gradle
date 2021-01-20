@@ -8,15 +8,15 @@ apply plugin: 'org.jetbrains.dokka-android'
 android {
     def version = 14
 
-    compileSdkVersion 25
+    compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 25
+        targetSdkVersion 29
         versionCode version
         versionName "0.4.7_new_product_types"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
@@ -32,12 +32,16 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:25.4.0'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
+
     implementation 'com.github.evotor:push-notifications:v0.2.1'
     implementation 'com.github.evotor:query-api:1.0.0'
+
     implementation 'com.google.code.gson:gson:2.8.6'
+
     testImplementation 'junit:junit:4.13.1'
 }
 
@@ -47,7 +51,7 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.21'
     repositories {
         jcenter()
         google()

@@ -1,8 +1,9 @@
 package ru.evotor.framework.core.action.event.receipt.receipt_edited;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * @deprecated Используйте {@link ru.evotor.framework.receipt.event.ReceiptCompletedEvent}
