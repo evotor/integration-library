@@ -20,6 +20,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -94,7 +95,12 @@ public final class PositionMapper {
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
         BigDecimal quantity = BundleUtils.getQuantity(bundle, KEY_QUANTITY);
         String barcode = bundle.getString(KEY_BARCODE);
-        String mark = bundle.getString(KEY_MARK);
+        Mark mark;
+        try {
+            mark = Mark.Companion.from(bundle);
+        } catch (Exception e) {
+            mark = new Mark(bundle.getString(KEY_MARK), null);
+        }
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
         String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
@@ -191,7 +197,7 @@ public final class PositionMapper {
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());
         bundle.putString(KEY_BARCODE, position.getBarcode());
-        bundle.putString(KEY_MARK, position.getMark());
+        bundle.putBundle(KEY_MARK, position.getMark().toBundle());
         bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume() == null ? null : position.getAlcoholByVolume().toPlainString());
         bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode() == null ? null : position.getAlcoholProductKindCode().toString());
         bundle.putString(KEY_TARE_VOLUME, position.getTareVolume() == null ? null : position.getTareVolume().toPlainString());

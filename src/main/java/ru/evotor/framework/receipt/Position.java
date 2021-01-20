@@ -25,6 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -48,7 +49,7 @@ public class Position implements Parcelable {
      * Идентификатор товара в формате UUID.
      */
     @Nullable
-    private String productUuid;
+    private final String productUuid;
     /**
      * Код товара.
      */
@@ -61,7 +62,7 @@ public class Position implements Parcelable {
     /**
      * Название.
      */
-    private String name;
+    private final String name;
     /**
      * Единицы измерения.
      */
@@ -95,7 +96,7 @@ public class Position implements Parcelable {
     /**
      * Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
-    private String mark;
+    private Mark mark;
     /**
      * Крепость.
      */
@@ -188,7 +189,7 @@ public class Position implements Parcelable {
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
             @Nullable String barcode,
-            String mark,
+            Mark mark,
             @Nullable BigDecimal alcoholByVolume,
             @Nullable Long alcoholProductKindCode,
             @Nullable BigDecimal tareVolume,
@@ -404,7 +405,7 @@ public class Position implements Parcelable {
      * @return Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
      */
     @Nullable
-    public String getMark() {
+    public Mark getMark() {
         return mark;
     }
 
@@ -650,7 +651,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.priceWithDiscountPosition);
         dest.writeSerializable(this.quantity);
         dest.writeString(this.barcode);
-        dest.writeString(this.mark);
+        writeMark(dest, this.mark);
         dest.writeSerializable(this.alcoholByVolume);
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
@@ -677,6 +678,10 @@ public class Position implements Parcelable {
         dest.writeInt(dataSize);
         // Go back to the end of parcel
         dest.setDataPosition(endOfDataPosition);
+    }
+
+    private void writeMark(Parcel dest, Mark mark) {
+        dest.writeBundle(mark != null ? mark.toBundle() : null);
     }
 
     private void writeAdditionalFields(Parcel dest, int flags) {
@@ -715,13 +720,21 @@ public class Position implements Parcelable {
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
         this.barcode = in.readString();
-        this.mark = in.readString();
+        this.mark = readMark(in);
         this.alcoholByVolume = (BigDecimal) in.readSerializable();
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
         readAdditionalFields(in);
+    }
+
+    private Mark readMark(Parcel in) {
+        try {
+            return Mark.Companion.from(in.readBundle(Mark.class.getClassLoader()));
+        } catch (Exception e) {
+            return new Mark(in.readString(), null);
+        }
     }
 
     private void readAdditionalFields(Parcel in) {
@@ -904,15 +917,32 @@ public class Position implements Parcelable {
             return new Builder(new Position(position));
         }
 
-        private Position position;
+        private final Position position;
 
         @Deprecated
         public Builder(Position position) {
             this.position = new Position(position);
         }
 
+        @Deprecated
         public Builder toAlcoholMarked(
                 @NonNull String mark,
+                @NonNull BigDecimal alcoholByVolume,
+                @NonNull Long alcoholProductKindCode,
+                @NonNull BigDecimal tareVolume
+        ) {
+            position.productType = ProductType.ALCOHOL_MARKED;
+            setAlcoParams(
+                    new Mark(mark, null),
+                    alcoholByVolume,
+                    alcoholProductKindCode,
+                    tareVolume
+            );
+            return this;
+        }
+
+        public Builder toAlcoholMarked(
+                @NonNull Mark mark,
                 @NonNull BigDecimal alcoholByVolume,
                 @NonNull Long alcoholProductKindCode,
                 @NonNull BigDecimal tareVolume
@@ -942,8 +972,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toTobaccoMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.TOBACCO_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTobaccoParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toTobaccoMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.TOBACCO_MARKED;
             setAlcoParams(
@@ -956,8 +1004,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toShoesMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.SHOES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setShoesParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toShoesMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.SHOES_MARKED;
             setAlcoParams(
@@ -970,8 +1036,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toMedicineMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.MEDICINE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setMedicineParams(new Mark(mark,null));
+            return this;
+        }
+
+        public Builder toMedicineMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.MEDICINE_MARKED;
             setAlcoParams(
@@ -984,8 +1068,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toTyresMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.TYRES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTyresParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toTyresMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.TYRES_MARKED;
             setAlcoParams(
@@ -998,8 +1100,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toPerfumeMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.PERFUME_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPerfumesParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toPerfumeMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.PERFUME_MARKED;
             setAlcoParams(
@@ -1012,8 +1132,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toPhotosMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.PHOTOS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPhotosParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toPhotosMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.PHOTOS_MARKED;
             setAlcoParams(
@@ -1026,8 +1164,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toLightIndustryMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.LIGHT_INDUSTRY_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setLightIndustryParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toLightIndustryMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.LIGHT_INDUSTRY_MARKED;
             setAlcoParams(
@@ -1040,8 +1196,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * @deprecated Используйте {@link }
+         */
+        @Deprecated
         public Builder toTobaccoProductsMarked(
                 @NonNull String mark
+        ) {
+            position.productType = ProductType.TOBACCO_PRODUCTS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTobaccoProductsParams(new Mark(mark, null));
+            return this;
+        }
+
+        public Builder toTobaccoProductsMarked(
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.TOBACCO_PRODUCTS_MARKED;
             setAlcoParams(
@@ -1077,7 +1251,7 @@ public class Position implements Parcelable {
         }
 
         private void setAlcoParams(
-                String mark,
+                Mark mark,
                 BigDecimal alcoholByVolume,
                 Long alcoholProductKindCode,
                 BigDecimal tareVolume
@@ -1088,35 +1262,35 @@ public class Position implements Parcelable {
             position.tareVolume = tareVolume;
         }
 
-        private void setShoesParams(String mark) {
+        private void setShoesParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setTobaccoParams(String mark) {
+        private void setTobaccoParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setMedicineParams(String mark) {
+        private void setMedicineParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setTyresParams(String mark) {
+        private void setTyresParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setPerfumesParams(String mark) {
+        private void setPerfumesParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setPhotosParams(String mark) {
+        private void setPhotosParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setLightIndustryParams(String mark) {
+        private void setLightIndustryParams(Mark mark) {
             position.mark = mark;
         }
 
-        private void setTobaccoProductsParams(String mark)  {
+        private void setTobaccoProductsParams(Mark mark)  {
             position.mark = mark;
         }
 
@@ -1141,6 +1315,11 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(String mark) {
+            position.mark = new Mark(mark, null);
+            return this;
+        }
+
+        public Builder setMark(Mark mark) {
             position.mark = mark;
             return this;
         }
