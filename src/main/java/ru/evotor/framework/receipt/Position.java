@@ -1026,6 +1026,34 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toLightIndustryMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.LIGHT_INDUSTRY_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setLightIndustryParams(mark);
+            return this;
+        }
+
+        public Builder toTobaccoProductsMarked(
+                @NonNull String mark
+        ) {
+            position.productType = ProductType.TOBACCO_PRODUCTS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setTobaccoProductsParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1081,6 +1109,14 @@ public class Position implements Parcelable {
         }
 
         private void setPhotosParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setLightIndustryParams(String mark) {
+            position.mark = mark;
+        }
+
+        private void setTobaccoProductsParams(String mark)  {
             position.mark = mark;
         }
 
