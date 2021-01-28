@@ -36,7 +36,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -94,8 +94,10 @@ public class Position implements Parcelable {
     @Nullable
     private String barcode;
     /**
-     * Алкогольная или табачная марка. Марка записывается в реквизит "код товара" (тег 1162).
+     * Последовательность символов, идентифицирующая маркированный товар.
+     * Бывает разных форматов.
      */
+    @Nullable
     private Mark mark;
     /**
      * Крепость.
@@ -651,7 +653,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.priceWithDiscountPosition);
         dest.writeSerializable(this.quantity);
         dest.writeString(this.barcode);
-        writeMark(dest, this.mark);
+        writeRawMark(dest, this.mark);
         dest.writeSerializable(this.alcoholByVolume);
         dest.writeValue(this.alcoholProductKindCode);
         dest.writeSerializable(this.tareVolume);
@@ -680,8 +682,16 @@ public class Position implements Parcelable {
         dest.setDataPosition(endOfDataPosition);
     }
 
-    private void writeMark(Parcel dest, Mark mark) {
-        dest.writeBundle(mark != null ? mark.toBundle() : null);
+    private void writeRawMark(Parcel dest, Mark mark) {
+        String rawMark;
+        if (mark instanceof Mark.RawMark) {
+            rawMark = ((Mark.RawMark) mark).getValue();
+        } else if (mark instanceof Mark.TagProductCode) {
+            rawMark = ((Mark.TagProductCode) mark).getValue();
+        } else {
+            rawMark = null;
+        }
+        dest.writeString(rawMark);
     }
 
     private void writeAdditionalFields(Parcel dest, int flags) {
@@ -703,6 +713,8 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
+        // Mark
+        dest.writeParcelable(this.mark, flags);
     }
 
     protected Position(Parcel in) {
@@ -720,21 +732,13 @@ public class Position implements Parcelable {
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
         this.barcode = in.readString();
-        this.mark = readMark(in);
+        this.mark = new Mark.RawMark(in.readString());
         this.alcoholByVolume = (BigDecimal) in.readSerializable();
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
         readAdditionalFields(in);
-    }
-
-    private Mark readMark(Parcel in) {
-        try {
-            return Mark.Companion.from(in.readBundle(Mark.class.getClassLoader()));
-        } catch (Exception e) {
-            return new Mark(in.readString(), null);
-        }
     }
 
     private void readAdditionalFields(Parcel in) {
@@ -799,6 +803,17 @@ public class Position implements Parcelable {
                 readPreferentialMedicine(in);
                 break;
             }
+            case 7: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                this.classificationCode = in.readString();
+                readPreferentialMedicine(in);
+                readMark(in);
+                break;
+            }
         }
 
         if (isVersionGreaterThanCurrent) {
@@ -837,6 +852,10 @@ public class Position implements Parcelable {
 
     private void readPreferentialMedicine(Parcel in) {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
+    }
+
+    private void readMark(Parcel in) {
+        this.mark = in.readParcelable(Mark.class.getClassLoader());
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -933,7 +952,7 @@ public class Position implements Parcelable {
         ) {
             position.productType = ProductType.ALCOHOL_MARKED;
             setAlcoParams(
-                    new Mark(mark, null),
+                    new Mark.RawMark(mark),
                     alcoholByVolume,
                     alcoholProductKindCode,
                     tareVolume
@@ -986,7 +1005,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTobaccoParams(new Mark(mark, null));
+            setTobaccoParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1018,7 +1037,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setShoesParams(new Mark(mark, null));
+            setShoesParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1050,7 +1069,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setMedicineParams(new Mark(mark,null));
+            setMedicineParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1082,7 +1101,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTyresParams(new Mark(mark, null));
+            setTyresParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1114,7 +1133,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setPerfumesParams(new Mark(mark, null));
+            setPerfumesParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1146,7 +1165,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setPhotosParams(new Mark(mark, null));
+            setPhotosParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1178,7 +1197,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setLightIndustryParams(new Mark(mark, null));
+            setLightIndustryParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1210,7 +1229,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTobaccoProductsParams(new Mark(mark, null));
+            setTobaccoProductsParams(new Mark.RawMark(mark));
             return this;
         }
 
@@ -1290,7 +1309,7 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setTobaccoProductsParams(Mark mark)  {
+        private void setTobaccoProductsParams(Mark mark) {
             position.mark = mark;
         }
 
@@ -1315,7 +1334,7 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(String mark) {
-            position.mark = new Mark(mark, null);
+            position.mark = new Mark.RawMark(mark);
             return this;
         }
 
