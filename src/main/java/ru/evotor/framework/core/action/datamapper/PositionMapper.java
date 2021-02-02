@@ -174,15 +174,12 @@ public final class PositionMapper {
     }
 
     private static Mark readMarkFromBundle(Bundle bundle) {
-        String rawMark = null;
-        if (bundle.containsKey(KEY_MARK)) {
-            rawMark = bundle.getString(KEY_MARK);
-        }
-        Mark mark;
-        if (rawMark != null) {
-            mark = new Mark.RawMark(rawMark);
-        } else {
-            mark = MarkMapper.fromBundle(bundle);
+        Mark mark = MarkMapper.fromBundle(bundle);
+        if (mark == null && bundle.containsKey(KEY_MARK)) {
+            String rawMark = bundle.getString(KEY_MARK);
+            if (rawMark != null) {
+                mark = new Mark.RawMark(rawMark);
+            }
         }
         return mark;
     }
@@ -206,7 +203,7 @@ public final class PositionMapper {
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());
         bundle.putString(KEY_BARCODE, position.getBarcode());
-        putToBundle(position, bundle);
+        putMarkToBundle(position, bundle);
         bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume() == null ? null : position.getAlcoholByVolume().toPlainString());
         bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode() == null ? null : position.getAlcoholProductKindCode().toString());
         bundle.putString(KEY_TARE_VOLUME, position.getTareVolume() == null ? null : position.getTareVolume().toPlainString());
@@ -251,7 +248,7 @@ public final class PositionMapper {
         return bundle;
     }
 
-    private static void putToBundle(Position position, Bundle bundle) {
+    private static void putMarkToBundle(Position position, Bundle bundle) {
         Mark mark = position.getMark();
         String rawMark;
         if (mark instanceof Mark.RawMark) {

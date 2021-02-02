@@ -943,6 +943,9 @@ public class Position implements Parcelable {
             this.position = new Position(position);
         }
 
+        /**
+         * @deprecated Используйте {@link #toAlcoholMarked(Mark, BigDecimal, Long, BigDecimal)}
+         */
         @Deprecated
         public Builder toAlcoholMarked(
                 @NonNull String mark,
@@ -992,7 +995,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toTobaccoMarked(Mark)}
          */
         @Deprecated
         public Builder toTobaccoMarked(
@@ -1024,7 +1027,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toShoesMarked(Mark)}
          */
         @Deprecated
         public Builder toShoesMarked(
@@ -1056,7 +1059,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toMedicineMarked(Mark)}
          */
         @Deprecated
         public Builder toMedicineMarked(
@@ -1088,7 +1091,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toTyresMarked(Mark)}
          */
         @Deprecated
         public Builder toTyresMarked(
@@ -1120,7 +1123,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toPerfumeMarked(Mark)}
          */
         @Deprecated
         public Builder toPerfumeMarked(
@@ -1152,7 +1155,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toPhotosMarked(Mark)}
          */
         @Deprecated
         public Builder toPhotosMarked(
@@ -1184,7 +1187,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toLightIndustryMarked(Mark)}
          */
         @Deprecated
         public Builder toLightIndustryMarked(
@@ -1216,7 +1219,7 @@ public class Position implements Parcelable {
         }
 
         /**
-         * @deprecated Используйте {@link }
+         * @deprecated Используйте {@link #toTobaccoProductsMarked(Mark)}
          */
         @Deprecated
         public Builder toTobaccoProductsMarked(
