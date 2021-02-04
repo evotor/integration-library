@@ -2,6 +2,7 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.Mark.RawMark
@@ -77,22 +78,18 @@ sealed class Mark : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): RawMark? {
-                val version = parcel.readInt()
-                val dataSize = parcel.readInt()
-                val dataStartPosition = parcel.dataPosition()
-                // read fields here
+            private fun readFromParcel(dest: Parcel): RawMark? {
                 var value: String? = null
-                when (version) {
-                    1 -> {
+
+                ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
+                    if (version >= 1) {
                         value = parcel.readString()
                     }
                 }
-                parcel.setDataPosition(dataStartPosition + dataSize)
 
-                if (value.isNullOrEmpty()) return null
-
-                return RawMark(value)
+                return value?.let {
+                    RawMark(it)
+                }
             }
 
             @JvmField
@@ -141,22 +138,18 @@ sealed class Mark : Parcelable {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(parcel: Parcel): TagProductCode? {
-                val version = parcel.readInt()
-                val dataSize = parcel.readInt()
-                val dataStartPosition = parcel.dataPosition()
-                // read fields here
+            private fun readFromParcel(dest: Parcel): TagProductCode? {
                 var value: String? = null
-                when (version) {
-                    1 -> {
+
+                ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
+                    if (version >= 1) {
                         value = parcel.readString()
                     }
                 }
-                parcel.setDataPosition(dataStartPosition + dataSize)
 
-                if (value.isNullOrEmpty()) return null
-
-                return TagProductCode(value)
+                return value?.let {
+                    TagProductCode(it)
+                }
             }
 
             @JvmField
