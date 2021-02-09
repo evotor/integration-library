@@ -57,6 +57,10 @@ data class Receipt
              */
             val uuid: String,
             /**
+             * Uuid чека-основания
+             */
+            val baseReceiptUuid: String?,
+            /**
              * Номер чека. Может быть null для еще незакрытого чека
              */
             val number: String?,
