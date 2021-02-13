@@ -20,6 +20,7 @@ import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.receipt.position.mapper.MeasureMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
@@ -396,8 +397,7 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
                 safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
-                cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                MeasureMapper.readFromPositionCursor(cursor),
                 cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
                 price,
                 priceWithDiscountPosition,

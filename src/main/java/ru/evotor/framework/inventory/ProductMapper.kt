@@ -4,6 +4,7 @@ import android.database.Cursor
 import ru.evotor.framework.Utils
 import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.TaxNumber
+import ru.evotor.framework.receipt.position.mapper.MeasureMapper
 import java.math.BigDecimal
 
 /**
@@ -31,8 +32,7 @@ internal object ProductMapper {
                         description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
                         price = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT))).divide(BigDecimal(100)),
                         quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
-                        measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
-                        measurePrecision = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
+                        measure = MeasureMapper.readFromProductCursor(cursor),
                         alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                         alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
