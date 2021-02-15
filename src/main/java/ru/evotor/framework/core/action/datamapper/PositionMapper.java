@@ -54,6 +54,8 @@ public final class PositionMapper {
 
     private static final String KEY_MARK = "mark";
 
+    private static final String KEY_MARK_ENTITY = "markEntity";
+
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
 
     private static final String KEY_ALCOHOL_PRODUCT_KIND_CODE = "alcoholProductKindCode";
@@ -174,7 +176,7 @@ public final class PositionMapper {
     }
 
     private static Mark readMarkFromBundle(Bundle bundle) {
-        Mark mark = MarkMapper.fromBundle(bundle);
+        Mark mark = MarkMapper.fromBundle(bundle.getBundle(KEY_MARK_ENTITY));
         if (mark == null && bundle.containsKey(KEY_MARK)) {
             String rawMark = bundle.getString(KEY_MARK);
             if (rawMark != null) {
@@ -259,6 +261,6 @@ public final class PositionMapper {
             rawMark = null;
         }
         bundle.putString(KEY_MARK, rawMark);
-        bundle.putBundle(MarkMapper.KEY_MARK_ENTITY, MarkMapper.toBundle(mark));
+        bundle.putBundle(KEY_MARK_ENTITY, MarkMapper.toBundle(mark));
     }
 }
