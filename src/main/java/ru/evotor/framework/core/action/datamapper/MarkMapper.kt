@@ -18,6 +18,9 @@ object MarkMapper {
         if (bundle == null) return null
         if (!bundle.containsKey(KEY_MARK_ENTITY)) return null
 
-        return bundle.getParcelable<Mark>(KEY_MARK_ENTITY)
+        return with(bundle) {
+            classLoader = Mark::class.java.classLoader
+            getParcelable<Mark>(KEY_MARK_ENTITY)
+        }
     }
 }
