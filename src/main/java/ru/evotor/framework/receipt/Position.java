@@ -191,7 +191,7 @@ public class Position implements Parcelable {
             BigDecimal priceWithDiscountPosition,
             BigDecimal quantity,
             @Nullable String barcode,
-            Mark mark,
+            @Nullable Mark mark,
             @Nullable BigDecimal alcoholByVolume,
             @Nullable Long alcoholProductKindCode,
             @Nullable BigDecimal tareVolume,
@@ -732,7 +732,14 @@ public class Position implements Parcelable {
         this.priceWithDiscountPosition = (BigDecimal) in.readSerializable();
         this.quantity = (BigDecimal) in.readSerializable();
         this.barcode = in.readString();
-        this.mark = new Mark.RawMark(in.readString());
+        String markString = in.readString();
+        Mark markFromParcel;
+        if (markString == null || markString.isEmpty()) {
+            markFromParcel = null;
+        } else {
+            markFromParcel = new Mark.RawMark(markString);
+        }
+        this.mark = markFromParcel;
         this.alcoholByVolume = (BigDecimal) in.readSerializable();
         this.alcoholProductKindCode = (Long) in.readValue(Long.class.getClassLoader());
         this.tareVolume = (BigDecimal) in.readSerializable();
@@ -943,6 +950,14 @@ public class Position implements Parcelable {
             this.position = new Position(position);
         }
 
+        @Nullable
+        private Mark.RawMark createRawMark(@Nullable String mark) {
+            if (mark == null || mark.isEmpty()) {
+                return null;
+            }
+            return new Mark.RawMark(mark);
+        }
+
         /**
          * @deprecated Используйте {@link #toAlcoholMarked(Mark, BigDecimal, Long, BigDecimal)}
          */
@@ -955,7 +970,7 @@ public class Position implements Parcelable {
         ) {
             position.productType = ProductType.ALCOHOL_MARKED;
             setAlcoParams(
-                    new Mark.RawMark(mark),
+                    createRawMark(mark),
                     alcoholByVolume,
                     alcoholProductKindCode,
                     tareVolume
@@ -1008,7 +1023,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTobaccoParams(new Mark.RawMark(mark));
+            setTobaccoParams(createRawMark(mark));
             return this;
         }
 
@@ -1040,7 +1055,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setShoesParams(new Mark.RawMark(mark));
+            setShoesParams(createRawMark(mark));
             return this;
         }
 
@@ -1072,7 +1087,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setMedicineParams(new Mark.RawMark(mark));
+            setMedicineParams(createRawMark(mark));
             return this;
         }
 
@@ -1104,7 +1119,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTyresParams(new Mark.RawMark(mark));
+            setTyresParams(createRawMark(mark));
             return this;
         }
 
@@ -1136,7 +1151,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setPerfumesParams(new Mark.RawMark(mark));
+            setPerfumesParams(createRawMark(mark));
             return this;
         }
 
@@ -1168,7 +1183,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setPhotosParams(new Mark.RawMark(mark));
+            setPhotosParams(createRawMark(mark));
             return this;
         }
 
@@ -1200,7 +1215,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setLightIndustryParams(new Mark.RawMark(mark));
+            setLightIndustryParams(createRawMark(mark));
             return this;
         }
 
@@ -1232,7 +1247,7 @@ public class Position implements Parcelable {
                     null,
                     null
             );
-            setTobaccoProductsParams(new Mark.RawMark(mark));
+            setTobaccoProductsParams(createRawMark(mark));
             return this;
         }
 
@@ -1337,7 +1352,7 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(String mark) {
-            position.mark = new Mark.RawMark(mark);
+            position.mark = createRawMark(mark);
             return this;
         }
 

@@ -404,10 +404,10 @@ object ReceiptApi {
                 priceWithDiscountPosition,
                 BigDecimal(cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY))).divide(BigDecimal(1000)),
                 cursor.optString(cursor.getColumnIndex(PositionTable.COLUMN_BARCODE)),
-                    cursor.optString(PositionTable.COLUMN_MARK)?.let {
-                        val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                        Mark.RawMark(rawMark)
-                    },
+                cursor.optString(PositionTable.COLUMN_MARK)?.let {
+                    val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
+                    Mark.RawMark(rawMark)
+                },
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
