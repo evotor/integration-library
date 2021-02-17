@@ -65,7 +65,7 @@ public class Position implements Parcelable {
     /**
      * Единица измерения.
      */
-    private Measure measure;
+    private Measure measure = Measure.Companion.getDefault();
     /**
      * Ставка НДС.
      */
@@ -177,7 +177,7 @@ public class Position implements Parcelable {
             @Nullable String productCode,
             ProductType productType,
             String name,
-            Measure measure,
+            @NonNull Measure measure,
             @Nullable TaxNumber taxNumber,
             BigDecimal price,
             BigDecimal priceWithDiscountPosition,
@@ -345,8 +345,24 @@ public class Position implements Parcelable {
     /**
      * @return Единица измерения
      */
-    public Measure getMeasure() {
+    @NonNull public Measure getMeasure() {
         return measure;
+    }
+
+    /**
+     * @deprecated Используйте @link{getMeasure}
+     * @return Наименование единицы измерения.
+     */
+    public String getMeasureName() {
+        return measure.getName();
+    }
+
+    /**
+     * @deprecated Используйте @link{getMeasure}
+     * @return Точность единицы измерения.
+     */
+    public int getMeasurePrecision() {
+        return measure.getPrecision();
     }
 
     /**
@@ -561,7 +577,7 @@ public class Position implements Parcelable {
         result = 31 * result + (productCode != null ? productCode.hashCode() : 0);
         result = 31 * result + (productType != null ? productType.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (measure != null ? measure.hashCode() : 0);
+        result = 31 * result + (measure.hashCode());
         result = 31 * result + (taxNumber != null ? taxNumber.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
