@@ -5,12 +5,11 @@ import android.database.Cursor
 import android.net.Uri
 import android.support.annotation.WorkerThread
 import org.json.JSONArray
+import ru.evotor.framework.*
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
-import ru.evotor.framework.optLong
-import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -20,12 +19,10 @@ import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.mapper.MeasureMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import ru.evotor.framework.safeGetLong
-import ru.evotor.framework.safeValueOf
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -397,7 +394,7 @@ object ReceiptApi {
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
                 safeValueOf<ProductType>(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
-                MeasureMapper.readFromPositionCursor(cursor),
+                readFromPositionCursor(cursor),
                 cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_TAX_NUMBER))) },
                 price,
                 priceWithDiscountPosition,
@@ -425,6 +422,16 @@ object ReceiptApi {
             null
         } else {
             ImportationData(countryOriginCode, customsDeclarationNumber)
+        }
+    }
+
+    private fun readFromPositionCursor(cursor: Cursor): Measure {
+        return cursor.let {
+            Measure(
+                    it.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
+                    it.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                    it.optInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_CODE)) ?: Measure.UNKNOWN_MEASURE_CODE
+            )
         }
     }
 

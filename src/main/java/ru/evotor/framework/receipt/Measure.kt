@@ -1,9 +1,7 @@
 package ru.evotor.framework.receipt
 
-import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
-import ru.evotor.IBundlable
 import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
@@ -16,50 +14,33 @@ data class Measure(
         /**
          * Наименование
          */
-        var name: String,
+        val name: String,
         /**
          * Точность
          */
-        var precision: Int,
+        val precision: Int,
         /**
          * Код
          */
         @FiscalRequisite(tag = FiscalTags.MEASURE_CODE)
-        var code: Int
+        val code: Int
 
-) : Parcelable, IBundlable {
+) : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(name)
             parcel.writeInt(precision)
-            parcel.writeValue(code)
+            parcel.writeInt(code)
         }
     }
 
     override fun describeContents(): Int = 0
 
-    override fun toBundle(): Bundle {
-        return Bundle().apply {
-            putString(KEY_MEASURE_NAME, name)
-            putInt(KEY_MEASURE_PRECISION, precision)
-            putInt(KEY_MEASURE_CODE, code)
-        }
-    }
-
     companion object {
 
         private const val VERSION = 1
         internal const val UNKNOWN_MEASURE_CODE = 255
-        private const val KEY_MEASURE_NAME = "measureName"
-        private const val KEY_MEASURE_PRECISION = "measurePrecision"
-        private const val KEY_MEASURE_CODE = "measureCode"
-
-        val default = Measure(
-                name = "шт",
-                precision = 0,
-                code = 0
-        )
 
         @JvmField
         val CREATOR = object : Parcelable.Creator<Measure> {
@@ -75,8 +56,7 @@ data class Measure(
                     measure = Measure(
                             name = parcel.readString(),
                             precision = parcel.readInt(),
-                            code = parcel.readValue(Int::class.java.classLoader) as? Int
-                                    ?: UNKNOWN_MEASURE_CODE
+                            code = parcel.readInt()
                     )
                 }
             }

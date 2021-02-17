@@ -9,9 +9,10 @@ import ru.evotor.framework.inventory.field.DictionaryField
 import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
 import ru.evotor.framework.inventory.field.TextField
+import ru.evotor.framework.optInt
 import ru.evotor.framework.optString
+import ru.evotor.framework.receipt.Measure
 import ru.evotor.framework.receipt.TaxNumber
-import ru.evotor.framework.receipt.position.mapper.MeasureMapper
 import java.math.BigDecimal
 
 /**
@@ -87,7 +88,7 @@ object InventoryApi {
                                         description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
                                         price = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT))).divide(BigDecimal(100)),
                                         quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
-                                        measure = MeasureMapper.readFromProductCursor(cursor),
+                                        measure = readFromProductCursor(cursor),
                                         alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                                         alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
@@ -103,6 +104,16 @@ object InventoryApi {
                     }
                 }
         return null
+    }
+
+    private fun readFromProductCursor(cursor: Cursor): Measure {
+        return cursor.let {
+            Measure(
+                    it.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
+                    it.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
+                    it.optInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_CODE)) ?: Measure.UNKNOWN_MEASURE_CODE
+            )
+        }
     }
 
     @JvmStatic

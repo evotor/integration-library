@@ -65,7 +65,7 @@ public class Position implements Parcelable {
     /**
      * Единица измерения.
      */
-    private Measure measure = Measure.Companion.getDefault();
+    @NonNull private Measure measure;
     /**
      * Ставка НДС.
      */
@@ -706,8 +706,8 @@ public class Position implements Parcelable {
         int tmpProductType = in.readInt();
         this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
         this.name = in.readString();
-        this.measure.setName(in.readString());
-        this.measure.setPrecision(in.readInt());
+        String measureName = in.readString();
+        int measurePrecision = in.readInt();
         int tmpTaxNumber = in.readInt();
         this.taxNumber = tmpTaxNumber == -1 ? null : TaxNumber.values()[tmpTaxNumber];
         this.price = (BigDecimal) in.readSerializable();
@@ -720,11 +720,11 @@ public class Position implements Parcelable {
         this.tareVolume = (BigDecimal) in.readSerializable();
         this.extraKeys = new HashSet<>(Arrays.asList(in.createTypedArray(ExtraKey.CREATOR)));
         this.subPositions = in.createTypedArrayList(Position.CREATOR);
-        readAdditionalFields(in);
+        readAdditionalFields(in, measureName, measurePrecision);
     }
 
-    private void readAdditionalFields(Parcel in) {
-
+    private void readAdditionalFields(Parcel in, String measureName, int measurePrecision) {
+        int measureCode = Measure.UNKNOWN_MEASURE_CODE;
         boolean isVersionGreaterThanCurrent = false;
         int startReadingPosition = in.dataPosition();
 
@@ -762,9 +762,13 @@ public class Position implements Parcelable {
             readPreferentialMedicine(in);
         }
         if (version >= 7) {
-            this.measure.setCode(in.readInt());
+            measureCode = in.readInt();
         }
-
+        this.measure = new Measure(
+                measureName,
+                measurePrecision,
+                measureCode
+        );
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
