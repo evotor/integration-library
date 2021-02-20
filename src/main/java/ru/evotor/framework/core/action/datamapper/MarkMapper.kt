@@ -8,7 +8,7 @@ object MarkMapper {
     private const val KEY_MARK_ENTITY = "markEntity"
 
     @JvmStatic
-    fun toBundle(mark: Mark): Bundle =
+    fun toBundle(mark: Mark?): Bundle =
             Bundle().apply {
                 putParcelable(KEY_MARK_ENTITY, mark)
             }

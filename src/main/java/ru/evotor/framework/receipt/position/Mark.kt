@@ -2,7 +2,6 @@ package ru.evotor.framework.receipt.position
 
 import android.os.Parcel
 import android.os.Parcelable
-import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.Mark.RawMark
@@ -79,13 +78,12 @@ sealed class Mark : Parcelable {
 
             @JvmStatic
             private fun readFromParcel(dest: Parcel): RawMark? {
-                var value: String? = null
-
-                ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                    if (version >= 1) {
-                        value = parcel.readString()
-                    }
-                }
+                val version = dest.readInt()
+                val dataSize = dest.readInt()
+                val dataStartPosition = dest.dataPosition()
+                // read fields here
+                val value: String? = dest.readString()
+                dest.setDataPosition(dataStartPosition + dataSize)
 
                 return value?.let {
                     RawMark(it)
@@ -139,13 +137,12 @@ sealed class Mark : Parcelable {
 
             @JvmStatic
             private fun readFromParcel(dest: Parcel): TagProductCode? {
-                var value: String? = null
-
-                ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                    if (version >= 1) {
-                        value = parcel.readString()
-                    }
-                }
+                val version = dest.readInt()
+                val dataSize = dest.readInt()
+                val dataStartPosition = dest.dataPosition()
+                // read fields here
+                val value: String? = dest.readString()
+                dest.setDataPosition(dataStartPosition + dataSize)
 
                 return value?.let {
                     TagProductCode(it)
