@@ -15,7 +15,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 25
         versionCode version
-        versionName "0.4.8_new_product_type"
+        versionName "0.4.48-STDEV-7060"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
