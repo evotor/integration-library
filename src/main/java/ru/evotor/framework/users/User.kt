@@ -40,6 +40,7 @@ data class User(
         val roleTitle: String
 ) {
     var inn: String? = null
+    var cashierPosition: String? = null
 
     constructor(uuid: String,
                 secondName: String?,
@@ -58,5 +59,26 @@ data class User(
             roleTitle
     ) {
         this.inn = inn
+    }
+
+    constructor(uuid: String,
+                secondName: String?,
+                firstName: String?,
+                inn: String?,
+                phone: String?,
+                pin: String?,
+                roleUuid: String,
+                roleTitle: String,
+                cashierPosition: String?) : this(
+            uuid,
+            secondName,
+            firstName,
+            inn,
+            phone,
+            pin,
+            roleUuid,
+            roleTitle
+    ) {
+        this.cashierPosition = cashierPosition
     }
 }

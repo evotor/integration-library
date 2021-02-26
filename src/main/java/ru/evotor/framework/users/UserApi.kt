@@ -1,3 +1,4 @@
+@file:Suppress("unused")
 package ru.evotor.framework.users
 
 import android.content.Context
@@ -18,7 +19,7 @@ object UserApi {
     fun getAllUsers(context: Context): List<User>? {
         context.contentResolver
                 .query(UsersTable.URI, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val users = ArrayList<User>()
                     try {
                         while (cursor.moveToNext()) {
@@ -27,8 +28,6 @@ object UserApi {
                         return users
                     } catch (e: Exception) {
                         e.printStackTrace()
-                    } finally {
-                        cursor.close()
                     }
                 }
         return null
@@ -37,21 +36,20 @@ object UserApi {
     /**
      * Возвращает данные авторизованного сотрудника.
      * @param context контекст приложения.
-     * @return данные авторизованного [сотрудника][ru.evotor.framework.users.User] или `null`, если сотрудник не авторизован.
+     * @return данные авторизованного [сотрудника][ru.evotor.framework.users.User] или `null`,
+     * если сотрудник не авторизован.
      */
     @JvmStatic
     fun getAuthenticatedUser(context: Context): User? {
         context.contentResolver
                 .query(UsersTable.URI_AUTHENTICATED, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     try {
                         if (cursor.moveToFirst()) {
                             return UserMapper.createUser(cursor)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                    } finally {
-                        cursor.close()
                     }
                 }
         return null
@@ -66,7 +64,7 @@ object UserApi {
     fun getAllGrants(context: Context): List<Grant>? {
         context.contentResolver
                 .query(GrantsTable.URI, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val grants = ArrayList<Grant>()
                     try {
                         while (cursor.moveToNext()) {
@@ -75,8 +73,6 @@ object UserApi {
                         return grants
                     } catch (e: Exception) {
                         e.printStackTrace()
-                    } finally {
-                        cursor.close()
                     }
                 }
         return null
@@ -89,10 +85,9 @@ object UserApi {
      */
     @JvmStatic
     fun getGrantsOfAuthenticatedUser(context: Context): List<Grant>? {
-
         context.contentResolver
                 .query(GrantsTable.URI_GRANTS_OF_AUTHENTICATED_USER, null, null, null, null)
-                ?.let { cursor ->
+                ?.use { cursor ->
                     val grants = ArrayList<Grant>()
                     try {
                         while (cursor.moveToNext()) {
@@ -101,12 +96,8 @@ object UserApi {
                         return grants
                     } catch (e: Exception) {
                         e.printStackTrace()
-                    } finally {
-                        cursor.close()
                     }
                 }
         return null
     }
-
-
 }

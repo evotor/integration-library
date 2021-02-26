@@ -3,8 +3,10 @@ package ru.evotor.framework.users
 import ru.evotor.query.Cursor
 import ru.evotor.query.FilterBuilder
 
-class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQuery, UserQuery.SortOrder, User?>(
-        if (authenticatedUsersOnly) UsersTable.URI_AUTHENTICATED else UsersTable.URI) {
+class UserQuery(authenticatedUsersOnly: Boolean = false):
+        FilterBuilder<UserQuery, UserQuery.SortOrder, User?>(
+                if (authenticatedUsersOnly) UsersTable.URI_AUTHENTICATED else UsersTable.URI
+        ) {
 
     @JvmField
     val uuid = addFieldFilter<String>(UsersTable.ROW_USER_UUID)
@@ -22,6 +24,8 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
     val roleUuid = addFieldFilter<String>(UsersTable.ROW_ROLE_UUID)
     @JvmField
     val roleTitle = addFieldFilter<String>(UsersTable.ROW_ROLE_TITLE)
+    @JvmField
+    val cashierPosition = addFieldFilter<String?>(UsersTable.ROW_USER_CASHIER_POSITION)
 
     override val currentQuery: UserQuery
         get() = this
@@ -44,6 +48,8 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
         val roleUuid = addFieldSorter(UsersTable.ROW_ROLE_UUID)
         @JvmField
         val roleTitle = addFieldSorter(UsersTable.ROW_ROLE_TITLE)
+        @JvmField
+        val cashierPosition = addFieldSorter(UsersTable.ROW_USER_CASHIER_POSITION)
 
         override val currentSortOrder: SortOrder
             get() = this
@@ -53,5 +59,4 @@ class UserQuery(authenticatedUsersOnly: Boolean = false) : FilterBuilder<UserQue
     override fun getValue(cursor: Cursor<User?>): User? {
         return UserMapper.createUser(cursor)
     }
-
 }
