@@ -41,6 +41,10 @@ public final class PositionMapper {
 
     private static final String KEY_QUANTITY = "quantity";
 
+    private static final String KEY_INITIAL_QUANTITY = "initialQuantity";
+
+    private static final String KEY_QUANTITY_IN_PACKAGE = "quantityInPackage";
+
     private static final String KEY_NAME = "name";
 
     private static final String KEY_MEASURE_NAME = "measureName";
@@ -135,6 +139,9 @@ public final class PositionMapper {
         PreferentialMedicine preferentialMedicine =
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
+        BigDecimal initialQuantity = BundleUtils.getQuantity(bundle, KEY_INITIAL_QUANTITY);
+        BigDecimal quantityInPackage = BundleUtils.getQuantity(bundle, KEY_QUANTITY_IN_PACKAGE);
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -169,6 +176,8 @@ public final class PositionMapper {
         builder.setExcise(excise);
         builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
+        builder.setInitialQuantity(initialQuantity);
+        builder.setQuantityInPackage(quantityInPackage);
         return builder.build();
     }
 
@@ -233,6 +242,16 @@ public final class PositionMapper {
         if (classificationCode != null) {
             bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
+
+        final BigDecimal initialQuantity = position.getInitialQuantity();
+        if (initialQuantity != null) {
+            bundle.putString(KEY_INITIAL_QUANTITY, initialQuantity.toPlainString());
+        }
+        final BigDecimal quantityInPackage = position.getQuantityInPackage();
+        if (quantityInPackage != null) {
+            bundle.putString(KEY_QUANTITY_IN_PACKAGE, quantityInPackage.toPlainString());
+        }
+
         return bundle;
     }
 

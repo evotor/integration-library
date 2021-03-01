@@ -35,7 +35,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -48,7 +48,7 @@ public class Position implements Parcelable {
      * Идентификатор товара в формате UUID.
      */
     @Nullable
-    private String productUuid;
+    private final String productUuid;
     /**
      * Код товара.
      */
@@ -61,7 +61,7 @@ public class Position implements Parcelable {
     /**
      * Название.
      */
-    private String name;
+    private final String name;
     /**
      * Единицы измерения.
      */
@@ -85,8 +85,21 @@ public class Position implements Parcelable {
     private BigDecimal priceWithDiscountPosition;
     /**
      * Количество.
+     * (Для маркированных товаров при частичной продаже это количество проданного сейчас товара по данной марке)
      */
     private BigDecimal quantity;
+    /**
+     * Остаток товара до выполнения операции. Необходимое для заполнения поле,
+     * при частичной продаже маркированного товара.
+     */
+    @Nullable
+    private BigDecimal initialQuantity;
+    /**
+     * Количество товара в упаковке всего. Необходимое для заполнения поле,
+     * при частичной продаже маркированного товара.
+     */
+    @Nullable
+    private BigDecimal quantityInPackage;
     /**
      * Штрихкод, по которому товар был найден.
      */
@@ -245,6 +258,8 @@ public class Position implements Parcelable {
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
+        this.initialQuantity = position.initialQuantity;
+        this.quantityInPackage = position.quantityInPackage;
     }
 
     /**
@@ -393,6 +408,22 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Остаток товара до выполнения операции. Необходимое для заполнения поле,
+     * при частичной продаже маркированного товара.
+     */
+    public BigDecimal getInitialQuantity() {
+        return initialQuantity;
+    }
+
+    /**
+     * @return Количество товара в упаковке всего. Необходимое для заполнения поле,
+     * при частичной продаже маркированного товара.
+     */
+    public BigDecimal getQuantityInPackage() {
+        return quantityInPackage;
+    }
+
+    /**
      * @return Штрихкод, по которому товар был найден.
      */
     @Nullable
@@ -538,6 +569,12 @@ public class Position implements Parcelable {
             return false;
         if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
+        if ((initialQuantity != null ? initialQuantity : BigDecimal.ZERO)
+                .compareTo(position.initialQuantity != null ? position.initialQuantity : BigDecimal.ZERO) != 0)
+            return false;
+        if ((quantityInPackage != null ? quantityInPackage : BigDecimal.ZERO)
+                .compareTo(position.quantityInPackage != null ? position.quantityInPackage : BigDecimal.ZERO) != 0)
+            return false;
         if (!Objects.equals(barcode, position.barcode))
             return false;
         if (!Objects.equals(mark, position.mark)) return false;
@@ -583,6 +620,8 @@ public class Position implements Parcelable {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (initialQuantity != null ? initialQuantity.hashCode() : 0);
+        result = 31 * result + (quantityInPackage != null ? quantityInPackage.hashCode() : 0);
         result = 31 * result + (barcode != null ? barcode.hashCode() : 0);
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         result = 31 * result + (alcoholByVolume != null ? alcoholByVolume.hashCode() : 0);
@@ -614,6 +653,8 @@ public class Position implements Parcelable {
                 ", price=" + price +
                 ", priceWithDiscountPosition=" + priceWithDiscountPosition +
                 ", quantity=" + quantity +
+                ", initialQuantity=" + initialQuantity +
+                ", quantityInPackage=" + quantityInPackage +
                 ", barcode='" + barcode + '\'' +
                 ", mark='" + mark + '\'' +
                 ", alcoholByVolume=" + alcoholByVolume +
@@ -698,6 +739,9 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
+        // Partial sale
+        dest.writeSerializable(this.initialQuantity);
+        dest.writeSerializable(this.quantityInPackage);
     }
 
     protected Position(Parcel in) {
@@ -784,6 +828,18 @@ public class Position implements Parcelable {
                 this.excise = (BigDecimal) in.readSerializable();
                 this.classificationCode = in.readString();
                 readPreferentialMedicine(in);
+                break;
+            }
+            case 7: {
+                readAttributesField(in);
+                readSettlementMethodField(in);
+                readAgentRequisitesField(in);
+                readImportationData(in);
+                this.excise = (BigDecimal) in.readSerializable();
+                this.classificationCode = in.readString();
+                readPreferentialMedicine(in);
+                this.initialQuantity = (BigDecimal) in.readSerializable();
+                this.quantityInPackage = (BigDecimal) in.readSerializable();
                 break;
             }
         }
@@ -904,7 +960,7 @@ public class Position implements Parcelable {
             return new Builder(new Position(position));
         }
 
-        private Position position;
+        private final Position position;
 
         @Deprecated
         public Builder(Position position) {
@@ -1076,6 +1132,17 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toPartial(
+                @NonNull ProductType productType,
+                @NonNull BigDecimal initialQuantity,
+                @NonNull BigDecimal quantityInPackage
+        ) {
+            position.productType = productType;
+            position.initialQuantity = initialQuantity;
+            position.quantityInPackage = quantityInPackage;
+            return this;
+        }
+
         private void setAlcoParams(
                 String mark,
                 BigDecimal alcoholByVolume,
@@ -1116,7 +1183,7 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setTobaccoProductsParams(String mark)  {
+        private void setTobaccoProductsParams(String mark) {
             position.mark = mark;
         }
 
@@ -1127,6 +1194,16 @@ public class Position implements Parcelable {
 
         public Builder setQuantity(BigDecimal quantity) {
             position.quantity = quantity;
+            return this;
+        }
+
+        public Builder setInitialQuantity(BigDecimal initialQuantity) {
+            position.initialQuantity = initialQuantity;
+            return this;
+        }
+
+        public Builder setQuantityInPackage(BigDecimal quantityInPackage) {
+            position.quantityInPackage = quantityInPackage;
             return this;
         }
 
