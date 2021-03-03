@@ -2,11 +2,11 @@ package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import ru.evotor.framework.receipt.Receipt;
 
 

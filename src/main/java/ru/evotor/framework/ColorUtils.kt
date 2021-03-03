@@ -1,8 +1,7 @@
 package ru.evotor.framework
 
-
 import android.graphics.Color
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * Created by Khaustov on 06.02.18.

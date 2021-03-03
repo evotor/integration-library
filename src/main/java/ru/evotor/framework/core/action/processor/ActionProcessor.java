@@ -4,9 +4,9 @@ package ru.evotor.framework.core.action.processor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.IIntegrationManagerResponse;
 import ru.evotor.framework.core.IntegrationManager;
@@ -29,8 +29,8 @@ public abstract class ActionProcessor {
      * Методы функции позволяют возвращать необходимые результаты обработки событий в смарт-терминал, а также вызывать операции и обрабатывать ошибки.
      */
     public final class Callback {
-        private IIntegrationManagerResponse response;
-        private Bundle sourceData;
+        private final IIntegrationManagerResponse response;
+        private final Bundle sourceData;
 
         private Callback(IIntegrationManagerResponse response, Bundle sourceData) {
             this.response = response;

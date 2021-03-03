@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.IntegrationManagerCallback;

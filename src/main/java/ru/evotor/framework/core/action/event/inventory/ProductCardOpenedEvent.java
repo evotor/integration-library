@@ -1,7 +1,8 @@
 package ru.evotor.framework.core.action.event.inventory;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 /**
  * @deprecated Используйте {@link ru.evotor.framework.inventory.event.ProductCardOpenedEvent}

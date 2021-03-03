@@ -2,7 +2,6 @@ package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import ru.evotor.framework.receipt.Payment;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.PrintGroup;

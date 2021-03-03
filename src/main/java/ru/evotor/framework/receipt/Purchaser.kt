@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.IntegrationLibraryParsingException
 
 /**
  * Реквизиты покупателя, которые могут быть записаны в [печатную группу чека][ru.evotor.framework.receipt.PrintGroup].
@@ -29,8 +30,10 @@ data class Purchaser(
     }
 
     private constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readString()
+                    ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+            parcel.readString()
+                    ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
             if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size])
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,9 +43,7 @@ data class Purchaser(
         type?.let { parcel.writeInt(it.ordinal) }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object {
 
@@ -58,7 +59,9 @@ data class Purchaser(
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
-                Purchaser(it.getString(KEY_NAME), it.getString(KEY_DOCUMENT_NUMBER),
+                val name = it.getString(KEY_NAME) ?: return null
+                val documentNumber = it.getString(KEY_DOCUMENT_NUMBER) ?: return null
+                Purchaser(name, documentNumber,
                         it.getInt(KEY_TYPE).let {
                             if (it == -1) {
                                 null

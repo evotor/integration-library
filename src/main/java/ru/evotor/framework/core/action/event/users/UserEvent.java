@@ -1,8 +1,8 @@
 package ru.evotor.framework.core.action.event.users;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import ru.evotor.IBundlable;
 
 public abstract class UserEvent implements IBundlable {
