@@ -14,5 +14,5 @@ object UsersTable {
     const val ROW_USER_PIN = "USER_PIN"
     const val ROW_ROLE_UUID = "ROLE_UUID"
     const val ROW_ROLE_TITLE = "ROLE_TITLE"
-    const val ROW_USER_CASHIER_POSITION = "USER_CASHIER_POSITION"
+    const val ROW_USER_POSITION = "USER_POSITION"
 }

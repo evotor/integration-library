@@ -25,7 +25,7 @@ class UserQuery(authenticatedUsersOnly: Boolean = false):
     @JvmField
     val roleTitle = addFieldFilter<String>(UsersTable.ROW_ROLE_TITLE)
     @JvmField
-    val cashierPosition = addFieldFilter<String?>(UsersTable.ROW_USER_CASHIER_POSITION)
+    val position = addFieldFilter<String?>(UsersTable.ROW_USER_POSITION)
 
     override val currentQuery: UserQuery
         get() = this
@@ -49,11 +49,10 @@ class UserQuery(authenticatedUsersOnly: Boolean = false):
         @JvmField
         val roleTitle = addFieldSorter(UsersTable.ROW_ROLE_TITLE)
         @JvmField
-        val cashierPosition = addFieldSorter(UsersTable.ROW_USER_CASHIER_POSITION)
+        val position = addFieldSorter(UsersTable.ROW_USER_POSITION)
 
         override val currentSortOrder: SortOrder
             get() = this
-
     }
 
     override fun getValue(cursor: Cursor<User?>): User? {

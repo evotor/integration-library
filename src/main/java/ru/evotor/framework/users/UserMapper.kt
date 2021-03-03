@@ -21,7 +21,7 @@ internal object UserMapper {
                 pin = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_USER_PIN)),
                 roleUuid = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_ROLE_UUID)),
                 roleTitle = cursor.getString(cursor.getColumnIndex(UsersTable.ROW_ROLE_TITLE)),
-                cashierPosition = cursor.optString(cursor.getColumnIndex(UsersTable.ROW_USER_CASHIER_POSITION))
+                position = cursor.optString(cursor.getColumnIndex(UsersTable.ROW_USER_POSITION))
         )
     }
 }
