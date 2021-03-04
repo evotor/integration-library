@@ -3,7 +3,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka-android'
+// TODO
+// apply plugin: 'org.jetbrains.dokka-android'
 
 android {
     def version = 15
@@ -59,7 +60,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
+        // TODO
+        // classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
     }
 }
 // in the individual module build.gradle files
@@ -71,35 +73,39 @@ allprojects {
     }
 }
 
-dokka {
+// TODO
+/*dokka {
     moduleName = 'integration-library'
     outputFormat = 'javadoc'
     outputDirectory = "$buildDir/javadoc"
 
     includes = ['packages.md']
 
-}
+}*/
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+// TODO
+/*task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/dokkaJavadoc"
 
     includes = ['packages.md']
-}
+}*/
 
-task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
+// TODO
+/*task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = "html-as-java"
     outputDirectory = "$buildDir/dokkaHtmlasjava"
 
     includes = ['packages.md']
-}
+}*/
 
-task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
+// TODO
+/*task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = "html"
     outputDirectory = "$buildDir/dokkaHtml"
 
     includes = ['packages.md']
-}
+}*/
 
 task sourceJar(type: Jar) {
     classifier "sources"
@@ -107,10 +113,11 @@ task sourceJar(type: Jar) {
 }
 
 // build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: dokka) {
+// TODO
+/*task javadocJar(type: Jar, dependsOn: dokka) {
     classifier = 'javadoc'
     from dokka.outputDirectory
-}
+}*/
 
 publishing {
     publications {
@@ -120,7 +127,8 @@ publishing {
             artifactId "integration-library"
             version "MRK-166"
             artifact(sourceJar)
-            artifact(javadocJar)
+            // TODO
+            // artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
 
             //generate pom nodes for dependencies
