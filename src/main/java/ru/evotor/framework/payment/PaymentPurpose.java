@@ -1,13 +1,12 @@
 package ru.evotor.framework.payment;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.framework.component.PaymentPerformer;
 import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper;
 import ru.evotor.framework.core.action.event.receipt.payment.PaymentEvent;

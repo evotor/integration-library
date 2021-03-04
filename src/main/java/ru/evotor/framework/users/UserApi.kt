@@ -1,8 +1,7 @@
-@file:Suppress("unused")
 package ru.evotor.framework.users
 
 import android.content.Context
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 
 /**
  * Интерфейс для получения данных сотрудников, работающих со смарт-терминалом.
@@ -20,8 +19,8 @@ object UserApi {
         context.contentResolver
                 .query(UsersTable.URI, null, null, null, null)
                 ?.use { cursor ->
-                    val users = ArrayList<User>()
                     try {
+                        val users = ArrayList<User>()
                         while (cursor.moveToNext()) {
                             users.add(UserMapper.createUser(cursor))
                         }
@@ -65,8 +64,8 @@ object UserApi {
         context.contentResolver
                 .query(GrantsTable.URI, null, null, null, null)
                 ?.use { cursor ->
-                    val grants = ArrayList<Grant>()
                     try {
+                        val grants = ArrayList<Grant>()
                         while (cursor.moveToNext()) {
                             grants.add(UserMapper.createGrant(cursor))
                         }
@@ -88,8 +87,8 @@ object UserApi {
         context.contentResolver
                 .query(GrantsTable.URI_GRANTS_OF_AUTHENTICATED_USER, null, null, null, null)
                 ?.use { cursor ->
-                    val grants = ArrayList<Grant>()
                     try {
+                        val grants = ArrayList<Grant>()
                         while (cursor.moveToNext()) {
                             grants.add(UserMapper.createGrant(cursor))
                         }

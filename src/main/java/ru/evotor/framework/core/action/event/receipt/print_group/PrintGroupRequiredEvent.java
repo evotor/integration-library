@@ -1,8 +1,8 @@
 package ru.evotor.framework.core.action.event.receipt.print_group;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import ru.evotor.framework.payment.PaymentSystem;
 
 /**

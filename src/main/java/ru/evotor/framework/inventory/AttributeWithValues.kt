@@ -2,6 +2,7 @@ package ru.evotor.framework.inventory
 
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.framework.core.IntegrationLibraryParsingException
 
 private const val VERSION = 1
 
@@ -56,9 +57,9 @@ data class AttributeWithValues(
             val version = parcel.readInt()
             val dataSize = parcel.readInt()
             val dataStartPosition = parcel.dataPosition()
-            val uuid = parcel.readString()
-            val name = parcel.readString()
-            val attributeValues = parcel.createTypedArrayList(AttributeValue.CREATOR)
+            val uuid = parcel.readString() ?: throw IntegrationLibraryParsingException(AttributeWithValues::class.java)
+            val name = parcel.readString() ?: throw IntegrationLibraryParsingException(AttributeWithValues::class.java)
+            val attributeValues = parcel.createTypedArrayList(AttributeValue.CREATOR) ?: throw IntegrationLibraryParsingException(AttributeWithValues::class.java)
             parcel.setDataPosition(dataStartPosition + dataSize)
             return AttributeWithValues(uuid, name, attributeValues)
         }

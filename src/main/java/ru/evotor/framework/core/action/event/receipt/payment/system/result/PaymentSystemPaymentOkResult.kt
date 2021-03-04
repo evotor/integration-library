@@ -31,11 +31,10 @@ class PaymentSystemPaymentOkResult(
                 return null
             }
             val rrn = bundle.getString(KEY_RRN, null)
-            val slip = bundle.getStringArrayList(KEY_SLIP)
+            val slip = bundle.getStringArrayList(KEY_SLIP) ?: emptyList<String>()
             val paymentInfo = bundle.getString(KEY_PAYMENT_INFO, null)
             val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN)
             return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType)
-
         }
     }
 }

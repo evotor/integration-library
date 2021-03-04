@@ -8,10 +8,15 @@ object PositionAttributesMapper {
 
     @JvmStatic
     fun fromBundle(attributes: Bundle?): Map<String, AttributeValue>? {
-        attributes?.let {
-            it.classLoader = AttributeValue::class.java.classLoader
+        attributes?.let { bundle ->
+            bundle.classLoader = AttributeValue::class.java.classLoader
             return HashMap<String, AttributeValue>().apply {
-                attributes.keySet().forEach { this[it] = attributes.getParcelable(it) }
+                attributes.keySet().forEach { key ->
+                    val value = attributes.getParcelable(key) as AttributeValue?
+                    value?.let {
+                        this[key] = it
+                    }
+                }
             }
         } ?: return null
     }

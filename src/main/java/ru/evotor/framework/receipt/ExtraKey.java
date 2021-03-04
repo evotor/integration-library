@@ -2,7 +2,8 @@ package ru.evotor.framework.receipt;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by a.kuznetsov on 02/05/2017.
