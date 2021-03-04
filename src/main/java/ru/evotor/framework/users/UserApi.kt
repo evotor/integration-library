@@ -35,7 +35,8 @@ object UserApi {
     /**
      * Возвращает данные авторизованного сотрудника.
      * @param context контекст приложения.
-     * @return данные авторизованного [сотрудника][ru.evotor.framework.users.User] или `null`, если сотрудник не авторизован.
+     * @return данные авторизованного [сотрудника][ru.evotor.framework.users.User] или `null`,
+     * если сотрудник не авторизован.
      */
     @JvmStatic
     fun getAuthenticatedUser(context: Context): User? {
