@@ -17,7 +17,6 @@ android {
         versionCode version
         versionName "0.4.9"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
     buildTypes {
@@ -114,14 +113,13 @@ task javadocJar(type: Jar, dependsOn: dokka) {
 
 publishing {
     publications {
-
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "MRK-166"
+            version "STDEV-5035"
             artifact(sourceJar)
             artifact(javadocJar)
-            artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
+            artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}.aar"
 
             //generate pom nodes for dependencies
             pom.withXml {
