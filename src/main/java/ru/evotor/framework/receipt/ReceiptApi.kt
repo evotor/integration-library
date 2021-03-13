@@ -49,6 +49,8 @@ object ReceiptApi {
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
     private const val DISCOUNTS_PATH = "discounts"
+    private const val CURRENT_CORRECTION_INCOME_PATH = "correctionIncome"
+    private const val CURRENT_CORRECTION_OUTCOME_PATH = "correctionOutcome"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
@@ -56,6 +58,8 @@ object ReceiptApi {
     private val CURRENT_PAYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_PAYBACK_PATH)
     private val CURRENT_BUY_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUY_PATH)
     private val CURRENT_BUYBACK_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_BUYBACK_PATH)
+    private val CURRENT_CORRECTION_INCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_CORRECTION_INCOME_PATH)
+    private val CURRENT_CORRECTION_OUTCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2,CURRENT_CORRECTION_OUTCOME_PATH)
 
     @JvmStatic
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
@@ -101,6 +105,8 @@ object ReceiptApi {
             Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
             Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
             Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
+            Receipt.Type.CORRECTION_INCOME -> CURRENT_CORRECTION_INCOME_RECEIPT_URI
+            Receipt.Type.CORRECTION_OUTCOME -> CURRENT_CORRECTION_OUTCOME_RECEIPT_URI
             else -> Uri.withAppendedPath(RECEIPTS_URI, uuid)
         }
 
@@ -227,6 +233,8 @@ object ReceiptApi {
             Receipt.Type.PAYBACK -> CURRENT_PAYBACK_RECEIPT_URI
             Receipt.Type.BUY -> CURRENT_BUY_RECEIPT_URI
             Receipt.Type.BUYBACK -> CURRENT_BUYBACK_RECEIPT_URI
+            Receipt.Type.CORRECTION_INCOME -> CURRENT_CORRECTION_INCOME_RECEIPT_URI
+            Receipt.Type.CORRECTION_OUTCOME -> CURRENT_CORRECTION_OUTCOME_RECEIPT_URI
         }
 
         return context.contentResolver.query(
