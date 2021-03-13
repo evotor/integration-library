@@ -66,7 +66,7 @@ class OpenCorrectionIncomeReceiptCommand(
                             callback,
                             Handler(Looper.getMainLooper())
                     )
-                } ?: return
+                }
     }
 
     override fun toBundle(): Bundle {
