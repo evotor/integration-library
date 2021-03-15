@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     def version = 15
@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.annotation:annotation:1.1.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.31"
 
     implementation 'com.github.evotor:push-notifications:v0.2.1'
     implementation 'com.github.evotor:query-api:1.0.0'
@@ -51,15 +51,16 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.4.31'
     repositories {
-        jcenter()
+        mavenCentral()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
     }
 }
 // in the individual module build.gradle files
@@ -71,34 +72,22 @@ allprojects {
     }
 }
 
-dokka {
+dokkaJavadoc.configure {
     moduleName = 'integration-library'
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
 
-    includes = ['packages.md']
-
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
 }
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/dokkaJavadoc"
-
-    includes = ['packages.md']
-}
-
-task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "html-as-java"
-    outputDirectory = "$buildDir/dokkaHtmlasjava"
-
-    includes = ['packages.md']
-}
-
-task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/dokkaHtml"
-
-    includes = ['packages.md']
+dokkaHtml.configure{
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
 }
 
 task sourceJar(type: Jar) {
@@ -107,9 +96,9 @@ task sourceJar(type: Jar) {
 }
 
 // build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: dokka) {
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     classifier = 'javadoc'
-    from dokka.outputDirectory
+    from dokkaJavadoc.outputDirectory
 }
 
 publishing {
