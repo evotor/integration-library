@@ -25,11 +25,11 @@ import java.util.*
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  */
 class OpenCorrectionIncomeReceiptCommand(
-        private val changes: List<PositionAdd>,
-        private val extra: SetExtra? = null,
-        private val correctionDate: Date,
-        private val correctionType: CorrectionType,
-        private val prescription: String? = null
+        val changes: List<PositionAdd>,
+        val extra: SetExtra? = null,
+        val correctionDate: Date,
+        val correctionType: CorrectionType,
+        val prescription: String? = null
 ) : IBundlable {
 
     companion object {
@@ -78,10 +78,4 @@ class OpenCorrectionIncomeReceiptCommand(
             putString(KEY_PRESCRIPTION, prescription)
         }
     }
-
-    fun getChanges(): List<PositionAdd> = this.changes
-    fun getExtras(): SetExtra? = this.extra
-    fun getCorrectionDate(): Date = this.correctionDate
-    fun getCorrectionType(): CorrectionType = this.correctionType
-    fun getPrescription(): String? = this.prescription
 }
