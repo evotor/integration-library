@@ -12,6 +12,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
 import ru.evotor.framework.receipt.Receipt
+import ru.evotor.framework.receipt.correction.CorrectionType
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,6 +26,9 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param correctionDate Дата совершения корректируемого расчета (ТЕГ 1178)
+ * @param correctionType Тип коррекции BY_SELF - самостоятельная операция, BY_PRESCRIBED - операция по предписанию налогового органа  (ТЕГ 1173)
+ * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  */
 class PrintCorrectionOutcomeReceiptCommand(
     val printReceipts: List<Receipt.PrintReceipt>,
@@ -34,7 +38,10 @@ class PrintCorrectionOutcomeReceiptCommand(
     val receiptDiscount: BigDecimal? = BigDecimal.ZERO,
     val paymentAddress: String?,
     val paymentPlace: String?,
-    val userUuid: String?
+    val userUuid: String?,
+    val correctionDate: Date,
+    val correctionType: CorrectionType,
+    val prescription: String? = null
 ) : IBundlable {
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -80,6 +87,9 @@ class PrintCorrectionOutcomeReceiptCommand(
             putString(KEY_PAYMENT_ADDRESS, paymentAddress)
             putString(KEY_PAYMENT_PLACE, paymentPlace)
             putString(KEY_USER_UUID, userUuid)
+            putLong(KEY_CORRECTION_DATE, correctionDate.time)
+            putString(KEY_CORRECTION_TYPE, correctionType.name)
+            putString(KEY_PRESCRIPTION, prescription)
         }
     }
 
@@ -95,6 +105,9 @@ class PrintCorrectionOutcomeReceiptCommand(
         private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
         private const val KEY_PAYMENT_PLACE = "paymentPlace"
         private const val KEY_USER_UUID = "userUuid"
+        private const val KEY_CORRECTION_DATE = "correctionDate"
+        private const val KEY_CORRECTION_TYPE = "correctionType"
+        private const val KEY_PRESCRIPTION = "prescription"
 
         @JvmStatic
         fun create(bundle: Bundle?): PrintCorrectionOutcomeReceiptCommand? {
@@ -107,7 +120,10 @@ class PrintCorrectionOutcomeReceiptCommand(
                     receiptDiscount = PrintReceiptCommand.getReceiptDiscount(bundle),
                     paymentAddress = PrintReceiptCommand.getPaymentAddress(bundle),
                     paymentPlace = PrintReceiptCommand.getPaymentPlace(bundle),
-                    userUuid = PrintReceiptCommand.getUserUuid(bundle)
+                    userUuid = PrintReceiptCommand.getUserUuid(bundle),
+                    correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
+                    correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
+                    prescription = it.getString(KEY_PRESCRIPTION)
                 )
             }
         }
