@@ -38,17 +38,18 @@ class OpenCorrectionOutcomeReceiptCommand(
         private const val KEY_CORRECTION_DATE = "correctionDate"
         private const val KEY_CORRECTION_TYPE = "correctionType"
         private const val KEY_PRESCRIPTION = "prescription"
-    }
 
-    fun create(bundle: Bundle?): OpenCorrectionOutcomeReceiptCommand? {
-        return bundle?.let {
-            OpenCorrectionOutcomeReceiptCommand(
+        @JvmStatic
+        fun create(bundle: Bundle?): OpenCorrectionOutcomeReceiptCommand? {
+            return bundle?.let {
+                OpenCorrectionOutcomeReceiptCommand(
                     changes = Utils.filterByClass(ChangesMapper.create(it.getParcelableArray(KEY_CHANGES)), PositionAdd::class.java),
                     extra = SetExtra.from(it.getBundle(KEY_RECEIPT_EXTRA)),
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
                     correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
                     prescription = it.getString(KEY_PRESCRIPTION)
-            )
+                )
+            }
         }
     }
 
