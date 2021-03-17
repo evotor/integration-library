@@ -13,6 +13,8 @@ import android.os.Bundle
  * [ru.evotor.framework.receipt.event.handler.receiver.PaybackReceiptBroadcastReceiver]
  * [ru.evotor.framework.receipt.event.handler.receiver.BuyReceiptBroadcastReceiver]
  * [ru.evotor.framework.receipt.event.handler.receiver.BuybackReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionIncomeReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionOutcomeReceiptBroadcastReceiver]
  *
  * @param receiptUuid uuid чека
  */

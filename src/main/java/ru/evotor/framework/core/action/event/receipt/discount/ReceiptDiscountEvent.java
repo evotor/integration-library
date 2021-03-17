@@ -60,6 +60,20 @@ public class ReceiptDiscountEvent implements IBundlable {
      */
     public static final String NAME_BUYBACK_WITH_BUY_RECEIPT = "evo.v2.receipt.buybackWithBuy.receiptDiscount";
 
+    /**
+     * Скидка начислена на чек коррекции прихода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.income.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.receiptDiscount";
+
+    /**
+     * Скидка начислена на чек коррекции расхода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.outcome.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.receiptDiscount";
+
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_DISCOUNT = "discount";
 

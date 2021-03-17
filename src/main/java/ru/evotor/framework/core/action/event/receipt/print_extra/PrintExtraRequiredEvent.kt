@@ -45,6 +45,18 @@ class PrintExtraRequiredEvent() : IBundlable {
          * Значение константы: <code>evo.v2.receipt.buyback.printExtra.REQUIRED</code>.
          */
         const val NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.printExtra.REQUIRED"
+        /**
+         * Данные будут напечатанны в чеке коррекции прихода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.income.printExtra.REQUIRED</code>.
+         */
+        const val NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.printExtra.REQUIRED"
+        /**
+         * Данные будут напечатанны в чеке коррекции расхода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.outcome.printExtra.REQUIRED</code>.
+         */
+        const val NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.printExtra.REQUIRED"
 
         fun create(bundle: Bundle?): PrintExtraRequiredEvent? {
             if (bundle == null) {

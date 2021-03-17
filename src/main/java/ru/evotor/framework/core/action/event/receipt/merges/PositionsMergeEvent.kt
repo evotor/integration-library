@@ -48,6 +48,22 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
          * Значение константы: <code>evo.v2.receipt.buyback.mergingPositions</code>.
          */
         const val NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.mergingPositions"
+
+        /**
+         * Объединение позиций чека коррекции прихода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.income.mergingPositions</code>.
+         */
+        const val NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.mergingPositions"
+
+        /**
+         * Объединение позиций чека коррекции расхода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.outcome.mergingPositions</code>.
+         */
+        const val NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.mergingPositions"
+
+
         private val KEY_RECEIPT_UUID = "receiptUuid"
         private val KEY_MERGES = "merges"
 
