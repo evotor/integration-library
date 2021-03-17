@@ -223,8 +223,8 @@ object KktApi {
      * @param callback
      */
     @Deprecated(
-            message = "Неприменим для касс, использующих ФФД 1.1 и выше",
-            replaceWith = ReplaceWith("OpenCorrectionIncomeReceiptCommand \nOpenCorrectionOutcomeReceiptCommand")
+        message = "Неприменим для касс, использующих ФФД 1.1 и выше",
+        replaceWith = ReplaceWith("PrintCorrectionIncomeReceiptCommand \nPrintCorrectionOutcomeReceiptCommand")
     )
     @JvmStatic
     fun registerCorrectionReceipt(
@@ -321,8 +321,8 @@ object KktApi {
      * @param callback
      */
     @Deprecated(
-            message = "Неприменим для касс, использующих ФФД 1.1 и выше",
-            replaceWith = ReplaceWith("OpenCorrectionIncomeReceiptCommand \nOpenCorrectionOutcomeReceiptCommand")
+        message = "Неприменим для касс, использующих ФФД 1.1 и выше",
+        replaceWith = ReplaceWith("PrintCorrectionIncomeReceiptCommand \nPrintCorrectionOutcomeReceiptCommand")
     )
     @JvmStatic
     fun registerCorrectionReceipt(
