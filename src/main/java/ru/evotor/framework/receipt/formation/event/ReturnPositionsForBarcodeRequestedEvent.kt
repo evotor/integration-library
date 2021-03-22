@@ -1,6 +1,8 @@
 package ru.evotor.framework.receipt.formation.event
 
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.Position
 
@@ -12,21 +14,25 @@ import ru.evotor.framework.receipt.Position
  * Обрабатывая данные, содержащиеся в событии, приложения могут добавлять позиции в чек и / или создавать новые товары.
  *
  * @property barcode строка данных, полученных от сканера штрихкодов.
+ * @property extractedData коллекция данных, которые удалось получить из отсканированного штрихкода
  * @property creatingNewProduct указывает на необходимость создать новый товар. Сразу после сканирования штрихкода всегда содержит false.
  * @see <a href="https://developer.evotor.ru/docs/doc_java_return_positions_for_barcode_requested.html">Обработка события сканирования штрихкода</a>
  */
 data class ReturnPositionsForBarcodeRequestedEvent(
         val barcode: String,
+        val extractedData: ArrayList<DataExtracted>? = null,
         val creatingNewProduct: Boolean
 ) : IntegrationEvent() {
 
     override fun toBundle() = Bundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
+        putParcelableArrayList(KEY_EXTRACTED_DATA_EXTRA, extractedData)
         putBoolean(KEY_CREATE_PRODUCT_EXTRA, creatingNewProduct)
     }
 
     companion object {
         const val KEY_BARCODE_EXTRA = "key_barcode_extra"
+        const val KEY_EXTRACTED_DATA_EXTRA = "key_extracted_data_extra"
         const val KEY_CREATE_PRODUCT_EXTRA = "key_create_product_extra"
 
         @JvmStatic
@@ -34,6 +40,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
             ReturnPositionsForBarcodeRequestedEvent(
                     barcode = it.getString(KEY_BARCODE_EXTRA)
                             ?: return null,
+                    extractedData = it.getParcelableArrayList(KEY_EXTRACTED_DATA_EXTRA),
                     creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA))
         }
     }
@@ -121,7 +128,82 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
                 Result(iCanCreateNewProduct, positions, positionsList)
             }
+        }
+    }
 
+    sealed class DataExtracted: Parcelable {
+
+        protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            // Determine position in parcel for writing data size
+            val dataSizePosition = parcel.dataPosition()
+            // Use integer placeholder for data size
+            parcel.writeInt(0)
+            //Determine position of data start
+            val startDataPosition = parcel.dataPosition()
+
+            writeFieldsToParcel(parcel, flags)
+
+            // Calculate data size
+            val dataSize = parcel.dataPosition() - startDataPosition
+            // Save position at the end of data
+            val endOfDataPosition = parcel.dataPosition()
+            //Set position to start to write additional data size
+            parcel.setDataPosition(dataSizePosition)
+            parcel.writeInt(dataSize)
+            // Go back to the end of parcel
+            parcel.setDataPosition(endOfDataPosition)
+        }
+
+        class EAN(val value: String): DataExtracted() {
+
+            override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
+                dest.writeString(value)
+            }
+
+            override fun writeToParcel(parcel: Parcel, flags: Int) {
+                parcel.writeInt(VERSION)
+                super.writeToParcel(parcel, flags)
+            }
+
+            override fun describeContents(): Int = 0
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other !is EAN) return false
+
+                if (value != other.value) return false
+
+                return true
+            }
+
+            override fun hashCode(): Int {
+                return value.hashCode()
+            }
+
+            companion object {
+                private const val VERSION = 1
+
+                @JvmStatic
+                private fun readFromParcel(parcel: Parcel): EAN {
+                    val version = parcel.readInt()
+                    val dataSize = parcel.readInt()
+                    val dataStartPosition = parcel.dataPosition()
+                    // read fields here
+                    val eanValue = parcel.readString()
+                    parcel.setDataPosition(dataStartPosition + dataSize)
+                    requireNotNull(eanValue)
+                    return EAN(eanValue)
+                }
+
+                @JvmField
+                val CREATOR: Parcelable.Creator<EAN> = object : Parcelable.Creator<EAN> {
+                    override fun createFromParcel(parcel: Parcel): EAN = readFromParcel(parcel)
+
+                    override fun newArray(size: Int): Array<EAN?> = arrayOfNulls(size)
+                }
+            }
         }
     }
 }
