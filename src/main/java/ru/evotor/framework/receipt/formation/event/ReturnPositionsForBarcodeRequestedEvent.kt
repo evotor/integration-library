@@ -156,10 +156,10 @@ data class ReturnPositionsForBarcodeRequestedEvent(
             parcel.setDataPosition(endOfDataPosition)
         }
 
-        class EAN(val value: String): DataExtracted() {
+        class GS1(val ean: String): DataExtracted() {
 
             override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-                dest.writeString(value)
+                dest.writeString(ean)
             }
 
             override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -171,22 +171,22 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
-                if (other !is EAN) return false
+                if (other !is GS1) return false
 
-                if (value != other.value) return false
+                if (ean != other.ean) return false
 
                 return true
             }
 
             override fun hashCode(): Int {
-                return value.hashCode()
+                return ean.hashCode()
             }
 
             companion object {
                 private const val VERSION = 1
 
                 @JvmStatic
-                private fun readFromParcel(parcel: Parcel): EAN {
+                private fun readFromParcel(parcel: Parcel): GS1 {
                     val version = parcel.readInt()
                     val dataSize = parcel.readInt()
                     val dataStartPosition = parcel.dataPosition()
@@ -194,14 +194,14 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                     val eanValue = parcel.readString()
                     parcel.setDataPosition(dataStartPosition + dataSize)
                     requireNotNull(eanValue)
-                    return EAN(eanValue)
+                    return GS1(eanValue)
                 }
 
                 @JvmField
-                val CREATOR: Parcelable.Creator<EAN> = object : Parcelable.Creator<EAN> {
-                    override fun createFromParcel(parcel: Parcel): EAN = readFromParcel(parcel)
+                val CREATOR: Parcelable.Creator<GS1> = object : Parcelable.Creator<GS1> {
+                    override fun createFromParcel(parcel: Parcel): GS1 = readFromParcel(parcel)
 
-                    override fun newArray(size: Int): Array<EAN?> = arrayOfNulls(size)
+                    override fun newArray(size: Int): Array<GS1?> = arrayOfNulls(size)
                 }
             }
         }
