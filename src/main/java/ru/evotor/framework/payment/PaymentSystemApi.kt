@@ -3,7 +3,7 @@ package ru.evotor.framework.payment
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 import ru.evotor.framework.Utils
 
 /**
@@ -14,7 +14,8 @@ object PaymentSystemApi {
 
     const val AUTHORITY = "ru.evotor.evotorpos.paymentSystem"
 
-    @JvmField val BASE_URI = Uri.parse("content://$AUTHORITY")
+    @JvmField
+    val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 
     /**
      * Возвращает список платёжных систем и соответствующих им аккаунтов, доступных пользователю смарт-терминала.
@@ -28,33 +29,29 @@ object PaymentSystemApi {
 
         val cursor: Cursor? = context.contentResolver.query(PaymentSystemTable.URI, null, null, null, null)
 
-        if (cursor != null) {
-            try {
-                while (cursor.moveToNext()) {
-                    val paymentSystem = PaymentSystem(
-                            Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), PaymentType.UNKNOWN),
-                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)),
-                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
-                    )
+        cursor?.use {
+            while (cursor.moveToNext()) {
+                val paymentSystem = PaymentSystem(
+                        Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), PaymentType.UNKNOWN),
+                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
+                )
 
-                    val paymentAccount = PaymentAccount(
-                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
-                            cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_ID))
-                    )
+                val paymentAccount = PaymentAccount(
+                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_ID))
+                )
 
-                    var inList = false
-                    paymentSystemList.forEach {
-                        if (it.first == paymentSystem) {
-                            inList = true
-                            it.second.add(paymentAccount)
-                        }
-                    }
-                    if (!inList) {
-                        paymentSystemList.add(Pair(paymentSystem, mutableListOf(paymentAccount)))
+                var inList = false
+                paymentSystemList.forEach {
+                    if (it.first == paymentSystem) {
+                        inList = true
+                        it.second.add(paymentAccount)
                     }
                 }
-            } finally {
-                cursor.close()
+                if (!inList) {
+                    paymentSystemList.add(Pair(paymentSystem, mutableListOf(paymentAccount)))
+                }
             }
         }
 

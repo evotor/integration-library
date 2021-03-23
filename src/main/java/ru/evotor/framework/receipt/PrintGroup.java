@@ -3,8 +3,7 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import android.support.annotation.Nullable;
-
+import androidx.annotation.Nullable;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
@@ -29,27 +28,27 @@ public class PrintGroup implements Parcelable {
     /**
      * Идентификатор печатной группы.
      */
-    private String identifier;
+    private final String identifier;
     /**
      * Тип печатной группы (фискальный, енвд и др.)
      */
-    private Type type;
+    private final Type type;
     /**
      * Название организации, на которую зарегестрированная касса.
      */
-    private String orgName;
+    private final String orgName;
     /**
      * ИНН организации, на которую зарегестрированная касса.
      */
-    private String orgInn;
+    private final String orgInn;
     /**
      * Адрес организации, на которую зарегестрированная касса.
      */
-    private String orgAddress;
+    private final String orgAddress;
     /**
      * Система налогообложения, которая применялась при расчёте.
      */
-    private TaxationSystem taxationSystem;
+    private final TaxationSystem taxationSystem;
 
     /**
      * Флаг, указывающий необходимость печати чека.

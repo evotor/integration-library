@@ -3,9 +3,9 @@ package ru.evotor.framework.device.scanner.event.handler.receiver
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.RequiresPermission
-import ru.evotor.framework.core.RequiresIntentAction
+import androidx.annotation.RequiresPermission
 import ru.evotor.framework.core.BroadcastEventReceiver
+import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.device.scanner.event.BarcodeReceivedEvent
 
 /**

@@ -1,9 +1,9 @@
 package ru.evotor.framework.core.action.command.print_receipt_command;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 
 public class PrintReceiptCommandResult implements IBundlable {

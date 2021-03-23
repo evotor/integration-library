@@ -2,13 +2,13 @@ package ru.evotor.framework.core.action.event.receipt.discount;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.BundleUtils;

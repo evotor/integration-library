@@ -55,18 +55,21 @@ object PrintablesMapper {
                 it
             }
 
-    fun fromBundle(bundle: Bundle): Array<IPrintable>? =
-            arrayListOf<IPrintable>().let {
-                list ->
-                val bundleParcelables: Array<Parcelable> = bundle.getParcelableArray(KEY_PRINTABLE_ARRAY)
-                bundleParcelables.forEach {
-                    bundle ->
-                    if (bundle is Bundle) {
-                        singleFromBundle(bundle)?.let { list.add(it) }
-                    }
+    fun fromBundle(bundle: Bundle?): Array<IPrintable>? {
+        if (bundle == null) return null
+
+        return arrayListOf<IPrintable>().let { list ->
+            val bundleParcelables: Array<Parcelable>? = bundle.getParcelableArray(KEY_PRINTABLE_ARRAY)
+            bundleParcelables?.forEach {
+                bundle ->
+                if (bundle is Bundle) {
+                    singleFromBundle(bundle)?.let { list.add(it) }
                 }
-                list.toTypedArray()
             }
+            list.toTypedArray()
+        }
+    }
+
 
     private fun singleFromBundle(bundle: Bundle): IPrintable? =
             when (safeValueOf<PrintableType>(bundle.getString(KEY_PRINTABLE_TYPE), null)) {
@@ -80,7 +83,7 @@ object PrintablesMapper {
                 PrintableType.IMAGE ->
                     bundle.getByteArray(KEY_PRINTABL_IMAGE).let {
                         PrintableImage(
-                                BitmapFactory.decodeByteArray(it, 0, it.size)
+                                BitmapFactory.decodeByteArray(it, 0, it?.size ?: 0)
                         )
                     }
                 null -> null

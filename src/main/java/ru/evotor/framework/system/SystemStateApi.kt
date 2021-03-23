@@ -3,7 +3,7 @@ package ru.evotor.framework.system
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 
 @WorkerThread
 object SystemStateApi {

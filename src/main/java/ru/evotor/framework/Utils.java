@@ -1,18 +1,24 @@
 package ru.evotor.framework;
 
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by a.kuznetsov on 30/04/2017.
  */
 
 public final class Utils {
+
+    private Utils() {
+        // private constructor to hide the public one
+    }
+
     public static <T extends Enum<T>> T safeValueOf(Class<T> clazz, String name, T defaultValue) {
         Objects.requireNonNull(clazz);
         if (name == null) {

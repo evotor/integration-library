@@ -22,14 +22,15 @@ object PrintExtraPlaceMapper {
             }
 
 
-    fun fromBundle(bundle: Bundle): PrintExtraPlace? =
-            when (safeValueOf<PrintExtraPlaceType>(bundle.getString(KEY_TYPE))) {
-                PrintExtraPlaceType.PRINT_GROUP_TOP -> PrintExtraPlacePrintGroupTop.fromBundle(bundle)
-                PrintExtraPlaceType.PRINT_GROUP_HEADER -> PrintExtraPlacePrintGroupHeader.fromBundle(bundle)
-                PrintExtraPlaceType.PRINT_GROUP_SUMMARY -> PrintExtraPlacePrintGroupSummary.fromBundle(bundle)
-                PrintExtraPlaceType.POSITION_FOOTER -> PrintExtraPlacePositionFooter.fromBundle(bundle)
-                PrintExtraPlaceType.POSITION_ALL_SUBPOSITIONS_FOOTER -> PrintExtraPlacePositionAllSubpositionsFooter.fromBundle(bundle)
-                else -> null
-            }
-
+    fun fromBundle(bundle: Bundle?): PrintExtraPlace? {
+        if (bundle == null) return null
+        return when (safeValueOf<PrintExtraPlaceType>(bundle.getString(KEY_TYPE))) {
+            PrintExtraPlaceType.PRINT_GROUP_TOP -> PrintExtraPlacePrintGroupTop.fromBundle(bundle)
+            PrintExtraPlaceType.PRINT_GROUP_HEADER -> PrintExtraPlacePrintGroupHeader.fromBundle(bundle)
+            PrintExtraPlaceType.PRINT_GROUP_SUMMARY -> PrintExtraPlacePrintGroupSummary.fromBundle(bundle)
+            PrintExtraPlaceType.POSITION_FOOTER -> PrintExtraPlacePositionFooter.fromBundle(bundle)
+            PrintExtraPlaceType.POSITION_ALL_SUBPOSITIONS_FOOTER -> PrintExtraPlacePositionAllSubpositionsFooter.fromBundle(bundle)
+            else -> null
+        }
+    }
 }

@@ -1,9 +1,9 @@
 package ru.evotor.framework.core.action.event.receipt.payment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
 import ru.evotor.framework.core.action.datamapper.PaymentSystemMapper;

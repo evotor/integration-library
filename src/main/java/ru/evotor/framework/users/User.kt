@@ -19,6 +19,11 @@ data class User(
          */
         val firstName: String?,
         /**
+         * ИНН
+         * Поле может быть пустым
+         */
+        val inn: String? = null,
+        /**
          * Номер телефона сотрудника.
          * Поле может быть пустым.
          */
@@ -37,10 +42,49 @@ data class User(
         /**
          * Название роли, например, "Кассир".
          */
-        val roleTitle: String
+        val roleTitle: String,
+        /**
+         * Должность
+         * Поле может быть пустым
+         */
+        val position: String? = null
 ) {
-    var inn: String? = null
+    @Deprecated(
+            message = "Use constructor with inn and position parameters instead",
+            level = DeprecationLevel.WARNING,
+            replaceWith = ReplaceWith(
+                    expression = "User(uuid: String, secondName: String?, firstName: String?, " +
+                            "inn: String?, phone: String?, pin: String?, roleUuid: String, " +
+                            "roleTitle: String, position: String?)"
+            )
+    )
+    constructor(uuid: String,
+                secondName: String?,
+                firstName: String?,
+                phone: String?,
+                pin: String?,
+                roleUuid: String,
+                roleTitle: String) : this(
+            uuid,
+            secondName,
+            firstName,
+            null,
+            phone,
+            pin,
+            roleUuid,
+            roleTitle,
+            null
+    )
 
+    @Deprecated(
+            message = "Use constructor with inn and position parameters instead",
+            level = DeprecationLevel.WARNING,
+            replaceWith = ReplaceWith(
+                    expression = "User(uuid: String, secondName: String?, firstName: String?, " +
+                            "inn: String?, phone: String?, pin: String?, roleUuid: String, " +
+                            "roleTitle: String, position: String?)"
+            )
+    )
     constructor(uuid: String,
                 secondName: String?,
                 firstName: String?,
@@ -52,11 +96,11 @@ data class User(
             uuid,
             secondName,
             firstName,
+            inn,
             phone,
             pin,
             roleUuid,
-            roleTitle
-    ) {
-        this.inn = inn
-    }
+            roleTitle,
+            null
+    )
 }

@@ -2,6 +2,7 @@ package ru.evotor.framework.core.action.event.receipt.merges
 
 import android.os.Parcel
 import android.os.Parcelable
+import ru.evotor.framework.core.IntegrationLibraryParsingException
 import ru.evotor.framework.receipt.Position
 
 /**
@@ -27,18 +28,14 @@ class PositionsMerge(val before: List<Position>, val after: Position) : Parcelab
         val CREATOR: Parcelable.Creator<PositionsMerge> = object : Parcelable.Creator<PositionsMerge> {
             override fun createFromParcel(parcel: Parcel): PositionsMerge {
                 val before = ArrayList<Position>()
-                parcel.readList(before, Position::class.java.classLoader)
-                val after = parcel.readParcelable<Position>(Position::class.java.classLoader)
+                parcel.readList(before as List<*>, Position::class.java.classLoader)
+                val after = parcel.readParcelable<Position>(Position::class.java.classLoader) ?: throw IntegrationLibraryParsingException(PositionsMerge::class.java)
                 return PositionsMerge(before, after)
             }
 
-            override fun newArray(size: Int): Array<PositionsMerge?> {
-                return arrayOfNulls(size)
-            }
+            override fun newArray(size: Int): Array<PositionsMerge?> = arrayOfNulls(size)
         }
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 }

@@ -2,11 +2,11 @@ package ru.evotor.framework.core.action.event.receipt.print_group;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
