@@ -21,9 +21,11 @@ import ru.evotor.framework.receipt.Position
  */
 data class ReturnPositionsForBarcodeRequestedEvent(
         val barcode: String,
-        val extractedData: DataExtracted? = null,
+        val extractedData: DataExtracted?,
         val creatingNewProduct: Boolean
 ) : IntegrationEvent() {
+
+    constructor(barcode: String, creatingNewProduct: Boolean) : this(barcode, null, creatingNewProduct)
 
     override fun toBundle() = Bundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
@@ -152,12 +154,12 @@ data class ReturnPositionsForBarcodeRequestedEvent(
             private const val VERSION = 1
 
             @JvmField
-            val CREATOR = object : Parcelable.Creator<DataExtracted> {
-                override fun createFromParcel(parcel: Parcel): DataExtracted = create(parcel)
+            val CREATOR = object : Parcelable.Creator<DataExtracted?> {
+                override fun createFromParcel(parcel: Parcel): DataExtracted? = create(parcel)
                 override fun newArray(size: Int): Array<DataExtracted?> = arrayOfNulls(size)
             }
 
-            private fun create(dest: Parcel): DataExtracted {
+            private fun create(dest: Parcel): DataExtracted? {
                 var dataExtracted: DataExtracted? = null
 
                 ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
@@ -173,8 +175,7 @@ data class ReturnPositionsForBarcodeRequestedEvent(
                             ean = ean
                     )
                 }
-                checkNotNull(dataExtracted)
-                return dataExtracted as DataExtracted
+                return dataExtracted
             }
         }
     }
