@@ -20,7 +20,7 @@ public final class TaxMapper {
             return null;
         }
         String taxNumber = bundle.getString(KEY_TAX_NUMBER);
-        BigDecimal taxRatePercent = BundleUtils.getBigDecimal(bundle, KEY_TAX_RATE_PERCENT, null);
+        BigDecimal taxRatePercent = BundleUtils.optBigDecimal(bundle, KEY_TAX_RATE_PERCENT, null);
         BigDecimal value = BundleUtils.getMoney(bundle, KEY_VALUE);
         return new Tax(
                 Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT),

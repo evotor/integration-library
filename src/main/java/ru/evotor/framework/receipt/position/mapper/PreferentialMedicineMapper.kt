@@ -29,7 +29,7 @@ internal object PreferentialMedicineMapper {
         PreferentialMedicine(
                 type = Utils.safeValueOf(PreferentialMedicine.PreferentialMedicineType::class.java,
                         type, PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                preferentialValue = BundleUtils.getBigDecimal(it, KEY_PREFERENTIAL_MEDICINE_VALUE)
+                preferentialValue = BundleUtils.optBigDecimal(it, KEY_PREFERENTIAL_MEDICINE_VALUE)
         )
     }
 

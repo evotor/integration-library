@@ -20,6 +20,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.Partial;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -40,10 +41,6 @@ public final class PositionMapper {
     private static final String KEY_PRICE_WITH_DISCOUNT_POSITION = "priceWithDiscountPosition";
 
     private static final String KEY_QUANTITY = "quantity";
-
-    private static final String KEY_INITIAL_QUANTITY = "initialQuantity";
-
-    private static final String KEY_QUANTITY_IN_PACKAGE = "quantityInPackage";
 
     private static final String KEY_NAME = "name";
 
@@ -80,6 +77,8 @@ public final class PositionMapper {
     private static final String KEY_PREFERENTIAL_MEDICINE = "preferentialMedicine";
 
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
+
+    private static final String KEY_PARTIAL_SALE = "partialSale";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -139,8 +138,7 @@ public final class PositionMapper {
         PreferentialMedicine preferentialMedicine =
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
-        BigDecimal initialQuantity = BundleUtils.getQuantity(bundle, KEY_INITIAL_QUANTITY);
-        BigDecimal quantityInPackage = BundleUtils.getQuantity(bundle, KEY_QUANTITY_IN_PACKAGE);
+        Partial partial = Partial.Companion.from(bundle.getBundle(KEY_PARTIAL_SALE));
 
         if (quantity == null ||
                 price == null ||
@@ -176,8 +174,7 @@ public final class PositionMapper {
         builder.setExcise(excise);
         builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
-        builder.setInitialQuantity(initialQuantity);
-        builder.setQuantityInPackage(quantityInPackage);
+        builder.setPartial(partial);
         return builder.build();
     }
 
@@ -243,14 +240,8 @@ public final class PositionMapper {
             bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
 
-        final BigDecimal initialQuantity = position.getInitialQuantity();
-        if (initialQuantity != null) {
-            bundle.putString(KEY_INITIAL_QUANTITY, initialQuantity.toPlainString());
-        }
-        final BigDecimal quantityInPackage = position.getQuantityInPackage();
-        if (quantityInPackage != null) {
-            bundle.putString(KEY_QUANTITY_IN_PACKAGE, quantityInPackage.toPlainString());
-        }
+        final Partial partial = position.getPartial();
+        bundle.putBundle(KEY_PARTIAL_SALE, partial != null ? partial.toBundle() : null);
 
         return bundle;
     }

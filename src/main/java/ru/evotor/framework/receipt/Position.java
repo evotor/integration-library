@@ -25,6 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.Partial;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -88,18 +89,6 @@ public class Position implements Parcelable {
      * (Для маркированных товаров при частичной продаже это количество проданного сейчас товара по данной марке)
      */
     private BigDecimal quantity;
-    /**
-     * Остаток товара до выполнения операции. Необходимое для заполнения поле,
-     * при частичной продаже маркированного товара.
-     */
-    @Nullable
-    private BigDecimal initialQuantity;
-    /**
-     * Количество товара в упаковке всего. Необходимое для заполнения поле,
-     * при частичной продаже маркированного товара.
-     */
-    @Nullable
-    private BigDecimal quantityInPackage;
     /**
      * Штрихкод, по которому товар был найден.
      */
@@ -188,6 +177,13 @@ public class Position implements Parcelable {
     @Nullable
     private PreferentialMedicine preferentialMedicine;
 
+    /**
+     * Частичное выбытие 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_SALE)
+    @Nullable
+    private Partial partial;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -258,8 +254,7 @@ public class Position implements Parcelable {
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
-        this.initialQuantity = position.initialQuantity;
-        this.quantityInPackage = position.quantityInPackage;
+        this.partial = position.getPartial();
     }
 
     /**
@@ -408,22 +403,6 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return Остаток товара до выполнения операции. Необходимое для заполнения поле,
-     * при частичной продаже маркированного товара.
-     */
-    public BigDecimal getInitialQuantity() {
-        return initialQuantity;
-    }
-
-    /**
-     * @return Количество товара в упаковке всего. Необходимое для заполнения поле,
-     * при частичной продаже маркированного товара.
-     */
-    public BigDecimal getQuantityInPackage() {
-        return quantityInPackage;
-    }
-
-    /**
      * @return Штрихкод, по которому товар был найден.
      */
     @Nullable
@@ -536,6 +515,15 @@ public class Position implements Parcelable {
         return preferentialMedicine;
     }
 
+    /**
+     * @return частичное выбытие 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_SALE)
+    @Nullable
+    public Partial getPartial() {
+        return partial;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -569,12 +557,6 @@ public class Position implements Parcelable {
             return false;
         if (!exceptQuantity && (quantity != null ? quantity : BigDecimal.ZERO).compareTo(position.quantity != null ? position.quantity : BigDecimal.ZERO) != 0)
             return false;
-        if ((initialQuantity != null ? initialQuantity : BigDecimal.ZERO)
-                .compareTo(position.initialQuantity != null ? position.initialQuantity : BigDecimal.ZERO) != 0)
-            return false;
-        if ((quantityInPackage != null ? quantityInPackage : BigDecimal.ZERO)
-                .compareTo(position.quantityInPackage != null ? position.quantityInPackage : BigDecimal.ZERO) != 0)
-            return false;
         if (!Objects.equals(barcode, position.barcode))
             return false;
         if (!Objects.equals(mark, position.mark)) return false;
@@ -603,6 +585,8 @@ public class Position implements Parcelable {
         }
         if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
             return false;
+        if (!Objects.equals(partial, position.partial))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -620,8 +604,6 @@ public class Position implements Parcelable {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (priceWithDiscountPosition != null ? priceWithDiscountPosition.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
-        result = 31 * result + (initialQuantity != null ? initialQuantity.hashCode() : 0);
-        result = 31 * result + (quantityInPackage != null ? quantityInPackage.hashCode() : 0);
         result = 31 * result + (barcode != null ? barcode.hashCode() : 0);
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         result = 31 * result + (alcoholByVolume != null ? alcoholByVolume.hashCode() : 0);
@@ -630,12 +612,13 @@ public class Position implements Parcelable {
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 31 * result + (settlementMethod != null ? settlementMethod.hashCode() : 0);
+        result = 31 * result + (settlementMethod.hashCode());
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
+        result = 31 * result + (partial != null ? partial.hashCode() : 0);
         return result;
     }
 
@@ -653,8 +636,6 @@ public class Position implements Parcelable {
                 ", price=" + price +
                 ", priceWithDiscountPosition=" + priceWithDiscountPosition +
                 ", quantity=" + quantity +
-                ", initialQuantity=" + initialQuantity +
-                ", quantityInPackage=" + quantityInPackage +
                 ", barcode='" + barcode + '\'' +
                 ", mark='" + mark + '\'' +
                 ", alcoholByVolume=" + alcoholByVolume +
@@ -669,6 +650,7 @@ public class Position implements Parcelable {
                 ", excise=" + excise +
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
+                ", partial=" + partial +
                 '}';
     }
 
@@ -740,8 +722,7 @@ public class Position implements Parcelable {
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         // Partial sale
-        dest.writeSerializable(this.initialQuantity);
-        dest.writeSerializable(this.quantityInPackage);
+        dest.writeBundle(this.partial != null ? this.partial.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -838,8 +819,7 @@ public class Position implements Parcelable {
                 this.excise = (BigDecimal) in.readSerializable();
                 this.classificationCode = in.readString();
                 readPreferentialMedicine(in);
-                this.initialQuantity = (BigDecimal) in.readSerializable();
-                this.quantityInPackage = (BigDecimal) in.readSerializable();
+                readPartialSale(in);
                 break;
             }
         }
@@ -880,6 +860,10 @@ public class Position implements Parcelable {
 
     private void readPreferentialMedicine(Parcel in) {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
+    }
+
+    private void readPartialSale(Parcel in) {
+        this.partial = Partial.Companion.from(in.readBundle(Partial.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1132,14 +1116,25 @@ public class Position implements Parcelable {
             return this;
         }
 
+
+        /**
+         * Частичная продажа для позиции доступна только если тип товара является одним из:
+         * <p>
+         * лекарства [MEDICINE_MARKED]
+         * духи [PERFUME_MARKED]
+         * альтернативный табак [TOBACCO_PRODUCTS_MARKED]
+         *
+         * @param initialQuantity   остаток товара до выполнения операции
+         * @param quantityInPackage количество товара в упаковке всего
+         */
         public Builder toPartial(
-                @NonNull ProductType productType,
                 @NonNull BigDecimal initialQuantity,
                 @NonNull BigDecimal quantityInPackage
         ) {
-            position.productType = productType;
-            position.initialQuantity = initialQuantity;
-            position.quantityInPackage = quantityInPackage;
+            position.partial = new Partial(
+                    initialQuantity,
+                    quantityInPackage
+            );
             return this;
         }
 
@@ -1194,16 +1189,6 @@ public class Position implements Parcelable {
 
         public Builder setQuantity(BigDecimal quantity) {
             position.quantity = quantity;
-            return this;
-        }
-
-        public Builder setInitialQuantity(BigDecimal initialQuantity) {
-            position.initialQuantity = initialQuantity;
-            return this;
-        }
-
-        public Builder setQuantityInPackage(BigDecimal quantityInPackage) {
-            position.quantityInPackage = quantityInPackage;
             return this;
         }
 
@@ -1289,6 +1274,11 @@ public class Position implements Parcelable {
 
         public Builder setClassificationCode(@Nullable String classificationCode) {
             position.classificationCode = classificationCode;
+            return this;
+        }
+
+        public Builder setPartial(@Nullable Partial partial) {
+            position.partial = partial;
             return this;
         }
 
