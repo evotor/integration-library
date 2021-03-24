@@ -182,4 +182,9 @@ object FiscalTags {
      */
     const val MEDICINE_ADDITIONAL_REQUISITE_VALUE = 1086
 
+    /**
+     * частичное выбытие
+     */
+    const val PARTIAL_SALE = 1191
+
 }
