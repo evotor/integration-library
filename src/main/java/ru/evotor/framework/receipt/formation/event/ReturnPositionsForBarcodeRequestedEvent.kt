@@ -1,9 +1,7 @@
 package ru.evotor.framework.receipt.formation.event
 
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
-import ru.evotor.framework.ParcelableUtils
+import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.Position
 
@@ -25,11 +23,9 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         val creatingNewProduct: Boolean
 ) : IntegrationEvent() {
 
-    constructor(barcode: String, creatingNewProduct: Boolean) : this(barcode, null, creatingNewProduct)
-
     override fun toBundle() = Bundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
-        putParcelable(KEY_EXTRACTED_DATA_EXTRA, extractedData)
+        putBundle(KEY_EXTRACTED_DATA_EXTRA, extractedData?.toBundle())
         putBoolean(KEY_CREATE_PRODUCT_EXTRA, creatingNewProduct)
     }
 
@@ -40,11 +36,22 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
+            if (!it.containsKey(KEY_EXTRACTED_DATA_EXTRA)) {
+                ReturnPositionsForBarcodeRequestedEvent(
+                        barcode = it.getString(KEY_BARCODE_EXTRA)
+                                ?: return null,
+                        extractedData = null,
+                        creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA)
+                )
+            }
             ReturnPositionsForBarcodeRequestedEvent(
                     barcode = it.getString(KEY_BARCODE_EXTRA)
                             ?: return null,
-                    extractedData = it.getParcelable<DataExtracted>(KEY_EXTRACTED_DATA_EXTRA),
-                    creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA))
+                    extractedData = DataExtracted.from(
+                            it.getBundle(KEY_EXTRACTED_DATA_EXTRA)
+                    ),
+                    creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA)
+            )
         }
     }
 
@@ -136,46 +143,23 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
     data class DataExtracted(
             val ean: String?
-    ) : Parcelable {
+    ) : IBundlable {
 
-        override fun describeContents(): Int = 0
-
-        override fun writeToParcel(dest: Parcel, flags: Int) {
-            ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
-                parcel.writeString(ean)
-            }
+        override fun toBundle(): Bundle = Bundle().apply {
+            classLoader = DataExtracted::class.java.classLoader
+            putString(KEY_EAN_EXTRA, ean)
         }
 
         companion object {
 
-            /**
-             * Текущая версия объекта
-             */
-            private const val VERSION = 1
+            private const val KEY_EAN_EXTRA = "key_ean_extra"
 
-            @JvmField
-            val CREATOR = object : Parcelable.Creator<DataExtracted?> {
-                override fun createFromParcel(parcel: Parcel): DataExtracted? = create(parcel)
-                override fun newArray(size: Int): Array<DataExtracted?> = arrayOfNulls(size)
-            }
+            @JvmStatic
+            fun from(bundle: Bundle?) = bundle?.let {
+                it.classLoader = DataExtracted::class.java.classLoader
 
-            private fun create(dest: Parcel): DataExtracted? {
-                var dataExtracted: DataExtracted? = null
-
-                ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-
-                    var ean: String? = null
-
-                    if (version >= 1) {
-                        ean = parcel.readString()
-                    }
-
-                    checkNotNull(ean)
-                    dataExtracted = DataExtracted(
-                            ean = ean
-                    )
-                }
-                return dataExtracted
+                val ean = it.getString(KEY_EAN_EXTRA)
+                DataExtracted(ean)
             }
         }
     }
