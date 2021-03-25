@@ -686,8 +686,8 @@ public class Position implements Parcelable {
         String rawMark;
         if (mark instanceof Mark.RawMark) {
             rawMark = ((Mark.RawMark) mark).getValue();
-        } else if (mark instanceof Mark.TagProductCode) {
-            rawMark = ((Mark.TagProductCode) mark).getValue();
+        } else if (mark instanceof Mark.MarkByFiscalTags) {
+            rawMark = ((Mark.MarkByFiscalTags) mark).getProductCode();
         } else {
             rawMark = null;
         }

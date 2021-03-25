@@ -4,8 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
+import ru.evotor.framework.receipt.position.Mark.MarkByFiscalTags
 import ru.evotor.framework.receipt.position.Mark.RawMark
-import ru.evotor.framework.receipt.position.Mark.TagProductCode
 
 /**
  * Класс марки для маркированных товаров и алкоголя.
@@ -14,7 +14,7 @@ import ru.evotor.framework.receipt.position.Mark.TagProductCode
  *
  * Может иметь полное представление, где заполняется только [RawMark]
  * ИЛИ
- * частичное представление по конкретным тэгам, к примеру [TagProductCode]
+ * частичное представление по конкретным тэгам [MarkByFiscalTags]
  */
 sealed class Mark : Parcelable {
 
@@ -100,16 +100,17 @@ sealed class Mark : Parcelable {
     }
 
     /**
-     * Тег для кода товара
-     * Может содержать в себе любые форматы марки
+     * Частичное представление по конкретным тэгам для передачи в кассу
+     *
+     * @param productCode Тег для кода товара
      */
-    class TagProductCode(
+    class MarkByFiscalTags(
             @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
-            val value: String
+            val productCode: String?
     ) : Mark() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-            dest.writeString(value)
+            dest.writeString(productCode)
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -121,22 +122,22 @@ sealed class Mark : Parcelable {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
-            if (other !is TagProductCode) return false
+            if (other !is MarkByFiscalTags) return false
 
-            if (value != other.value) return false
+            if (productCode != other.productCode) return false
 
             return true
         }
 
         override fun hashCode(): Int {
-            return value.hashCode()
+            return productCode.hashCode()
         }
 
         companion object {
             private const val VERSION = 1
 
             @JvmStatic
-            private fun readFromParcel(dest: Parcel): TagProductCode? {
+            private fun readFromParcel(dest: Parcel): MarkByFiscalTags? {
                 val version = dest.readInt()
                 val dataSize = dest.readInt()
                 val dataStartPosition = dest.dataPosition()
@@ -145,15 +146,15 @@ sealed class Mark : Parcelable {
                 dest.setDataPosition(dataStartPosition + dataSize)
 
                 return value?.let {
-                    TagProductCode(it)
+                    MarkByFiscalTags(it)
                 }
             }
 
             @JvmField
-            val CREATOR: Parcelable.Creator<TagProductCode?> = object : Parcelable.Creator<TagProductCode?> {
-                override fun createFromParcel(parcel: Parcel): TagProductCode? = readFromParcel(parcel)
+            val CREATOR: Parcelable.Creator<MarkByFiscalTags?> = object : Parcelable.Creator<MarkByFiscalTags?> {
+                override fun createFromParcel(parcel: Parcel): MarkByFiscalTags? = readFromParcel(parcel)
 
-                override fun newArray(size: Int): Array<TagProductCode?> = arrayOfNulls(size)
+                override fun newArray(size: Int): Array<MarkByFiscalTags?> = arrayOfNulls(size)
             }
         }
     }
