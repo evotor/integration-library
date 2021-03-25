@@ -1,8 +1,8 @@
 package ru.evotor.framework.core.action.event.cash_drawer;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import ru.evotor.IBundlable;
 
 /**

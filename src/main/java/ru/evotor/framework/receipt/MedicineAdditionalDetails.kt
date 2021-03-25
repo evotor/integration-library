@@ -46,8 +46,8 @@ data class MedicineAdditionalDetails(
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<MedicineAdditionalDetails> {
-            override fun createFromParcel(parcel: Parcel): MedicineAdditionalDetails = create(parcel)
+        val CREATOR = object : Parcelable.Creator<MedicineAdditionalDetails?> {
+            override fun createFromParcel(parcel: Parcel): MedicineAdditionalDetails? = create(parcel)
             override fun newArray(size: Int): Array<MedicineAdditionalDetails?> = arrayOfNulls(size)
         }
 
@@ -62,28 +62,31 @@ data class MedicineAdditionalDetails(
         fun fromBundle(bundle: Bundle?): MedicineAdditionalDetails? {
             return bundle?.let {
                 MedicineAdditionalDetails(
-                        documentNumber = it.getString(KEY_DOCUMENT_NUMBER),
+                        documentNumber = it.getString(KEY_DOCUMENT_NUMBER) ?: return null,
                         documentDate = Date(it.getLong(KEY_DOCUMENT_DATE)),
-                        serialNumber = it.getString(KEY_SERIAL_NUMBER)
+                        serialNumber = it.getString(KEY_SERIAL_NUMBER) ?: return null
                 )
             }
         }
 
-        private fun create(dest: Parcel): MedicineAdditionalDetails {
+        private fun create(dest: Parcel): MedicineAdditionalDetails? {
             var medicineAdditionalDetails: MedicineAdditionalDetails? = null
 
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
                 if (version >= 1) {
-                    medicineAdditionalDetails = MedicineAdditionalDetails(
-                            documentNumber = parcel.readString(),
-                            documentDate = Date(parcel.readLong()),
-                            serialNumber = parcel.readString()
-                    )
+                    val documentNumber = parcel.readString()
+                    val documentDate = Date(parcel.readLong())
+                    val serialNumber = parcel.readString()
+                    if (documentNumber != null && serialNumber != null) {
+                        medicineAdditionalDetails = MedicineAdditionalDetails(
+                                documentNumber = documentNumber,
+                                documentDate = documentDate,
+                                serialNumber = serialNumber
+                        )
+                    }
                 }
             }
-            checkNotNull(medicineAdditionalDetails)
-            return medicineAdditionalDetails as MedicineAdditionalDetails
-
+            return medicineAdditionalDetails
         }
     }
 }

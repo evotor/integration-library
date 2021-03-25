@@ -1,8 +1,9 @@
 package ru.evotor.framework.core.action.event.session;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SessionClosedEvent extends SessionEvent {
     public static final String BROADCAST_ACTION_SESSION_CLOSED = "evotor.intent.action.reports.SESSION_CLOSED";

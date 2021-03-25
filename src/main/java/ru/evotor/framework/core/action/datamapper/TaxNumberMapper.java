@@ -1,8 +1,8 @@
 package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.TaxNumber;
 
