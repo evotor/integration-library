@@ -37,7 +37,9 @@ internal object ProductMapper {
                         alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
-                        classificationCode = cursor.optString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE))
+                        classificationCode = cursor.optString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE)),
+                        // TODO: Only test
+                        partialSaleFrequency = ProductItem.PartialSaleFrequency.SOMETIMES
                 )
             }
         } catch (e: Exception) {
