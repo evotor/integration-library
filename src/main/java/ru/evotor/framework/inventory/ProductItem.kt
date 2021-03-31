@@ -38,7 +38,7 @@ sealed class ProductItem(
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,
             val classificationCode: String?,
-            val partialSaleFrequency: PartialSaleFrequency? //TODO: NULLABLE OR NOT_NULL
+            val partialSaleFrequency: PartialSaleFrequency?
     ) : ProductItem(
             uuid,
             parentUuid,
@@ -64,6 +64,6 @@ sealed class ProductItem(
     enum class PartialSaleFrequency {
         NEVER,
         ALWAYS,
-        SOMETIMES
+        ON_DEMAND
     }
 }

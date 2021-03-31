@@ -87,7 +87,7 @@ object InventoryApi {
                                         tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
                                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
                                         classificationCode = if (cursor.isNull(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE))) null else cursor.getString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE)),
-                                        partialSaleFrequency = Utils.safeValueOf(ProductItem.PartialSaleFrequency::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARTIAL_SALE_FREQUENCY)), ProductItem.PartialSaleFrequency.NEVER)
+                                        partialSaleFrequency = Utils.safeValueOf(ProductItem.PartialSaleFrequency::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARTIAL_SALE_FREQUENCY)), null)
                                 )
                             }
                         }
