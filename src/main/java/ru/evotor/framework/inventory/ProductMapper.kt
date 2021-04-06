@@ -2,9 +2,10 @@ package ru.evotor.framework.inventory
 
 import android.database.Cursor
 import ru.evotor.framework.Utils
-import ru.evotor.framework.optString
+import ru.evotor.framework.formatPrice
+import ru.evotor.framework.formatQuantity
 import ru.evotor.framework.receipt.TaxNumber
-import java.math.BigDecimal
+import ru.evotor.framework.safeGetString
 
 /**
  * Created by a.lunkov on 13.03.2018.
@@ -29,15 +30,15 @@ internal object ProductMapper {
                         type = Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TYPE)), ProductType.NORMAL),
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                         description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
-                        price = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT))).divide(BigDecimal(100)),
-                        quantity = BigDecimal(cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY))).divide(BigDecimal(1000)),
+                        price = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT)).formatPrice(),
+                        quantity = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY)).formatQuantity(),
                         measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
                         measurePrecision = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
-                        alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                        alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).formatQuantity(),
                         alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
-                        tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).let { BigDecimal(it).divide(BigDecimal(1000)) },
+                        tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).formatQuantity(),
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
-                        classificationCode = cursor.optString(cursor.getColumnIndex(ProductTable.ROW_CLASSIFICATION_CODE)),
+                        classificationCode = cursor.safeGetString(ProductTable.ROW_CLASSIFICATION_CODE),
                         partialSaleFrequency = Utils.safeValueOf(ProductItem.PartialSaleFrequency::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARTIAL_SALE_FREQUENCY)), null)
                 )
             }

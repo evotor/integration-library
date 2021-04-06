@@ -19,7 +19,7 @@ internal fun Cursor.safeGetBoolean(columnIndex: Int): Boolean? {
     }
 
     return getInt(columnIndex).let { int ->
-        when(int) {
+        when (int) {
             0 -> false
             1 -> true
             else -> null
@@ -103,9 +103,19 @@ internal fun <T : Enum<*>> Cursor.safeGetEnum(columnIndex: Int, values: Array<T>
 
 }
 
-internal fun Cursor.safeGetString(columnName: String) = getColumnIndex(columnName).let {
-    when(it) {
-        -1 -> null
-        else -> getString(it)
+internal fun Cursor.safeGetString(columnName: String): String? {
+    val index = getColumnIndex(columnName)
+    if (index == -1) {
+        return null
     }
+
+    return safeGetString(index)
+}
+
+internal fun Cursor.safeGetString(columnIndex: Int): String? {
+    if (isNull(columnIndex)) {
+        return null
+    }
+
+    return getString(columnIndex)
 }

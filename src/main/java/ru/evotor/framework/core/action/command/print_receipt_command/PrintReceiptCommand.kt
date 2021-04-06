@@ -7,17 +7,14 @@ import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.calculator.MoneyCalculator
-import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.datamapper.getMoney
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
-import ru.evotor.framework.min
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Receipt
-import ru.evotor.framework.sumByBigDecimal
 import java.math.BigDecimal
 import java.util.*
 
@@ -52,7 +49,7 @@ abstract class PrintReceiptCommand(
                 .call(action,
                         componentNameList[0],
                         this,
-                        ICanStartActivity { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
+                        { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
                         callback,
                         Handler(Looper.getMainLooper())
                 )
@@ -80,6 +77,7 @@ abstract class PrintReceiptCommand(
          * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
          */
         const val NAME_PERMISSION = "ru.evotor.permission.receipt.print.INTERNET_RECEIPT"
+
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
         private const val KEY_RECEIPT_EXTRA = "extra"
         private const val KEY_CLIENT_EMAIL = "clientEmail"
@@ -128,16 +126,29 @@ abstract class PrintReceiptCommand(
             val result = HashMap<Payment, BigDecimal>()
             for (payment in payments) {
                 if (payment.paymentPerformer.paymentSystem?.paymentType != PaymentType.CASH) {
-                    result.put(payment, BigDecimal.ZERO)
+                    result[payment] = BigDecimal.ZERO
                     continue
                 }
 
                 val change = min(payment.value, remaining)
                 remaining = MoneyCalculator.subtract(remaining, change)
-                result.put(payment, change)
+                result[payment] = change
             }
 
             return result
         }
+
+        /**
+         * Returns the sum of all values produced by [selector] function applied to each element in the collection.
+         */
+        internal inline fun <T> Iterable<T>.sumByBigDecimal(selector: (T) -> BigDecimal): BigDecimal {
+            var sum = BigDecimal.ZERO
+            for (element in this) {
+                sum += selector(element)
+            }
+            return sum
+        }
+
+        private fun min(a: BigDecimal, b: BigDecimal) = if (a <= b) a else b
     }
 }

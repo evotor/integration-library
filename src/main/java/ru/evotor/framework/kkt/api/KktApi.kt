@@ -201,7 +201,7 @@ object KktApi {
 //        )?.use { cursor ->
 //            cursor.moveToFirst()
 //            cursor.safeGetLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
-//                BigDecimal(it).divide(BigDecimal(100))
+//                it.formatPrice()
 //            }
 //        }
 //    }

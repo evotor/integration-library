@@ -13,7 +13,7 @@ internal fun Context.startIntegrationService(
         callback: IntegrationManagerCallback
 ) = this.packageManager
         .queryIntentServices(Intent(action), 0)
-        ?.takeIf { it.isNotEmpty() }
+        .takeIf { it.isNotEmpty() }
         ?.first()
         ?.let {
             ComponentName(it.serviceInfo.packageName, it.serviceInfo.name)
@@ -23,7 +23,7 @@ internal fun Context.startIntegrationService(
                     action,
                     componentName,
                     event,
-                    ICanStartActivity { this.startActivity(it) },
+                    { this.startActivity(it) },
                     callback,
                     Handler(Looper.getMainLooper())
             )

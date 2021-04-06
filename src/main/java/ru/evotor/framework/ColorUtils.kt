@@ -7,6 +7,7 @@ import androidx.annotation.ColorInt
  * Created by Khaustov on 06.02.18.
  */
 object ColorUtils {
+
     private const val RED_MULTIPLIER = 0.299
     private const val GREEN_MULTIPLIER = 0.587
     private const val BLUE_MULTIPLIER = 0.114

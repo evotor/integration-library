@@ -1,10 +1,10 @@
 package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
-import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.SettlementMethod
 import ru.evotor.framework.safeGetInt
+import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 
 internal object SettlementMethodMapper {
@@ -20,7 +20,7 @@ internal object SettlementMethodMapper {
     internal fun fromCursor(cursor: Cursor): SettlementMethod {
         val typeOrdinal = cursor.safeGetInt(PositionTable.COLUMN_SETTLEMENT_METHOD)
                 ?: return SettlementMethod.FullSettlement()
-        val amountValue = cursor.optString(PositionTable.COLUMN_SETTLEMENT_METHOD_AMOUNT)
+        val amountValue = cursor.safeGetString(PositionTable.COLUMN_SETTLEMENT_METHOD_AMOUNT)
         val amount = if (amountValue == null) null else BigDecimal(amountValue)
         return SettlementMethodMapper.fromInt(typeOrdinal, amount)
     }
