@@ -378,7 +378,7 @@ object ReceiptApi {
         }
 
         val classificationCode = cursor.safeGetString(PositionTable.COLUMN_CLASSIFICATION_CODE)
-        val excise = cursor.safeGetLong(PositionTable.COLUMN_EXCISE)?.let {
+        val excise = cursor.safeGetString(PositionTable.COLUMN_EXCISE)?.let {
             BigDecimal(it)
         }
 
