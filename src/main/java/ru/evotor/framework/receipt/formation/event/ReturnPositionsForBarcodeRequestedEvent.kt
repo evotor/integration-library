@@ -36,20 +36,16 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
-            if (!it.containsKey(KEY_EXTRACTED_DATA_EXTRA)) {
-                ReturnPositionsForBarcodeRequestedEvent(
-                        barcode = it.getString(KEY_BARCODE_EXTRA)
-                                ?: return null,
-                        extractedData = null,
-                        creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA)
-                )
-            }
             ReturnPositionsForBarcodeRequestedEvent(
                     barcode = it.getString(KEY_BARCODE_EXTRA)
                             ?: return null,
-                    extractedData = DataExtracted.from(
-                            it.getBundle(KEY_EXTRACTED_DATA_EXTRA)
-                    ),
+                    extractedData = if (!it.containsKey(KEY_EXTRACTED_DATA_EXTRA)) {
+                        null
+                    } else {
+                        DataExtracted.from(
+                                it.getBundle(KEY_EXTRACTED_DATA_EXTRA)
+                        )
+                    },
                     creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA)
             )
         }
