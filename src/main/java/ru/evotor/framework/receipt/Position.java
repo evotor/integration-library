@@ -188,7 +188,7 @@ public class Position implements Parcelable {
      * - духи {@link ProductType#PERFUME_MARKED}
      * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
      * <p>
-     * Так см. {@link #quantity}
+     * Также см. {@link #quantity}
      */
     @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
     @Nullable
