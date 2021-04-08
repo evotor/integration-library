@@ -20,6 +20,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -52,6 +53,8 @@ public final class PositionMapper {
     private static final String KEY_BARCODE = "barcode";
 
     private static final String KEY_MARK = "mark";
+
+    private static final String KEY_MARK_ENTITY = "markEntity";
 
     private static final String KEY_ALCOHOL_BY_VOLUME = "alcoholByVolume";
 
@@ -94,7 +97,7 @@ public final class PositionMapper {
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
         BigDecimal quantity = BundleUtils.getQuantity(bundle, KEY_QUANTITY);
         String barcode = bundle.getString(KEY_BARCODE);
-        String mark = bundle.getString(KEY_MARK);
+        Mark mark = readMarkFromBundle(bundle);
         String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
         String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
         String tareVolume = bundle.getString(KEY_TARE_VOLUME);
@@ -172,6 +175,17 @@ public final class PositionMapper {
         return builder.build();
     }
 
+    private static Mark readMarkFromBundle(Bundle bundle) {
+        Mark mark = MarkMapper.fromBundle(bundle.getBundle(KEY_MARK_ENTITY));
+        if (mark == null && bundle.containsKey(KEY_MARK)) {
+            String rawMark = bundle.getString(KEY_MARK);
+            if (rawMark != null) {
+                mark = new Mark.RawMark(rawMark);
+            }
+        }
+        return mark;
+    }
+
     @Nullable
     public static Bundle toBundle(@Nullable Position position) {
         if (position == null) {
@@ -191,7 +205,7 @@ public final class PositionMapper {
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
         bundle.putString(KEY_QUANTITY, position.getQuantity().toPlainString());
         bundle.putString(KEY_BARCODE, position.getBarcode());
-        bundle.putString(KEY_MARK, position.getMark());
+        putMarkToBundle(position, bundle);
         bundle.putString(KEY_ALCOHOL_BY_VOLUME, position.getAlcoholByVolume() == null ? null : position.getAlcoholByVolume().toPlainString());
         bundle.putString(KEY_ALCOHOL_PRODUCT_KIND_CODE, position.getAlcoholProductKindCode() == null ? null : position.getAlcoholProductKindCode().toString());
         bundle.putString(KEY_TARE_VOLUME, position.getTareVolume() == null ? null : position.getTareVolume().toPlainString());
@@ -236,4 +250,17 @@ public final class PositionMapper {
         return bundle;
     }
 
+    private static void putMarkToBundle(Position position, Bundle bundle) {
+        Mark mark = position.getMark();
+        String rawMark;
+        if (mark instanceof Mark.RawMark) {
+            rawMark = ((Mark.RawMark) mark).getValue();
+        } else if (mark instanceof Mark.MarkByFiscalTags) {
+            rawMark = ((Mark.MarkByFiscalTags) mark).getProductCode();
+        } else {
+            rawMark = null;
+        }
+        bundle.putString(KEY_MARK, rawMark);
+        bundle.putBundle(KEY_MARK_ENTITY, MarkMapper.toBundle(mark));
+    }
 }
