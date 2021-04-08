@@ -17,6 +17,7 @@ import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
+import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.PositionPartialMapper
@@ -401,7 +402,10 @@ object ReceiptApi {
                         priceWithDiscountPosition,
                         cursor.getQuantity(PositionTable.COLUMN_QUANTITY),
                         cursor.optString(PositionTable.COLUMN_BARCODE),
-                        cursor.optString(PositionTable.COLUMN_MARK),
+                        cursor.optString(PositionTable.COLUMN_MARK)?.let {
+                            val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
+                            Mark.RawMark(rawMark)
+                        },
                         cursor.optVolume(PositionTable.COLUMN_ALCOHOL_BY_VOLUME),
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                         cursor.optVolume(PositionTable.COLUMN_TARE_VOLUME),
