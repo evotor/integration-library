@@ -25,8 +25,8 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.Mark;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -187,6 +187,8 @@ public class Position implements Parcelable {
      * - лекарства {@link ProductType#MEDICINE_MARKED}
      * - духи {@link ProductType#PERFUME_MARKED}
      * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+     * <p>
+     * Так см. {@link #quantity}
      */
     @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
     @Nullable
@@ -405,6 +407,7 @@ public class Position implements Parcelable {
 
     /**
      * @return Количество.
+     * (Для маркированных товаров, при частичной реализации, это количество проданного сейчас товара по данной марке)
      */
     public BigDecimal getQuantity() {
         return quantity;
