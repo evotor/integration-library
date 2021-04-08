@@ -3,17 +3,18 @@ package ru.evotor.framework
 import android.database.Cursor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.math.BigDecimal
 
-internal fun Cursor.safeGetBoolean(columnName: String): Boolean? {
+internal fun Cursor.optBoolean(columnName: String): Boolean? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetBoolean(index)
+    return optBoolean(index)
 }
 
-internal fun Cursor.safeGetBoolean(columnIndex: Int): Boolean? {
+internal fun Cursor.optBoolean(columnIndex: Int): Boolean? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -27,16 +28,16 @@ internal fun Cursor.safeGetBoolean(columnIndex: Int): Boolean? {
     }
 }
 
-internal fun Cursor.safeGetInt(columnName: String): Int? {
+internal fun Cursor.optInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetInt(index)
+    return optInt(index)
 }
 
-internal fun Cursor.safeGetInt(columnIndex: Int): Int? {
+internal fun Cursor.optInt(columnIndex: Int): Int? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -44,16 +45,16 @@ internal fun Cursor.safeGetInt(columnIndex: Int): Int? {
     return getInt(columnIndex)
 }
 
-internal fun Cursor.safeGetLong(columnName: String): Long? {
+internal fun Cursor.optLong(columnName: String): Long? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetLong(index)
+    return optLong(index)
 }
 
-internal fun Cursor.safeGetLong(columnIndex: Int): Long? {
+internal fun Cursor.optLong(columnIndex: Int): Long? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -61,16 +62,16 @@ internal fun Cursor.safeGetLong(columnIndex: Int): Long? {
     return getLong(columnIndex)
 }
 
-internal fun Cursor.safeGetList(columnName: String): List<String>? {
+internal fun Cursor.optList(columnName: String): List<String>? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetList(index)
+    return optList(index)
 }
 
-internal fun Cursor.safeGetList(columnIndex: Int): List<String>? {
+internal fun Cursor.optList(columnIndex: Int): List<String>? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -79,16 +80,16 @@ internal fun Cursor.safeGetList(columnIndex: Int): List<String>? {
 
 }
 
-internal fun <T : Enum<*>> Cursor.safeGetEnum(columnName: String, values: Array<T>): T? {
+internal fun <T : Enum<*>> Cursor.optEnum(columnName: String, values: Array<T>): T? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetEnum(index, values)
+    return optEnum(index, values)
 }
 
-internal fun <T : Enum<*>> Cursor.safeGetEnum(columnIndex: Int, values: Array<T>): T? {
+internal fun <T : Enum<*>> Cursor.optEnum(columnIndex: Int, values: Array<T>): T? {
     if (isNull(columnIndex)) {
         return null
     }
@@ -103,19 +104,61 @@ internal fun <T : Enum<*>> Cursor.safeGetEnum(columnIndex: Int, values: Array<T>
 
 }
 
-internal fun Cursor.safeGetString(columnName: String): String? {
+internal fun Cursor.optString(columnName: String): String? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
         return null
     }
 
-    return safeGetString(index)
+    return optString(index)
 }
 
-internal fun Cursor.safeGetString(columnIndex: Int): String? {
+internal fun Cursor.optString(columnIndex: Int): String? {
     if (isNull(columnIndex)) {
         return null
     }
 
     return getString(columnIndex)
+}
+
+internal fun Cursor.getQuantity(columnName: String): BigDecimal {
+    val index = getColumnIndex(columnName)
+    return formatQuantity(getLong(index))
+}
+
+internal fun Cursor.optQuantity(columnName: String): BigDecimal? {
+    val quantityValueLong = this.optLong(columnName) ?: return null
+    return formatQuantity(quantityValueLong)
+}
+
+internal fun Cursor.getVolume(columnName: String): BigDecimal {
+    val index = getColumnIndex(columnName)
+    return formatVolume(getLong(index))
+}
+
+internal fun Cursor.optVolume(columnName: String): BigDecimal? {
+    val volumeValueLong = this.optLong(columnName) ?: return null
+    return formatVolume(volumeValueLong)
+}
+
+internal fun Cursor.getMoney(columnName: String): BigDecimal {
+    val index = getColumnIndex(columnName)
+    return formatMoney(getLong(index))
+}
+
+internal fun Cursor.optMoney(columnName: String): BigDecimal? {
+    val moneyValueLong = this.optLong(columnName) ?: return null
+    return formatMoney(moneyValueLong)
+}
+
+private fun formatQuantity(quantity: Long): BigDecimal {
+    return BigDecimal(quantity).divide(BigDecimal(1000))
+}
+
+private fun formatVolume(volume: Long): BigDecimal {
+    return BigDecimal(volume).divide(BigDecimal(1000))
+}
+
+private fun formatMoney(money: Long): BigDecimal {
+    return BigDecimal(money).divide(BigDecimal(100))
 }

@@ -14,15 +14,15 @@ import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
+import ru.evotor.framework.optBoolean
+import ru.evotor.framework.optInt
+import ru.evotor.framework.optList
+import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.receipt.position.VatRate
-import ru.evotor.framework.safeGetBoolean
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetList
-import ru.evotor.framework.safeGetString
 import java.math.BigDecimal
 import java.util.*
 
@@ -31,8 +31,8 @@ import java.util.*
  */
 object KktApi {
 
-    private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.getString(cursor.getColumnIndex(name)) }
-    private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.safeGetBoolean(name) }
+    private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.optString(name) }
+    private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.optBoolean(name) }
 
     private var fsSerialNumber: String? = null
 
@@ -44,7 +44,7 @@ object KktApi {
     @JvmStatic
     fun getRegisteredFfdVersion(context: Context): FfdVersion? =
         getValue(context, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
-            cursor.safeGetInt(name)?.let { version ->
+            cursor.optInt(name)?.let { version ->
                 if (version !in 0..FfdVersion.values().size) {
                     throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
                 }
@@ -62,7 +62,7 @@ object KktApi {
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
         getValue(context, KktContract.COLUMN_REGISTERED_AGENT_TYPES) { cursor, name ->
-            cursor.safeGetList(name)?.map { item ->
+            cursor.optList(name)?.map { item ->
                 item.toInt().let { index ->
                     if (index !in 0..Agent.Type.values().size) {
                         throw IntegrationLibraryMappingException(Agent.Type::class.java.name)
@@ -82,7 +82,7 @@ object KktApi {
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
         getValue(context, KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES) { cursor, name ->
-            cursor.safeGetList(name)?.map { item ->
+            cursor.optList(name)?.map { item ->
                 item.toInt().let { index ->
                     if (index !in 0..Subagent.Type.values().size) {
                         throw IntegrationLibraryMappingException(Subagent.Type::class.java.name)
@@ -200,7 +200,7 @@ object KktApi {
 //                null
 //        )?.use { cursor ->
 //            cursor.moveToFirst()
-//            cursor.safeGetLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
+//            cursor.optLong(KktContract.COLUMN_CURRENT_CASH_SUM)?.let {
 //                it.formatPrice()
 //            }
 //        }
@@ -427,7 +427,7 @@ object KktApi {
 
         cursor?.use {
             it.moveToFirst()
-            fsSerialNumber = it.safeGetString(KktContract.COLUMN_FS_SERIAL_NUMBER)
+            fsSerialNumber = it.optString(KktContract.COLUMN_FS_SERIAL_NUMBER)
         }
     }
 }

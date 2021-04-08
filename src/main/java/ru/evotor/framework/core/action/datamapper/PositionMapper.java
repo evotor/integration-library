@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
@@ -20,7 +21,7 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.Partial;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -78,7 +79,7 @@ public final class PositionMapper {
 
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
-    private static final String KEY_PARTIAL_SALE = "partialSale";
+    private static final String KEY_PARTIAL_REALISATION = "partialRealisation";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -138,7 +139,7 @@ public final class PositionMapper {
         PreferentialMedicine preferentialMedicine =
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
-        Partial partial = Partial.Companion.from(bundle.getBundle(KEY_PARTIAL_SALE));
+        PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALISATION));
 
         if (quantity == null ||
                 price == null ||
@@ -174,7 +175,7 @@ public final class PositionMapper {
         builder.setExcise(excise);
         builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
-        builder.setPartial(partial);
+        builder.setPartialRealization(partialRealization);
         return builder.build();
     }
 
@@ -240,8 +241,8 @@ public final class PositionMapper {
             bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
 
-        final Partial partial = position.getPartial();
-        bundle.putBundle(KEY_PARTIAL_SALE, partial != null ? partial.toBundle() : null);
+        final PartialRealization partialRealization = position.getPartialRealization();
+        bundle.putBundle(KEY_PARTIAL_REALISATION, partialRealization != null ? partialRealization.toBundle() : null);
 
         return bundle;
     }

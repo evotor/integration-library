@@ -38,7 +38,7 @@ sealed class ProductItem(
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,
             val classificationCode: String?,
-            val partialSaleFrequency: PartialSaleFrequency?
+            val allowPartialRealization: AllowPartialRealization?
     ) : ProductItem(
             uuid,
             parentUuid,
@@ -61,7 +61,7 @@ sealed class ProductItem(
         return uuid.hashCode()
     }
 
-    enum class PartialSaleFrequency {
+    enum class AllowPartialRealization {
         NEVER,
         ALWAYS,
         ON_DEMAND

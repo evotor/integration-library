@@ -1,22 +1,17 @@
 package ru.evotor.framework.receipt.position.mapper
 
 import android.database.Cursor
-import ru.evotor.framework.formatQuantity
+import ru.evotor.framework.optQuantity
 import ru.evotor.framework.receipt.PositionTable
-import ru.evotor.framework.receipt.position.Partial
-import ru.evotor.framework.safeGetLong
+import ru.evotor.framework.receipt.position.PartialRealization
 
 internal object PositionPartialMapper {
 
-    internal fun fromCursor(cursor: Cursor): Partial? {
-        val initialQuantity = cursor.safeGetLong(PositionTable.COLUMN_PARTIAL_INITIAL_QUANTITY)
-        val quantityInPackage = cursor.safeGetLong(PositionTable.COLUMN_PARTIAL_QUANTITY_IN_PACKAGE)
-        if (initialQuantity == null || quantityInPackage == null) {
-            return null
-        }
-        return Partial(
-                initialQuantity = initialQuantity.formatQuantity(),
-                quantityInPackage = quantityInPackage.formatQuantity()
+    internal fun fromCursor(cursor: Cursor): PartialRealization? {
+        val quantityInPackage = cursor.optQuantity(PositionTable.COLUMN_PARTIAL_QUANTITY_IN_PACKAGE)
+                ?: return null
+        return PartialRealization(
+                quantityInPackage = quantityInPackage
         )
     }
 }

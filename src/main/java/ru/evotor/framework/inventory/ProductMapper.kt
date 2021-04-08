@@ -1,11 +1,8 @@
 package ru.evotor.framework.inventory
 
 import android.database.Cursor
-import ru.evotor.framework.Utils
-import ru.evotor.framework.formatPrice
-import ru.evotor.framework.formatQuantity
+import ru.evotor.framework.*
 import ru.evotor.framework.receipt.TaxNumber
-import ru.evotor.framework.safeGetString
 
 /**
  * Created by a.lunkov on 13.03.2018.
@@ -17,29 +14,29 @@ internal object ProductMapper {
             if (cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_IS_GROUP)) > 0) {
                 return ProductItem.ProductGroup(
                         uuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_UUID)),
-                        parentUuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARENT_UUID)),
-                        code = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_CODE)),
+                        parentUuid = cursor.optString(ProductTable.ROW_PARENT_UUID),
+                        code = cursor.optString(ProductTable.ROW_CODE),
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT)
                 )
             } else {
                 return ProductItem.Product(
                         uuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_UUID)),
-                        parentUuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARENT_UUID)),
-                        code = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_CODE)),
+                        parentUuid = cursor.optString(ProductTable.ROW_PARENT_UUID),
+                        code = cursor.optString(ProductTable.ROW_CODE),
                         type = Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TYPE)), ProductType.NORMAL),
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
-                        description = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_DESCRIPTION)),
-                        price = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_PRICE_OUT)).formatPrice(),
-                        quantity = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_QUANTITY)).formatQuantity(),
+                        description = cursor.optString(ProductTable.ROW_DESCRIPTION),
+                        price = cursor.getMoney(ProductTable.ROW_PRICE_OUT),
+                        quantity = cursor.getQuantity(ProductTable.ROW_QUANTITY),
                         measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
                         measurePrecision = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
-                        alcoholByVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_BY_VOLUME)).formatQuantity(),
-                        alcoholProductKindCode = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)),
-                        tareVolume = cursor.getLong(cursor.getColumnIndex(ProductTable.ROW_TARE_VOLUME)).formatQuantity(),
+                        alcoholByVolume = cursor.optVolume(ProductTable.ROW_ALCOHOL_BY_VOLUME),
+                        alcoholProductKindCode = cursor.optLong(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE),
+                        tareVolume = cursor.optVolume(ProductTable.ROW_TARE_VOLUME),
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
-                        classificationCode = cursor.safeGetString(ProductTable.ROW_CLASSIFICATION_CODE),
-                        partialSaleFrequency = Utils.safeValueOf(ProductItem.PartialSaleFrequency::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_PARTIAL_SALE_FREQUENCY)), null)
+                        classificationCode = cursor.optString(ProductTable.ROW_CLASSIFICATION_CODE),
+                        allowPartialRealization = Utils.safeValueOf(ProductItem.AllowPartialRealization::class.java, cursor.optString(ProductTable.ROW_ALLOW_PARTIAL_REALIZATION), null)
                 )
             }
         } catch (e: Exception) {

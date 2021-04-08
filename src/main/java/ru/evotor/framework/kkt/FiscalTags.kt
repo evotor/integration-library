@@ -185,6 +185,6 @@ object FiscalTags {
     /**
      * частичное выбытие
      */
-    const val PARTIAL_SALE = 1191
+    const val PARTIAL_REALIZATION = 1191
 
 }

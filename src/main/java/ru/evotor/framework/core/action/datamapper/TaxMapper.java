@@ -5,11 +5,13 @@ import android.os.Bundle;
 import java.math.BigDecimal;
 
 import androidx.annotation.Nullable;
+import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.Tax;
 import ru.evotor.framework.receipt.TaxNumber;
 
 public final class TaxMapper {
+
     private static final String KEY_TAX_NUMBER = "taxNumber";
     private static final String KEY_TAX_RATE_PERCENT = "taxRatePercent";
     private static final String KEY_VALUE = "value";
@@ -20,7 +22,7 @@ public final class TaxMapper {
             return null;
         }
         String taxNumber = bundle.getString(KEY_TAX_NUMBER);
-        BigDecimal taxRatePercent = BundleUtils.optBigDecimal(bundle, KEY_TAX_RATE_PERCENT, null);
+        BigDecimal taxRatePercent = BundleUtils.optBigDecimal(bundle, KEY_TAX_RATE_PERCENT);
         BigDecimal value = BundleUtils.getMoney(bundle, KEY_VALUE);
         return new Tax(
                 Utils.safeValueOf(TaxNumber.class, taxNumber, TaxNumber.NO_VAT),

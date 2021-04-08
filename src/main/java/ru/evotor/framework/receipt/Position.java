@@ -25,7 +25,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.Partial;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -179,10 +179,15 @@ public class Position implements Parcelable {
 
     /**
      * Частичное выбытие 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - лекарства {@link ProductType#MEDICINE_MARKED}
+     * - духи {@link ProductType#PERFUME_MARKED}
+     * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
      */
-    @FiscalRequisite(tag = FiscalTags.PARTIAL_SALE)
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
     @Nullable
-    private Partial partial;
+    private PartialRealization partialRealization;
 
     public Position(
             String uuid,
@@ -254,7 +259,7 @@ public class Position implements Parcelable {
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
-        this.partial = position.getPartial();
+        this.partialRealization = position.getPartialRealization();
     }
 
     /**
@@ -516,12 +521,12 @@ public class Position implements Parcelable {
     }
 
     /**
-     * @return частичное выбытие 1191
+     * @return Частичное выбытие 1191
      */
-    @FiscalRequisite(tag = FiscalTags.PARTIAL_SALE)
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
     @Nullable
-    public Partial getPartial() {
-        return partial;
+    public PartialRealization getPartialRealization() {
+        return partialRealization;
     }
 
     @Override
@@ -585,7 +590,7 @@ public class Position implements Parcelable {
         }
         if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
             return false;
-        if (!Objects.equals(partial, position.partial))
+        if (!Objects.equals(partialRealization, position.partialRealization))
             return false;
 
         return Objects.equals(subPositions, position.subPositions);
@@ -618,7 +623,7 @@ public class Position implements Parcelable {
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
-        result = 31 * result + (partial != null ? partial.hashCode() : 0);
+        result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
         return result;
     }
 
@@ -650,7 +655,7 @@ public class Position implements Parcelable {
                 ", excise=" + excise +
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
-                ", partial=" + partial +
+                ", partial=" + partialRealization +
                 '}';
     }
 
@@ -722,7 +727,7 @@ public class Position implements Parcelable {
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         // Partial sale
-        dest.writeBundle(this.partial != null ? this.partial.toBundle() : null);
+        dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -819,7 +824,7 @@ public class Position implements Parcelable {
                 this.excise = (BigDecimal) in.readSerializable();
                 this.classificationCode = in.readString();
                 readPreferentialMedicine(in);
-                readPartialSale(in);
+                readPartialRealization(in);
                 break;
             }
         }
@@ -862,8 +867,8 @@ public class Position implements Parcelable {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
-    private void readPartialSale(Parcel in) {
-        this.partial = Partial.Companion.from(in.readBundle(Partial.class.getClassLoader()));
+    private void readPartialRealization(Parcel in) {
+        this.partialRealization = PartialRealization.Companion.from(in.readBundle(PartialRealization.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1124,15 +1129,12 @@ public class Position implements Parcelable {
          * духи [PERFUME_MARKED]
          * альтернативный табак [TOBACCO_PRODUCTS_MARKED]
          *
-         * @param initialQuantity   остаток товара до выполнения операции
          * @param quantityInPackage количество товара в упаковке всего
          */
-        public Builder toPartial(
-                @NonNull BigDecimal initialQuantity,
+        public Builder toPartialRealization(
                 @NonNull BigDecimal quantityInPackage
         ) {
-            position.partial = new Partial(
-                    initialQuantity,
+            position.partialRealization = new PartialRealization(
                     quantityInPackage
             );
             return this;
@@ -1277,8 +1279,8 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setPartial(@Nullable Partial partial) {
-            position.partial = partial;
+        public Builder setPartialRealization(@Nullable PartialRealization partialRealization) {
+            position.partialRealization = partialRealization;
             return this;
         }
 

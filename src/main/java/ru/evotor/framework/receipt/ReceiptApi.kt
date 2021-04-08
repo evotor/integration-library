@@ -174,7 +174,7 @@ object ReceiptApi {
             )?.use { cursor ->
                 while (cursor.moveToNext()) {
                     val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
-                    val discount = cursor.getLong(cursor.getColumnIndex(DISCOUNT_COLUMN_NAME)).formatPrice()
+                    val discount = cursor.getMoney(DISCOUNT_COLUMN_NAME)
 
                     discountMap[posDiscountUuid] = discount
                 }
@@ -302,8 +302,8 @@ object ReceiptApi {
         return GetPaymentsResult(
                 createPayment(cursor) ?: return null,
                 createPrintGroup(cursor),
-                cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE_BY_PRINT_GROUP)).formatPrice(),
-                cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_CHANGE_BY_PRINT_GROUP)).formatPrice()
+                cursor.getMoney(PaymentTable.COLUMN_VALUE_BY_PRINT_GROUP),
+                cursor.getMoney(PaymentTable.COLUMN_CHANGE_BY_PRINT_GROUP)
         )
     }
 
@@ -325,11 +325,11 @@ object ReceiptApi {
     }
 
     private fun createPurchaser(cursor: Cursor): Purchaser? {
-        val purchaserName = cursor.safeGetString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
-        val purchaserDocumentNumber = cursor.safeGetString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+        val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
+        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
 
         return if (purchaserName != null && purchaserDocumentNumber != null) {
-            val purchaserType = cursor.safeGetLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
+            val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
                 PurchaserType.values()[it.toInt()]
             }
             Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
@@ -339,17 +339,17 @@ object ReceiptApi {
     }
 
     private fun createMedicineAttribute(cursor: Cursor): MedicineAttribute? {
-        val subjectId = cursor.safeGetString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID)
+        val subjectId = cursor.optString(MedicineAttributeSubTable.COLUMN_SUBJECT_ID)
                 ?: return null
 
         val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
-                cursor.safeGetString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
                     PreferentialMedicine.PreferentialMedicineType.valueOf(it)
                 }
 
-        val documentNumber: String? = cursor.safeGetString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
-        val documentDate: Date? = cursor.safeGetLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }
-        val serialNumber: String? = cursor.safeGetString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
+        val documentNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
+        val documentDate: Date? = cursor.optLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }
+        val serialNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
 
         val medicineAdditionalDetails: MedicineAdditionalDetails? =
                 if (documentDate != null && documentNumber != null && serialNumber != null)
@@ -364,27 +364,27 @@ object ReceiptApi {
     }
 
     private fun createPosition(cursor: Cursor): Position? {
-        val price = cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE)).formatPrice()
+        val price = cursor.getMoney(PositionTable.COLUMN_PRICE)
         val priceWithDiscountPosition = if (cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION) != -1) {
-            cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION)).formatPrice()
+            cursor.getMoney(PositionTable.COLUMN_PRICE_WITH_DISCOUNT_POSITION)
         } else {
             price
         }
-        val extraKeys = cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
-            createExtraKeysFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_EXTRA_KEYS))
+        val extraKeys = cursor.optString(PositionTable.COLUMN_EXTRA_KEYS)?.let {
+            createExtraKeysFromDBFormat(cursor.optString(PositionTable.COLUMN_EXTRA_KEYS))
         }
-        val attributes = cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES)?.let {
-            createAttributesFromDBFormat(cursor.safeGetString(PositionTable.COLUMN_ATTRIBUTES))
+        val attributes = cursor.optString(PositionTable.COLUMN_ATTRIBUTES)?.let {
+            createAttributesFromDBFormat(cursor.optString(PositionTable.COLUMN_ATTRIBUTES))
         }
 
-        val classificationCode = cursor.safeGetString(PositionTable.COLUMN_CLASSIFICATION_CODE)
-        val excise = cursor.safeGetString(PositionTable.COLUMN_EXCISE)?.let {
+        val classificationCode = cursor.optString(PositionTable.COLUMN_CLASSIFICATION_CODE)
+        val excise = cursor.optString(PositionTable.COLUMN_EXCISE)?.let {
             BigDecimal(it)
         }
 
         val importationData = createImportationData(
-                cursor.safeGetString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
-                cursor.safeGetString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
+                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
         )
 
         val builder = Position.Builder
@@ -396,15 +396,15 @@ object ReceiptApi {
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                        cursor.safeGetString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(it) },
+                        cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(it) },
                         price,
                         priceWithDiscountPosition,
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_QUANTITY)).formatQuantity(),
-                        cursor.safeGetString(PositionTable.COLUMN_BARCODE),
-                        cursor.safeGetString(PositionTable.COLUMN_MARK),
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_BY_VOLUME)).formatQuantity(),
+                        cursor.getQuantity(PositionTable.COLUMN_QUANTITY),
+                        cursor.optString(PositionTable.COLUMN_BARCODE),
+                        cursor.optString(PositionTable.COLUMN_MARK),
+                        cursor.optVolume(PositionTable.COLUMN_ALCOHOL_BY_VOLUME),
                         cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                        cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_TARE_VOLUME)).formatQuantity(),
+                        cursor.optVolume(PositionTable.COLUMN_TARE_VOLUME),
                         extraKeys,
                         emptyList()
                 ))
@@ -415,7 +415,7 @@ object ReceiptApi {
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)
-                .setPartial(PositionPartialMapper.fromCursor(cursor))
+                .setPartialRealization(PositionPartialMapper.fromCursor(cursor))
         return builder.build()
     }
 
@@ -453,22 +453,22 @@ object ReceiptApi {
 
         return Payment(
                 cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_UUID)),
-                cursor.getLong(cursor.getColumnIndex(PaymentTable.COLUMN_VALUE)).formatPrice(),
+                cursor.getMoney(PaymentTable.COLUMN_VALUE),
                 createPaymentSystem(cursor),
                 createPaymentPerformer(cursor) ?: return null,
-                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_PURPOSED_IDENTIFIER)),
-                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_ID)),
-                cursor.getString(cursor.getColumnIndex(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                cursor.optString(PaymentTable.COLUMN_PURPOSED_IDENTIFIER),
+                cursor.optString(PaymentTable.COLUMN_ACCOUNT_ID),
+                cursor.optString(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION),
                 identifier)
     }
 
     private fun createPaymentPerformer(cursor: Cursor): PaymentPerformer? {
         return PaymentPerformer(
                 createPaymentSystem(cursor) ?: return null,
-                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_PACKAGE_NAME)),
-                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_COMPONENT_NAME)),
-                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_APP_UUID)),
-                cursor.getString(cursor.getColumnIndex(PaymentPerformerTable.COLUMN_APP_NAME))
+                cursor.optString(PaymentPerformerTable.COLUMN_PACKAGE_NAME),
+                cursor.optString(PaymentPerformerTable.COLUMN_COMPONENT_NAME),
+                cursor.optString(PaymentPerformerTable.COLUMN_APP_UUID),
+                cursor.optString(PaymentPerformerTable.COLUMN_APP_NAME)
         )
     }
 
@@ -506,13 +506,13 @@ object ReceiptApi {
 
         return Receipt.Header(
                 uuid = cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
-                baseReceiptUuid = cursor.safeGetString(ReceiptHeaderTable.COLUMN_BASE_RECEIPT_UUID),
-                number = cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_NUMBER)),
+                baseReceiptUuid = cursor.optString(ReceiptHeaderTable.COLUMN_BASE_RECEIPT_UUID),
+                number = cursor.optString(ReceiptHeaderTable.COLUMN_NUMBER),
                 type = Utils.safeValueOf(Receipt.Type::class.java, cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE)), null)
                         ?: return null,
-                date = cursor.safeGetLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
-                clientEmail = cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
-                clientPhone = cursor.safeGetString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
+                date = cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
+                clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
+                clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
                 extra = extra
         )
     }

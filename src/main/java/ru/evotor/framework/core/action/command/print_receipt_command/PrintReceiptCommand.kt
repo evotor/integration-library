@@ -10,8 +10,8 @@ import ru.evotor.framework.calculator.MoneyCalculator
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
-import ru.evotor.framework.core.action.datamapper.getMoney
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.getMoney
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Receipt
@@ -106,7 +106,7 @@ abstract class PrintReceiptCommand(
         }
 
         internal fun getReceiptDiscount(bundle: Bundle): BigDecimal? {
-            return bundle.getMoney(KEY_RECEIPT_DISCOUNT, BigDecimal.ZERO)
+            return bundle.getMoney(KEY_RECEIPT_DISCOUNT) ?: BigDecimal.ZERO
         }
 
         internal fun getPaymentAddress(bundle: Bundle): String? {
