@@ -11,6 +11,8 @@ import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.Receipt
 import ru.evotor.framework.receipt.correction.CorrectionType
 import java.math.BigDecimal
@@ -27,7 +29,7 @@ import java.util.*
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  * @param correctionDate Дата совершения корректируемого расчета (ТЕГ 1178)
- * @param correctionType Тип коррекции BY_SELF - самостоятельная операция, BY_PRESCRIBED - операция по предписанию налогового органа  (ТЕГ 1173)
+ * @param correctionType Тип коррекции (ТЕГ 1173)
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  */
 class PrintCorrectionOutcomeReceiptCommand(
@@ -39,8 +41,11 @@ class PrintCorrectionOutcomeReceiptCommand(
     val paymentAddress: String?,
     val paymentPlace: String?,
     val userUuid: String?,
+    @FiscalRequisite(tag = FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
     val correctionDate: Date,
+    @FiscalRequisite(tag = FiscalTags.CORRECTION_TYPE)
     val correctionType: CorrectionType,
+    @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
     val prescription: String? = null
 ) : IBundlable {
 

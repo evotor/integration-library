@@ -13,6 +13,8 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper.toBundle
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra.Companion.from
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.correction.CorrectionType
 import java.util.*
 
@@ -21,14 +23,17 @@ import java.util.*
  * @param changes Список позиций
  * @param extra Дополнительные поля для чека
  * @param correctionDate Дата совершения корректируемого расчета (ТЕГ 1178)
- * @param correctionType Тип коррекции BY_SELF - самостоятельная операция, BY_PRESCRIBED - операция по предписанию налогового органа  (ТЕГ 1173)
+ * @param correctionType Тип коррекции (ТЕГ 1173)
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  */
 class OpenCorrectionIncomeReceiptCommand(
         val changes: List<PositionAdd>,
         val extra: SetExtra? = null,
+        @FiscalRequisite(tag = FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         val correctionDate: Date,
+        @FiscalRequisite(tag = FiscalTags.CORRECTION_TYPE)
         val correctionType: CorrectionType,
+        @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
         val prescription: String? = null
 ) : IBundlable {
 
