@@ -746,7 +746,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         // Mark
         dest.writeParcelable(this.mark, flags);
-        // Partial sale
+        // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
     }
 
@@ -1338,11 +1338,11 @@ public class Position implements Parcelable {
 
 
         /**
-         * Частичная продажа для позиции доступна только если тип товара является одним из:
+         * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
-         * лекарства [MEDICINE_MARKED]
-         * духи [PERFUME_MARKED]
-         * альтернативный табак [TOBACCO_PRODUCTS_MARKED]
+         * лекарства {@link ProductType#MEDICINE_MARKED}
+         * духи {@link ProductType#PERFUME_MARKED}
+         * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
          *
          * @param quantityInPackage количество товара в упаковке всего
          */

@@ -20,7 +20,7 @@ import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.mapper.PositionPartialMapper
+import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
@@ -419,7 +419,7 @@ object ReceiptApi {
                 .setClassificationCode(classificationCode)
                 .setImportationData(importationData)
                 .setExcise(excise)
-                .setPartialRealization(PositionPartialMapper.fromCursor(cursor))
+                .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
         return builder.build()
     }
 

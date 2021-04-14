@@ -21,8 +21,8 @@ import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
-import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.Mark;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -82,7 +82,7 @@ public final class PositionMapper {
 
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
-    private static final String KEY_PARTIAL_REALISATION = "partialRealisation";
+    private static final String KEY_PARTIAL_REALIZATION = "partialRealization";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -142,7 +142,7 @@ public final class PositionMapper {
         PreferentialMedicine preferentialMedicine =
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
-        PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALISATION));
+        PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALIZATION));
 
         if (quantity == null ||
                 price == null ||
@@ -256,7 +256,7 @@ public final class PositionMapper {
         }
 
         final PartialRealization partialRealization = position.getPartialRealization();
-        bundle.putBundle(KEY_PARTIAL_REALISATION, partialRealization != null ? partialRealization.toBundle() : null);
+        bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
 
         return bundle;
     }

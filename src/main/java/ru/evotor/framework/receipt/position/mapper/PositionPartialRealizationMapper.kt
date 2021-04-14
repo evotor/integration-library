@@ -5,7 +5,7 @@ import ru.evotor.framework.optQuantity
 import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.PartialRealization
 
-internal object PositionPartialMapper {
+internal object PositionPartialRealizationMapper {
 
     internal fun fromCursor(cursor: Cursor): PartialRealization? {
         val quantityInPackage = cursor.optQuantity(PositionTable.COLUMN_PARTIAL_QUANTITY_IN_PACKAGE)
