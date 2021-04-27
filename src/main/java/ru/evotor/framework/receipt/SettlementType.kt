@@ -32,5 +32,15 @@ enum class SettlementType {
     /**
      * Коррекция расхода
      */
-    CORRECTION_OUTCOME
+    CORRECTION_OUTCOME,
+
+    /**
+     * Коррекция возврата прихода
+     */
+    CORRECTION_RETURN_INCOME,
+
+    /**
+     * Коррекция возврата расхода
+     */
+    CORRECTION_RETURN_OUTCOME
 }

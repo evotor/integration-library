@@ -14,12 +14,16 @@ object NavigationApi {
     private const val ACTION_EDIT_BUYBACK = "evotor.intent.action.edit.BUYBACK"
     private const val ACTION_EDIT_CORRECTION_INCOME = "evotor.intent.action.edit.correction.INCOME"
     private const val ACTION_EDIT_CORRECTION_OUTCOME = "evotor.intent.action.edit.correction.OUTCOME"
+    private const val ACTION_EDIT_CORRECTION_RETURN_INCOME = "evotor.intent.action.edit.correction.RETURN_INCOME"
+    private const val ACTION_EDIT_CORRECTION_RETURN_OUTCOME = "evotor.intent.action.edit.correction.RETURN_OUTCOME"
     private const val ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
     private const val ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
     private const val ACTION_PAYMENT_BUY = "evotor.intent.action.payment.BUY"
     private const val ACTION_PAYMENT_BUYBACK = "evotor.intent.action.payment.BUYBACK"
     private const val ACTION_PAYMENT_CORRECTION_INCOME = "evotor.intent.action.payment.correction.INCOME"
     private const val ACTION_PAYMENT_CORRECTION_OUTCOME = "evotor.intent.action.payment.correction.OUTCOME"
+    private const val ACTION_PAYMENT_CORRECTION_RETURN_INCOME = "evotor.intent.action.payment.correction.RETURN_INCOME"
+    private const val ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME = "evotor.intent.action.payment.correction.RETURN_OUTCOME"
     private const val ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
     private const val ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
     private const val ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
@@ -103,6 +107,26 @@ object NavigationApi {
     }
 
     /**
+     * Создаёт `intent`, который открывает окно редактирования чека коррекции возврата прихода.
+     *
+     * @return intent
+     */
+    @JvmStatic
+    fun createIntentForCorrectionReturnIncomeReceiptEdit(): Intent {
+        return Intent(ACTION_EDIT_CORRECTION_RETURN_INCOME)
+    }
+
+    /**
+     * Создаёт `intent`, который открывает окно редактирования чека коррекции возврата расхода.
+     *
+     * @return intent
+     */
+    @JvmStatic
+    fun createIntentForCorrectionReturnOutcomeReceiptEdit(): Intent {
+        return Intent(ACTION_EDIT_CORRECTION_RETURN_OUTCOME)
+    }
+
+    /**
      * Создаёт `intent`, который открывает окно оплаты чека продажи.
      *
      * @return intent
@@ -162,6 +186,27 @@ object NavigationApi {
     @JvmStatic
     fun createIntentForCorrectionOutcomeReceiptPayment(): Intent {
         return Intent(ACTION_PAYMENT_CORRECTION_OUTCOME)
+    }
+
+    /**
+     * Создаёт `intent`, который открывает окно оплаты чека коррекции возврата прихода.
+     *
+     * @return intent
+     */
+    @JvmStatic
+    fun createIntentForCorrectionReturnIncomeReceiptPayment(): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_INCOME)
+    }
+
+
+    /**
+     * Создаёт `intent`, который открывает окно оплаты чека коррекции возврата расхода.
+     *
+     * @return intent
+     */
+    @JvmStatic
+    fun createIntentForCorrectionReturnOutcomeReceiptPayment(): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME)
     }
 
     /**
