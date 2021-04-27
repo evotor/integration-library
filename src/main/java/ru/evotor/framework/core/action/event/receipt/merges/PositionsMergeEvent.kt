@@ -63,6 +63,20 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
          */
         const val NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.mergingPositions"
 
+        /**
+         * Объединение позиций чека коррекции возврата прихода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.return.income.mergingPositions</code>.
+         */
+        const val NAME_CORRECTION_RETURN_INCOME_RECEIPT = "evo.v2.receipt.correction.return.income.mergingPositions"
+
+        /**
+         * Объединение позиций чека коррекции возврата расхода.
+         *
+         * Значение константы: <code>evo.v2.receipt.correction.return.outcome.mergingPositions</code>.
+         */
+        const val NAME_CORRECTION_RETURN_OUTCOME_RECEIPT = "evo.v2.receipt.correction.return.outcome.mergingPositions"
+
 
         private val KEY_RECEIPT_UUID = "receiptUuid"
         private val KEY_MERGES = "merges"
