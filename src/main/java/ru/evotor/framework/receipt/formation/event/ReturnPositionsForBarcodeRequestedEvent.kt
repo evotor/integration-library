@@ -1,6 +1,7 @@
 package ru.evotor.framework.receipt.formation.event
 
 import android.os.Bundle
+import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.IntegrationEvent
 import ru.evotor.framework.receipt.Position
 
@@ -12,21 +13,25 @@ import ru.evotor.framework.receipt.Position
  * Обрабатывая данные, содержащиеся в событии, приложения могут добавлять позиции в чек и / или создавать новые товары.
  *
  * @property barcode строка данных, полученных от сканера штрихкодов.
+ * @property extractedData агрегированные данные, которые удалось получить из отсканированного штрихкода
  * @property creatingNewProduct указывает на необходимость создать новый товар. Сразу после сканирования штрихкода всегда содержит false.
  * @see <a href="https://developer.evotor.ru/docs/doc_java_return_positions_for_barcode_requested.html">Обработка события сканирования штрихкода</a>
  */
 data class ReturnPositionsForBarcodeRequestedEvent(
         val barcode: String,
+        val extractedData: DataExtracted?,
         val creatingNewProduct: Boolean
 ) : IntegrationEvent() {
 
     override fun toBundle() = Bundle().apply {
         putString(KEY_BARCODE_EXTRA, barcode)
+        putBundle(KEY_EXTRACTED_DATA_EXTRA, extractedData?.toBundle())
         putBoolean(KEY_CREATE_PRODUCT_EXTRA, creatingNewProduct)
     }
 
     companion object {
         const val KEY_BARCODE_EXTRA = "key_barcode_extra"
+        const val KEY_EXTRACTED_DATA_EXTRA = "key_extracted_data_extra"
         const val KEY_CREATE_PRODUCT_EXTRA = "key_create_product_extra"
 
         @JvmStatic
@@ -34,7 +39,15 @@ data class ReturnPositionsForBarcodeRequestedEvent(
             ReturnPositionsForBarcodeRequestedEvent(
                     barcode = it.getString(KEY_BARCODE_EXTRA)
                             ?: return null,
-                    creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA))
+                    extractedData = if (!it.containsKey(KEY_EXTRACTED_DATA_EXTRA)) {
+                        null
+                    } else {
+                        DataExtracted.from(
+                                it.getBundle(KEY_EXTRACTED_DATA_EXTRA)
+                        )
+                    },
+                    creatingNewProduct = it.getBoolean(KEY_CREATE_PRODUCT_EXTRA)
+            )
         }
     }
 
@@ -121,7 +134,29 @@ data class ReturnPositionsForBarcodeRequestedEvent(
 
                 Result(iCanCreateNewProduct, positions, positionsList)
             }
+        }
+    }
 
+    data class DataExtracted(
+            val ean: String?
+    ) : IBundlable {
+
+        override fun toBundle(): Bundle = Bundle().apply {
+            classLoader = DataExtracted::class.java.classLoader
+            putString(KEY_EAN_EXTRA, ean)
+        }
+
+        companion object {
+
+            private const val KEY_EAN_EXTRA = "key_ean_extra"
+
+            @JvmStatic
+            fun from(bundle: Bundle?) = bundle?.let {
+                it.classLoader = DataExtracted::class.java.classLoader
+
+                val ean = it.getString(KEY_EAN_EXTRA)
+                DataExtracted(ean)
+            }
         }
     }
 }
