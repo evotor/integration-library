@@ -62,5 +62,10 @@ public enum ProductType {
     /**
      * Альтернативный табак (сигары, кретек, кальянный табак и т.д.)
      */
-    TOBACCO_PRODUCTS_MARKED
+    TOBACCO_PRODUCTS_MARKED,
+
+    /**
+     * Молочная продукция (сыры, йогурты, молоко и т.д.)
+     */
+    DAIRY_MARKED
 }
