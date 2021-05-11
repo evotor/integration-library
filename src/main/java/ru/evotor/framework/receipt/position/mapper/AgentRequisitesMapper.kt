@@ -145,8 +145,7 @@ internal object AgentRequisitesMapper {
                 uuid = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_UUID)?.let { UUID.fromString(it) },
                 counterpartyType = cursor.safeGetInt(AgentRequisitesContract.COLUMN_PRINCIPAL_COUNTERPARTY_TYPE)?.let { Counterparty.Type.values()[it] },
                 fullName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_FULL_NAME),
-                shortName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME)
-                        ?: return null,
+                shortName = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_SHORT_NAME) ?: "",
                 inn = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_INN)
                         ?: return null,
                 kpp = cursor.optString(AgentRequisitesContract.COLUMN_PRINCIPAL_KPP),

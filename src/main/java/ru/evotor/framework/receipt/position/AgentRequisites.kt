@@ -51,6 +51,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Агент".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForAgent(
@@ -81,6 +82,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Комиссионер".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForCommissioner(
@@ -111,6 +113,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Поверенный".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForAttorneyInFact(
@@ -142,6 +145,7 @@ data class AgentRequisites(
          * @param agentPhones телефоны платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param operationDescription описание операции платежного агента
          */
         @JvmStatic
@@ -182,6 +186,7 @@ data class AgentRequisites(
          * @param subagentPhones телефоны платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param operationDescription описание операции платежного субагента
          */
         @JvmStatic
@@ -223,6 +228,7 @@ data class AgentRequisites(
          * @param agentPhones телефоны банковского платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
@@ -278,6 +284,7 @@ data class AgentRequisites(
          * @param subagentPhones телефоны банковского платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода

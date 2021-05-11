@@ -12,7 +12,7 @@ internal object PrincipalMapper {
                         uuid = CounterpartyMapper.readUuid(it),
                         counterpartyType = CounterpartyMapper.readCounterpartyType(it),
                         fullName = CounterpartyMapper.readFullName(it),
-                        shortName = CounterpartyMapper.readShortName(it) ?: return null,
+                        shortName = CounterpartyMapper.readShortName(it) ?: "",
                         inn = CounterpartyMapper.readInn(it) ?: return null,
                         kpp = CounterpartyMapper.readKpp(it),
                         phones = CounterpartyMapper.readPhones(it) ?: return null,
