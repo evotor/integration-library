@@ -26,6 +26,7 @@ object FeaturesContract {
     const val PATH_LIGHT_INDUSTRY_MARK = "light_industry_mark"
     const val PATH_TOBACCO_PRODUCTS_MARK = "tobacco_products_mark"
     const val PATH_SLIP_AMOUNT = "slip_amount"
+    const val PATH_DAIRY_MARK = "dairy_mark"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }
