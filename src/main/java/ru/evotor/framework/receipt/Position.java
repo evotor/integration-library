@@ -1235,6 +1235,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toDairyMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.DAIRY_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setDairyParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1298,6 +1312,10 @@ public class Position implements Parcelable {
         }
 
         private void setTobaccoProductsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setDairyParams(Mark mark) {
             position.mark = mark;
         }
 
