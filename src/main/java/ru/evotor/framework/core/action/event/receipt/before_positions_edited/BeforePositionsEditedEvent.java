@@ -47,6 +47,30 @@ public class BeforePositionsEditedEvent implements IBundlable {
      * Значение константы: <code>evo.v2.receipt.buyback.beforePositionsEdited</code>.
      */
     public static final String NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека коррекции прихода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.income.beforePositionsEdited</code>.
+     */
+    public static final String NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека коррекции расхода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.outcome.beforePositionsEdited</code>.
+     */
+    public static final String NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека коррекции возврата прихода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.return.income.beforePositionsEdited</code>.
+     */
+    public static final String NAME_CORRECTION_RETURN_INCOME_RECEIPT = "evo.v2.receipt.correction.return.income.beforePositionsEdited";
+    /**
+     * Будут изменены позиции чека коррекции возврата расхода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.return.outcome.beforePositionsEdited</code>.
+     */
+    public static final String NAME_CORRECTION_RETURN_OUTCOME_RECEIPT = "evo.v2.receipt.correction.return.outcome.beforePositionsEdited";
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_CHANGES = "changes";

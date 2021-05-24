@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     def version = 16
@@ -17,6 +17,7 @@ android {
         versionCode version
         versionName "0.4.9"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
     buildTypes {
@@ -52,13 +53,14 @@ repositories {
 buildscript {
     ext.kotlin_version = '1.4.32'
     repositories {
-        jcenter()
+        mavenCentral()
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20"
     }
 }
 // in the individual module build.gradle files
@@ -70,34 +72,22 @@ allprojects {
     }
 }
 
-dokka {
+dokkaJavadoc.configure {
     moduleName = 'integration-library'
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
 
-    includes = ['packages.md']
-
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
 }
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/dokkaJavadoc"
-
-    includes = ['packages.md']
-}
-
-task dokkaHTMLAsJava(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "html-as-java"
-    outputDirectory = "$buildDir/dokkaHtmlasjava"
-
-    includes = ['packages.md']
-}
-
-task dokkaHTML(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/dokkaHtml"
-
-    includes = ['packages.md']
+dokkaHtml.configure{
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+        }
+    }
 }
 
 task sourceJar(type: Jar) {
@@ -106,9 +96,9 @@ task sourceJar(type: Jar) {
 }
 
 // build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: dokka) {
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     classifier = 'javadoc'
-    from dokka.outputDirectory
+    from dokkaJavadoc.outputDirectory
 }
 
 publishing {
@@ -116,7 +106,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "STDEV-6600"
+            version "STDEV-7848"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
