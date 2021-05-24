@@ -16,6 +16,7 @@ import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.receipt.ExtraKey;
+import ru.evotor.framework.receipt.Measure;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
@@ -47,6 +48,8 @@ public final class PositionMapper {
     private static final String KEY_MEASURE_NAME = "measureName";
 
     private static final String KEY_MEASURE_PRECISION = "measurePrecision";
+
+    private static final String KEY_MEASURE_CODE = "measureCode";
 
     private static final String KEY_TAX_NUMBER = "taxNumber";
 
@@ -92,6 +95,7 @@ public final class PositionMapper {
         String name = bundle.getString(KEY_NAME);
         String measureName = bundle.getString(KEY_MEASURE_NAME);
         int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
+        int measureCode = bundle.getInt(KEY_MEASURE_CODE, Measure.UNKNOWN_MEASURE_CODE);
         TaxNumber taxNumber = TaxNumberMapper.from(bundle.getBundle(KEY_TAX_NUMBER));
         BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
         BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
@@ -145,14 +149,19 @@ public final class PositionMapper {
             return null;
         }
 
+        Measure measure = new Measure(
+                measureName,
+                measurePrecision,
+                measureCode
+        );
+
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
                 productUuid,
                 productCode,
                 productType,
                 name,
-                measureName,
-                measurePrecision,
+                measure,
                 taxNumber,
                 price,
                 priceWithDiscountPosition,
@@ -198,8 +207,9 @@ public final class PositionMapper {
         bundle.putString(KEY_PRODUCT_CODE, position.getProductCode());
         bundle.putString(KEY_PRODUCT_TYPE, position.getProductType().name());
         bundle.putString(KEY_NAME, position.getName());
-        bundle.putString(KEY_MEASURE_NAME, position.getMeasureName());
-        bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasurePrecision());
+        bundle.putString(KEY_MEASURE_NAME, position.getMeasure().getName());
+        bundle.putInt(KEY_MEASURE_PRECISION, position.getMeasure().getPrecision());
+        bundle.putInt(KEY_MEASURE_CODE, position.getMeasure().getCode());
         bundle.putBundle(KEY_TAX_NUMBER, TaxNumberMapper.toBundle(position.getTaxNumber()));
         bundle.putString(KEY_PRICE, position.getPrice().toPlainString());
         bundle.putString(KEY_PRICE_WITH_DISCOUNT_POSITION, position.getPriceWithDiscountPosition().toPlainString());
