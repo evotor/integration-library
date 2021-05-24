@@ -54,7 +54,7 @@ data class Measure(
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
                 if (version >= 1) {
                     measure = Measure(
-                            name = parcel.readString(),
+                            name = parcel.readString()!!,
                             precision = parcel.readInt(),
                             code = parcel.readInt()
                     )
