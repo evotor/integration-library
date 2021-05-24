@@ -15,7 +15,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode version
-        versionName "0.4.9_new_product_type_dairy"
+        versionName "0.4.9_ffd12"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.annotation:annotation:1.2.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
