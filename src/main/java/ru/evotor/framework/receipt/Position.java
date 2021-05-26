@@ -1517,6 +1517,15 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * Частичная реализация для позиции доступна только если тип товара является одним из:
+         * <p>
+         * лекарства {@link ProductType#MEDICINE_MARKED}
+         * духи {@link ProductType#PERFUME_MARKED}
+         * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         *
+         * @param partialRealization частичная реализация
+         */
         public Builder setPartialRealization(@Nullable PartialRealization partialRealization) {
             position.partialRealization = partialRealization;
             return this;
