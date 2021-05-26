@@ -37,7 +37,8 @@ sealed class ProductItem(
             val alcoholByVolume: BigDecimal?,
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,
-            val classificationCode: String?
+            val classificationCode: String?,
+            val allowPartialRealization: AllowPartialRealization?
     ) : ProductItem(
             uuid,
             parentUuid,
@@ -58,5 +59,11 @@ sealed class ProductItem(
 
     override fun hashCode(): Int {
         return uuid.hashCode()
+    }
+
+    enum class AllowPartialRealization {
+        NEVER,
+        ALWAYS,
+        ON_DEMAND
     }
 }

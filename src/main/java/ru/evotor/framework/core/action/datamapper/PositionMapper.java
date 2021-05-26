@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductType;
@@ -21,6 +22,7 @@ import ru.evotor.framework.receipt.TaxNumber;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
 import ru.evotor.framework.receipt.position.Mark;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -80,6 +82,8 @@ public final class PositionMapper {
 
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
+    private static final String KEY_PARTIAL_REALIZATION = "partialRealization";
+
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
         if (bundle == null) {
@@ -138,6 +142,8 @@ public final class PositionMapper {
         PreferentialMedicine preferentialMedicine =
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
+        PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALIZATION));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -172,6 +178,7 @@ public final class PositionMapper {
         builder.setExcise(excise);
         builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
+        builder.setPartialRealization(partialRealization);
         return builder.build();
     }
 
@@ -247,6 +254,10 @@ public final class PositionMapper {
         if (classificationCode != null) {
             bundle.putString(KEY_CLASSIFICATION_CODE, classificationCode);
         }
+
+        final PartialRealization partialRealization = position.getPartialRealization();
+        bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
+
         return bundle;
     }
 

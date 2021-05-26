@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
-import ru.evotor.framework.core.action.datamapper.BundleUtils;
+import ru.evotor.framework.BundleUtils;
 
 /**
  * Событие, которое возникает при начислении скидки на чек.
