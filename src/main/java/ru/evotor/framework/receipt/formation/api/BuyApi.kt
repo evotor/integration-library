@@ -6,7 +6,7 @@ import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.receipt.formation.event.CurrentReceiptDraftMovementToPaymentStageRequestedEvent
-import ru.evotor.framework.receipt.formation.event.handler.service.SellBacksideIntegrationService
+import ru.evotor.framework.receipt.formation.event.handler.service.BuyBacksideIntegrationService
 
 /**
  * Класс содержит методы для проведения чеков покупки из интерфейса приложения.
@@ -22,7 +22,7 @@ object BuyApi {
     @JvmStatic
     fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentPerformer: PaymentPerformer, callback: ReceiptFormationCallback) {
         context.startIntegrationService(
-            SellBacksideIntegrationService.ACTION_MOVE_CURRENT_BUY_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+            BuyBacksideIntegrationService.ACTION_MOVE_CURRENT_BUY_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
             CurrentReceiptDraftMovementToPaymentStageRequestedEvent(null, paymentPerformer),
             IntegrationManagerCallback {
                 it?.result?.error?.let { error -> callback.onError(ReceiptFormationException(error.code, error.message)) }
@@ -41,7 +41,7 @@ object BuyApi {
     @JvmStatic
     fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentDelegator: PaymentDelegator, callback: ReceiptFormationCallback) {
         context.startIntegrationService(
-            SellBacksideIntegrationService.ACTION_MOVE_CURRENT_BUY_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+            BuyBacksideIntegrationService.ACTION_MOVE_CURRENT_BUY_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
             CurrentReceiptDraftMovementToPaymentStageRequestedEvent(paymentDelegator, null),
             IntegrationManagerCallback {
                 it?.result?.error?.let { error -> callback.onError(ReceiptFormationException(error.code, error.message)) }
