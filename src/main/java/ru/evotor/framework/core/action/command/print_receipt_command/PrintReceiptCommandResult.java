@@ -62,6 +62,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_CODE_USER_NOT_FOUND = -12;
 
+    /**
+     * Марка не соответствует формату марки товарной группы
+     */
+    public static final int ERROR_INVALID_MARK = -13;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
