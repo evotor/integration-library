@@ -9,6 +9,7 @@ import java.math.BigDecimal
  *
  * Признак способа расчёта необходимо указывать для каждой позиции чека.
  */
+@Suppress("UNUSED_VARIABLE")
 sealed class SettlementMethod : Parcelable {
 
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
@@ -37,10 +38,10 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Предоплата 100% – полная предварительная оплата до момента передачи предмета расчёта.
      */
-    class FullPrepayment() : SettlementMethod() {
+    class FullPrepayment : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
+            // nothing to do
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -85,7 +86,7 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Предоплата – частичная предварительная оплата до момента передачи предмета расчёта.
      */
-    class PartialPrepayment() : SettlementMethod() {
+    class PartialPrepayment : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -133,7 +134,7 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Аванс.
      */
-    class AdvancePayment() : SettlementMethod() {
+    class AdvancePayment : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -181,7 +182,7 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Полный расчёт – полная оплата, в том числе с учётом аванса (предварительной оплаты) в момент передачи предмета расчёта.
      */
-    class FullSettlement() : SettlementMethod() {
+    class FullSettlement : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -283,7 +284,7 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Передача в кредит – передача предмета расчёта без его оплаты в момент его передачи с последующей оплатой в кредит.
      */
-    class Lend() : SettlementMethod() {
+    class Lend : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 
@@ -331,7 +332,7 @@ sealed class SettlementMethod : Parcelable {
     /**
      * Оплата кредита – оплата предмета расчёта после его передачи с оплатой в кредит.
      */
-    class LoanPayment() : SettlementMethod() {
+    class LoanPayment : SettlementMethod() {
 
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
 

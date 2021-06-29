@@ -26,6 +26,7 @@ import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
 import ru.evotor.framework.receipt.position.Mark;
+import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
@@ -36,7 +37,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 7;
+    private static final int VERSION = 8;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -82,6 +83,7 @@ public class Position implements Parcelable {
     private BigDecimal priceWithDiscountPosition;
     /**
      * Количество.
+     * (Для маркированных товаров при частичной продаже это количество проданного сейчас товара по данной марке)
      */
     private BigDecimal quantity;
     /**
@@ -174,6 +176,20 @@ public class Position implements Parcelable {
     @Nullable
     private PreferentialMedicine preferentialMedicine;
 
+    /**
+     * Частичное выбытие 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - лекарства {@link ProductType#MEDICINE_MARKED}
+     * - духи {@link ProductType#PERFUME_MARKED}
+     * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+     * <p>
+     * Также см. {@link #quantity}
+     */
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
+    @Nullable
+    private PartialRealization partialRealization;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -241,6 +257,7 @@ public class Position implements Parcelable {
         this.excise = position.getExcise();
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
+        this.partialRealization = position.getPartialRealization();
     }
 
     /**
@@ -392,6 +409,7 @@ public class Position implements Parcelable {
 
     /**
      * @return Количество.
+     * (Для маркированных товаров, при частичной реализации, это количество проданного сейчас товара по данной марке)
      */
     public BigDecimal getQuantity() {
         return quantity;
@@ -510,6 +528,15 @@ public class Position implements Parcelable {
         return preferentialMedicine;
     }
 
+    /**
+     * @return Частичное выбытие 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
+    @Nullable
+    public PartialRealization getPartialRealization() {
+        return partialRealization;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -569,6 +596,8 @@ public class Position implements Parcelable {
         }
         if (!Objects.equals(preferentialMedicine, position.preferentialMedicine))
             return false;
+        if (!Objects.equals(partialRealization, position.partialRealization))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -593,12 +622,13 @@ public class Position implements Parcelable {
         result = 31 * result + (extraKeys != null ? extraKeys.hashCode() : 0);
         result = 31 * result + (subPositions != null ? subPositions.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 31 * result + (settlementMethod != null ? settlementMethod.hashCode() : 0);
+        result = 31 * result + (settlementMethod.hashCode());
         result = 31 * result + (agentRequisites != null ? agentRequisites.hashCode() : 0);
         result = 31 * result + (importationData != null ? importationData.hashCode() : 0);
         result = 31 * result + (excise != null ? excise.hashCode() : 0);
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
+        result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
         return result;
     }
 
@@ -629,6 +659,7 @@ public class Position implements Parcelable {
                 ", excise=" + excise +
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
+                ", partial=" + partialRealization +
                 '}';
     }
 
@@ -714,6 +745,8 @@ public class Position implements Parcelable {
         dest.writeInt(this.measure.getCode());
         // Mark
         dest.writeParcelable(this.mark, flags);
+        // Partial realization
+        dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -789,6 +822,9 @@ public class Position implements Parcelable {
             measureCode = in.readInt();
             readMark(in);
         }
+        if (version >= 8) {
+            readPartialRealization(in);
+        }
         this.measure = new Measure(
                 measureName,
                 measurePrecision,
@@ -836,6 +872,10 @@ public class Position implements Parcelable {
         this.mark = in.readParcelable(Mark.class.getClassLoader());
     }
 
+    private void readPartialRealization(Parcel in) {
+        this.partialRealization = PartialRealization.Companion.from(in.readBundle(PartialRealization.class.getClassLoader()));
+    }
+
     public static final Creator<Position> CREATOR = new Creator<Position>() {
         @Override
         public Position createFromParcel(Parcel source) {
@@ -847,8 +887,6 @@ public class Position implements Parcelable {
             return new Position[size];
         }
     };
-
-
 
     public static final class Builder {
         public static Builder newInstance(
@@ -1271,6 +1309,25 @@ public class Position implements Parcelable {
             return this;
         }
 
+
+        /**
+         * Частичная реализация для позиции доступна только если тип товара является одним из:
+         * <p>
+         * лекарства {@link ProductType#MEDICINE_MARKED}
+         * духи {@link ProductType#PERFUME_MARKED}
+         * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         *
+         * @param quantityInPackage количество товара в упаковке всего
+         */
+        public Builder toPartialRealization(
+                @NonNull BigDecimal quantityInPackage
+        ) {
+            position.partialRealization = new PartialRealization(
+                    quantityInPackage
+            );
+            return this;
+        }
+
         private void setAlcoParams(
                 Mark mark,
                 BigDecimal alcoholByVolume,
@@ -1411,6 +1468,20 @@ public class Position implements Parcelable {
 
         public Builder setClassificationCode(@Nullable String classificationCode) {
             position.classificationCode = classificationCode;
+            return this;
+        }
+
+        /**
+         * Частичная реализация для позиции доступна только если тип товара является одним из:
+         * <p>
+         * лекарства {@link ProductType#MEDICINE_MARKED}
+         * духи {@link ProductType#PERFUME_MARKED}
+         * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         *
+         * @param partialRealization частичная реализация
+         */
+        public Builder setPartialRealization(@Nullable PartialRealization partialRealization) {
+            position.partialRealization = partialRealization;
             return this;
         }
 

@@ -183,6 +183,11 @@ object FiscalTags {
     const val MEDICINE_ADDITIONAL_REQUISITE_VALUE = 1086
 
     /**
+     * частичное выбытие
+     */
+    const val PARTIAL_REALIZATION = 1191
+
+    /**
      * мера количества предмета расчета
      */
     const val MEASURE_CODE = 2108

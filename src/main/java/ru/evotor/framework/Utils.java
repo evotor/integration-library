@@ -33,6 +33,7 @@ public final class Utils {
     }
 
     @NonNull
+    @SuppressWarnings("unchecked")
     public static <T, R> List<R> filterByClass(@NonNull List<T> source, @NonNull Class<R> clazz) {
         List<R> list = new ArrayList<>();
         for (T t : source) {
@@ -44,6 +45,7 @@ public final class Utils {
     }
 
     @Nullable
+    @SuppressWarnings("unchecked")
     public static <T> List<T> convertParcelables(@Nullable Parcelable[] parcelables, @NonNull Class<T> clazz) {
         if (parcelables != null) {
             List<T> exports = new ArrayList<>();
