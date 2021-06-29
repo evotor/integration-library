@@ -24,7 +24,6 @@ import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMap
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.safeGetLong
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList

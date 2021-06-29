@@ -2,6 +2,7 @@ package ru.evotor.framework.inventory
 
 import android.database.Cursor
 import ru.evotor.framework.*
+import ru.evotor.framework.receipt.Measure
 import ru.evotor.framework.receipt.TaxNumber
 
 /**
