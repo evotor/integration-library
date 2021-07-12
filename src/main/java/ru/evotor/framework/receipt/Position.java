@@ -742,11 +742,11 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
-        dest.writeInt(this.measure.getCode());
         // Mark
         dest.writeParcelable(this.mark, flags);
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
+        dest.writeInt(this.measure.getCode());
     }
 
     protected Position(Parcel in) {
