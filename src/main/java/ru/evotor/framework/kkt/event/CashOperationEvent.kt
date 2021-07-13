@@ -3,7 +3,7 @@ package ru.evotor.framework.kkt.event
 import android.os.Bundle
 
 import ru.evotor.IBundlable
-import ru.evotor.framework.core.action.datamapper.BundleUtils
+import ru.evotor.framework.getMoney
 import java.math.BigDecimal
 
 abstract class CashOperationEvent internal constructor(val documentUuid: String, val total: BigDecimal) : IBundlable {
@@ -23,8 +23,6 @@ abstract class CashOperationEvent internal constructor(val documentUuid: String,
 
         internal fun getDocumentUuid(bundle: Bundle): String? = bundle.getString(KEY_DOCUMENT_UUID)
 
-        internal fun getTotal(bundle: Bundle): BigDecimal? = BundleUtils.getMoney(bundle, KEY_TOTAL)
-
+        internal fun getTotal(bundle: Bundle): BigDecimal? = bundle.getMoney(KEY_TOTAL)
     }
-
 }

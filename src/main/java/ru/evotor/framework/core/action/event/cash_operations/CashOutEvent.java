@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import ru.evotor.framework.core.action.datamapper.BundleUtils;
+import ru.evotor.framework.BundleUtils;
 
 /**
  * @deprecated Используйте {@link ru.evotor.framework.kkt.event.CashWithdrawnEvent}

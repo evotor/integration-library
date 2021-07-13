@@ -1,5 +1,6 @@
 package ru.evotor.framework.inventory
 
+import ru.evotor.framework.receipt.Measure
 import ru.evotor.framework.receipt.TaxNumber
 import java.math.BigDecimal
 
@@ -32,12 +33,12 @@ sealed class ProductItem(
             val price: BigDecimal,
             val quantity: BigDecimal,
             val description: String?,
-            val measureName: String,
-            val measurePrecision: Int,
+            val measure: Measure,
             val alcoholByVolume: BigDecimal?,
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,
-            val classificationCode: String?
+            val classificationCode: String?,
+            val allowPartialRealization: AllowPartialRealization?
     ) : ProductItem(
             uuid,
             parentUuid,
@@ -58,5 +59,11 @@ sealed class ProductItem(
 
     override fun hashCode(): Int {
         return uuid.hashCode()
+    }
+
+    enum class AllowPartialRealization {
+        NEVER,
+        ALWAYS,
+        ON_DEMAND
     }
 }

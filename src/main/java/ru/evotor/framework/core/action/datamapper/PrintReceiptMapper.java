@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
+import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.receipt.Payment;
 import ru.evotor.framework.receipt.Position;
 import ru.evotor.framework.receipt.PrintGroup;

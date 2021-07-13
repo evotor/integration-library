@@ -14,6 +14,10 @@ import ru.evotor.framework.receipt.Position
  * [ru.evotor.framework.receipt.event.handler.receiver.PaybackReceiptBroadcastReceiver]
  * [ru.evotor.framework.receipt.event.handler.receiver.BuyReceiptBroadcastReceiver]
  * [ru.evotor.framework.receipt.event.handler.receiver.BuybackReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionIncomeReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionOutcomeReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionReturnIncomeReceiptBroadcastReceiver]
+ * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionReturnOutcomeReceiptBroadcastReceiver]
  *
  * @param receiptUuid uuid чека
  * @param position удалённая позиция

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
-import ru.evotor.framework.core.action.datamapper.BundleUtils;
+import ru.evotor.framework.BundleUtils;
 
 /**
  * Событие, которое возникает при начислении скидки на чек.
@@ -59,6 +59,34 @@ public class ReceiptDiscountEvent implements IBundlable {
      * Значение константы: <code>evo.v2.receipt.buybackWithBuy.receiptDiscount</code>.
      */
     public static final String NAME_BUYBACK_WITH_BUY_RECEIPT = "evo.v2.receipt.buybackWithBuy.receiptDiscount";
+
+    /**
+     * Скидка начислена на чек коррекции прихода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.income.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.receiptDiscount";
+
+    /**
+     * Скидка начислена на чек коррекции расхода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.outcome.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.receiptDiscount";
+
+    /**
+     * Скидка начислена на чек коррекции возврата прихода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.return.income.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_RETURN_INCOME_RECEIPT = "evo.v2.receipt.correction.return.income.receiptDiscount";
+
+    /**
+     * Скидка начислена на чек коррекции возврата расхода.
+     * <p>
+     * Значение константы: <code>evo.v2.receipt.correction.return.outcome.receiptDiscount</code>.
+     */
+    public static final String NAME_CORRECTION_RETURN_OUTCOME_RECEIPT = "evo.v2.receipt.correction.return.outcome.receiptDiscount";
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_DISCOUNT = "discount";

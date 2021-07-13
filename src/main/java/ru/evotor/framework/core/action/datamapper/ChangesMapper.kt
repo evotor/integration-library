@@ -3,11 +3,11 @@ package ru.evotor.framework.core.action.datamapper
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import ru.evotor.framework.Utils
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.core.action.event.receipt.changes.UnknownChange
 import ru.evotor.framework.core.action.event.receipt.changes.position.*
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
-import ru.evotor.framework.safeValueOf
 
 object ChangesMapper {
     private const val TAG = "ChangesMapper"
@@ -18,7 +18,7 @@ object ChangesMapper {
     private data class ChangeInBundle(val typeName: String, val bundle: Bundle)
 
     fun create(changesParcelable: Array<Parcelable>?): List<IChange> {
-        val changes = ArrayList <IChange>()
+        val changes = ArrayList<IChange>()
         changesParcelable ?: return changes
 
         return changesParcelable
@@ -64,9 +64,8 @@ object ChangesMapper {
     }
 
     private fun fromBundle(typeName: String, bundle: Bundle): IChange? {
-        val type = safeValueOf<IChange.Type>(typeName)
 
-        return when (type) {
+        return when (Utils.safeValueOf(IChange.Type::class.java, typeName, null)) {
             IChange.Type.POSITION_REMOVE -> PositionRemove.from(bundle)
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
             IChange.Type.POSITION_EDIT -> PositionEdit.from(bundle)

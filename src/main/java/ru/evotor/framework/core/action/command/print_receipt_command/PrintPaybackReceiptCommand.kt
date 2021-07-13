@@ -8,7 +8,6 @@ import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.PrintGroup
 import ru.evotor.framework.receipt.Receipt
-import ru.evotor.framework.sumByBigDecimal
 import java.math.BigDecimal
 import java.util.*
 

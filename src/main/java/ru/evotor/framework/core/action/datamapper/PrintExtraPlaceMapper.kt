@@ -1,8 +1,8 @@
 package ru.evotor.framework.core.action.datamapper
 
 import android.os.Bundle
+import ru.evotor.framework.Utils
 import ru.evotor.framework.receipt.print_extras.*
-import ru.evotor.framework.safeValueOf
 
 object PrintExtraPlaceMapper {
 
@@ -24,7 +24,7 @@ object PrintExtraPlaceMapper {
 
     fun fromBundle(bundle: Bundle?): PrintExtraPlace? {
         if (bundle == null) return null
-        return when (safeValueOf<PrintExtraPlaceType>(bundle.getString(KEY_TYPE))) {
+        return when (Utils.safeValueOf(PrintExtraPlaceType::class.java, bundle.getString(KEY_TYPE), null)) {
             PrintExtraPlaceType.PRINT_GROUP_TOP -> PrintExtraPlacePrintGroupTop.fromBundle(bundle)
             PrintExtraPlaceType.PRINT_GROUP_HEADER -> PrintExtraPlacePrintGroupHeader.fromBundle(bundle)
             PrintExtraPlaceType.PRINT_GROUP_SUMMARY -> PrintExtraPlacePrintGroupSummary.fromBundle(bundle)
