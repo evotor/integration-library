@@ -37,7 +37,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 8;
+    private static final int VERSION = 9;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -742,11 +742,11 @@ public class Position implements Parcelable {
         dest.writeString(this.classificationCode);
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
-        dest.writeInt(this.measure.getCode());
         // Mark
         dest.writeParcelable(this.mark, flags);
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
+        dest.writeInt(this.measure.getCode());
     }
 
     protected Position(Parcel in) {
@@ -819,11 +819,13 @@ public class Position implements Parcelable {
             readPreferentialMedicine(in);
         }
         if (version >= 7) {
-            measureCode = in.readInt();
             readMark(in);
         }
         if (version >= 8) {
             readPartialRealization(in);
+        }
+        if (version >= 9) {
+            measureCode = in.readInt();
         }
         this.measure = new Measure(
                 measureName,
