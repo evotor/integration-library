@@ -107,7 +107,23 @@ data class Receipt
         /**
          * Возврат покупки
          */
-        BUYBACK
+        BUYBACK,
+        /**
+         * Коррекция прихода
+         */
+        CORRECTION_INCOME,
+        /**
+         * Коррекция расхода
+         */
+        CORRECTION_OUTCOME,
+        /**
+         * Коррекция возврата прихода
+         */
+        CORRECTION_RETURN_INCOME,
+        /**
+         * Коррекция возврата расхода
+         */
+        CORRECTION_RETURN_OUTCOME
     }
 
     /**

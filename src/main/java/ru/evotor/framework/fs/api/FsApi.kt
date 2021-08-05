@@ -5,9 +5,9 @@ import android.database.Cursor
 import android.net.Uri
 import ru.evotor.framework.fs.FsFiscalizationDocument
 import ru.evotor.framework.kkt.provider.KktContract
-import ru.evotor.framework.safeGetInt
-import ru.evotor.framework.safeGetLong
-import ru.evotor.framework.safeGetString
+import ru.evotor.framework.optInt
+import ru.evotor.framework.optLong
+import ru.evotor.framework.optString
 import java.util.*
 
 /**
@@ -48,16 +48,16 @@ object FsApi {
             return null
         }
 
-        val date: Date? = cursor.safeGetLong(KktContract.COLUMN_FS_REGISTRATION_INFO_DATE)?.let { Date(it) }
-        val inn: String? = cursor.safeGetString(KktContract.COLUMN_FS_REGISTRATION_INFO_INN)
-        val rnm: String? = cursor.safeGetString(KktContract.COLUMN_FS_REGISTRATION_INFO_RNM)
-        val taxationSystems: Byte? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_TAXATION_SYSTEMS)?.toByte()
-        val workModeFlags: Byte? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_FLAGS)?.toByte()
-        val workModeExFlags: Byte? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_EX_FLAGS)?.toByte()
-        val ofdInn: String? = cursor.safeGetString(KktContract.COLUMN_FS_REGISTRATION_INFO_OFD_INN)
-        val reregistrationReasonCode: Int? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_REREGISTRATION_REASON_CODE)
-        val fiscalDocumentNumber: Int? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER)
-        val fiscalDocumentSign: Int? = cursor.safeGetInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN)
+        val date: Date? = cursor.optLong(KktContract.COLUMN_FS_REGISTRATION_INFO_DATE)?.let { Date(it) }
+        val inn: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_INN)
+        val rnm: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_RNM)
+        val taxationSystems: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_TAXATION_SYSTEMS)?.toByte()
+        val workModeFlags: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_FLAGS)?.toByte()
+        val workModeExFlags: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_EX_FLAGS)?.toByte()
+        val ofdInn: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_OFD_INN)
+        val reregistrationReasonCode: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_REREGISTRATION_REASON_CODE)
+        val fiscalDocumentNumber: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER)
+        val fiscalDocumentSign: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN)
 
         date ?: return null
         inn ?: return null
@@ -120,7 +120,7 @@ object FsApi {
 
         cursor?.use {
             it.moveToFirst()
-            fsSerialNumber = it.safeGetString(KktContract.COLUMN_FS_SERIAL_NUMBER)
+            fsSerialNumber = it.optString(KktContract.COLUMN_FS_SERIAL_NUMBER)
         }
     }
 

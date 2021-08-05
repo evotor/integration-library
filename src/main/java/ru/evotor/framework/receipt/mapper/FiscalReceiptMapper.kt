@@ -4,11 +4,11 @@ import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.mapper.FiscalDocumentMapper
-import ru.evotor.framework.safeGetEnum
+import ru.evotor.framework.optBoolean
+import ru.evotor.framework.optEnum
 import ru.evotor.framework.receipt.FiscalReceipt
 import ru.evotor.framework.receipt.SettlementType
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.safeGetBoolean
 
 internal object FiscalReceiptMapper {
     private const val KEY_SETTLEMENT_TYPE = "SETTLEMENT_TYPE"
@@ -18,7 +18,7 @@ internal object FiscalReceiptMapper {
         FiscalReceipt(
                 documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
-                settlementType = it.safeGetEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
+                settlementType = it.optEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
                         ?: return null,
                 kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
                         ?: return null,
@@ -35,7 +35,7 @@ internal object FiscalReceiptMapper {
                     ?: throwOutdatedLibraryException(),
             creationDate = FiscalDocumentMapper.readCreationDate(cursor)
                     ?: throwOutdatedLibraryException(),
-            settlementType = cursor.safeGetEnum(
+            settlementType = cursor.optEnum(
                     FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
             ) ?: throwOutdatedLibraryException(),
             kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor)
@@ -46,7 +46,7 @@ internal object FiscalReceiptMapper {
                     ?: throwOutdatedLibraryException(),
             fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
                     ?: throwOutdatedLibraryException(),
-            wasPrinted = cursor.safeGetBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
+            wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
     )
 
     private fun throwOutdatedLibraryException(): Nothing =

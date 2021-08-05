@@ -3,18 +3,18 @@ package ru.evotor.framework.receipt.position.mapper
 import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.Utils
-import ru.evotor.framework.core.action.datamapper.BundleUtils
+import ru.evotor.framework.optBigDecimal
+import ru.evotor.framework.optInt
 import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.PreferentialMedicine
-import ru.evotor.framework.safeGetInt
 
 internal object PreferentialMedicineMapper {
 
     private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PreferentialMedicineType"
     private const val KEY_PREFERENTIAL_MEDICINE_VALUE = "PreferentialMedicineValue"
 
-    internal fun readFromCursor(cursor: Cursor): PreferentialMedicine? = cursor.safeGetInt(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
+    internal fun readFromCursor(cursor: Cursor): PreferentialMedicine? = cursor.optInt(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
         PreferentialMedicine(
                 type = PreferentialMedicine.PreferentialMedicineType.values()[it],
                 preferentialValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE_AMOUNT)?.toBigDecimalOrNull()
@@ -29,7 +29,7 @@ internal object PreferentialMedicineMapper {
         PreferentialMedicine(
                 type = Utils.safeValueOf(PreferentialMedicine.PreferentialMedicineType::class.java,
                         type, PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                preferentialValue = BundleUtils.getBigDecimal(it, KEY_PREFERENTIAL_MEDICINE_VALUE)
+                preferentialValue = it.optBigDecimal(KEY_PREFERENTIAL_MEDICINE_VALUE)
         )
     }
 

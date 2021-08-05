@@ -5,6 +5,7 @@ import android.os.Bundle;
 import java.math.BigDecimal;
 
 import androidx.annotation.Nullable;
+import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.component.PaymentPerformer;
 import ru.evotor.framework.payment.PaymentPurpose;
 
@@ -31,7 +32,7 @@ public final class PaymentPurposeMapper {
                 identifier,
                 paymentPerformer != null ? paymentPerformer.getPaymentSystem() != null ? paymentPerformer.getPaymentSystem().getPaymentSystemId() : paymentSystemId : paymentSystemId,
                 paymentPerformer,
-                total,
+                total != null ? total : BigDecimal.ZERO,
                 account,
                 userMessage
         );
