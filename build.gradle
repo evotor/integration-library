@@ -128,6 +128,24 @@ publishing {
                         dependencyNode.appendNode('version', dependency.version)
                     }
                 }
+
+                configurations.api.allDependencies.each { dependency ->
+                    if (dependency.group) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dependency.group)
+                        dependencyNode.appendNode('artifactId', dependency.name)
+                        dependencyNode.appendNode('version', dependency.version)
+                    }
+                }
+
+                configurations.implementation.allDependencies.each { dependency ->
+                    if (dependency.group) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dependency.group)
+                        dependencyNode.appendNode('artifactId', dependency.name)
+                        dependencyNode.appendNode('version', dependency.version)
+                    }
+                }
             }
         }
     }
