@@ -46,7 +46,7 @@ object KktApi {
     fun getRegisteredFfdVersion(context: Context): FfdVersion? =
             getValue(context, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
                 cursor.optInt(name)?.let { version ->
-                    if (version !in 0..FfdVersion.values().size) {
+                    if (version !in 0 until FfdVersion.values().size) {
                         throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
                     }
                     FfdVersion.values()[version]
