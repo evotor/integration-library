@@ -407,7 +407,7 @@ object KktApi {
                 null
         )?.use {
             it.moveToFirst()
-            parser(it, valueName) ?: throw IntegrationLibraryMappingException(valueName)
+            parser(it, valueName) // ?: throw IntegrationLibraryMappingException(valueName)
         }
     }
 
