@@ -50,12 +50,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         return call(action,
                 componentName,
                 data == null ? null : data.toBundle(),
-                new ICanStartActivity() {
-                    @Override
-                    public void startActivity(Intent intent) {
-                        activity.startActivity(intent);
-                    }
-                },
+                new ActivityStarter(activity),
                 callback,
                 handler
         );
@@ -125,12 +120,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 ComponentName componentName,
                 Bundle data) {
             this(
-                    activity == null ? null : new ICanStartActivity() {
-                        @Override
-                        public void startActivity(Intent intent) {
-                            activity.startActivity(intent);
-                        }
-                    },
+                    activity == null ? null : new ActivityStarter(activity),
                     handler,
                     callback,
                     action,
@@ -307,12 +297,13 @@ public class IntegrationManagerImpl implements IntegrationManager {
             @Override
             public void onResult(Bundle bundle) {
                 Intent intent = bundle.getParcelable(KEY_INTENT);
+                Bundle options = bundle.getParcelable(KEY_OPTIONS);
                 if (intent != null) {
                     if (mActivityStarter != null) {
                         // since the user provided an Activity we will silently start intents
                         // that we see
                         try {
-                            mActivityStarter.startActivity(intent);
+                            mActivityStarter.startActivity(intent, options);
                         } catch (Throwable error) {
                             setException(error);
                         }

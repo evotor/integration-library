@@ -1,12 +1,12 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.calculator.MoneyCalculator
+import ru.evotor.framework.core.ActivityStarter
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
@@ -49,7 +49,7 @@ abstract class PrintReceiptCommand(
                 .call(action,
                         componentNameList[0],
                         this,
-                        { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
+                        ActivityStarter(context),
                         callback,
                         Handler(Looper.getMainLooper())
                 )
