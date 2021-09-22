@@ -1350,6 +1350,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toWater(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.WATER_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setWaterParams(mark);
+            return this;
+        }
+
 
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
@@ -1414,6 +1428,10 @@ public class Position implements Parcelable {
         }
 
         private void setDairyParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setWaterParams(Mark mark) {
             position.mark = mark;
         }
 
