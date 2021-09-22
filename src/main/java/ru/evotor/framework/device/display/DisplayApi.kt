@@ -14,7 +14,7 @@ object DisplayApi {
      * на дисплей кассира и дисплей покупателя.
      */
     fun getDisplaysInfo(context: Context): DisplaysInfo? {
-        val uri = Uri.parse("${DisplayContract.BASE_URI}${DisplayContract.DISPLAY_QUERY_PATH}")
+        val uri = Uri.parse("${DisplayContract.BASE_URI}/${DisplayContract.DISPLAY_QUERY_PATH}")
         val cursor = context.contentResolver.query(
             uri,
             arrayOf(

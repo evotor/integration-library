@@ -7,7 +7,7 @@ object DisplayContract {
     const val AUTHORITY = "ru.evotor.launcher"
     val BASE_URI: Uri = Uri.parse("content://$AUTHORITY")
 
-    const val DISPLAY_QUERY_PATH = ".display"
+    const val DISPLAY_QUERY_PATH = "display"
 
     const val COLUMN_DISPLAYS_COUNT = "DISPLAYS_COUNT"
     const val COLUMN_CUSTOMER_DISPLAY_ID = "CUSTOMER_DISPLAY_ID"
