@@ -1,53 +1,56 @@
 package ru.evotor.framework.device.display
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
-import android.net.Uri
+import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Bundle
 
 object DisplayApi {
 
     /**
-     * Возвращает информацию о количестве дисплеев
-     * и логическом делении дисплеев
-     * на дисплей кассира и дисплей покупателя.
+     * Возвращает id дисплея покупателя
+     * (или 0, если отсутствует подключенный дисплей покупателя)
      */
-    fun getDisplaysInfo(context: Context): DisplaysInfo? {
-        val uri = Uri.parse("${DisplayContract.BASE_URI}/${DisplayContract.DISPLAY_QUERY_PATH}")
-        val cursor = context.contentResolver.query(
-            uri,
-            arrayOf(
-                DisplayContract.COLUMN_DISPLAYS_COUNT,
-                DisplayContract.COLUMN_CASHIER_DISPLAY_ID,
-                DisplayContract.COLUMN_CUSTOMER_DISPLAY_ID
-            ),
-            null,
-            null,
-            null
-        )
+    @JvmStatic
+    fun getCustomerDisplayId(context: Context): Int {
+        return context.getSystemService(DisplayManager::class.java)
+            .displays.firstOrNull { it.displayId != 0 }?.displayId ?: 0
+    }
 
-        return cursor?.use {
-            if (it.moveToFirst()) {
-                DisplaysInfo(
-                    it.getInt(it.getColumnIndex(DisplayContract.COLUMN_DISPLAYS_COUNT)),
-                    it.getInt(it.getColumnIndex(DisplayContract.COLUMN_CASHIER_DISPLAY_ID)),
-                    it.getInt(it.getColumnIndex(DisplayContract.COLUMN_CUSTOMER_DISPLAY_ID)),
-                )
-            } else null
-        }
+    /**
+     * Получить id указанного дисплея
+     */
+    @JvmStatic
+    fun getLaunchDisplayId(context: Context, display: Displays): Int {
+        return if (display == Displays.CUSTOMER) {
+            getCustomerDisplayId(context)
+        } else 0
     }
 
     /**
      *  Выбор дисплея доступен только с 26 версии Android API,
      *  поэтому для меньшей версии Android API вернётся null.
      */
-    fun makeOptionsBundleForStartOnDisplay(displayId: Int): Bundle? {
+    @JvmStatic
+    fun makeOptionsFor(context: Context, display: Displays): Bundle? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ActivityOptions.makeBasic().setLaunchDisplayId(displayId).toBundle()
+            ActivityOptions.makeBasic().setLaunchDisplayId(
+                getLaunchDisplayId(context, display)
+            ).toBundle()
         } else {
             null
         }
+    }
+
+    /**
+     *  Вернет true, если activity запущена на экране покупателя
+     *  Если подключенный экран отсутствует, вернет false
+     */
+    @JvmStatic
+    fun isActivityOnCustomerScreen(activity: Activity): Boolean {
+        return activity.windowManager.defaultDisplay.displayId != 0
     }
 
 }
