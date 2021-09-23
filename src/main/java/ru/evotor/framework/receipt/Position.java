@@ -1289,6 +1289,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toWaterMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.WATER_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setWaterParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1375,6 +1389,10 @@ public class Position implements Parcelable {
         }
 
         private void setDairyParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setWaterParams(Mark mark) {
             position.mark = mark;
         }
 
