@@ -2,6 +2,7 @@ package ru.evotor.framework.inventory
 
 import android.database.Cursor
 import ru.evotor.framework.*
+import ru.evotor.framework.receipt.Measure
 import ru.evotor.framework.receipt.TaxNumber
 
 /**
@@ -29,8 +30,7 @@ internal object ProductMapper {
                         description = cursor.optString(ProductTable.ROW_DESCRIPTION),
                         price = cursor.getMoney(ProductTable.ROW_PRICE_OUT),
                         quantity = cursor.getQuantity(ProductTable.ROW_QUANTITY),
-                        measureName = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
-                        measurePrecision = cursor.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
+                        measure = readFromProductCursor(cursor),
                         alcoholByVolume = cursor.optVolume(ProductTable.ROW_ALCOHOL_BY_VOLUME),
                         alcoholProductKindCode = cursor.optLong(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE),
                         tareVolume = cursor.optVolume(ProductTable.ROW_TARE_VOLUME),
@@ -43,5 +43,15 @@ internal object ProductMapper {
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun readFromProductCursor(cursor: Cursor): Measure {
+        return cursor.let {
+            Measure(
+                    it.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
+                    it.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
+                    it.optInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_CODE)) ?: Measure.UNKNOWN_MEASURE_CODE
+            )
+        }
     }
 }

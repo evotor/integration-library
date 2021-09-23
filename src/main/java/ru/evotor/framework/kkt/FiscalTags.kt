@@ -187,4 +187,9 @@ object FiscalTags {
      */
     const val PARTIAL_REALIZATION = 1191
 
+    /**
+     * мера количества предмета расчета
+     */
+    const val MEASURE_CODE = 2108
+
 }
