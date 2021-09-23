@@ -23,7 +23,7 @@ internal fun Context.startIntegrationService(
             action,
             componentName,
             event,
-            ActivityStarter(this),
+            ActivityStarter(this, false),
             callback,
             Handler(Looper.getMainLooper())
         )
