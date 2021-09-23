@@ -50,7 +50,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         return call(action,
                 componentName,
                 data == null ? null : data.toBundle(),
-                new ActivityStarter(activity),
+                new ActivityStarter(activity, false),
                 callback,
                 handler
         );
@@ -120,7 +120,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 ComponentName componentName,
                 Bundle data) {
             this(
-                    activity == null ? null : new ActivityStarter(activity),
+                    activity == null ? null : new ActivityStarter(activity, false),
                     handler,
                     callback,
                     action,

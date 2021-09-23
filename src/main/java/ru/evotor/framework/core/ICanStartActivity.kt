@@ -12,12 +12,18 @@ interface ICanStartActivity {
     fun startActivity(intent: Intent, options: Bundle?)
 }
 
-class ActivityStarter(private val context: Context) : ICanStartActivity {
+class ActivityStarter(
+    private val context: Context,
+    private val isNewTask: Boolean = true
+) : ICanStartActivity {
     override fun startActivity(intent: Intent) {
         startActivity(intent, null)
     }
 
     override fun startActivity(intent: Intent, options: Bundle?) {
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        if (isNewTask) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent, options)
     }
 }
