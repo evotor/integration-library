@@ -42,7 +42,7 @@ public abstract class ActionProcessor {
          * @param intent содержит данные и название операции, которую необходимо запустить.
          * @throws RemoteException
          */
-        public final void startActivity(Intent intent) throws RemoteException {
+        public final void startActivity(Intent intent, Bundle options) throws RemoteException {
             if (!intent.hasExtra(IntegrationManager.KEY_INTENT_DATA)) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, new IntegrationResponse(response));
@@ -52,8 +52,18 @@ public abstract class ActionProcessor {
 
             final Bundle data = new Bundle();
             data.putParcelable(IntegrationManager.KEY_INTENT, intent);
+            data.putParcelable(IntegrationManager.KEY_OPTIONS, options);
 
             response.onResult(data);
+        }
+
+        /**
+         * Запускает операцию.
+         * @param intent содержит данные и название операции, которую необходимо запустить.
+         * @throws RemoteException
+         */
+        public final void startActivity(Intent intent) throws RemoteException {
+            startActivity(intent, null);
         }
 
         /**
