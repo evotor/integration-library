@@ -12,7 +12,7 @@ interface ICanStartActivity {
     fun startActivity(intent: Intent, options: Bundle?)
 }
 
-class ActivityStarter(
+open class ActivityStarter(
     private val context: Context,
     private val isNewTask: Boolean = true
 ) : ICanStartActivity {
