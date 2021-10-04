@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
+import ru.evotor.framework.core.ActivityStarter
 import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
@@ -58,13 +59,7 @@ class PrintCorrectionReturnOutcomeReceiptCommand(
                     NAME,
                     component,
                     this,
-                    ICanStartActivity {
-                        context.startActivity(
-                            it.apply {
-                                it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            }
-                        )
-                    },
+                    ActivityStarter(context),
                     callback,
                     Handler(Looper.getMainLooper())
                 )
