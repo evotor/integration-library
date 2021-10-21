@@ -4,6 +4,7 @@ import android.os.Bundle
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
+import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
 
 /**
@@ -33,6 +34,17 @@ abstract class CorrectionReturnIncomeIntegrationService : IntegrationServiceV2()
     @RequiresIntentAction(ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS)
     open fun handleEvent(event: DiscountScreenAdditionalItemsEvent): Nothing? = null
 
+    /**
+     * Возвращает смарт-терминалу данные адреса и места расчёта при разносной и развозной торговле.
+     *
+     * @param event Событие, с помощью которого, смарт-терминал сообщает приложениям о необходимости указать адрес и место расчёта при развозной или разносной торговле.
+     * @return [ReturnDeliveryRequisitesForReceiptRequestedEvent.Result]
+     *
+     * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
+     */
+    @RequiresIntentAction(BuyIntegrationService.ACTION_DELIVERY_REQUISITES)
+    open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
+
     companion object {
         /**
          * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек коррекции.
@@ -41,6 +53,14 @@ abstract class CorrectionReturnIncomeIntegrationService : IntegrationServiceV2()
          */
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.correction.return_income.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.correction.return_income.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
+
+        /**
+         * Запрос адреса и места расчёта для добавления в чек.
+         *
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.correction_return_income.DELIVERY_REQUISITES`.
+         */
+        const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.correction_return_income.DELIVERY_REQUISITES"
+
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.CorrectionReturnIncomeIntegrationService].
          *
