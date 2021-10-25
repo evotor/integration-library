@@ -28,6 +28,7 @@ object FeaturesContract {
     const val PATH_SLIP_AMOUNT = "slip_amount"
     const val PATH_DAIRY_MARK = "dairy_mark"
     const val PATH_FFD12 = "ffd12"
+    const val PATH_UPDATE_MANAGEMENT = "update_management"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }
