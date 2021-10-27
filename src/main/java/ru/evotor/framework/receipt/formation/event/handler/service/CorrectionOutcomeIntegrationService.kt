@@ -56,7 +56,7 @@ abstract class CorrectionOutcomeIntegrationService : IntegrationServiceV2() {
         /**
          * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек коррекции.
          *
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.PURCHASER_REQUISITES`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.correction.outcome.PURCHASER_REQUISITES`.
          */
         const val ACTION_PURCHASER_REQUISITES =
             "ru.evotor.event.correction.outcome.PURCHASER_REQUISITES"
