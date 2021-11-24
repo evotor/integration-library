@@ -25,6 +25,8 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     @JvmField
     val price = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_PRICE_OUT, {it.multiply(BigDecimal(100))})
     @JvmField
+    val costPrice = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_COST_PRICE, {it?.multiply(BigDecimal(100))})
+    @JvmField
     val quantity = addFieldFilter<BigDecimal, BigDecimal>(ProductTable.ROW_QUANTITY, {it.multiply(BigDecimal(1000))})
     @JvmField
     val description = addFieldFilter<String?>(ProductTable.ROW_DESCRIPTION)
@@ -58,6 +60,8 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
         val type = addFieldSorter(ProductTable.ROW_TYPE)
         @JvmField
         val price = addFieldSorter(ProductTable.ROW_PRICE_OUT)
+        @JvmField
+        val costPrice = addFieldSorter(ProductTable.ROW_COST_PRICE)
         @JvmField
         val quantity = addFieldSorter(ProductTable.ROW_QUANTITY)
         @JvmField
