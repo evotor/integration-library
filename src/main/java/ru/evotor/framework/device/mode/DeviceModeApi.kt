@@ -14,8 +14,12 @@ object DeviceModeApi {
                 DeviceModeContract.QUERY_URI,
                 arrayOf(DeviceModeContract.COLUMN_MODE),
                 null, null, null
-            )?.use {
-                it.getString(it.getColumnIndex(DeviceModeContract.COLUMN_MODE))
+            )?.use { c ->
+                if (c.moveToNext()) {
+                    c.getString(c.getColumnIndex(DeviceModeContract.COLUMN_MODE))
+                } else {
+                    null
+                }
             }
         } catch (t: Throwable) {
             null
