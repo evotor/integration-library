@@ -1,4 +1,4 @@
-package ru.evotor.framework.device.mode
+package ru.evotor.framework.system.mode
 
 import android.net.Uri
 

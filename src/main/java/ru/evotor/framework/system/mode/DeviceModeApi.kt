@@ -1,8 +1,18 @@
-package ru.evotor.framework.device.mode
+package ru.evotor.framework.system.mode
 
 import android.content.Context
 
 object DeviceModeApi {
+
+    /**
+     * Режим работы терминала - смарт-терминал
+     */
+    const val MODE_ST = "ST"
+
+    /**
+     * * Режим работы терминала - фискальный регистратор
+     */
+    const val MODE_FR = "FR"
 
     /**
      * Возвращает текущий режим работы терминала, если применимо, иначе - null
