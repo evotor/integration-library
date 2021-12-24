@@ -1,12 +1,11 @@
 package ru.evotor.framework.core.action.command.print_z_report_command
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
-import ru.evotor.framework.core.ICanStartActivity
+import ru.evotor.framework.core.ActivityStarter
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 
@@ -15,22 +14,26 @@ import ru.evotor.framework.core.IntegrationManagerImpl
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 class PrintZReportCommand(
-        val userUuid: String? = null
+    val userUuid: String? = null
 ) : IBundlable {
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
-        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
+        val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(
+            NAME,
+            context.applicationContext
+        )
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
         IntegrationManagerImpl(context.applicationContext)
-                .call(NAME,
-                        componentNameList[0],
-                        this,
-                        ICanStartActivity { context.startActivity(it.apply { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }) },
-                        callback,
-                        Handler(Looper.getMainLooper())
-                )
+            .call(
+                NAME,
+                componentNameList[0],
+                this,
+                ActivityStarter(context),
+                callback,
+                Handler(Looper.getMainLooper())
+            )
     }
 
     override fun toBundle(): Bundle {
@@ -55,7 +58,7 @@ class PrintZReportCommand(
                 return null
             }
             return PrintZReportCommand(
-                    userUuid = getUserUuid(bundle)
+                userUuid = getUserUuid(bundle)
             )
         }
 

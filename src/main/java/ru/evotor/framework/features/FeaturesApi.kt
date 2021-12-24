@@ -144,12 +144,32 @@ object FeaturesApi {
     fun isTobaccoProductsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOBACCO_PRODUCTS_MARK)
 
     /**
+     * Проверяет, активна ли функция "Маркировка молочной продукции" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isDairyMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DAIRY_MARK)
+
+    /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isSlipAmountActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SLIP_AMOUNT)
 
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Переход на ФФД 1.2".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFfd12Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FFD12)
+
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Управление обновлениями".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isUpdateManagementActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_UPDATE_MANAGEMENT)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(

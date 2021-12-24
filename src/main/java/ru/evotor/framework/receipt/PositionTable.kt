@@ -3,7 +3,10 @@ package ru.evotor.framework.receipt
 import android.net.Uri
 
 object PositionTable {
-    @JvmField val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "position")
+
+    @JvmField
+    val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "position")
+
     const val COLUMN_POSITION_UUID = "POSITION_UUID"
     const val COLUMN_PARENT_POSITION_UUID = "PARENT_POSITION_UUID"
     const val COLUMN_PRODUCT_UUID = "PRODUCT_UUID"
@@ -12,6 +15,7 @@ object PositionTable {
     const val COLUMN_NAME = "NAME"
     const val COLUMN_MEASURE_NAME = "MEASURE_NAME"
     const val COLUMN_MEASURE_PRECISION = "MEASURE_PRECISION"
+    const val COLUMN_MEASURE_CODE = "MEASURE_CODE"
     const val COLUMN_TAX_NUMBER = "TAX_NUMBER"
     const val COLUMN_PRICE = "PRICE"
     const val COLUMN_PRICE_WITH_DISCOUNT_POSITION = "PRICE_WITH_DISCOUNT_POSITION"
@@ -31,6 +35,7 @@ object PositionTable {
     const val COLUMN_EXCISE = "EXCISE"
     const val COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE = "IMPORTATION_DATA_COUNTRY_ORIGIN_CODE"
     const val COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER = "IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER"
+    const val COLUMN_PARTIAL_QUANTITY_IN_PACKAGE = "PARTIAL_REALIZATION_QUANTITY_IN_PACKAGE"
 
     object ExtraKeyJSONKeys {
         const val KEY_IDENTITY = "identity"

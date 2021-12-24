@@ -8,23 +8,23 @@ import android.os.Looper
 import ru.evotor.IBundlable
 
 internal fun Context.startIntegrationService(
-        action: String,
-        event: IBundlable,
-        callback: IntegrationManagerCallback
+    action: String,
+    event: IBundlable,
+    callback: IntegrationManagerCallback
 ) = this.packageManager
-        .queryIntentServices(Intent(action), 0)
-        ?.takeIf { it.isNotEmpty() }
-        ?.first()
-        ?.let {
-            ComponentName(it.serviceInfo.packageName, it.serviceInfo.name)
-        }
-        ?.let { componentName ->
-            IntegrationManagerImpl(this).call(
-                    action,
-                    componentName,
-                    event,
-                    ICanStartActivity { this.startActivity(it) },
-                    callback,
-                    Handler(Looper.getMainLooper())
-            )
-        }
+    .queryIntentServices(Intent(action), 0)
+    .takeIf { it.isNotEmpty() }
+    ?.first()
+    ?.let {
+        ComponentName(it.serviceInfo.packageName, it.serviceInfo.name)
+    }
+    ?.let { componentName ->
+        IntegrationManagerImpl(this).call(
+            action,
+            componentName,
+            event,
+            ActivityStarter(this, false),
+            callback,
+            Handler(Looper.getMainLooper())
+        )
+    }

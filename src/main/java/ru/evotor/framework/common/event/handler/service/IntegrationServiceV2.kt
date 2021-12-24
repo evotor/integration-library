@@ -17,7 +17,7 @@ private fun IIntegrationManagerResponse.onEmptyResult() =
 private fun IIntegrationManagerResponse.onResultWithData(data: Bundle) =
         onResult(Bundle().apply { putBundle(IntegrationManager.KEY_DATA, data) })
 
-private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, intent: Intent) =
+private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, intent: Intent, options: Bundle? = null) =
         onResult(Bundle().apply {
             putParcelable(IntegrationManager.KEY_INTENT, intent.apply {
                 putExtra(IntegrationManager.KEY_INTENT_DATA, Bundle().apply {
@@ -25,6 +25,7 @@ private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, 
                     putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData)
                 })
             })
+            putParcelable(IntegrationManager.KEY_OPTIONS, options)
         })
 
 /**

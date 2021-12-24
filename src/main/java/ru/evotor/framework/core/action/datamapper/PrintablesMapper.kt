@@ -8,7 +8,7 @@ import ru.evotor.devices.commons.printer.printable.IPrintable
 import ru.evotor.devices.commons.printer.printable.PrintableBarcode
 import ru.evotor.devices.commons.printer.printable.PrintableImage
 import ru.evotor.devices.commons.printer.printable.PrintableText
-import ru.evotor.framework.safeValueOf
+import ru.evotor.framework.Utils
 import java.io.ByteArrayOutputStream
 
 
@@ -60,8 +60,7 @@ object PrintablesMapper {
 
         return arrayListOf<IPrintable>().let { list ->
             val bundleParcelables: Array<Parcelable>? = bundle.getParcelableArray(KEY_PRINTABLE_ARRAY)
-            bundleParcelables?.forEach {
-                bundle ->
+            bundleParcelables?.forEach { bundle ->
                 if (bundle is Bundle) {
                     singleFromBundle(bundle)?.let { list.add(it) }
                 }
@@ -72,13 +71,13 @@ object PrintablesMapper {
 
 
     private fun singleFromBundle(bundle: Bundle): IPrintable? =
-            when (safeValueOf<PrintableType>(bundle.getString(KEY_PRINTABLE_TYPE), null)) {
+            when (Utils.safeValueOf(PrintableType::class.java, bundle.getString(KEY_PRINTABLE_TYPE), null)) {
                 PrintableType.TEXT -> PrintableText(
                         bundle.getString(KEY_PRINTABL_TEXT)
                 )
                 PrintableType.BARCODE -> PrintableBarcode(
                         bundle.getString(KEY_PRINTABL_TEXT),
-                        safeValueOf<PrintableBarcode.BarcodeType>(bundle.getString(KEY_PRINTABL_BARCODE_TYPE), PrintableBarcode.BarcodeType.CODE39)
+                        Utils.safeValueOf(PrintableBarcode.BarcodeType::class.java, bundle.getString(KEY_PRINTABL_BARCODE_TYPE), PrintableBarcode.BarcodeType.CODE39)
                 )
                 PrintableType.IMAGE ->
                     bundle.getByteArray(KEY_PRINTABL_IMAGE).let {

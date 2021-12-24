@@ -1,7 +1,7 @@
 package ru.evotor.framework.core.action.event.receipt.payment.system.event
 
 import android.os.Bundle
-import ru.evotor.framework.core.action.datamapper.getMoney
+import ru.evotor.framework.getMoney
 import java.math.BigDecimal
 
 /**
