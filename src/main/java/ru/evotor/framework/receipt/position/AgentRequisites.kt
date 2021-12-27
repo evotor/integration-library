@@ -51,6 +51,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Агент".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForAgent(
@@ -58,7 +59,10 @@ data class AgentRequisites(
                 principalInn: String,
 
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>
+                principalPhones: List<String>,
+
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String
         ) = AgentRequisitesMapper.create(
                 Agent.Type.AGENT,
                 null,
@@ -66,6 +70,7 @@ data class AgentRequisites(
                 null,
                 principalInn,
                 principalPhones,
+                principalName,
                 null,
                 null,
                 null,
@@ -77,6 +82,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Комиссионер".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForCommissioner(
@@ -84,7 +90,10 @@ data class AgentRequisites(
                 principalInn: String,
 
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>
+                principalPhones: List<String>,
+
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String
         ) = AgentRequisitesMapper.create(
                 Agent.Type.COMMISSIONER,
                 null,
@@ -92,6 +101,7 @@ data class AgentRequisites(
                 null,
                 principalInn,
                 principalPhones,
+                principalName,
                 null,
                 null,
                 null,
@@ -103,6 +113,7 @@ data class AgentRequisites(
          * Создает агентские реквизиты для агента типа "Поверенный".
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          */
         @JvmStatic
         fun createForAttorneyInFact(
@@ -110,7 +121,10 @@ data class AgentRequisites(
                 principalInn: String,
 
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>
+                principalPhones: List<String>,
+
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String
         ) = AgentRequisitesMapper.create(
                 Agent.Type.ATTORNEY_IN_FACT,
                 null,
@@ -118,6 +132,7 @@ data class AgentRequisites(
                 null,
                 principalInn,
                 principalPhones,
+                principalName,
                 null,
                 null,
                 null,
@@ -130,6 +145,7 @@ data class AgentRequisites(
          * @param agentPhones телефоны платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param operationDescription описание операции платежного агента
          */
         @JvmStatic
@@ -144,6 +160,9 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
                 principalPhones: List<String>,
 
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
+
                 @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
                 operationDescription: String
         ) = AgentRequisitesMapper.create(
@@ -153,6 +172,7 @@ data class AgentRequisites(
                 null,
                 principalInn,
                 principalPhones,
+                principalName,
                 null,
                 null,
                 null,
@@ -166,6 +186,7 @@ data class AgentRequisites(
          * @param subagentPhones телефоны платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param operationDescription описание операции платежного субагента
          */
         @JvmStatic
@@ -182,6 +203,9 @@ data class AgentRequisites(
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
                 principalPhones: List<String>,
 
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
+
                 @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
                 operationDescription: String
         ) = AgentRequisitesMapper.create(
@@ -191,6 +215,7 @@ data class AgentRequisites(
                 subagentPhones,
                 principalInn,
                 principalPhones,
+                principalName,
                 null,
                 null,
                 null,
@@ -203,6 +228,7 @@ data class AgentRequisites(
          * @param agentPhones телефоны банковского платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
@@ -219,6 +245,9 @@ data class AgentRequisites(
 
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
                 principalPhones: List<String>,
+
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
 
                 @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
                 transactionOperatorName: String,
@@ -241,6 +270,7 @@ data class AgentRequisites(
                 null,
                 principalInn,
                 principalPhones,
+                principalName,
                 transactionOperatorName,
                 transactionOperatorInn,
                 transactionOperatorPhones,
@@ -254,6 +284,7 @@ data class AgentRequisites(
          * @param subagentPhones телефоны банковского платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
+         * @param principalName название принципала (поставщика)
          * @param transactionOperatorName наименование оператора перевода
          * @param transactionOperatorInn ИНН оператора перевода
          * @param transactionOperatorPhones телефоны оператора перевода
@@ -273,6 +304,9 @@ data class AgentRequisites(
 
                 @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
                 principalPhones: List<String>,
+
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
 
                 @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
                 transactionOperatorName: String,
@@ -295,6 +329,7 @@ data class AgentRequisites(
                 subagentPhones,
                 principalInn,
                 principalPhones,
+                principalName,
                 transactionOperatorName,
                 transactionOperatorInn,
                 transactionOperatorPhones,
