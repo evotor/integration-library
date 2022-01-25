@@ -15,7 +15,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode version
-        versionName "0.4.9_ffd12"
+        versionName "0.4.9_ffd12_new_product_type_bike"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
