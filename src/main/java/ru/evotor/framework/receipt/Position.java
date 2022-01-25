@@ -3,6 +3,9 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +17,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
@@ -1289,6 +1290,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toWaterMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.WATER_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setWaterParams(mark);
+            return this;
+        }
+      
         public Builder toBikeMarked(
                 @NonNull Mark mark
         ) {
@@ -1324,7 +1339,6 @@ public class Position implements Parcelable {
             );
             return this;
         }
-
 
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
@@ -1389,6 +1403,10 @@ public class Position implements Parcelable {
         }
 
         private void setDairyParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setWaterParams(Mark mark) {
             position.mark = mark;
         }
 

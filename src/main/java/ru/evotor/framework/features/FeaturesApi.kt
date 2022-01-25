@@ -151,6 +151,13 @@ object FeaturesApi {
     fun isDairyMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DAIRY_MARK)
 
     /**
+     * Проверяет, активна ли функция "Маркировка воды" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isWaterMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_WATER_MARK)
+
+    /**
      * Проверяет, активна ли функция "Маркировка велотоваров" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
