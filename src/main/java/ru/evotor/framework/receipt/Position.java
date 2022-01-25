@@ -1303,6 +1303,20 @@ public class Position implements Parcelable {
             setWaterParams(mark);
             return this;
         }
+      
+        public Builder toBikeMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.BIKE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setBikeParams(mark);
+            return this;
+        }
 
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
@@ -1393,6 +1407,10 @@ public class Position implements Parcelable {
         }
 
         private void setWaterParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setBikeParams(Mark mark) {
             position.mark = mark;
         }
 
