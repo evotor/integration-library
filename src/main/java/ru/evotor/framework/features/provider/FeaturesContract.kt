@@ -31,6 +31,8 @@ object FeaturesContract {
     const val PATH_FFD12 = "ffd12"
     const val PATH_UPDATE_MANAGEMENT = "update_management"
     const val PATH_BIKE_MARK = "bike_mark"
+    const val PATH_FISC_BLOCK = "fisc_block"
+    const val PATH_FISC_PAID = "fisc_paid"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }
