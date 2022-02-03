@@ -37,6 +37,24 @@ abstract class PaymentSystemEvent(
 
         const val META_NAME_PAYMENT_TYPE = "ru.evotor.paymentSystem.PAYMENT_TYPE"
 
+        const val META_NAME_UI_PREFIX = "ru.evotor.paymentSystem.ui"
+
+        /**
+         * Возможность скрыть кнопку оплаты продажи с экрана оплаты:
+         * <meta-data
+         *      android:name="ru.evotor.paymentSystem.ui.SELL"
+         *      android:value="false" />
+         */
+        const val META_NAME_UI_SELL = "$META_NAME_UI_PREFIX.SELL"
+
+        /**
+         * Возможность скрыть кнопку оплаты возврата продажи с экрана оплаты:
+         * <meta-data
+         *      android:name="ru.evotor.paymentSystem.ui.PAYBACK"
+         *      android:value="false" />
+         */
+        const val META_NAME_UI_PAYBACK = "$META_NAME_UI_PREFIX.PAYBACK"
+
         private val KEY_OPERATION_TYPE = "operationType"
 
         fun create(bundle: Bundle?): PaymentSystemEvent? {
