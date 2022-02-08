@@ -185,6 +185,20 @@ object FeaturesApi {
      */
     fun isUpdateManagementActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_UPDATE_MANAGEMENT)
 
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Блокировка кассового ПО".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFiscBlockActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_BLOCK)
+
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Полный кассовый функционал".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFiscPaidActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_PAID)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
