@@ -538,6 +538,7 @@ object ReceiptApi {
         return Receipt.Header(
             uuid = cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_UUID)),
             baseReceiptUuid = cursor.optString(ReceiptHeaderTable.COLUMN_BASE_RECEIPT_UUID),
+            userUuid = cursor.optString(ReceiptHeaderTable.COLUMN_USER_UUID),
             number = cursor.optString(ReceiptHeaderTable.COLUMN_NUMBER),
             type = Utils.safeValueOf(Receipt.Type::class.java, cursor.getString(cursor.getColumnIndex(ReceiptHeaderTable.COLUMN_TYPE)), null)
                 ?: return null,
