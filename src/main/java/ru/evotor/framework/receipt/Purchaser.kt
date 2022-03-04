@@ -20,10 +20,10 @@ import ru.evotor.framework.core.IntegrationLibraryParsingException
  */
 data class Purchaser(
     val name: String,
-    val innNumber: String,
-    val birthDate: String,
-    val documentTypeCode: Int,
-    val documentNumber: String,
+    val innNumber: String?,
+    val birthDate: String?,
+    val documentTypeCode: Int?,
+    val documentNumber: String?,
     val type: PurchaserType?
 ) : Parcelable, IBundlable {
 
@@ -32,7 +32,7 @@ data class Purchaser(
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
             putString(KEY_BIRTH_DATE, birthDate)
-            putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode)
+            putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
         }
@@ -55,7 +55,7 @@ data class Purchaser(
         parcel.writeString(name)
         parcel.writeString(innNumber)
         parcel.writeString(birthDate)
-        parcel.writeInt(documentTypeCode)
+        parcel.writeInt(documentTypeCode ?: -1)
         parcel.writeString(documentNumber)
         parcel.writeInt(if (type == null) 0 else 1)
         type?.let { parcel.writeInt(it.ordinal) }
