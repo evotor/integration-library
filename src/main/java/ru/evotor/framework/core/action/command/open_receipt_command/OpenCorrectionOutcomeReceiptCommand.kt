@@ -11,7 +11,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.ChangesMapper
 import ru.evotor.framework.core.action.datamapper.ChangesMapper.toBundle
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.correction.CorrectionType

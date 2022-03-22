@@ -11,8 +11,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.ChangesMapper
 import ru.evotor.framework.core.action.datamapper.ChangesMapper.toBundle
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra.Companion.from
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.correction.CorrectionType
@@ -50,7 +49,7 @@ class OpenCorrectionIncomeReceiptCommand(
             return bundle?.let {
                 OpenCorrectionIncomeReceiptCommand(
                         changes = Utils.filterByClass(ChangesMapper.create(it.getParcelableArray(KEY_CHANGES)), PositionAdd::class.java),
-                        extra = from(it.getBundle(KEY_RECEIPT_EXTRA)),
+                        extra = SetExtra.from(it.getBundle(KEY_RECEIPT_EXTRA)),
                         correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
                         correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
                         prescription = it.getString(KEY_PRESCRIPTION)

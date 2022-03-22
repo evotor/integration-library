@@ -6,7 +6,12 @@ import android.util.Log
 import ru.evotor.framework.Utils
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.core.action.event.receipt.changes.UnknownChange
-import ru.evotor.framework.core.action.event.receipt.changes.position.*
+import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
+import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEdit
+import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
+import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
 
 object ChangesMapper {
@@ -22,34 +27,34 @@ object ChangesMapper {
         changesParcelable ?: return changes
 
         return changesParcelable
-                .map { it as Bundle }
-                .map {
-                    val typeString = it.getString(KEY_CHANGE_TYPE, null)
+            .map { it as Bundle }
+            .map {
+                val typeString = it.getString(KEY_CHANGE_TYPE, null)
 
-                    val changeBundle = it.getBundle(KEY_CHANGE)
-                    if (typeString == null) {
-                        Log.e(TAG, "type can not be null")
-                        return@map null
-                    }
-
-                    if (changeBundle == null) {
-                        Log.e(TAG, "changeBundle can not be null")
-                        return@map null
-                    }
-
-                    ChangeInBundle(typeString, changeBundle)
+                val changeBundle = it.getBundle(KEY_CHANGE)
+                if (typeString == null) {
+                    Log.e(TAG, "type can not be null")
+                    return@map null
                 }
-                .filterNotNull()
-                .map {
-                    val change = fromBundle(it.typeName, it.bundle)
-                    if (change == null) {
-                        Log.e(TAG, "change can not be null")
-                        return@map null
-                    }
 
-                    return@map change
+                if (changeBundle == null) {
+                    Log.e(TAG, "changeBundle can not be null")
+                    return@map null
                 }
-                .filterNotNull()
+
+                ChangeInBundle(typeString, changeBundle)
+            }
+            .filterNotNull()
+            .map {
+                val change = fromBundle(it.typeName, it.bundle)
+                if (change == null) {
+                    Log.e(TAG, "change can not be null")
+                    return@map null
+                }
+
+                return@map change
+            }
+            .filterNotNull()
     }
 
     fun toBundle(change: IChange): Bundle {
@@ -73,6 +78,7 @@ object ChangesMapper {
             IChange.Type.SET_POSITION_PRINT_GROUP -> SetPrintGroup.from(bundle)
             IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP -> SetPrintGroup.from(bundle)
             IChange.Type.SET_PRINT_EXTRA -> SetPrintExtra.from(bundle)
+            IChange.Type.SET_PURCHASER_CONTACT_DATA -> SetPurchaserContactData.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
