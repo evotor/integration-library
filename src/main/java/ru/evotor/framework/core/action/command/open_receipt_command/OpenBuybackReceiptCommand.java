@@ -58,6 +58,19 @@ public class OpenBuybackReceiptCommand implements IBundlable {
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
 
+    /**
+     * Используйте конструктор с setPurchaserContactData
+     *
+     * @param changes
+     * @param extra
+     */
+    @Deprecated
+    public OpenBuybackReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extra
+    ) {
+        this(changes, extra, null);
+    }
 
     public OpenBuybackReceiptCommand(
             @Nullable List<PositionAdd> changes,

@@ -57,6 +57,20 @@ public class OpenBuyReceiptCommand implements IBundlable {
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
 
+    /**
+     * Используйте конструктор с setPurchaserContactData
+     *
+     * @param changes
+     * @param extra
+     */
+    @Deprecated
+    public OpenBuyReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extra
+    ) {
+        this(changes, extra, null);
+    }
+
     public OpenBuyReceiptCommand(
             @Nullable List<PositionAdd> changes,
             @Nullable SetExtra extra,
