@@ -1,6 +1,7 @@
 package ru.evotor.framework.core.action.event.receipt.changes.receipt
 
 import android.os.Bundle
+import androidx.annotation.RequiresPermission
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
 /**
@@ -46,19 +47,26 @@ class SetPurchaserContactData private constructor(
 
     companion object {
         @JvmStatic
+        @RequiresPermission(SET_PURCHASER_CONTACT_DATA_PERMISSION)
         fun createForEmail(email: String?): SetPurchaserContactData {
             return SetPurchaserContactData(email = email, phone = null)
         }
 
         @JvmStatic
+        @RequiresPermission(SET_PURCHASER_CONTACT_DATA_PERMISSION)
         fun createForPhone(phone: String?): SetPurchaserContactData {
             return SetPurchaserContactData(email = null, phone = phone)
         }
 
         @JvmStatic
+        @RequiresPermission(SET_PURCHASER_CONTACT_DATA_PERMISSION)
         fun createForClearContactData(): SetPurchaserContactData {
             return SetPurchaserContactData(email = null, phone = null)
         }
+
+        @Suppress("MemberVisibilityCanBePrivate")
+        const val SET_PURCHASER_CONTACT_DATA_PERMISSION =
+            "ru.evotor.permission.SET_PURCHASER_CONTACT_DATA"
 
         private const val KEY_EMAIL = "email"
         private const val KEY_PHONE = "phone"
