@@ -5,7 +5,8 @@ import androidx.annotation.RequiresPermission
 import ru.evotor.framework.core.action.event.receipt.changes.IChange
 
 /**
- * Добавляет в чек дополнительные поля в виде валидного JSON-объекта.
+ * Добавляет в чек контактные данные клиента, на которые будет отправлен электронный чек.
+ * Чек будет отправлен либо на email, либо на номер телефона
  */
 class SetPurchaserContactData private constructor(
     val email: String?,
