@@ -34,6 +34,7 @@ interface IChange : IBundlable {
          * Добавление дополнительных полей для печати в чеке.
          */
         SET_PRINT_EXTRA,
+        SET_PURCHASER_CONTACT_DATA,
         UNKNOWN
     }
 }

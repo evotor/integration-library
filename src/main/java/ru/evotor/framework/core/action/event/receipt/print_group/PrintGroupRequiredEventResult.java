@@ -11,8 +11,8 @@ import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
 
 /**
  * Результат обработки события {@link PrintGroupRequiredEvent}.

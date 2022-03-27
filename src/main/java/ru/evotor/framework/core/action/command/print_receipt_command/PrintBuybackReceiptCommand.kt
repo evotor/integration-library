@@ -3,7 +3,7 @@ package ru.evotor.framework.core.action.command.print_receipt_command
 import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.IntegrationManagerCallback
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.PrintGroup

@@ -1,4 +1,4 @@
-package ru.evotor.framework.core.action.event.receipt.changes.position
+package ru.evotor.framework.core.action.event.receipt.changes.receipt
 
 import android.os.Bundle
 import org.json.JSONObject
