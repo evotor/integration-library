@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.PaymentPurposeMapper;
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
 import ru.evotor.framework.payment.PaymentPurpose;
 
 /**
