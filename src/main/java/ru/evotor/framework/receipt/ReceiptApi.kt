@@ -351,7 +351,7 @@ object ReceiptApi {
         val purchaserDocumentTypeCode =
             cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
 
-        return if (purchaserName != null && purchaserDocumentNumber != null && purchaserInnNumber != null && purchaserBirthDate != null && purchaserDocumentTypeCode != null) {
+        return if (purchaserName != null && (purchaserInnNumber != null || (purchaserDocumentNumber != null && purchaserBirthDate != null && purchaserDocumentTypeCode != null))) {
             val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
                 PurchaserType.values()[it.toInt()]
             }
