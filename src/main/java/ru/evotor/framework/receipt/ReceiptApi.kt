@@ -344,13 +344,25 @@ object ReceiptApi {
 
     private fun createPurchaser(cursor: Cursor): Purchaser? {
         val purchaserName = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_NAME)
-        val purchaserDocumentNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+        val purchaserDocumentNumber =
+            cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_NUMBER)
+        val purchaserInnNumber = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_INN_NUMBER)
+        val purchaserBirthDate = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_BIRTH_DATE)
+        val purchaserDocumentTypeCode =
+            cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
 
-        return if (purchaserName != null && purchaserDocumentNumber != null) {
+        return if (purchaserName != null) {
             val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
                 PurchaserType.values()[it.toInt()]
             }
-            Purchaser(purchaserName, purchaserDocumentNumber, purchaserType)
+            Purchaser(
+                name = purchaserName,
+                innNumber = purchaserInnNumber,
+                birthDate = purchaserBirthDate,
+                documentTypeCode = purchaserDocumentTypeCode,
+                documentNumber = purchaserDocumentNumber,
+                type = purchaserType
+            )
         } else {
             null
         }
