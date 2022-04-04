@@ -19,36 +19,38 @@ import ru.evotor.framework.core.IntegrationLibraryParsingException
  * @property type Тип покупателя, например, физическое лицо. Не сохраняется в фискальном документе.
  */
 data class Purchaser(
-    val name: String,
-    val innNumber: String?,
-    val birthDate: String?,
-    val documentTypeCode: Int?,
-    val documentNumber: String?,
-    val type: PurchaserType?
+        val name: String,
+        val innNumber: String?,
+        val birthDate: String?,
+        val documentTypeCode: Int?,
+        val documentNumber: String?,
+        val type: PurchaserType?
 ) : Parcelable, IBundlable {
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_NAME, name)
-            putString(KEY_INN_NUMBER, innNumber)
-            putString(KEY_BIRTH_DATE, birthDate)
-            putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
-            putString(KEY_DOCUMENT_NUMBER, documentNumber)
+            putString(KEY_INN_NUMBER_V2, innNumber)
+            putString(KEY_BIRTH_DATE_V2, birthDate)
+            putInt(KEY_DOCUMENT_TYPE_CODE_V2, documentTypeCode ?: -1)
+            putString(KEY_DOCUMENT_NUMBER, documentNumber ?: innNumber)
+            putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
+            putInt(KEY_BUNDLE_VERSION, BUNDLE_VERSION)
         }
     }
 
     private constructor(parcel: Parcel) : this(
-        parcel.readString()
-            ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-        parcel.readString()
-            ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-        parcel.readString()
-            ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-        parcel.readInt(),
-        parcel.readString()
-            ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-        if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
+            parcel.readString()
+                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+            parcel.readString()
+                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+            parcel.readString()
+                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+            parcel.readInt(),
+            parcel.readString()
+                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+            if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -72,19 +74,25 @@ data class Purchaser(
         }
 
         private const val KEY_NAME = "KEY_NAME"
-        private const val KEY_INN_NUMBER = "KEY_INN_NUMBER"
-        private const val KEY_BIRTH_DATE = "KEY_BIRTH_DATE"
-        private const val KEY_DOCUMENT_TYPE_CODE = "KEY_DOCUMENT_TYPE_CODE"
+        private const val KEY_INN_NUMBER_V2 = "KEY_INN_NUMBER_V2"
+        private const val KEY_BIRTH_DATE_V2 = "KEY_BIRTH_DATE_V2"
+        private const val KEY_DOCUMENT_TYPE_CODE_V2 = "KEY_DOCUMENT_TYPE_CODE_V2"
         private const val KEY_DOCUMENT_NUMBER = "KEY_DOCUMENT_NUMBER"
+        private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
+        private const val KEY_BUNDLE_VERSION = "KEY_BUNDLE_VERSION"
+        private const val BUNDLE_VERSION = 2
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
+                val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
                 val innNumber = it.getString(KEY_NAME) ?: return null
                 val birthDate = it.getString(KEY_NAME) ?: return null
                 val documentTypeCode = it.getInt(KEY_NAME)
-                val documentNumber = it.getString(KEY_DOCUMENT_NUMBER) ?: return null
+                val documentNumber =
+                    if(bundleVersion == BUNDLE_VERSION) it.getString(KEY_DOCUMENT_NUMBER_V2) ?: return null
+                    else it.getString(KEY_DOCUMENT_NUMBER) ?: return null
                 Purchaser(name, innNumber, birthDate, documentTypeCode, documentNumber,
                     it.getInt(KEY_TYPE).let {
                         if (it == -1) {
