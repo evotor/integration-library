@@ -30,9 +30,9 @@ data class Purchaser(
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_NAME, name)
-            putString(KEY_INN_NUMBER_V2, innNumber)
-            putString(KEY_BIRTH_DATE_V2, birthDate)
-            putInt(KEY_DOCUMENT_TYPE_CODE_V2, documentTypeCode ?: -1)
+            putString(KEY_INN_NUMBER, innNumber)
+            putString(KEY_BIRTH_DATE, birthDate)
+            putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, documentNumber ?: innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
@@ -74,9 +74,9 @@ data class Purchaser(
         }
 
         private const val KEY_NAME = "KEY_NAME"
-        private const val KEY_INN_NUMBER_V2 = "KEY_INN_NUMBER_V2"
-        private const val KEY_BIRTH_DATE_V2 = "KEY_BIRTH_DATE_V2"
-        private const val KEY_DOCUMENT_TYPE_CODE_V2 = "KEY_DOCUMENT_TYPE_CODE_V2"
+        private const val KEY_INN_NUMBER = "KEY_INN_NUMBER"
+        private const val KEY_BIRTH_DATE = "KEY_BIRTH_DATE"
+        private const val KEY_DOCUMENT_TYPE_CODE = "KEY_DOCUMENT_TYPE_CODE"
         private const val KEY_DOCUMENT_NUMBER = "KEY_DOCUMENT_NUMBER"
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
@@ -87,9 +87,9 @@ data class Purchaser(
             return bundle?.let {
                 val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
-                val innNumber = it.getString(KEY_NAME) ?: return null
-                val birthDate = it.getString(KEY_NAME) ?: return null
-                val documentTypeCode = it.getInt(KEY_NAME)
+                val innNumber = it.getString(KEY_INN_NUMBER) ?: return null
+                val birthDate = it.getString(KEY_BIRTH_DATE) ?: return null
+                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
                 val documentNumber =
                     if(bundleVersion == BUNDLE_VERSION) it.getString(KEY_DOCUMENT_NUMBER_V2) ?: return null
                     else it.getString(KEY_DOCUMENT_NUMBER) ?: return null
