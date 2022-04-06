@@ -7,11 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.core.ActivityStarter
-import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.Receipt

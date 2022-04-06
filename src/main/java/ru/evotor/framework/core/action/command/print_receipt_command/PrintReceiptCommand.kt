@@ -10,7 +10,7 @@ import ru.evotor.framework.core.ActivityStarter
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.getMoney
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment

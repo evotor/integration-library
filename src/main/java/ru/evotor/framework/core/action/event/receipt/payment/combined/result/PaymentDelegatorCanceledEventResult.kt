@@ -1,7 +1,7 @@
 package ru.evotor.framework.core.action.event.receipt.payment.combined.result
 
 import android.os.Bundle
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 class PaymentDelegatorCanceledEventResult(
         val paymentUuid: String,

@@ -12,7 +12,8 @@ import ru.evotor.IBundlable;
 import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
 
 /**
  * Результат обработки события изменения чека.
@@ -21,6 +22,7 @@ public class BeforePositionsEditedEventResult implements IBundlable {
 
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
+    private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
 
     @Nullable
     public static BeforePositionsEditedEventResult create(@Nullable Bundle bundle) {
@@ -37,7 +39,8 @@ public class BeforePositionsEditedEventResult implements IBundlable {
         }
         return new BeforePositionsEditedEventResult(
                 positionChanges,
-                SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+                SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
         );
     }
 
@@ -48,16 +51,20 @@ public class BeforePositionsEditedEventResult implements IBundlable {
     private final List<IPositionChange> changes;
     @Nullable
     private final SetExtra extra;
+    @Nullable
+    private final SetPurchaserContactData setPurchaserContactData;
 
     public BeforePositionsEditedEventResult(
             @Nullable List<IPositionChange> changes,
-            @Nullable SetExtra extra
+            @Nullable SetExtra extra,
+            @Nullable SetPurchaserContactData setPurchaserContactData
     ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
         }
         this.extra = extra;
+        this.setPurchaserContactData = setPurchaserContactData;
     }
 
     @Override
@@ -71,6 +78,10 @@ public class BeforePositionsEditedEventResult implements IBundlable {
         }
         bundle.putParcelableArray(KEY_CHANGES, changesParcelable);
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra == null ? null : extra.toBundle());
+        bundle.putBundle(
+                KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
+                setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
+        );
         return bundle;
     }
 
@@ -82,5 +93,10 @@ public class BeforePositionsEditedEventResult implements IBundlable {
     @Nullable
     public SetExtra getExtra() {
         return extra;
+    }
+
+    @Nullable
+    public SetPurchaserContactData getSetPurchaserContactData() {
+        return setPurchaserContactData;
     }
 }
