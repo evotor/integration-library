@@ -73,6 +73,8 @@ data class Purchaser(
             override fun newArray(size: Int) = arrayOfNulls<Purchaser>(size)
         }
 
+        private const val BUNDLE_VERSION = 2
+
         private const val KEY_NAME = "KEY_NAME"
         private const val KEY_INN_NUMBER = "KEY_INN_NUMBER"
         private const val KEY_BIRTH_DATE = "KEY_BIRTH_DATE"
@@ -81,15 +83,14 @@ data class Purchaser(
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
         private const val KEY_BUNDLE_VERSION = "KEY_BUNDLE_VERSION"
-        private const val BUNDLE_VERSION = 2
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
                 val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
-                val innNumber = if(bundleVersion == BUNDLE_VERSION) it.getString(KEY_INN_NUMBER) ?: return null
-                else it.getString(KEY_DOCUMENT_NUMBER) ?: return null
-                val birthDate = it.getString(KEY_BIRTH_DATE) ?: return null
+                val innNumber = if(bundleVersion == BUNDLE_VERSION) it.getString(KEY_INN_NUMBER)
+                else it.getString(KEY_DOCUMENT_NUMBER)
+                val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
                 Purchaser(name, innNumber, birthDate, documentTypeCode, documentNumber,
