@@ -27,16 +27,18 @@ data class Purchaser(
         val type: PurchaserType?
 ) : Parcelable, IBundlable {
 
+    val version = 2
+
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
             putString(KEY_BIRTH_DATE, birthDate)
             putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
-            putString(KEY_DOCUMENT_NUMBER, documentNumber ?: innNumber)
+            putString(KEY_DOCUMENT_NUMBER, innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
-            putInt(KEY_BUNDLE_VERSION, BUNDLE_VERSION)
+            putInt(KEY_BUNDLE_VERSION, version)
         }
     }
 
@@ -81,18 +83,16 @@ data class Purchaser(
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
         private const val KEY_BUNDLE_VERSION = "KEY_BUNDLE_VERSION"
-        private const val BUNDLE_VERSION = 2
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
                 val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
-                val innNumber = it.getString(KEY_INN_NUMBER) ?: return null
-                val birthDate = it.getString(KEY_BIRTH_DATE) ?: return null
+                val innNumber = if(bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
+                else it.getString(KEY_DOCUMENT_NUMBER)
+                val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
-                val documentNumber =
-                    if(bundleVersion == BUNDLE_VERSION) it.getString(KEY_DOCUMENT_NUMBER_V2) ?: return null
-                    else it.getString(KEY_DOCUMENT_NUMBER) ?: return null
+                val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
                 Purchaser(name, innNumber, birthDate, documentTypeCode, documentNumber,
                     it.getInt(KEY_TYPE).let {
                         if (it == -1) {
@@ -131,7 +131,7 @@ enum class PurchaserType {
 /**
  * Значения реквизита "код вида документа, удостоверяющего личность". Данные сохраняются в теге 1245 фискального документа.
  */
-enum class DocumentType(documentCode: Int) {
+enum class DocumentType(val documentCode: Int) {
 
     /**
      * Паспорт гражданина РФ
