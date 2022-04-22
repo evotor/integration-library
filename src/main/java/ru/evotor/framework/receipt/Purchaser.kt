@@ -43,16 +43,13 @@ data class Purchaser(
     }
 
     private constructor(parcel: Parcel) : this(
-            parcel.readString()
-                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-            parcel.readString()
-                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-            parcel.readString()
-                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-            parcel.readInt(),
-            parcel.readString()
-                ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
-            if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
+        parcel.readString()
+            ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readString(),
+        if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
