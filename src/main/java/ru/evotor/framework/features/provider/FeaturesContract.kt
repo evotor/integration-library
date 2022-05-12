@@ -33,6 +33,7 @@ object FeaturesContract {
     const val PATH_BIKE_MARK = "bike_mark"
     const val PATH_FISC_BLOCK = "fisc_block"
     const val PATH_FISC_PAID = "fisc_paid"
+    const val PATH_JEWELRY_MARK = "jewelry_mark"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

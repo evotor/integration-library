@@ -1318,6 +1318,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toJewelryMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.JEWELRY_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setJewelryParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1411,6 +1425,10 @@ public class Position implements Parcelable {
         }
 
         private void setBikeParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setJewelryParams(Mark mark) {
             position.mark = mark;
         }
 
