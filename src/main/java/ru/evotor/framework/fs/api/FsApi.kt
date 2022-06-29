@@ -15,7 +15,6 @@ import java.util.*
  */
 object FsApi {
     private val fsUriPrefix = "${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_REGISTRATION_INFO}"
-    private var fsSerialNumber: String? = null
 
     /**
      * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсуствует
@@ -26,9 +25,7 @@ object FsApi {
      */
     @JvmStatic
     fun getFsSerialNumber(context: Context): String? {
-        if (fsSerialNumber == null) getKktFsInfo(context)
-
-        return fsSerialNumber
+        return getKktFsInfo(context)
     }
 
     @JvmStatic
@@ -106,7 +103,7 @@ object FsApi {
 
     }
 
-    private fun getKktFsInfo(context: Context) {
+    private fun getKktFsInfo(context: Context): String? {
         val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_KKT_FS_INFO}")
         val cursor = context.contentResolver.query(
             uri,
@@ -118,9 +115,9 @@ object FsApi {
             null
         )
 
-        cursor?.use {
+        return cursor?.use {
             it.moveToFirst()
-            fsSerialNumber = it.optString(KktContract.COLUMN_FS_SERIAL_NUMBER)
+            it.optString(KktContract.COLUMN_FS_SERIAL_NUMBER)
         }
     }
 
