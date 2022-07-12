@@ -418,10 +418,7 @@ object ReceiptApi {
                 priceWithDiscountPosition,
                 cursor.getQuantity(PositionTable.COLUMN_QUANTITY),
                 cursor.optString(PositionTable.COLUMN_BARCODE),
-                cursor.optString(PositionTable.COLUMN_MARK)?.let {
-                    val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                    Mark.RawMark(rawMark)
-                },
+                getMarkFromCursor(cursor),
                 cursor.optVolume(PositionTable.COLUMN_ALCOHOL_BY_VOLUME),
                 cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
                 cursor.optVolume(PositionTable.COLUMN_TARE_VOLUME),
@@ -546,6 +543,18 @@ object ReceiptApi {
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra
         )
+    }
+
+    private fun getMarkFromCursor(cursor: Cursor) : Mark? {
+        return cursor.optString(PositionTable.COLUMN_MARK)?.let { markValue ->
+            cursor.optString(PositionTable.COLUMN_MARK_TYPE)?.let { markType ->
+                when (markType) {
+                    Mark.RawMark::class.simpleName -> Mark.RawMark(markValue)
+                    Mark.MarkByFiscalTags::class.simpleName -> Mark.MarkByFiscalTags(markValue)
+                    else -> null
+                }
+            }
+        }
     }
 
     private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
