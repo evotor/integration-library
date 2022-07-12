@@ -553,7 +553,7 @@ object ReceiptApi {
                     Mark.MarkByFiscalTags::class.simpleName -> Mark.MarkByFiscalTags(markValue)
                     else -> null
                 }
-            }
+            } ?: Mark.RawMark(markValue)
         }
     }
 
