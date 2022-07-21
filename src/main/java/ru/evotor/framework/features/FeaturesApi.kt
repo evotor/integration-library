@@ -206,6 +206,13 @@ object FeaturesApi {
      */
     fun isFiscPaidActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_PAID)
 
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Прием платежей через СБП".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isSbpActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SBP_ACTIVATION)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
