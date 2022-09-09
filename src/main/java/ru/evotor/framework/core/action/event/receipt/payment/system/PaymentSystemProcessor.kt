@@ -15,7 +15,9 @@ abstract class PaymentSystemProcessor : ActionProcessor() {
             PaymentSystemEvent.OperationType.SELL_CANCEL -> sellCancel(action, event as PaymentSystemSellCancelEvent, callback)
             PaymentSystemEvent.OperationType.PAYBACK -> payback(action, event as PaymentSystemPaybackEvent, callback)
             PaymentSystemEvent.OperationType.PAYBACK_CANCEL -> paybackCancel(action, event as PaymentSystemPaybackCancelEvent, callback)
-            else -> null
+            else -> {
+                // do nothing
+            }
         }
     }
 

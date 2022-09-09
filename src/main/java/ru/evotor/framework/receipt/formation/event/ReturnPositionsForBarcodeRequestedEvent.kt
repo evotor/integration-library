@@ -77,12 +77,12 @@ data class ReturnPositionsForBarcodeRequestedEvent(
         override fun toBundle() = Bundle().apply {
             classLoader = Position::class.java.classLoader
             putInt(KEY_EXTRA_POSITIONS_COUNT, positions.size)
-            if (!positions.isNullOrEmpty()) {
+            if (positions.isNotEmpty()) {
                 for (i in positions.indices) {
                     putParcelable(KEY_EXTRA_POSITIONS + i, positions[i])
                 }
             }
-            if (!positionsList.isNullOrEmpty()) {
+            if (positionsList.isNotEmpty()) {
                 putInt(KEY_EXTRA_POSITIONS_LIST_COUNT, positionsList.size)
                 for (i in positionsList.indices) {
                     putInt(KEY_EXTRA_SUB_POSITIONS_COUNT + i, positionsList[i].size)
