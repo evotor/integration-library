@@ -3,6 +3,9 @@ package ru.evotor.framework.receipt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +17,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.inventory.AttributeValue;
@@ -800,72 +801,30 @@ public class Position implements Parcelable {
         if (version > VERSION) {
             isVersionGreaterThanCurrent = true;
         }
-        switch (version) {
-            case 1: {
-                readAttributesField(in);
-                break;
-            }
-            case 2: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                break;
-            }
-            case 3: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                break;
-            }
-            case 4: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                readImportationData(in);
-                this.excise = (BigDecimal) in.readSerializable();
-                break;
-            }
-            case 5: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                readImportationData(in);
-                this.excise = (BigDecimal) in.readSerializable();
-                this.classificationCode = in.readString();
-                break;
-            }
-            case 6: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                readImportationData(in);
-                this.excise = (BigDecimal) in.readSerializable();
-                this.classificationCode = in.readString();
-                readPreferentialMedicine(in);
-                break;
-            }
-            case 7: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                readImportationData(in);
-                this.excise = (BigDecimal) in.readSerializable();
-                this.classificationCode = in.readString();
-                readPreferentialMedicine(in);
-                readMark(in);
-                break;
-            }
-            case 8: {
-                readAttributesField(in);
-                readSettlementMethodField(in);
-                readAgentRequisitesField(in);
-                readImportationData(in);
-                this.excise = (BigDecimal) in.readSerializable();
-                this.classificationCode = in.readString();
-                readPreferentialMedicine(in);
-                readMark(in);
-                readPartialRealization(in);
-                break;
-            }
+        if (version >= 1) {
+            readAttributesField(in);
+        }
+        if (version >= 2) {
+            readSettlementMethodField(in);
+        }
+        if (version >= 3) {
+            readAgentRequisitesField(in);
+        }
+        if (version >= 4) {
+            readImportationData(in);
+            this.excise = (BigDecimal) in.readSerializable();
+        }
+        if (version >= 5) {
+            this.classificationCode = in.readString();
+        }
+        if (version >= 6) {
+            readPreferentialMedicine(in);
+        }
+        if (version >= 7) {
+            readMark(in);
+        }
+        if (version >= 8) {
+            readPartialRealization(in);
         }
 
         if (isVersionGreaterThanCurrent) {
