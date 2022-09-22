@@ -5,6 +5,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
 import ru.evotor.framework.core.IntegrationLibraryParsingException
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Реквизиты покупателя, которые могут быть записаны в [печатную группу чека][ru.evotor.framework.receipt.PrintGroup].
@@ -21,7 +24,7 @@ import ru.evotor.framework.core.IntegrationLibraryParsingException
 data class Purchaser(
         val name: String,
         val innNumber: String?,
-        val birthDate: String?,
+        val birthDate: Date?,
         val documentTypeCode: Int?,
         val documentNumber: String?,
         val type: PurchaserType?
@@ -33,7 +36,7 @@ data class Purchaser(
         return Bundle().apply {
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
-            putString(KEY_BIRTH_DATE, birthDate)
+            putString(KEY_BIRTH_DATE, dateToString(birthDate, DATE_FORMAT))
             putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
@@ -46,7 +49,7 @@ data class Purchaser(
         parcel.readString()
             ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
         parcel.readString(),
-        parcel.readString(),
+        stringToDate(parcel.readString(), DATE_FORMAT),
         parcel.readInt(),
         parcel.readString(),
         if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
@@ -55,7 +58,7 @@ data class Purchaser(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(innNumber)
-        parcel.writeString(birthDate)
+        parcel.writeString(dateToString(birthDate, DATE_FORMAT))
         parcel.writeInt(documentTypeCode ?: -1)
         parcel.writeString(documentNumber)
         parcel.writeInt(if (type == null) 0 else 1)
@@ -80,6 +83,7 @@ data class Purchaser(
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
         private const val KEY_BUNDLE_VERSION = "KEY_BUNDLE_VERSION"
+        const val DATE_FORMAT = "dd.MM.yyyy"
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
@@ -90,7 +94,7 @@ data class Purchaser(
                 val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
-                Purchaser(name, innNumber, birthDate, documentTypeCode, documentNumber,
+                Purchaser(name, innNumber, stringToDate(birthDate, DATE_FORMAT), documentTypeCode, documentNumber,
                     it.getInt(KEY_TYPE).let {
                         if (it == -1) {
                             null
@@ -99,6 +103,18 @@ data class Purchaser(
                         }
                     }
                 )
+            }
+        }
+
+        fun dateToString(date: Date?, dateFormat: String) : String? {
+            return date?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).format(it) }
+        }
+
+        fun stringToDate(dateStr: String?, dateFormat: String) : Date? {
+            return try {
+                dateStr?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) }
+            } catch (e: ParseException) {
+                null
             }
         }
     }
