@@ -36,7 +36,7 @@ data class Purchaser(
         return Bundle().apply {
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
-            putString(KEY_BIRTH_DATE, dateToString(birthDate, DATE_FORMAT))
+            putString(KEY_BIRTH_DATE, dateToString(birthDate))
             putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
@@ -49,7 +49,7 @@ data class Purchaser(
         parcel.readString()
             ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
         parcel.readString(),
-        stringToDate(parcel.readString(), DATE_FORMAT),
+        stringToDate(parcel.readString()),
         parcel.readInt(),
         parcel.readString(),
         if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
@@ -58,7 +58,7 @@ data class Purchaser(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(innNumber)
-        parcel.writeString(dateToString(birthDate, DATE_FORMAT))
+        parcel.writeString(dateToString(birthDate))
         parcel.writeInt(documentTypeCode ?: -1)
         parcel.writeString(documentNumber)
         parcel.writeInt(if (type == null) 0 else 1)
@@ -94,7 +94,7 @@ data class Purchaser(
                 val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
-                Purchaser(name, innNumber, stringToDate(birthDate, DATE_FORMAT), documentTypeCode, documentNumber,
+                Purchaser(name, innNumber, stringToDate(birthDate), documentTypeCode, documentNumber,
                     it.getInt(KEY_TYPE).let {
                         if (it == -1) {
                             null
