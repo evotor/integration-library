@@ -83,7 +83,7 @@ data class Purchaser(
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
         private const val KEY_BUNDLE_VERSION = "KEY_BUNDLE_VERSION"
-        const val DATE_FORMAT = "dd.MM.yyyy"
+        private const val DATE_FORMAT = "dd.MM.yyyy"
 
         fun fromBundle(bundle: Bundle?): Purchaser? {
             return bundle?.let {
@@ -106,11 +106,11 @@ data class Purchaser(
             }
         }
 
-        fun dateToString(date: Date?, dateFormat: String) : String? {
+        fun dateToString(date: Date?, dateFormat: String = DATE_FORMAT): String? {
             return date?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).format(it) }
         }
 
-        fun stringToDate(dateStr: String?, dateFormat: String) : Date? {
+        fun stringToDate(dateStr: String?, dateFormat: String = DATE_FORMAT): Date? {
             return try {
                 dateStr?.let { SimpleDateFormat(dateFormat, Locale.getDefault()).parse(it) }
             } catch (e: ParseException) {

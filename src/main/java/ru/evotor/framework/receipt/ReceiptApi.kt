@@ -358,7 +358,7 @@ object ReceiptApi {
             Purchaser(
                 name = purchaserName,
                 innNumber = purchaserInnNumber,
-                birthDate = Purchaser.stringToDate(purchaserBirthDate, Purchaser.DATE_FORMAT),
+                birthDate = Purchaser.stringToDate(purchaserBirthDate),
                 documentTypeCode = purchaserDocumentTypeCode,
                 documentNumber = purchaserDocumentNumber,
                 type = purchaserType
