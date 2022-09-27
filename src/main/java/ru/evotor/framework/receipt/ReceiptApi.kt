@@ -350,6 +350,8 @@ object ReceiptApi {
         val purchaserBirthDate = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_BIRTH_DATE)
         val purchaserDocumentTypeCode =
             cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
+        val purchaserDocumentType =
+            DocumentType.values().first { it.documentCode == purchaserDocumentTypeCode }
 
         return if (purchaserName != null) {
             val purchaserType = cursor.optLong(PrintGroupSubTable.COLUMN_PURCHASER_TYPE)?.let {
@@ -359,7 +361,7 @@ object ReceiptApi {
                 name = purchaserName,
                 innNumber = purchaserInnNumber,
                 birthDate = purchaserBirthDate?.let { Purchaser.stringToDate(it) },
-                documentTypeCode = purchaserDocumentTypeCode,
+                documentType = purchaserDocumentType,
                 documentNumber = purchaserDocumentNumber,
                 type = purchaserType
             )

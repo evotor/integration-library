@@ -17,7 +17,7 @@ import java.util.*
  * @property name Наименование покупателя, например, название организации. Данные сохраняются в теге 1227 фискального документа.
  * @property innNumber Номер ИНН покупателя. Данные сохраняются в теге 1228 фискального документа.
  * @property birthDate Дата рождения покупателя. Данные сохраняются в теге 1243 фискального документа.
- * @property documentTypeCode Код вида документа, удостоверяющего личность. Данные сохраняются в теге 1245 фискального документа.
+ * @property documentType Вид документа, удостоверяющего личность. Код вида документа сохраняется в теге 1245 фискального документа.
  * @property documentNumber Данные документа, удостоверяющего личность. Данные сохраняются в теге 1246 фискального документа.
  * @property type Тип покупателя, например, физическое лицо. Не сохраняется в фискальном документе.
  */
@@ -25,7 +25,7 @@ data class Purchaser(
         val name: String,
         val innNumber: String?,
         val birthDate: Date?,
-        val documentTypeCode: Int?,
+        val documentType: DocumentType?,
         val documentNumber: String?,
         val type: PurchaserType?
 ) : Parcelable, IBundlable {
@@ -37,7 +37,7 @@ data class Purchaser(
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
             putString(KEY_BIRTH_DATE, birthDate?.let { dateToString(it) })
-            putInt(KEY_DOCUMENT_TYPE_CODE, documentTypeCode ?: -1)
+            putInt(KEY_DOCUMENT_TYPE, documentType?.documentCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
@@ -50,7 +50,7 @@ data class Purchaser(
             ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
         parcel.readString(),
         parcel.readString()?.let { stringToDate(it) },
-        parcel.readInt(),
+        if(parcel.readInt() == 0) null else DocumentType.values().first { documentType -> documentType.documentCode == parcel.readInt() },
         parcel.readString(),
         if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
@@ -59,7 +59,8 @@ data class Purchaser(
         parcel.writeString(name)
         parcel.writeString(innNumber)
         parcel.writeString(birthDate?.let { dateToString(it) })
-        parcel.writeInt(documentTypeCode ?: -1)
+        parcel.writeInt(if (documentType == null) 0 else 1)
+        documentType?.let { parcel.writeInt(documentType.documentCode) }
         parcel.writeString(documentNumber)
         parcel.writeInt(if (type == null) 0 else 1)
         type?.let { parcel.writeInt(it.ordinal) }
@@ -78,7 +79,7 @@ data class Purchaser(
         private const val KEY_NAME = "KEY_NAME"
         private const val KEY_INN_NUMBER = "KEY_INN_NUMBER"
         private const val KEY_BIRTH_DATE = "KEY_BIRTH_DATE"
-        private const val KEY_DOCUMENT_TYPE_CODE = "KEY_DOCUMENT_TYPE_CODE"
+        private const val KEY_DOCUMENT_TYPE = "KEY_DOCUMENT_TYPE"
         private const val KEY_DOCUMENT_NUMBER = "KEY_DOCUMENT_NUMBER"
         private const val KEY_DOCUMENT_NUMBER_V2 = "KEY_DOCUMENT_NUMBER_V2"
         private const val KEY_TYPE = "KEY_TYPE"
@@ -89,12 +90,15 @@ data class Purchaser(
             return bundle?.let {
                 val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
-                val innNumber = if(bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
+                val innNumber = if (bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
                 else it.getString(KEY_DOCUMENT_NUMBER)
                 val birthDate = it.getString(KEY_BIRTH_DATE)
-                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE_CODE)
+                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE)
+                val documentType = if (documentTypeCode != -1 ) {
+                    DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
+                } else null
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
-                Purchaser(name, innNumber, birthDate?.let { stringToDate(birthDate) }, documentTypeCode, documentNumber,
+                Purchaser(name, innNumber, birthDate?.let { stringToDate(birthDate) }, documentType, documentNumber,
                     it.getInt(KEY_TYPE).let {
                         if (it == -1) {
                             null
