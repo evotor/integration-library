@@ -37,7 +37,7 @@ data class Purchaser(
             putString(KEY_NAME, name)
             putString(KEY_INN_NUMBER, innNumber)
             putString(KEY_BIRTH_DATE, birthDate?.let { dateToString(it) })
-            putInt(KEY_DOCUMENT_TYPE, documentType?.documentCode ?: -1)
+            putInt(KEY_DOCUMENT_TYPE, documentType?.ordinal ?: -1)
             putString(KEY_DOCUMENT_NUMBER, innNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
@@ -50,7 +50,7 @@ data class Purchaser(
             ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
         parcel.readString(),
         parcel.readString()?.let { stringToDate(it) },
-        if(parcel.readInt() == 0) null else DocumentType.values().first { documentType -> documentType.documentCode == parcel.readInt() },
+        if (parcel.readInt() == 0) null else DocumentType.values()[parcel.readInt() % DocumentType.values().size],
         parcel.readString(),
         if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
@@ -93,9 +93,9 @@ data class Purchaser(
                 val innNumber = if (bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
                 else it.getString(KEY_DOCUMENT_NUMBER)
                 val birthDate = it.getString(KEY_BIRTH_DATE)
-                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE)
-                val documentType = if (documentTypeCode != -1 ) {
-                    DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
+                val documentTypeOrdinal = it.getInt(KEY_DOCUMENT_TYPE)
+                val documentType = if (documentTypeOrdinal != -1 ) {
+                    DocumentType.values()[documentTypeOrdinal % DocumentType.values().size]
                 } else null
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
                 Purchaser(name, innNumber, birthDate?.let { stringToDate(birthDate) }, documentType, documentNumber,
