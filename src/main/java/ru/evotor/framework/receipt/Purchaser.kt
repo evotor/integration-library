@@ -50,7 +50,9 @@ data class Purchaser(
             ?: throw IntegrationLibraryParsingException(Purchaser::class.java),
         parcel.readString(),
         parcel.readString()?.let { stringToDate(it) },
-        if(parcel.readInt() == 0) null else DocumentType.values().first { documentType -> documentType.documentCode == parcel.readInt() },
+        if(parcel.readInt() == 0) null else {
+            val documentCode = parcel.readInt()
+            DocumentType.values().first { documentType -> documentType.documentCode == documentCode } },
         parcel.readString(),
         if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
@@ -94,7 +96,7 @@ data class Purchaser(
                 else it.getString(KEY_DOCUMENT_NUMBER)
                 val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE)
-                val documentType = if (documentTypeCode != -1 ) {
+                val documentType = if (documentTypeCode != -1) {
                     DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
                 } else null
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
