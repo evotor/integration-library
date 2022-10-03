@@ -38,7 +38,7 @@ data class Purchaser(
             putString(KEY_INN_NUMBER, innNumber)
             putString(KEY_BIRTH_DATE, birthDate?.let { dateToString(it) })
             putInt(KEY_DOCUMENT_TYPE, documentType?.documentCode ?: -1)
-            putString(KEY_DOCUMENT_NUMBER, innNumber)
+            putString(KEY_DOCUMENT_NUMBER, innNumber ?: documentNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
             putInt(KEY_TYPE, type?.ordinal ?: -1)
             putInt(KEY_BUNDLE_VERSION, version)
@@ -227,4 +227,3 @@ enum class DocumentType(val documentCode: Int) {
      */
     DOC_FOR_PERIOD_OF_CONSIDERATION_CITIZENSHIP_RF(40),
 }
-
