@@ -227,3 +227,4 @@ enum class DocumentType(val documentCode: Int) {
      */
     DOC_FOR_PERIOD_OF_CONSIDERATION_CITIZENSHIP_RF(40),
 }
+
