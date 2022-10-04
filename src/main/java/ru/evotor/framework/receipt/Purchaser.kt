@@ -95,8 +95,8 @@ data class Purchaser(
                 val innNumber = if (bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
                 else it.getString(KEY_DOCUMENT_NUMBER)
                 val birthDate = it.getString(KEY_BIRTH_DATE)
-                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE)
-                val documentType = if (documentTypeCode > 0) {
+                val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE, -1)
+                val documentType = if (documentTypeCode != -1) {
                     DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
                 } else null
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
