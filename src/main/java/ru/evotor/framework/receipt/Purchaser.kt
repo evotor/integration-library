@@ -27,7 +27,7 @@ data class Purchaser(
         val birthDate: Date?,
         val documentType: DocumentType?,
         val documentNumber: String?,
-        val type: PurchaserType?
+        val type: PurchaserType
 ) : Parcelable, IBundlable {
 
     val version = 2
@@ -40,7 +40,7 @@ data class Purchaser(
             putInt(KEY_DOCUMENT_TYPE, documentType?.documentCode ?: -1)
             putString(KEY_DOCUMENT_NUMBER, innNumber ?: documentNumber)
             putString(KEY_DOCUMENT_NUMBER_V2, documentNumber)
-            putInt(KEY_TYPE, type?.ordinal ?: -1)
+            putInt(KEY_TYPE, type.ordinal)
             putInt(KEY_BUNDLE_VERSION, version)
         }
     }
@@ -54,7 +54,7 @@ data class Purchaser(
             val documentCode = parcel.readInt()
             DocumentType.values().first { documentType -> documentType.documentCode == documentCode } },
         parcel.readString(),
-        if (parcel.readInt() == 0) null else PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
+        PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -64,8 +64,7 @@ data class Purchaser(
         parcel.writeInt(if (documentType == null) 0 else 1)
         documentType?.let { parcel.writeInt(documentType.documentCode) }
         parcel.writeString(documentNumber)
-        parcel.writeInt(if (type == null) 0 else 1)
-        type?.let { parcel.writeInt(it.ordinal) }
+        parcel.writeInt(type.ordinal)
     }
 
     override fun describeContents(): Int = 0
@@ -100,15 +99,9 @@ data class Purchaser(
                     DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
                 } else null
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
-                Purchaser(name, innNumber, birthDate?.let { stringToDate(birthDate) }, documentType, documentNumber,
-                    it.getInt(KEY_TYPE).let {
-                        if (it == -1) {
-                            null
-                        } else {
-                            PurchaserType.values()[it % PurchaserType.values().size]
-                        }
-                    }
-                )
+                val purchaserTypeOrdinal = it.getInt(KEY_TYPE)
+                val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
+                Purchaser(name, innNumber, birthDate?.let { stringToDate(birthDate) }, documentType, documentNumber, purchaserType)
             }
         }
 
