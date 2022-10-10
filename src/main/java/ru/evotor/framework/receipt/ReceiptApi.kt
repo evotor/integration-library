@@ -354,8 +354,9 @@ object ReceiptApi {
             val purchaserBirthDate = cursor.optString(PrintGroupSubTable.COLUMN_PURCHASER_BIRTH_DATE)
             val purchaserDocumentTypeCode =
                 cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
-            val purchaserDocumentType =
+            val purchaserDocumentType = if (purchaserDocumentTypeCode != null) {
                 DocumentType.values().first { it.documentCode == purchaserDocumentTypeCode }
+            } else null
             Purchaser(
                 name = purchaserName,
                 innNumber = purchaserInnNumber,
