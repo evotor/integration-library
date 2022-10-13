@@ -52,7 +52,7 @@ data class Purchaser(
         parcel.readString()?.let { stringToDate(it) },
         if(parcel.readInt() == 0) null else {
             val documentCode = parcel.readInt()
-            DocumentType.values().first { documentType -> documentType.documentCode == documentCode } },
+            DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode } },
         parcel.readString(),
         PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
