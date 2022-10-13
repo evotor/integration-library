@@ -44,7 +44,7 @@ data class Purchaser(
             putInt(KEY_BUNDLE_VERSION, version)
         }
     }
-    
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(innNumber)
@@ -52,9 +52,9 @@ data class Purchaser(
         parcel.writeInt(1)
         parcel.writeInt(type.ordinal)
         parcel.writeString(birthDate?.let { dateToString(it) })
+        parcel.writeString(documentNumber)
         parcel.writeInt(if (documentType == null) 0 else 1)
         documentType?.let { parcel.writeInt(documentType.documentCode) }
-        parcel.writeString(documentNumber)
     }
 
     override fun describeContents(): Int = 0
@@ -104,11 +104,11 @@ data class Purchaser(
             val purchaserTypeOrdinal = parcel.readInt()
             val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
             val birthDate = parcel.readString()?.let { stringToDate(it) }
-            val isDocumentExists = parcel.readInt() == 0
-            val documentType = if(isDocumentExists) null else {
+            val documentNumber = parcel.readString()
+            val isDocumentNotExists = parcel.readInt() != 1 && documentNumber.isNullOrBlank()
+            val documentType = if(isDocumentNotExists) null else {
                 val documentCode = parcel.readInt()
                 DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode } }
-            val documentNumber = parcel.readString()
             return Purchaser(name, inn, birthDate, documentType, documentNumber, purchaserType)
         }
 
