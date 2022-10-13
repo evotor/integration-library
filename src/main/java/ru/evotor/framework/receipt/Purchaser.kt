@@ -56,6 +56,7 @@ data class Purchaser(
         parcel.readString(),
         PurchaserType.values()[parcel.readInt() % PurchaserType.values().size]
     )
+    
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
