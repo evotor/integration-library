@@ -51,10 +51,12 @@ data class Purchaser(
         //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
         parcel.writeInt(version)
         parcel.writeInt(type.ordinal)
-        parcel.writeString(birthDate?.let { dateToString(it) })
-        parcel.writeString(documentNumber)
-        parcel.writeInt(if (documentType == null) 0 else 1)
-        documentType?.let { parcel.writeInt(documentType.documentCode) }
+        if (version >= 2) {
+            parcel.writeString(birthDate?.let { dateToString(it) })
+            parcel.writeString(documentNumber)
+            parcel.writeInt(if (documentType == null) 0 else 1)
+            documentType?.let { parcel.writeInt(documentType.documentCode) }
+        }
     }
 
     override fun describeContents(): Int = 0
@@ -96,16 +98,19 @@ data class Purchaser(
         }
 
         fun createPurchaserFromParcel(parcel: Parcel): Purchaser {
+            var purchaser: Purchaser? = null
             val name = parcel.readString()
                 ?: throw IntegrationLibraryParsingException(Purchaser::class.java)
             val inn = parcel.readString()
             //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
             val purchaserTypeVersion = parcel.readInt()
             val purchaserTypeOrdinal = parcel.readInt()
-            return if(purchaserTypeVersion < 2) {
+            if (purchaserTypeVersion < 2) {
                 val purchaserType = if(purchaserTypeVersion == 1) PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size] else PurchaserType.NATURAL_PERSON
-                Purchaser(name, inn, null, null, null, purchaserType)
-            } else {
+                purchaser = Purchaser(name, inn, null, null, null, purchaserType)
+            }
+
+            if (purchaserTypeVersion >= 2) {
                 val birthDate = parcel.readString()?.let { stringToDate(it) }
                 val documentNumber = parcel.readString()
                 val isDocumentNotExists = parcel.readInt() != 1
@@ -113,8 +118,9 @@ data class Purchaser(
                     val documentCode = parcel.readInt()
                     DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode } }
                 val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
-                Purchaser(name, inn, birthDate, documentType, documentNumber, purchaserType)
+                purchaser = Purchaser(name, inn, birthDate, documentType, documentNumber, purchaserType)
             }
+            return purchaser ?: throw IntegrationLibraryParsingException(Purchaser::class.java)
         }
 
         fun dateToString(date: Date?, dateFormat: String = DATE_FORMAT): String? {
