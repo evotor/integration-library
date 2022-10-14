@@ -49,7 +49,7 @@ data class Purchaser(
         parcel.writeString(name)
         parcel.writeString(innNumber)
         //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
-        parcel.writeInt(2)
+        parcel.writeInt(version)
         parcel.writeInt(type.ordinal)
         parcel.writeString(birthDate?.let { dateToString(it) })
         parcel.writeString(documentNumber)
@@ -102,8 +102,8 @@ data class Purchaser(
             //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
             val purchaserTypeVersion = parcel.readInt()
             val purchaserTypeOrdinal = parcel.readInt()
-            val purchaserType = if(purchaserTypeVersion == 1) PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size] else PurchaserType.NATURAL_PERSON
             return if(purchaserTypeVersion < 2) {
+                val purchaserType = if(purchaserTypeVersion == 1) PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size] else PurchaserType.NATURAL_PERSON
                 Purchaser(name, inn, null, null, null, purchaserType)
             } else {
                 val birthDate = parcel.readString()?.let { stringToDate(it) }
@@ -112,6 +112,7 @@ data class Purchaser(
                 val documentType = if(isDocumentNotExists) null else {
                     val documentCode = parcel.readInt()
                     DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode } }
+                val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
                 Purchaser(name, inn, birthDate, documentType, documentNumber, purchaserType)
             }
         }
