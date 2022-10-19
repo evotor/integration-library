@@ -26,6 +26,7 @@ import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 public final class PositionMapper {
 
@@ -86,6 +87,8 @@ public final class PositionMapper {
     private static final String KEY_CLASSIFICATION_CODE = "classificationCode";
 
     private static final String KEY_PARTIAL_REALIZATION = "partialRealization";
+
+    private static final String KEY_VOLUME_SORT_ACCOUNTING_REALIZATION = "volumeSortAccountingRealization";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -267,6 +270,9 @@ public final class PositionMapper {
 
         final PartialRealization partialRealization = position.getPartialRealization();
         bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
+
+        final VolumeSortAccountingRealization volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
+        bundle.putBundle(KEY_VOLUME_SORT_ACCOUNTING_REALIZATION, volumeSortAccountingRealization != null ? volumeSortAccountingRealization.toBundle() : null);
 
         return bundle;
     }

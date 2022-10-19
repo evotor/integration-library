@@ -192,4 +192,9 @@ object FiscalTags {
      */
     const val MEASURE_CODE = 2108
 
+    /**
+     * мера количества предмета расчета
+     */
+    const val VOLUME_SORT_ACCOUNTING_REALIZATION = 1191
+
 }

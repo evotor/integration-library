@@ -30,6 +30,7 @@ import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 /**
  * Позиция чека.
@@ -38,7 +39,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 9;
+    private static final int VERSION = 10;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -191,6 +192,18 @@ public class Position implements Parcelable {
     @Nullable
     private PartialRealization partialRealization;
 
+    /**
+     * Выбытие по объемно-сортовому учету(ОСУ) 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - молочная продукция {@link ProductType#DAIRY_MARKED}
+     * - вода {@link ProductType#WATER_MARKED}
+     * <p>
+     */
+    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @Nullable
+    private VolumeSortAccountingRealization volumeSortAccountingRealization;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -259,6 +272,7 @@ public class Position implements Parcelable {
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
+        this.volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
     }
 
     /**
@@ -538,6 +552,15 @@ public class Position implements Parcelable {
         return partialRealization;
     }
 
+    /**
+     * @return Выбытие по объемно-сортовому учету(ОСУ) 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @Nullable
+    public VolumeSortAccountingRealization getVolumeSortAccountingRealization() {
+        return volumeSortAccountingRealization;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -599,6 +622,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(partialRealization, position.partialRealization))
             return false;
+        if (!Objects.equals(volumeSortAccountingRealization, position.volumeSortAccountingRealization))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -630,6 +655,7 @@ public class Position implements Parcelable {
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
+        result = 31 * result + (volumeSortAccountingRealization != null ? volumeSortAccountingRealization.hashCode() : 0);
         return result;
     }
 
@@ -661,6 +687,7 @@ public class Position implements Parcelable {
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
                 ", partial=" + partialRealization +
+                ", volumeSortAccountingRealization=" + volumeSortAccountingRealization +
                 '}';
     }
 
@@ -748,6 +775,8 @@ public class Position implements Parcelable {
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
+        // Volume Sort Accounting Realization
+        dest.writeBundle(this.volumeSortAccountingRealization != null ? this.volumeSortAccountingRealization.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -828,6 +857,9 @@ public class Position implements Parcelable {
         if (version >= 9) {
             measureCode = in.readInt();
         }
+        if (version >= 10) {
+            readVolumeSortAccountingRealization(in);
+        }
         this.measure = new Measure(
                 measureName,
                 measurePrecision,
@@ -877,6 +909,12 @@ public class Position implements Parcelable {
 
     private void readPartialRealization(Parcel in) {
         this.partialRealization = PartialRealization.Companion.from(in.readBundle(PartialRealization.class.getClassLoader()));
+    }
+
+    private void readVolumeSortAccountingRealization(Parcel in) {
+        this.volumeSortAccountingRealization = VolumeSortAccountingRealization.Companion.from(
+                in.readBundle(VolumeSortAccountingRealization.class.getClassLoader())
+        );
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1372,6 +1410,26 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
+         * <p>
+         * вода {@link ProductType#WATER_MARKED}
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         *
+         * @param volumeSortQuantity количество товара по ОСУ
+         * @param gtin gtin товара
+         */
+        public Builder toVolumeSortAccountingRealization(
+                @NonNull BigDecimal volumeSortQuantity,
+                @NonNull String gtin
+        ) {
+            position.volumeSortAccountingRealization = new VolumeSortAccountingRealization(
+                    gtin,
+                    volumeSortQuantity
+            );
+            return this;
+        }
+
         private void setAlcoParams(
                 Mark mark,
                 BigDecimal alcoholByVolume,
@@ -1538,6 +1596,21 @@ public class Position implements Parcelable {
          */
         public Builder setPartialRealization(@Nullable PartialRealization partialRealization) {
             position.partialRealization = partialRealization;
+            return this;
+        }
+
+        /**
+         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
+         * <p>
+         * вода {@link ProductType#WATER_MARKED}
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         *
+         * @param volumeSortAccountingRealization реализация по ОСУ
+         */
+        public Builder setVolumeSortAccountingRealization(
+                @Nullable VolumeSortAccountingRealization volumeSortAccountingRealization
+        ) {
+            position.volumeSortAccountingRealization = volumeSortAccountingRealization;
             return this;
         }
 
