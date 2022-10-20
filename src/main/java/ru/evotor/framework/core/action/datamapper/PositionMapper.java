@@ -151,6 +151,9 @@ public final class PositionMapper {
 
         PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALIZATION));
 
+        VolumeSortAccountingRealization volumeSortAccountingRealization =
+                VolumeSortAccountingRealization.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING_REALIZATION));
+
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -191,6 +194,7 @@ public final class PositionMapper {
         builder.setPreferentialMedicine(preferentialMedicine);
         builder.setClassificationCode(classificationCode);
         builder.setPartialRealization(partialRealization);
+        builder.setVolumeSortAccountingRealization(volumeSortAccountingRealization);
         return builder.build();
     }
 
@@ -272,7 +276,10 @@ public final class PositionMapper {
         bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
 
         final VolumeSortAccountingRealization volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
-        bundle.putBundle(KEY_VOLUME_SORT_ACCOUNTING_REALIZATION, volumeSortAccountingRealization != null ? volumeSortAccountingRealization.toBundle() : null);
+        bundle.putBundle(
+                KEY_VOLUME_SORT_ACCOUNTING_REALIZATION,
+                volumeSortAccountingRealization != null ? volumeSortAccountingRealization.toBundle() : null
+        );
 
         return bundle;
     }

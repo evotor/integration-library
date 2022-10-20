@@ -35,5 +35,4 @@ data class VolumeSortAccountingRealization (
             VolumeSortAccountingRealization(volumeSortQuantity = volumeSortQuantity, gtin = gtin)
         }
     }
-
 }
