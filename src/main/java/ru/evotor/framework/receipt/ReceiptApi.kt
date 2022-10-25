@@ -19,15 +19,10 @@ import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
-import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
-import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
-import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
-import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
+import ru.evotor.framework.receipt.position.mapper.*
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @WorkerThread
 object ReceiptApi {
@@ -450,6 +445,7 @@ object ReceiptApi {
             .setImportationData(importationData)
             .setExcise(excise)
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
+            .setVolumeSortAccountingRealization(VolumeAssortingAccountingRealization.fromCursor(cursor))
         return builder.build()
     }
 
