@@ -6,7 +6,7 @@ import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization
 
-internal object VolumeAssortingAccountingRealization {
+internal object VolumeSortAccountingRealizationMapper {
 
     internal fun fromCursor(cursor: Cursor): VolumeSortAccountingRealization? {
         val volumeSortQuantity = cursor.optQuantity(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_QUANTITY)

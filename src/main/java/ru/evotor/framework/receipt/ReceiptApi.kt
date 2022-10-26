@@ -445,7 +445,7 @@ object ReceiptApi {
             .setImportationData(importationData)
             .setExcise(excise)
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
-            .setVolumeSortAccountingRealization(VolumeAssortingAccountingRealization.fromCursor(cursor))
+            .setVolumeSortAccountingRealization(VolumeSortAccountingRealizationMapper.fromCursor(cursor))
         return builder.build()
     }
 
