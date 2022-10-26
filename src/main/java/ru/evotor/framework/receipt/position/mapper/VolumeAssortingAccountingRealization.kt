@@ -9,9 +9,9 @@ import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization
 internal object VolumeAssortingAccountingRealization {
 
     internal fun fromCursor(cursor: Cursor): VolumeSortAccountingRealization? {
-        val volumeSortQuantity = cursor.optQuantity(PositionTable.COLUMN_VOLUME_ASSORTING_QUANTITY)
+        val volumeSortQuantity = cursor.optQuantity(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_QUANTITY)
                 ?: return null
-        val gtin = cursor.optString(PositionTable.COLUMN_VOLUME_ASSORTING_GTIN)
+        val gtin = cursor.optString(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_GTIN)
             ?: return null
         return VolumeSortAccountingRealization(
             volumeSortQuantity = volumeSortQuantity,
