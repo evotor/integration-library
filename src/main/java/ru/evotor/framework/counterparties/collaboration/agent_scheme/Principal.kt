@@ -30,7 +30,7 @@ data class Principal(
          * Наименование краткое
          */
         @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-        override val shortName: String? = null,
+        override val shortName: String,
 
         /**
          * ИНН

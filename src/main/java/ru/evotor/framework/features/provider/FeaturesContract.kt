@@ -27,8 +27,14 @@ object FeaturesContract {
     const val PATH_TOBACCO_PRODUCTS_MARK = "tobacco_products_mark"
     const val PATH_SLIP_AMOUNT = "slip_amount"
     const val PATH_DAIRY_MARK = "dairy_mark"
+    const val PATH_WATER_MARK = "water_mark"
     const val PATH_FFD12 = "ffd12"
     const val PATH_UPDATE_MANAGEMENT = "update_management"
+    const val PATH_BIKE_MARK = "bike_mark"
+    const val PATH_FISC_BLOCK = "fisc_block"
+    const val PATH_FISC_PAID = "fisc_paid"
+    const val PATH_JEWELRY_MARK = "jewelry_mark"
+    const val PATH_SBP_ACTIVATION = "sbp_activation"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

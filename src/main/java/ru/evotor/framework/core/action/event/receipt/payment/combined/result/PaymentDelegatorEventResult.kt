@@ -3,7 +3,7 @@ package ru.evotor.framework.core.action.event.receipt.payment.combined.result
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 abstract class PaymentDelegatorEventResult(
         val resultType: ResultType,

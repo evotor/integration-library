@@ -104,6 +104,7 @@ sealed class Mark : Parcelable {
      *
      * @param productCode Тег для кода товара
      */
+    @Deprecated("Работает только для версий ФФД <= 1.1")
     class MarkByFiscalTags(
             @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
             val productCode: String?

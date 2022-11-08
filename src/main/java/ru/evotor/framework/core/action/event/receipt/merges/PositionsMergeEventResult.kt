@@ -2,7 +2,7 @@ package ru.evotor.framework.core.action.event.receipt.merges
 
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.core.action.event.receipt.changes.position.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 /**
  * Created by ivan on 26.06.17.

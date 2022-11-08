@@ -151,6 +151,27 @@ object FeaturesApi {
     fun isDairyMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DAIRY_MARK)
 
     /**
+     * Проверяет, активна ли функция "Маркировка воды" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isWaterMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_WATER_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка велотоваров" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isBikeMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BIKE_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка ювелирных изделий" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isJewelryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_JEWELRY_MARK)
+
+    /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
@@ -170,6 +191,27 @@ object FeaturesApi {
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isUpdateManagementActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_UPDATE_MANAGEMENT)
+
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Блокировка кассового ПО".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFiscBlockActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_BLOCK)
+
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Полный кассовый функционал".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFiscPaidActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_PAID)
+
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Прием платежей через СБП".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isSbpActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SBP_ACTIVATION)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
