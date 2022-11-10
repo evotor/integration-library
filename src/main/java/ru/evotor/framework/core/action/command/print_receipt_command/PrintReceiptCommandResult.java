@@ -62,6 +62,51 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_CODE_USER_NOT_FOUND = -12;
 
+    /**
+     * Открыт чек
+     */
+    public static final int ERROR_CODE_RECEIPT_IS_ALREADY_OPEN = -13;
+
+    /**
+     * Открыт чек продажи
+     */
+    public static final int ERROR_CODE_SELL_RECEIPT_IS_ALREADY_OPEN = -14;
+
+    /**
+     * Открыт чек возврата
+     */
+    public static final int ERROR_CODE_PAYBACK_RECEIPT_IS_ALREADY_OPEN = -15;
+
+    /**
+     * Открыт чек покупки
+     */
+    public static final int ERROR_CODE_BUY_RECEIPT_IS_ALREADY_OPEN = -16;
+
+    /**
+     * Открыт чек возврата покупки
+     */
+    public static final int ERROR_CODE_BUYBACK_RECEIPT_IS_ALREADY_OPEN = -17;
+
+    /**
+     * Открыт чек коррекции продажи
+     */
+    public static final int ERROR_CODE_CORRECTION_INCOME_RECEIPT_IS_ALREADY_OPEN = -18;
+
+    /**
+     * Открыт чек коррекции покупки
+     */
+    public static final int ERROR_CODE_CORRECTION_OUTCOME_RECEIPT_IS_ALREADY_OPEN = -19;
+
+    /**
+     * Открыт чек коррекции возврата продажи
+     */
+    public static final int ERROR_CODE_CORRECTION_RETURN_INCOME_RECEIPT_IS_ALREADY_OPEN = -20;
+
+    /**
+     * Открыт чек коррекции возврата покупки
+     */
+    public static final int ERROR_CODE_CORRECTION_RETURN_OUTCOME_RECEIPT_IS_ALREADY_OPEN = -21;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
