@@ -1604,6 +1604,7 @@ public class Position implements Parcelable {
          * <p>
          * вода {@link ProductType#WATER_MARKED}
          * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * не может использоваться совместно с setPartialRealization
          *
          * @param volumeSortAccountingRealization реализация по ОСУ
          */
