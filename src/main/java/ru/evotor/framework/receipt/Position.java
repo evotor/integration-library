@@ -1354,6 +1354,28 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toLottery() {
+            position.productType = ProductType.LOTTERY;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toLotteryMoney() {
+            position.productType = ProductType.LOTTERY_MONEY;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
