@@ -33,6 +33,7 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
+    private static final String KEY_SELL_RECEIPT_UUID = "sellReceiptUuid";
 
     @Nullable
     public static OpenPaybackReceiptCommand create(@Nullable Bundle bundle) {
@@ -47,7 +48,8 @@ public class OpenPaybackReceiptCommand implements IBundlable {
                         PositionAdd.class
                 ),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
-                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
+                bundle.getString(KEY_SELL_RECEIPT_UUID, null)
         );
     }
 
@@ -57,6 +59,8 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     private final SetExtra extra;
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
+    @Nullable
+    private final String sellReceiptUuid;
 
     /**
      * Используйте конструктор с setPurchaserContactData
@@ -69,7 +73,7 @@ public class OpenPaybackReceiptCommand implements IBundlable {
             @Nullable List<PositionAdd> changes,
             @Nullable SetExtra extraChange
     ) {
-        this(changes, extraChange, null);
+        this(changes, extraChange, null, null);
     }
 
     public OpenPaybackReceiptCommand(
@@ -77,12 +81,22 @@ public class OpenPaybackReceiptCommand implements IBundlable {
             @Nullable SetExtra extraChange,
             @Nullable SetPurchaserContactData setPurchaserContactData
     ) {
+        this(changes, extraChange, setPurchaserContactData, null);
+    }
+
+    public OpenPaybackReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extraChange,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable String sellReceiptUuid
+    ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
         }
         this.extra = extraChange;
         this.setPurchaserContactData = setPurchaserContactData;
+        this.sellReceiptUuid = sellReceiptUuid;
     }
 
     public void process(@NonNull final Activity activity, IntegrationManagerCallback callback) {
@@ -118,6 +132,8 @@ public class OpenPaybackReceiptCommand implements IBundlable {
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
+        bundle.putString(KEY_SELL_RECEIPT_UUID, sellReceiptUuid);
+
         return bundle;
     }
 
@@ -134,5 +150,10 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     @Nullable
     public SetPurchaserContactData getSetPurchaserContactData() {
         return setPurchaserContactData;
+    }
+
+    @Nullable
+    public String getSellReceiptUuid() {
+        return sellReceiptUuid;
     }
 }
