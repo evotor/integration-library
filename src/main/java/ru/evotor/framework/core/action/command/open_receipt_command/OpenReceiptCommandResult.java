@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import ru.evotor.IBundlable;
 
 public class OpenReceiptCommandResult implements IBundlable {
@@ -18,6 +19,8 @@ public class OpenReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_CORRECTION_OUTCOME_RECEIPT_IS_ALREADY_OPEN = -6;
     public static final int ERROR_CODE_CORRECTION_RETURN_INCOME_RECEIPT_IS_ALREADY_OPEN = -7;
     public static final int ERROR_CODE_CORRECTION_RETURN_OUTCOME_RECEIPT_IS_ALREADY_OPEN = -8;
+    public static final int ERROR_CODE_OPEN_PAYBACK_RECEIPT_INVALID_POSITIONS = -9;
+    public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -10;
 
     @Nullable
     public static OpenReceiptCommandResult create(@Nullable Bundle bundle) {
