@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
+import ru.evotor.framework.core.IntegrationLibraryParsingException;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
@@ -60,6 +61,7 @@ public class Position implements Parcelable {
     /**
      * Тип товара.
      */
+    @Nullable
     private ProductType productType;
     /**
      * Название.
@@ -755,7 +757,13 @@ public class Position implements Parcelable {
         this.productUuid = in.readString();
         this.productCode = in.readString();
         int tmpProductType = in.readInt();
-        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+
+        if (tmpProductType >= ProductType.values().length) {
+            throw new IntegrationLibraryParsingException(Position.class);
+        } else {
+            this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+        }
+
         this.name = in.readString();
         String measureName = in.readString();
         int measurePrecision = in.readInt();
