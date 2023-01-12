@@ -11,7 +11,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import java.math.BigDecimal
 
 /**
- * Команда печати чека выплаты наличных
+ * Команда печати чека внесения наличных
  *
  * @param partnerName Получатель
  * @param description Основание
@@ -46,7 +46,7 @@ class PrintCashIncomeDocumentCommand(
     }
 
     companion object {
-        const val ACTION_NAME = "evo.v2.document.printCashIncomeDocument"
+        const val ACTION_NAME = "evo.v2.cash.income.printDocument"
 
         private const val KEY_PARTNER_NAME = "partner_name"
         private const val KEY_DESCRIPTION = "description"

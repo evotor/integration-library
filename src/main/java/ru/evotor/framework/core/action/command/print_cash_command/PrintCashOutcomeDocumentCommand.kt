@@ -55,7 +55,7 @@ class PrintCashOutcomeDocumentCommand(
     }
 
     companion object {
-        const val ACTION_NAME = "evo.v2.document.printCashOutcomeDocument"
+        const val ACTION_NAME = "evo.v2.cash.outcome.printDocument"
 
         private const val KEY_PARTNER_NAME = "partner_name"
         private const val KEY_DESCRIPTION = "description"
