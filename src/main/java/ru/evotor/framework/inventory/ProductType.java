@@ -87,10 +87,10 @@ public enum ProductType {
     /**
      * Лотерейный билет
      */
-    LOTTERY,
+    LOTTERY_TICKET,
 
     /**
      * Выигрыш в лотерею
      */
-    LOTTERY_MONEY,
+    LOTTERY_PRIZE,
 }
