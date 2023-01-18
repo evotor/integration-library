@@ -1363,7 +1363,7 @@ public class Position implements Parcelable {
         }
 
         public Builder toLottery() {
-            position.productType = ProductType.LOTTERY;
+            position.productType = ProductType.LOTTERY_TICKET;
             setAlcoParams(
                     null,
                     null,
@@ -1374,7 +1374,7 @@ public class Position implements Parcelable {
         }
 
         public Builder toLotteryMoney() {
-            position.productType = ProductType.LOTTERY_MONEY;
+            position.productType = ProductType.LOTTERY_PRIZE;
             setAlcoParams(
                     null,
                     null,
