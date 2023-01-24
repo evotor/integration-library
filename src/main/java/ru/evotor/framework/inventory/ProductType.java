@@ -82,5 +82,10 @@ public enum ProductType {
     /**
      * Ювелирные изделия
      */
-    JEWELRY_MARKED
+    JEWELRY_MARKED,
+
+    /**
+     * Меховые изделия
+     */
+    FUR_MARKED
 }

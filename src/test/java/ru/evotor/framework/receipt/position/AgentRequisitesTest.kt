@@ -1,13 +1,11 @@
 package ru.evotor.framework.receipt.position
 
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
-import ru.evotor.framework.kkt.FiscalRequisite
-import ru.evotor.framework.kkt.FiscalTags
 
 @Suppress("SameParameterValue")
 class AgentRequisitesTest {
