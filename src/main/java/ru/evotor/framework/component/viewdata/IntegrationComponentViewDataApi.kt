@@ -11,7 +11,6 @@ import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
-import ru.evotor.integrations.R
 
 object IntegrationComponentViewDataApi {
 
@@ -23,7 +22,8 @@ object IntegrationComponentViewDataApi {
         val applicationsList = ArrayList<PaymentPerformerViewData>()
         val packageManager = context.packageManager
         val intent = Intent(eventName)
-        val applicationsInfo = packageManager.queryIntentServices(intent, PackageManager.GET_META_DATA)
+        val applicationsInfo =
+            packageManager.queryIntentServices(intent, PackageManager.GET_META_DATA)
         for (resolveInfo in applicationsInfo) {
             generatePaymentPerformerViewData(context, resolveInfo)?.let {
                 applicationsList.add(it)
@@ -32,7 +32,10 @@ object IntegrationComponentViewDataApi {
         return applicationsList
     }
 
-    private fun generatePaymentPerformerViewData(context: Context, resolveInfo: ResolveInfo): PaymentPerformerViewData? {
+    private fun generatePaymentPerformerViewData(
+        context: Context,
+        resolveInfo: ResolveInfo
+    ): PaymentPerformerViewData? {
         if (resolveInfo.serviceInfo == null || resolveInfo.serviceInfo.metaData == null) {
             return null
         }
@@ -42,12 +45,16 @@ object IntegrationComponentViewDataApi {
         val packageManager = context.packageManager
         var appUuid: String? = null
         try {
-            val packageInfo = packageManager.getPackageInfo(resolveInfo.serviceInfo.packageName, PackageManager.GET_META_DATA or PackageManager.GET_PERMISSIONS)
+            val packageInfo = packageManager.getPackageInfo(
+                resolveInfo.serviceInfo.packageName,
+                PackageManager.GET_META_DATA or PackageManager.GET_PERMISSIONS
+            )
             if (!hasPermission(packageInfo)) {
                 return null
             }
             if (packageInfo.applicationInfo.metaData != null) {
-                appUuid = packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
+                appUuid =
+                    packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
             }
         } catch (exc: PackageManager.NameNotFoundException) {
             return null
@@ -56,32 +63,36 @@ object IntegrationComponentViewDataApi {
             return null
         }
         val paymentSystem = PaymentSystem(
-                paymentType,
-                resolveInfo.loadLabel(packageManager).toString(),
-                paymentSystemId
+            paymentType,
+            resolveInfo.loadLabel(packageManager).toString(),
+            paymentSystemId
         )
         val paymentPerformer = PaymentPerformer(
-                paymentSystem,
-                resolveInfo.serviceInfo.packageName,
-                resolveInfo.serviceInfo.name,
-                appUuid,
-                resolveInfo.loadLabel(packageManager).toString()
+            paymentSystem,
+            resolveInfo.serviceInfo.packageName,
+            resolveInfo.serviceInfo.name,
+            appUuid,
+            resolveInfo.loadLabel(packageManager).toString()
         )
-        val backgroundColor =  if (metaData.containsKey(BACKGROUND_COLOR_KEY))
+        val backgroundColor = if (metaData.containsKey(BACKGROUND_COLOR_KEY)) {
             metaData.getInt(BACKGROUND_COLOR_KEY)
-        else
-            context.getColor(R.color.white)
+        } else {
+            context.getColor(android.R.color.white)
+        }
+
         return PaymentPerformerViewData(
-                paymentPerformer,
-                resolveInfo.loadIcon(packageManager),
-                backgroundColor,
-                ColorUtils.getContrastColor(backgroundColor)
+            paymentPerformer,
+            resolveInfo.loadIcon(packageManager),
+            backgroundColor,
+            ColorUtils.getContrastColor(backgroundColor)
         )
     }
 
-    private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
+    private fun hasPermission(packageInfo: PackageInfo) =
+        packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
 
-    private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
+    private fun getPaymentSystemId(metaData: Bundle) =
+        metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
 
     private fun getPaymentType(metaData: Bundle) = try {
         PaymentType.valueOf(metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_TYPE, null))
