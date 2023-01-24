@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,7 +18,6 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -87,21 +85,14 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     "calling this from your main thread can lead to deadlock");
             Log.e(TAG, "calling this from your main thread can lead to deadlock and/or ANRs",
                     exception);
-            if (context.getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.FROYO) {
-                throw exception;
-            }
+            throw exception;
         }
     }
 
     private void postToHandler(Handler handler, final IntegrationManagerCallback callback,
                                final IntegrationManagerFuture future) {
         handler = handler == null ? mainHandler : handler;
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                callback.run(future);
-            }
-        });
+        handler.post(() -> callback.run(future));
     }
 
     private class ImsTask extends FutureTask<IntegrationManagerFuture.Result> implements IntegrationManagerFuture {
@@ -136,11 +127,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 String action,
                 ComponentName componentName,
                 Bundle data) {
-            super(new Callable<Result>() {
-                @Override
-                public Result call() throws Exception {
-                    throw new IllegalStateException("this should never be called");
-                }
+            super(() -> {
+                throw new IllegalStateException("this should never be called");
             });
 
             mHandler = handler;
@@ -217,7 +205,6 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 connection = pair.first;
                 if (!connection.disconnected) {
                     return pair.second;
-
                 }
 
                 context.unbindService(connection);
@@ -259,9 +246,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 }
             } catch (CancellationException e) {
                 throw new OperationCanceledException();
-            } catch (TimeoutException e) {
-                // fall through and cancel
-            } catch (InterruptedException e) {
+            } catch (TimeoutException | InterruptedException e) {
                 // fall through and cancel
             } catch (ExecutionException e) {
                 final Throwable cause = e.getCause();

@@ -2,22 +2,25 @@ package ru.evotor.framework.core;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.NetworkOnMainThreadException;
 import android.os.RemoteException;
 import android.util.Log;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import androidx.annotation.CallSuper;
-import androidx.annotation.Nullable;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
  * Базовый класс для реализации служб приложения.
- *
+ * <p>
  * Методы класса упрощают обмен данными между службами и смарт-терминалом.
  */
 public abstract class IntegrationService extends Service {
@@ -31,6 +34,16 @@ public abstract class IntegrationService extends Service {
                     processor.process(action, response, bundle);
                 } catch (Exception e) {
                     Log.e("IntegrationService", "Message: " + e.getMessage(), e);
+                    if ((!(e instanceof BadParcelableException))
+                            && (!(e instanceof IllegalArgumentException))
+                            && (!(e instanceof IllegalStateException))
+                            && (!(e instanceof NullPointerException))
+                            && (!(e instanceof SecurityException))
+                            && (!(e instanceof UnsupportedOperationException))
+                            && (!(e instanceof NetworkOnMainThreadException))
+                    ) {
+                        throw new IllegalStateException(e);
+                    }
                     throw e;
                 }
 

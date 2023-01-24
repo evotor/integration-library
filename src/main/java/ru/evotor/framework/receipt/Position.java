@@ -1340,6 +1340,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toFurMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.FUR_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setFurParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1459,6 +1473,10 @@ public class Position implements Parcelable {
         }
 
         private void setJewelryParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setFurParams(Mark mark) {
             position.mark = mark;
         }
 
