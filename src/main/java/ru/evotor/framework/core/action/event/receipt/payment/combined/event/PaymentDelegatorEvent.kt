@@ -10,15 +10,9 @@ import ru.evotor.IBundlable
  *
  * Чтобы приложение получало событие, значение константы <code>NAME_ACTION</code> необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
  */
-class PaymentDelegatorEvent(
-    val receiptUuid: String,
-    val availablePaybackSum: ArrayList<PaymentDelegatorPaybackData>? = null
-) : IBundlable {
+class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
     override fun toBundle(): Bundle =
-            Bundle().apply {
-                putString(KEY_RECEIPT_UUID, receiptUuid)
-                putParcelableArrayList(KEY_AVAILABLE_PAYBACK_SUM, availablePaybackSum)
-            }
+        Bundle().apply { putString(KEY_RECEIPT_UUID, receiptUuid) }
 
     companion object {
         /**
@@ -39,19 +33,11 @@ class PaymentDelegatorEvent(
             if (bundle == null) {
                 return null
             }
-            bundle.classLoader = PaymentDelegatorPaybackData::class.java.classLoader
-            val receiptUuid = getReceiptUuid(bundle) ?: return null
-            val remains = getAvailablePaybackSum(bundle)
-            return PaymentDelegatorEvent(receiptUuid, remains)
-
+            val receiptUuid = PaymentDelegatorEvent.getReceiptUuid(bundle) ?: return null
+            return PaymentDelegatorEvent(receiptUuid)
         }
 
         fun getReceiptUuid(bundle: Bundle?): String? =
                 bundle?.getString(KEY_RECEIPT_UUID)
-
-        fun getAvailablePaybackSum(bundle: Bundle?): ArrayList<PaymentDelegatorPaybackData>? =
-            bundle?.let { b ->
-                b.getParcelableArrayList(KEY_AVAILABLE_PAYBACK_SUM)
-            }
     }
 }
