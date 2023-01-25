@@ -87,5 +87,15 @@ public enum ProductType {
     /**
      * Меховые изделия
      */
-    FUR_MARKED
+    FUR_MARKED,
+
+    /**
+     * Лотерейный билет
+     */
+    LOTTERY_TICKET,
+
+    /**
+     * Выигрыш в лотерею
+     */
+    LOTTERY_PRIZE,
 }
