@@ -6,7 +6,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
-    def version = 21
+    def version = 22
 
     compileSdkVersion 29
     defaultConfig {
