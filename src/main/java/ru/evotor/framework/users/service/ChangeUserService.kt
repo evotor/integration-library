@@ -20,9 +20,9 @@ abstract class ChangeUserService : IntegrationServiceV2() {
     companion object {
 
         /**
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.intent.event.user.USER_CHANGED`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.intent.event.users.USER_CHANGED`.
          */
-        const val ACTION_USER_CHANGED = "ru.evotor.intent.event.USER_CHANGED"
+        const val ACTION_USER_CHANGED = "ru.evotor.intent.event.users.USER_CHANGED"
 
         const val PERMISSION = "ru.evotor.permission.CHANGE_USER"
     }

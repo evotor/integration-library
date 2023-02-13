@@ -20,9 +20,9 @@ abstract class CreateProductService : IntegrationServiceV2() {
     companion object {
 
         /**
-         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.intent.event.user.CREATE_PRODUCT`.
+         * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.intent.event.product.CREATE_PRODUCT`.
          */
-        const val ACTION_CREATE_PRODUCT = "ru.evotor.intent.event.CREATE_PRODUCT"
+        const val ACTION_CREATE_PRODUCT = "ru.evotor.intent.event.product.CREATE_PRODUCT"
 
         const val PERMISSION = "ru.evotor.permission.CREATE_PRODUCT"
     }
