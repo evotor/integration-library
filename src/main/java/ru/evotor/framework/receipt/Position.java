@@ -1424,15 +1424,6 @@ public class Position implements Parcelable {
             return this;
         }
 
-        /**
-         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
-         * <p>
-         * вода {@link ProductType#WATER_MARKED}
-         * молочная продукция {@link ProductType#DAIRY_MARKED}
-         *
-         * @param volumeSortQuantity количество товара по ОСУ
-         * @param gtin gtin товара
-         */
         public Builder toVolumeSortAccountingRealization(
                 @NonNull BigDecimal volumeSortQuantity,
                 @NonNull String gtin
