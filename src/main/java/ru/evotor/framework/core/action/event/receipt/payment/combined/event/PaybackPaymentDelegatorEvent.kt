@@ -17,9 +17,9 @@ class PaybackPaymentDelegatorEvent(
         /**
          * Оплата чека продажи будет передана другому приложению.
          *
-         * Значение константы: <code>evo.v2.receipt.sell.payment.COMBINED</code>.
+         * Значение константы: <code>evo.v2.receipt.payback.payment.COMBINED</code>.
          */
-        const val NAME_ACTION = "evo.v2.receipt.sell.payment.COMBINED_PAYBACK"
+        const val NAME_ACTION = "evo.v2.receipt.payback.payment.COMBINED"
         /**
          * Разрешение, которое необходимо указать в манифесте приложения.
          */
