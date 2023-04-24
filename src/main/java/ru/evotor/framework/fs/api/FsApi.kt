@@ -45,16 +45,23 @@ object FsApi {
             return null
         }
 
-        val date: Date? = cursor.optLong(KktContract.COLUMN_FS_REGISTRATION_INFO_DATE)?.let { Date(it) }
+        val date: Date? =
+            cursor.optLong(KktContract.COLUMN_FS_REGISTRATION_INFO_DATE)?.let { Date(it) }
         val inn: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_INN)
         val rnm: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_RNM)
-        val taxationSystems: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_TAXATION_SYSTEMS)?.toByte()
-        val workModeFlags: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_FLAGS)?.toByte()
-        val workModeExFlags: Byte? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_EX_FLAGS)?.toByte()
+        val taxationSystems: Byte? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_TAXATION_SYSTEMS)?.toByte()
+        val workModeFlags: Byte? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_FLAGS)?.toByte()
+        val workModeExFlags: Byte? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_WORK_MODE_EX_FLAGS)?.toByte()
         val ofdInn: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_OFD_INN)
-        val reregistrationReasonCode: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_REREGISTRATION_REASON_CODE)
-        val fiscalDocumentNumber: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER)
-        val fiscalDocumentSign: Int? = cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN)
+        val reregistrationReasonCode: Int? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_REREGISTRATION_REASON_CODE)
+        val fiscalDocumentNumber: Int? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER)
+        val fiscalDocumentSign: Int? =
+            cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN)
 
         date ?: return null
         inn ?: return null
@@ -78,7 +85,10 @@ object FsApi {
         )
     }
 
-    private fun getFsFiscalizationDocument(context: Context, uri: Uri): GetFsFiscalizationDocumentResult {
+    private fun getFsFiscalizationDocument(
+        context: Context,
+        uri: Uri
+    ): GetFsFiscalizationDocumentResult {
         val cursor = context.contentResolver.query(
             uri,
             arrayOf(
@@ -99,8 +109,9 @@ object FsApi {
         )
 
         cursor ?: return GetFsFiscalizationDocumentResult.Unsupported
-        return GetFsFiscalizationDocumentResult.Success(mapCursorToFsFiscalizationDocument(cursor))
-
+        return cursor.use {
+            GetFsFiscalizationDocumentResult.Success(mapCursorToFsFiscalizationDocument(it))
+        }
     }
 
     private fun getKktFsInfo(context: Context): String? {
