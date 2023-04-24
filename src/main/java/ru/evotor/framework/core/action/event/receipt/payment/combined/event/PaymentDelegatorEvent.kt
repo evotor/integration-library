@@ -12,7 +12,7 @@ import ru.evotor.IBundlable
  */
 class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
     override fun toBundle(): Bundle =
-            Bundle().apply { putString(KEY_RECEIPT_UUID, receiptUuid) }
+        Bundle().apply { putString(KEY_RECEIPT_UUID, receiptUuid) }
 
     companion object {
         /**
@@ -27,6 +27,7 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
         const val NAME_PERMISSION = "ru.evotor.permission.COMBINED"
 
         private const val KEY_RECEIPT_UUID = "receiptUuid"
+        private const val KEY_AVAILABLE_PAYBACK_SUM = "availablePaybackSum"
 
         fun create(bundle: Bundle?): PaymentDelegatorEvent? {
             if (bundle == null) {
@@ -34,7 +35,6 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
             }
             val receiptUuid = PaymentDelegatorEvent.getReceiptUuid(bundle) ?: return null
             return PaymentDelegatorEvent(receiptUuid)
-
         }
 
         fun getReceiptUuid(bundle: Bundle?): String? =
