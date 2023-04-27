@@ -24,6 +24,6 @@ abstract class CreateProductService : IntegrationServiceV2() {
          */
         const val ACTION_CREATE_PRODUCT_CLICKED = "ru.evotor.intent.event.product.CREATE_PRODUCT_CLICKED"
 
-        const val PERMISSION = "ru.evotor.permission.CREATE_PRODUCT_CLICKED"
+        const val PERMISSION = "ru.evotor.permission.CREATE_PRODUCT"
     }
 }
