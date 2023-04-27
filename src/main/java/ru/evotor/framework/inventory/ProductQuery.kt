@@ -35,7 +35,9 @@ class ProductQuery :
     ) { it.multiply(BigDecimal(100)) }
 
     @JvmField
-    val costPrice = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_COST_PRICE, {it?.multiply(BigDecimal(100))})
+    val costPrice = addFieldFilter<BigDecimal?, BigDecimal?>(
+        ProductTable.ROW_COST_PRICE
+    ) { it?.multiply(BigDecimal(100)) }
 
     @JvmField
     val quantity = addFieldFilter<BigDecimal, BigDecimal>(
