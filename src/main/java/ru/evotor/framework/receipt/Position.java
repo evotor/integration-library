@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
+import ru.evotor.framework.core.IntegrationLibraryParsingException;
 import ru.evotor.framework.inventory.AttributeValue;
 import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
@@ -60,6 +61,7 @@ public class Position implements Parcelable {
     /**
      * Тип товара.
      */
+    @Nullable
     private ProductType productType;
     /**
      * Название.
@@ -755,7 +757,13 @@ public class Position implements Parcelable {
         this.productUuid = in.readString();
         this.productCode = in.readString();
         int tmpProductType = in.readInt();
-        this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+
+        if (tmpProductType >= ProductType.values().length) {
+            throw new IntegrationLibraryParsingException(Position.class);
+        } else {
+            this.productType = tmpProductType == -1 ? null : ProductType.values()[tmpProductType];
+        }
+
         this.name = in.readString();
         String measureName = in.readString();
         int measurePrecision = in.readInt();
@@ -1332,6 +1340,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toFurMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.FUR_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setFurParams(mark);
+            return this;
+        }
+
         public Builder toNormal() {
             position.productType = ProductType.NORMAL;
             setAlcoParams(
@@ -1345,6 +1367,28 @@ public class Position implements Parcelable {
 
         public Builder toService() {
             position.productType = ProductType.SERVICE;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toLotteryTicket() {
+            position.productType = ProductType.LOTTERY_TICKET;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toLotteryPrize() {
+            position.productType = ProductType.LOTTERY_PRIZE;
             setAlcoParams(
                     null,
                     null,
@@ -1429,6 +1473,10 @@ public class Position implements Parcelable {
         }
 
         private void setJewelryParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setFurParams(Mark mark) {
             position.mark = mark;
         }
 

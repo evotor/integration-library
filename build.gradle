@@ -8,7 +8,7 @@ apply plugin: 'org.jetbrains.dokka'
 android {
     namespace 'ru.evotor.integrations'
 
-    def version = 19
+    def version = 22
 
     compileSdkVersion 30
 
@@ -17,7 +17,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode version
-        versionName "0.5.02"
+        versionName "0.6.03"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
@@ -49,12 +49,12 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
 
     api 'com.github.evotor:push-notifications:v0.2.1'
     api 'com.github.evotor:query-api:STDEV-13837-SNAPSHOT'
 
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     testImplementation 'junit:junit:4.13.2'
 }
