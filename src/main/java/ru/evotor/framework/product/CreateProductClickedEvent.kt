@@ -3,7 +3,7 @@ package ru.evotor.framework.product
 import android.os.Bundle
 import ru.evotor.framework.common.event.IntegrationEvent
 
-class CreateProductEvent : IntegrationEvent() {
+class CreateProductClickedEvent : IntegrationEvent() {
     override fun toBundle() = Bundle()
 
     class Result() : IntegrationEvent.Result() {
@@ -22,6 +22,6 @@ class CreateProductEvent : IntegrationEvent() {
     companion object {
 
         @JvmStatic
-        fun from() = CreateProductEvent()
+        fun from() = CreateProductClickedEvent()
     }
 }
