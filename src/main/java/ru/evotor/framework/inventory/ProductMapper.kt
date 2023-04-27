@@ -29,6 +29,7 @@ internal object ProductMapper {
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                         description = cursor.optString(ProductTable.ROW_DESCRIPTION),
                         price = cursor.getMoney(ProductTable.ROW_PRICE_OUT),
+                        costPrice = cursor.optMoney(ProductTable.ROW_COST_PRICE),
                         quantity = cursor.getQuantity(ProductTable.ROW_QUANTITY),
                         measure = readFromProductCursor(cursor),
                         alcoholByVolume = cursor.optVolume(ProductTable.ROW_ALCOHOL_BY_VOLUME),
