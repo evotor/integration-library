@@ -172,6 +172,13 @@ object FeaturesApi {
     fun isJewelryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_JEWELRY_MARK)
 
     /**
+     * Проверяет, активна ли функция "Маркировка меховых изделий" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFurMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FUR_MARK)
+
+    /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.

@@ -29,6 +29,23 @@ public abstract class AbstractService {
 
         if (connected == null || !connected) {
             this.startInitConnection(context, false);
+
+            int maxCounter = 20;
+            do {
+                connected = this.getServiceConnected();
+                if (connected == null || connected) {
+                    break;
+                }
+                if (maxCounter <= 0) {
+                    break;
+                }
+                maxCounter--;
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException exc) {
+                }
+
+            } while (true);
         }
 
         while ((connected = this.getServiceConnected()) == null) {
