@@ -52,7 +52,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.4.0'
 
     api 'com.github.evotor:push-notifications:v0.2.1'
-    api 'com.github.evotor:query-api:STDEV-13837-SNAPSHOT'
+    api 'com.github.evotor:query-api:1.2.0'
 
     implementation 'com.google.code.gson:gson:2.8.9'
 
