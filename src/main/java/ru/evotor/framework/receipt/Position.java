@@ -193,6 +193,12 @@ public class Position implements Parcelable {
     @Nullable
     private PartialRealization partialRealization;
 
+    /**
+     * Признак подакцизности товар
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    private boolean isExcisable;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -261,6 +267,7 @@ public class Position implements Parcelable {
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
+        this.isExcisable = position.isExcisable;
     }
 
     /**
@@ -538,6 +545,10 @@ public class Position implements Parcelable {
     @Nullable
     public PartialRealization getPartialRealization() {
         return partialRealization;
+    }
+
+    public boolean isExcisable() {
+        return isExcisable;
     }
 
     @Override
@@ -841,9 +852,25 @@ public class Position implements Parcelable {
                 measurePrecision,
                 measureCode
         );
+        if (version >= 10) {
+            try {
+                this.isExcisable = in.readInt() == 1;
+            } catch (Exception e) {
+                this.isExcisable = getIsExciseByProductType(this.productType);
+            }
+        } else {
+            this.isExcisable = getIsExciseByProductType(this.productType);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
+    }
+
+    public static boolean getIsExciseByProductType(ProductType productType) {
+        return productType == ProductType.ALCOHOL_MARKED ||
+                productType == ProductType.ALCOHOL_NOT_MARKED ||
+                productType == ProductType.TOBACCO_MARKED ||
+                productType == ProductType.TOBACCO_PRODUCTS_MARKED;
     }
 
     private void readAttributesField(Parcel in) {
@@ -1413,6 +1440,11 @@ public class Position implements Parcelable {
             position.partialRealization = new PartialRealization(
                     quantityInPackage
             );
+            return this;
+        }
+
+        public Builder setIsExcisable(boolean isExcisable) {
+            position.isExcisable = isExcisable;
             return this;
         }
 
