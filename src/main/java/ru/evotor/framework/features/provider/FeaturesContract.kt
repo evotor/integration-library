@@ -36,6 +36,7 @@ object FeaturesContract {
     const val PATH_JEWELRY_MARK = "jewelry_mark"
     const val PATH_FUR_MARK = "fur_mark"
     const val PATH_SBP_ACTIVATION = "sbp_activation"
+    const val PATH_EXCISE_PRODUCTS = "excise_products"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

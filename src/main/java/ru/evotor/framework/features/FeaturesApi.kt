@@ -220,6 +220,13 @@ object FeaturesApi {
      */
     fun isSbpActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_SBP_ACTIVATION)
 
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "Подакцизные товары".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isExciseProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXCISE_PRODUCTS)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
