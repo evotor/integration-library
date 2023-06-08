@@ -40,7 +40,7 @@ internal object ProductMapper {
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
                         classificationCode = cursor.optString(ProductTable.ROW_CLASSIFICATION_CODE),
                         allowPartialRealization = Utils.safeValueOf(ProductItem.AllowPartialRealization::class.java, cursor.optString(ProductTable.ROW_ALLOW_PARTIAL_REALIZATION), null),
-                        isExcisable = cursor.optBoolean(ProductTable.ROW_IS_EXCISABLE) ?: Position.getIsExciseByProductType(productType)
+                        isExcisable = Position.getIsExciseByProductType(productType, cursor.optBoolean(ProductTable.ROW_IS_EXCISABLE))
                 )
             }
         } catch (e: Exception) {

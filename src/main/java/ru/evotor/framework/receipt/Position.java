@@ -856,21 +856,31 @@ public class Position implements Parcelable {
             try {
                 this.isExcisable = in.readInt() == 1;
             } catch (Exception e) {
-                this.isExcisable = getIsExciseByProductType(this.productType);
+                this.isExcisable = getIsExciseByProductType(this.productType, null);
             }
         } else {
-            this.isExcisable = getIsExciseByProductType(this.productType);
+            this.isExcisable = getIsExciseByProductType(this.productType, null);
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
     }
 
-    public static boolean getIsExciseByProductType(ProductType productType) {
-        return productType == ProductType.ALCOHOL_MARKED ||
+    public static boolean getIsExciseByProductType(ProductType productType, @Nullable Boolean isExcisable) {
+        if (productType == ProductType.ALCOHOL_MARKED ||
                 productType == ProductType.ALCOHOL_NOT_MARKED ||
-                productType == ProductType.TOBACCO_MARKED ||
-                productType == ProductType.TOBACCO_PRODUCTS_MARKED;
+                productType == ProductType.TOBACCO_MARKED) {
+            return true;
+        } else if (productType == ProductType.NORMAL ||
+                productType == ProductType.TOBACCO_PRODUCTS_MARKED) {
+            if (isExcisable != null) {
+                return isExcisable;
+            } else {
+                return productType == ProductType.TOBACCO_PRODUCTS_MARKED;
+            }
+        } else {
+            return false;
+        }
     }
 
     private void readAttributesField(Parcel in) {
