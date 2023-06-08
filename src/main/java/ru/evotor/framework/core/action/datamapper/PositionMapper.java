@@ -152,11 +152,9 @@ public final class PositionMapper {
         boolean isExcisable = bundle.getBoolean(KEY_IS_EXCISABLE, false);
         if (productType == ProductType.ALCOHOL_MARKED ||
                 productType == ProductType.ALCOHOL_NOT_MARKED ||
-                productType == ProductType.TOBACCO_MARKED) {
+                productType == ProductType.TOBACCO_MARKED ||
+                productType == ProductType.TOBACCO_PRODUCTS_MARKED) {
             isExcisable = true;
-        } else if (productType != ProductType.NORMAL &&
-                productType != ProductType.TOBACCO_PRODUCTS_MARKED) {
-            isExcisable = false;
         }
 
         if (quantity == null ||
