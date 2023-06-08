@@ -39,7 +39,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 9;
+    private static final int VERSION = 10;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -761,6 +761,7 @@ public class Position implements Parcelable {
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
+        dest.writeInt(this.isExcisable ? 1 : 0);
     }
 
     protected Position(Parcel in) {
@@ -960,6 +961,7 @@ public class Position implements Parcelable {
             builder.position.productType = product.getType();
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
+            builder.position.isExcisable = product.isExcisable();
 
             return builder;
         }
