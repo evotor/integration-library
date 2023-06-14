@@ -194,7 +194,7 @@ public class Position implements Parcelable {
     private PartialRealization partialRealization;
 
     /**
-     * Признак подакцизности товар
+     * Признак подакцизности товара
      * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
      */
     private boolean isExcisable;
@@ -547,7 +547,11 @@ public class Position implements Parcelable {
         return partialRealization;
     }
 
-    public boolean isExcisable() {
+    /**
+     * @return Признак подакцизности товара.
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    public boolean getIsExcisable() {
         return isExcisable;
     }
 
@@ -612,6 +616,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(partialRealization, position.partialRealization))
             return false;
+        if (!Objects.equals(isExcisable, position.isExcisable))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -643,6 +649,7 @@ public class Position implements Parcelable {
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
+        result = 31 * result + (Boolean.hashCode(isExcisable));
         return result;
     }
 
@@ -674,6 +681,7 @@ public class Position implements Parcelable {
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
                 ", partial=" + partialRealization +
+                ", isExcisable=" + isExcisable +
                 '}';
     }
 
@@ -1455,6 +1463,19 @@ public class Position implements Parcelable {
             return this;
         }
 
+        /**
+         * Признак подакцизности товара <br>
+         * На основании этого флага будет вычислен признак предмета расчета (тег 1212),
+         * должно выставляться значение 'true', если тип товара является: <br>
+         * {@link ProductType#ALCOHOL_MARKED} <br>
+         * {@link ProductType#ALCOHOL_NOT_MARKED} <br>
+         * {@link ProductType#TOBACCO_MARKED} <br>
+         * {@link ProductType#TOBACCO_PRODUCTS_MARKED} <br>
+         * <br>
+         * Опционально указывается для типа товара {@link ProductType#NORMAL}
+         *
+         * @param isExcisable булевое значение, является ли товар акцизным
+         */
         public Builder setIsExcisable(boolean isExcisable) {
             position.isExcisable = isExcisable;
             return this;

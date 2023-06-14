@@ -3,6 +3,8 @@ package ru.evotor.framework.core.action.datamapper;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import androidx.annotation.Nullable;
 import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.inventory.AttributeValue;
@@ -278,7 +279,7 @@ public final class PositionMapper {
         final PartialRealization partialRealization = position.getPartialRealization();
         bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
 
-        bundle.putBoolean(KEY_IS_EXCISABLE, position.isExcisable());
+        bundle.putBoolean(KEY_IS_EXCISABLE, position.getIsExcisable());
 
         return bundle;
     }
