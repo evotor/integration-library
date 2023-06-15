@@ -3,6 +3,7 @@ package ru.evotor.framework.inventory
 import android.database.Cursor
 import ru.evotor.framework.*
 import ru.evotor.framework.receipt.Measure
+import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.TaxNumber
 
 /**
@@ -21,11 +22,12 @@ internal object ProductMapper {
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT)
                 )
             } else {
+                val productType = Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TYPE)), ProductType.NORMAL)
                 return ProductItem.Product(
                         uuid = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_UUID)),
                         parentUuid = cursor.optString(ProductTable.ROW_PARENT_UUID),
                         code = cursor.optString(ProductTable.ROW_CODE),
-                        type = Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TYPE)), ProductType.NORMAL),
+                        type = productType,
                         name = cursor.getString(cursor.getColumnIndex(ProductTable.ROW_NAME)),
                         description = cursor.optString(ProductTable.ROW_DESCRIPTION),
                         price = cursor.getMoney(ProductTable.ROW_PRICE_OUT),
@@ -37,7 +39,8 @@ internal object ProductMapper {
                         tareVolume = cursor.optVolume(ProductTable.ROW_TARE_VOLUME),
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
                         classificationCode = cursor.optString(ProductTable.ROW_CLASSIFICATION_CODE),
-                        allowPartialRealization = Utils.safeValueOf(ProductItem.AllowPartialRealization::class.java, cursor.optString(ProductTable.ROW_ALLOW_PARTIAL_REALIZATION), null)
+                        allowPartialRealization = Utils.safeValueOf(ProductItem.AllowPartialRealization::class.java, cursor.optString(ProductTable.ROW_ALLOW_PARTIAL_REALIZATION), null),
+                        isExcisable = Position.getIsExciseByProductType(productType, cursor.optBoolean(ProductTable.ROW_IS_EXCISABLE))
                 )
             }
         } catch (e: Exception) {

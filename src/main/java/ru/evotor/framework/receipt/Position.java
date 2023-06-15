@@ -39,7 +39,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 9;
+    private static final int VERSION = 10;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -193,6 +193,12 @@ public class Position implements Parcelable {
     @Nullable
     private PartialRealization partialRealization;
 
+    /**
+     * Признак подакцизности товара
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    private boolean isExcisable;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -261,6 +267,7 @@ public class Position implements Parcelable {
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
+        this.isExcisable = position.isExcisable;
     }
 
     /**
@@ -540,6 +547,14 @@ public class Position implements Parcelable {
         return partialRealization;
     }
 
+    /**
+     * @return Признак подакцизности товара.
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    public boolean getIsExcisable() {
+        return isExcisable;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -601,6 +616,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(partialRealization, position.partialRealization))
             return false;
+        if (!Objects.equals(isExcisable, position.isExcisable))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -632,6 +649,7 @@ public class Position implements Parcelable {
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
+        result = 31 * result + (Boolean.hashCode(isExcisable));
         return result;
     }
 
@@ -663,6 +681,7 @@ public class Position implements Parcelable {
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
                 ", partial=" + partialRealization +
+                ", isExcisable=" + isExcisable +
                 '}';
     }
 
@@ -750,6 +769,7 @@ public class Position implements Parcelable {
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
+        dest.writeInt(this.isExcisable ? 1 : 0);
     }
 
     protected Position(Parcel in) {
@@ -841,8 +861,34 @@ public class Position implements Parcelable {
                 measurePrecision,
                 measureCode
         );
+        if (version >= 10) {
+            try {
+                this.isExcisable = in.readInt() == 1;
+            } catch (Exception e) {
+                this.isExcisable = getIsExciseByProductType(this.productType, null);
+            }
+        } else {
+            this.isExcisable = getIsExciseByProductType(this.productType, null);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
+        }
+    }
+
+    public static boolean getIsExciseByProductType(ProductType productType, @Nullable Boolean isExcisable) {
+        if (productType == ProductType.ALCOHOL_MARKED ||
+                productType == ProductType.ALCOHOL_NOT_MARKED ||
+                productType == ProductType.TOBACCO_MARKED) {
+            return true;
+        } else if (productType == ProductType.NORMAL ||
+                productType == ProductType.TOBACCO_PRODUCTS_MARKED) {
+            if (isExcisable != null) {
+                return isExcisable;
+            } else {
+                return productType == ProductType.TOBACCO_PRODUCTS_MARKED;
+            }
+        } else {
+            return false;
         }
     }
 
@@ -923,6 +969,7 @@ public class Position implements Parcelable {
             builder.position.productType = product.getType();
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
+            builder.position.isExcisable = product.isExcisable();
 
             return builder;
         }
@@ -1413,6 +1460,24 @@ public class Position implements Parcelable {
             position.partialRealization = new PartialRealization(
                     quantityInPackage
             );
+            return this;
+        }
+
+        /**
+         * Признак подакцизности товара <br>
+         * На основании этого флага будет вычислен признак предмета расчета (тег 1212),
+         * должно выставляться значение 'true', если тип товара является: <br>
+         * {@link ProductType#ALCOHOL_MARKED} <br>
+         * {@link ProductType#ALCOHOL_NOT_MARKED} <br>
+         * {@link ProductType#TOBACCO_MARKED} <br>
+         * {@link ProductType#TOBACCO_PRODUCTS_MARKED} <br>
+         * <br>
+         * Опционально указывается для типа товара {@link ProductType#NORMAL}
+         *
+         * @param isExcisable булевое значение, является ли товар акцизным
+         */
+        public Builder setIsExcisable(boolean isExcisable) {
+            position.isExcisable = isExcisable;
             return this;
         }
 
