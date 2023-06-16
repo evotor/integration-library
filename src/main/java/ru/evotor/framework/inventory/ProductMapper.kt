@@ -1,9 +1,16 @@
 package ru.evotor.framework.inventory
 
 import android.database.Cursor
-import ru.evotor.framework.*
+import ru.evotor.framework.Utils
+import ru.evotor.framework.getMoney
+import ru.evotor.framework.getQuantity
+import ru.evotor.framework.optBoolean
+import ru.evotor.framework.optInt
+import ru.evotor.framework.optLong
+import ru.evotor.framework.optMoney
+import ru.evotor.framework.optString
+import ru.evotor.framework.optVolume
 import ru.evotor.framework.receipt.Measure
-import ru.evotor.framework.receipt.Position
 import ru.evotor.framework.receipt.TaxNumber
 
 /**
@@ -40,7 +47,7 @@ internal object ProductMapper {
                         taxNumber = Utils.safeValueOf(TaxNumber::class.java, cursor.getString(cursor.getColumnIndex(ProductTable.ROW_TAX_NUMBER)), TaxNumber.NO_VAT),
                         classificationCode = cursor.optString(ProductTable.ROW_CLASSIFICATION_CODE),
                         allowPartialRealization = Utils.safeValueOf(ProductItem.AllowPartialRealization::class.java, cursor.optString(ProductTable.ROW_ALLOW_PARTIAL_REALIZATION), null),
-                        isExcisable = Position.getIsExciseByProductType(productType, cursor.optBoolean(ProductTable.ROW_IS_EXCISABLE))
+                        isExcisable = cursor.optBoolean(ProductTable.ROW_IS_EXCISABLE)
                 )
             }
         } catch (e: Exception) {

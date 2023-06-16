@@ -70,7 +70,8 @@ public class Position implements Parcelable {
     /**
      * Единица измерения.
      */
-    @NonNull private Measure measure;
+    @NonNull
+    private Measure measure;
     /**
      * Ставка НДС.
      */
@@ -197,7 +198,8 @@ public class Position implements Parcelable {
      * Признак подакцизности товара
      * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
      */
-    private boolean isExcisable;
+    @Nullable
+    private Boolean isExcisable;
 
     public Position(
             String uuid,
@@ -375,21 +377,22 @@ public class Position implements Parcelable {
     /**
      * @return Единица измерения
      */
-    @NonNull public Measure getMeasure() {
+    @NonNull
+    public Measure getMeasure() {
         return measure;
     }
 
     /**
-     * @deprecated Используйте @link{getMeasure}
      * @return Наименование единицы измерения.
+     * @deprecated Используйте @link{getMeasure}
      */
     public String getMeasureName() {
         return measure.getName();
     }
 
     /**
-     * @deprecated Используйте @link{getMeasure}
      * @return Точность единицы измерения.
+     * @deprecated Используйте @link{getMeasure}
      */
     public int getMeasurePrecision() {
         return measure.getPrecision();
@@ -551,7 +554,8 @@ public class Position implements Parcelable {
      * @return Признак подакцизности товара.
      * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
      */
-    public boolean getIsExcisable() {
+    @Nullable
+    public Boolean getIsExcisable() {
         return isExcisable;
     }
 
@@ -649,7 +653,7 @@ public class Position implements Parcelable {
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
-        result = 31 * result + (Boolean.hashCode(isExcisable));
+        result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
         return result;
     }
 
@@ -769,7 +773,7 @@ public class Position implements Parcelable {
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
-        dest.writeInt(this.isExcisable ? 1 : 0);
+        dest.writeSerializable(this.isExcisable);
     }
 
     protected Position(Parcel in) {
@@ -862,33 +866,10 @@ public class Position implements Parcelable {
                 measureCode
         );
         if (version >= 10) {
-            try {
-                this.isExcisable = in.readInt() == 1;
-            } catch (Exception e) {
-                this.isExcisable = getIsExciseByProductType(this.productType, null);
-            }
-        } else {
-            this.isExcisable = getIsExciseByProductType(this.productType, null);
+            this.isExcisable = (Boolean) in.readSerializable();
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
-        }
-    }
-
-    public static boolean getIsExciseByProductType(ProductType productType, @Nullable Boolean isExcisable) {
-        if (productType == ProductType.ALCOHOL_MARKED ||
-                productType == ProductType.ALCOHOL_NOT_MARKED ||
-                productType == ProductType.TOBACCO_MARKED) {
-            return true;
-        } else if (productType == ProductType.NORMAL ||
-                productType == ProductType.TOBACCO_PRODUCTS_MARKED) {
-            if (isExcisable != null) {
-                return isExcisable;
-            } else {
-                return productType == ProductType.TOBACCO_PRODUCTS_MARKED;
-            }
-        } else {
-            return false;
         }
     }
 
@@ -1358,7 +1339,7 @@ public class Position implements Parcelable {
             setWaterParams(mark);
             return this;
         }
-      
+
         public Builder toBikeMarked(
                 @NonNull Mark mark
         ) {
@@ -1476,7 +1457,7 @@ public class Position implements Parcelable {
          *
          * @param isExcisable булевое значение, является ли товар акцизным
          */
-        public Builder setIsExcisable(boolean isExcisable) {
+        public Builder setIsExcisable(Boolean isExcisable) {
             position.isExcisable = isExcisable;
             return this;
         }

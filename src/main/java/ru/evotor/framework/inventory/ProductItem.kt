@@ -40,7 +40,7 @@ sealed class ProductItem(
             val tareVolume: BigDecimal?,
             val classificationCode: String?,
             val allowPartialRealization: AllowPartialRealization?,
-            val isExcisable: Boolean
+            val isExcisable: Boolean?
     ) : ProductItem(
             uuid,
             parentUuid,

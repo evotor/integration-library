@@ -150,13 +150,7 @@ public final class PositionMapper {
                 PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
         PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALIZATION));
-        boolean isExcisable = bundle.getBoolean(KEY_IS_EXCISABLE, false);
-        if (productType == ProductType.ALCOHOL_MARKED ||
-                productType == ProductType.ALCOHOL_NOT_MARKED ||
-                productType == ProductType.TOBACCO_MARKED ||
-                productType == ProductType.TOBACCO_PRODUCTS_MARKED) {
-            isExcisable = true;
-        }
+        Boolean isExcisable = (Boolean) bundle.getSerializable(KEY_IS_EXCISABLE);
 
         if (quantity == null ||
                 price == null ||
@@ -279,7 +273,7 @@ public final class PositionMapper {
         final PartialRealization partialRealization = position.getPartialRealization();
         bundle.putBundle(KEY_PARTIAL_REALIZATION, partialRealization != null ? partialRealization.toBundle() : null);
 
-        bundle.putBoolean(KEY_IS_EXCISABLE, position.getIsExcisable());
+        bundle.putSerializable(KEY_IS_EXCISABLE, position.getIsExcisable());
 
         return bundle;
     }
