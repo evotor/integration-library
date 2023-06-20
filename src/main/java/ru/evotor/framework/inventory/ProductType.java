@@ -98,4 +98,9 @@ public enum ProductType {
      * Выигрыш в лотерею
      */
     LOTTERY_PRIZE,
+
+    /**
+     * Маркированное пиво (Кеги)
+     */
+    BEER_MARKED_KEG
 }
