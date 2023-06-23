@@ -39,7 +39,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 9;
+    private static final int VERSION = 10;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -70,7 +70,8 @@ public class Position implements Parcelable {
     /**
      * Единица измерения.
      */
-    @NonNull private Measure measure;
+    @NonNull
+    private Measure measure;
     /**
      * Ставка НДС.
      */
@@ -193,6 +194,13 @@ public class Position implements Parcelable {
     @Nullable
     private PartialRealization partialRealization;
 
+    /**
+     * Признак подакцизности товара
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    @Nullable
+    private Boolean isExcisable;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -261,6 +269,7 @@ public class Position implements Parcelable {
         this.classificationCode = position.getClassificationCode();
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
+        this.isExcisable = position.isExcisable;
     }
 
     /**
@@ -368,21 +377,22 @@ public class Position implements Parcelable {
     /**
      * @return Единица измерения
      */
-    @NonNull public Measure getMeasure() {
+    @NonNull
+    public Measure getMeasure() {
         return measure;
     }
 
     /**
-     * @deprecated Используйте @link{getMeasure}
      * @return Наименование единицы измерения.
+     * @deprecated Используйте @link{getMeasure}
      */
     public String getMeasureName() {
         return measure.getName();
     }
 
     /**
-     * @deprecated Используйте @link{getMeasure}
      * @return Точность единицы измерения.
+     * @deprecated Используйте @link{getMeasure}
      */
     public int getMeasurePrecision() {
         return measure.getPrecision();
@@ -540,6 +550,15 @@ public class Position implements Parcelable {
         return partialRealization;
     }
 
+    /**
+     * @return Признак подакцизности товара.
+     * На основании этого флага будет вычислен признак предмета расчета (тег 1212)
+     */
+    @Nullable
+    public Boolean getIsExcisable() {
+        return isExcisable;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -601,6 +620,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(partialRealization, position.partialRealization))
             return false;
+        if (!Objects.equals(isExcisable, position.isExcisable))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -632,6 +653,7 @@ public class Position implements Parcelable {
         result = 31 * result + (classificationCode != null ? classificationCode.hashCode() : 0);
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
+        result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
         return result;
     }
 
@@ -663,6 +685,7 @@ public class Position implements Parcelable {
                 ", classificationCode=" + classificationCode +
                 ", preferentialMedicine=" + preferentialMedicine +
                 ", partial=" + partialRealization +
+                ", isExcisable=" + isExcisable +
                 '}';
     }
 
@@ -750,6 +773,7 @@ public class Position implements Parcelable {
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
+        dest.writeSerializable(this.isExcisable);
     }
 
     protected Position(Parcel in) {
@@ -841,6 +865,9 @@ public class Position implements Parcelable {
                 measurePrecision,
                 measureCode
         );
+        if (version >= 10) {
+            this.isExcisable = (Boolean) in.readSerializable();
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -923,6 +950,7 @@ public class Position implements Parcelable {
             builder.position.productType = product.getType();
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
+            builder.position.isExcisable = product.isExcisable();
 
             return builder;
         }
@@ -1311,7 +1339,7 @@ public class Position implements Parcelable {
             setWaterParams(mark);
             return this;
         }
-      
+
         public Builder toBikeMarked(
                 @NonNull Mark mark
         ) {
@@ -1413,6 +1441,24 @@ public class Position implements Parcelable {
             position.partialRealization = new PartialRealization(
                     quantityInPackage
             );
+            return this;
+        }
+
+        /**
+         * Признак подакцизности товара <br>
+         * На основании этого флага будет вычислен признак предмета расчета (тег 1212),
+         * должно выставляться значение 'true', если тип товара является: <br>
+         * {@link ProductType#ALCOHOL_MARKED} <br>
+         * {@link ProductType#ALCOHOL_NOT_MARKED} <br>
+         * {@link ProductType#TOBACCO_MARKED} <br>
+         * {@link ProductType#TOBACCO_PRODUCTS_MARKED} <br>
+         * <br>
+         * Опционально указывается для типа товара {@link ProductType#NORMAL}
+         *
+         * @param isExcisable булевое значение, является ли товар акцизным
+         */
+        public Builder setIsExcisable(Boolean isExcisable) {
+            position.isExcisable = isExcisable;
             return this;
         }
 

@@ -5,11 +5,18 @@ import android.database.Cursor
 import android.net.Uri
 import androidx.annotation.WorkerThread
 import org.json.JSONArray
-import ru.evotor.framework.*
+import ru.evotor.framework.Utils
 import ru.evotor.framework.component.PaymentPerformer
 import ru.evotor.framework.component.PaymentPerformerTable
+import ru.evotor.framework.getMoney
+import ru.evotor.framework.getQuantity
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
+import ru.evotor.framework.optBoolean
+import ru.evotor.framework.optInt
+import ru.evotor.framework.optLong
+import ru.evotor.framework.optString
+import ru.evotor.framework.optVolume
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -25,9 +32,7 @@ import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import java.math.BigDecimal
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.Date
 
 @WorkerThread
 object ReceiptApi {
@@ -419,6 +424,8 @@ object ReceiptApi {
                 cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
         )
 
+        val isExcisable = cursor.optBoolean(PositionTable.COLUMN_IS_EXCISABLE)
+
         val builder = Position.Builder
             .copyFrom(Position(
                 cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
@@ -450,6 +457,7 @@ object ReceiptApi {
             .setImportationData(importationData)
             .setExcise(excise)
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
+            .setIsExcisable(isExcisable)
         return builder.build()
     }
 

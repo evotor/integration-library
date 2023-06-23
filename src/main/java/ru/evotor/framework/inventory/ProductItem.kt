@@ -39,7 +39,8 @@ sealed class ProductItem(
             val alcoholProductKindCode: Long?,
             val tareVolume: BigDecimal?,
             val classificationCode: String?,
-            val allowPartialRealization: AllowPartialRealization?
+            val allowPartialRealization: AllowPartialRealization?,
+            val isExcisable: Boolean?
     ) : ProductItem(
             uuid,
             parentUuid,
