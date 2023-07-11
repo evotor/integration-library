@@ -11,7 +11,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 
 
 /**
- * Команда закрытия смены патежного терминала
+ * Команда закрытия смены платежного терминала
  * @param userUuid - Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  * @param paymentSystemAccountId - Идентификатор аккаунта в рамках платёжной системы. Если передано null, то будет выбран пинпад по умолчанию. @see ru.evotor.framework.payment.PaymentSystemApi
  */
