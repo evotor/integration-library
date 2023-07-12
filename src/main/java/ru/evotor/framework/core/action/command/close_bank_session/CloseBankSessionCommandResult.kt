@@ -41,7 +41,7 @@ class CloseBankSessionCommandResult(
         const val ERROR_CODE_USER_NOT_FOUND = -5
 
         /**
-         * Платежная система с заданным accountId не найдена
+         * Платежная система по умолчанию или с заданным accountId не найдена
          */
         const val ERROR_CODE_PINPAD_NOT_FOUND = -6
 
