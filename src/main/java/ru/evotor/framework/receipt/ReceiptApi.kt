@@ -12,7 +12,6 @@ import ru.evotor.framework.getMoney
 import ru.evotor.framework.getQuantity
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
-import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -424,7 +423,7 @@ object ReceiptApi {
                 cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
         )
 
-        val isExcisable = cursor.optBoolean(PositionTable.COLUMN_IS_EXCISABLE)
+        val isExcisable = cursor.optString(PositionTable.COLUMN_IS_EXCISABLE)?.toBooleanStrictOrNull()
 
         val builder = Position.Builder
             .copyFrom(Position(
@@ -474,7 +473,7 @@ object ReceiptApi {
             Measure(
                     it.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
                     it.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                    it.optInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_CODE)) ?: Measure.UNKNOWN_MEASURE_CODE
+                    it.optInt(PositionTable.COLUMN_MEASURE_CODE) ?: Measure.UNKNOWN_MEASURE_CODE
             )
         }
     }

@@ -28,6 +28,13 @@ internal fun Cursor.optBoolean(columnIndex: Int): Boolean? {
     }
 }
 
+/**
+ * Возвращает целочисленное значение из указанного столбца по его имени.
+ * Так же выполняется проверка наличия столбца.
+ *
+ * @param columnName Имя столбца, из которого необходимо получить значение.
+ * @return Целочисленное значение из столбца или null, если столбец не существует.
+ */
 internal fun Cursor.optInt(columnName: String): Int? {
     val index = getColumnIndex(columnName)
     if (index == -1) {
@@ -37,6 +44,13 @@ internal fun Cursor.optInt(columnName: String): Int? {
     return optInt(index)
 }
 
+/**
+ * Возвращает целочисленное значение из указанного столбца по его индексу.
+ * Если столбца не существует [android.database.Cursor.isNull] выдаст ошибку CursorIndexOutOfBoundsException: Requested column: -1
+ *
+ * @param columnIndex Индекс столбца, из которого необходимо получить значение.
+ * @return Целочисленное значение из столбца или null, если значение является null.
+ */
 internal fun Cursor.optInt(columnIndex: Int): Int? {
     if (isNull(columnIndex)) {
         return null
