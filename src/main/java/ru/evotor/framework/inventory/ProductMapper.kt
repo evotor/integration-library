@@ -61,7 +61,7 @@ internal object ProductMapper {
             Measure(
                     it.getString(cursor.getColumnIndex(ProductTable.ROW_MEASURE_NAME)),
                     it.getInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_PRECISION)),
-                    it.optInt(cursor.getColumnIndex(ProductTable.ROW_MEASURE_CODE)) ?: Measure.UNKNOWN_MEASURE_CODE
+                    it.optInt(ProductTable.ROW_MEASURE_CODE) ?: Measure.UNKNOWN_MEASURE_CODE
             )
         }
     }
