@@ -13,22 +13,31 @@ object NavigationApi {
     private const val ACTION_EDIT_BUY = "evotor.intent.action.edit.BUY"
     private const val ACTION_EDIT_BUYBACK = "evotor.intent.action.edit.BUYBACK"
     private const val ACTION_EDIT_CORRECTION_INCOME = "evotor.intent.action.edit.correction.INCOME"
-    private const val ACTION_EDIT_CORRECTION_OUTCOME = "evotor.intent.action.edit.correction.OUTCOME"
-    private const val ACTION_EDIT_CORRECTION_RETURN_INCOME = "evotor.intent.action.edit.correction.RETURN_INCOME"
-    private const val ACTION_EDIT_CORRECTION_RETURN_OUTCOME = "evotor.intent.action.edit.correction.RETURN_OUTCOME"
+    private const val ACTION_EDIT_CORRECTION_OUTCOME =
+        "evotor.intent.action.edit.correction.OUTCOME"
+    private const val ACTION_EDIT_CORRECTION_RETURN_INCOME =
+        "evotor.intent.action.edit.correction.RETURN_INCOME"
+    private const val ACTION_EDIT_CORRECTION_RETURN_OUTCOME =
+        "evotor.intent.action.edit.correction.RETURN_OUTCOME"
     private const val ACTION_PAYMENT_SELL = "evotor.intent.action.payment.SELL"
     private const val ACTION_PAYMENT_PAYBACK = "evotor.intent.action.payment.PAYBACK"
     private const val ACTION_PAYMENT_BUY = "evotor.intent.action.payment.BUY"
     private const val ACTION_PAYMENT_BUYBACK = "evotor.intent.action.payment.BUYBACK"
-    private const val ACTION_PAYMENT_CORRECTION_INCOME = "evotor.intent.action.payment.correction.INCOME"
-    private const val ACTION_PAYMENT_CORRECTION_OUTCOME = "evotor.intent.action.payment.correction.OUTCOME"
-    private const val ACTION_PAYMENT_CORRECTION_RETURN_INCOME = "evotor.intent.action.payment.correction.RETURN_INCOME"
-    private const val ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME = "evotor.intent.action.payment.correction.RETURN_OUTCOME"
+    private const val ACTION_PAYMENT_CORRECTION_INCOME =
+        "evotor.intent.action.payment.correction.INCOME"
+    private const val ACTION_PAYMENT_CORRECTION_OUTCOME =
+        "evotor.intent.action.payment.correction.OUTCOME"
+    private const val ACTION_PAYMENT_CORRECTION_RETURN_INCOME =
+        "evotor.intent.action.payment.correction.RETURN_INCOME"
+    private const val ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME =
+        "evotor.intent.action.payment.correction.RETURN_OUTCOME"
     private const val ACTION_SETTINGS_CASH_RECEIPT = "evotor.intent.action.settings.CASH_RECEIPT"
     private const val ACTION_REPORT_CASH_REGISTER = "evotor.intent.action.report.CASH_REGISTER"
     private const val ACTION_EDIT_PRODUCT = "evotor.intent.action.edit.PRODUCT"
     private const val ACTION_CHANGE_USER = "evotor.intent.action.user.CHANGE"
     private const val ACTION_PRODUCT_LIST = "evotor.intent.action.commodity.SELECT"
+
+    const val EXTRA_SHOULD_LOCK_SCREEN = "shouldLockScreen"
 
     // extras for edit sell intent
     const val EXTRA_CLOSE_AFTER_OPERATION = "closeAfterOperation"
@@ -51,9 +60,14 @@ object NavigationApi {
      */
     @JvmStatic
     fun createIntentForSellReceiptEdit(
-            closeAfterOperation: Boolean = false
+        closeAfterOperation: Boolean = false
     ): Intent {
-        return Intent(ACTION_EDIT_SELL).apply { putExtra(EXTRA_CLOSE_AFTER_OPERATION, closeAfterOperation) }
+        return Intent(ACTION_EDIT_SELL).apply {
+            putExtra(
+                EXTRA_CLOSE_AFTER_OPERATION,
+                closeAfterOperation
+            )
+        }
     }
 
     /**
@@ -129,84 +143,148 @@ object NavigationApi {
     /**
      * Создаёт `intent`, который открывает окно оплаты чека продажи.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForSellReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_SELL)
+    fun createIntentForSellReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_SELL).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека возврата.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForPaybackReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_PAYBACK)
+    fun createIntentForPaybackReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_PAYBACK).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека покупки.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForBuyReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_BUY)
+    fun createIntentForBuyReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_BUY).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека возврата покупки.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForBuybackReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_BUYBACK)
+    fun createIntentForBuybackReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_BUYBACK).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции прихода.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForCorrectionIncomeReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_CORRECTION_INCOME)
+    fun createIntentForCorrectionIncomeReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_INCOME).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции расхода.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForCorrectionOutcomeReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_CORRECTION_OUTCOME)
+    fun createIntentForCorrectionOutcomeReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_OUTCOME).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции возврата прихода.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForCorrectionReturnIncomeReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_INCOME)
+    fun createIntentForCorrectionReturnIncomeReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_INCOME).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции возврата расхода.
      *
+     * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
+     * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
+     * По-умолчанию 'false'
+     *
      * @return intent
      */
     @JvmStatic
-    fun createIntentForCorrectionReturnOutcomeReceiptPayment(): Intent {
-        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME)
+    fun createIntentForCorrectionReturnOutcomeReceiptPayment(
+        shouldLockScreen: Boolean = false
+    ): Intent {
+        return Intent(ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME).apply {
+            putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+        }
     }
 
     /**
