@@ -10,6 +10,7 @@ public class PrintReceiptCommandResult implements IBundlable {
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_RECEIPT_NUMBER = "receiptNumber";
+    private static final String KEY_NOT_PRINTED = "notPrinted";
 
     /**
      * Нужна синхронизация даты/времени ККМ и терминала
@@ -62,6 +63,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_CODE_USER_NOT_FOUND = -12;
 
+    /**
+     * Предыдущий фискальный документ не был допечатан
+     */
+    public static final int ERROR_CODE_PREVIOUS_DOCUMENT_NOT_PRINTED = -13;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
@@ -73,9 +79,11 @@ public class PrintReceiptCommandResult implements IBundlable {
         if (receiptUuid == null || receiptNumber == null) {
             return null;
         }
+        boolean notPrinted = bundle.getBoolean(KEY_NOT_PRINTED, false);
         return new PrintReceiptCommandResult(
                 receiptUuid,
-                receiptNumber
+                receiptNumber,
+                notPrinted
         );
     }
 
@@ -83,6 +91,7 @@ public class PrintReceiptCommandResult implements IBundlable {
     private final String receiptUuid;
     @NonNull
     private final String receiptNumber;
+    private final boolean notPrinted;
 
     public PrintReceiptCommandResult(
             @NonNull String receiptUuid,
@@ -90,6 +99,17 @@ public class PrintReceiptCommandResult implements IBundlable {
     ) {
         this.receiptUuid = receiptUuid;
         this.receiptNumber = receiptNumber;
+        notPrinted = false;
+    }
+
+    public PrintReceiptCommandResult(
+            @NonNull String receiptUuid,
+            @NonNull String receiptNumber,
+            boolean notPrinted
+    ) {
+        this.receiptUuid = receiptUuid;
+        this.receiptNumber = receiptNumber;
+        this.notPrinted = notPrinted;
     }
 
     @Override
@@ -98,6 +118,7 @@ public class PrintReceiptCommandResult implements IBundlable {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_RECEIPT_UUID, receiptUuid);
         bundle.putString(KEY_RECEIPT_NUMBER, receiptNumber);
+        bundle.putBoolean(KEY_NOT_PRINTED, notPrinted);
         return bundle;
     }
 

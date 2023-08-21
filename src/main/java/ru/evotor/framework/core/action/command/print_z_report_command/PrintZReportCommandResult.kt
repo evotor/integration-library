@@ -4,13 +4,19 @@ import android.os.Bundle
 
 import ru.evotor.IBundlable
 
-class PrintZReportCommandResult : IBundlable {
+class PrintZReportCommandResult(
+    val notPrinted: Boolean = false
+) : IBundlable {
 
     override fun toBundle(): Bundle {
-        return Bundle()
+        return Bundle().also {
+            it.putBoolean(KEY_NOT_PRINTED, notPrinted)
+        }
     }
 
     companion object {
+
+        private const val KEY_NOT_PRINTED = "notPrinted"
 
         /**
          * Нужна синхронизация даты/времени ККМ и терминала
@@ -42,10 +48,19 @@ class PrintZReportCommandResult : IBundlable {
          */
         const val ERROR_CODE_USER_NOT_FOUND = -6
 
+        /**
+         * Предыдущий фискальный документ не был допечатан
+         */
+        const val ERROR_CODE_PREVIOUS_DOCUMENT_NOT_PRINTED = -7
+
 
         @JvmStatic
         fun create(bundle: Bundle?): PrintZReportCommandResult? {
-            return bundle?.let { PrintZReportCommandResult() }
+            return bundle?.let {
+                PrintZReportCommandResult(
+                    notPrinted = it.getBoolean(KEY_NOT_PRINTED, false)
+                )
+            }
         }
     }
 }
