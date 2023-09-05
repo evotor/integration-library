@@ -8,13 +8,14 @@ apply plugin: 'org.jetbrains.dokka'
 android {
     def version = 25
 
-    compileSdkVersion 29
+    compileSdk 29
+
     defaultConfig {
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode version
-        versionName "0.6.06"
+        versionName "0.6.08"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
@@ -111,7 +112,7 @@ publishing {
         mavenKotlin(MavenPublication) {
             groupId 'com.github.evotor'
             artifactId "integration-library"
-            version "STDEV-15870"
+            version "STDEV-13213"
             artifact(sourceJar)
             artifact(javadocJar)
             artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
