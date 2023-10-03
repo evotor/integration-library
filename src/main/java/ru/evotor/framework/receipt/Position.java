@@ -1072,6 +1072,34 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toAntisepticMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.ANTISEPTIC_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setAntisepticParams(mark);
+            return this;
+        }
+
+        public Builder toDietarySupplementsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.DIETARY_SUPPLEMENTS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setDietarySupplementsParams(mark);
+            return this;
+        }
+
         /**
          * @deprecated Используйте {@link #toTobaccoMarked(Mark)}
          */
@@ -1539,6 +1567,14 @@ public class Position implements Parcelable {
         }
 
         private void setFurParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setAntisepticParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        public void setDietarySupplementsParams(Mark mark) {
             position.mark = mark;
         }
 
