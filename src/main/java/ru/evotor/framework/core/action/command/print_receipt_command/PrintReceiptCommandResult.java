@@ -131,4 +131,8 @@ public class PrintReceiptCommandResult implements IBundlable {
     public String getReceiptNumber() {
         return receiptNumber;
     }
+
+    public boolean isNotPrinted() {
+        return notPrinted;
+    }
 }
