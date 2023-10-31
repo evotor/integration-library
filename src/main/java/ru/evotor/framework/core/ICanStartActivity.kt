@@ -3,6 +3,7 @@ package ru.evotor.framework.core
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import java.lang.ref.WeakReference
 
 /**
  * Created by a.kuznetsov on 26/04/2017.
@@ -13,9 +14,11 @@ interface ICanStartActivity {
 }
 
 open class ActivityStarter(
-    private val context: Context,
+    context: Context,
     private val isNewTask: Boolean = true
 ) : ICanStartActivity {
+
+    private val contextRef = WeakReference(context)
     override fun startActivity(intent: Intent) {
         startActivity(intent, null)
     }
@@ -24,6 +27,7 @@ open class ActivityStarter(
         if (isNewTask) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        context.startActivity(intent, options)
+        contextRef.get()?.startActivity(intent, options)
+            ?: throw IllegalStateException("Context has been deleted by garbage collector")
     }
 }
