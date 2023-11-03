@@ -892,7 +892,7 @@ public class Position implements Parcelable {
             this.isExcisable = (Boolean) in.readSerializable();
         }
         if (version >= 11) {
-            readMarksCheckInfo(in);
+            readMarksCheckingInfo(in);
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
@@ -940,7 +940,7 @@ public class Position implements Parcelable {
         this.partialRealization = PartialRealization.Companion.from(in.readBundle(PartialRealization.class.getClassLoader()));
     }
 
-    private void readMarksCheckInfo(Parcel in) {
+    private void readMarksCheckingInfo(Parcel in) {
         this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
     }
 
@@ -1490,7 +1490,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder toMarksCheckInfo(
+        public Builder toMarksCheckingInfo(
                 @NonNull String checkId,
                 @NonNull Long timestamp
         ) {
