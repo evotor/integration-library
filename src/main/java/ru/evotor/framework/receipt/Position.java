@@ -278,7 +278,7 @@ public class Position implements Parcelable {
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
         this.isExcisable = position.isExcisable;
-        this.marksCheckingInfo = position.marksCheckingInfo;
+        this.marksCheckingInfo = position.getMarksCheckingInfo();
     }
 
     /**

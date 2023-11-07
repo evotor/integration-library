@@ -19,7 +19,7 @@ data class MarksCheckingInfo(
 ) : IBundlable {
     override fun toBundle(): Bundle = Bundle().apply {
         putString(KEY_CHECK_ID, checkId)
-        putString(KEY_TIMESTAMP, checkTimestamp.toString())
+        putLong(KEY_TIMESTAMP, checkTimestamp)
     }
 
     companion object {
