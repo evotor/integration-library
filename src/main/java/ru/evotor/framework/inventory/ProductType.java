@@ -74,7 +74,7 @@ public enum ProductType {
      */
     WATER_MARKED,
 
-    /**  
+    /**
      * Велосипеды или велосипедные рамы (велосипеды с двигателем, велосипедные рамы и т.д.)
      */
     BIKE_MARKED,
@@ -102,5 +102,15 @@ public enum ProductType {
     /**
      * Маркированное пиво (Кеги)
      */
-    BEER_MARKED_KEG
+    BEER_MARKED_KEG,
+
+    /**
+     * Маркированные антисептики
+     */
+    ANTISEPTIC_MARKED,
+
+    /**
+     * Маркированные БАДы
+     */
+    DIETARY_SUPPLEMENTS_MARKED
 }
