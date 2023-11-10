@@ -138,7 +138,7 @@ object UserApi {
         return try {
             context.contentResolver.update(
                 UsersTable.URI_FORCE_AUTHENTICATED,
-                null,
+                ContentValues(),
                 UsersTable.ROW_USER_UUID,
                 arrayOf(userUuid)
             ) == 1
