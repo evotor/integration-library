@@ -2,6 +2,7 @@ package ru.evotor.framework.users
 
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import androidx.annotation.WorkerThread
 
 /**
@@ -103,6 +104,7 @@ object UserApi {
 
     /**
      * Авторизует пользователя в системе.
+     * Требует разрешения ru.evotor.permission.auth.LOGIN
      * @param context контекст приложения.
      * @param userUuid uuid пользователя.
      * @param userPin пин-код пользователя при наличии.
@@ -116,6 +118,27 @@ object UserApi {
                 ContentValues().also {
                     it.put(UsersTable.ROW_USER_PIN, userPin)
                 },
+                UsersTable.ROW_USER_UUID,
+                arrayOf(userUuid)
+            ) == 1
+        } catch (t: Throwable) {
+            false
+        }
+    }
+
+
+    /**
+     * Принудительно авторизует пользователя в системе, без ввода пин-кода.
+     * Требует разрешения ru.evotor.permission.auth.FORCE_LOGIN
+     * @param context контекст приложения.
+     * @param userUuid uuid пользователя.
+     * @return если пользователь авторизован - true, иначе - false
+     */
+    fun forceAuthenticate(context: Context, userUuid: String): Boolean {
+        return try {
+            context.contentResolver.update(
+                UsersTable.URI_FORCE_AUTHENTICATED,
+                null,
                 UsersTable.ROW_USER_UUID,
                 arrayOf(userUuid)
             ) == 1
