@@ -97,7 +97,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
     private class ImsTask extends FutureTask<IntegrationManagerFuture.Result> implements IntegrationManagerFuture {
         final Handler mHandler;
-        final IntegrationManagerCallback mCallback;
+        IntegrationManagerCallback mCallback;
         final ICanStartActivity mActivityStarter;
         final String mAction;
         final ComponentName mComponentName;
@@ -271,6 +271,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         protected void done() {
             if (mCallback != null) {
                 postToHandler(mHandler, mCallback, this);
+                mCallback = null;
             }
         }
 
