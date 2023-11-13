@@ -234,6 +234,21 @@ object FeaturesApi {
      */
     fun isExciseProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_EXCISE_PRODUCTS)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка антисептиков" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isAntisepticMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_ANTISEPTIC_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка БАДов" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isDietarySupplementsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DIETARY_SUPPLEMENTS_MARK)
+
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
