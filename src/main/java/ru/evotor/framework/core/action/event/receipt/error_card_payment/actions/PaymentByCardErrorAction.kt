@@ -2,8 +2,13 @@ package ru.evotor.framework.core.action.event.receipt.error_card_payment.actions
 
 import android.os.Bundle
 
+/**
+ * Команда обработки ошибки оплаты по карте.
+ * При передаче этой команды будет показан диалог с ошибкой.
+ * Если был передан cancelTimeout, то по истечении будет нажата кнопка "ОТМЕНА".
+ */
 class PaymentByCardErrorAction(
-    val cancelTimeout: Long? = null
+    val cancelTimeout: UInt? = null // таймаут нажатия на кнопку "ОТМЕНА" в секундах
 ) : IHandleEventResultAction {
 
     override fun getType(): IHandleEventResultAction.Type {
@@ -13,7 +18,7 @@ class PaymentByCardErrorAction(
     override fun toBundle(): Bundle {
         return Bundle().also {
             if (cancelTimeout != null) {
-                it.putLong(KEY_TIMEOUT, cancelTimeout)
+                it.putLong(KEY_TIMEOUT, cancelTimeout.toLong())
             }
         }
     }
@@ -28,7 +33,7 @@ class PaymentByCardErrorAction(
                 timeout = null
             }
             return PaymentByCardErrorAction(
-                timeout
+                timeout?.toUInt()
             )
         }
     }
