@@ -25,7 +25,7 @@ class PaymentByCardErrorAction(
 
     companion object {
 
-        private const val KEY_TIMEOUT = "timeout"
+        const val KEY_TIMEOUT = "timeout"
 
         fun from(bundle: Bundle): PaymentByCardErrorAction {
             var timeout: Long? = bundle.getLong(KEY_TIMEOUT, -1L)
