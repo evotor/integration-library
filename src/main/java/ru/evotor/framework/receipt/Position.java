@@ -1470,6 +1470,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toJuiceMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.JUICE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setJuiceParams(mark);
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -1575,6 +1589,10 @@ public class Position implements Parcelable {
         }
 
         public void setDietarySupplementsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        public void setJuiceParams(Mark mark) {
             position.mark = mark;
         }
 
