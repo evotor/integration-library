@@ -16,7 +16,7 @@ class ErrorPaymentByCardEvent : IBundlable {
          *
          * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
          */
-        const val NAME_PERMISSION = "ru.evotor.permission.handle.errorPaymentByCard"
+        const val NAME_PERMISSION = "ru.evotor.permission.handle.ERROR_PAYMENT_BY_CARD"
         const val NAME = "evo.v2.receipt.errorPaymentByCard"
 
         fun create(bundle: Bundle?): ErrorPaymentByCardEvent? {
