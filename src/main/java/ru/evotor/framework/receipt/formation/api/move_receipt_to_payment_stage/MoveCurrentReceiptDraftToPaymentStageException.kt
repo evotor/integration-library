@@ -1,6 +1,6 @@
-package ru.evotor.framework.receipt.formation.api
+package ru.evotor.framework.receipt.formation.api.move_receipt_to_payment_stage
 
-class ReceiptFormationException(
+class MoveCurrentReceiptDraftToPaymentStageException(
         val code: Int,
         message: String
 ): Exception(message) {
