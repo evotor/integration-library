@@ -1,16 +1,10 @@
-package ru.evotor.framework.receipt.formation.api
+package ru.evotor.framework.receipt.formation.api.trigger_receipt_discount_event
 
-import android.os.Bundle
-import ru.evotor.IBundlable
-
-class TriggerReceiptDiscountEventCommandResult : IBundlable {
-
-    override fun toBundle(): Bundle {
-        return Bundle()
-    }
-
+class TriggerReceiptDiscountEventException(
+    val code: Int,
+    message: String
+) : Exception(message) {
     companion object {
-
         /**
          * ККМ в данный момент выполняет другую операцию
          */

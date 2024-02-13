@@ -23,7 +23,7 @@ class TriggerReceiptDiscountEventRequestedEvent(
          *
          * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
          */
-        const val NAME_PERMISSION = "ru.evotor.permission.TRIGGER_RECEIPT_DISCOUNT_EVENT_COMMAND"
+        const val NAME_PERMISSION = "ru.evotor.permission.TRIGGER_RECEIPT_DISCOUNT_EVENT"
 
         private const val KEY_COMPONENT_NAME = "KEY_COMPONENT_NAME"
         private const val KEY_RECEIPT_TYPE = "KEY_RECEIPT_TYPE"
