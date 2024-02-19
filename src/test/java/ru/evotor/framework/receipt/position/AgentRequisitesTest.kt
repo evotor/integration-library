@@ -65,14 +65,13 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForPaymentAgent() = createForPaymentAgent(listOf("+70000000000"), "1234", listOf("89000000000", "89000000001"), "name", "Страхование на выгодных условиях")
+    fun createForPaymentAgent() = createForPaymentAgent(listOf("+70000000000"), "1234", listOf("89000000000", "89000000001"), "name", )
 
     private fun createForPaymentAgent(
             agentPhones: List<String>,
             principalInn: String,
             principalPhones: List<String>,
-            principalName: String,
-            operationDescription: String
+            principalName: String
     ) = Assert.assertEquals(
             AgentRequisites.createForPaymentAgent(agentPhones, principalInn, principalPhones, principalName),
             AgentRequisites(
@@ -85,15 +84,14 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForPaymentSubagent() = createForPaymentSubagent(listOf("+70000000000"), listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "name", "Страхование на выгодных условиях")
+    fun createForPaymentSubagent() = createForPaymentSubagent(listOf("+70000000000"), listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "name")
 
     private fun createForPaymentSubagent(
             agentPhones: List<String>,
             subagentPhones: List<String>,
             principalInn: String,
             principalPhones: List<String>,
-            principalName: String,
-            operationDescription: String
+            principalName: String
     ) = Assert.assertEquals(
             AgentRequisites.createForPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName),
             AgentRequisites(
@@ -130,10 +128,9 @@ class AgentRequisitesTest {
     )
 
     @Test
-    fun createForBankPaymentSubagent() = createForBankPaymentSubagent(listOf("+70000000000"), listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "name", "Страховое агентство", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Страхование на выгодных условиях")
+    fun createForBankPaymentSubagent() = createForBankPaymentSubagent(listOf("+77776668888"), "1234", listOf("89000000000", "89000000001"), "name", "Страховое агентство", "4321", listOf("89859998070"), "улица Пушкина, дом Калатушкина, офис 420", "Страхование на выгодных условиях")
 
     private fun createForBankPaymentSubagent(
-            agentPhones: List<String>,
             subagentPhones: List<String>,
             principalInn: String,
             principalPhones: List<String>,
