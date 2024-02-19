@@ -146,36 +146,7 @@ data class AgentRequisites(
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
-         * @param operationDescription описание операции платежного агента
          */
-
-        @JvmStatic
-        @Deprecated(
-            message = "Use the createForPaymentAgent function without the operationDescription argument",
-            replaceWith = ReplaceWith("createForPaymentAgent(agentPhones, principalInn, principalPhones, principalName)"),
-            level = DeprecationLevel.WARNING
-        )
-        fun createForPaymentAgent(
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                agentPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-                principalInn: String,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-                principalName: String,
-
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
-                operationDescription: String
-        ) = createForPaymentAgent(
-                agentPhones,
-                principalInn,
-                principalPhones,
-                principalName
-            )
 
         @JvmStatic
         fun createForPaymentAgent(
@@ -212,33 +183,7 @@ data class AgentRequisites(
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
-         * @param operationDescription описание операции платежного субагента
          */
-        @JvmStatic
-        @Deprecated(
-            message = "Use the createForPaymentSubagent function without the operationDescription argument",
-            replaceWith = ReplaceWith("createForPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName)"),
-            level = DeprecationLevel.WARNING
-        )
-        fun createForPaymentSubagent(
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                agentPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                subagentPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-                principalInn: String,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-                principalName: String,
-
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
-                operationDescription: String
-        ) = createForPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName)
 
         fun createForPaymentSubagent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
@@ -327,7 +272,6 @@ data class AgentRequisites(
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный субагент".
-         * @param agentPhones телефоны банковского платёжного агента
          * @param subagentPhones телефоны банковского платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
@@ -338,63 +282,6 @@ data class AgentRequisites(
          * @param transactionOperatorAddress адрес оператора перевода
          * @param operationDescription описание операции банковского платежного субагента
          */
-        @JvmStatic
-        @Deprecated(
-            message = "Use the createForBankPaymentSubagent function without the agentPhones argument",
-            replaceWith = ReplaceWith("createForBankPaymentSubagent(\n" +
-                "            subagentPhones, \n" +
-                "            principalInn, \n" +
-                "            principalPhones, \n" +
-                "            principalName, \n" +
-                "            transactionOperatorName, \n" +
-                "            transactionOperatorInn,\n" +
-                "            transactionOperatorPhones,\n" +
-                "            transactionOperatorAddress,\n" +
-                "            operationDescription\n" +
-                "        )"),
-            level = DeprecationLevel.WARNING
-        )
-        fun createForBankPaymentSubagent(
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                agentPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                subagentPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-                principalInn: String,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                principalPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-                principalName: String,
-
-                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
-                transactionOperatorName: String,
-
-                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_INN)
-                transactionOperatorInn: String,
-
-                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-                transactionOperatorPhones: List<String>,
-
-                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_ADDRESS)
-                transactionOperatorAddress: String,
-
-                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
-                operationDescription: String
-        ) = createForBankPaymentSubagent(
-            subagentPhones,
-            principalInn,
-            principalPhones,
-            principalName,
-            transactionOperatorName,
-            transactionOperatorInn,
-            transactionOperatorPhones,
-            transactionOperatorAddress,
-            operationDescription
-        )
 
         @JvmStatic
         fun createForBankPaymentSubagent(
