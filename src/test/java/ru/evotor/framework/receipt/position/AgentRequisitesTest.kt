@@ -74,13 +74,13 @@ class AgentRequisitesTest {
             principalName: String,
             operationDescription: String
     ) = Assert.assertEquals(
-            AgentRequisites.createForPaymentAgent(agentPhones, principalInn, principalPhones, principalName, operationDescription),
+            AgentRequisites.createForPaymentAgent(agentPhones, principalInn, principalPhones, principalName),
             AgentRequisites(
                     Agent(null, Agent.Type.PAYMENT_AGENT, null, null, null, null, null, agentPhones, null),
                     null,
                     Principal(null, null, null, principalName, principalInn, null, principalPhones, null),
                     null,
-                    operationDescription
+                    null
             )
     )
 
@@ -95,13 +95,13 @@ class AgentRequisitesTest {
             principalName: String,
             operationDescription: String
     ) = Assert.assertEquals(
-            AgentRequisites.createForPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName, operationDescription),
+            AgentRequisites.createForPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName),
             AgentRequisites(
                     Agent(null, null, null, null, null, null, null, agentPhones, null),
                     Subagent(null, Subagent.Type.PAYMENT_SUBAGENT, null, null, null, null, null, subagentPhones, null),
                     Principal(null, null, null, principalName, principalInn, null, principalPhones, null),
                     null,
-                    operationDescription
+                    null
             )
     )
 
@@ -144,9 +144,9 @@ class AgentRequisitesTest {
             transactionOperatorAddress: String,
             operationDescription: String
     ) = Assert.assertEquals(
-            AgentRequisites.createForBankPaymentSubagent(agentPhones, subagentPhones, principalInn, principalPhones, principalName, transactionOperatorName, transactionOperatorInn, transactionOperatorPhones, transactionOperatorAddress, operationDescription),
+            AgentRequisites.createForBankPaymentSubagent(subagentPhones, principalInn, principalPhones, principalName, transactionOperatorName, transactionOperatorInn, transactionOperatorPhones, transactionOperatorAddress, operationDescription),
             AgentRequisites(
-                    Agent(null, null, null, null, null, null, null, agentPhones, null),
+                    null,
                     Subagent(null, Subagent.Type.BANK_PAYMENT_SUBAGENT, null, null, null, null, null, subagentPhones, null),
                     Principal(null, null, null, principalName, principalInn, null, principalPhones, null),
                     TransactionOperator(null, null, transactionOperatorName, null, transactionOperatorInn, null, transactionOperatorPhones, listOf(transactionOperatorAddress)),
