@@ -142,82 +142,90 @@ data class AgentRequisites(
 
         /**
          * Создает агентские реквизиты для агента типа "платёжный агент".
-         * @param agentPhones телефоны платёжного агента и оператора по приёму платежей
+         * @param agentPhones телефоны платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
+         * @param operationDescription описание операции платежного агента
          */
-
         @JvmStatic
         fun createForPaymentAgent(
-            @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            agentPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                agentPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-            principalInn: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
+                principalInn: String,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            principalPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                principalPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-            principalName: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
+
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
+                operationDescription: String
         ) = AgentRequisitesMapper.create(
-            Agent.Type.PAYMENT_AGENT,
-            agentPhones,
-            null,
-            null,
-            principalInn,
-            principalPhones,
-            principalName,
-            null,
-            null,
-            null,
-            null,
-            null
+                Agent.Type.PAYMENT_AGENT,
+                agentPhones,
+                null,
+                null,
+                principalInn,
+                principalPhones,
+                principalName,
+                null,
+                null,
+                null,
+                null,
+                operationDescription
         )
 
         /**
          * Создает агентские реквизиты для агента типа "Платёжный субагент".
-         * @param agentPhones телефоны оператора по приёму платежей
-         * @param subagentPhones телефоны платежного агента
+         * @param agentPhones телефоны платёжного агента (оператора по приёму платежей)
+         * @param subagentPhones телефоны платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
+         * @param operationDescription описание операции платежного субагента
          */
-
+        @JvmStatic
         fun createForPaymentSubagent(
-            @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            agentPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                agentPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            subagentPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                subagentPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-            principalInn: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
+                principalInn: String,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            principalPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                principalPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-            principalName: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
+
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
+                operationDescription: String
         ) = AgentRequisitesMapper.create(
-            null,
-            agentPhones,
-            Subagent.Type.PAYMENT_SUBAGENT,
-            subagentPhones,
-            principalInn,
-            principalPhones,
-            principalName,
-            null,
-            null,
-            null,
-            null,
-            null
+                null,
+                agentPhones,
+                Subagent.Type.PAYMENT_SUBAGENT,
+                subagentPhones,
+                principalInn,
+                principalPhones,
+                principalName,
+                null,
+                null,
+                null,
+                null,
+                operationDescription
         )
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный агент".
-         * @param agentPhones телефоны платёжного агента
+         * @param agentPhones телефоны банковского платёжного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
@@ -272,7 +280,8 @@ data class AgentRequisites(
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный субагент".
-         * @param subagentPhones телефоны платежного агента
+         * @param agentPhones телефоны банковского платёжного агента
+         * @param subagentPhones телефоны банковского платёжного субагента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
@@ -282,48 +291,50 @@ data class AgentRequisites(
          * @param transactionOperatorAddress адрес оператора перевода
          * @param operationDescription описание операции банковского платежного субагента
          */
-
         @JvmStatic
         fun createForBankPaymentSubagent(
-            @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            subagentPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                agentPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-            principalInn: String,
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                subagentPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            principalPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
+                principalInn: String,
 
-            @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-            principalName: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                principalPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
-            transactionOperatorName: String,
+                @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+                principalName: String,
 
-            @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_INN)
-            transactionOperatorInn: String,
+                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
+                transactionOperatorName: String,
 
-            @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-            transactionOperatorPhones: List<String>,
+                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_INN)
+                transactionOperatorInn: String,
 
-            @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_ADDRESS)
-            transactionOperatorAddress: String,
+                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+                transactionOperatorPhones: List<String>,
 
-            @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
-            operationDescription: String
+                @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_ADDRESS)
+                transactionOperatorAddress: String,
+
+                @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
+                operationDescription: String
         ) = AgentRequisitesMapper.create(
-            null,
-            null,
-            Subagent.Type.BANK_PAYMENT_SUBAGENT,
-            subagentPhones,
-            principalInn,
-            principalPhones,
-            principalName,
-            transactionOperatorName,
-            transactionOperatorInn,
-            transactionOperatorPhones,
-            transactionOperatorAddress,
-            operationDescription
+                null,
+                agentPhones,
+                Subagent.Type.BANK_PAYMENT_SUBAGENT,
+                subagentPhones,
+                principalInn,
+                principalPhones,
+                principalName,
+                transactionOperatorName,
+                transactionOperatorInn,
+                transactionOperatorPhones,
+                transactionOperatorAddress,
+                operationDescription
         )
 
         fun from(bundle: Bundle?): AgentRequisites? = AgentRequisitesMapper.read(bundle)
