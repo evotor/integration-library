@@ -272,7 +272,7 @@ data class AgentRequisites(
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный субагент".
-         * @param subagentPhones телефоны банковского платёжного субагента
+         * @param subagentPhones телефоны платежного агента
          * @param principalInn ИНН принципала (поставщика)
          * @param principalPhones телефоны принципала (поставщика)
          * @param principalName название принципала (поставщика)
