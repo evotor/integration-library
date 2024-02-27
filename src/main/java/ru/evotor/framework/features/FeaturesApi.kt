@@ -248,6 +248,13 @@ object FeaturesApi {
      */
     fun isDietarySupplementsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DIETARY_SUPPLEMENTS_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка соковой продукции и безулкогольных напитков" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isJuiceMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_JUICE_MARK)
+
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
