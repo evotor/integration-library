@@ -26,6 +26,7 @@ import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.framework.receipt.position.mapper.MarksCheckingInfoMapper
 import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
@@ -457,6 +458,7 @@ object ReceiptApi {
             .setExcise(excise)
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
             .setIsExcisable(isExcisable)
+            .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
         return builder.build()
     }
 
