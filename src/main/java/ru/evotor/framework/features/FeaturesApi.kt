@@ -255,6 +255,20 @@ object FeaturesApi {
      */
     fun isJuiceMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_JUICE_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка кресел-колясок" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isWheelchairsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_WHEELCHAIRS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка медицинских изделий" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isMedicalDevicesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICAL_DEVICES_MARK)
+
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(

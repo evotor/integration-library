@@ -117,5 +117,15 @@ public enum ProductType {
     /**
      * Маркированная соковая продукция и безалкогольные напитки
      */
-    JUICE_MARKED
+    JUICE_MARKED,
+
+    /**
+     * Маркированные кресла-коляски
+     */
+    WHEELCHAIRS_MARKED,
+
+    /**
+     * Медицинские изделия
+     */
+    MEDICAL_DEVICES_MARKED
 }
