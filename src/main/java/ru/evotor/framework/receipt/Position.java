@@ -1131,16 +1131,18 @@ public class Position implements Parcelable {
         }
 
         public Builder toBeerMarked(
-                @NonNull Mark mark
+                @NonNull Mark mark,
+                @NonNull BigDecimal alcoholByVolume,
+                @NonNull Long alcoholProductKindCode,
+                @NonNull BigDecimal tareVolume
         ) {
             position.productType = ProductType.BEER_MARKED;
             setAlcoParams(
-                    null,
-                    null,
-                    null,
-                    null
+                    mark,
+                    alcoholByVolume,
+                    alcoholProductKindCode,
+                    tareVolume
             );
-            setBeerParams(mark);
             return this;
         }
 
