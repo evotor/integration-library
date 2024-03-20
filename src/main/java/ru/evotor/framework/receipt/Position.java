@@ -1130,6 +1130,20 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toBeerMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.BEER_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setBeerParams(mark);
+            return this;
+        }
+
         /**
          * @deprecated Используйте {@link #toTobaccoMarked(Mark)}
          */
@@ -1616,6 +1630,10 @@ public class Position implements Parcelable {
         }
 
         public void setDietarySupplementsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setBeerParams(Mark mark) {
             position.mark = mark;
         }
 
