@@ -28,6 +28,7 @@ import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
 import ru.evotor.framework.receipt.position.Mark;
+import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
@@ -39,7 +40,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 10;
+    private static final int VERSION = 11;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -201,6 +202,13 @@ public class Position implements Parcelable {
     @Nullable
     private Boolean isExcisable;
 
+    /**
+     * Данные об онлайн-проверке марки
+     * Значения будут записаны в тэг 1265
+     */
+    @Nullable
+    private MarksCheckingInfo marksCheckingInfo;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -270,6 +278,7 @@ public class Position implements Parcelable {
         this.preferentialMedicine = position.getPreferentialMedicine();
         this.partialRealization = position.getPartialRealization();
         this.isExcisable = position.isExcisable;
+        this.marksCheckingInfo = position.getMarksCheckingInfo();
     }
 
     /**
@@ -559,6 +568,15 @@ public class Position implements Parcelable {
         return isExcisable;
     }
 
+    /**
+     * @return Данные об онлайн-проверке марки
+     * Значения будут записаны в тег 1265
+     */
+    @Nullable
+    public MarksCheckingInfo getMarksCheckingInfo() {
+        return marksCheckingInfo;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -622,6 +640,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(isExcisable, position.isExcisable))
             return false;
+        if (!Objects.equals(marksCheckingInfo, position.marksCheckingInfo))
+            return false;
 
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -654,6 +674,7 @@ public class Position implements Parcelable {
         result = 31 * result + (preferentialMedicine != null ? preferentialMedicine.hashCode() : 0);
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
         result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
+        result = 31 * result + (marksCheckingInfo != null ? marksCheckingInfo.hashCode() : 0);
         return result;
     }
 
@@ -686,6 +707,7 @@ public class Position implements Parcelable {
                 ", preferentialMedicine=" + preferentialMedicine +
                 ", partial=" + partialRealization +
                 ", isExcisable=" + isExcisable +
+                ", marksCheckingInfo=" + marksCheckingInfo +
                 '}';
     }
 
@@ -774,6 +796,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
         dest.writeSerializable(this.isExcisable);
+        dest.writeBundle(this.marksCheckingInfo != null ? this.marksCheckingInfo.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -868,6 +891,9 @@ public class Position implements Parcelable {
         if (version >= 10) {
             this.isExcisable = (Boolean) in.readSerializable();
         }
+        if (version >= 11) {
+            readMarksCheckingInfo(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -912,6 +938,10 @@ public class Position implements Parcelable {
 
     private void readPartialRealization(Parcel in) {
         this.partialRealization = PartialRealization.Companion.from(in.readBundle(PartialRealization.class.getClassLoader()));
+    }
+
+    private void readMarksCheckingInfo(Parcel in) {
+        this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1488,6 +1518,17 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toMarksCheckingInfo(
+                @NonNull String checkId,
+                @NonNull Long timestamp
+        ) {
+            position.marksCheckingInfo = new MarksCheckingInfo(
+                    checkId,
+                    timestamp
+            );
+            return this;
+        }
+
         /**
          * Признак подакцизности товара <br>
          * На основании этого флага будет вычислен признак предмета расчета (тег 1212),
@@ -1684,6 +1725,11 @@ public class Position implements Parcelable {
          */
         public Builder setPartialRealization(@Nullable PartialRealization partialRealization) {
             position.partialRealization = partialRealization;
+            return this;
+        }
+
+        public Builder setMarksCheckingInfo(@Nullable MarksCheckingInfo marksCheckingInfo) {
+            position.marksCheckingInfo = marksCheckingInfo;
             return this;
         }
 
