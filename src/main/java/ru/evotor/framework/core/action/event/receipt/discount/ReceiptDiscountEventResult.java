@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import ru.evotor.IBundlable;
@@ -26,6 +28,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
 
+    private static final String KEY_POSITION_UUID_TO_DISCOUNT_MAP = "positionUuidToDiscountMap";
+
     @Nullable
     public static ReceiptDiscountEventResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
@@ -35,6 +39,10 @@ public class ReceiptDiscountEventResult implements IBundlable {
         if (discount == null) {
             return null;
         }
+        Map<String, BigDecimal> positionUuidToDiscountMap = null;
+        if(bundle.containsKey(KEY_POSITION_UUID_TO_DISCOUNT_MAP)) {
+            positionUuidToDiscountMap = (Map<String, BigDecimal>) bundle.getSerializable(KEY_POSITION_UUID_TO_DISCOUNT_MAP);
+        }
         return new ReceiptDiscountEventResult(
                 discount,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
@@ -42,7 +50,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
                         ChangesMapper.INSTANCE.create(bundle.getParcelableArray(KEY_CHANGES)),
                         IPositionChange.class
                 ),
-                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
+                positionUuidToDiscountMap
         );
     }
 
@@ -54,6 +63,9 @@ public class ReceiptDiscountEventResult implements IBundlable {
     private final List<IPositionChange> changes;
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
+
+    @Nullable
+    private final Map<String, BigDecimal> positionUuidToDiscountMap;
 
     public ReceiptDiscountEventResult(
             @NonNull BigDecimal discount,
@@ -67,6 +79,23 @@ public class ReceiptDiscountEventResult implements IBundlable {
         this.extra = extra;
         this.changes = changes;
         this.setPurchaserContactData = setPurchaserContactData;
+        this.positionUuidToDiscountMap = null;
+    }
+
+    public ReceiptDiscountEventResult(
+            @NonNull BigDecimal discount,
+            @Nullable SetExtra extra,
+            @NonNull List<IPositionChange> changes,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable Map<String, BigDecimal> positionUuidToDiscountMap
+    ) {
+        Objects.requireNonNull(discount);
+
+        this.discount = discount;
+        this.extra = extra;
+        this.changes = changes;
+        this.setPurchaserContactData = setPurchaserContactData;
+        this.positionUuidToDiscountMap = positionUuidToDiscountMap;
     }
 
     @NonNull
@@ -84,6 +113,9 @@ public class ReceiptDiscountEventResult implements IBundlable {
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
+        if (positionUuidToDiscountMap != null) {
+            bundle.putSerializable(KEY_POSITION_UUID_TO_DISCOUNT_MAP, (Serializable) positionUuidToDiscountMap);
+        }
         return bundle;
     }
 
@@ -105,5 +137,10 @@ public class ReceiptDiscountEventResult implements IBundlable {
     @Nullable
     public SetPurchaserContactData getSetPurchaserContactData() {
         return setPurchaserContactData;
+    }
+
+    @Nullable
+    public Map<String, BigDecimal> getPositionUuidToDiscountMap() {
+        return positionUuidToDiscountMap;
     }
 }
