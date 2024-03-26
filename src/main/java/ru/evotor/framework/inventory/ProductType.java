@@ -112,5 +112,10 @@ public enum ProductType {
     /**
      * Маркированные БАДы
      */
-    DIETARY_SUPPLEMENTS_MARKED
+    DIETARY_SUPPLEMENTS_MARKED,
+
+    /**
+     * Маркированное пиво в бутылках
+     */
+    BEER_MARKED
 }

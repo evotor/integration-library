@@ -38,6 +38,7 @@ object FeaturesContract {
     const val PATH_SBP_ACTIVATION = "sbp_activation"
     const val PATH_EXCISE_PRODUCTS = "excise_products"
     const val PATH_BEER_KEG_MARK = "beer_mark_keg"
+    const val PATH_BEER_MARK = "beer_mark"
     const val PATH_ANTISEPTIC_MARK = "antiseptic_mark"
     const val PATH_DIETARY_SUPPLEMENTS_MARK = "dietary_supplements_mark"
 
