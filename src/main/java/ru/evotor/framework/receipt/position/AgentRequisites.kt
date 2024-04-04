@@ -256,10 +256,10 @@ data class AgentRequisites(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
             operationDescription: String
         ) = AgentRequisitesMapper.create(
-            agentType = null,
-            agentPhones = null,
-            subagentType = Subagent.Type.BANK_PAYMENT_SUBAGENT,
-            subagentPhones = agentPhones,
+            agentType = Agent.Type.BANK_PAYMENT_AGENT,
+            agentPhones = agentPhones,
+            subagentType = null,
+            subagentPhones = null,
             principalInn = principalInn,
             principalPhones = principalPhones,
             principalName = principalName,
