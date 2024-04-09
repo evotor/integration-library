@@ -248,6 +248,10 @@ object FeaturesApi {
      */
     fun isDietarySupplementsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DIETARY_SUPPLEMENTS_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Товары с возрастным ограничением" на данном терминале
+     */
+    fun isAgeLimitedProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_AGE_LIMITED_PRODUCTS)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
