@@ -25,6 +25,7 @@ import java.util.*
  * @param correctionDate Дата совершения корректируемого расчета (ТЕГ 1178)
  * @param correctionType Тип коррекции (ТЕГ 1173)
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
+ * @param fiscalSignOfIncorrectReceipt Фискальный признак ошибочного чека (ТЕГ 1192)
  * @param setPurchaserContactData Контактные данные покупателя, на которые будет отправлен чек
  */
 class OpenCorrectionReturnOutcomeReceiptCommand(
@@ -36,6 +37,8 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
     val correctionType: CorrectionType,
     @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
     val prescription: String? = null,
+    @FiscalRequisite(tag = FiscalTags.FISCAL_SIGN_OF_INCORRECT_RECIEPT)
+    val fiscalSignOfIncorrectReceipt: String? = null,
     val setPurchaserContactData: SetPurchaserContactData? = null
 ) : IBundlable {
 
@@ -46,6 +49,7 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
         private const val KEY_CORRECTION_DATE = "correctionDate"
         private const val KEY_CORRECTION_TYPE = "correctionType"
         private const val KEY_PRESCRIPTION = "prescription"
+        private const val KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT = "fiscalSignOfIncorrectReceipt"
         private const val KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData"
 
         @JvmStatic
@@ -63,6 +67,7 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
                     correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
                     prescription = it.getString(KEY_PRESCRIPTION),
+                    fiscalSignOfIncorrectReceipt = it.getString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT),
                     setPurchaserContactData = SetPurchaserContactData.from(
                         it.getBundle(
                             KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA
@@ -96,6 +101,7 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
             putLong(KEY_CORRECTION_DATE, correctionDate.time)
             putString(KEY_CORRECTION_TYPE, correctionType.name)
             putString(KEY_PRESCRIPTION, prescription)
+            putString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT, fiscalSignOfIncorrectReceipt)
             putBundle(
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData?.toBundle()

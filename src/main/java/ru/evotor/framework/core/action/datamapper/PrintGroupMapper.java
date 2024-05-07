@@ -19,6 +19,7 @@ public final class PrintGroupMapper {
     private static final String KEY_SHOULD_PRINT_RECEIPT = "shouldPrintReceipt";
     private static final String KEY_PURCHASER = "purchaser";
     private static final String KEY_MEDICINE_ATTRIBUTE = "medicineAttribute";
+    private static final String KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT = "fiscalSignOfIncorrectReceipt";
 
     @Nullable
     public static PrintGroup from(@Nullable Bundle bundle) {
@@ -31,6 +32,7 @@ public final class PrintGroupMapper {
         String orgInn = bundle.getString(KEY_ORG_INN);
         String orgAddress = bundle.getString(KEY_ORG_ADDRESS);
         String taxationSystem = bundle.getString(KEY_TAXATION_SYSTEM);
+        String fiscalSignOfIncorrectReceipt = bundle.getString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT);
         boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
         Purchaser purchaser = Purchaser.Companion.fromBundle(bundle.getBundle(KEY_PURCHASER));
         MedicineAttribute medicineAttribute = MedicineAttribute.Companion.fromBundle(bundle.getBundle(KEY_MEDICINE_ATTRIBUTE));
@@ -43,7 +45,8 @@ public final class PrintGroupMapper {
                 Utils.safeValueOf(TaxationSystem.class, taxationSystem, null),
                 shouldPrintReceipt,
                 purchaser,
-                medicineAttribute
+                medicineAttribute,
+                fiscalSignOfIncorrectReceipt
         );
     }
 
@@ -59,6 +62,7 @@ public final class PrintGroupMapper {
         bundle.putString(KEY_ORG_INN, printGroup.getOrgInn());
         bundle.putString(KEY_ORG_ADDRESS, printGroup.getOrgAddress());
         bundle.putString(KEY_TAXATION_SYSTEM, printGroup.getTaxationSystem() == null ? null : printGroup.getTaxationSystem().name());
+        bundle.putString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT, printGroup.getFiscalSignOfIncorrectReceipt());
         bundle.putBoolean(KEY_SHOULD_PRINT_RECEIPT, printGroup.isShouldPrintReceipt());
         bundle.putBundle(KEY_PURCHASER, printGroup.getPurchaser() == null ? null : printGroup.getPurchaser().toBundle());
         bundle.putBundle(KEY_MEDICINE_ATTRIBUTE, printGroup.getMedicineAttribute() == null ? null : printGroup.getMedicineAttribute().toBundle());

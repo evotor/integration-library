@@ -4,8 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
+
+import java.util.Objects;
+
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import ru.evotor.framework.ParcelableUtils;
 import ru.evotor.framework.kkt.FiscalRequisite;
@@ -19,11 +21,11 @@ public class PrintGroup implements Parcelable {
     /**
      * Текущая версия объекта PrintGroup.
      */
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
 
     private static final String DEFAULT_PRINT_GROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
 
-    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null);
+    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null, null);
 
     /**
      * Идентификатор печатной группы.
@@ -49,6 +51,14 @@ public class PrintGroup implements Parcelable {
      * Система налогообложения, которая применялась при расчёте.
      */
     private final TaxationSystem taxationSystem;
+    /**
+     * Дополнительный реквизит для указания ФПД ошибочного чека, который исправляется чеком коррекции.
+     * На самом деле драйвер записывает как unsigned int, но из-за отсутствия в Java unsigned-типов
+     * используется String.
+     */
+    @FiscalRequisite(tag = FiscalTags.FISCAL_SIGN_OF_INCORRECT_RECIEPT)
+    @Nullable
+    private final String fiscalSignOfIncorrectReceipt;
 
     /**
      * Флаг, указывающий необходимость печати чека.
@@ -78,7 +88,7 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt
     ) {
-        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null);
+        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null, null);
     }
 
     public PrintGroup(
@@ -90,7 +100,8 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt,
             @Nullable Purchaser purchaser,
-            @Nullable MedicineAttribute medicineAttribute
+            @Nullable MedicineAttribute medicineAttribute,
+            @Nullable String fiscalSignOfIncorrectReceipt
     ) {
         this.identifier = identifier;
         this.type = type;
@@ -101,6 +112,7 @@ public class PrintGroup implements Parcelable {
         this.shouldPrintReceipt = shouldPrintReceipt;
         this.purchaser = purchaser;
         this.medicineAttribute = medicineAttribute;
+        this.fiscalSignOfIncorrectReceipt = fiscalSignOfIncorrectReceipt;
     }
 
     public String getIdentifier() {
@@ -125,6 +137,12 @@ public class PrintGroup implements Parcelable {
 
     public TaxationSystem getTaxationSystem() {
         return taxationSystem;
+    }
+
+    @FiscalRequisite(tag = FiscalTags.FISCAL_SIGN_OF_INCORRECT_RECIEPT)
+    @Nullable
+    public String getFiscalSignOfIncorrectReceipt() {
+        return fiscalSignOfIncorrectReceipt;
     }
 
     public boolean isShouldPrintReceipt() {
@@ -170,17 +188,15 @@ public class PrintGroup implements Parcelable {
         dest.writeString(this.orgInn);
         dest.writeString(this.orgAddress);
         dest.writeInt(this.taxationSystem == null ? -1 : this.taxationSystem.ordinal());
+        dest.writeString(this.fiscalSignOfIncorrectReceipt);
         dest.writeInt(this.shouldPrintReceipt ? 1 : 0);
 
-        ParcelableUtils.writeExpand(dest, VERSION, new Function1<Parcel, Unit>() {
-            @Override
-            public Unit invoke(Parcel parcel) {
-                /* version = 1*/
-                parcel.writeParcelable(PrintGroup.this.purchaser, flags);
-                /* version = 2*/
-                parcel.writeParcelable(PrintGroup.this.medicineAttribute, flags);
-                return Unit.INSTANCE;
-            }
+        ParcelableUtils.writeExpand(dest, VERSION, parcel -> {
+            /* version = 1*/
+            parcel.writeParcelable(PrintGroup.this.purchaser, flags);
+            /* version = 2*/
+            parcel.writeParcelable(PrintGroup.this.medicineAttribute, flags);
+            return Unit.INSTANCE;
         });
     }
 
@@ -193,6 +209,7 @@ public class PrintGroup implements Parcelable {
         this.orgAddress = in.readString();
         int tmpTaxationSystem = in.readInt();
         this.taxationSystem = tmpTaxationSystem == -1 ? null : TaxationSystem.values()[tmpTaxationSystem];
+        this.fiscalSignOfIncorrectReceipt = in.readString();
         try {
             this.shouldPrintReceipt = in.readInt() == 1;
         } catch (Exception e) {
@@ -244,6 +261,7 @@ public class PrintGroup implements Parcelable {
             return false;
         if (shouldPrintReceipt != that.shouldPrintReceipt) return false;
         if (taxationSystem != that.taxationSystem) return false;
+        if (!Objects.equals(fiscalSignOfIncorrectReceipt, that.fiscalSignOfIncorrectReceipt)) return false;
         if (purchaser != null ? !purchaser.equals(that.purchaser) : that.purchaser != null)
             return false;
 
@@ -258,6 +276,7 @@ public class PrintGroup implements Parcelable {
         result = 31 * result + (orgInn != null ? orgInn.hashCode() : 0);
         result = 31 * result + (orgAddress != null ? orgAddress.hashCode() : 0);
         result = 31 * result + (taxationSystem != null ? taxationSystem.hashCode() : 0);
+        result = 31 * result + (fiscalSignOfIncorrectReceipt != null ? fiscalSignOfIncorrectReceipt.hashCode() : 0);
         result = 31 * result + (shouldPrintReceipt ? 1 : 0);
         result = 31 * result + (purchaser != null ? purchaser.hashCode() : 0);
         result = 31 * result + (medicineAttribute != null ? medicineAttribute.hashCode() : 0);
@@ -268,5 +287,4 @@ public class PrintGroup implements Parcelable {
     public boolean isDefault() {
         return DEFAULT_PRINT_GROUP_IDENTIFIER.equals(identifier);
     }
-
 }

@@ -343,7 +343,8 @@ object ReceiptApi {
             Utils.safeValueOf(TaxationSystem::class.java, cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)), null),
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
-            medicineAttribute
+            medicineAttribute,
+            cursor.optString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_FISCAL_SIGN_OF_INCORRECT_RECEIPT))
         )
     }
 
