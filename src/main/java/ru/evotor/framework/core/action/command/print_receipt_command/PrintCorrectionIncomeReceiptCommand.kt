@@ -47,7 +47,7 @@ class PrintCorrectionIncomeReceiptCommand(
     val correctionType: CorrectionType,
     @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
     val prescription: String? = null,
-    @FiscalRequisite(tag = FiscalTags.FISCAL_SIGN_OF_INCORRECT_RECIEPT)
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
     val fiscalSignOfIncorrectReceipt: String? = null,
 ) : IBundlable {
 

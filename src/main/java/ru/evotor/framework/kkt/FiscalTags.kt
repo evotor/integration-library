@@ -196,6 +196,6 @@ object FiscalTags {
      * фискальный признак ошибочного чека
      * значение дополнительного реквизита.
      */
-    const val FISCAL_SIGN_OF_INCORRECT_RECIEPT = 1192
+    const val ADDITIONAL_REQUISITE_1192 = 1192
 
 }
