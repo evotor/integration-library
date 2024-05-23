@@ -68,6 +68,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_CODE_PREVIOUS_DOCUMENT_NOT_PRINTED = -13;
 
+    /**
+     * Дополнительный реквизит чека коррекции (тег 1192) не является unsigned int
+     */
+    public static final int ERROR_CODE_INVALID_FISCAL_SIGN_OF_INCORRECT_RECEIPT = -14;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {
