@@ -193,8 +193,7 @@ object FiscalTags {
     const val MEASURE_CODE = 2108
 
     /**
-     * фискальный признак ошибочного чека
-     * значение дополнительного реквизита.
+     * дополнительный реквизит чека
      */
     const val ADDITIONAL_REQUISITE_1192 = 1192
 
