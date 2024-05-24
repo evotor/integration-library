@@ -69,7 +69,8 @@ public class PrintReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_PREVIOUS_DOCUMENT_NOT_PRINTED = -13;
 
     /**
-     * Дополнительный реквизит чека коррекции (тег 1192) не является unsigned int
+     * Номер ошибочного документа при печати чека коррекции (тег 1192)
+     * не является unsigned int (должен быть от 0 до 4,294,967,295)
      */
     public static final int ERROR_CODE_INVALID_FISCAL_SIGN_OF_INCORRECT_RECEIPT = -14;
 
