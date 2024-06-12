@@ -115,6 +115,11 @@ public enum ProductType {
     DIETARY_SUPPLEMENTS_MARKED,
 
     /**
+     * Маркированное пиво в бутылках
+     */
+    BEER_MARKED,
+
+    /**
      * Маркированная соковая продукция и безалкогольные напитки
      */
     JUICE_MARKED,
