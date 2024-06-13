@@ -179,11 +179,18 @@ object FeaturesApi {
     fun isFurMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FUR_MARK)
 
     /**
-     * Проверяет, активна ли функция "Маркировка пива" на данном терминале
+     * Проверяет, активна ли функция "Маркировка пива"(в кегах) на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isBeerMarkKegActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BEER_KEG_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка пива"(в бутылках) на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isBeerMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BEER_MARK)
 
     /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
@@ -248,6 +255,10 @@ object FeaturesApi {
      */
     fun isDietarySupplementsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_DIETARY_SUPPLEMENTS_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Товары с возрастным ограничением" на данном терминале
+     */
+    fun isAgeLimitedProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_AGE_LIMITED_PRODUCTS)
     /**
      * Проверяет, активна ли функция "Маркировка соковой продукции и безулкогольных напитков" на данном терминале
      *
