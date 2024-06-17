@@ -1,13 +1,11 @@
 package ru.evotor.framework.core.action.command.print_receipt_command
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import ru.evotor.IBundlable
 import ru.evotor.framework.core.ActivityStarter
-import ru.evotor.framework.core.ICanStartActivity
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
@@ -32,6 +30,7 @@ import java.util.*
  * @param correctionDate Дата совершения корректируемого расчета (ТЕГ 1178)
  * @param correctionType Тип коррекции (ТЕГ 1173)
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
+ * @param fiscalSignOfIncorrectReceipt Фискальный признак ошибочного чека (ТЕГ 1192)
  */
 class PrintCorrectionReturnIncomeReceiptCommand(
     val printReceipts: List<Receipt.PrintReceipt>,
@@ -47,7 +46,9 @@ class PrintCorrectionReturnIncomeReceiptCommand(
     @FiscalRequisite(tag = FiscalTags.CORRECTION_TYPE)
     val correctionType: CorrectionType,
     @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
-    val prescription: String? = null
+    val prescription: String? = null,
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
+    val fiscalSignOfIncorrectReceipt: String? = null
 ) : IBundlable {
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -70,12 +71,9 @@ class PrintCorrectionReturnIncomeReceiptCommand(
         return Bundle().apply {
             putParcelableArrayList(
                 KEY_PRINT_RECEIPTS,
-                printReceipts.mapTo(
-                    ArrayList(),
-                    {
-                        PrintReceiptMapper.toBundle(it)
-                    }
-                )
+                printReceipts.mapTo(ArrayList()) {
+                    PrintReceiptMapper.toBundle(it)
+                }
             )
             putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
             putString(KEY_CLIENT_EMAIL, clientEmail)
@@ -90,6 +88,7 @@ class PrintCorrectionReturnIncomeReceiptCommand(
             putLong(KEY_CORRECTION_DATE, correctionDate.time)
             putString(KEY_CORRECTION_TYPE, correctionType.name)
             putString(KEY_PRESCRIPTION, prescription)
+            putString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT, fiscalSignOfIncorrectReceipt)
         }
     }
 
@@ -108,6 +107,7 @@ class PrintCorrectionReturnIncomeReceiptCommand(
         private const val KEY_CORRECTION_DATE = "correctionDate"
         private const val KEY_CORRECTION_TYPE = "correctionType"
         private const val KEY_PRESCRIPTION = "prescription"
+        private const val KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT = "fiscalSignOfIncorrectReceipt"
 
         @JvmStatic
         fun create(bundle: Bundle?): PrintCorrectionReturnIncomeReceiptCommand? {
@@ -123,7 +123,8 @@ class PrintCorrectionReturnIncomeReceiptCommand(
                     userUuid = PrintReceiptCommand.getUserUuid(bundle),
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
                     correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
-                    prescription = it.getString(KEY_PRESCRIPTION)
+                    prescription = it.getString(KEY_PRESCRIPTION),
+                    fiscalSignOfIncorrectReceipt = it.getString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT)
                 )
             }
         }
