@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import ru.evotor.framework.features.FeaturesApi
-import ru.evotor.framework.receipt.slip.SlipsAmountApi.DEPRECATED_BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.Companion.BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.SLIPS_AMOUNT_PROVIDER
 import ru.evotor.framework.settings.SettingsProviderContracts.NEGATIVE_BALANCE_PROVIDER
@@ -60,4 +59,8 @@ object SettingsApi {
 
         return null
     }
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    const val DEPRECATED_AUTHORITY = "ru.evotor.settings.SlipsAmountInfo"
+    private val DEPRECATED_BASE_URI = Uri.parse("content://$DEPRECATED_AUTHORITY")
 }
