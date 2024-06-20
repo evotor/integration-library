@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import ru.evotor.framework.features.FeaturesApi
+import ru.evotor.framework.receipt.slip.SlipsAmountApi.DEPRECATED_BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.Companion.BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.SLIPS_AMOUNT_PROVIDER
 import ru.evotor.framework.settings.SettingsProviderContracts.NEGATIVE_BALANCE_PROVIDER
@@ -20,6 +21,8 @@ object SettingsApi {
         if (FeaturesApi.isSlipAmountActive(context)) {
             SLIPS_AMOUNT_PROVIDER.runCursor(context) { columnIndex ->
                 getInt(columnIndex)
+            } ?: SLIPS_AMOUNT_PROVIDER.runCursor(context, DEPRECATED_BASE_URI) { columnIndex ->
+                getInt(columnIndex)
             }
         } else {
             null
@@ -33,9 +36,13 @@ object SettingsApi {
             getInt(columnIndex) != 0
         }
 
-    private fun <T> SettingsProviderContracts.runCursor(context: Context, getValue: Cursor.(Int) -> T): T? {
+    private fun <T> SettingsProviderContracts.runCursor(
+        context: Context,
+        baseUri: Uri = BASE_URI,
+        getValue: Cursor.(Int) -> T
+    ): T? {
         context.contentResolver.query(
-            Uri.withAppendedPath(BASE_URI, path),
+            Uri.withAppendedPath(baseUri, path),
             null,
             null,
             null,
