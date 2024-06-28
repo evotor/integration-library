@@ -261,7 +261,7 @@ object FeaturesApi {
     fun isAgeLimitedProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_AGE_LIMITED_PRODUCTS)
 
     /**
-     * Проверяет, активна ли функция "Маркировка соковой продукции и безулкогольных напитков" на данном терминале
+     * Проверяет, активна ли функция "Маркировка соковой продукции и безалкогольных напитков" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
