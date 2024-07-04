@@ -26,9 +26,12 @@ enum class SettingsProviderContracts(
         "NEGATIVE_BALANCE_COLUMN"
     );
 
+    @Suppress("MemberVisibilityCanBePrivate")
     companion object {
-        @Suppress("MemberVisibilityCanBePrivate")
         const val AUTHORITY = "ru.evotor.evotorpos.settings"
+        const val DEPRECATED_AUTHORITY = "ru.evotor.settings.SlipsAmountInfo"
+
         internal val BASE_URI = Uri.parse("content://$AUTHORITY")
+        internal val DEPRECATED_BASE_URI = Uri.parse("content://$DEPRECATED_AUTHORITY")
     }
 }
