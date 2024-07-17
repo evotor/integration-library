@@ -1516,6 +1516,49 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toJuiceMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.JUICE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setJuiceParams(mark);
+            return this;
+        }
+
+        public Builder toWheelchairsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.WHEELCHAIRS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setWheelchairsParams(mark);
+            return this;
+        }
+
+        public Builder toMedicalDevicesMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.MEDICAL_DEVICES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setMedicalDevicesParams(mark);
+            return this;
+        }
+
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -1632,6 +1675,18 @@ public class Position implements Parcelable {
         }
 
         public void setDietarySupplementsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        public void setJuiceParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setWheelchairsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setMedicalDevicesParams(Mark mark) {
             position.mark = mark;
         }
 
