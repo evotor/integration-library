@@ -276,6 +276,11 @@ object FeaturesApi {
      */
     fun isMedicalDevicesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICAL_DEVICES_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Товары с возрастным ограничением" на данном терминале
+     */
+    fun isAgeLimitedProductsActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_AGE_LIMITED_PRODUCTS)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
                     Uri.withAppendedPath(FeaturesContract.BASE_URI, path),

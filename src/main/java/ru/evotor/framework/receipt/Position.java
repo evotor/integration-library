@@ -40,7 +40,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 11;
+    private static final int VERSION = 12;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -209,6 +209,12 @@ public class Position implements Parcelable {
     @Nullable
     private MarksCheckingInfo marksCheckingInfo;
 
+    /**
+     * Признак возрастного ограничения товара
+     */
+    @Nullable
+    private Boolean isAgeLimited;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -279,6 +285,7 @@ public class Position implements Parcelable {
         this.partialRealization = position.getPartialRealization();
         this.isExcisable = position.isExcisable;
         this.marksCheckingInfo = position.getMarksCheckingInfo();
+        this.isAgeLimited = position.isAgeLimited;
     }
 
     /**
@@ -569,6 +576,14 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Признак возрастного ограничения товара
+     */
+    @Nullable
+    public Boolean getIsAgeLimited() {
+        return isAgeLimited;
+    }
+
+    /**
      * @return Данные об онлайн-проверке марки
      * Значения будут записаны в тег 1265
      */
@@ -642,7 +657,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(marksCheckingInfo, position.marksCheckingInfo))
             return false;
-
+        if (!Objects.equals(isAgeLimited, position.isAgeLimited))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -675,6 +691,7 @@ public class Position implements Parcelable {
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
         result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
         result = 31 * result + (marksCheckingInfo != null ? marksCheckingInfo.hashCode() : 0);
+        result = 31 * result + (isAgeLimited != null ? isAgeLimited.hashCode() : 0);
         return result;
     }
 
@@ -708,6 +725,7 @@ public class Position implements Parcelable {
                 ", partial=" + partialRealization +
                 ", isExcisable=" + isExcisable +
                 ", marksCheckingInfo=" + marksCheckingInfo +
+                ", isAgeLimited=" + isAgeLimited +
                 '}';
     }
 
@@ -797,6 +815,7 @@ public class Position implements Parcelable {
         dest.writeInt(this.measure.getCode());
         dest.writeSerializable(this.isExcisable);
         dest.writeBundle(this.marksCheckingInfo != null ? this.marksCheckingInfo.toBundle() : null);
+        dest.writeSerializable(this.isAgeLimited);
     }
 
     protected Position(Parcel in) {
@@ -894,6 +913,9 @@ public class Position implements Parcelable {
         if (version >= 11) {
             readMarksCheckingInfo(in);
         }
+        if (version >= 12) {
+            this.isAgeLimited = (Boolean) in.readSerializable();
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -981,7 +1003,7 @@ public class Position implements Parcelable {
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
             builder.position.isExcisable = product.isExcisable();
-
+            builder.position.isAgeLimited = product.isAgeLimited();
             return builder;
         }
 
@@ -1805,6 +1827,11 @@ public class Position implements Parcelable {
 
         public Builder setMarksCheckingInfo(@Nullable MarksCheckingInfo marksCheckingInfo) {
             position.marksCheckingInfo = marksCheckingInfo;
+            return this;
+        }
+
+        public Builder setIsAgeLimited(Boolean isAgeLimited) {
+            position.isAgeLimited = isAgeLimited;
             return this;
         }
 
