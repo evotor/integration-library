@@ -117,5 +117,20 @@ public enum ProductType {
     /**
      * Маркированное пиво в бутылках
      */
-    BEER_MARKED
+    BEER_MARKED,
+
+    /**
+     * Маркированная соковая продукция и безалкогольные напитки
+     */
+    JUICE_MARKED,
+
+    /**
+     * Маркированные кресла-коляски
+     */
+    WHEELCHAIRS_MARKED,
+
+    /**
+     * Медицинские изделия
+     */
+    MEDICAL_DEVICES_MARKED
 }
