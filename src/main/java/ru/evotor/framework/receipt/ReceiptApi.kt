@@ -425,6 +425,7 @@ object ReceiptApi {
         )
 
         val isExcisable = cursor.optString(PositionTable.COLUMN_IS_EXCISABLE)?.toBooleanStrictOrNull()
+        val isMarkSkipped = cursor.optString(PositionTable.COLUMN_IS_MARK_SKIPPED)?.toBooleanStrictOrNull()
 
         val builder = Position.Builder
             .copyFrom(Position(
@@ -459,6 +460,7 @@ object ReceiptApi {
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
             .setIsExcisable(isExcisable)
             .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
+            .setIsMarkSkipped(isMarkSkipped)
         return builder.build()
     }
 
