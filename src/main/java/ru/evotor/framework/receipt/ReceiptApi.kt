@@ -426,6 +426,7 @@ object ReceiptApi {
 
         val isExcisable = cursor.optString(PositionTable.COLUMN_IS_EXCISABLE)?.toBooleanStrictOrNull()
         val isMarkSkipped = cursor.optString(PositionTable.COLUMN_IS_MARK_SKIPPED)?.toBooleanStrictOrNull()
+        val isAgeLimited = cursor.optString(PositionTable.COLUMN_IS_AGE_LIMITED)?.toBooleanStrictOrNull()
 
         val builder = Position.Builder
             .copyFrom(Position(
@@ -461,6 +462,7 @@ object ReceiptApi {
             .setIsExcisable(isExcisable)
             .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
             .setIsMarkSkipped(isMarkSkipped)
+            .setIsAgeLimited(isAgeLimited)
         return builder.build()
     }
 
