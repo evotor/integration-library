@@ -40,7 +40,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 12;
+    private static final int VERSION = 13;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -215,6 +215,12 @@ public class Position implements Parcelable {
     @Nullable
     private Boolean isAgeLimited;
 
+    /**
+     * Признак, если был пропущен ввод кода маркировки
+     */
+    @Nullable
+    private Boolean isMarkSkipped;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -286,6 +292,7 @@ public class Position implements Parcelable {
         this.isExcisable = position.isExcisable;
         this.marksCheckingInfo = position.getMarksCheckingInfo();
         this.isAgeLimited = position.isAgeLimited;
+        this.isMarkSkipped = position.isMarkSkipped;
     }
 
     /**
@@ -584,6 +591,14 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return true, если был пропущен ввод кода маркировки
+     */
+    @Nullable
+    public Boolean getIsMarkSkipped() {
+        return isMarkSkipped;
+    }
+
+    /**
      * @return Данные об онлайн-проверке марки
      * Значения будут записаны в тег 1265
      */
@@ -659,6 +674,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(isAgeLimited, position.isAgeLimited))
             return false;
+        if (!Objects.equals(isMarkSkipped, position.isMarkSkipped))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -692,6 +709,7 @@ public class Position implements Parcelable {
         result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
         result = 31 * result + (marksCheckingInfo != null ? marksCheckingInfo.hashCode() : 0);
         result = 31 * result + (isAgeLimited != null ? isAgeLimited.hashCode() : 0);
+        result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         return result;
     }
 
@@ -726,6 +744,7 @@ public class Position implements Parcelable {
                 ", isExcisable=" + isExcisable +
                 ", marksCheckingInfo=" + marksCheckingInfo +
                 ", isAgeLimited=" + isAgeLimited +
+                ", isMarkSkipped=" + isMarkSkipped +
                 '}';
     }
 
@@ -816,6 +835,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.isExcisable);
         dest.writeBundle(this.marksCheckingInfo != null ? this.marksCheckingInfo.toBundle() : null);
         dest.writeSerializable(this.isAgeLimited);
+        dest.writeSerializable(this.isMarkSkipped);
     }
 
     protected Position(Parcel in) {
@@ -915,6 +935,9 @@ public class Position implements Parcelable {
         }
         if (version >= 12) {
             this.isAgeLimited = (Boolean) in.readSerializable();
+        }
+        if (version >= 13) {
+            this.isMarkSkipped = (Boolean) in.readSerializable();
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
@@ -1832,6 +1855,11 @@ public class Position implements Parcelable {
 
         public Builder setIsAgeLimited(Boolean isAgeLimited) {
             position.isAgeLimited = isAgeLimited;
+            return this;
+        }
+
+        public Builder setIsMarkSkipped(@Nullable Boolean isMarkSkipped) {
+            position.isMarkSkipped = isMarkSkipped;
             return this;
         }
 
