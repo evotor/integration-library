@@ -423,6 +423,7 @@ object KktApi {
         )
     }
 
+    @JvmStatic
     fun isSessionOpen(context: Context) : String{
         val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}")
         return getKktInfoStatus(context, uri).toString()
