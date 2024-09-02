@@ -424,23 +424,49 @@ object KktApi {
     }
 
     @JvmStatic
-    fun isSessionOpen(context: Context) : String{
-        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}")
-        return getKktInfoStatus(context, uri).toString()
+    fun isSessionOpen(context: Context): Boolean? {
+        return getValue(context, KktContract.PATH_SESSION_STATUS) { cursor, name ->
+            cursor.optBoolean(name)
+        }
     }
-//    fun isSessionExpired() : Boolean {
-//
-//    }
-//    fun sessionOpenDate() : Data?{
-//
-//    }
-//    fun sessionExpireDate() : Date?{
-//
-//    }
-//    fun sessionNumber() : Long{
-//
-//    }
 
+    @JvmStatic
+    fun isSessionExpired(context: Context): Boolean? {
+        return getValue(context, KktContract.PATH_SESSION_STATUS) { cursor, name ->
+            cursor.optBoolean(name)
+        }
+    }
+
+    @JvmStatic
+    fun sessionOpenDate(context: Context): Date? {
+        return getValue(context, KktContract.COLUMN_SESSION_STATUS_OPEN_DATE) { cursor, name ->
+            val dateLong = cursor.optLong(name)
+            if(dateLong == null)
+                null
+            else{
+                Date(dateLong)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun sessionExpireDate(context: Context): Date? {
+        return getValue(context, KktContract.COLUMN_SESSION_STATUS_CLOSE_DATE) { cursor, name ->
+            val dateLong = cursor.optLong(name)
+            if(dateLong == null)
+                null
+            else{
+                Date(dateLong)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun sessionNumber(context: Context): Long? {
+        return getValue(context, KktContract.COLUMN_SESSION_STATUS_SESSION_NUMBER) { cursor, name ->
+            cursor.optLong(name)
+        }
+    }
 
     private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
         return context.contentResolver.query(
