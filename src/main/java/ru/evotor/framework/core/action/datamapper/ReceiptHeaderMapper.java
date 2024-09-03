@@ -19,6 +19,7 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_CLIENT_EMAIL = "clientEmail";
     private static final String KEY_CLIENT_PHONE = "clientPhone";
     private static final String KEY_EXTRA = "extra";
+    private static final String KEY_SESSION_NUMBER = "receiptNumber";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -38,6 +39,11 @@ public final class ReceiptHeaderMapper {
             return null;
         }
 
+        Long sessionNumber = null;
+        if(bundle.containsKey(KEY_SESSION_NUMBER)) {
+            sessionNumber = bundle.getLong(KEY_SESSION_NUMBER);
+        }
+
         return new Receipt.Header(
                 receiptUuid,
                 baseReceiptUuid,
@@ -46,7 +52,8 @@ public final class ReceiptHeaderMapper {
                 date,
                 bundle.getString(KEY_CLIENT_EMAIL),
                 bundle.getString(KEY_CLIENT_PHONE),
-                bundle.getString(KEY_EXTRA)
+                bundle.getString(KEY_EXTRA),
+                sessionNumber
         );
     }
 
@@ -70,6 +77,9 @@ public final class ReceiptHeaderMapper {
         bundle.putString(KEY_CLIENT_PHONE, header.getClientPhone());
         bundle.putString(KEY_CLIENT_EMAIL, header.getClientEmail());
         bundle.putString(KEY_EXTRA, header.getExtra());
+
+        if(header.getSessionNumber() != null)
+            bundle.putLong(KEY_SESSION_NUMBER, header.getSessionNumber());
 
         return bundle;
     }
