@@ -49,7 +49,7 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredFfdVersion(context: Context): FfdVersion? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
+        getValue(context, KktContract.COLUMN_SUPPORTED_FFD_VERSION) { cursor, name ->
             cursor.optInt(name)?.let { version ->
                 if (version !in 0 until FfdVersion.values().size) {
                     throw IntegrationLibraryMappingException(FfdVersion::class.java.name)
@@ -67,7 +67,7 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredAgentTypes(context: Context): List<Agent.Type>? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_REGISTERED_AGENT_TYPES) { cursor, name ->
+        getValue(context, KktContract.COLUMN_REGISTERED_AGENT_TYPES) { cursor, name ->
             cursor.optList(name)?.map { item ->
                 item.toInt().let { index ->
                     if (index !in 0..Agent.Type.values().size) {
@@ -87,7 +87,7 @@ object KktApi {
      */
     @JvmStatic
     fun getRegisteredSubagentTypes(context: Context): List<Subagent.Type>? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES) { cursor, name ->
+        getValue(context, KktContract.COLUMN_REGISTERED_SUBAGENT_TYPES) { cursor, name ->
             cursor.optList(name)?.map { item ->
                 item.toInt().let { index ->
                     if (index !in 0..Subagent.Type.values().size) {
@@ -106,7 +106,7 @@ object KktApi {
      */
     @JvmStatic
     fun isVatRate20Available(context: Context): Boolean? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE, booleanGetter)
+        getValue(context, KktContract.COLUMN_IS_VAT_RATE_20_AVAILABLE, booleanGetter)
 
     /**
      * Возвращает серийный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -130,7 +130,7 @@ object KktApi {
      */
     @JvmStatic
     fun receiveKktSerialNumber(context: Context): String? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_SERIAL_NUMBER, stringGetter)
+        getValue(context, KktContract.COLUMN_SERIAL_NUMBER, stringGetter)
 
     /**
      * Возвращает регистрационный номер ККТ в функцию обратного вызова (асинхронная операция)
@@ -154,7 +154,7 @@ object KktApi {
      */
     @JvmStatic
     fun receiveKktRegNumber(context: Context): String? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_REGISTER_NUMBER, stringGetter)
+        getValue(context, KktContract.COLUMN_REGISTER_NUMBER, stringGetter)
 
     /**
      * Проверяет, готова ли касса для работы в разъездной торговле.
@@ -167,7 +167,7 @@ object KktApi {
      */
     @JvmStatic
     fun isKktReadyForDelivery(context: Context): Boolean? =
-        getValue(context, KktContract.BASE_URI, KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
+        getValue(context,  KktContract.COLUMN_IS_DELIVERY_AVAILABLE, booleanGetter)
 
     /**
      * Возвращает серийный номер фискального накопителя или null, если фискальный накопитель отсутствует
@@ -424,83 +424,21 @@ object KktApi {
     }
 
     @JvmStatic
-    fun isSessionOpen(context: Context): Boolean? {
-        return getValue(
-            context,
-            Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}"),
-            COLUMN_SESSION_STATUS_IS_OPEN)
-        { cursor, name ->
-            cursor.optBoolean(name)
-        }
+    fun getKktSessionInfo(context: Context) : KktSessionInfo?{
+        val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}")
+        return getKktSessionInfo(context, uri)
     }
 
-    @JvmStatic
-    fun isSessionExpired(context: Context): Boolean? {
-        return getValue(
-            context,
-            Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}"),
-            COLUMN_SESSION_STATUS_IS_EXPIRED)
-        { cursor, name ->
-            cursor.optBoolean(name)
-        }
-    }
-
-    @JvmStatic
-    fun sessionOpenDate(context: Context): Date? {
-        return getValue(
-            context,
-            Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}"),
-            COLUMN_SESSION_STATUS_OPEN_DATE
-        )
-        { cursor, name ->
-            val dateLong = cursor.optLong(name)
-            if (dateLong == null)
-                null
-            else {
-                Date(dateLong)
-            }
-        }
-    }
-
-    @JvmStatic
-    fun sessionExpireDate(context: Context): Date? {
-        return getValue(
-            context,
-            Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}"),
-            COLUMN_SESSION_STATUS_CLOSE_DATE
-        )
-        { cursor, name ->
-            val dateLong = cursor.optLong(name)
-            if (dateLong == null)
-                null
-            else {
-                Date(dateLong)
-            }
-        }
-    }
-
-    @JvmStatic
-    fun sessionNumber(context: Context): Long? {
-        return getValue(
-            context,
-            Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}"),
-            COLUMN_SESSION_STATUS_SESSION_NUMBER
-        )
-        { cursor, name ->
-            cursor.optLong(name)
-        }
-    }
-
-    private fun <T> getValue(context: Context, url: Uri, valueName: String, parser: (Cursor, String) -> T?): T? {
+    private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
         return context.contentResolver.query(
-            url,
+            KktContract.BASE_URI,
             arrayOf(valueName),
             null,
             null,
             null
         )?.use {
             it.moveToFirst()
-            parser(it, valueName)
+            parser(it, valueName) ?: throw IntegrationLibraryMappingException(valueName)
         }
     }
 
@@ -522,10 +460,10 @@ object KktApi {
         }
     }
 
-    private fun getKktInfoStatus(
+    private fun getKktSessionInfo(
         context: Context,
         uri: Uri
-    ): GetKktSession {
+    ): KktSessionInfo? {
         val cursor = context.contentResolver.query(
             uri,
             arrayOf(
@@ -540,13 +478,14 @@ object KktApi {
             null
         )
 
-        cursor ?: return GetKktSession.Unsupported
+        cursor ?: return null
+
         cursor.use {
-            return GetKktSession.Success(mapCursorToKktSession(it))
+            return mapCursorToKktSession(it)
         }
     }
 
-    private fun mapCursorToKktSession(cursor: Cursor): KktSession? {
+    private fun mapCursorToKktSession(cursor: Cursor): KktSessionInfo? {
         if (!cursor.moveToFirst()) {
             return null
         }
@@ -557,7 +496,7 @@ object KktApi {
         val closeDate: Long? = cursor.optLong(COLUMN_SESSION_STATUS_CLOSE_DATE)
         val sessionNumber: Int? = cursor.optInt(COLUMN_SESSION_STATUS_SESSION_NUMBER)
 
-        return KktSession(
+        return KktSessionInfo(
             isOpen,
             isExpired,
             openDate?.let { Date(it) },
@@ -566,16 +505,11 @@ object KktApi {
         )
     }
 
-    data class KktSession(
+    data class KktSessionInfo(
         val isOpen: Boolean?,
         val isExpired: Boolean?,
         val openDate: Date?,
         val closeDate: Date?,
         val sessionNumber: Int?
     )
-
-    sealed class GetKktSession() {
-        class Success(val session: KktSession?) : GetKktSession()
-        object Unsupported : GetKktSession()
-    }
 }

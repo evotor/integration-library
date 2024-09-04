@@ -19,7 +19,7 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_CLIENT_EMAIL = "clientEmail";
     private static final String KEY_CLIENT_PHONE = "clientPhone";
     private static final String KEY_EXTRA = "extra";
-    private static final String KEY_SESSION_NUMBER = "receiptNumber";
+    private static final String KEY_SESSION_NUMBER = "sessionNumber";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
