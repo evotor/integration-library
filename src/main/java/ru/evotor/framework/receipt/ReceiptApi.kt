@@ -571,7 +571,8 @@ object ReceiptApi {
             date = cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
-            extra = extra
+            extra = extra,
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
         )
     }
 
