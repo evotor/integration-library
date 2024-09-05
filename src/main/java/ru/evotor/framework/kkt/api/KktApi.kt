@@ -489,7 +489,6 @@ object KktApi {
         if (!cursor.moveToFirst()) {
             return null
         }
-
         val isOpen: Boolean? = cursor.optBoolean(COLUMN_SESSION_STATUS_IS_OPEN)
         val isExpired: Boolean? = cursor.optBoolean(COLUMN_SESSION_STATUS_IS_EXPIRED)
         val openDate: Long? = cursor.optLong(COLUMN_SESSION_STATUS_OPEN_DATE)
