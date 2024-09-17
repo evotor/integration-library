@@ -3,59 +3,29 @@ package ru.evotor.framework.receipt.position
 import android.os.Bundle
 import ru.evotor.IBundlable
 
-class SaleBanTime() : IBundlable {
-    var startHours: Int = 0
-        private set
-    var startMinutes: Int = 0
-        private set
-    var endHours: Int = 0
-        private set
-    var endMinutes: Int = 0
-        private set
+data class SaleBanTime(
+    val startTime: String,
+    val endTime: String
+) : IBundlable {
 
-    constructor(
-        startHours: Int,
-        startMinutes: Int,
-        endHours: Int,
-        endMinutes: Int
-    ) : this() {
-        if (
-            !validateHours(startHours) ||
-            !validateMinutes(startMinutes) ||
-            !validateHours(endHours) ||
-            !validateMinutes(endMinutes)
-        ) {
-            throw IllegalArgumentException("Incorrect time")
+    init {
+        checkTimeCorrectness(startTime)
+        checkTimeCorrectness(endTime)
+    }
+
+    override fun toBundle(): Bundle {
+        return Bundle().apply {
+            putString(KEY_START_TIME, startTime)
+            putString(KEY_END_TIME, endTime)
         }
-        this.startHours = startHours
-        this.startMinutes = startMinutes
-        this.endHours = endHours
-        this.endMinutes = endMinutes
     }
 
-    constructor(
-        startTime: String,
-        endTime: String
-    ) : this() {
-        val start = parseHoursAndMinutes(startTime)
-        val end = parseHoursAndMinutes(endTime)
-        this.startHours = start.first
-        this.startMinutes = start.second
-        this.endHours = end.first
-        this.endMinutes = end.second
-    }
+    private fun checkTimeCorrectness(time: String) {
+        val pair = parseHoursAndMinutes(time)
+        val hours = pair.first
+        val minutes = pair.second
 
-
-    private fun parseHoursAndMinutes(time: String): Pair<Int, Int> {
-        if (time.matches(Regex("""\d{2}:\d{2}"""))) {
-            val (hours, minutes) = time.split(":").map { it.toInt() }
-
-            if (validateHours(hours) && validateMinutes(minutes)) {
-                return hours to minutes
-            } else {
-                throw IllegalArgumentException("Incorrect time $time")
-            }
-        } else {
+        if (!validateHours(hours) || !validateMinutes(minutes)) {
             throw IllegalArgumentException("Incorrect time $time")
         }
     }
@@ -68,33 +38,30 @@ class SaleBanTime() : IBundlable {
         return hours in 0..23
     }
 
-    override fun toBundle(): Bundle {
-        return Bundle().apply {
-            putInt(KEY_START_HOURS, startHours)
-            putInt(KEY_START_MINUTES, startMinutes)
-            putInt(KEY_END_HOURS, endHours)
-            putInt(KEY_END_MINUTES, endMinutes)
-        }
-    }
-
     override fun toString(): String {
-        return "from $startHours:$startMinutes to $endHours:$endMinutes"
+        return "$startTime-$endTime"
     }
 
     companion object {
-        private const val KEY_START_HOURS = "START_HOURS"
-        private const val KEY_START_MINUTES = "START_MINUTES"
-        private const val KEY_END_HOURS = "END_HOURS"
-        private const val KEY_END_MINUTES = "END_MINUTES"
+        private const val KEY_START_TIME = "START_TIME"
+        private const val KEY_END_TIME = "END_TIME"
+
+        fun parseHoursAndMinutes(time: String): Pair<Int, Int> {
+            if (time.matches(Regex("""\d{2}:\d{2}"""))) {
+                val (hours, minutes) = time.split(":").map { it.toInt() }
+                return hours to minutes
+            } else {
+                throw IllegalArgumentException("Incorrect time $time")
+            }
+        }
 
         @JvmStatic
         fun from(bundle: Bundle?): SaleBanTime? {
             return bundle?.let {
                 SaleBanTime(
-                    it.getInt(KEY_START_HOURS),
-                    it.getInt(KEY_START_MINUTES),
-                    it.getInt(KEY_END_HOURS),
-                    it.getInt(KEY_END_MINUTES))
+                    it.getString(KEY_START_TIME) ?: return null,
+                    it.getString(KEY_END_TIME) ?: return null
+                )
             }
         }
     }
