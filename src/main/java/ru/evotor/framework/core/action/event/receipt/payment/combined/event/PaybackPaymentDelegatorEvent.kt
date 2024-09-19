@@ -3,6 +3,13 @@ package ru.evotor.framework.core.action.event.receipt.payment.combined.event
 import android.os.Bundle
 import ru.evotor.IBundlable
 
+/**
+ * Событие, которое возникает при передаче оплаты чека возврата ПО чеку и возврата покупки ПО чеку другому приложению (например, при выборе приложения "Комбооплата").
+ *
+ * Константа <code>NAME_ACTION</code> указывает, что чек будет оплачен в другом приложении.
+ *
+ * Чтобы приложение получало событие, значение константы <code>NAME_ACTION</code> необходимо указать в элементе <code><action></code> intent-фильтра соответствующей службы.
+ */
 class PaybackPaymentDelegatorEvent(
     val receiptUuid: String,
     val availablePaybackSum: ArrayList<PaymentDelegatorPaybackData>? = null
@@ -15,7 +22,7 @@ class PaybackPaymentDelegatorEvent(
 
     companion object {
         /**
-         * Оплата чека продажи будет передана другому приложению.
+         * Оплата чека будет передана другому приложению.
          *
          * Значение константы: <code>evo.v2.receipt.payback.payment.COMBINED</code>.
          */
