@@ -85,7 +85,12 @@ data class Receipt
             /**
              * Extra
              */
-            val extra: String?
+            val extra: String?,
+
+            /**
+             * Номер аппаратной смены. Может быть null для еще незакрытого чека
+             */
+            val sessionNumber: Long?
     )
 
     /**
