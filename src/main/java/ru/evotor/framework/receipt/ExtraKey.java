@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
-import ru.evotor.framework.Validation;
+import ru.evotor.framework.UuidValidationUtils;
 
 /**
  * Created by a.kuznetsov on 02/05/2017.
@@ -16,7 +16,7 @@ public class ExtraKey implements Parcelable {
     private final String description;
 
     public ExtraKey(@Nullable String identity, @Nullable String appId, @Nullable String description) {
-        Validation.checkUuid(identity);
+        UuidValidationUtils.checkUuid(identity);
 
         this.identity = identity;
         this.appId = appId;
