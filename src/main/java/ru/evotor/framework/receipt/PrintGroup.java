@@ -8,6 +8,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import ru.evotor.framework.ParcelableUtils;
+import ru.evotor.framework.UuidValidationUtils;
 import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 
@@ -92,6 +93,8 @@ public class PrintGroup implements Parcelable {
             @Nullable Purchaser purchaser,
             @Nullable MedicineAttribute medicineAttribute
     ) {
+        UuidValidationUtils.checkUuid(identifier);
+
         this.identifier = identifier;
         this.type = type;
         this.orgName = orgName;
