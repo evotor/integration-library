@@ -24,5 +24,10 @@ class MoveCurrentReceiptDraftToPaymentStageException(
          * Неопознанная ошибка
          */
         const val CODE_UNIDENTIFIED_ERROR = -1
+
+        /**
+         * Для текущего чека невозможно выполнить переход к оплате и печати
+         */
+        const val CODE_MOVE_TO_PAYMENT_UNAVAILABLE_FOR_RECEIPT = -5
     }
 }

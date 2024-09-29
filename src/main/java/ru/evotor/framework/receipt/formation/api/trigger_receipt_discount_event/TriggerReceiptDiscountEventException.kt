@@ -39,5 +39,10 @@ class TriggerReceiptDiscountEventException(
          * Для текущего чека недоступен вызов события ReceiptDiscountEvent
          */
         const val ERROR_CODE_DISCOUNT_APP_UNAVAILABLE_FOR_RECEIPT = -7
+
+        /**
+         * В данный момент для текущего чека вызов события ReceiptDiscountEvent запрещен
+         */
+        const val ERROR_CODE_DISCOUNT_APP_FORBIDDEN_FOR_RECEIPT = -8
     }
 }
