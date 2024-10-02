@@ -17,6 +17,7 @@ public class ExtraKey implements Parcelable {
 
     public ExtraKey(@Nullable String identity, @Nullable String appId, @Nullable String description) {
         UuidValidationUtils.checkUuid(identity);
+        UuidValidationUtils.checkUuid(appId);
 
         this.identity = identity;
         this.appId = appId;
