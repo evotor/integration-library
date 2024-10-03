@@ -31,7 +31,6 @@ import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
-import ru.evotor.framework.receipt.position.SaleBanTime;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 /**
@@ -223,10 +222,11 @@ public class Position implements Parcelable {
     private Boolean isMarkSkipped;
 
     /**
-     * Признак времени запрета продажи
+     * Признак времени запрета продажи,
+     * интервал времени, когда позицию продавать нельзя
      */
     @Nullable
-    private SaleBanTime saleBanTime;
+    private TimeRange saleBanTime;
 
     public Position(
             String uuid,
@@ -607,7 +607,7 @@ public class Position implements Parcelable {
     }
 
     @Nullable
-    public SaleBanTime getSaleBanTime() {
+    public TimeRange getSaleBanTime() {
         return saleBanTime;
     }
 
@@ -957,7 +957,7 @@ public class Position implements Parcelable {
             this.isMarkSkipped = (Boolean) in.readSerializable();
         }
         if (version >= 14) {
-            this.saleBanTime = SaleBanTime.from(in.readBundle(SaleBanTime.class.getClassLoader()));
+            this.saleBanTime = TimeRange.from(in.readBundle(TimeRange.class.getClassLoader()));
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
@@ -1883,7 +1883,7 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder setSaleBanTime(@Nullable SaleBanTime saleBanTime) {
+        public Builder setSaleBanTime(@Nullable TimeRange saleBanTime) {
             position.saleBanTime = saleBanTime;
             return this;
         }

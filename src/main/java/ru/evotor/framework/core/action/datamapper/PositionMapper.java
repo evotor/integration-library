@@ -27,7 +27,7 @@ import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
-import ru.evotor.framework.receipt.position.SaleBanTime;
+import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
@@ -168,7 +168,7 @@ public final class PositionMapper {
         ) {
             return null;
         }
-        SaleBanTime saleBanTime = SaleBanTime.from(bundle.getBundle(KEY_SALE_BAN_TIME));
+        TimeRange saleBanTime = TimeRange.from(bundle.getBundle(KEY_SALE_BAN_TIME));
 
         Measure measure = new Measure(
                 measureName,
