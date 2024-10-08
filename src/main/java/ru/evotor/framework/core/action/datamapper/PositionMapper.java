@@ -27,6 +27,7 @@ import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
+import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 
 public final class PositionMapper {
@@ -94,6 +95,7 @@ public final class PositionMapper {
     private static final String KEY_MARKS_CHECK_INFO = "marks_check_info";
     private static final String KEY_IS_AGE_LIMITED = "is_age_limited";
     private static final String KEY_IS_MARK_SKIPPED = "is_mark_skipped";
+    private static final String KEY_SALE_BAN_TIME = "sale_ban_time";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -166,6 +168,7 @@ public final class PositionMapper {
         ) {
             return null;
         }
+        TimeRange saleBanTime = TimeRange.from(bundle.getBundle(KEY_SALE_BAN_TIME));
 
         Measure measure = new Measure(
                 measureName,
@@ -204,6 +207,7 @@ public final class PositionMapper {
         builder.setMarksCheckingInfo(marksCheckingInfo);
         builder.setIsAgeLimited(isAgeLimited);
         builder.setIsMarkSkipped(isMarkSkipped);
+        builder.setSaleBanTime(saleBanTime);
         return builder.build();
     }
 
@@ -290,6 +294,7 @@ public final class PositionMapper {
         bundle.putBundle(KEY_MARKS_CHECK_INFO, marksCheckingInfo != null ? marksCheckingInfo.toBundle() : null);
         bundle.putSerializable(KEY_IS_AGE_LIMITED, position.getIsAgeLimited());
         bundle.putSerializable(KEY_IS_MARK_SKIPPED, position.getIsMarkSkipped());
+        bundle.putBundle(KEY_SALE_BAN_TIME, position.getSaleBanTime() != null ? position.getSaleBanTime().toBundle() : null);
         return bundle;
     }
 
