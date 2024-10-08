@@ -92,6 +92,8 @@ public final class PositionMapper {
     private static final String KEY_IS_EXCISABLE = "is_excisable";
 
     private static final String KEY_MARKS_CHECK_INFO = "marks_check_info";
+    private static final String KEY_IS_AGE_LIMITED = "is_age_limited";
+    private static final String KEY_IS_MARK_SKIPPED = "is_mark_skipped";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -156,7 +158,8 @@ public final class PositionMapper {
         Boolean isExcisable = (Boolean) bundle.getSerializable(KEY_IS_EXCISABLE);
 
         MarksCheckingInfo marksCheckingInfo = MarksCheckingInfo.from(bundle.getBundle(KEY_MARKS_CHECK_INFO));
-
+        Boolean isAgeLimited = (Boolean) bundle.getSerializable(KEY_IS_AGE_LIMITED);
+        Boolean isMarkSkipped = (Boolean) bundle.getSerializable(KEY_IS_MARK_SKIPPED);
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
@@ -199,6 +202,8 @@ public final class PositionMapper {
         builder.setPartialRealization(partialRealization);
         builder.setIsExcisable(isExcisable);
         builder.setMarksCheckingInfo(marksCheckingInfo);
+        builder.setIsAgeLimited(isAgeLimited);
+        builder.setIsMarkSkipped(isMarkSkipped);
         return builder.build();
     }
 
@@ -283,7 +288,8 @@ public final class PositionMapper {
 
         final MarksCheckingInfo marksCheckingInfo = position.getMarksCheckingInfo();
         bundle.putBundle(KEY_MARKS_CHECK_INFO, marksCheckingInfo != null ? marksCheckingInfo.toBundle() : null);
-
+        bundle.putSerializable(KEY_IS_AGE_LIMITED, position.getIsAgeLimited());
+        bundle.putSerializable(KEY_IS_MARK_SKIPPED, position.getIsMarkSkipped());
         return bundle;
     }
 

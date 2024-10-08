@@ -112,5 +112,25 @@ public enum ProductType {
     /**
      * Маркированные БАДы
      */
-    DIETARY_SUPPLEMENTS_MARKED
+    DIETARY_SUPPLEMENTS_MARKED,
+
+    /**
+     * Маркированное пиво в бутылках
+     */
+    BEER_MARKED,
+
+    /**
+     * Маркированная соковая продукция и безалкогольные напитки
+     */
+    JUICE_MARKED,
+
+    /**
+     * Маркированные кресла-коляски
+     */
+    WHEELCHAIRS_MARKED,
+
+    /**
+     * Медицинские изделия
+     */
+    MEDICAL_DEVICES_MARKED
 }

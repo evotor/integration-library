@@ -38,8 +38,13 @@ object FeaturesContract {
     const val PATH_SBP_ACTIVATION = "sbp_activation"
     const val PATH_EXCISE_PRODUCTS = "excise_products"
     const val PATH_BEER_KEG_MARK = "beer_mark_keg"
+    const val PATH_BEER_MARK = "beer_mark"
     const val PATH_ANTISEPTIC_MARK = "antiseptic_mark"
     const val PATH_DIETARY_SUPPLEMENTS_MARK = "dietary_supplements_mark"
+    const val PATH_AGE_LIMITED_PRODUCTS = "age_limited_products"
+    const val PATH_JUICE_MARK = "juice_mark"
+    const val PATH_WHEELCHAIRS_MARK = "wheelchairs_mark"
+    const val PATH_MEDICAL_DEVICES_MARK = "medical_devices_mark"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

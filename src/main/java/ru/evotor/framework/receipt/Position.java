@@ -40,7 +40,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 11;
+    private static final int VERSION = 13;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -209,6 +209,18 @@ public class Position implements Parcelable {
     @Nullable
     private MarksCheckingInfo marksCheckingInfo;
 
+    /**
+     * Признак возрастного ограничения товара
+     */
+    @Nullable
+    private Boolean isAgeLimited;
+
+    /**
+     * Признак, если был пропущен ввод кода маркировки
+     */
+    @Nullable
+    private Boolean isMarkSkipped;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -279,6 +291,8 @@ public class Position implements Parcelable {
         this.partialRealization = position.getPartialRealization();
         this.isExcisable = position.isExcisable;
         this.marksCheckingInfo = position.getMarksCheckingInfo();
+        this.isAgeLimited = position.isAgeLimited;
+        this.isMarkSkipped = position.isMarkSkipped;
     }
 
     /**
@@ -569,6 +583,22 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Признак возрастного ограничения товара
+     */
+    @Nullable
+    public Boolean getIsAgeLimited() {
+        return isAgeLimited;
+    }
+
+    /**
+     * @return true, если был пропущен ввод кода маркировки
+     */
+    @Nullable
+    public Boolean getIsMarkSkipped() {
+        return isMarkSkipped;
+    }
+
+    /**
      * @return Данные об онлайн-проверке марки
      * Значения будут записаны в тег 1265
      */
@@ -642,7 +672,10 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(marksCheckingInfo, position.marksCheckingInfo))
             return false;
-
+        if (!Objects.equals(isAgeLimited, position.isAgeLimited))
+            return false;
+        if (!Objects.equals(isMarkSkipped, position.isMarkSkipped))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -675,6 +708,8 @@ public class Position implements Parcelable {
         result = 31 * result + (partialRealization != null ? partialRealization.hashCode() : 0);
         result = 31 * result + (isExcisable != null ? isExcisable.hashCode() : 0);
         result = 31 * result + (marksCheckingInfo != null ? marksCheckingInfo.hashCode() : 0);
+        result = 31 * result + (isAgeLimited != null ? isAgeLimited.hashCode() : 0);
+        result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         return result;
     }
 
@@ -708,6 +743,8 @@ public class Position implements Parcelable {
                 ", partial=" + partialRealization +
                 ", isExcisable=" + isExcisable +
                 ", marksCheckingInfo=" + marksCheckingInfo +
+                ", isAgeLimited=" + isAgeLimited +
+                ", isMarkSkipped=" + isMarkSkipped +
                 '}';
     }
 
@@ -797,6 +834,8 @@ public class Position implements Parcelable {
         dest.writeInt(this.measure.getCode());
         dest.writeSerializable(this.isExcisable);
         dest.writeBundle(this.marksCheckingInfo != null ? this.marksCheckingInfo.toBundle() : null);
+        dest.writeSerializable(this.isAgeLimited);
+        dest.writeSerializable(this.isMarkSkipped);
     }
 
     protected Position(Parcel in) {
@@ -894,6 +933,12 @@ public class Position implements Parcelable {
         if (version >= 11) {
             readMarksCheckingInfo(in);
         }
+        if (version >= 12) {
+            this.isAgeLimited = (Boolean) in.readSerializable();
+        }
+        if (version >= 13) {
+            this.isMarkSkipped = (Boolean) in.readSerializable();
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -981,7 +1026,7 @@ public class Position implements Parcelable {
             builder.position.productCode = product.getCode();
             builder.position.classificationCode = product.getClassificationCode();
             builder.position.isExcisable = product.isExcisable();
-
+            builder.position.isAgeLimited = product.isAgeLimited();
             return builder;
         }
 
@@ -1127,6 +1172,22 @@ public class Position implements Parcelable {
                     null
             );
             setDietarySupplementsParams(mark);
+            return this;
+        }
+
+        public Builder toBeerMarked(
+                @NonNull Mark mark,
+                @NonNull BigDecimal alcoholByVolume,
+                @NonNull Long alcoholProductKindCode,
+                @NonNull BigDecimal tareVolume
+        ) {
+            position.productType = ProductType.BEER_MARKED;
+            setAlcoParams(
+                    mark,
+                    alcoholByVolume,
+                    alcoholProductKindCode,
+                    tareVolume
+            );
             return this;
         }
 
@@ -1500,6 +1561,49 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toJuiceMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.JUICE_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setJuiceParams(mark);
+            return this;
+        }
+
+        public Builder toWheelchairsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.WHEELCHAIRS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setWheelchairsParams(mark);
+            return this;
+        }
+
+        public Builder toMedicalDevicesMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.MEDICAL_DEVICES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setMedicalDevicesParams(mark);
+            return this;
+        }
+
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -1619,6 +1723,22 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
+        public void setJuiceParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setWheelchairsParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setMedicalDevicesParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setBeerParams(Mark mark) {
+            position.mark = mark;
+        }
+
         public Builder setUuid(String uuid) {
             position.uuid = uuid;
             return this;
@@ -1730,6 +1850,16 @@ public class Position implements Parcelable {
 
         public Builder setMarksCheckingInfo(@Nullable MarksCheckingInfo marksCheckingInfo) {
             position.marksCheckingInfo = marksCheckingInfo;
+            return this;
+        }
+
+        public Builder setIsAgeLimited(Boolean isAgeLimited) {
+            position.isAgeLimited = isAgeLimited;
+            return this;
+        }
+
+        public Builder setIsMarkSkipped(@Nullable Boolean isMarkSkipped) {
+            position.isMarkSkipped = isMarkSkipped;
             return this;
         }
 

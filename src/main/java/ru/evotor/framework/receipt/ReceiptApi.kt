@@ -425,6 +425,8 @@ object ReceiptApi {
         )
 
         val isExcisable = cursor.optString(PositionTable.COLUMN_IS_EXCISABLE)?.toBooleanStrictOrNull()
+        val isMarkSkipped = cursor.optString(PositionTable.COLUMN_IS_MARK_SKIPPED)?.toBooleanStrictOrNull()
+        val isAgeLimited = cursor.optString(PositionTable.COLUMN_IS_AGE_LIMITED)?.toBooleanStrictOrNull()
 
         val builder = Position.Builder
             .copyFrom(Position(
@@ -459,6 +461,8 @@ object ReceiptApi {
             .setPartialRealization(PositionPartialRealizationMapper.fromCursor(cursor))
             .setIsExcisable(isExcisable)
             .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
+            .setIsMarkSkipped(isMarkSkipped)
+            .setIsAgeLimited(isAgeLimited)
         return builder.build()
     }
 
@@ -567,7 +571,8 @@ object ReceiptApi {
             date = cursor.optLong(ReceiptHeaderTable.COLUMN_DATE)?.let { Date(it) },
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
-            extra = extra
+            extra = extra,
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
         )
     }
 
