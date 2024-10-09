@@ -90,6 +90,7 @@ public class ReceiptDiscountEvent implements IBundlable {
 
     private static final String KEY_RECEIPT_UUID = "receiptUuid";
     private static final String KEY_DISCOUNT = "discount";
+    private static final String KEY_LOYALTY_CARD_ID = "loyaltyCardId";
 
     @Nullable
     public static ReceiptDiscountEvent create(@Nullable Bundle bundle) {
@@ -108,6 +109,8 @@ public class ReceiptDiscountEvent implements IBundlable {
     private final String receiptUuid;
     @NonNull
     private final BigDecimal discount;
+    @Nullable
+    private String loyaltyCardId = null;
 
     public ReceiptDiscountEvent(
             @NonNull String receiptUuid,
@@ -116,12 +119,22 @@ public class ReceiptDiscountEvent implements IBundlable {
         this.receiptUuid = receiptUuid;
         this.discount = discount;
     }
+    public ReceiptDiscountEvent(
+            @NonNull String receiptUuid,
+            @NonNull BigDecimal discount,
+            @Nullable String loyaltyCardId
+    ) {
+        this.receiptUuid = receiptUuid;
+        this.discount = discount;
+        this.loyaltyCardId = loyaltyCardId;
+    }
 
     @NonNull
     public Bundle toBundle() {
         Bundle result = new Bundle();
         result.putString(KEY_RECEIPT_UUID, receiptUuid);
         result.putString(KEY_DISCOUNT, discount.toPlainString());
+        result.putString(KEY_LOYALTY_CARD_ID, loyaltyCardId);
         return result;
     }
 
@@ -133,5 +146,10 @@ public class ReceiptDiscountEvent implements IBundlable {
     @NonNull
     public BigDecimal getDiscount() {
         return discount;
+    }
+
+    @Nullable
+    public String getLoyaltyCardId(){
+        return loyaltyCardId;
     }
 }

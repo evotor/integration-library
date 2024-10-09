@@ -29,7 +29,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
 
     private static final String KEY_POSITION_UUID_TO_DISCOUNT_MAP = "positionUuidToDiscountMap";
-    private static final String KEY_LOYALTY_CARD_INFO = "loyaltyCardInfo";
+    private static final String KEY_LOYALTY_CARD_ID = "loyaltyCardId";
 
     @Nullable
     public static ReceiptDiscountEventResult create(@Nullable Bundle bundle) {
@@ -68,7 +68,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
     @Nullable
     private final Map<String, BigDecimal> positionUuidToDiscountMap;
     @Nullable
-    private final String loyaltyCardInfo;
+    private final String loyaltyCardId;
 
     public ReceiptDiscountEventResult(
             @NonNull BigDecimal discount,
@@ -83,7 +83,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
         this.changes = changes;
         this.setPurchaserContactData = setPurchaserContactData;
         this.positionUuidToDiscountMap = null;
-        this.loyaltyCardInfo = null;
+        this.loyaltyCardId = null;
     }
 
     public ReceiptDiscountEventResult(
@@ -100,7 +100,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
         this.changes = changes;
         this.setPurchaserContactData = setPurchaserContactData;
         this.positionUuidToDiscountMap = positionUuidToDiscountMap;
-        this.loyaltyCardInfo = null;
+        this.loyaltyCardId = null;
     }
 
     public ReceiptDiscountEventResult(
@@ -109,7 +109,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
             @NonNull List<IPositionChange> changes,
             @Nullable SetPurchaserContactData setPurchaserContactData,
             @Nullable Map<String, BigDecimal> positionUuidToDiscountMap,
-            @Nullable String loyaltyCardInfo
+            @Nullable String loyaltyCardId
     ) {
         Objects.requireNonNull(discount);
 
@@ -118,7 +118,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
         this.changes = changes;
         this.setPurchaserContactData = setPurchaserContactData;
         this.positionUuidToDiscountMap = positionUuidToDiscountMap;
-        this.loyaltyCardInfo = loyaltyCardInfo;
+        this.loyaltyCardId = loyaltyCardId;
     }
 
     @NonNull
@@ -139,8 +139,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
         if (positionUuidToDiscountMap != null) {
             bundle.putSerializable(KEY_POSITION_UUID_TO_DISCOUNT_MAP, (Serializable) positionUuidToDiscountMap);
         }
-        if (loyaltyCardInfo != null) {
-            bundle.putString(KEY_LOYALTY_CARD_INFO, loyaltyCardInfo);
+        if (loyaltyCardId != null) {
+            bundle.putString(KEY_LOYALTY_CARD_ID, loyaltyCardId);
         }
         return bundle;
     }
@@ -171,7 +171,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
     }
 
     @Nullable
-    public String getLoyaltyCardInfo(){
-        return loyaltyCardInfo;
+    public String getLoyaltyCardId(){
+        return loyaltyCardId;
     }
 }
