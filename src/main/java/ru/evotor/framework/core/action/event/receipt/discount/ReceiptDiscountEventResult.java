@@ -44,6 +44,10 @@ public class ReceiptDiscountEventResult implements IBundlable {
         if(bundle.containsKey(KEY_POSITION_UUID_TO_DISCOUNT_MAP)) {
             positionUuidToDiscountMap = (Map<String, BigDecimal>) bundle.getSerializable(KEY_POSITION_UUID_TO_DISCOUNT_MAP);
         }
+        String loyaltyCardId = null;
+        if (bundle.containsKey(KEY_LOYALTY_CARD_ID)){
+            loyaltyCardId = bundle.getString(KEY_LOYALTY_CARD_ID, null);
+        }
         return new ReceiptDiscountEventResult(
                 discount,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
@@ -52,7 +56,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
                         IPositionChange.class
                 ),
                 SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
-                positionUuidToDiscountMap
+                positionUuidToDiscountMap,
+                loyaltyCardId
         );
     }
 

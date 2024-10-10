@@ -102,7 +102,8 @@ public class ReceiptDiscountEvent implements IBundlable {
         if (discount == null) {
             return null;
         }
-        return new ReceiptDiscountEvent(receiptUuid, discount);
+        String loyaltyCardId = bundle.getString(KEY_LOYALTY_CARD_ID, null);
+        return new ReceiptDiscountEvent(receiptUuid, discount, loyaltyCardId);
     }
 
     @NonNull
