@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ru.evotor.framework.UuidValidationUtils;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.core.IntegrationLibraryParsingException;
@@ -858,6 +859,7 @@ public class Position implements Parcelable {
     protected Position(Parcel in) {
         this.uuid = in.readString();
         this.productUuid = in.readString();
+
         this.productCode = in.readString();
         int tmpProductType = in.readInt();
 
@@ -1795,6 +1797,8 @@ public class Position implements Parcelable {
         }
 
         public Builder setExtraKeys(Set<ExtraKey> extraKeys) {
+            checkValidationExtraKeys(extraKeys);
+
             position.extraKeys = extraKeys;
             return this;
         }
@@ -1815,6 +1819,8 @@ public class Position implements Parcelable {
         }
 
         public Builder setAttributes(@Nullable Map<String, AttributeValue> attributes) {
+            checkValidationAttributes(attributes);
+
             position.attributes = attributes;
             return this;
         }
@@ -1890,6 +1896,24 @@ public class Position implements Parcelable {
 
         public Position build() {
             return new Position(position);
+        }
+
+        private void checkValidationAttributes(@Nullable Map<String, AttributeValue> attributes){
+            if(attributes == null) return;
+
+            for(Map.Entry<String, AttributeValue> atr : attributes.entrySet()){
+                UuidValidationUtils.checkUuid(atr.getValue().getAttributeUuid());
+                UuidValidationUtils.checkUuid(atr.getValue().getUuid());
+            }
+        }
+
+        private void checkValidationExtraKeys(@Nullable Set<ExtraKey> extraKeys){
+            if(extraKeys == null) return;
+
+            for(ExtraKey ex : extraKeys){
+                UuidValidationUtils.checkUuid(ex.getIdentity());
+                UuidValidationUtils.checkUuid(ex.getAppId());
+            }
         }
     }
 
