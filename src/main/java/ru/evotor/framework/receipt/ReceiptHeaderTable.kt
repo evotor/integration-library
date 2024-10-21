@@ -10,4 +10,5 @@ object ReceiptHeaderTable {
     const val COLUMN_CLIENT_PHONE = "CLIENT_PHONE"
     const val COLUMN_EXTRA = "EXTRA"
     const val COLUMN_SESSION_NUMBER = "SESSION_NUMBER"
+
 }

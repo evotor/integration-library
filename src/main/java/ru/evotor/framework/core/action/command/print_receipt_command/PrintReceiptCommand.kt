@@ -30,14 +30,14 @@ import java.util.*
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 abstract class PrintReceiptCommand(
-        val printReceipts: List<Receipt.PrintReceipt>,
-        val extra: SetExtra?,
-        val clientPhone: String?,
-        val clientEmail: String?,
-        val receiptDiscount: BigDecimal?,
-        val paymentAddress: String?,
-        val paymentPlace: String?,
-        val userUuid: String?
+    val printReceipts: List<Receipt.PrintReceipt>,
+    val extra: SetExtra?,
+    val clientPhone: String?,
+    val clientEmail: String?,
+    val receiptDiscount: BigDecimal?,
+    val paymentAddress: String?,
+    val paymentPlace: String?,
+    val userUuid: String?
 ) : IBundlable {
 
     internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
@@ -46,13 +46,14 @@ abstract class PrintReceiptCommand(
             return
         }
         IntegrationManagerImpl(context.applicationContext)
-                .call(action,
-                        componentNameList[0],
-                        this,
-                        ActivityStarter(context),
-                        callback,
-                        Handler(Looper.getMainLooper())
-                )
+            .call(
+                action,
+                componentNameList[0],
+                this,
+                ActivityStarter(context),
+                callback,
+                Handler(Looper.getMainLooper())
+            )
     }
 
     override fun toBundle(): Bundle {
@@ -89,8 +90,8 @@ abstract class PrintReceiptCommand(
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
-                    ?.mapNotNull { PrintReceiptMapper.from(it) }
-                    ?: emptyList()
+                ?.mapNotNull { PrintReceiptMapper.from(it) }
+                ?: emptyList()
         }
 
         internal fun getSetExtra(bundle: Bundle): SetExtra? {

@@ -75,9 +75,9 @@ public class PrintReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_INVALID_FISCAL_SIGN_OF_INCORRECT_RECEIPT = -14;
 
     /**
-     *  Некорректный uuid
+     * некорректный uuid
      */
-    public static final int ERROR_CODE_INCORRECT_UUID = -15;
+    public static final int ERROR_CODE_UUID_VALIDATION = -15;
 
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {

@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import ru.evotor.framework.UuidValidationUtils;
+import ru.evotor.framework.Validation;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.core.IntegrationLibraryParsingException;
@@ -248,8 +248,8 @@ public class Position implements Parcelable {
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
-        UuidValidationUtils.checkUuid(uuid);
-        UuidValidationUtils.checkUuid(productUuid);
+        Validation.checkUuid(uuid);
+        Validation.checkUuid(productUuid);
 
         this.uuid = uuid;
         this.productUuid = productUuid;
@@ -1905,8 +1905,8 @@ public class Position implements Parcelable {
             if(attributes == null) return;
 
             for(Map.Entry<String, AttributeValue> atr : attributes.entrySet()){
-                UuidValidationUtils.checkUuid(atr.getValue().getAttributeUuid());
-                UuidValidationUtils.checkUuid(atr.getValue().getUuid());
+                Validation.checkUuid(atr.getValue().getAttributeUuid());
+                Validation.checkUuid(atr.getValue().getUuid());
             }
         }
 
@@ -1914,8 +1914,8 @@ public class Position implements Parcelable {
             if(extraKeys == null) return;
 
             for(ExtraKey ex : extraKeys){
-                UuidValidationUtils.checkUuid(ex.getIdentity());
-                UuidValidationUtils.checkUuid(ex.getAppId());
+                Validation.checkUuid(ex.getIdentity());
+                Validation.checkUuid(ex.getAppId());
             }
         }
     }
