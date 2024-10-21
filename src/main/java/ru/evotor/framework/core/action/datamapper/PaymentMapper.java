@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import androidx.annotation.Nullable;
 import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.component.PaymentPerformer;
+import ru.evotor.framework.payment.CashlessInfo;
 import ru.evotor.framework.payment.PaymentSystem;
 import ru.evotor.framework.receipt.Payment;
 
@@ -21,6 +22,7 @@ public final class PaymentMapper {
     private static final String KEY_ACCOUNT_ID = "accountId";
     private static final String KEY_ACCOUNT_USER_DESCRIPTION = "accountUserDescription";
     private static final String KEY_IDENTIFIER = "identifier";
+    private static final String KEY_CASHLESS_INFO = "cashlessInfo";
 
     @Nullable
     public static Payment from(@Nullable Bundle bundle) {
@@ -44,6 +46,7 @@ public final class PaymentMapper {
         String accountId = bundle.getString(KEY_ACCOUNT_ID);
         String accountUserDescription = bundle.getString(KEY_ACCOUNT_USER_DESCRIPTION);
         String identifier = bundle.getString(KEY_IDENTIFIER);
+        CashlessInfo cashlessInfo = CashlessInfo.fromBundle(bundle.getBundle(KEY_CASHLESS_INFO));
 
         return new Payment(
                 uuid,
@@ -53,7 +56,8 @@ public final class PaymentMapper {
                 purposeIdentifier,
                 accountId,
                 accountUserDescription,
-                identifier
+                identifier,
+                cashlessInfo
         );
     }
 
@@ -71,6 +75,9 @@ public final class PaymentMapper {
         bundle.putString(KEY_ACCOUNT_ID, payment.getAccountId());
         bundle.putString(KEY_ACCOUNT_USER_DESCRIPTION, payment.getAccountUserDescription());
         bundle.putString(KEY_IDENTIFIER, payment.getIdentifier());
+        if (payment.getCashlessInfo() != null) {
+            bundle.putBundle(KEY_CASHLESS_INFO, payment.getCashlessInfo().toBundle());
+        }
 
         return bundle;
     }
