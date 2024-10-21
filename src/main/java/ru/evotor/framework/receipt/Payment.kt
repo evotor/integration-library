@@ -1,6 +1,7 @@
 package ru.evotor.framework.receipt
 
 import ru.evotor.framework.component.PaymentPerformer
+import ru.evotor.framework.payment.CashlessInfo
 import ru.evotor.framework.payment.PaymentSystem
 import java.math.BigDecimal
 
@@ -40,7 +41,11 @@ data class Payment(
         /**
          * Идентификатор платежа в платежной системе (RRN для оплаты картой)
          */
-        val identifier: String?
+        val identifier: String?,
+        /**
+         * Дополнительная информация о способе безналичной оплаты
+         */
+        val cashlessInfo: CashlessInfo? = null
 ) {
 
     constructor(
@@ -54,6 +59,6 @@ data class Payment(
     ) : this(uuid, value, paymentSystem, paymentPerformer, purposeIdentifier, accountId, accountUserDescription, null)
 
     override fun toString(): String {
-        return "Payment(uuid='$uuid', value=$value, paymentSystem=$paymentSystem, paymentPerformer=$paymentPerformer, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier)"
+        return "Payment(uuid='$uuid', value=$value, paymentSystem=$paymentSystem, paymentPerformer=$paymentPerformer, purposeIdentifier=$purposeIdentifier, accountId=$accountId, accountUserDescription=$accountUserDescription, identifier=$identifier, cashlessInfo=$cashlessInfo)"
     }
 }
