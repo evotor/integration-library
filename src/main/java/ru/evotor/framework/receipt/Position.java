@@ -248,6 +248,9 @@ public class Position implements Parcelable {
             Set<ExtraKey> extraKeys,
             List<Position> subPositions
     ) {
+        UuidValidationUtils.checkUuid(uuid);
+        UuidValidationUtils.checkUuid(productUuid);
+
         this.uuid = uuid;
         this.productUuid = productUuid;
         this.productCode = productCode;
