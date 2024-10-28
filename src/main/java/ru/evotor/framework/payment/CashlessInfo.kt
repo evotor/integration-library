@@ -2,12 +2,17 @@ package ru.evotor.framework.payment
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.UuidValidationUtils
 
 data class CashlessInfo(
     val uuid: String,
     val description: String,
     val method: Method
 ) : IBundlable {
+
+    init {
+        UuidValidationUtils.checkUuid(uuid)
+    }
 
     override fun toBundle(): Bundle {
         val bundle = Bundle()
