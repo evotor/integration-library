@@ -16,6 +16,7 @@ import ru.evotor.framework.optInt
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
 import ru.evotor.framework.optVolume
+import ru.evotor.framework.payment.CashlessInfo
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
@@ -517,7 +518,27 @@ object ReceiptApi {
             cursor.optString(PaymentTable.COLUMN_PURPOSED_IDENTIFIER),
             cursor.optString(PaymentTable.COLUMN_ACCOUNT_ID),
             cursor.optString(PaymentTable.COLUMN_ACCOUNT_USER_DESCRIPTION),
-            identifier)
+            identifier,
+            createCashlessInfo(cursor)
+        )
+    }
+
+    private fun createCashlessInfo(cursor: Cursor): CashlessInfo? {
+        val uuid = cursor.optString(PaymentTable.COLUMN_CASHLESS_INFO_UUID) ?: return null
+        val description = cursor.optString(PaymentTable.COLUMN_CASHLESS_INFO_DESCRIPTION) ?: return null
+        val methodOrdinal = cursor.optString(PaymentTable.COLUMN_CASHLESS_INFO_METHOD)?.toInt() ?: return null
+        val method = if (methodOrdinal < 0) {
+            return null
+        } else if (methodOrdinal >= CashlessInfo.Method.values().size) {
+            CashlessInfo.Method.UNKNOWN
+        } else {
+            CashlessInfo.Method.values()[methodOrdinal]
+        }
+        return CashlessInfo(
+            uuid,
+            description,
+            method
+        )
     }
 
     private fun createPaymentPerformer(cursor: Cursor): PaymentPerformer? {

@@ -22,13 +22,14 @@ data class CashlessInfo(
         return bundle
     }
 
+    // Новые значения добавлять только в конец
     enum class Method {
+        UNKNOWN,
         QR,
         BIOMETRY,
         CARD,
         INTERNET_ACQUIRING,
-        BANK_TRANSFER,
-        UNKNOWN
+        BANK_TRANSFER
     }
 
     companion object {
@@ -42,15 +43,19 @@ data class CashlessInfo(
             bundle ?: return null
 
             val methodOrdinal = bundle.getInt(KEY_METHOD_ORDINAL, -1)
-            val method = if (methodOrdinal == -1 || methodOrdinal >= Method.values().size) {
+            if (methodOrdinal < 0) {
+                return null
+            }
+            val method = if (methodOrdinal >= Method.values().size) {
                 Method.UNKNOWN
-            } else {
+            }
+                else {
                 Method.values()[methodOrdinal]
             }
 
             return CashlessInfo(
-                uuid = bundle.getString(KEY_UUID) ?: throw IllegalArgumentException("uuid should not be null"),
-                description = bundle.getString(KEY_DESCRIPTION) ?: throw IllegalArgumentException("description should not be null"),
+                uuid = bundle.getString(KEY_UUID) ?: return null,
+                description = bundle.getString(KEY_DESCRIPTION) ?: return null,
                 method = method
             )
         }
