@@ -283,7 +283,7 @@ object FeaturesApi {
 
     fun isCaviarMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CAVIAR_MARK)
 
-    fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARKED)
+    fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARK)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
