@@ -281,6 +281,9 @@ object FeaturesApi {
      */
     fun isMedicalDevicesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICAL_DEVICES_MARK)
 
+    fun isCaviarMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CAVIAR_MARK)
+
+    fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARKED)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
