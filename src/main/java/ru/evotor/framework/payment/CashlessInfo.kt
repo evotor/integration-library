@@ -1,0 +1,63 @@
+package ru.evotor.framework.payment
+
+import android.os.Bundle
+import ru.evotor.IBundlable
+import ru.evotor.UuidValidationUtils
+
+data class CashlessInfo(
+    val uuid: String,
+    val description: String,
+    val method: Method
+) : IBundlable {
+
+    init {
+        UuidValidationUtils.checkUuid(uuid)
+    }
+
+    override fun toBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putString(KEY_UUID, uuid)
+        bundle.putString(KEY_DESCRIPTION, description)
+        bundle.putInt(KEY_METHOD_ORDINAL, method.ordinal)
+        return bundle
+    }
+
+    // Новые значения добавлять только в конец
+    enum class Method {
+        UNKNOWN,
+        QR,
+        BIOMETRY,
+        CARD,
+        INTERNET_ACQUIRING,
+        BANK_TRANSFER
+    }
+
+    companion object {
+
+        private const val KEY_UUID = "uuid"
+        private const val KEY_DESCRIPTION = "description"
+        private const val KEY_METHOD_ORDINAL = "methodOrdinal"
+
+        @JvmStatic
+        fun fromBundle(bundle: Bundle?): CashlessInfo? {
+            bundle ?: return null
+
+            val methodOrdinal = bundle.getInt(KEY_METHOD_ORDINAL, -1)
+            if (methodOrdinal < 0) {
+                return null
+            }
+            val method = if (methodOrdinal >= Method.values().size) {
+                Method.UNKNOWN
+            }
+                else {
+                Method.values()[methodOrdinal]
+            }
+
+            return CashlessInfo(
+                uuid = bundle.getString(KEY_UUID) ?: return null,
+                description = bundle.getString(KEY_DESCRIPTION) ?: return null,
+                method = method
+            )
+        }
+    }
+}
