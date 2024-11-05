@@ -37,5 +37,26 @@ enum class TaxNumber(val value: BigDecimal) {
     /**
      * Основная ставка 0%
      */
-    VAT_0(BigDecimal.ZERO)
+    VAT_0(BigDecimal.ZERO),
+
+    /**
+     * Ставка НДС УСН первого уровня (5%)
+     */
+    VAT_SLS_L1(BigDecimal(5)),
+
+    /**
+     * Ставка НДС УСН второго уровня (7%)
+     */
+    VAT_SLS_L2(BigDecimal(7)),
+
+    /**
+     * Расчетная ставка НДС УСН первого уровня (5%)
+     */
+    VAT_SLS_L1_CALC(BigDecimal(5)),
+
+    /**
+     * Расчетная ставка НДС УСН второго уровня (7%)
+     */
+    VAT_SLS_L2_CALC(BigDecimal(7)),
+
 }
