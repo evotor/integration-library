@@ -1,1 +1,85 @@
-<manifest package="ru.evotor.integrations"/>
+<manifest package="ru.evotor.integrations"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <queries>
+        <intent>
+            <action android:name="evo.v2.receipt.paymentSystem"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.sell.payment.COMBINED"/>
+        </intent>
+        <intent>
+            <action android:name="evotor.intent.action.CORRECTION_RECEIPT_REGISTRATION_REQUESTED"/>
+        </intent>
+        <intent>
+            <action android:name="evotor.intent.action.MOVE_CURRENT_BUY_RECEIPT_DRAFT_TO_PAYMENT_STAGE"/>
+        </intent>
+        <intent>
+            <action android:name="evotor.intent.action.MOVE_CURRENT_PAYBACK_RECEIPT_DRAFT_TO_PAYMENT_STAGE"/>
+        </intent>
+        <intent>
+            <action android:name="evotor.intent.action.MOVE_CURRENT_SELL_RECEIPT_DRAFT_TO_PAYMENT_STAGE"/>
+        </intent>
+        <intent>
+            <action android:name="evotor.intent.action.ACTION_TRIGGER_RECEIPT_DISCOUNT_EVENT"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.bank_session.close"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.buy.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.buyback.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.sell.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.payback.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.income.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.outcome.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.return.income.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.return.outcome.openReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.sell.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.buy.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.payback.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.buyback.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.income.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.outcome.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.return.income.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.receipt.correction.return.outcome.printReceipt"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.unprinted_document.print"/>
+        </intent>
+        <intent>
+            <action android:name="evo.v2.zreport.print"/>
+        </intent>
+    </queries>
+
+</manifest>
