@@ -286,7 +286,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isVat5AndVat7Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT5_AND_VAT7)
+    fun isVat5And7Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT_5_AND_7)
 
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
