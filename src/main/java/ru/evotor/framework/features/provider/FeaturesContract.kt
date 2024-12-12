@@ -45,6 +45,7 @@ object FeaturesContract {
     const val PATH_JUICE_MARK = "juice_mark"
     const val PATH_WHEELCHAIRS_MARK = "wheelchairs_mark"
     const val PATH_MEDICAL_DEVICES_MARK = "medical_devices_mark"
+    const val PATH_VAT_5_AND_7 = "vat_5_and_7"
     const val PATH_CAVIAR_MARK = "caviar_mark"
     const val PATH_VETERINARY_MARK = "veterinary_mark"
 

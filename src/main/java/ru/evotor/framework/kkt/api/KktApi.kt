@@ -279,14 +279,6 @@ object KktApi {
                 )
             )
         }
-        if (amountPaid.compareTo(BigDecimal.ZERO) == 0) {
-            return callback.onError(
-                DocumentRegistrationException(
-                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
-                    "Уплаченная сумма не может быть равной нулю"
-                )
-            )
-        }
         context.startIntegrationService(
             KktBacksideIntegrationService.ACTION_CORRECTION_RECEIPT_REGISTRATION_REQUESTED,
             CorrectionReceiptRegistrationRequestedEvent(
@@ -386,14 +378,6 @@ object KktApi {
                 DocumentRegistrationException(
                     DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
                     "Указанный тип расчёта не поддерживается"
-                )
-            )
-        }
-        if (amountPaid.compareTo(BigDecimal.ZERO) == 0) {
-            return callback.onError(
-                DocumentRegistrationException(
-                    DocumentRegistrationException.CODE_INVALID_INPUT_DATA,
-                    "Уплаченная сумма не может быть равной нулю"
                 )
             )
         }
