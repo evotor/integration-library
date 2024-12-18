@@ -281,6 +281,13 @@ object FeaturesApi {
      */
     fun isMedicalDevicesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEDICAL_DEVICES_MARK)
 
+    /**
+     * Проверяет, активна ли на смарт-терминале функция "НДС 5% и 7%".
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat5And7Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT_5_AND_7)
+
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
