@@ -185,6 +185,7 @@ data class AgentRequisites(
          * @param principalName название принципала (поставщика)
          */
 
+        @JvmStatic
         fun createForPaymentSubagent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             agentPhones: List<String>,
