@@ -120,13 +120,8 @@ object InventoryApi {
     fun getProductsByBarcode(context: Context, barcode: String): List<ProductItem> {
         val productList = ArrayList<ProductItem>()
 
-        context.contentResolver.query(
-            Uri.withAppendedPath(PositionTable.URI, barcode),
-            null,
-            null,
-            null,
-            null
-        )
+        context.contentResolver
+            .query(Uri.withAppendedPath(PositionTable.URI, barcode), null, null, null, null)
             ?.use { cursor ->
                 while (cursor.moveToNext()) {
                     try {
