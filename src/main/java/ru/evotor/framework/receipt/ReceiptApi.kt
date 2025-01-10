@@ -72,6 +72,7 @@ object ReceiptApi {
 
 
     @JvmStatic
+    @Deprecated("Use getProductsByBarcode from InventoryApi")
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 

@@ -9,6 +9,7 @@ import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
 import ru.evotor.framework.inventory.field.TextField
 import ru.evotor.framework.optString
+import ru.evotor.framework.receipt.PositionTable
 
 /**
  * Created by nixan on 06.03.17.
@@ -97,6 +98,7 @@ object InventoryApi {
     @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
         val result = ArrayList<ProductExtra>()
+
         context.contentResolver
                 .query(ProductExtraTable.URI, null, "${ProductExtraTable.ROW_PRODUCT_UUID} = ?", arrayOf(productUuid), null)
                 ?.use { cursor ->
@@ -110,7 +112,36 @@ object InventoryApi {
                         e.printStackTrace()
                     }
                 }
+
         return result
+    }
+
+    @JvmStatic
+    fun getProductsByBarcode(context: Context, barcode: String): List<ProductItem> {
+        val productList = ArrayList<ProductItem>()
+
+        context.contentResolver.query(
+            Uri.withAppendedPath(PositionTable.URI, barcode),
+            null,
+            null,
+            null,
+            null
+        )
+            ?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    try {
+                        val newProduct = ProductMapper.getValueFromCursor(cursor)
+
+                        newProduct?.let {
+                            productList.add(newProduct)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+        return productList
     }
 
     private fun createProductExtra(cursor: Cursor): ProductExtra {
