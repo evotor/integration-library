@@ -9,7 +9,6 @@ import ru.evotor.framework.inventory.field.Field
 import ru.evotor.framework.inventory.field.FieldTable
 import ru.evotor.framework.inventory.field.TextField
 import ru.evotor.framework.optString
-import ru.evotor.framework.receipt.PositionTable
 
 /**
  * Created by nixan on 06.03.17.
@@ -118,28 +117,56 @@ object InventoryApi {
 
     @JvmStatic
     fun getProductsByBarcode(context: Context, barcode: String): List<ProductItem> {
+        val productUuidList = ArrayList<String>()
         val productList = ArrayList<ProductItem>()
 
         context.contentResolver.query(
-            Uri.withAppendedPath(PositionTable.URI, barcode),
+            Uri.withAppendedPath(ProductTable.COMMODITY_BARCODE_URI, barcode),
             null,
             null,
             null,
             null
         )
             ?.use { cursor ->
-                while (cursor.moveToNext()) {
                     try {
-                        val newProduct = ProductMapper.getValueFromCursor(cursor)
+                        if (cursor.moveToFirst()) {
+                            do {
+                                val newProductUuid = cursor.getString(cursor.getColumnIndexOrThrow("COMMODITY_UUID"))
 
-                        newProduct?.let {
-                            productList.add(newProduct)
+                                newProductUuid?.let {
+                                    productUuidList.add(newProductUuid)
+                                }
+                            } while (cursor.moveToNext())
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+            }
+
+        productUuidList.forEach { uuid ->
+            context.contentResolver.query(
+                Uri.withAppendedPath(ProductTable.URI, uuid),
+                null,
+                null,
+                null,
+                null
+            )
+                ?.use { cursor ->
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                val newProductItem = ProductMapper.getValueFromCursor(cursor)
+
+                                newProductItem?.let {
+                                    productList.add(it)
+                                }
+                            } while (cursor.moveToNext())
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }
-            }
+        }
 
         return productList
     }
