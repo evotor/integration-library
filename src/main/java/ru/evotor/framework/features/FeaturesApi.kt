@@ -288,6 +288,19 @@ object FeaturesApi {
      */
     fun isVat5And7Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT_5_AND_7)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка морепродуктов (икры осетровых и лососевых)" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isCaviarMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CAVIAR_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка ветеринарных препаратов" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARK)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
             context.contentResolver.query(
