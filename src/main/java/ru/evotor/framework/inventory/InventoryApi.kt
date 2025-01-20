@@ -97,6 +97,7 @@ object InventoryApi {
     @JvmStatic
     fun getProductExtras(context: Context, productUuid: String): List<ProductExtra> {
         val result = ArrayList<ProductExtra>()
+
         context.contentResolver
                 .query(ProductExtraTable.URI, null, "${ProductExtraTable.ROW_PRODUCT_UUID} = ?", arrayOf(productUuid), null)
                 ?.use { cursor ->
@@ -110,7 +111,64 @@ object InventoryApi {
                         e.printStackTrace()
                     }
                 }
+
         return result
+    }
+
+    @JvmStatic
+    fun getProductsByBarcode(context: Context, barcode: String): List<ProductItem> {
+        val productUuidList = ArrayList<String>()
+        val productList = ArrayList<ProductItem>()
+
+        context.contentResolver.query(
+            Uri.withAppendedPath(ProductTable.COMMODITY_BARCODE_URI, barcode),
+            null,
+            null,
+            null,
+            null
+        )
+            ?.use { cursor ->
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                val newProductUuid = cursor.getString(cursor.getColumnIndexOrThrow("COMMODITY_UUID"))
+
+                                newProductUuid?.let {
+                                    productUuidList.add(newProductUuid)
+                                }
+                            } while (cursor.moveToNext())
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+            }
+
+        productUuidList.forEach { uuid ->
+            context.contentResolver.query(
+                Uri.withAppendedPath(ProductTable.URI, uuid),
+                null,
+                null,
+                null,
+                null
+            )
+                ?.use { cursor ->
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                val newProductItem = ProductMapper.getValueFromCursor(cursor)
+
+                                newProductItem?.let {
+                                    productList.add(it)
+                                }
+                            } while (cursor.moveToNext())
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+        }
+
+        return productList
     }
 
     private fun createProductExtra(cursor: Cursor): ProductExtra {
