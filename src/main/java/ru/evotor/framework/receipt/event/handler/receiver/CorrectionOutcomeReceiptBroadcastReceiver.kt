@@ -14,7 +14,7 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
  * Широковещательный приёмник событий приложения "Коррекция расхода".
  * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
-class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
+open class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     actionPositionAdded = ACTION_POSITION_ADDED,
     actionApplyDiscountToReceipt = ACTION_APPLY_DISCOUNT_TO_RECEIPT,
     actionPositionRemoved = ACTION_POSITION_REMOVED,
