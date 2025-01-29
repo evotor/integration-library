@@ -1623,6 +1623,33 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toCaviarMarked(
+            @NonNull Mark mark
+        ) {
+            position.productType = ProductType.CAVIAR_MARKED;
+            setAlcoParams(
+                null,
+                null,
+                null,
+                null
+            );
+            setCaviarParams(mark);
+            return this;
+        }
+
+        public Builder toVeterinaryMarked(
+            @NonNull Mark mark
+        ) {
+            position.productType = ProductType.VETERINARY_MARKED;
+            setAlcoParams(
+                null,
+                null,
+                null,
+                null
+            );
+            setCaviarParams(mark);
+            return this;
+        }
 
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
@@ -1754,6 +1781,10 @@ public class Position implements Parcelable {
         private void setMedicalDevicesParams(Mark mark) {
             position.mark = mark;
         }
+
+        public void setCaviarParams(Mark mark) { position.mark = mark; }
+
+        public void setVeterinaryParams(Mark mark) { position.mark = mark; }
 
         private void setBeerParams(Mark mark) {
             position.mark = mark;
