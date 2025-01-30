@@ -17,12 +17,12 @@ import java.math.BigDecimal
  * @param kktSerialNumber заводской номер ККТ
  */
 class SendJewelryEvent(
-    private val receiptUuid: String,
-    private val jewelryMarkedPositions: Map<String, BigDecimal>,
-    private val sessionNumber: Long,
-    private val documentNumber: Long,
-    private val paperWidth: Int,
-    private val kktSerialNumber: String,
+    val receiptUuid: String,
+    val jewelryMarkedPositions: Map<String, BigDecimal>,
+    val sessionNumber: Long,
+    val documentNumber: Long,
+    val paperWidth: Int,
+    val kktSerialNumber: String,
 ) : IBundlable {
 
     override fun toBundle(): Bundle {
