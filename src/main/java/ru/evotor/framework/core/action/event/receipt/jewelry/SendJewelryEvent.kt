@@ -43,11 +43,29 @@ class SendJewelryEvent(
     companion object {
 
         /**
-         * Отправка чека в УТМ ГИИС ДМДК через стороннее приложение.
+         * Продажа ювелирных изделий.
          *
-         * Значение константы: <code>evo.v2.receipt.sendJewelry</code>.
+         * Значение константы: <code>evo.v2.receipt.sell.sendJewelry</code>.
          */
-        const val NAME_ACTION = "evo.v2.receipt.sendJewelry"
+        const val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.sendJewelry"
+        /**
+         * Отмена продажи ювелирных изделий.
+         *
+         * Значение константы: <code>evo.v2.receipt.sell.cancel.sendJewelry</code>.
+         */
+        const val NAME_SELL_CANCEL_RECEIPT = "evo.v2.receipt.sell.cancel.sendJewelry"
+        /**
+         * Возврат ювелирных изделий.
+         *
+         * Значение константы: <code>evo.v2.receipt.payback.sendJewelry</code>.
+         */
+        const val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.sendJewelry"
+        /**
+         * Отмена возврата ювелирных изделий.
+         *
+         * Значение константы: <code>evo.v2.receipt.payback.cancel.sendJewelry</code>.
+         */
+        const val NAME_PAYBACK_CANCEL_RECEIPT = "evo.v2.receipt.payback.cancel.sendJewelry"
 
         private const val KEY_RECEIPT_UUID = "receiptUuid"
         private const val KEY_OPERATION_TYPE = "operationType"

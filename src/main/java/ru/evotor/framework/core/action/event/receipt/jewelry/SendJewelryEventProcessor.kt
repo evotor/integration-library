@@ -13,16 +13,20 @@ abstract class SendJewelryEventProcessor : ActionProcessor() {
             callback.skip()
             return
         }
-        call(action, event, callback)
+        when (action) {
+            SendJewelryEvent.NAME_SELL_RECEIPT -> sell(action, event, callback)
+            SendJewelryEvent.NAME_SELL_CANCEL_RECEIPT -> sellCancel(action, event, callback)
+            SendJewelryEvent.NAME_PAYBACK_RECEIPT -> payback(action, event, callback)
+            SendJewelryEvent.NAME_PAYBACK_CANCEL_RECEIPT -> paybackCancel(action, event, callback)
+            else -> {
+                // do nothing
+            }
+        }
     }
 
-    /**
-     * Используйте метод, чтобы обработать событие [SendJewelryEvent] и сохранить результат [SendJewelryEventResult].
-     * @param action
-     * @param event экземпляр события о выбытии ювелирных изделий.
-     * @param callback функция обратного вызова. Методы функции позволяют пропускать обработку события, возвращать результат,
-     *                запускать операции и обрабатывать ошибки.
-     */
-    abstract fun call(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
+    abstract fun sell(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
+    abstract fun sellCancel(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
+    abstract fun payback(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
+    abstract fun paybackCancel(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
 
 }
