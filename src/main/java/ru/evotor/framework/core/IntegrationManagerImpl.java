@@ -222,7 +222,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
-                    connectLatch.await(5, TimeUnit.SECONDS);
+                    connectLatch.await(10, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
