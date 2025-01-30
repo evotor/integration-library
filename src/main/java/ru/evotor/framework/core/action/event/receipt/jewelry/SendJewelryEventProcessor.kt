@@ -17,9 +17,9 @@ abstract class SendJewelryEventProcessor : ActionProcessor() {
     }
 
     /**
-     * Используйте метод, чтобы обработать событие {@link SendJewelryEvent} и сохранить результат {@link SendJewelryEventResult}.
+     * Используйте метод, чтобы обработать событие [SendJewelryEvent] и сохранить результат [SendJewelryEventResult].
      * @param action
-     * @param event экземпляр события выбора оплаты.
+     * @param event экземпляр события о выбытии ювелирных изделий.
      * @param callback функция обратного вызова. Методы функции позволяют пропускать обработку события, возвращать результат,
      *                запускать операции и обрабатывать ошибки.
      */
