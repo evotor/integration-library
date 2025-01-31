@@ -2,6 +2,7 @@ package ru.evotor.framework.core.action.event.receipt.jewelry
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import ru.evotor.framework.Utils
 import java.math.BigDecimal
 
 /**
@@ -18,6 +19,7 @@ import java.math.BigDecimal
  */
 class SendJewelryEvent(
     val receiptUuid: String,
+    val operationType: OperationType,
     val jewelryMarkedPositions: Map<String, BigDecimal>,
     val sessionNumber: Long,
     val documentNumber: Long,
@@ -25,9 +27,14 @@ class SendJewelryEvent(
     val kktSerialNumber: String,
 ) : IBundlable {
 
+    public enum class OperationType {
+        UNKNOWN, SELL, SELL_CANCEL, PAYBACK, PAYBACK_CANCEL
+    }
+
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putString(KEY_RECEIPT_UUID, receiptUuid)
+        result.putString(KEY_OPERATION_TYPE, operationType.name)
         result.putBundle(KEY_JEWELRY_MARKED_POSITIONS, positionsToBundle(jewelryMarkedPositions))
         result.putLong(KEY_SESSION_NUMBER, sessionNumber)
         result.putLong(KEY_DOCUMENT_NUMBER, documentNumber)
@@ -38,31 +45,14 @@ class SendJewelryEvent(
     companion object {
 
         /**
-         * Продажа ювелирных изделий.
+         * Отправка чека в УТМ ГИИС ДМДК через стороннее приложение.
          *
-         * Значение константы: <code>evo.v2.receipt.sell.sendJewelry</code>.
+         * Значение константы: <code>evo.v2.receipt.sendJewelry</code>.
          */
-        const val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.sendJewelry"
-        /**
-         * Отмена продажи ювелирных изделий.
-         *
-         * Значение константы: <code>evo.v2.receipt.sell.cancel.sendJewelry</code>.
-         */
-        const val NAME_SELL_CANCEL_RECEIPT = "evo.v2.receipt.sell.cancel.sendJewelry"
-        /**
-         * Возврат ювелирных изделий.
-         *
-         * Значение константы: <code>evo.v2.receipt.payback.sendJewelry</code>.
-         */
-        const val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.sendJewelry"
-        /**
-         * Отмена возврата ювелирных изделий.
-         *
-         * Значение константы: <code>evo.v2.receipt.payback.cancel.sendJewelry</code>.
-         */
-        const val NAME_PAYBACK_CANCEL_RECEIPT = "evo.v2.receipt.payback.cancel.sendJewelry"
+        const val NAME_ACTION = "evo.v2.receipt.sendJewelry"
 
         private const val KEY_RECEIPT_UUID = "receiptUuid"
+        private const val KEY_OPERATION_TYPE = "operationType"
         private const val KEY_JEWELRY_MARKED_POSITIONS = "jewelryMarkedPositions"
         private const val KEY_SESSION_NUMBER = "sessionNumber"
         private const val KEY_DOCUMENT_NUMBER = "documentNumber"
@@ -72,6 +62,7 @@ class SendJewelryEvent(
         fun from(bundle: Bundle?): SendJewelryEvent? = bundle?.let {
             SendJewelryEvent(
                 getReceiptUuid(it) ?: return null,
+                getOperationType(it),
                 getJewelryMarkedPositions(it) ?: return null,
                 getSessionNumber(it) ?: return null,
                 getDocumentNumber(it) ?: return null,
@@ -82,6 +73,13 @@ class SendJewelryEvent(
 
         private fun getReceiptUuid(bundle: Bundle): String? =
             bundle.getString(KEY_RECEIPT_UUID, null)
+
+        private fun getOperationType(bundle: Bundle): OperationType =
+            Utils.safeValueOf(
+                OperationType::class.java,
+                bundle.getString(KEY_OPERATION_TYPE, null),
+                OperationType.UNKNOWN
+            )
 
         private fun getJewelryMarkedPositions(bundle: Bundle): Map<String, BigDecimal>? =
             bundleToPositions(bundle.getBundle(KEY_JEWELRY_MARKED_POSITIONS))
