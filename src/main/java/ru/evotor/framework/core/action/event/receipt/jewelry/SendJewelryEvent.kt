@@ -11,6 +11,7 @@ import java.math.BigDecimal
  * Происходит перед вызовом приложений для оплат, в случае, если в чеке есть товары с типом ProductType.JEWELRY_MARKED.
  *
  * @param receiptUuid uuid чека
+ * @param operationType тип операции (отправка/отмена чека продажи/возврата)
  * @param jewelryMarkedPositions список ювелирных позиций (УИН + итоговая стоимость)
  * @param sessionNumber фискальный номер смены
  * @param documentNumber фискальный номер последнего закрытого в ФН чека
