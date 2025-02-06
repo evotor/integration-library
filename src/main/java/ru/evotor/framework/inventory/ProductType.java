@@ -132,5 +132,15 @@ public enum ProductType {
     /**
      * Медицинские изделия
      */
-    MEDICAL_DEVICES_MARKED
+    MEDICAL_DEVICES_MARKED,
+
+    /**
+     * Морепродукты (икра осетровых и лососевых)
+     */
+    CAVIAR_MARKED,
+
+    /**
+     * Ветеринарные препараты
+     */
+    VETERINARY_MARKED
 }
