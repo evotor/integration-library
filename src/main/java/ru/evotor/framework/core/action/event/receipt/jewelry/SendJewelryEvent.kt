@@ -43,6 +43,7 @@ class SendJewelryEvent(
         result.putString(KEY_KKT_SERIAL_NUMBER, kktSerialNumber)
         return result
     }
+
     companion object {
 
         /**
