@@ -32,6 +32,7 @@ public interface IntegrationManager {
             String action,
             ComponentName componentName,
             Bundle data,
+            Bundle metaData,
             ICanStartActivity activity,
             IntegrationManagerCallback callback,
             Handler handler);

@@ -44,10 +44,19 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
-    public IntegrationManagerFuture call(final String action, ComponentName componentName, IBundlable data, final Activity activity, IntegrationManagerCallback callback, Handler handler) {
-        return call(action,
+    public IntegrationManagerFuture call(
+            final String action,
+            ComponentName componentName,
+            IBundlable data,
+            final Activity activity,
+            IntegrationManagerCallback callback,
+            Handler handler
+    ) {
+        return call(
+                action,
                 componentName,
                 data == null ? null : data.toBundle(),
+                null,
                 new ActivityStarter(activity, false),
                 callback,
                 handler
@@ -55,10 +64,18 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
-    public IntegrationManagerFuture call(String action, ComponentName componentName, IBundlable data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
+    public IntegrationManagerFuture call(
+            String action,
+            ComponentName componentName,
+            IBundlable data,
+            ICanStartActivity activityStarter,
+            IntegrationManagerCallback callback,
+            Handler handler
+    ) {
         return call(action,
                 componentName,
                 data == null ? null : data.toBundle(),
+                null,
                 activityStarter,
                 callback,
                 handler
@@ -66,8 +83,25 @@ public class IntegrationManagerImpl implements IntegrationManager {
     }
 
     @Override
-    public IntegrationManagerFuture call(String action, ComponentName componentName, Bundle data, ICanStartActivity activityStarter, IntegrationManagerCallback callback, Handler handler) {
-        final ImsTask future = new ImsTask(activityStarter, handler, callback, action, componentName, data);
+    public IntegrationManagerFuture call(
+            String action,
+            ComponentName componentName,
+            Bundle data,
+            Bundle metaData,
+            ICanStartActivity activityStarter,
+            IntegrationManagerCallback callback,
+            Handler handler
+    ) {
+        final ImsTask future = new ImsTask(
+                activityStarter,
+                handler,
+                callback,
+                action,
+                componentName,
+                data,
+                metaData
+        );
+
         new Thread() {
             @Override
             public void run() {
@@ -75,6 +109,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 future.start();
             }
         }.start();
+
         return future;
     }
 
@@ -102,6 +137,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final String mAction;
         final ComponentName mComponentName;
         final Bundle mData;
+        final Bundle mMetaData;
 
         public ImsTask(
                 final Activity activity,
@@ -109,14 +145,17 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 IntegrationManagerCallback callback,
                 final String action,
                 ComponentName componentName,
-                Bundle data) {
+                Bundle data,
+                Bundle metaData
+        ) {
             this(
                     activity == null ? null : new ActivityStarter(activity, false),
                     handler,
                     callback,
                     action,
                     componentName,
-                    data
+                    data,
+                    metaData
             );
         }
 
@@ -126,7 +165,9 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 IntegrationManagerCallback callback,
                 String action,
                 ComponentName componentName,
-                Bundle data) {
+                Bundle data,
+                Bundle metaData
+        ) {
             super(() -> {
                 throw new IllegalStateException("this should never be called");
             });
@@ -137,6 +178,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             mAction = action;
             mComponentName = componentName;
             mData = data;
+            this.mMetaData = metaData;
         }
 
         public final IntegrationManagerFuture start() {
@@ -160,7 +202,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private void doWork(Response response) throws RemoteException {
-            IIntegrationManager service = getService(response.getComponentName());
+            IIntegrationManager service = getService(response.getComponentName(), mMetaData);
             if (service == null) {
                 response.skip();
                 return;
@@ -169,7 +211,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             service.call(response, mAction, mData);
         }
 
-        private IIntegrationManager getService(ComponentName componentName) {
+        private IIntegrationManager getService(ComponentName componentName, Bundle metaData) {
             IIntegrationManager manager = getFromPool(componentName);
             if (manager != null) {
                 return manager;
@@ -181,7 +223,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     return manager;
                 }
 
-                connect(componentName);
+                connect(componentName, metaData);
                 return getFromPool(componentName);
             }
         }
@@ -213,7 +255,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
         }
 
-        private void connect(final ComponentName componentName) {
+        private void connect(final ComponentName componentName, Bundle metaData) {
             ensureNotOnMainThread();
             Intent intent = new Intent();
             intent.setComponent(componentName);
@@ -222,7 +264,11 @@ public class IntegrationManagerImpl implements IntegrationManager {
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
-                    connectLatch.await(5, TimeUnit.SECONDS);
+                    if (metaData.containsKey(intent.getPackage())) {
+                        connectLatch.await(metaData.getInt(intent.getPackage()), TimeUnit.SECONDS);
+                    } else {
+                        connectLatch.await(5, TimeUnit.SECONDS);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
