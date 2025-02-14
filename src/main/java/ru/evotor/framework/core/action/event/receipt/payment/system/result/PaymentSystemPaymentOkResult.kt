@@ -10,7 +10,8 @@ class PaymentSystemPaymentOkResult(
         val slip: List<String>,
         val paymentInfo: String?,
         val paymentType: PaymentType = PaymentType.ELECTRON,
-        val cashlessInfo: CashlessInfo? = null
+        val cashlessInfo: CashlessInfo? = null,
+        val extendedSLip: String? = null
 ) : PaymentSystemPaymentResult(ResultType.OK) {
 
     override fun toBundle(): Bundle {
@@ -20,6 +21,7 @@ class PaymentSystemPaymentOkResult(
         result.putString(KEY_PAYMENT_INFO, paymentInfo)
         result.putString(KEY_PAYMENT_TYPE, paymentType.name)
         result.putBundle(KEY_CASHLESS_INFO, cashlessInfo?.toBundle())
+        result.putString(KEY_EXTENDED_SLIP, extendedSLip)
         return result
     }
 
@@ -29,6 +31,7 @@ class PaymentSystemPaymentOkResult(
         private val KEY_PAYMENT_INFO = "paymentInfo"
         private val KEY_PAYMENT_TYPE = "paymentType"
         private val KEY_CASHLESS_INFO = "cashlessInfo"
+        private val KEY_EXTENDED_SLIP = "extendedSlip"
 
         fun create(bundle: Bundle?): PaymentSystemPaymentOkResult? {
             if (bundle == null) {
@@ -39,7 +42,8 @@ class PaymentSystemPaymentOkResult(
             val paymentInfo = bundle.getString(KEY_PAYMENT_INFO, null)
             val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN)
             val cashlessInfo = CashlessInfo.fromBundle(bundle.getBundle(KEY_CASHLESS_INFO))
-            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo)
+            val extendedSLip = bundle.getString(KEY_EXTENDED_SLIP, null)
+            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, extendedSLip)
         }
     }
 }
