@@ -264,8 +264,11 @@ public class IntegrationManagerImpl implements IntegrationManager {
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
-                    if (metaData.containsKey(intent.getPackage())) {
-                        connectLatch.await(metaData.getInt(intent.getPackage()), TimeUnit.SECONDS);
+                    String packageName = componentName.getPackageName();
+
+                    if (metaData.containsKey(packageName)) {
+                        int timeout = metaData.getInt(packageName);
+                        connectLatch.await(timeout, TimeUnit.SECONDS);
                     } else {
                         connectLatch.await(5, TimeUnit.SECONDS);
                     }
