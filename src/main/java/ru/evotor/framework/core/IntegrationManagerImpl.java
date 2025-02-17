@@ -18,6 +18,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -87,7 +88,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             String action,
             ComponentName componentName,
             Bundle data,
-            Bundle metaData,
+            Map<String, Integer> packageSpecificTimeouts,
             ICanStartActivity activityStarter,
             IntegrationManagerCallback callback,
             Handler handler
@@ -99,7 +100,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 action,
                 componentName,
                 data,
-                metaData
+                packageSpecificTimeouts
         );
 
         new Thread() {
@@ -137,7 +138,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final String mAction;
         final ComponentName mComponentName;
         final Bundle mData;
-        final Bundle mMetaData;
+        final Map<String, Integer> mPackageSpecificTimeouts;
 
         public ImsTask(
                 final Activity activity,
@@ -146,7 +147,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 final String action,
                 ComponentName componentName,
                 Bundle data,
-                Bundle metaData
+                Map<String, Integer> packageSpecificTimeouts
         ) {
             this(
                     activity == null ? null : new ActivityStarter(activity, false),
@@ -155,7 +156,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     action,
                     componentName,
                     data,
-                    metaData
+                    packageSpecificTimeouts
             );
         }
 
@@ -166,7 +167,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 String action,
                 ComponentName componentName,
                 Bundle data,
-                Bundle metaData
+                Map<String, Integer> packageSpecificTimeouts
         ) {
             super(() -> {
                 throw new IllegalStateException("this should never be called");
@@ -178,7 +179,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             mAction = action;
             mComponentName = componentName;
             mData = data;
-            this.mMetaData = metaData;
+            this.mPackageSpecificTimeouts = packageSpecificTimeouts;
         }
 
         public final IntegrationManagerFuture start() {
@@ -202,7 +203,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private void doWork(Response response) throws RemoteException {
-            IIntegrationManager service = getService(response.getComponentName(), mMetaData);
+            IIntegrationManager service = getService(response.getComponentName(), mPackageSpecificTimeouts);
             if (service == null) {
                 response.skip();
                 return;
@@ -211,7 +212,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
             service.call(response, mAction, mData);
         }
 
-        private IIntegrationManager getService(ComponentName componentName, Bundle metaData) {
+        private IIntegrationManager getService(
+                ComponentName componentName,
+                Map<String, Integer> packageSpecificTimeouts
+        ) {
             IIntegrationManager manager = getFromPool(componentName);
             if (manager != null) {
                 return manager;
@@ -223,7 +227,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     return manager;
                 }
 
-                connect(componentName, metaData);
+                connect(componentName, packageSpecificTimeouts);
                 return getFromPool(componentName);
             }
         }
@@ -255,7 +259,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
             }
         }
 
-        private void connect(final ComponentName componentName, Bundle metaData) {
+        private void connect(
+                final ComponentName componentName, Map<String,
+                Integer> packageSpecificTimeouts
+        ) {
             ensureNotOnMainThread();
             Intent intent = new Intent();
             intent.setComponent(componentName);
@@ -265,13 +272,9 @@ public class IntegrationManagerImpl implements IntegrationManager {
             if (binded) {
                 try {
                     String packageName = componentName.getPackageName();
-
-                    if (metaData.containsKey(packageName)) {
-                        int timeout = metaData.getInt(packageName);
-                        connectLatch.await(timeout, TimeUnit.SECONDS);
-                    } else {
-                        connectLatch.await(5, TimeUnit.SECONDS);
-                    }
+                    Integer packageTimeout = packageSpecificTimeouts.get(packageName);
+                    packageTimeout = (packageTimeout != null) ? packageTimeout : 5;
+                    connectLatch.await(packageTimeout, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

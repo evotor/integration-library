@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.Handler;
 
+import java.util.Map;
+
 import ru.evotor.IBundlable;
 
 /**
@@ -32,7 +34,7 @@ public interface IntegrationManager {
             String action,
             ComponentName componentName,
             Bundle data,
-            Bundle metaData,
+            Map<String, Integer> packageSpecificTimeouts,
             ICanStartActivity activity,
             IntegrationManagerCallback callback,
             Handler handler);
