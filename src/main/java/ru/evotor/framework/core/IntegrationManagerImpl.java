@@ -179,7 +179,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             mAction = action;
             mComponentName = componentName;
             mData = data;
-            this.mPackageSpecificTimeouts = packageSpecificTimeouts;
+            mPackageSpecificTimeouts = packageSpecificTimeouts;
         }
 
         public final IntegrationManagerFuture start() {
