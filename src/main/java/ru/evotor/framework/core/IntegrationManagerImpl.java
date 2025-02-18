@@ -13,12 +13,19 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.OperationCanceledException;
 import android.os.RemoteException;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -271,9 +278,20 @@ public class IntegrationManagerImpl implements IntegrationManager {
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
+                    // For certain applications, we have an extended default timeout because they cannot be skipped
+                    // https://jira.evotor.ru/browse/STDEV-21022
+                    ArrayMap<String, Integer> markPackages = new ArrayMap<>();
+                    markPackages.put("ru.evotor.edo", 30);
+                    markPackages.put("ru.evotor.egais", 30);
+                    markPackages.put("ru.evotor.utm.utmmanager", 30);
+
+                    ArrayMap<String, Integer> packagesTimeouts = new ArrayMap<>(markPackages);
+                    packagesTimeouts.putAll(packageSpecificTimeouts);
+
                     String packageName = componentName.getPackageName();
-                    Integer packageTimeout = packageSpecificTimeouts.get(packageName);
+                    Integer packageTimeout = packagesTimeouts.get(packageName);
                     packageTimeout = (packageTimeout != null) ? packageTimeout : 5;
+
                     connectLatch.await(packageTimeout, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
