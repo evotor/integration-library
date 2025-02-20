@@ -282,7 +282,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     String packageName = componentName.getPackageName();
                     int primitivePackageTimeout = 5;
 
-                    if (packageSpecificTimeouts.containsKey(packageName)) {
+                    if (packageSpecificTimeouts != null) {
                         Integer packageTimeout = packageSpecificTimeouts.get(packageName);
                         if (packageTimeout != null) {
                             primitivePackageTimeout = packageTimeout;
