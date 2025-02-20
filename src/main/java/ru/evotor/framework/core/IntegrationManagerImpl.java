@@ -278,18 +278,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
             boolean binded = context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
             if (binded) {
                 try {
-                    // For certain applications, we have an extended default timeout because they cannot be skipped
-                    // https://jira.evotor.ru/browse/STDEV-21022
-                    ArrayMap<String, Integer> markPackages = new ArrayMap<>();
-                    markPackages.put("ru.evotor.edo", 30);
-                    markPackages.put("ru.evotor.egais", 30);
-                    markPackages.put("ru.evotor.utm.utmmanager", 30);
-
-                    ArrayMap<String, Integer> packagesTimeouts = new ArrayMap<>(markPackages);
-                    packagesTimeouts.putAll(packageSpecificTimeouts);
-
                     String packageName = componentName.getPackageName();
-                    Integer packageTimeout = packagesTimeouts.get(packageName);
+                    Integer packageTimeout = packageSpecificTimeouts.get(packageName);
                     packageTimeout = (packageTimeout != null) ? packageTimeout : 5;
 
                     connectLatch.await(packageTimeout, TimeUnit.SECONDS);
