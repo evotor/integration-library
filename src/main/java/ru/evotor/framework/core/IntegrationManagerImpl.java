@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -267,8 +268,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private void connect(
-                final ComponentName componentName, Map<String,
-                Integer> packageSpecificTimeouts
+                final ComponentName componentName,
+                Map<String, Integer> packageSpecificTimeouts
         ) {
             ensureNotOnMainThread();
             Intent intent = new Intent();
@@ -279,10 +280,15 @@ public class IntegrationManagerImpl implements IntegrationManager {
             if (binded) {
                 try {
                     String packageName = componentName.getPackageName();
-                    Integer packageTimeout = packageSpecificTimeouts.get(packageName);
-                    packageTimeout = (packageTimeout != null) ? packageTimeout : 5;
+                    int primitivePackageTimeout = 5;
 
-                    connectLatch.await(packageTimeout, TimeUnit.SECONDS);
+                    if (packageSpecificTimeouts.containsKey(packageName)) {
+                        Integer packageTimeout = packageSpecificTimeouts.get(packageName);
+                        if (packageTimeout != null) {
+                            primitivePackageTimeout = packageTimeout;
+                        }
+                    }
+                    connectLatch.await(primitivePackageTimeout, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
