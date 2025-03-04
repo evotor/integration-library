@@ -31,6 +31,7 @@ import ru.evotor.framework.receipt.position.mapper.MarksCheckingInfoMapper
 import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
+import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import java.math.BigDecimal
 import java.util.Date
@@ -464,6 +465,7 @@ object ReceiptApi {
             .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
             .setIsMarkSkipped(isMarkSkipped)
             .setIsAgeLimited(isAgeLimited)
+            .setVeterinaryAttribute(VeterinaryAttributeMapper.readFromCursor(cursor))
         return builder.build()
     }
 
