@@ -193,6 +193,13 @@ object FeaturesApi {
     fun isBeerMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BEER_MARK)
 
     /**
+     * Проверяет, активна ли функция "<Маркировка безалкогольного пива>" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isNotAlcoholBeerMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_NOT_ALCOHOL_BEER_MARK)
+
+    /**
      * Проверяет, активна ли функция "Настройка количества печати слип-чеков" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.

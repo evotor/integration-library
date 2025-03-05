@@ -39,6 +39,7 @@ object FeaturesContract {
     const val PATH_EXCISE_PRODUCTS = "excise_products"
     const val PATH_BEER_KEG_MARK = "beer_mark_keg"
     const val PATH_BEER_MARK = "beer_mark"
+    const val PATH_NOT_ALCOHOL_BEER_MARK = "not_alcohol_beer_mark"
     const val PATH_ANTISEPTIC_MARK = "antiseptic_mark"
     const val PATH_DIETARY_SUPPLEMENTS_MARK = "dietary_supplements_mark"
     const val PATH_AGE_LIMITED_PRODUCTS = "age_limited_products"

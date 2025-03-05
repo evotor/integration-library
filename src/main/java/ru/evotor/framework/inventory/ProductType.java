@@ -120,6 +120,11 @@ public enum ProductType {
     BEER_MARKED,
 
     /**
+     * Маркированное безалкогольное пиво
+     */
+    NOT_ALCOHOL_BEER_MARKED,
+
+    /**
      * Маркированная соковая продукция и безалкогольные напитки
      */
     JUICE_MARKED,
