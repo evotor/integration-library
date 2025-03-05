@@ -25,6 +25,10 @@ data class VeterinaryAttribute(
     override fun toBundle(): Bundle = VeterinaryAttributeMapper.writeToBundle(this)
 
     companion object {
+        /**
+         * Текущая версия объекта VeterinaryAttribute.
+         */
+        const val VERSION = 1
 
         @JvmStatic
         fun from(bundle: Bundle?): VeterinaryAttribute? = VeterinaryAttributeMapper.readFromBundle(bundle)

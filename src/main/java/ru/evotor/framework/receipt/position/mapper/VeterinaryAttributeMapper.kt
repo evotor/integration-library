@@ -13,6 +13,7 @@ internal object VeterinaryAttributeMapper {
     private const val KEY_VETERINARY_ATTRIBUTE_TYPE = "VeterinaryAttributeType"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_DATE_VALUE = "VeterinaryAttributeDocumentDateValue"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER_VALUE = "VeterinaryAttributeDocumentNumberValue"
+    private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_VERSION = "VeterinaryAttributeVersion"
 
     internal fun readFromCursor(cursor: Cursor): VeterinaryAttribute? = cursor.optInt(PositionTable.COLUMN_VETERINARY_ATTRIBUTE)?.let {
         VeterinaryAttribute(
@@ -39,6 +40,7 @@ internal object VeterinaryAttributeMapper {
     }
 
     fun writeToBundle(veterinaryAttribute: VeterinaryAttribute) = Bundle().apply {
+        this.putInt(KEY_VETERINARY_ATTRIBUTE_DOCUMENT_VERSION, VeterinaryAttribute.VERSION)
         this.putString(KEY_VETERINARY_ATTRIBUTE_TYPE, veterinaryAttribute.type.name)
         this.putString(KEY_VETERINARY_ATTRIBUTE_DOCUMENT_DATE_VALUE, veterinaryAttribute.documentDate)
         this.putString(KEY_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER_VALUE, veterinaryAttribute.documentNumber)
