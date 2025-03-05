@@ -15,11 +15,11 @@ data class VeterinaryAttribute(
     /**
      * Номер документа, не более 70 символов
      */
-    val documentNumber: String? = null,
+    val documentNumber: String,
     /**
      * Дата документа в формате ГГММДД
      */
-    val documentDate: String? = null
+    val documentDate: String
 ) : IBundlable {
 
     override fun toBundle(): Bundle = VeterinaryAttributeMapper.writeToBundle(this)

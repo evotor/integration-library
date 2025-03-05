@@ -18,8 +18,8 @@ internal object VeterinaryAttributeMapper {
     internal fun readFromCursor(cursor: Cursor): VeterinaryAttribute? = cursor.optInt(PositionTable.COLUMN_VETERINARY_ATTRIBUTE)?.let {
         VeterinaryAttribute(
             type = VeterinaryAttribute.VeterinaryDocumentType.values()[it],
-            documentNumber = cursor.optString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER),
-            documentDate = cursor.optString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_DATE)
+            documentNumber = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER)),
+            documentDate = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_DATE))
         )
     }
 
@@ -28,14 +28,25 @@ internal object VeterinaryAttributeMapper {
         if (type.isNullOrEmpty()) {
             return@let null
         }
+
+        val documentNumber = it.getString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER)
+        if (documentNumber.isNullOrEmpty()) {
+            return@let null
+        }
+
+        val documentDate = it.getString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_DATE)
+        if (documentDate.isNullOrEmpty()) {
+            return@let null
+        }
+
         VeterinaryAttribute(
             type = Utils.safeValueOf(
                 VeterinaryAttribute.VeterinaryDocumentType::class.java,
                 type,
                 VeterinaryAttribute.VeterinaryDocumentType.VPR
             ),
-            documentNumber = it.getString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER),
-            documentDate = it.getString(PositionTable.COLUMN_VETERINARY_ATTRIBUTE_DOCUMENT_DATE)
+            documentNumber = documentNumber,
+            documentDate = documentDate
         )
     }
 
