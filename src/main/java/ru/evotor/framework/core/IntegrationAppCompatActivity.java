@@ -55,10 +55,14 @@ public abstract class IntegrationAppCompatActivity extends AppCompatActivity {
     @Override
     public void finish() {
         if (mIntegrationResponse != null) {
-            // send the result bundle back if set, otherwise send an error.
+            // send the result bundle back if set, otherwise send to skip.
             if (mResultBundle != null) {
                 Bundle bundle = new Bundle();
                 bundle.putBundle(IntegrationManager.KEY_DATA, mResultBundle);
+                mIntegrationResponse.onResult(bundle);
+            }else{
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(IntegrationManager.KEY_SKIP, true);
                 mIntegrationResponse.onResult(bundle);
             }
             mIntegrationResponse = null;
