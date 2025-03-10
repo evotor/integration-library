@@ -1,7 +1,10 @@
 package ru.evotor.framework.receipt.position.mapper
 
+import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.framework.Utils
+import ru.evotor.framework.optString
+import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.attribute.VeterinaryAttribute
 
 internal object VeterinaryAttributeMapper {
@@ -10,6 +13,20 @@ internal object VeterinaryAttributeMapper {
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_DATE_VALUE = "VeterinaryAttributeDocumentDateValue"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER_VALUE = "VeterinaryAttributeDocumentNumberValue"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_VERSION = "VeterinaryAttributeVersion"
+
+    internal fun readFromCursor(cursor: Cursor): VeterinaryAttribute? {
+        val type = cursor.optString(PositionTable.COLUMN_VETERINARY_DOCUMENT_TYPE)?.let { VeterinaryAttribute.VeterinaryDocumentType.valueOf(it) }
+        if (type == null) {
+            return null
+        }
+        val documentNumber = cursor.optString(PositionTable.COLUMN_VETERINARY_DOCUMENT_NUMBER) ?: return null
+        val documentDate = cursor.optString(PositionTable.COLUMN_VETERINARY_DOCUMENT_DATE) ?: return null
+        return VeterinaryAttribute(
+            type = type,
+            documentNumber = documentNumber,
+            documentDate = documentDate
+        )
+    }
 
     fun readFromBundle(bundle: Bundle?): VeterinaryAttribute? = bundle?.let {
         val type = it.getString(KEY_VETERINARY_ATTRIBUTE_TYPE)
