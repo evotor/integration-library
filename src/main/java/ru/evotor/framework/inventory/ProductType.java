@@ -2,6 +2,8 @@ package ru.evotor.framework.inventory;
 
 /**
  * Тип товара.
+ *
+ * Новые значения добавлять только в конец
  */
 public enum ProductType {
     /**
@@ -142,5 +144,10 @@ public enum ProductType {
     /**
      * Ветеринарные препараты
      */
-    VETERINARY_MARKED
+    VETERINARY_MARKED,
+
+    /**
+     * Маркированное безалкогольное пиво
+     */
+    NOT_ALCOHOL_BEER_MARKED,
 }
