@@ -117,7 +117,6 @@ data class MedicineAttribute(
             }
             checkNotNull(medicineAttribute)
             return medicineAttribute as MedicineAttribute
-
         }
     }
 }

@@ -25,6 +25,7 @@ import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
+import ru.evotor.framework.receipt.attribute.VeterinaryAttribute;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
 import ru.evotor.framework.receipt.position.Mark;
@@ -40,7 +41,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 14;
+    private static final int VERSION = 15;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -182,6 +183,14 @@ public class Position implements Parcelable {
     private PreferentialMedicine preferentialMedicine;
 
     /**
+     * Информация о рецепте
+     * Значения будут записаны в тег 1260
+     */
+    @FiscalRequisite(tag = FiscalTags.VETERINARY_ATTRIBUTE)
+    @Nullable
+    private VeterinaryAttribute veterinaryAttribute;
+
+    /**
      * Частичное выбытие 1191
      * <p>
      * Доступно только для следующих типов товара:
@@ -301,6 +310,7 @@ public class Position implements Parcelable {
         this.isAgeLimited = position.isAgeLimited;
         this.isMarkSkipped = position.isMarkSkipped;
         this.saleBanTime = position.saleBanTime;
+        this.veterinaryAttribute = position.veterinaryAttribute;
     }
 
     /**
@@ -573,6 +583,15 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Информация о рецепте для ветеринарных препаратов
+     */
+    @FiscalRequisite(tag = FiscalTags.VETERINARY_ATTRIBUTE)
+    @Nullable
+    public VeterinaryAttribute getVeterinaryAttribute() {
+        return veterinaryAttribute;
+    }
+
+    /**
      * @return Частичное выбытие 1191
      */
     @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
@@ -691,6 +710,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(saleBanTime, position.saleBanTime))
             return false;
+        if (!Objects.equals(veterinaryAttribute, position.veterinaryAttribute))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -726,6 +747,7 @@ public class Position implements Parcelable {
         result = 31 * result + (isAgeLimited != null ? isAgeLimited.hashCode() : 0);
         result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
+        result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
         return result;
     }
 
@@ -761,6 +783,7 @@ public class Position implements Parcelable {
                 ", marksCheckingInfo=" + marksCheckingInfo +
                 ", isAgeLimited=" + isAgeLimited +
                 ", isMarkSkipped=" + isMarkSkipped +
+                ", veterinaryAttribute=" + veterinaryAttribute +
                 '}';
     }
 
@@ -853,6 +876,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.isAgeLimited);
         dest.writeSerializable(this.isMarkSkipped);
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
+        dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -959,6 +983,9 @@ public class Position implements Parcelable {
         if (version >= 14) {
             this.saleBanTime = TimeRange.from(in.readBundle(TimeRange.class.getClassLoader()));
         }
+        if (version >= 15) {
+            readVeterinaryAttribute(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -995,6 +1022,10 @@ public class Position implements Parcelable {
 
     private void readPreferentialMedicine(Parcel in) {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
+    }
+
+    private void readVeterinaryAttribute(Parcel in) {
+        this.veterinaryAttribute = VeterinaryAttribute.Companion.from(in.readBundle(VeterinaryAttribute.class.getClassLoader()));
     }
 
     private void readMark(Parcel in) {
@@ -1888,6 +1919,11 @@ public class Position implements Parcelable {
 
         public Builder setPreferentialMedicine(@Nullable PreferentialMedicine preferentialMedicine) {
             position.preferentialMedicine = preferentialMedicine;
+            return this;
+        }
+
+        public Builder setVeterinaryAttribute(@Nullable VeterinaryAttribute veterinaryAttribute) {
+            position.veterinaryAttribute = veterinaryAttribute;
             return this;
         }
 
