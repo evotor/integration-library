@@ -35,8 +35,14 @@ data class FiscalReceipt internal constructor(
         /**
          * Регистрационный номер ККТ
          */
-        @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
+        @Deprecated("Используйте kktRegNumber", replaceWith = ReplaceWith("kktRegNumber"))
         override val kktRegistrationNumber: Long,
+
+        /**
+         * Регистрационный номер ККТ
+         */
+        @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
+        override val kktRegNumber: String,
 
         /**
          * Номер аппаратной смены
