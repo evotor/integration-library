@@ -20,7 +20,8 @@ internal object FiscalReceiptMapper {
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
                 settlementType = it.optEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
                         ?: return null,
-                kktRegistrationNumber = 0,
+                kktRegistrationNumber = FiscalDocumentMapper.readKktRegNumberAsLong(it)
+                    ?: return null,
                 sessionNumber = FiscalDocumentMapper.readSessionNumber(it) ?: return null,
                 fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(it)
                         ?: return null,
@@ -38,7 +39,7 @@ internal object FiscalReceiptMapper {
             settlementType = cursor.optEnum(
                     FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
             ) ?: throwOutdatedLibraryException(),
-            kktRegistrationNumber = 0,
+            kktRegistrationNumber = FiscalDocumentMapper.readKktRegNumberAsLong(cursor) ?: throwOutdatedLibraryException(),
             sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
                     ?: throwOutdatedLibraryException(),
             fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)

@@ -35,6 +35,12 @@ internal object FiscalDocumentMapper {
 
     fun readKktRegistrationNumber(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
 
+    @Deprecated("Используйте readKktRegistrationNumber", replaceWith = ReplaceWith("FiscalDocumentMapper.readKktRegistrationNumber(bundle)"))
+    fun readKktRegNumberAsLong(bundle: Bundle?): Long? = bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)
+
+    @Deprecated("Используйте readKktRegistrationNumber", replaceWith = ReplaceWith("FiscalDocumentMapper.readKktRegistrationNumber(cursor)"))
+    fun readKktRegNumberAsLong(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
+
     fun readSessionNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_SESSION_NUMBER)
 
     fun readSessionNumber(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
