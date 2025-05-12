@@ -20,14 +20,14 @@ internal object FiscalReceiptMapper {
                 creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
                 settlementType = it.optEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
                         ?: return null,
-                kktRegistrationNumber = FiscalDocumentMapper.readKktRegNumberAsLong(it)
+                kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
                     ?: return null,
                 sessionNumber = FiscalDocumentMapper.readSessionNumber(it) ?: return null,
                 fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(it)
                         ?: return null,
                 fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(it) ?: return null,
                 wasPrinted = it.getBoolean(KEY_WAS_PRINTED),
-                kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumber(it) ?: return null
+                kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumberAsString(it) ?: return null
         )
     }
 
@@ -39,7 +39,7 @@ internal object FiscalReceiptMapper {
             settlementType = cursor.optEnum(
                     FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
             ) ?: throwOutdatedLibraryException(),
-            kktRegistrationNumber = FiscalDocumentMapper.readKktRegNumberAsLong(cursor) ?: throwOutdatedLibraryException(),
+            kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor) ?: throwOutdatedLibraryException(),
             sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
                     ?: throwOutdatedLibraryException(),
             fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)
@@ -47,7 +47,7 @@ internal object FiscalReceiptMapper {
             fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
                     ?: throwOutdatedLibraryException(),
             wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException(),
-            kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor) ?: throwOutdatedLibraryException()
+            kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumberAsString(cursor) ?: throwOutdatedLibraryException()
     )
 
     private fun throwOutdatedLibraryException(): Nothing =
