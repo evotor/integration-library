@@ -5,32 +5,36 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
 import ru.evotor.framework.ParcelableUtils
+import ru.evotor.framework.optLong
 
 data class AdditionalTransactionData(
-    val tid: String,
-    val inn: String?,
-    val primaryAccountNumber: String,
-    val issuerBik: String,
-    val issuerTransactionNumber: String,
+    val tid: String?,
+    val initialDatetime: Long,
+    val paymentSystemCode: String,
+    val acquiringBankCode: String,
+    val authorizationCode: String,
+    val transactionId: String?,
 ) : IBundlable, Parcelable {
 
     override fun toBundle(): Bundle {
         val bundle = Bundle()
         bundle.putString(KEY_TID, tid)
-        bundle.putString(KEY_INN, inn)
-        bundle.putString(KEY_PRIMARY_ACCOUNT_NUMBER, primaryAccountNumber)
-        bundle.putString(KEY_PRIMARY_ISSUER_BIK, issuerBik)
-        bundle.putString(KEY_PRIMARY_ISSUER_TRANSACTION_NUMBER, issuerTransactionNumber)
+        bundle.putLong(KEY_INITIAL_DATETIME, initialDatetime)
+        bundle.putString(KEY_PAYMENT_SYSTEM_CODE, paymentSystemCode)
+        bundle.putString(KEY_ACQUIRING_BANK_CODE, acquiringBankCode)
+        bundle.putString(KEY_AUTHORIZATION_CODE, authorizationCode)
+        bundle.putString(KEY_TRANSACTION_ID, transactionId)
         return bundle
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         ParcelableUtils.writeExpand(parcel, VERSION) { parcel ->
             parcel.writeString(tid)
-            parcel.writeString(inn)
-            parcel.writeString(primaryAccountNumber)
-            parcel.writeString(issuerBik)
-            parcel.writeString(issuerTransactionNumber)
+            parcel.writeLong(initialDatetime)
+            parcel.writeString(paymentSystemCode)
+            parcel.writeString(acquiringBankCode)
+            parcel.writeString(authorizationCode)
+            parcel.writeString(transactionId)
         }
     }
 
@@ -40,30 +44,32 @@ data class AdditionalTransactionData(
 
     companion object {
 
-        private const val VERSION = 1
+        private const val VERSION = 2
 
         private const val KEY_TID = "tid"
-        private const val KEY_INN = "inn"
-        private const val KEY_PRIMARY_ACCOUNT_NUMBER = "primaryAccountNumber"
-        private const val KEY_PRIMARY_ISSUER_BIK = "issuerBik"
-        private const val KEY_PRIMARY_ISSUER_TRANSACTION_NUMBER = "issuerTransactionNumber"
+        private const val KEY_INITIAL_DATETIME = "initialDatetime"
+        private const val KEY_PAYMENT_SYSTEM_CODE = "paymentSystemCode"
+        private const val KEY_ACQUIRING_BANK_CODE = "acquiringBankCode"
+        private const val KEY_AUTHORIZATION_CODE = "authorizationCode"
+        private const val KEY_TRANSACTION_ID = "transactionId"
 
         @JvmStatic
         fun fromBundle(bundle: Bundle?): AdditionalTransactionData? {
             bundle ?: return null
 
             return AdditionalTransactionData(
-                tid = bundle.getString(KEY_TID) ?: return null,
-                inn = bundle.getString(KEY_INN),
-                primaryAccountNumber = bundle.getString(KEY_PRIMARY_ACCOUNT_NUMBER) ?: return null,
-                issuerBik = bundle.getString(KEY_PRIMARY_ISSUER_BIK) ?: return null,
-                issuerTransactionNumber = bundle.getString(KEY_PRIMARY_ISSUER_TRANSACTION_NUMBER) ?: return null,
+                tid = bundle.getString(KEY_TID),
+                initialDatetime = bundle.optLong(KEY_INITIAL_DATETIME) ?: return null,
+                paymentSystemCode = bundle.getString(KEY_PAYMENT_SYSTEM_CODE) ?: return null,
+                acquiringBankCode = bundle.getString(KEY_ACQUIRING_BANK_CODE) ?: return null,
+                authorizationCode = bundle.getString(KEY_AUTHORIZATION_CODE) ?: return null,
+                transactionId = bundle.getString(KEY_TRANSACTION_ID),
             )
         }
 
         @JvmField
-        val CREATOR = object : Parcelable.Creator<AdditionalTransactionData> {
-            override fun createFromParcel(parcel: Parcel): AdditionalTransactionData {
+        val CREATOR = object : Parcelable.Creator<AdditionalTransactionData?> {
+            override fun createFromParcel(parcel: Parcel): AdditionalTransactionData? {
                 return create(parcel)
             }
 
@@ -72,26 +78,28 @@ data class AdditionalTransactionData(
             }
         }
 
-        private fun create(dest: Parcel): AdditionalTransactionData {
+        private fun create(dest: Parcel): AdditionalTransactionData? {
             var additionalTransactionData: AdditionalTransactionData? = null
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
-                // version 1
-                val tid = parcel.readString() ?: throw IllegalStateException("tid should be null")
-                val inn = parcel.readString()
-                val primaryAccountNumber = parcel.readString() ?: throw IllegalStateException("primaryAccountNumber should be null")
-                val issuerBik = parcel.readString() ?: throw IllegalStateException("issuerBik should be null")
-                val issuerTransactionNumber = parcel.readString() ?: throw IllegalStateException("issuerTransactionNumber should be null")
+                if (version >= 2) {
+                    val tid = parcel.readString()
+                    val initialDatetime = parcel.readLong()
+                    val paymentSystemCode = parcel.readString() ?: throw IllegalStateException("paymentSystemCode should be null")
+                    val acquiringBankCode = parcel.readString() ?: throw IllegalStateException("acquiringBankCode should be null")
+                    val authorizationCode = parcel.readString() ?: throw IllegalStateException("authorizationCode should be null")
+                    val transactionId = parcel.readString()
 
-                additionalTransactionData = AdditionalTransactionData(
-                    tid = tid,
-                    inn = inn,
-                    primaryAccountNumber = primaryAccountNumber,
-                    issuerBik = issuerBik,
-                    issuerTransactionNumber = issuerTransactionNumber,
-                )
+                    additionalTransactionData = AdditionalTransactionData(
+                        tid = tid,
+                        initialDatetime = initialDatetime,
+                        paymentSystemCode = paymentSystemCode,
+                        acquiringBankCode = acquiringBankCode,
+                        authorizationCode = authorizationCode,
+                        transactionId = transactionId,
+                    )
+                }
             }
-            checkNotNull(additionalTransactionData)
-            return additionalTransactionData as AdditionalTransactionData
+            return additionalTransactionData
 
         }
     }
