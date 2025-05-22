@@ -33,6 +33,7 @@ import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 /**
  * Позиция чека.
@@ -41,7 +42,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 15;
+    private static final int VERSION = 16;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -237,6 +238,18 @@ public class Position implements Parcelable {
     @Nullable
     private TimeRange saleBanTime;
 
+    /**
+     * Выбытие по объемно-сортовому учету(ОСУ) 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - молочная продукция {@link ProductType#DAIRY_MARKED}
+     * - вода {@link ProductType#WATER_MARKED}
+     * <p>
+     */
+    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @Nullable
+    private VolumeSortAccountingRealization volumeSortAccountingRealization;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -311,6 +324,7 @@ public class Position implements Parcelable {
         this.isMarkSkipped = position.isMarkSkipped;
         this.saleBanTime = position.saleBanTime;
         this.veterinaryAttribute = position.veterinaryAttribute;
+        this.volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
     }
 
     /**
@@ -639,6 +653,15 @@ public class Position implements Parcelable {
         return marksCheckingInfo;
     }
 
+    /**
+     * @return Выбытие по объемно-сортовому учету(ОСУ) 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @Nullable
+    public VolumeSortAccountingRealization getVolumeSortAccountingRealization() {
+        return volumeSortAccountingRealization;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -712,6 +735,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(veterinaryAttribute, position.veterinaryAttribute))
             return false;
+        if (!Objects.equals(volumeSortAccountingRealization, position.volumeSortAccountingRealization))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -748,6 +773,7 @@ public class Position implements Parcelable {
         result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
         result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
+        result = 31 * result + (volumeSortAccountingRealization != null ? volumeSortAccountingRealization.hashCode() : 0);
         return result;
     }
 
@@ -784,6 +810,7 @@ public class Position implements Parcelable {
                 ", isAgeLimited=" + isAgeLimited +
                 ", isMarkSkipped=" + isMarkSkipped +
                 ", veterinaryAttribute=" + veterinaryAttribute +
+                ", volumeSortAccountingRealization=" + volumeSortAccountingRealization +
                 '}';
     }
 
@@ -877,6 +904,8 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.isMarkSkipped);
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
         dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
+        // Volume Sort Accounting Realization
+        dest.writeBundle(this.volumeSortAccountingRealization != null ? this.volumeSortAccountingRealization.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -986,6 +1015,9 @@ public class Position implements Parcelable {
         if (version >= 15) {
             readVeterinaryAttribute(in);
         }
+        if (version >= 16) {
+            readVolumeSortAccountingRealization(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -1038,6 +1070,12 @@ public class Position implements Parcelable {
 
     private void readMarksCheckingInfo(Parcel in) {
         this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
+    }
+
+    private void readVolumeSortAccountingRealization(Parcel in) {
+        this.volumeSortAccountingRealization = VolumeSortAccountingRealization.Companion.from(
+                in.readBundle(VolumeSortAccountingRealization.class.getClassLoader())
+        );
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1755,6 +1793,17 @@ public class Position implements Parcelable {
             position.tareVolume = tareVolume;
         }
 
+        public Builder toVolumeSortAccountingRealization(
+                @NonNull BigDecimal volumeSortQuantity,
+                @NonNull String gtin
+        ) {
+            position.volumeSortAccountingRealization = new VolumeSortAccountingRealization(
+                    gtin,
+                    volumeSortQuantity
+            );
+            return this;
+        }
+
         private void setShoesParams(Mark mark) {
             position.mark = mark;
         }
@@ -1966,6 +2015,22 @@ public class Position implements Parcelable {
 
         public Builder setSaleBanTime(@Nullable TimeRange saleBanTime) {
             position.saleBanTime = saleBanTime;
+            return this;
+        }
+
+        /**
+         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
+         * <p>
+         * вода {@link ProductType#WATER_MARKED}
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * не может использоваться совместно с setPartialRealization
+         *
+         * @param volumeSortAccountingRealization реализация по ОСУ
+         */
+        public Builder setVolumeSortAccountingRealization(
+                @Nullable VolumeSortAccountingRealization volumeSortAccountingRealization
+        ) {
+            position.volumeSortAccountingRealization = volumeSortAccountingRealization;
             return this;
         }
 
