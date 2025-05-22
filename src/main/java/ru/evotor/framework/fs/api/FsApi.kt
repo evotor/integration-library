@@ -62,6 +62,8 @@ object FsApi {
             cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER)
         val fiscalDocumentSign: Int? =
             cursor.optInt(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN)
+        val address: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_SALE_ADDRESS)
+        val registrationInfo: String? = cursor.optString(KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_SALE_PLACE)
 
         date ?: return null
         inn ?: return null
@@ -70,6 +72,8 @@ object FsApi {
         workModeFlags ?: return null
         fiscalDocumentNumber ?: return null
         fiscalDocumentSign ?: return null
+        address ?: return null
+        registrationInfo ?: return null
 
         return FsFiscalizationDocument(
             date = date,
@@ -81,7 +85,9 @@ object FsApi {
             ofdInn = ofdInn,
             reregistrationReasonCode = reregistrationReasonCode,
             fiscalDocumentNumber = fiscalDocumentNumber,
-            fiscalDocumentSign = fiscalDocumentSign
+            fiscalDocumentSign = fiscalDocumentSign,
+            address = address,
+            registrationInfo = registrationInfo,
         )
     }
 
@@ -101,7 +107,9 @@ object FsApi {
                 KktContract.COLUMN_FS_REGISTRATION_INFO_OFD_INN,
                 KktContract.COLUMN_FS_REGISTRATION_INFO_REREGISTRATION_REASON_CODE,
                 KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_NUMBER,
-                KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN
+                KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_DOCUMENT_SIGN,
+                KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_SALE_ADDRESS,
+                KktContract.COLUMN_FS_REGISTRATION_INFO_FISCAL_SALE_PLACE
             ),
             null,
             null,

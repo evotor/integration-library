@@ -49,7 +49,15 @@ data class FsFiscalizationDocument(
     /**
      * Фискальный признак
      */
-    val fiscalDocumentSign: Int
+    val fiscalDocumentSign: Int,
+    /**
+     * Адрес расчета
+     */
+    val address: String?,
+    /**
+     * Место расчета
+     */
+    val registrationInfo: String?,
 ) {
     /**
      * Список систем налогообложения
@@ -122,3 +130,4 @@ data class FsFiscalizationDocument(
         return value and mask == mask
     }
 }
+
