@@ -10,8 +10,8 @@ abstract class FiscalDocument internal constructor() : Document() {
 
     abstract val kktRegistrationNumber: String
     abstract val sessionNumber: Long
-    abstract val fiscalStorageNumber: Long
-    abstract val fiscalIdentifier: Long
+    abstract val fiscalStorageNumber: String
+    abstract val fiscalIdentifier: String
 
     override fun toBundle(): Bundle = FiscalDocumentMapper.write(this)
 }

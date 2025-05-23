@@ -35,6 +35,7 @@ data class FiscalReceipt internal constructor(
         /**
          * Регистрационный номер ККТ
          */
+        @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
         override val kktRegistrationNumber: String,
 
         /**
@@ -47,13 +48,13 @@ data class FiscalReceipt internal constructor(
          * Номер фискального накопителя
          */
         @FiscalRequisite(tag = FiscalTags.FISCAL_STORAGE_NUMBER)
-        override val fiscalStorageNumber: Long,
+        override val fiscalStorageNumber: String,
 
         /**
          * Фискальный признак (фискальный идентификатор) документа
          */
         @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
-        override val fiscalIdentifier: Long,
+        override val fiscalIdentifier: String,
 
         /**
          * Был ли напечатан фискальный чек
