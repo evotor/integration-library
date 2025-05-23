@@ -26,8 +26,7 @@ internal object FiscalReceiptMapper {
                 fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(it)
                         ?: return null,
                 fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(it) ?: return null,
-                wasPrinted = it.getBoolean(KEY_WAS_PRINTED),
-                kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumberAsString(it) ?: return null
+                wasPrinted = it.getBoolean(KEY_WAS_PRINTED)
         )
     }
 
@@ -46,8 +45,7 @@ internal object FiscalReceiptMapper {
                     ?: throwOutdatedLibraryException(),
             fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
                     ?: throwOutdatedLibraryException(),
-            wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException(),
-            kktRegNumber = FiscalDocumentMapper.readKktRegistrationNumberAsString(cursor) ?: throwOutdatedLibraryException()
+            wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
     )
 
     private fun throwOutdatedLibraryException(): Nothing =
