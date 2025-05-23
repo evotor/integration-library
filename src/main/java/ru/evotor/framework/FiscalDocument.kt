@@ -7,10 +7,11 @@ import java.util.*
 abstract class FiscalDocument internal constructor() : Document() {
     abstract val documentNumber: Long
     abstract val creationDate: Date
-    abstract val kktRegistrationNumber: Long
+
+    abstract val kktRegistrationNumber: String
     abstract val sessionNumber: Long
-    abstract val fiscalStorageNumber: Long
-    abstract val fiscalIdentifier: Long
+    abstract val fiscalStorageNumber: String
+    abstract val fiscalIdentifier: String
 
     override fun toBundle(): Bundle = FiscalDocumentMapper.write(this)
 }
