@@ -32,15 +32,9 @@ internal object FiscalDocumentMapper {
                 SimpleDateFormat(FISCAL_DATE_PATTERN, Locale.getDefault()).parse(dateString)
             }
 
-    fun readKktRegistrationNumberAsString(bundle: Bundle?): String? = bundle?.getString(KEY_KKT_REG_NUMBER)
+    fun readKktRegistrationNumber(bundle: Bundle?): String? = bundle?.getString(KEY_KKT_REG_NUMBER) ?: bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)?.toString()
 
-    fun readKktRegistrationNumberAsString(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
-
-    @Deprecated("Используйте readKktRegistrationNumber", replaceWith = ReplaceWith("FiscalDocumentMapper.readKktRegistrationNumberAsString(bundle)"))
-    fun readKktRegistrationNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)
-
-    @Deprecated("Используйте readKktRegistrationNumber", replaceWith = ReplaceWith("FiscalDocumentMapper.readKktRegistrationNumberAsString(cursor)"))
-    fun readKktRegistrationNumber(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
+    fun readKktRegistrationNumber(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
 
     fun readSessionNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_SESSION_NUMBER)
 
@@ -57,8 +51,7 @@ internal object FiscalDocumentMapper {
     fun write(fiscalDocument: FiscalDocument) = DocumentMapper.write(fiscalDocument).apply {
         this.putLong(KEY_DOCUMENT_NUMBER, fiscalDocument.documentNumber)
         this.putSerializable(KEY_CREATION_DATE, fiscalDocument.creationDate)
-        this.putLong(KEY_KKT_REGISTRATION_NUMBER, fiscalDocument.kktRegistrationNumber)
-        this.putString(KEY_KKT_REG_NUMBER, fiscalDocument.kktRegNumber)
+        this.putString(KEY_KKT_REG_NUMBER, fiscalDocument.kktRegistrationNumber)
         this.putLong(KEY_SESSION_NUMBER, fiscalDocument.sessionNumber)
         this.putLong(KEY_FISCAL_STORAGE_NUMBER, fiscalDocument.fiscalStorageNumber)
         this.putLong(KEY_FISCAL_IDENTIFIER, fiscalDocument.fiscalIdentifier)
