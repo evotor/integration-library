@@ -29,6 +29,14 @@ data class AdditionalTransactionData(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         ParcelableUtils.writeExpand(parcel, VERSION) { parcel ->
+            // version 1
+            parcel.writeString("") // fake tid
+            parcel.writeString("") // fake inn
+            parcel.writeString("") // fake primaryAccountNumber
+            parcel.writeString("") // fake issuerBik
+            parcel.writeString("") // fake issuerTransactionNumber
+
+            // version 2
             parcel.writeString(tid)
             parcel.writeLong(initialDatetime)
             parcel.writeString(paymentSystemCode)
@@ -81,12 +89,19 @@ data class AdditionalTransactionData(
         private fun create(dest: Parcel): AdditionalTransactionData? {
             var additionalTransactionData: AdditionalTransactionData? = null
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
+                // version 1
+                parcel.readString() // fake tid
+                parcel.readString() // fake inn
+                parcel.readString() // fake primaryAccountNumber
+                parcel.readString() // fake issuerBik
+                parcel.readString() // fake issuerTransactionNumber
+
                 if (version >= 2) {
                     val tid = parcel.readString()
                     val initialDatetime = parcel.readLong()
-                    val paymentSystemCode = parcel.readString() ?: throw IllegalStateException("paymentSystemCode should be null")
-                    val acquiringBankCode = parcel.readString() ?: throw IllegalStateException("acquiringBankCode should be null")
-                    val authorizationCode = parcel.readString() ?: throw IllegalStateException("authorizationCode should be null")
+                    val paymentSystemCode = parcel.readString() ?: throw IllegalStateException("paymentSystemCode should not be null")
+                    val acquiringBankCode = parcel.readString() ?: throw IllegalStateException("acquiringBankCode should not be null")
+                    val authorizationCode = parcel.readString() ?: throw IllegalStateException("authorizationCode should not be null")
                     val transactionId = parcel.readString()
 
                     additionalTransactionData = AdditionalTransactionData(
