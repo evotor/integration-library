@@ -2015,6 +2015,7 @@ public class Position implements Parcelable {
          * молочная продукция {@link ProductType#DAIRY_MARKED}
          * маркированное безалкогольное пиво {@link ProductType#NOT_ALCOHOL_BEER_MARKED}
          * маркированное пиво в бутылках {@link ProductType#BEER_MARKED}
+         * маркированное пиво (Кеги) {@link ProductType#BEER_MARKED_KEG}
          * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
          * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
          * не может использоваться совместно с setPartialRealization
