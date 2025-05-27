@@ -33,6 +33,7 @@ import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 /**
@@ -246,9 +247,9 @@ public class Position implements Parcelable {
      * - вода {@link ProductType#WATER_MARKED}
      * <p>
      */
-    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
     @Nullable
-    private VolumeSortAccountingRealization volumeSortAccountingRealization;
+    private VolumeSortAccounting volumeSortAccounting;
 
     public Position(
             String uuid,
@@ -324,7 +325,7 @@ public class Position implements Parcelable {
         this.isMarkSkipped = position.isMarkSkipped;
         this.saleBanTime = position.saleBanTime;
         this.veterinaryAttribute = position.veterinaryAttribute;
-        this.volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
+        this.volumeSortAccounting = position.getVolumeSortAccounting();
     }
 
     /**
@@ -656,10 +657,10 @@ public class Position implements Parcelable {
     /**
      * @return Выбытие по объемно-сортовому учету(ОСУ) 1191
      */
-    @FiscalRequisite(tag = FiscalTags.VOLUME_SORT_ACCOUNTING_REALIZATION)
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
     @Nullable
-    public VolumeSortAccountingRealization getVolumeSortAccountingRealization() {
-        return volumeSortAccountingRealization;
+    public VolumeSortAccounting getVolumeSortAccounting() {
+        return volumeSortAccounting;
     }
 
     @Override
@@ -735,7 +736,7 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(veterinaryAttribute, position.veterinaryAttribute))
             return false;
-        if (!Objects.equals(volumeSortAccountingRealization, position.volumeSortAccountingRealization))
+        if (!Objects.equals(volumeSortAccounting, position.volumeSortAccounting))
             return false;
         return Objects.equals(subPositions, position.subPositions);
     }
@@ -773,7 +774,7 @@ public class Position implements Parcelable {
         result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
         result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
-        result = 31 * result + (volumeSortAccountingRealization != null ? volumeSortAccountingRealization.hashCode() : 0);
+        result = 31 * result + (volumeSortAccounting != null ? volumeSortAccounting.hashCode() : 0);
         return result;
     }
 
@@ -810,7 +811,7 @@ public class Position implements Parcelable {
                 ", isAgeLimited=" + isAgeLimited +
                 ", isMarkSkipped=" + isMarkSkipped +
                 ", veterinaryAttribute=" + veterinaryAttribute +
-                ", volumeSortAccountingRealization=" + volumeSortAccountingRealization +
+                ", volumeSortAccounting=" + volumeSortAccounting +
                 '}';
     }
 
@@ -905,7 +906,7 @@ public class Position implements Parcelable {
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
         dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
         // Volume Sort Accounting Realization
-        dest.writeBundle(this.volumeSortAccountingRealization != null ? this.volumeSortAccountingRealization.toBundle() : null);
+        dest.writeBundle(this.volumeSortAccounting != null ? this.volumeSortAccounting.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -1016,7 +1017,7 @@ public class Position implements Parcelable {
             readVeterinaryAttribute(in);
         }
         if (version >= 16) {
-            readVolumeSortAccountingRealization(in);
+            readVolumeSortAccounting(in);
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
@@ -1072,8 +1073,8 @@ public class Position implements Parcelable {
         this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
     }
 
-    private void readVolumeSortAccountingRealization(Parcel in) {
-        this.volumeSortAccountingRealization = VolumeSortAccountingRealization.Companion.from(
+    private void readVolumeSortAccounting(Parcel in) {
+        this.volumeSortAccounting = VolumeSortAccounting.fromBundle(
                 in.readBundle(VolumeSortAccountingRealization.class.getClassLoader())
         );
     }
@@ -1793,17 +1794,6 @@ public class Position implements Parcelable {
             position.tareVolume = tareVolume;
         }
 
-        public Builder toVolumeSortAccountingRealization(
-                @NonNull BigDecimal volumeSortQuantity,
-                @NonNull String gtin
-        ) {
-            position.volumeSortAccountingRealization = new VolumeSortAccountingRealization(
-                    gtin,
-                    volumeSortQuantity
-            );
-            return this;
-        }
-
         private void setShoesParams(Mark mark) {
             position.mark = mark;
         }
@@ -2023,14 +2013,18 @@ public class Position implements Parcelable {
          * <p>
          * вода {@link ProductType#WATER_MARKED}
          * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * маркированное безалкогольное пиво {@link ProductType#NOT_ALCOHOL_BEER_MARKED}
+         * маркированное пиво в бутылках {@link ProductType#BEER_MARKED}
+         * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
+         * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
          * не может использоваться совместно с setPartialRealization
          *
-         * @param volumeSortAccountingRealization реализация по ОСУ
+         * @param volumeSortAccounting реализация по ОСУ
          */
-        public Builder setVolumeSortAccountingRealization(
-                @Nullable VolumeSortAccountingRealization volumeSortAccountingRealization
+        public Builder setVolumeSortAccounting(
+                @Nullable VolumeSortAccounting volumeSortAccounting
         ) {
-            position.volumeSortAccountingRealization = volumeSortAccountingRealization;
+            position.volumeSortAccounting = volumeSortAccounting;
             return this;
         }
 

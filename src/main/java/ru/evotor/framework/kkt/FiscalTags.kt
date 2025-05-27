@@ -207,9 +207,4 @@ object FiscalTags {
      * дополнительный реквизит предмета расчета
      */
     const val ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION = 1191
-
-    /**
-     * выбытие по ОСУ
-     */
-    const val VOLUME_SORT_ACCOUNTING_REALIZATION = ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION
 }
