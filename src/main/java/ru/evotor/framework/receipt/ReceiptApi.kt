@@ -32,7 +32,7 @@ import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMap
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
-import ru.evotor.framework.receipt.position.mapper.VolumeSortAccountingRealizationMapper
+import ru.evotor.framework.receipt.position.mapper.VolumeSortAccountingMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import java.math.BigDecimal
 import java.util.Date
@@ -476,7 +476,7 @@ object ReceiptApi {
             .setIsMarkSkipped(isMarkSkipped)
             .setIsAgeLimited(isAgeLimited)
             .setVeterinaryAttribute(veterinaryAttribute)
-            .setVolumeSortAccountingRealization(VolumeSortAccountingRealizationMapper.fromCursor(cursor))
+            .setVolumeSortAccounting(VolumeSortAccountingMapper.fromCursor(cursor))
         return builder.build()
     }
 

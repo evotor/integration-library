@@ -30,6 +30,7 @@ import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 public final class PositionMapper {
@@ -100,7 +101,7 @@ public final class PositionMapper {
     private static final String KEY_SALE_BAN_TIME = "sale_ban_time";
     private static final String KEY_VETERINARY_ATTRIBUTE = "veterinary_attribute";
 
-    private static final String KEY_VOLUME_SORT_ACCOUNTING_REALIZATION = "volumeSortAccountingRealization";
+    private static final String KEY_VOLUME_SORT_ACCOUNTING = "volumeSortAccounting";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -182,8 +183,8 @@ public final class PositionMapper {
         );
         VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(bundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
 
-        VolumeSortAccountingRealization volumeSortAccountingRealization =
-                VolumeSortAccountingRealization.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING_REALIZATION));
+        VolumeSortAccounting volumeSortAccounting =
+                VolumeSortAccounting.fromBundle(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
@@ -218,7 +219,7 @@ public final class PositionMapper {
         builder.setIsMarkSkipped(isMarkSkipped);
         builder.setSaleBanTime(saleBanTime);
         builder.setVeterinaryAttribute(veterinaryAttribute);
-        builder.setVolumeSortAccountingRealization(volumeSortAccountingRealization);
+        builder.setVolumeSortAccounting(volumeSortAccounting);
         return builder.build();
     }
 
@@ -308,10 +309,10 @@ public final class PositionMapper {
         bundle.putBundle(KEY_SALE_BAN_TIME, position.getSaleBanTime() != null ? position.getSaleBanTime().toBundle() : null);
         bundle.putBundle(KEY_VETERINARY_ATTRIBUTE, position.getVeterinaryAttribute() != null ? position.getVeterinaryAttribute().toBundle() : null);
 
-        final VolumeSortAccountingRealization volumeSortAccountingRealization = position.getVolumeSortAccountingRealization();
+        final VolumeSortAccounting volumeSortAccounting = position.getVolumeSortAccounting();
         bundle.putBundle(
-                KEY_VOLUME_SORT_ACCOUNTING_REALIZATION,
-                volumeSortAccountingRealization != null ? volumeSortAccountingRealization.toBundle() : null
+                KEY_VOLUME_SORT_ACCOUNTING,
+                volumeSortAccounting != null ? volumeSortAccounting.toBundle() : null
         );
 
         return bundle;
