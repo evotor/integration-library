@@ -31,7 +31,6 @@ import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.VolumeSortAccounting;
-import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 public final class PositionMapper {
 
@@ -184,7 +183,7 @@ public final class PositionMapper {
         VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(bundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
 
         VolumeSortAccounting volumeSortAccounting =
-                VolumeSortAccounting.fromBundle(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
+                VolumeSortAccounting.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,

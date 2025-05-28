@@ -34,7 +34,6 @@ import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.framework.receipt.position.VolumeSortAccounting;
-import ru.evotor.framework.receipt.position.VolumeSortAccountingRealization;
 
 /**
  * Позиция чека.
@@ -1074,8 +1073,8 @@ public class Position implements Parcelable {
     }
 
     private void readVolumeSortAccounting(Parcel in) {
-        this.volumeSortAccounting = VolumeSortAccounting.fromBundle(
-                in.readBundle(VolumeSortAccountingRealization.class.getClassLoader())
+        this.volumeSortAccounting = VolumeSortAccounting.from(
+                in.readBundle(VolumeSortAccounting.class.getClassLoader())
         );
     }
 

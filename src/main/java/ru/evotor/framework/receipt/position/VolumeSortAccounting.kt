@@ -1,41 +1,30 @@
 package ru.evotor.framework.receipt.position
 
+import android.database.Cursor
 import android.os.Bundle
 import ru.evotor.IBundlable
-import ru.evotor.framework.receipt.position.mapper.VolumeSortAccountingMapper
+import ru.evotor.framework.Utils
+import ru.evotor.framework.optBigDecimal
+import ru.evotor.framework.optQuantity
+import ru.evotor.framework.optString
+import ru.evotor.framework.receipt.PositionTable
 import java.math.BigDecimal
 
-sealed class VolumeSortAccounting : IBundlable {
 
-    override fun toBundle(): Bundle {
-        return VolumeSortAccountingMapper.toBundle(this)
-    }
-
-    data class Piece(
-        /**
-         * Идентификатор продукта GTIN
-         */
-        val gtin: String,
-        /**
-         * Тип выбытия по ОСУ
-         */
-        val type: RealizationType = RealizationType.HORECA
-    ) : VolumeSortAccounting()
-
-    data class Measured(
-        /**
-         * Идентификатор продукта GTIN
-         */
-        val gtin: String,
-        /**
-         * Количество товара по ОСУ
-         */
-        val quantity: BigDecimal,
-        /**
-         * Тип выбытия по ОСУ
-         */
-        val type: RealizationType = RealizationType.HORECA
-    ) : VolumeSortAccounting()
+data class VolumeSortAccounting(
+    /**
+     * Идентификатор продукта GTIN
+     */
+    val gtin: String,
+    /**
+     * Количество товара по ОСУ
+     */
+    val quantity: BigDecimal? = null,
+    /**
+     * Тип выбытия по ОСУ
+     */
+    val type: RealizationType = RealizationType.HORECA
+) : IBundlable {
 
     enum class RealizationType {
         /**
@@ -49,10 +38,42 @@ sealed class VolumeSortAccounting : IBundlable {
         WHOLESALE
     }
 
+    override fun toBundle() = Bundle().apply {
+        putString(KEY_VOLUME_SORT_QUANTITY, quantity?.toPlainString())
+        putString(KEY_GTIN, gtin)
+        putString(REALIZATION_TYPE, type.name)
+    }
+
     companion object {
+
+        private const val KEY_VOLUME_SORT_QUANTITY = "VolumeSortQuantity"
+        private const val KEY_GTIN = "GTIN"
+        private const val REALIZATION_TYPE = "REALIZATION_TYPE_KEY"
+
         @JvmStatic
-        fun fromBundle(bundle: Bundle?): VolumeSortAccounting? {
-            return VolumeSortAccountingMapper.fromBundle(bundle)
+        fun from(bundle: Bundle?): VolumeSortAccounting? = bundle?.let {
+            val quantity = it.optBigDecimal(KEY_VOLUME_SORT_QUANTITY)
+            val gtin = it.getString(KEY_GTIN) ?: return null
+            val type = Utils.safeValueOf(
+                RealizationType::class.java,
+                it.getString(REALIZATION_TYPE),
+                RealizationType.HORECA
+            )
+
+            VolumeSortAccounting(quantity = quantity, gtin = gtin, type = type)
+        }
+
+        @JvmStatic
+        fun from(cursor: Cursor?): VolumeSortAccounting? {
+            return VolumeSortAccounting(
+                gtin = cursor?.optString(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_GTIN) ?: return null,
+                quantity = cursor.optQuantity(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_QUANTITY),
+                type = Utils.safeValueOf(
+                    RealizationType::class.java,
+                    cursor.optString(PositionTable.COLUMN_VOLUME_SORT_ACCOUNTING_REALIZATION_TYPE),
+                    RealizationType.HORECA
+                )
+            )
         }
     }
 }
