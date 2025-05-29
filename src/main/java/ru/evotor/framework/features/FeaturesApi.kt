@@ -320,4 +320,18 @@ object FeaturesApi {
                 it.moveToFirst()
                 it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
             } ?: defaultValue
+
+    /**
+     * Проверяет, активна ли функция "Маркировка кормов для животных" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isPetFoodMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PET_FOOD_MARKED)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка растительных масел]" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVegetableOilMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VEGETABLE_OIL_MARKED)
 }
