@@ -73,6 +73,10 @@ object ReceiptApi {
 
 
     @JvmStatic
+    @Deprecated(
+        message = "Use getProductsByBarcode from InventoryApi",
+        replaceWith = ReplaceWith(expression = "InventoryApi.getProductsByBarcode(context, barcode)", imports = ["ru.evotor.framework.inventory.InventoryApi"])
+    )
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
