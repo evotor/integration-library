@@ -19,6 +19,7 @@ public final class PrintGroupMapper {
     private static final String KEY_SHOULD_PRINT_RECEIPT = "shouldPrintReceipt";
     private static final String KEY_PURCHASER = "purchaser";
     private static final String KEY_MEDICINE_ATTRIBUTE = "medicineAttribute";
+    private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
 
     @Nullable
     public static PrintGroup from(@Nullable Bundle bundle) {
@@ -34,6 +35,7 @@ public final class PrintGroupMapper {
         boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
         Purchaser purchaser = Purchaser.Companion.fromBundle(bundle.getBundle(KEY_PURCHASER));
         MedicineAttribute medicineAttribute = MedicineAttribute.Companion.fromBundle(bundle.getBundle(KEY_MEDICINE_ATTRIBUTE));
+        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, true);
         return new PrintGroup(
                 identifier,
                 Utils.safeValueOf(PrintGroup.Type.class, type, PrintGroup.Type.CASH_RECEIPT),
@@ -43,7 +45,8 @@ public final class PrintGroupMapper {
                 Utils.safeValueOf(TaxationSystem.class, taxationSystem, null),
                 shouldPrintReceipt,
                 purchaser,
-                medicineAttribute
+                medicineAttribute,
+                receiptFromInternet
         );
     }
 
@@ -62,6 +65,7 @@ public final class PrintGroupMapper {
         bundle.putBoolean(KEY_SHOULD_PRINT_RECEIPT, printGroup.isShouldPrintReceipt());
         bundle.putBundle(KEY_PURCHASER, printGroup.getPurchaser() == null ? null : printGroup.getPurchaser().toBundle());
         bundle.putBundle(KEY_MEDICINE_ATTRIBUTE, printGroup.getMedicineAttribute() == null ? null : printGroup.getMedicineAttribute().toBundle());
+        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, printGroup.isReceiptFromInternet());
 
         return bundle;
     }
