@@ -16,7 +16,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         val taxationSystem: TaxationSystem,
         val correctionType: CorrectionType,
         val basisForCorrection: String,
-        val prescriptionNumber: String,
+        val prescriptionNumber: String? = null,
         val correctableSettlementDate: Date,
         val amountPaid: BigDecimal,
         val paymentType: PaymentType,
@@ -48,8 +48,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
                     getCorrectionType(it),
                     it.getString(KEY_BASIS_FOR_CORRECTION)
                             ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
-                    it.getString(KEY_PRESCRIPTION_NUMBER)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                    it.getString(KEY_PRESCRIPTION_NUMBER),
                     Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
                     BigDecimal(it.getString(KEY_AMOUNT_PAID)),
                     PaymentType.valueOf(it.getString(KEY_PAYMENT_TYPE)
