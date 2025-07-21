@@ -35,7 +35,7 @@ public final class PrintGroupMapper {
         boolean shouldPrintReceipt = bundle.getBoolean(KEY_SHOULD_PRINT_RECEIPT, true);
         Purchaser purchaser = Purchaser.Companion.fromBundle(bundle.getBundle(KEY_PURCHASER));
         MedicineAttribute medicineAttribute = MedicineAttribute.Companion.fromBundle(bundle.getBundle(KEY_MEDICINE_ATTRIBUTE));
-        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, true);
+        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
         return new PrintGroup(
                 identifier,
                 Utils.safeValueOf(PrintGroup.Type.class, type, PrintGroup.Type.CASH_RECEIPT),
