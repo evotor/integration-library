@@ -19,11 +19,11 @@ public class PrintGroup implements Parcelable {
     /**
      * Текущая версия объекта PrintGroup.
      */
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
 
     private static final String DEFAULT_PRINT_GROUP_IDENTIFIER = "46dd89f0-3a54-470a-a166-ad01fa34b86a";
 
-    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null);
+    public static final PrintGroup DEFAULT = new PrintGroup(DEFAULT_PRINT_GROUP_IDENTIFIER, Type.CASH_RECEIPT, null, null, null, null, true, null, null, false);
 
     /**
      * Идентификатор печатной группы.
@@ -68,6 +68,11 @@ public class PrintGroup implements Parcelable {
     @Nullable
     private MedicineAttribute medicineAttribute;
 
+    /**
+     * Признак расчета в «Интернет».
+     */
+    private boolean receiptFromInternet;
+
     @Deprecated
     public PrintGroup(
             String identifier,
@@ -78,7 +83,7 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt
     ) {
-        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null);
+        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null, false);
     }
 
     public PrintGroup(
@@ -90,7 +95,8 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt,
             @Nullable Purchaser purchaser,
-            @Nullable MedicineAttribute medicineAttribute
+            @Nullable MedicineAttribute medicineAttribute,
+            boolean receiptFromInternet
     ) {
         this.identifier = identifier;
         this.type = type;
@@ -101,6 +107,7 @@ public class PrintGroup implements Parcelable {
         this.shouldPrintReceipt = shouldPrintReceipt;
         this.purchaser = purchaser;
         this.medicineAttribute = medicineAttribute;
+        this.receiptFromInternet = receiptFromInternet;
     }
 
     public String getIdentifier() {
@@ -142,6 +149,10 @@ public class PrintGroup implements Parcelable {
         return medicineAttribute;
     }
 
+    public boolean isReceiptFromInternet() {
+        return receiptFromInternet;
+    }
+
     public enum Type {
         /**
          * Кассовый чек, напечатанный средствами ККМ
@@ -179,6 +190,8 @@ public class PrintGroup implements Parcelable {
                 parcel.writeParcelable(PrintGroup.this.purchaser, flags);
                 /* version = 2*/
                 parcel.writeParcelable(PrintGroup.this.medicineAttribute, flags);
+                /* version = 3*/
+                parcel.writeInt(PrintGroup.this.receiptFromInternet ? 1 : 0);
                 return Unit.INSTANCE;
             }
         });
@@ -208,6 +221,10 @@ public class PrintGroup implements Parcelable {
 
                 if (version >= 2) {
                     PrintGroup.this.medicineAttribute = parcel.readParcelable(MedicineAttribute.class.getClassLoader());
+                }
+
+                if (version >= 3) {
+                    PrintGroup.this.receiptFromInternet = in.readInt() == 1;
                 }
 
                 return Unit.INSTANCE;
@@ -246,6 +263,7 @@ public class PrintGroup implements Parcelable {
         if (taxationSystem != that.taxationSystem) return false;
         if (purchaser != null ? !purchaser.equals(that.purchaser) : that.purchaser != null)
             return false;
+        if (receiptFromInternet != that.receiptFromInternet) return false;
 
         return medicineAttribute != null ? medicineAttribute.equals(that.medicineAttribute) : that.medicineAttribute == null;
     }
@@ -261,6 +279,7 @@ public class PrintGroup implements Parcelable {
         result = 31 * result + (shouldPrintReceipt ? 1 : 0);
         result = 31 * result + (purchaser != null ? purchaser.hashCode() : 0);
         result = 31 * result + (medicineAttribute != null ? medicineAttribute.hashCode() : 0);
+        result = 31 * result + (receiptFromInternet ? 1 : 0);
 
         return result;
     }
