@@ -86,7 +86,6 @@ public class PrintGroup implements Parcelable {
         this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null, false);
     }
 
-    @Deprecated
     public PrintGroup(
             String identifier,
             Type type,
