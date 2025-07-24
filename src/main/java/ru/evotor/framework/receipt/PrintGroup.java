@@ -95,6 +95,20 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt,
             @Nullable Purchaser purchaser,
+            @Nullable MedicineAttribute medicineAttribute
+    ) {
+        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, purchaser, medicineAttribute, false);
+    }
+
+    public PrintGroup(
+            String identifier,
+            Type type,
+            String orgName,
+            String orgInn,
+            String orgAddress,
+            TaxationSystem taxationSystem,
+            boolean shouldPrintReceipt,
+            @Nullable Purchaser purchaser,
             @Nullable MedicineAttribute medicineAttribute,
             boolean receiptFromInternet
     ) {
