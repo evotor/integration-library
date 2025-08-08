@@ -41,9 +41,6 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
     @JvmField
     val tareVolume = addFieldFilter<BigDecimal?, BigDecimal?>(ProductTable.ROW_TARE_VOLUME, {it?.multiply(BigDecimal(1000))})
 
-    override val currentQuery: ProductQuery
-        get() = this
-
     class SortOrder : FilterBuilder.SortOrder<SortOrder>() {
 
         @JvmField
@@ -76,9 +73,6 @@ class ProductQuery : FilterBuilder<ProductQuery, ProductQuery.SortOrder, Product
         val alcoholProductKindCode = addFieldSorter(ProductTable.ROW_ALCOHOL_PRODUCT_KIND_CODE)
         @JvmField
         val tareVolume = addFieldSorter(ProductTable.ROW_TARE_VOLUME)
-
-        override val currentSortOrder: SortOrder
-            get() = this
 
     }
 
