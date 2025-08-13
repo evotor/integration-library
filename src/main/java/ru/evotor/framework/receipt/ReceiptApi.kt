@@ -352,7 +352,7 @@ object ReceiptApi {
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
             medicineAttribute,
-            cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET)) == 1,
+            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1,
         )
     }
 
