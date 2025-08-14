@@ -8,12 +8,11 @@ import java.math.BigDecimal
  * Событие, которое возникает при оплате чека продажи сторонней платёжной системой.
  */
 class PaymentSystemSellEvent(
-        val receiptUuid: String,
-        val accoundId: String?,
-        val sum: BigDecimal,
-        val description: String?
+    val receiptUuid: String,
+    val accoundId: String?,
+    val sum: BigDecimal,
+    val description: String?
 ) : PaymentSystemEvent(PaymentSystemEvent.OperationType.SELL) {
-
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RECEIPT_UUID, receiptUuid)

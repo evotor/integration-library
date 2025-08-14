@@ -3,9 +3,7 @@ package ru.evotor.framework.core.action.datamapper
 import android.os.Bundle
 import ru.evotor.framework.inventory.AttributeValue
 
-
 object PositionAttributesMapper {
-
     @JvmStatic
     fun fromBundle(attributes: Bundle?): Map<String, AttributeValue>? {
         attributes?.let { bundle ->
@@ -21,7 +19,6 @@ object PositionAttributesMapper {
         } ?: return null
     }
 
-
     @JvmStatic
     fun toBundle(attributes: Map<String, AttributeValue>?): Bundle? {
         attributes?.let {
@@ -32,5 +29,4 @@ object PositionAttributesMapper {
             }
         } ?: return null
     }
-
 }

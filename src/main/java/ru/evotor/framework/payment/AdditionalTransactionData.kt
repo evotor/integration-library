@@ -13,9 +13,8 @@ data class AdditionalTransactionData(
     val paymentSystemCode: String,
     val acquiringBankCode: String,
     val authorizationCode: String,
-    val transactionId: String?,
+    val transactionId: String?
 ) : IBundlable, Parcelable {
-
     override fun toBundle(): Bundle {
         val bundle = Bundle()
         bundle.putString(KEY_TID, tid)
@@ -51,7 +50,6 @@ data class AdditionalTransactionData(
     }
 
     companion object {
-
         private const val VERSION = 2
 
         private const val KEY_TID = "tid"
@@ -66,7 +64,7 @@ data class AdditionalTransactionData(
             bundle ?: return null
 
             return AdditionalTransactionData(
-                tid = bundle.getString(KEY_TID),
+                tid = bundle.getString(KEY_TID) ?: return null,
                 initialDatetime = bundle.optLong(KEY_INITIAL_DATETIME) ?: return null,
                 paymentSystemCode = bundle.getString(KEY_PAYMENT_SYSTEM_CODE) ?: return null,
                 acquiringBankCode = bundle.getString(KEY_ACQUIRING_BANK_CODE) ?: return null,
@@ -115,7 +113,6 @@ data class AdditionalTransactionData(
                 }
             }
             return additionalTransactionData
-
         }
     }
 }

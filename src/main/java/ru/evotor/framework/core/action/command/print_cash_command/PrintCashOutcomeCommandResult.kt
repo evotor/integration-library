@@ -7,7 +7,6 @@ class PrintCashOutcomeCommandResult : IBundlable {
     override fun toBundle(): Bundle = Bundle()
 
     companion object {
-
         /**
          * Поле "получатель" не может быть пустым
          */

@@ -11,9 +11,9 @@ abstract class PaymentDelegatorEventProcessor : ActionProcessor() {
             return
         }
         call(
-                action,
-                event,
-                callback
+            action,
+            event,
+            callback
         )
     }
 

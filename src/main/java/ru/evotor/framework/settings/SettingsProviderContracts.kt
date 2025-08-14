@@ -9,7 +9,6 @@ enum class SettingsProviderContracts(
     val path: String,
     val columnName: String
 ) {
-
     /**
      * Количество печати слип-чеков.
      */

@@ -23,7 +23,6 @@ data class MarksCheckingInfo(
     }
 
     companion object {
-
         private const val KEY_CHECK_ID = "CheckId"
         private const val KEY_TIMESTAMP = "Timestamp"
 

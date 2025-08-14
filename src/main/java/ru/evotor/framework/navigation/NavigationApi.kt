@@ -212,7 +212,6 @@ object NavigationApi {
         }
     }
 
-
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции прихода.
      *
@@ -230,7 +229,6 @@ object NavigationApi {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
         }
     }
-
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции расхода.
@@ -267,7 +265,6 @@ object NavigationApi {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
         }
     }
-
 
     /**
      * Создаёт `intent`, который открывает окно оплаты чека коррекции возврата расхода.
@@ -409,6 +406,4 @@ object NavigationApi {
             putExtra(EXTRA_PRODUCT_UUID, uuid)
         }
     }
-
-
 }

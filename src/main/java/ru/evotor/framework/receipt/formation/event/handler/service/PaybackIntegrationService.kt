@@ -10,7 +10,6 @@ import ru.evotor.framework.receipt.formation.event.*
  * Служба для работы с чеком возврата.
  */
 abstract class PaybackIntegrationService : IntegrationServiceV2() {
-
     final override fun onEvent(action: String, bundle: Bundle): IBundlable? = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
@@ -67,7 +66,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
     companion object {
-
         /**
          * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек возврата.
          *

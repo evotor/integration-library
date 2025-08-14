@@ -1,9 +1,8 @@
 package ru.evotor.devices.commons;
 
+
 import android.content.Context;
 import android.os.DeadObjectException;
-
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import ru.evotor.devices.commons.exception.DeviceServiceException;
 import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
@@ -13,6 +12,8 @@ import ru.evotor.devices.commons.services.IPrinterServiceWrapper;
 import ru.evotor.devices.commons.services.IScalesServiceWrapper;
 import ru.evotor.devices.commons.services.PrinterService;
 import ru.evotor.devices.commons.services.ScalesService;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Класс, необходимый для инициализации встроенного или подключённого оборудования.
@@ -40,6 +41,7 @@ public class DeviceServiceConnector {
 
     /**
      * Получает событие о подключении оборудования.
+     *
      * @param connectionWrapper интерфейс для выполнения дейтвий при подключении и отключении принтера и весов.
      */
     public static void addConnectionWrapper(ConnectionWrapper connectionWrapper) {
@@ -75,6 +77,7 @@ public class DeviceServiceConnector {
 
     /**
      * Инициализирует встроенное и подключённое оборудование
+     *
      * @param appContext контекст приложения.
      */
     public static void startInitConnections(final Context appContext) {

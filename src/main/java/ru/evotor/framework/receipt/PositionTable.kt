@@ -3,7 +3,6 @@ package ru.evotor.framework.receipt
 import android.net.Uri
 
 object PositionTable {
-
     @JvmField
     val URI = Uri.withAppendedPath(ReceiptApi.BASE_URI, "position")
 

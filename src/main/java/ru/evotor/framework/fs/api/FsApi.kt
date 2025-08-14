@@ -132,9 +132,9 @@ object FsApi {
         }
     }
 
-
     sealed class GetFsFiscalizationDocumentResult {
         class Success(val document: FsFiscalizationDocument?) : GetFsFiscalizationDocumentResult()
+
         object Unsupported : GetFsFiscalizationDocumentResult()
     }
 }

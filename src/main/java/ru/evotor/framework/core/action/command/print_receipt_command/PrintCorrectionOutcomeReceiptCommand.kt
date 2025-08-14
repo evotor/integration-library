@@ -48,9 +48,8 @@ class PrintCorrectionOutcomeReceiptCommand(
     @FiscalRequisite(tag = FiscalTags.PRESCRIPTION_NUMBER)
     val prescription: String? = null,
     @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
-    val fiscalSignOfIncorrectReceipt: String? = null,
+    val fiscalSignOfIncorrectReceipt: String? = null
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         IntegrationManagerImpl
             .convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
@@ -93,7 +92,6 @@ class PrintCorrectionOutcomeReceiptCommand(
     }
 
     companion object {
-
         const val NAME = "evo.v2.receipt.correction.outcome.printReceipt"
 
         private const val KEY_PRINT_RECEIPTS = "printReceipts"

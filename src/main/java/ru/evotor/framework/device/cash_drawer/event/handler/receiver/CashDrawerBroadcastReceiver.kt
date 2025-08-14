@@ -11,7 +11,6 @@ import ru.evotor.framework.device.cash_drawer.event.CashDrawerOpenedEvent
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 abstract class CashDrawerBroadcastReceiver : BroadcastEventReceiver() {
-
     /**
      * Обработчик событий открытия денежного ящика.
      */
@@ -20,13 +19,15 @@ abstract class CashDrawerBroadcastReceiver : BroadcastEventReceiver() {
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            ACTION_CASH_DRAWER_OPENED -> handleCashDrawerOpenedEvent(context, CashDrawerOpenedEvent.from(bundle)
-                    ?: return)
+            ACTION_CASH_DRAWER_OPENED -> handleCashDrawerOpenedEvent(
+                context,
+                CashDrawerOpenedEvent.from(bundle)
+                    ?: return
+            )
         }
     }
 
     companion object {
         const val ACTION_CASH_DRAWER_OPENED = "evotor.intent.action.cashDrawer.OPEN"
     }
-
 }

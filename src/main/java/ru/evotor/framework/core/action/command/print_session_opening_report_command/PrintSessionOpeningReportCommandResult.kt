@@ -6,7 +6,6 @@ import ru.evotor.IBundlable
 class PrintSessionOpeningReportCommandResult(
     val notPrinted: Boolean = false
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         return Bundle().also {
             it.putBoolean(KEY_NOT_PRINTED, notPrinted)

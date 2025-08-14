@@ -12,18 +12,18 @@ import java.math.BigDecimal
 import java.util.*
 
 class CorrectionReceiptRegistrationRequestedEvent internal constructor(
-        val settlementType: SettlementType,
-        val taxationSystem: TaxationSystem,
-        val correctionType: CorrectionType,
-        val basisForCorrection: String,
-        val prescriptionNumber: String? = null,
-        val correctableSettlementDate: Date,
-        val amountPaid: BigDecimal,
-        val paymentType: PaymentType,
-        val vatRate: VatRate,
-        val correctionDescription: String,
-        var paymentAddress: String? = null,
-        var paymentPlace: String? = null
+    val settlementType: SettlementType,
+    val taxationSystem: TaxationSystem,
+    val correctionType: CorrectionType,
+    val basisForCorrection: String,
+    val prescriptionNumber: String? = null,
+    val correctableSettlementDate: Date,
+    val amountPaid: BigDecimal,
+    val paymentType: PaymentType,
+    val vatRate: VatRate,
+    val correctionDescription: String,
+    var paymentAddress: String? = null,
+    var paymentPlace: String? = null
 ) : IBundlable {
     companion object {
         private const val KEY_TAXATION_SYSTEM = "TAXATION_SYSTEM"
@@ -41,24 +41,33 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
 
         fun from(bundle: Bundle?): CorrectionReceiptRegistrationRequestedEvent? = bundle?.let {
             CorrectionReceiptRegistrationRequestedEvent(
-                    SettlementType.valueOf(it.getString(KEY_SETTLEMENT_TYPE)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
-                    TaxationSystem.valueOf(it.getString(KEY_TAXATION_SYSTEM)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
-                    getCorrectionType(it),
-                    it.getString(KEY_BASIS_FOR_CORRECTION)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
-                    it.getString(KEY_PRESCRIPTION_NUMBER)?: "",
-                    Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
-                    BigDecimal(it.getString(KEY_AMOUNT_PAID)),
-                    PaymentType.valueOf(it.getString(KEY_PAYMENT_TYPE)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
-                    VatRate.valueOf(it.getString(KEY_VAT_RATE)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)),
-                    it.getString(KEY_CORRECTION_DESCRIPTION)
-                            ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
-                    it.getString(KEY_PAYMENT_ADDRESS),
-                    it.getString(KEY_PAYMENT_PLACE)
+                SettlementType.valueOf(
+                    it.getString(KEY_SETTLEMENT_TYPE)
+                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                ),
+                TaxationSystem.valueOf(
+                    it.getString(KEY_TAXATION_SYSTEM)
+                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                ),
+                getCorrectionType(it),
+                it.getString(KEY_BASIS_FOR_CORRECTION)
+                    ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                it.getString(KEY_PRESCRIPTION_NUMBER)
+                    ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
+                BigDecimal(it.getString(KEY_AMOUNT_PAID)),
+                PaymentType.valueOf(
+                    it.getString(KEY_PAYMENT_TYPE)
+                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                ),
+                VatRate.valueOf(
+                    it.getString(KEY_VAT_RATE)
+                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                ),
+                it.getString(KEY_CORRECTION_DESCRIPTION)
+                    ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                it.getString(KEY_PAYMENT_ADDRESS),
+                it.getString(KEY_PAYMENT_PLACE)
             )
         }
 
@@ -69,7 +78,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
                 CorrectionType.values()[ordinal]
             } else {
                 val correctionTypeName = bundle.getString(KEY_CORRECTION_TYPE)
-                        ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
+                    ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java)
                 CorrectionType.valueOf(correctionTypeName)
             }
         }
@@ -80,7 +89,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         putString(KEY_TAXATION_SYSTEM, taxationSystem.name)
         putString(KEY_CORRECTION_TYPE, correctionType.name)
         putString(KEY_BASIS_FOR_CORRECTION, basisForCorrection)
-        putString(KEY_PRESCRIPTION_NUMBER, prescriptionNumber ?: "")
+        putString(KEY_PRESCRIPTION_NUMBER, prescriptionNumber)
         putLong(KEY_CORRECTABLE_SETTLEMENT_DATE, correctableSettlementDate.time)
         putString(KEY_AMOUNT_PAID, amountPaid.toString())
         putString(KEY_PAYMENT_TYPE, paymentType.name)

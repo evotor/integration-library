@@ -25,5 +25,4 @@ class ReceiptDiscountRequiredEventResult(
             return ReceiptDiscountRequiredEventResult(componentName)
         }
     }
-
 }

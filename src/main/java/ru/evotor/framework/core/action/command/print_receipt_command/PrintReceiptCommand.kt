@@ -30,29 +30,29 @@ import java.util.*
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 abstract class PrintReceiptCommand(
-        val printReceipts: List<Receipt.PrintReceipt>,
-        val extra: SetExtra?,
-        val clientPhone: String?,
-        val clientEmail: String?,
-        val receiptDiscount: BigDecimal?,
-        val paymentAddress: String?,
-        val paymentPlace: String?,
-        val userUuid: String?
+    val printReceipts: List<Receipt.PrintReceipt>,
+    val extra: SetExtra?,
+    val clientPhone: String?,
+    val clientEmail: String?,
+    val receiptDiscount: BigDecimal?,
+    val paymentAddress: String?,
+    val paymentPlace: String?,
+    val userUuid: String?
 ) : IBundlable {
-
     internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
         IntegrationManagerImpl(context.applicationContext)
-                .call(action,
-                        componentNameList[0],
-                        this,
-                        ActivityStarter(context),
-                        callback,
-                        Handler(Looper.getMainLooper())
-                )
+            .call(
+                action,
+                componentNameList[0],
+                this,
+                ActivityStarter(context),
+                callback,
+                Handler(Looper.getMainLooper())
+            )
     }
 
     override fun toBundle(): Bundle {
@@ -61,8 +61,11 @@ abstract class PrintReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
-        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString()
-                ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(
+            KEY_RECEIPT_DISCOUNT,
+            receiptDiscount?.toPlainString()
+                ?: BigDecimal.ZERO.toPlainString()
+        )
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         bundle.putString(KEY_USER_UUID, userUuid)
@@ -70,7 +73,6 @@ abstract class PrintReceiptCommand(
     }
 
     companion object {
-
         /**
          * Разрешение для отправки чеков по СМС или электронной почте.
          *
@@ -89,8 +91,8 @@ abstract class PrintReceiptCommand(
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
-                    ?.mapNotNull { PrintReceiptMapper.from(it) }
-                    ?: emptyList()
+                ?.mapNotNull { PrintReceiptMapper.from(it) }
+                ?: emptyList()
         }
 
         internal fun getSetExtra(bundle: Bundle): SetExtra? {

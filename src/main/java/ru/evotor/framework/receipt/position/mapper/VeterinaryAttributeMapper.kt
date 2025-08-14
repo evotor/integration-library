@@ -8,7 +8,6 @@ import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.attribute.VeterinaryAttribute
 
 internal object VeterinaryAttributeMapper {
-
     private const val KEY_VETERINARY_ATTRIBUTE_TYPE = "VeterinaryAttributeType"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_DATE_VALUE = "VeterinaryAttributeDocumentDateValue"
     private const val KEY_VETERINARY_ATTRIBUTE_DOCUMENT_NUMBER_VALUE = "VeterinaryAttributeDocumentNumberValue"

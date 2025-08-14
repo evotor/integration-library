@@ -7,7 +7,6 @@ import java.util.*
 abstract class FiscalDocument internal constructor() : Document() {
     abstract val documentNumber: Long
     abstract val creationDate: Date
-
     abstract val kktRegistrationNumber: String
     abstract val sessionNumber: Long
     abstract val fiscalStorageNumber: String

@@ -36,7 +36,6 @@ import java.util.*
  * Интерфейс для работы с кассой.
  */
 object KktApi {
-
     private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.optString(name) }
     private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.optBoolean(name) }
 
@@ -161,7 +160,7 @@ object KktApi {
      * Результатом является логическое "И" всех необходимых условий.
      *
      * @param context текущий контекст
-     * @return  true    - если все условия для работы в разъездной торговле выполнены,
+     * @return true    - если все условия для работы в разъездной торговле выполнены,
      *          false   - если хотя бы одно условие не выполнено
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
      */
@@ -232,35 +231,24 @@ object KktApi {
     @JvmStatic
     fun registerCorrectionReceipt(
         context: Context,
-
         @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
         settlementType: SettlementType,
-
         @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
         taxationSystem: TaxationSystem,
-
         @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
         correctionType: CorrectionType,
-
         @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
         basisForCorrection: String,
-
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
-        prescriptionNumber: String? = null,
-
+        prescriptionNumber: String,
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
-
         amountPaid: BigDecimal,
-
         paymentType: PaymentType,
-
         @FiscalRequisite(FiscalTags.VAT_RATE)
         vatRate: VatRate,
-
         @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
         correctionDescription: String,
-
         callback: DocumentRegistrationCallback
     ) {
         if (correctableSettlementDate >= Date()) {
@@ -328,41 +316,28 @@ object KktApi {
     @JvmStatic
     fun registerCorrectionReceipt(
         context: Context,
-
         @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
         settlementType: SettlementType,
-
         @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
         taxationSystem: TaxationSystem,
-
         @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
         correctionType: CorrectionType,
-
         @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
         basisForCorrection: String,
-
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
-        prescriptionNumber: String? = null,
-
+        prescriptionNumber: String,
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
-
         amountPaid: BigDecimal,
-
         paymentType: PaymentType,
-
         @FiscalRequisite(FiscalTags.VAT_RATE)
         vatRate: VatRate,
-
         @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
         correctionDescription: String,
-
         @FiscalRequisite(FiscalTags.PAYMENT_ADDRESS)
         paymentAddress: String,
-
         @FiscalRequisite(FiscalTags.PAYMENT_PLACE)
         paymentPlace: String,
-
         callback: DocumentRegistrationCallback
     ) {
         if (correctableSettlementDate >= Date()) {
@@ -408,7 +383,7 @@ object KktApi {
     }
 
     @JvmStatic
-    fun getKktSessionInfo(context: Context) : KktSessionInfo?{
+    fun getKktSessionInfo(context: Context): KktSessionInfo? {
         val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}")
         return getKktSessionInfo(context, uri)
     }

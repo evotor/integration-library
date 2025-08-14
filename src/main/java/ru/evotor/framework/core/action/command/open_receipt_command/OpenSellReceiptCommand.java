@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.command.open_receipt_command;
 
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.os.Bundle;
@@ -10,10 +11,6 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import ru.evotor.IBundlable;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.core.IntegrationManagerCallback;
@@ -23,6 +20,10 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Команда открытия чека продажи.

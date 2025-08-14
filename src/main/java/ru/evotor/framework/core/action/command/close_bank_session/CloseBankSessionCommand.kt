@@ -9,7 +9,6 @@ import ru.evotor.framework.core.ActivityStarter
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 
-
 /**
  * Команда закрытия смены платежного терминала
  * @param userUuid - Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
@@ -19,7 +18,6 @@ class CloseBankSessionCommand(
     val paymentSystemAccountId: Int? = null,
     val userUuid: String? = null
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(
             NAME,
@@ -77,7 +75,9 @@ class CloseBankSessionCommand(
         private fun getPaymentSystemAccountId(bundle: Bundle): Int? {
             return if (bundle.containsKey(KEY_ACCOUNT_ID)) {
                 bundle.getInt(KEY_ACCOUNT_ID)
-            } else null
+            } else {
+                null
+            }
         }
     }
 }

@@ -41,7 +41,6 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
     val fiscalSignOfIncorrectReceipt: String? = null,
     val setPurchaserContactData: SetPurchaserContactData? = null
 ) : IBundlable {
-
     companion object {
         const val NAME = "evo.v2.receipt.correction.return.outcome.openReceipt"
         private const val KEY_CHANGES = "changes"
@@ -61,7 +60,8 @@ class OpenCorrectionReturnOutcomeReceiptCommand(
                             it.getParcelableArray(
                                 KEY_CHANGES
                             )
-                        ), PositionAdd::class.java
+                        ),
+                        PositionAdd::class.java
                     ),
                     extra = SetExtra.from(it.getBundle(KEY_RECEIPT_EXTRA)),
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),

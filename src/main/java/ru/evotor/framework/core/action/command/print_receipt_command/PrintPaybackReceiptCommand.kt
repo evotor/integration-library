@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.Receipt
 import java.math.BigDecimal
 import java.util.*
 
-
 /**
  * Команда печати чека возврата.
  * @param printReceipts Список чеков для печати.
@@ -24,15 +23,15 @@ import java.util.*
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
  */
 class PrintPaybackReceiptCommand(
-        printReceipts: List<Receipt.PrintReceipt>,
-        extra: SetExtra?,
-        clientPhone: String?,
-        clientEmail: String?,
-        receiptDiscount: BigDecimal?,
-        val sellReceiptUuid: String? = null,
-        paymentAddress: String? = null,
-        paymentPlace: String? = null,
-        userUuid: String? = null
+    printReceipts: List<Receipt.PrintReceipt>,
+    extra: SetExtra?,
+    clientPhone: String?,
+    clientEmail: String?,
+    receiptDiscount: BigDecimal?,
+    val sellReceiptUuid: String? = null,
+    paymentAddress: String? = null,
+    paymentPlace: String? = null,
+    userUuid: String? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -42,8 +41,7 @@ class PrintPaybackReceiptCommand(
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
         userUuid = userUuid
-) {
-
+    ) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат
@@ -54,42 +52,45 @@ class PrintPaybackReceiptCommand(
      * @param paymentPlace Место расчёта
      */
     constructor(
-            positions: List<Position>,
-            payments: List<Payment>,
-            clientPhone: String?,
-            clientEmail: String?,
-            sellReceiptUuid: String? = null,
-            paymentAddress: String? = null,
-            paymentPlace: String? = null,
-            userUuid: String? = null) : this(
-            ArrayList<Receipt.PrintReceipt>().apply {
-                add(Receipt.PrintReceipt(
-                        PrintGroup(
-                                UUID.randomUUID().toString(),
-                                PrintGroup.Type.CASH_RECEIPT,
-                                null,
-                                null,
-                                null,
-                                null,
-                                clientEmail == null && clientPhone == null
-                        ),
-                        positions,
-                        payments.associate { it to it.value },
-                        calculateChanges(
-                                positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
-                                payments
-                        ),
-                        hashMapOf()
-                ))
-            },
-            null,
-            clientPhone,
-            clientEmail,
-            BigDecimal.ZERO,
-            sellReceiptUuid,
-            paymentAddress,
-            paymentPlace,
-            userUuid
+        positions: List<Position>,
+        payments: List<Payment>,
+        clientPhone: String?,
+        clientEmail: String?,
+        sellReceiptUuid: String? = null,
+        paymentAddress: String? = null,
+        paymentPlace: String? = null,
+        userUuid: String? = null
+    ) : this(
+        ArrayList<Receipt.PrintReceipt>().apply {
+            add(
+                Receipt.PrintReceipt(
+                    PrintGroup(
+                        UUID.randomUUID().toString(),
+                        PrintGroup.Type.CASH_RECEIPT,
+                        null,
+                        null,
+                        null,
+                        null,
+                        clientEmail == null && clientPhone == null
+                    ),
+                    positions,
+                    payments.associate { it to it.value },
+                    calculateChanges(
+                        positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
+                        payments
+                    ),
+                    hashMapOf()
+                )
+            )
+        },
+        null,
+        clientPhone,
+        clientEmail,
+        BigDecimal.ZERO,
+        sellReceiptUuid,
+        paymentAddress,
+        paymentPlace,
+        userUuid
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -101,7 +102,6 @@ class PrintPaybackReceiptCommand(
     }
 
     companion object {
-
         const val NAME = "evo.v2.receipt.payback.printReceipt"
 
         private const val KEY_SELL_RECEIPT_UUID = "SELL_RECEIPT_UUID"
@@ -111,15 +111,15 @@ class PrintPaybackReceiptCommand(
                 return null
             }
             return PrintPaybackReceiptCommand(
-                    printReceipts = getPrintReceipts(bundle),
-                    extra = getSetExtra(bundle),
-                    clientPhone = getClientPhone(bundle),
-                    clientEmail = getClientEmail(bundle),
-                    receiptDiscount = getReceiptDiscount(bundle),
-                    sellReceiptUuid = bundle.getString(KEY_SELL_RECEIPT_UUID),
-                    paymentAddress = getPaymentAddress(bundle),
-                    paymentPlace = getPaymentPlace(bundle),
-                    userUuid = getUserUuid(bundle)
+                printReceipts = getPrintReceipts(bundle),
+                extra = getSetExtra(bundle),
+                clientPhone = getClientPhone(bundle),
+                clientEmail = getClientEmail(bundle),
+                receiptDiscount = getReceiptDiscount(bundle),
+                sellReceiptUuid = bundle.getString(KEY_SELL_RECEIPT_UUID),
+                paymentAddress = getPaymentAddress(bundle),
+                paymentPlace = getPaymentPlace(bundle),
+                userUuid = getUserUuid(bundle)
             )
         }
     }

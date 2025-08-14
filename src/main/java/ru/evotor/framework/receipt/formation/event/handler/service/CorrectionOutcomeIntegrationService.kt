@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
  * Служба для работы с чеком коррекции.
  */
 abstract class CorrectionOutcomeIntegrationService : IntegrationServiceV2() {
-
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(
             bundle

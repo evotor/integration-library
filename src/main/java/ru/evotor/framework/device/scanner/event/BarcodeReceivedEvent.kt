@@ -15,7 +15,6 @@ import ru.evotor.IBundlable
  * @param barcode отсканированный штрихкод
  */
 class BarcodeReceivedEvent(val barcode: String) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putString(KEY_BARCODE, barcode)
@@ -23,13 +22,10 @@ class BarcodeReceivedEvent(val barcode: String) : IBundlable {
     }
 
     companion object {
-
         private const val KEY_BARCODE = "ScannedCode"
 
         fun from(bundle: Bundle?): BarcodeReceivedEvent? = bundle?.let {
             BarcodeReceivedEvent(it.getString(KEY_BARCODE) ?: return null)
         }
-
     }
-
 }

@@ -8,20 +8,18 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange
 import ru.evotor.framework.receipt.print_extras.PrintExtraPlace
 
 class SetPrintExtra(
-        val printPlace: PrintExtraPlace,
-        val printables: Array<IPrintable>
+    val printPlace: PrintExtraPlace,
+    val printables: Array<IPrintable>
 ) : IChange {
-
     override fun getType() = IChange.Type.SET_PRINT_EXTRA
 
     override fun toBundle(): Bundle =
-            Bundle().apply {
-                putBundle(KEY_PRINT_PLACE, PrintExtraPlaceMapper.toBundle(printPlace))
-                putBundle(KEY_PRINTABLES, PrintablesMapper.toBundle(printables))
-            }
+        Bundle().apply {
+            putBundle(KEY_PRINT_PLACE, PrintExtraPlaceMapper.toBundle(printPlace))
+            putBundle(KEY_PRINTABLES, PrintablesMapper.toBundle(printables))
+        }
 
     companion object {
-
         const val KEY_PRINT_PLACE = "printPlace"
         const val KEY_PRINTABLES = "printables"
 
@@ -39,5 +37,4 @@ class SetPrintExtra(
             return SetPrintExtra(printPlace, printables)
         }
     }
-
 }

@@ -50,7 +50,6 @@ class PrintCorrectionReturnIncomeReceiptCommand(
     @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
     val fiscalSignOfIncorrectReceipt: String? = null
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         IntegrationManagerImpl
             .convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
@@ -93,7 +92,6 @@ class PrintCorrectionReturnIncomeReceiptCommand(
     }
 
     companion object {
-
         const val NAME = "evo.v2.receipt.correction.return.income.printReceipt"
 
         private const val KEY_PRINT_RECEIPTS = "printReceipts"

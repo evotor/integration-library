@@ -9,13 +9,14 @@ import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
  *
  * @param packageName Название пакета
  * @param componentName Название компонента (служба, операция и т.д.)
- * @param appUuid Уникальный идентификатора приложения в Облаке Эвотор
+ * @param appUuid Уникальный идентификатора приложения в Облаке
  * @param appName Название приложения
  */
-class PaymentDelegator(packageName: String?,
-                       componentName: String?,
-                       appUuid: String?,
-                       appName: String?
+class PaymentDelegator(
+    packageName: String?,
+    componentName: String?,
+    appUuid: String?,
+    appName: String?
 ) : IntegrationComponent(packageName, componentName, appUuid, appName), IBundlable {
     override fun toBundle(): Bundle {
         return PaymentDelegatorMapper.toBundle(this)

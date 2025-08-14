@@ -25,11 +25,10 @@ import ru.evotor.framework.common.event.IntegrationEvent
  * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
  */
 data class ReturnDeliveryRequisitesForReceiptRequestedEvent(
-        val receiptUuid: String,
-        val paymentAddress: String? = null,
-        val paymentPlace: String? = null
+    val receiptUuid: String,
+    val paymentAddress: String? = null,
+    val paymentPlace: String? = null
 ) : IntegrationEvent() {
-
     override fun toBundle() = Bundle().apply {
         putString(KEY_RECEIPT_UUID, receiptUuid)
         putString(KEY_EXTRA_ADDRESS, paymentAddress)
@@ -44,9 +43,9 @@ data class ReturnDeliveryRequisitesForReceiptRequestedEvent(
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
             ReturnDeliveryRequisitesForReceiptRequestedEvent(
-                    receiptUuid = it.getString(KEY_RECEIPT_UUID) ?: return null,
-                    paymentAddress = it.getString(KEY_EXTRA_ADDRESS),
-                    paymentPlace = it.getString(KEY_EXTRA_PLACE)
+                receiptUuid = it.getString(KEY_RECEIPT_UUID) ?: return null,
+                paymentAddress = it.getString(KEY_EXTRA_ADDRESS),
+                paymentPlace = it.getString(KEY_EXTRA_PLACE)
             )
         }
     }
@@ -55,27 +54,24 @@ data class ReturnDeliveryRequisitesForReceiptRequestedEvent(
      * Результат обработки события, который содержит адрес и место расчёта.
      */
     data class Result(
-            val paymentAddress: String,
-            val paymentPlace: String
+        val paymentAddress: String,
+        val paymentPlace: String
     ) : IntegrationEvent.Result() {
-
         override fun toBundle() = Bundle().apply {
             putString(KEY_EXTRA_ADDRESS, paymentAddress)
             putString(KEY_EXTRA_PLACE, paymentPlace)
         }
 
         companion object {
-
             @JvmStatic
             fun from(bundle: Bundle?) = bundle?.let {
                 Result(
-                        paymentAddress = it.getString(KEY_EXTRA_ADDRESS)
-                                ?: return null,
-                        paymentPlace = it.getString(KEY_EXTRA_PLACE)
-                                ?: return null)
+                    paymentAddress = it.getString(KEY_EXTRA_ADDRESS)
+                        ?: return null,
+                    paymentPlace = it.getString(KEY_EXTRA_PLACE)
+                        ?: return null
+                )
             }
-
         }
-
     }
 }

@@ -6,6 +6,8 @@ import android.os.Parcelable
 import ru.evotor.IBundlable
 import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 import ru.evotor.framework.payment.PaymentSystem
+import ru.evotor.readAliased
+import ru.evotor.writeAliased
 
 /**
  * Компонент (служба, операция и т.д.) интеграционного приложения, осуществляющий оплату.
@@ -13,21 +15,23 @@ import ru.evotor.framework.payment.PaymentSystem
  * @param paymentSystem Платежная система.
  * @param packageName Название пакета.
  * @param componentName Название компонента (служба, операция и т.д.).
- * @param appUuid Уникальный идентификатора приложения в Облаке Эвотор.
+ * @param appUuid Уникальный идентификатора приложения в Облаке.
  * @param appName Название приложения.
  */
-class PaymentPerformer(val paymentSystem: PaymentSystem?,
-                       packageName: String?,
-                       componentName: String?,
-                       appUuid: String?,
-                       appName: String?
+class PaymentPerformer(
+    val paymentSystem: PaymentSystem?,
+    packageName: String?,
+    componentName: String?,
+    appUuid: String?,
+    appName: String?
 ) : IntegrationComponent(packageName, componentName, appUuid, appName), Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            parcel.readParcelable(PaymentSystem::class.java.classLoader),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
+        parcel.readAliased(PaymentSystem.CREATOR),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -43,7 +47,7 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
         val startPosition = parcel.dataPosition()
 
         // version 1
-        parcel.writeParcelable(paymentSystem, flags)
+        parcel.writeAliased(paymentSystem, flags)
         parcel.writeString(packageName)
         parcel.writeString(componentName)
         parcel.writeString(appUuid)
@@ -69,7 +73,7 @@ class PaymentPerformer(val paymentSystem: PaymentSystem?,
         const val PARCELABLE_VERSION = 1
 
         @JvmField
-        val CREATOR: Parcelable.Creator<PaymentPerformer> = object : Parcelable.Creator<PaymentPerformer> {
+        val CREATOR = object : Parcelable.Creator<PaymentPerformer?> {
             override fun createFromParcel(parcel: Parcel): PaymentPerformer {
                 val parcelableVersion = parcel.readInt()
                 val parcelableSize = parcel.readInt()

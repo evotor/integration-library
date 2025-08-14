@@ -8,7 +8,6 @@ import ru.evotor.framework.core.action.processor.ActionProcessor
  */
 
 abstract class PositionsMergeEventProcessor : ActionProcessor() {
-
     override fun process(action: String, bundle: Bundle?, callback: ActionProcessor.Callback) {
         val event = PositionsMergeEvent.create(bundle) ?: run {
             callback.skip()

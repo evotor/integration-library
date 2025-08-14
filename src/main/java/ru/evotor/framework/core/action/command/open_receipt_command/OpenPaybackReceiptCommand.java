@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.command.open_receipt_command;
 
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.os.Bundle;

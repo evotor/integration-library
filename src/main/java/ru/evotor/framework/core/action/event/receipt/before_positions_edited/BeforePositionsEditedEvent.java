@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.event.receipt.before_positions_edited;
 
+
 import android.os.Bundle;
 import android.os.Parcelable;
 

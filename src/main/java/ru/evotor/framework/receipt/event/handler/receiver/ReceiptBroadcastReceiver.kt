@@ -12,15 +12,14 @@ import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
 
 abstract class ReceiptBroadcastReceiver(
-        private val actionReceiptCreated: String,
-        private val actionPositionAdded: String,
-        private val actionPositionUpdated: String,
-        private val actionPositionRemoved: String,
-        private val actionApplyDiscountToReceipt: String,
-        private val actionReceiptDeleted: String,
-        private val actionReceiptCompleted: String
+    private val actionReceiptCreated: String,
+    private val actionPositionAdded: String,
+    private val actionPositionUpdated: String,
+    private val actionPositionRemoved: String,
+    private val actionApplyDiscountToReceipt: String,
+    private val actionReceiptDeleted: String,
+    private val actionReceiptCompleted: String
 ) : BroadcastEventReceiver() {
-
     protected abstract fun handleReceiptCreatedEvent(context: Context, event: ReceiptCreatedEvent)
 
     protected abstract fun handlePositionAddedEvent(context: Context, event: PositionAddedEvent)
@@ -37,21 +36,41 @@ abstract class ReceiptBroadcastReceiver(
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            actionReceiptCreated -> handleReceiptCreatedEvent(context, ReceiptCreatedEvent.from(bundle)
-                    ?: return)
-            actionPositionAdded -> handlePositionAddedEvent(context, PositionAddedEvent.from(bundle)
-                    ?: return)
-            actionPositionUpdated -> handlePositionUpdatedEvent(context, PositionUpdatedEvent.from(bundle)
-                    ?: return)
-            actionPositionRemoved -> handlePositionRemovedEvent(context, PositionRemovedEvent.from(bundle)
-                    ?: return)
-            actionApplyDiscountToReceipt -> handleApplyDiscountToReceiptEvent(context, ApplyDiscountToReceiptEvent.from(bundle)
-                    ?: return)
-            actionReceiptDeleted -> handleReceiptDeletedEvent(context, ReceiptDeletedEvent.from(bundle)
-                    ?: return)
-            actionReceiptCompleted -> handleReceiptCompletedEvent(context, ReceiptCompletedEvent.from(bundle)
-                    ?: return)
+            actionReceiptCreated -> handleReceiptCreatedEvent(
+                context,
+                ReceiptCreatedEvent.from(bundle)
+                    ?: return
+            )
+            actionPositionAdded -> handlePositionAddedEvent(
+                context,
+                PositionAddedEvent.from(bundle)
+                    ?: return
+            )
+            actionPositionUpdated -> handlePositionUpdatedEvent(
+                context,
+                PositionUpdatedEvent.from(bundle)
+                    ?: return
+            )
+            actionPositionRemoved -> handlePositionRemovedEvent(
+                context,
+                PositionRemovedEvent.from(bundle)
+                    ?: return
+            )
+            actionApplyDiscountToReceipt -> handleApplyDiscountToReceiptEvent(
+                context,
+                ApplyDiscountToReceiptEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptDeleted -> handleReceiptDeletedEvent(
+                context,
+                ReceiptDeletedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptCompleted -> handleReceiptCompletedEvent(
+                context,
+                ReceiptCompletedEvent.from(bundle)
+                    ?: return
+            )
         }
     }
-
 }

@@ -21,7 +21,6 @@ data class VeterinaryAttribute(
      */
     val documentDate: String
 ) : IBundlable {
-
     override fun toBundle(): Bundle = VeterinaryAttributeMapper.writeToBundle(this)
 
     companion object {

@@ -69,7 +69,6 @@ object ChangesMapper {
     }
 
     private fun fromBundle(typeName: String, bundle: Bundle): IChange? {
-
         return when (Utils.safeValueOf(IChange.Type::class.java, typeName, null)) {
             IChange.Type.POSITION_REMOVE -> PositionRemove.from(bundle)
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
@@ -82,5 +81,4 @@ object ChangesMapper {
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
-
 }

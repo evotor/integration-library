@@ -6,8 +6,8 @@ import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.payment.PaymentPurpose
 
 class PaymentDelegatorSelectedEventResult(
-        val paymentPurpose: PaymentPurpose,
-        extra: SetExtra?
+    val paymentPurpose: PaymentPurpose,
+    extra: SetExtra?
 ) : PaymentDelegatorEventResult(ResultType.SELECTED, extra) {
     override fun toBundle(): Bundle {
         val result = super.toBundle()
@@ -23,11 +23,11 @@ class PaymentDelegatorSelectedEventResult(
                 return null
             }
             val paymentPurpose = bundle.getBundle(KEY_PAYMENT_PURPOSE)
-                    ?.let { PaymentPurposeMapper.from(it) }
+                ?.let { PaymentPurposeMapper.from(it) }
             if (paymentPurpose != null) {
                 return PaymentDelegatorSelectedEventResult(
-                        paymentPurpose,
-                        SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+                    paymentPurpose,
+                    SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
                 )
             }
             return null

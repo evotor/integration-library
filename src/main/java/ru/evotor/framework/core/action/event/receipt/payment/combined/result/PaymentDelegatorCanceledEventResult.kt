@@ -4,8 +4,8 @@ import android.os.Bundle
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 class PaymentDelegatorCanceledEventResult(
-        val paymentUuid: String,
-        extra: SetExtra?
+    val paymentUuid: String,
+    extra: SetExtra?
 ) : PaymentDelegatorEventResult(ResultType.CANCEL, extra) {
     override fun toBundle(): Bundle {
         val result = super.toBundle()
@@ -21,11 +21,12 @@ class PaymentDelegatorCanceledEventResult(
                 return null
             }
             return bundle.getString(KEY_PAYMENT_UUID)
-                    ?.let {
-                        PaymentDelegatorCanceledEventResult(
-                                it,
-                                SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)))
-                    }
+                ?.let {
+                    PaymentDelegatorCanceledEventResult(
+                        it,
+                        SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+                    )
+                }
         }
     }
 }

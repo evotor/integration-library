@@ -21,4 +21,3 @@ abstract class ReceiptDiscountRequiredEventProcessor : ActionProcessor() {
 
     abstract fun call(action: String, event: ReceiptDiscountRequiredEvent, callback: ActionProcessor.Callback)
 }
-

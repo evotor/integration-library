@@ -6,19 +6,21 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
+    namespace = "ru.evotor.integrations"
     def version = 36
 
-    compileSdk 29
+    compileSdk 30
 
     defaultConfig {
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode version
-        versionName "0.6.08"
+        versionName "v0.6.27.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,8 +31,11 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
+    }
+    buildFeatures {
+        aidl = true
     }
 }
 
@@ -54,7 +59,7 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.22'
     repositories {
         mavenCentral()
         google()
