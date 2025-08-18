@@ -112,6 +112,12 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     from dokkaJavadoc.outputDirectory
 }
 
+tasks.configureEach {
+    if (it.name.startsWith("publish")) {
+        dependsOn(tasks.named("bundleReleaseAar"))
+    }
+}
+
 publishing {
     publications {
         mavenKotlin(MavenPublication) {
