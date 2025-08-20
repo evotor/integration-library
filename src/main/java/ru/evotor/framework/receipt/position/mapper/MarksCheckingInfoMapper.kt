@@ -12,9 +12,13 @@ object MarksCheckingInfoMapper {
             ?: return null
         val checkTimestamp = cursor.optLong(PositionTable.COLUMN_MARKS_CHECKING_INFO_CHECK_TIMESTAMP)
             ?: return null
+        val inst = cursor.optString(PositionTable.COLUMN_MARKS_CHECKING_INFO_CHECK_INST)
+        val lmChzDbVersion = cursor.optString(PositionTable.COLUMN_MARKS_CHECKING_INFO_CHECK_LM_CHZ_DB_VERSION)
         return MarksCheckingInfo(
             checkId = checkId,
-            checkTimestamp = checkTimestamp
+            checkTimestamp = checkTimestamp,
+            inst = inst,
+            lmChzDbVersion = lmChzDbVersion
         )
     }
 }

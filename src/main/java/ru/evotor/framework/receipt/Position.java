@@ -41,7 +41,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 15;
+    private static final int VERSION = 16;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -1669,14 +1669,14 @@ public class Position implements Parcelable {
         }
 
         public Builder toCaviarMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.CAVIAR_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
             return this;
@@ -1711,14 +1711,14 @@ public class Position implements Parcelable {
         }
 
         public Builder toVeterinaryMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.VETERINARY_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
             return this;
@@ -1744,11 +1744,15 @@ public class Position implements Parcelable {
 
         public Builder toMarksCheckingInfo(
                 @NonNull String checkId,
-                @NonNull Long timestamp
+                @NonNull Long timestamp,
+                String inst,
+                String lmChzDbVersion
         ) {
             position.marksCheckingInfo = new MarksCheckingInfo(
                     checkId,
-                    timestamp
+                    timestamp,
+                    inst,
+                    lmChzDbVersion
             );
             return this;
         }
@@ -1855,13 +1859,21 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        public void setCaviarParams(Mark mark) { position.mark = mark; }
+        public void setCaviarParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setPetFoodParams(Mark mark) { position.mark = mark; }
+        public void setPetFoodParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setVegetableOilParams(Mark mark) { position.mark = mark; }
+        public void setVegetableOilParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setVeterinaryParams(Mark mark) { position.mark = mark; }
+        public void setVeterinaryParams(Mark mark) {
+            position.mark = mark;
+        }
 
         private void setBeerParams(Mark mark) {
             position.mark = mark;
