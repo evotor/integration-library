@@ -1682,6 +1682,34 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toPetFoodMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.PET_FOOD_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPetFoodParams(mark);
+            return this;
+        }
+
+        public Builder toVegetableOilMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.VEGETABLE_OIL_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setVegetableOilParams(mark);
+            return this;
+        }
+
         public Builder toVeterinaryMarked(
             @NonNull Mark mark
         ) {
@@ -1828,6 +1856,10 @@ public class Position implements Parcelable {
         }
 
         public void setCaviarParams(Mark mark) { position.mark = mark; }
+
+        public void setPetFoodParams(Mark mark) { position.mark = mark; }
+
+        public void setVegetableOilParams(Mark mark) { position.mark = mark; }
 
         public void setVeterinaryParams(Mark mark) { position.mark = mark; }
 

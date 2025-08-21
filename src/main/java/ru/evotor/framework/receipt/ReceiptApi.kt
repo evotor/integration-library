@@ -351,7 +351,8 @@ object ReceiptApi {
             Utils.safeValueOf(TaxationSystem::class.java, cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)), null),
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
-            medicineAttribute
+            medicineAttribute,
+            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1,
         )
     }
 
