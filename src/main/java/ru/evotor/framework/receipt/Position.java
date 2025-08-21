@@ -28,6 +28,7 @@ import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.attribute.VeterinaryAttribute;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.LocalModuleInfo;
 import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
@@ -1745,14 +1746,12 @@ public class Position implements Parcelable {
         public Builder toMarksCheckingInfo(
                 @NonNull String checkId,
                 @NonNull Long timestamp,
-                String inst,
-                String lmChzDbVersion
+                LocalModuleInfo localModuleInfo
         ) {
             position.marksCheckingInfo = new MarksCheckingInfo(
                     checkId,
                     timestamp,
-                    inst,
-                    lmChzDbVersion
+                    localModuleInfo
             );
             return this;
         }

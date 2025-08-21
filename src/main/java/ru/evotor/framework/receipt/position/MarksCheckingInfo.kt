@@ -17,40 +17,33 @@ data class MarksCheckingInfo(
      */
     val checkTimestamp: Long,
     /**
-     * Идентификатор экземпляра ЛМ ЧЗ
+     * Информация о локальном модуле
      */
-    val inst: String?,
-    /**
-     * Версия базы ЛМ ЧЗ, на которой осуществлялась проверка
-     */
-    val lmChzDbVersion: String?
+    val localModuleInfo: LocalModuleInfo?
 ) : IBundlable {
     override fun toBundle(): Bundle = Bundle().apply {
         putString(KEY_CHECK_ID, checkId)
         putLong(KEY_TIMESTAMP, checkTimestamp)
-        putString(KEY_LM_CHZ_ID, inst)
-        putString(KEY_LM_CHZ_DB_Version, lmChzDbVersion)
+        putBundle(KEY_LOCAL_MODULE, localModuleInfo?.toBundle())
     }
 
     companion object {
 
         private const val KEY_CHECK_ID = "CheckId"
         private const val KEY_TIMESTAMP = "Timestamp"
-        private const val KEY_LM_CHZ_ID = "LmChzId"
-        private const val KEY_LM_CHZ_DB_Version = "LmChzDbVersion"
+        private const val KEY_LOCAL_MODULE = "LocalModule"
 
         @JvmStatic
         fun from(bundle: Bundle?): MarksCheckingInfo? = bundle?.let {
             val checkId = it.getString(KEY_CHECK_ID) ?: return null
             val checkTimestamp = it.optLong(KEY_TIMESTAMP) ?: return null
-            val inst = it.getString(KEY_LM_CHZ_ID)
-            val lmChzDbVersion = it.getString(KEY_LM_CHZ_DB_Version)
+            val localModuleInfoBundle = it.getBundle(KEY_LOCAL_MODULE)
+            val localModuleInfo = LocalModuleInfo.from(localModuleInfoBundle)
 
             MarksCheckingInfo(
                 checkId = checkId,
                 checkTimestamp = checkTimestamp,
-                inst = inst,
-                lmChzDbVersion = lmChzDbVersion
+                localModuleInfo = localModuleInfo
             )
         }
     }
