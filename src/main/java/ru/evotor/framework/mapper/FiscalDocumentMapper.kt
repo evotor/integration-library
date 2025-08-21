@@ -14,9 +14,12 @@ internal object FiscalDocumentMapper {
     private const val KEY_DOCUMENT_NUMBER = "DOCUMENT_NUMBER"
     private const val KEY_CREATION_DATE = "CREATION_DATE"
     private const val KEY_KKT_REGISTRATION_NUMBER = "KKT_REGISTRATION_NUMBER"
+    private const val KEY_KKT_REGISTRATION_NUMBER_STRING = "KEY_KKT_REGISTRATION_NUMBER_STRING"
     private const val KEY_SESSION_NUMBER = "SESSION_NUMBER"
     private const val KEY_FISCAL_STORAGE_NUMBER = "FISCAL_STORAGE_NUMBER"
+    private const val KEY_FISCAL_STORAGE_NUMBER_STRING = "FISCAL_STORAGE_NUMBER_STRING"
     private const val KEY_FISCAL_IDENTIFIER = "FISCAL_IDENTIFIER"
+    private const val KEY_FISCAL_IDENTIFIER_STRING = "FISCAL_IDENTIFIER_STRING"
 
     private const val FISCAL_DATE_PATTERN = "ddMMyyyyHHmm"
 
@@ -31,28 +34,28 @@ internal object FiscalDocumentMapper {
                 SimpleDateFormat(FISCAL_DATE_PATTERN, Locale.getDefault()).parse(dateString)
             }
 
-    fun readKktRegistrationNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)
+    fun readKktRegistrationNumber(bundle: Bundle?): String? = bundle?.getString(KEY_KKT_REGISTRATION_NUMBER_STRING) ?: bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)?.toString()
 
-    fun readKktRegistrationNumber(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
+    fun readKktRegistrationNumber(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_KKT_REGISTRATION_NUMBER)
 
     fun readSessionNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_SESSION_NUMBER)
 
     fun readSessionNumber(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
 
-    fun readFiscalStorageNumber(bundle: Bundle?): Long? = bundle?.optLong(KEY_FISCAL_STORAGE_NUMBER)
+    fun readFiscalStorageNumber(bundle: Bundle?): String? = bundle?.getString(KEY_FISCAL_STORAGE_NUMBER_STRING) ?: bundle?.optLong(KEY_FISCAL_STORAGE_NUMBER)?.toString()
 
-    fun readFiscalStorageNumber(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
+    fun readFiscalStorageNumber(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
 
-    fun readFiscalIdentifier(bundle: Bundle?): Long? = bundle?.optLong(KEY_FISCAL_IDENTIFIER)
+    fun readFiscalIdentifier(bundle: Bundle?): String? = bundle?.getString(KEY_FISCAL_IDENTIFIER_STRING) ?: bundle?.optLong(KEY_FISCAL_IDENTIFIER)?.toString()
 
-    fun readFiscalIdentifier(cursor: Cursor): Long? = cursor.optLong(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
+    fun readFiscalIdentifier(cursor: Cursor): String? = cursor.optString(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
 
     fun write(fiscalDocument: FiscalDocument) = DocumentMapper.write(fiscalDocument).apply {
         this.putLong(KEY_DOCUMENT_NUMBER, fiscalDocument.documentNumber)
         this.putSerializable(KEY_CREATION_DATE, fiscalDocument.creationDate)
-        this.putLong(KEY_KKT_REGISTRATION_NUMBER, fiscalDocument.kktRegistrationNumber)
+        this.putString(KEY_KKT_REGISTRATION_NUMBER_STRING, fiscalDocument.kktRegistrationNumber)
         this.putLong(KEY_SESSION_NUMBER, fiscalDocument.sessionNumber)
-        this.putLong(KEY_FISCAL_STORAGE_NUMBER, fiscalDocument.fiscalStorageNumber)
-        this.putLong(KEY_FISCAL_IDENTIFIER, fiscalDocument.fiscalIdentifier)
+        this.putString(KEY_FISCAL_STORAGE_NUMBER_STRING, fiscalDocument.fiscalStorageNumber)
+        this.putString(KEY_FISCAL_IDENTIFIER_STRING, fiscalDocument.fiscalIdentifier)
     }
 }
