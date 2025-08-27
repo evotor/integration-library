@@ -197,6 +197,7 @@ public class Position implements Parcelable {
      * - лекарства {@link ProductType#MEDICINE_MARKED}
      * - духи {@link ProductType#PERFUME_MARKED}
      * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+     * - ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
      * <p>
      * Также см. {@link #quantity}
      */
@@ -1730,6 +1731,7 @@ public class Position implements Parcelable {
          * лекарства {@link ProductType#MEDICINE_MARKED}
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
          *
          * @param quantityInPackage количество товара в упаковке всего
          */
@@ -1973,6 +1975,7 @@ public class Position implements Parcelable {
          * лекарства {@link ProductType#MEDICINE_MARKED}
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
          *
          * @param partialRealization частичная реализация
          */
