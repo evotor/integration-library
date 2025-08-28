@@ -28,6 +28,7 @@ import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.attribute.VeterinaryAttribute;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.LocalModuleInfo;
 import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
@@ -1669,14 +1670,14 @@ public class Position implements Parcelable {
         }
 
         public Builder toCaviarMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.CAVIAR_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
             return this;
@@ -1711,14 +1712,14 @@ public class Position implements Parcelable {
         }
 
         public Builder toVeterinaryMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.VETERINARY_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
             return this;
@@ -1744,11 +1745,13 @@ public class Position implements Parcelable {
 
         public Builder toMarksCheckingInfo(
                 @NonNull String checkId,
-                @NonNull Long timestamp
+                @NonNull Long timestamp,
+                LocalModuleInfo localModuleInfo
         ) {
             position.marksCheckingInfo = new MarksCheckingInfo(
                     checkId,
-                    timestamp
+                    timestamp,
+                    localModuleInfo
             );
             return this;
         }
@@ -1855,13 +1858,21 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        public void setCaviarParams(Mark mark) { position.mark = mark; }
+        public void setCaviarParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setPetFoodParams(Mark mark) { position.mark = mark; }
+        public void setPetFoodParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setVegetableOilParams(Mark mark) { position.mark = mark; }
+        public void setVegetableOilParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setVeterinaryParams(Mark mark) { position.mark = mark; }
+        public void setVeterinaryParams(Mark mark) {
+            position.mark = mark;
+        }
 
         private void setBeerParams(Mark mark) {
             position.mark = mark;
