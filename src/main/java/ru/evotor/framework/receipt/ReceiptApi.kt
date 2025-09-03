@@ -73,6 +73,10 @@ object ReceiptApi {
 
 
     @JvmStatic
+    @Deprecated(
+        message = "Use getProductsByBarcode from InventoryApi",
+        replaceWith = ReplaceWith(expression = "InventoryApi.getProductsByBarcode(context, barcode)", imports = ["ru.evotor.framework.inventory.InventoryApi"])
+    )
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
@@ -347,7 +351,8 @@ object ReceiptApi {
             Utils.safeValueOf(TaxationSystem::class.java, cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)), null),
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
-            medicineAttribute
+            medicineAttribute,
+            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1,
         )
     }
 
