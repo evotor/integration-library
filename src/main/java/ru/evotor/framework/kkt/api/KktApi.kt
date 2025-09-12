@@ -246,7 +246,7 @@ object KktApi {
         basisForCorrection: String,
 
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
-        prescriptionNumber: String,
+        prescriptionNumber: String? = null,
 
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
@@ -342,7 +342,7 @@ object KktApi {
         basisForCorrection: String,
 
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
-        prescriptionNumber: String,
+        prescriptionNumber: String? = null,
 
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
