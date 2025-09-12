@@ -2,7 +2,6 @@ package ru.evotor.framework.fs
 
 import ru.evotor.framework.receipt.TaxationSystem
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.experimental.and
 
 
@@ -53,11 +52,11 @@ data class FsFiscalizationDocument(
     /**
      * Адрес расчета
      */
-    val address: String?,
+    val saleAddress: String?,
     /**
      * Место расчета
      */
-    val registrationInfo: String?,
+    val salePlace: String?,
 ) {
     /**
      * Список систем налогообложения
