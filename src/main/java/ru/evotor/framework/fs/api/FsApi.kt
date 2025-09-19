@@ -85,7 +85,7 @@ object FsApi {
             fiscalDocumentNumber = fiscalDocumentNumber,
             fiscalDocumentSign = fiscalDocumentSign,
             saleAddress = saleAddress,
-            salePlace = salePlace,
+            salePlace = salePlace
         )
     }
 
