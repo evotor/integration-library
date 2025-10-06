@@ -3,6 +3,8 @@ package ru.evotor.framework.receipt.formation.event.handler.service
 import android.os.Bundle
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
+import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEvent
+import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEventResult
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
 import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
 import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForPrintGroupRequestedEvent
@@ -16,6 +18,7 @@ abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
+        ACTION_INTERNET_REQUISITES -> InternetRequisitesRequiredEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
     /**
@@ -45,6 +48,9 @@ abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
+    @RequiresIntentAction(ACTION_INTERNET_REQUISITES)
+    open fun handleEvent(event: InternetRequisitesRequiredEvent): InternetRequisitesRequiredEventResult? = null
+
     companion object {
         const val ACTION_PURCHASER_REQUISITES = "ru.evotor.event.paybackWithSell.PURCHASER_REQUISITES"
         const val ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS = "ru.evotor.event.paybackWithSell.DISCOUNT_SCREEN_ADDITIONAL_ITEMS"
@@ -55,6 +61,8 @@ abstract class PaybackWithSellIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.paybackWithSell.DELIVERY_REQUISITES`.
          */
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.paybackWithSell.DELIVERY_REQUISITES"
+
+        const val ACTION_INTERNET_REQUISITES = "ru.evotor.event.paybackWithSell.INTERNET_REQUISITES"
 
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].

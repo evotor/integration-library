@@ -22,6 +22,7 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 class PrintSellReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -31,7 +32,8 @@ class PrintSellReceiptCommand(
         receiptDiscount: BigDecimal?,
         paymentAddress: String? = null,
         paymentPlace: String? = null,
-        userUuid: String? = null
+        userUuid: String? = null,
+        receiptFromInternet: Boolean? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -40,7 +42,8 @@ class PrintSellReceiptCommand(
         receiptDiscount = receiptDiscount,
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
-        userUuid = userUuid
+        userUuid = userUuid,
+        receiptFromInternet = receiptFromInternet
 ) {
 
     /**
@@ -58,7 +61,8 @@ class PrintSellReceiptCommand(
             clientEmail: String?,
             paymentAddress: String? = null,
             paymentPlace: String? = null,
-            userUuid: String? = null
+            userUuid: String? = null,
+            receiptFromInternet: Boolean? = null
     ) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
@@ -77,7 +81,8 @@ class PrintSellReceiptCommand(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
                         ),
-                        hashMapOf()
+                        hashMapOf(),
+                        receiptFromInternet ?: false
                 ))
             },
             null,
@@ -109,7 +114,8 @@ class PrintSellReceiptCommand(
                     receiptDiscount = getReceiptDiscount(bundle),
                     paymentAddress = getPaymentAddress(bundle),
                     paymentPlace = getPaymentPlace(bundle),
-                    userUuid = getUserUuid(bundle)
+                    userUuid = getUserUuid(bundle),
+                    receiptFromInternet = getReceiptFromInternet(bundle)
             )
         }
     }

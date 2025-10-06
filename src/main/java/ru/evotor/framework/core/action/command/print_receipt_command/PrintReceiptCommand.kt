@@ -37,7 +37,8 @@ abstract class PrintReceiptCommand(
         val receiptDiscount: BigDecimal?,
         val paymentAddress: String?,
         val paymentPlace: String?,
-        val userUuid: String?
+        val userUuid: String?,
+        val receiptFromInternet: Boolean?
 ) : IBundlable {
 
     internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
@@ -66,6 +67,7 @@ abstract class PrintReceiptCommand(
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         bundle.putString(KEY_USER_UUID, userUuid)
+        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, receiptFromInternet ?: false)
         return bundle
     }
 
@@ -86,6 +88,7 @@ abstract class PrintReceiptCommand(
         private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
         private const val KEY_PAYMENT_PLACE = "paymentPlace"
         private const val KEY_USER_UUID = "userUuid"
+        private const val KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
@@ -119,6 +122,10 @@ abstract class PrintReceiptCommand(
 
         internal fun getUserUuid(bundle: Bundle): String? {
             return bundle.getString(KEY_USER_UUID, null)
+        }
+
+        internal fun getReceiptFromInternet(bundle: Bundle): Boolean {
+            return bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

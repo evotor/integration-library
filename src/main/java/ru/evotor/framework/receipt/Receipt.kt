@@ -158,7 +158,11 @@ data class Receipt
              *
              * Added on 13.02.2018
              */
-            val discounts: Map<String, BigDecimal>?
+            val discounts: Map<String, BigDecimal>?,
+            /**
+             * Признак расчета в сети «Интернет»
+             */
+            val receiptFromInternet: Boolean
     ) {
 
         /**

@@ -70,7 +70,9 @@ public class PrintGroup implements Parcelable {
 
     /**
      * Признак расчета в «Интернет».
+     * @deprecated Используйте {@link ru.evotor.framework.receipt.Receipt.PrintReceipt#receiptFromInternet}
      */
+    @Deprecated
     private boolean receiptFromInternet;
 
     @Deprecated

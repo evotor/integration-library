@@ -219,15 +219,17 @@ object ReceiptApi {
         for (printGroup in printGroups) {
             val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment }
                 ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
-            printDocuments.add(Receipt.PrintReceipt(
-                printGroup,
-                getPositionResults
-                    .filter { it.printGroup == printGroup }
-                    .map { it.position },
-                payments.mapValues { it.value.value },
-                payments.mapValues { it.value.change },
-                receiptDiscount
-            )
+            printDocuments.add(
+                Receipt.PrintReceipt(
+                    printGroup = printGroup,
+                    positions = getPositionResults
+                        .filter { it.printGroup == printGroup }
+                        .map { it.position },
+                    payments = payments.mapValues { it.value.value },
+                    changes = payments.mapValues { it.value.change },
+                    discounts = receiptDiscount,
+                    receiptFromInternet = false // TODO
+                )
             )
         }
 
