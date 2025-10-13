@@ -22,8 +22,8 @@ class PaymentDelegatorForwardedEventResult(
             if (bundle == null) {
                 return null
             }
-            val delegatorBundle = bundle.getBundle(KEY_PAYMENT_DELEGATOR)
-            val paymentDelegator = PaymentDelegator.from(delegatorBundle)
+            val paymentDelegator = bundle.getBundle(KEY_PAYMENT_DELEGATOR)
+                ?.let { PaymentDelegator.from(it) }
             if (paymentDelegator != null) {
                 return PaymentDelegatorForwardedEventResult(
                         paymentDelegator,
