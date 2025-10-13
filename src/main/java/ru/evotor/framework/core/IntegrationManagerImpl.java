@@ -34,8 +34,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.evotor.IBundlable;
+import ru.evotor.framework.Utils;
 
 
 public class IntegrationManagerImpl implements IntegrationManager {
@@ -139,6 +141,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
         handler.post(() -> callback.run(future));
     }
 
+    private static AtomicInteger threadNum = new AtomicInteger(1);
+
     private class ImsTask extends FutureTask<IntegrationManagerFuture.Result> implements IntegrationManagerFuture {
         final Handler mHandler;
         IntegrationManagerCallback mCallback;
@@ -147,6 +151,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
         final ComponentName mComponentName;
         final Bundle mData;
         final Map<String, Integer> mPackageSpecificTimeouts;
+
+        int num = 0;
 
         public ImsTask(
                 final Activity activity,
@@ -181,6 +187,9 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 throw new IllegalStateException("this should never be called");
             });
 
+            Utils.log("ImsTask "  + this);
+
+            this.num = threadNum.incrementAndGet();
             mHandler = handler;
             mCallback = callback;
             mActivityStarter = activityStarter;
@@ -211,13 +220,30 @@ public class IntegrationManagerImpl implements IntegrationManager {
         }
 
         private void doWork(Response response) throws RemoteException {
+            Log.d(TAG, "doWork " + num);
+
             IIntegrationManager service = getService(response.getComponentName(), mPackageSpecificTimeouts);
             if (service == null) {
                 response.skip();
+                Log.d(TAG, "doWork return " + num);
                 return;
             }
 
+            Log.d(TAG, "doWork call " + num);
             service.call(response, mAction, mData);
+        }
+
+        @Override
+        public String toString() {
+            return "ImsTask{" +
+                    "num=" + num +
+                    ", mHandler=" + mHandler +
+                    ", mActivityStarter=" + mActivityStarter +
+                    ", mAction='" + mAction + '\'' +
+                    ", mComponentName=" + mComponentName +
+                    ", mData=" + mData +
+                    ", mPackageSpecificTimeouts=" + mPackageSpecificTimeouts +
+                    '}';
         }
 
         private IIntegrationManager getService(
@@ -229,40 +255,53 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 return manager;
             }
 
+            Log.d(TAG, "getService wait " + num);
             synchronized (connectionPool) {
+                Log.d(TAG, "getService run " + num);
                 manager = getFromPool(componentName);
                 if (manager != null) {
+                    Log.d(TAG, "getService return " + num);
                     return manager;
                 }
 
                 connect(componentName, packageSpecificTimeouts);
-                return getFromPool(componentName);
+                IIntegrationManager iIntegrationManager = getFromPool(componentName);
+                Log.d(TAG, "getService return manager " + num);
+                return iIntegrationManager;
             }
         }
 
         private IIntegrationManager getFromPool(ComponentName componentName) {
+            Log.d(TAG, "getFromPool return start function " + num);
+
             Pair<IntegrationManagerServiceConnection, IIntegrationManager> pair = connectionPool.get(componentName);
             if (pair == null) {
+                Log.d(TAG, "getFromPool return null function " + num);
                 return null;
             }
 
             IntegrationManagerServiceConnection connection = pair.first;
             if (!connection.disconnected) {
+                Log.d(TAG, "getFromPool return pair " + num + " pair = " + pair.second);
                 return pair.second;
             }
 
+            Log.d(TAG, "getFromPool wait " + num);
             synchronized (connectionPool) {
+                Log.d(TAG, "getFromPool run " + num);
                 pair = connectionPool.get(componentName);
                 if (pair == null) {
                     return null;
                 }
                 connection = pair.first;
                 if (!connection.disconnected) {
+                    Log.d(TAG, "getFromPool return pair sync " + num + " pair = " + pair.second);
                     return pair.second;
                 }
 
                 context.unbindService(connection);
                 connectionPool.remove(componentName);
+                Log.d(TAG, "getFromPool return null sync" + num);
                 return null;
             }
         }
@@ -288,6 +327,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
                             primitivePackageTimeout = packageTimeout;
                         }
                     }
+
+                    Log.d(TAG, "connect time out " + num + "time = " + primitivePackageTimeout);
                     connectLatch.await(primitivePackageTimeout, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -335,6 +376,8 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
         @Override
         protected void done() {
+            Log.d(TAG, "done");
+
             if (mCallback != null) {
                 postToHandler(mHandler, mCallback, this);
                 mCallback = null;

@@ -1,6 +1,8 @@
 package ru.evotor.framework;
 
+import android.os.Looper;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +60,10 @@ public final class Utils {
         } else {
             return null;
         }
+    }
+
+    public static void log(String message) {
+        boolean isMain = Looper.getMainLooper().getThread() == Thread.currentThread();
+        Log.d("Utils Integration",  message + " main = " + isMain);
     }
 }
