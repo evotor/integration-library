@@ -85,7 +85,7 @@ class PrintPaybackReceiptCommand(
                                 payments
                         ),
                         hashMapOf(),
-                        receiptFromInternet ?: false
+                        receiptFromInternet
                 ))
             },
             null,

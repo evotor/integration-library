@@ -3,8 +3,6 @@ package ru.evotor.framework.receipt.formation.event.handler.service
 import android.os.Bundle
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEvent
-import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEventResult
 import ru.evotor.framework.receipt.formation.event.DiscountScreenAdditionalItemsEvent
 import ru.evotor.framework.receipt.formation.event.ReturnDeliveryRequisitesForReceiptRequestedEvent
 import ru.evotor.framework.receipt.formation.event.ReturnMedicineAttributeEvent
@@ -22,7 +20,6 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
-        ACTION_INTERNET_REQUISITES -> InternetRequisitesRequiredEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
 
@@ -75,9 +72,6 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_MEDICINE_ATTRIBUTES)
     open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
-    @RequiresIntentAction(PaybackIntegrationService.Companion.ACTION_INTERNET_REQUISITES)
-    open fun handleEvent(event: InternetRequisitesRequiredEvent): InternetRequisitesRequiredEventResult? = null
-
     companion object {
 
         /**
@@ -108,8 +102,6 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение запроса, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.sell.DELIVERY_REQUISITES`.
          */
         const val ACTION_DELIVERY_REQUISITES = "ru.evotor.event.sell.DELIVERY_REQUISITES"
-
-        const val ACTION_INTERNET_REQUISITES = "ru.evotor.event.sell.INTERNET_REQUISITES"
 
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.SellIntegrationService].

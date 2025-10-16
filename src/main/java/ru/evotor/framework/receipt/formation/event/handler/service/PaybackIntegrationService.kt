@@ -4,8 +4,6 @@ import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.common.event.handler.service.IntegrationServiceV2
 import ru.evotor.framework.core.RequiresIntentAction
-import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEvent
-import ru.evotor.framework.core.action.event.receipt.internet.InternetRequisitesRequiredEventResult
 import ru.evotor.framework.receipt.formation.event.*
 
 /**
@@ -19,7 +17,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
         ACTION_DELIVERY_REQUISITES -> ReturnDeliveryRequisitesForReceiptRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_MEDICINE_ATTRIBUTES -> ReturnMedicineAttributeEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedEvent.from(bundle)?.let { handleEvent(it) }
-        ACTION_INTERNET_REQUISITES -> InternetRequisitesRequiredEvent.from(bundle)?.let { handleEvent(it) }
         else -> null
     }
 
@@ -69,9 +66,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
     @RequiresIntentAction(ACTION_MEDICINE_ATTRIBUTES)
     open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
-    @RequiresIntentAction(ACTION_INTERNET_REQUISITES)
-    open fun handleEvent(event: InternetRequisitesRequiredEvent): InternetRequisitesRequiredEventResult? = null
-
     companion object {
 
         /**
@@ -102,8 +96,6 @@ abstract class PaybackIntegrationService : IntegrationServiceV2() {
          * Чтобы подписать службу на получение действия, в манифесте приложения, в элементе `action` intent-фильтра службы, укажите значение `ru.evotor.event.payback.BARCODE_RECEIVED`.
          */
         const val ACTION_BARCODE_RECEIVED = "ru.evotor.event.payback.BARCODE_RECEIVED"
-
-        const val ACTION_INTERNET_REQUISITES = "ru.evotor.event.payback.INTERNET_REQUISITES"
 
         /**
          * Разрешение необходимое приложению для работы со службой [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].

@@ -115,7 +115,7 @@ public final class PrintReceiptMapper {
         }
         bundle.putParcelableArrayList(KEY_CHANGES, changes);
 
-        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, printReceipt.getReceiptFromInternet());
+        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, Boolean.TRUE.equals(printReceipt.getReceiptFromInternet()));
 
         return bundle;
     }

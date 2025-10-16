@@ -162,7 +162,7 @@ data class Receipt
             /**
              * Признак расчета в сети «Интернет»
              */
-            val receiptFromInternet: Boolean
+            val receiptFromInternet: Boolean?
     ) {
 
         /**

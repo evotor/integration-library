@@ -82,7 +82,7 @@ class PrintSellReceiptCommand(
                                 payments
                         ),
                         hashMapOf(),
-                        receiptFromInternet ?: false
+                        receiptFromInternet
                 ))
             },
             null,
