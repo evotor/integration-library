@@ -13,6 +13,7 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetInternetRequisites;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
 
 /**
@@ -23,6 +24,7 @@ public class BeforePositionsEditedEventResult implements IBundlable {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
+    private static final String KEY_RECEIPT_SET_INTERNET_REQUISITES = "setInternetRequisites";
 
     @Nullable
     public static BeforePositionsEditedEventResult create(@Nullable Bundle bundle) {
@@ -40,7 +42,8 @@ public class BeforePositionsEditedEventResult implements IBundlable {
         return new BeforePositionsEditedEventResult(
                 positionChanges,
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
-                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
+                SetInternetRequisites.from(bundle.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES))
         );
     }
 
@@ -53,11 +56,22 @@ public class BeforePositionsEditedEventResult implements IBundlable {
     private final SetExtra extra;
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
+    @Nullable
+    private final SetInternetRequisites setInternetRequisites;
 
     public BeforePositionsEditedEventResult(
             @Nullable List<IPositionChange> changes,
             @Nullable SetExtra extra,
             @Nullable SetPurchaserContactData setPurchaserContactData
+    ) {
+        this(changes, extra, setPurchaserContactData, null);
+    }
+
+    public BeforePositionsEditedEventResult(
+            @Nullable List<IPositionChange> changes,
+            @Nullable SetExtra extra,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable SetInternetRequisites setInternetRequisites
     ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
@@ -65,6 +79,7 @@ public class BeforePositionsEditedEventResult implements IBundlable {
         }
         this.extra = extra;
         this.setPurchaserContactData = setPurchaserContactData;
+        this.setInternetRequisites = setInternetRequisites;
     }
 
     @Override
@@ -82,6 +97,10 @@ public class BeforePositionsEditedEventResult implements IBundlable {
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
+        bundle.putBundle(
+                KEY_RECEIPT_SET_INTERNET_REQUISITES,
+                setInternetRequisites == null ? null : setInternetRequisites.toBundle()
+        );
         return bundle;
     }
 
@@ -98,5 +117,10 @@ public class BeforePositionsEditedEventResult implements IBundlable {
     @Nullable
     public SetPurchaserContactData getSetPurchaserContactData() {
         return setPurchaserContactData;
+    }
+
+    @Nullable
+    public SetInternetRequisites getSetInternetRequisites() {
+        return setInternetRequisites;
     }
 }
