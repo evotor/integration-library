@@ -55,6 +55,7 @@ object ReceiptApi {
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
     private const val DISCOUNTS_PATH = "discounts"
+    private const val RECEIPT_FROM_INTERNET_PATH = "receiptFromInternet"
     private const val CURRENT_CORRECTION_INCOME_PATH = "correctionIncome"
     private const val CURRENT_CORRECTION_OUTCOME_PATH = "correctionOutcome"
     private const val CURRENT_CORRECTION_RETURN_INCOME_PATH = "correctionReturnIncome"
@@ -213,6 +214,18 @@ object ReceiptApi {
             null
         }
 
+        val receiptFromInternet = context.contentResolver.query(
+            Uri.withAppendedPath(baseUri, RECEIPT_FROM_INTERNET_PATH),
+            null,
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToNext()) {
+                cursor.optInt(ReceiptFromInternetTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
+            } else null
+        }
+
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
         val groupByPrintGroupPaymentResults = getPaymentsResults
             .groupBy { it.printGroup }
@@ -228,7 +241,7 @@ object ReceiptApi {
                     payments = payments.mapValues { it.value.value },
                     changes = payments.mapValues { it.value.change },
                     discounts = receiptDiscount,
-                    receiptFromInternet = false // TODO
+                    receiptFromInternet = receiptFromInternet
                 )
             )
         }
