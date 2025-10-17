@@ -2,7 +2,7 @@ package ru.evotor.framework.inventory;
 
 /**
  * Тип товара.
- *
+ * <p>
  * Новые значения добавлять только в конец
  */
 public enum ProductType {
@@ -159,5 +159,15 @@ public enum ProductType {
     /**
      * Растительные масла
      */
-    VEGETABLE_OIL_MARKED
+    VEGETABLE_OIL_MARKED,
+
+    /**
+     * Автомобильные жидкости
+     */
+    AUTO_FLUIDS_MARKED,
+
+    /**
+     * Бытовая химия и косметика
+     */
+    CHEMICALS_MARKED
 }

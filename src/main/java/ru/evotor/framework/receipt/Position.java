@@ -1726,6 +1726,34 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toAutoFluidsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.AUTO_FLUIDS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setAutoFluidsParams(mark);
+            return this;
+        }
+
+        public Builder toChemicalsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.CHEMICALS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setChemicalsParams(mark);
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -1871,6 +1899,10 @@ public class Position implements Parcelable {
         public void setVegetableOilParams(Mark mark) {
             position.mark = mark;
         }
+
+        public void setAutoFluidsParams(Mark mark) { position.mark = mark; }
+
+        public void setChemicalsParams(Mark mark) { position.mark = mark; }
 
         public void setVeterinaryParams(Mark mark) {
             position.mark = mark;
