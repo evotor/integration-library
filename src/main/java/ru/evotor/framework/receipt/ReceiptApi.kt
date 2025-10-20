@@ -222,7 +222,7 @@ object ReceiptApi {
             null
         )?.use { cursor ->
             if (cursor.moveToNext()) {
-                cursor.optInt(ReceiptFromInternetTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
+                cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
             } else null
         }
 
