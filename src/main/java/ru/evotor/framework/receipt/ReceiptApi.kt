@@ -55,7 +55,6 @@ object ReceiptApi {
     private const val POSITIONS_PATH = "positions"
     private const val PAYMENTS_PATH = "payments"
     private const val DISCOUNTS_PATH = "discounts"
-    private const val RECEIPT_FROM_INTERNET_PATH = "receiptFromInternet"
     private const val CURRENT_CORRECTION_INCOME_PATH = "correctionIncome"
     private const val CURRENT_CORRECTION_OUTCOME_PATH = "correctionOutcome"
     private const val CURRENT_CORRECTION_RETURN_INCOME_PATH = "correctionReturnIncome"
@@ -129,15 +128,19 @@ object ReceiptApi {
             else -> Uri.withAppendedPath(RECEIPTS_URI, uuid)
         }
 
-        val header = context.contentResolver.query(
+        val (header, receiptFromInternet) = context.contentResolver.query(
             baseUri,
             null,
             null,
             null,
             null
-        )?.use {
-            if (it.moveToNext()) {
-                return@use createReceiptHeader(it)
+        )?.use { cursor ->
+            if (cursor.moveToNext()) {
+                val receiptHeader = createReceiptHeader(cursor)
+                val receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
+                receiptHeader?.let {
+                    return@use receiptHeader to receiptFromInternet
+                }
             } else {
                 return null
             }
@@ -212,18 +215,6 @@ object ReceiptApi {
             //old version of evopos, does not support discounts
             error.printStackTrace()
             null
-        }
-
-        val receiptFromInternet = context.contentResolver.query(
-            Uri.withAppendedPath(baseUri, RECEIPT_FROM_INTERNET_PATH),
-            null,
-            null,
-            null,
-            null
-        )?.use { cursor ->
-            if (cursor.moveToNext()) {
-                cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
-            } else null
         }
 
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
