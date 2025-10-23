@@ -134,9 +134,9 @@ object ReceiptApi {
             null,
             null,
             null
-        )?.use {
-            if (it.moveToNext()) {
-                return@use createReceiptHeader(it)
+        )?.use { cursor ->
+            if (cursor.moveToNext()) {
+                return@use createReceiptHeader(cursor)
             } else {
                 return null
             }
@@ -219,15 +219,16 @@ object ReceiptApi {
         for (printGroup in printGroups) {
             val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment }
                 ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
-            printDocuments.add(Receipt.PrintReceipt(
-                printGroup,
-                getPositionResults
-                    .filter { it.printGroup == printGroup }
-                    .map { it.position },
-                payments.mapValues { it.value.value },
-                payments.mapValues { it.value.change },
-                receiptDiscount
-            )
+            printDocuments.add(
+                Receipt.PrintReceipt(
+                    printGroup = printGroup,
+                    positions = getPositionResults
+                        .filter { it.printGroup == printGroup }
+                        .map { it.position },
+                    payments = payments.mapValues { it.value.value },
+                    changes = payments.mapValues { it.value.change },
+                    discounts = receiptDiscount
+                )
             )
         }
 
@@ -607,7 +608,8 @@ object ReceiptApi {
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
-            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
+            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false
         )
     }
 

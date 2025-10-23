@@ -21,6 +21,7 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 class PrintBuyReceiptCommand(
         printReceipts: List<Receipt.PrintReceipt>,
@@ -30,7 +31,8 @@ class PrintBuyReceiptCommand(
         receiptDiscount: BigDecimal?,
         paymentAddress: String? = null,
         paymentPlace: String? = null,
-        userUuid: String? = null
+        userUuid: String? = null,
+        receiptFromInternet: Boolean? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -39,7 +41,8 @@ class PrintBuyReceiptCommand(
         receiptDiscount = receiptDiscount,
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
-        userUuid = userUuid
+        userUuid = userUuid,
+        receiptFromInternet = receiptFromInternet
 ) {
 
     /**
@@ -49,6 +52,8 @@ class PrintBuyReceiptCommand(
      * @param clientEmail Эл.почта клиента
      * @param paymentAddress Адрес места расчёта
      * @param paymentPlace Место расчёта
+     * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция
+     * @param receiptFromInternet Признак расчета в сети «Интернет»
      */
     constructor(
             positions: List<Position>,
@@ -57,7 +62,9 @@ class PrintBuyReceiptCommand(
             clientEmail: String?,
             paymentAddress: String? = null,
             paymentPlace: String? = null,
-            userUuid: String? = null) : this(
+            userUuid: String? = null,
+            receiptFromInternet: Boolean? = null
+    ) : this(
             ArrayList<Receipt.PrintReceipt>().apply {
                 add(Receipt.PrintReceipt(
                         PrintGroup(
@@ -84,7 +91,8 @@ class PrintBuyReceiptCommand(
             BigDecimal.ZERO,
             paymentAddress,
             paymentPlace,
-            userUuid
+            userUuid,
+            receiptFromInternet
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -107,7 +115,8 @@ class PrintBuyReceiptCommand(
                     receiptDiscount = getReceiptDiscount(bundle),
                     paymentAddress = getPaymentAddress(bundle),
                     paymentPlace = getPaymentPlace(bundle),
-                    userUuid = getUserUuid(bundle)
+                    userUuid = getUserUuid(bundle),
+                    receiptFromInternet = getReceiptFromInternet(bundle)
             )
         }
     }

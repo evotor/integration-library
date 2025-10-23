@@ -43,7 +43,7 @@ abstract class CorrectionReturnIncomeIntegrationService : IntegrationServiceV2()
      *
      * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
      */
-    @RequiresIntentAction(BuyIntegrationService.ACTION_DELIVERY_REQUISITES)
+    @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
     companion object {

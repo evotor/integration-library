@@ -22,6 +22,7 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetInternetRequisites;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
 
 /**
@@ -33,6 +34,7 @@ public class OpenBuybackReceiptCommand implements IBundlable {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
+    private static final String KEY_RECEIPT_SET_INTERNET_REQUISITES = "setInternetRequisites";
 
     @Nullable
     public static OpenBuybackReceiptCommand create(@Nullable Bundle bundle) {
@@ -47,7 +49,8 @@ public class OpenBuybackReceiptCommand implements IBundlable {
                         PositionAdd.class
                 ),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
-                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
+                SetInternetRequisites.from(bundle.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES))
         );
     }
 
@@ -57,9 +60,11 @@ public class OpenBuybackReceiptCommand implements IBundlable {
     private final SetExtra extra;
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
+    @Nullable
+    private final SetInternetRequisites setInternetRequisites;
 
     /**
-     * Используйте конструктор с setPurchaserContactData
+     * Используйте конструктор с setPurchaserContactData и setInternetRequisites
      *
      * @param changes
      * @param extra
@@ -77,12 +82,22 @@ public class OpenBuybackReceiptCommand implements IBundlable {
             @Nullable SetExtra extraChange,
             @Nullable SetPurchaserContactData setPurchaserContactData
     ) {
+        this(changes, extraChange, setPurchaserContactData, null);
+    }
+
+    public OpenBuybackReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extraChange,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable SetInternetRequisites setInternetRequisites
+    ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
         }
         this.extra = extraChange;
         this.setPurchaserContactData = setPurchaserContactData;
+        this.setInternetRequisites = setInternetRequisites;
     }
 
     public void process(@NonNull final Activity activity, IntegrationManagerCallback callback) {
@@ -118,6 +133,10 @@ public class OpenBuybackReceiptCommand implements IBundlable {
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
+        bundle.putBundle(
+                KEY_RECEIPT_SET_INTERNET_REQUISITES,
+                setInternetRequisites == null ? null : setInternetRequisites.toBundle()
+        );
         return bundle;
     }
 
@@ -134,5 +153,10 @@ public class OpenBuybackReceiptCommand implements IBundlable {
     @Nullable
     public SetPurchaserContactData getSetPurchaserContactData() {
         return setPurchaserContactData;
+    }
+
+    @Nullable
+    public SetInternetRequisites getSetInternetRequisites() {
+        return setInternetRequisites;
     }
 }

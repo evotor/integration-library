@@ -74,6 +74,11 @@ public class PrintReceiptCommandResult implements IBundlable {
      */
     public static final int ERROR_CODE_INVALID_FISCAL_SIGN_OF_INCORRECT_RECEIPT = -14;
 
+    /**
+     * В интернет-чеках место расчета должно быть заполнено
+     */
+    public static final int ERROR_PAYMENT_PLACE_IS_NULL  = -15;
+
     @Nullable
     public static PrintReceiptCommandResult create(@Nullable Bundle bundle) {
         if (bundle == null) {

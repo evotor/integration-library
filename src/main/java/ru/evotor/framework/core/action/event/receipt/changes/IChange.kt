@@ -35,6 +35,7 @@ interface IChange : IBundlable {
          */
         SET_PRINT_EXTRA,
         SET_PURCHASER_CONTACT_DATA,
+        SET_INTERNET_REQUISITES,
         UNKNOWN
     }
 }
