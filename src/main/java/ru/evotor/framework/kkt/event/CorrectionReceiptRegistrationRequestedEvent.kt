@@ -52,8 +52,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
                 getCorrectionType(it),
                 it.getString(KEY_BASIS_FOR_CORRECTION)
                     ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
-                it.getString(KEY_PRESCRIPTION_NUMBER)
-                    ?: throw IntegrationLibraryParsingException(CorrectionReceiptRegistrationRequestedEvent::class.java),
+                it.getString(KEY_PRESCRIPTION_NUMBER),
                 Date(it.getLong(KEY_CORRECTABLE_SETTLEMENT_DATE)),
                 BigDecimal(it.getString(KEY_AMOUNT_PAID)),
                 PaymentType.valueOf(
