@@ -90,7 +90,11 @@ data class Receipt
             /**
              * Номер аппаратной смены. Может быть null для еще незакрытого чека
              */
-            val sessionNumber: Long?
+            val sessionNumber: Long?,
+            /**
+             * Признак расчета в сети «Интернет»
+             */
+            val receiptFromInternet: Boolean
     )
 
     /**
@@ -158,11 +162,7 @@ data class Receipt
              *
              * Added on 13.02.2018
              */
-            val discounts: Map<String, BigDecimal>?,
-            /**
-             * Признак расчета в сети «Интернет»
-             */
-            val receiptFromInternet: Boolean?
+            val discounts: Map<String, BigDecimal>?
     ) {
 
         /**

@@ -128,7 +128,7 @@ object ReceiptApi {
             else -> Uri.withAppendedPath(RECEIPTS_URI, uuid)
         }
 
-        val (header, receiptFromInternet) = context.contentResolver.query(
+        val header = context.contentResolver.query(
             baseUri,
             null,
             null,
@@ -136,11 +136,7 @@ object ReceiptApi {
             null
         )?.use { cursor ->
             if (cursor.moveToNext()) {
-                val receiptHeader = createReceiptHeader(cursor)
-                val receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 }
-                receiptHeader?.let {
-                    return@use receiptHeader to receiptFromInternet
-                }
+                return@use createReceiptHeader(cursor)
             } else {
                 return null
             }
@@ -231,8 +227,7 @@ object ReceiptApi {
                         .map { it.position },
                     payments = payments.mapValues { it.value.value },
                     changes = payments.mapValues { it.value.change },
-                    discounts = receiptDiscount,
-                    receiptFromInternet = receiptFromInternet
+                    discounts = receiptDiscount
                 )
             )
         }
@@ -613,7 +608,8 @@ object ReceiptApi {
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
-            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
+            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false
         )
     }
 

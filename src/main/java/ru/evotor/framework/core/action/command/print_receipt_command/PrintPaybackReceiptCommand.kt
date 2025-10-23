@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.Receipt
 import java.math.BigDecimal
 import java.util.*
 
-
 /**
  * Команда печати чека возврата.
  * @param printReceipts Список чеков для печати.
@@ -55,6 +54,8 @@ class PrintPaybackReceiptCommand(
      * @param sellReceiptUuid Идентифиатор чека продажи, на основании которого осуществляется возврат
      * @param paymentAddress Адрес места расчёта
      * @param paymentPlace Место расчёта
+     * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция
+     * @param receiptFromInternet Признак расчета в сети «Интернет»
      */
     constructor(
             positions: List<Position>,
@@ -84,8 +85,7 @@ class PrintPaybackReceiptCommand(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
                         ),
-                        hashMapOf(),
-                        receiptFromInternet
+                        hashMapOf()
                 ))
             },
             null,
@@ -95,7 +95,8 @@ class PrintPaybackReceiptCommand(
             sellReceiptUuid,
             paymentAddress,
             paymentPlace,
-            userUuid
+            userUuid,
+            receiptFromInternet
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {

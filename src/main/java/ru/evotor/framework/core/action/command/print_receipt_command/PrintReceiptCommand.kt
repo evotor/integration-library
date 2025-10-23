@@ -28,6 +28,7 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 abstract class PrintReceiptCommand(
         val printReceipts: List<Receipt.PrintReceipt>,

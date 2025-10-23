@@ -27,7 +27,6 @@ public final class PrintReceiptMapper {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_SINGLE_CHANGE = "change";
     private static final String KEY_SINGLE_CHANGE_VALUE = "changeValue";
-    private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
 
     @Nullable
     public static Receipt.PrintReceipt from(@Nullable Bundle bundle) {
@@ -68,15 +67,12 @@ public final class PrintReceiptMapper {
             changes.put(change, BundleUtils.getMoney(completeChangeBundle, KEY_SINGLE_CHANGE_VALUE));
         }
 
-        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
-
         return new Receipt.PrintReceipt(
                 printGroup,
                 positions,
                 payments,
                 changes,
-                new HashMap<String, BigDecimal>(),
-                receiptFromInternet
+                new HashMap<String, BigDecimal>()
         );
     }
 
@@ -114,8 +110,6 @@ public final class PrintReceiptMapper {
             changes.add(completeChangeBundle);
         }
         bundle.putParcelableArrayList(KEY_CHANGES, changes);
-
-        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, Boolean.TRUE.equals(printReceipt.getReceiptFromInternet()));
 
         return bundle;
     }

@@ -52,6 +52,8 @@ class PrintBuyReceiptCommand(
      * @param clientEmail Эл.почта клиента
      * @param paymentAddress Адрес места расчёта
      * @param paymentPlace Место расчёта
+     * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция
+     * @param receiptFromInternet Признак расчета в сети «Интернет»
      */
     constructor(
             positions: List<Position>,
@@ -80,8 +82,7 @@ class PrintBuyReceiptCommand(
                                 positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
                                 payments
                         ),
-                        hashMapOf(),
-                        receiptFromInternet
+                        hashMapOf()
                 ))
             },
             null,
@@ -90,7 +91,8 @@ class PrintBuyReceiptCommand(
             BigDecimal.ZERO,
             paymentAddress,
             paymentPlace,
-            userUuid
+            userUuid,
+            receiptFromInternet
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
