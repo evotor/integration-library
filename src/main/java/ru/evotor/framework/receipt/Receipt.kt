@@ -90,7 +90,16 @@ data class Receipt
             /**
              * Номер аппаратной смены. Может быть null для еще незакрытого чека
              */
-            val sessionNumber: Long?
+            val sessionNumber: Long?,
+            /**
+             * Адрес места расчёта
+             */
+            var paymentAddress: String?,
+
+            /**
+             * Место расчёта
+             */
+            var paymentPlace: String?
     )
 
     /**

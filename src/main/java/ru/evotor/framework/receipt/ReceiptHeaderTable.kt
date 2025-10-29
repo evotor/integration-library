@@ -10,4 +10,6 @@ object ReceiptHeaderTable {
     const val COLUMN_CLIENT_PHONE = "CLIENT_PHONE"
     const val COLUMN_EXTRA = "EXTRA"
     const val COLUMN_SESSION_NUMBER = "SESSION_NUMBER"
+    const val COLUMN_PAYMENT_ADDRESS = "PAYMENT_ADDRESS"
+    const val COLUMN_PAYMENT_PLACE = "PAYMENT_PLACE"
 }
