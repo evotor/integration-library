@@ -3,18 +3,20 @@ package ru.evotor.framework.kkt.api
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import ru.evotor.framework.*
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
+import ru.evotor.framework.getMoney
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_PAYMENT_ADDRESS
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_PAYMENT_PLACE
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_CLOSE_DATE
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_IS_EXPIRED
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_IS_OPEN
@@ -23,6 +25,7 @@ import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_SESSIO
 import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optList
+import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
@@ -30,7 +33,7 @@ import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.receipt.position.VatRate
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 
 /**
  * Интерфейс для работы с кассой.
@@ -388,6 +391,12 @@ object KktApi {
         return getKktSessionInfo(context, uri)
     }
 
+    @JvmStatic
+    fun getPaymentLocation(context: Context): Location? {
+        val uri = Uri.parse("${KktContract.BASE_URI}/${KktContract.PATH_KKT_PAYMENT_LOCATION}")
+        return getLocationInfo(context, uri)
+    }
+
     private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
         return context.contentResolver.query(
             KktContract.BASE_URI,
@@ -463,11 +472,51 @@ object KktApi {
         )
     }
 
+    private fun getLocationInfo(
+        context: Context,
+        uri: Uri
+    ): Location? {
+        val cursor = context.contentResolver.query(
+            uri,
+            arrayOf(
+                COLUMN_PAYMENT_ADDRESS,
+                COLUMN_PAYMENT_PLACE
+            ),
+            null,
+            null,
+            null
+        )
+
+        cursor ?: return null
+
+        cursor.use {
+            return mapCursorToLocation(it)
+        }
+    }
+
+    private fun mapCursorToLocation(cursor: Cursor): Location? {
+        if (!cursor.moveToFirst()) {
+            return null
+        }
+        val paymentLocation: String? = cursor.optString(COLUMN_PAYMENT_ADDRESS)
+        val paymentPlace: String? = cursor.optString(COLUMN_PAYMENT_PLACE)
+
+        return Location(
+            paymentLocation,
+            paymentPlace
+        )
+    }
+
     data class KktSessionInfo(
         val isOpen: Boolean?,
         val isExpired: Boolean?,
         val openDate: Date?,
         val closeDate: Date?,
         val sessionNumber: Int?
+    )
+
+    data class Location(
+        val paymentAddress: String? = null,
+        val paymentPlace: String? = null
     )
 }
