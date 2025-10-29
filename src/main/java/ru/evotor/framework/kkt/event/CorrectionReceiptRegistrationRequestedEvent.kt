@@ -88,7 +88,7 @@ class CorrectionReceiptRegistrationRequestedEvent internal constructor(
         putString(KEY_TAXATION_SYSTEM, taxationSystem.name)
         putString(KEY_CORRECTION_TYPE, correctionType.name)
         putString(KEY_BASIS_FOR_CORRECTION, basisForCorrection)
-        putString(KEY_PRESCRIPTION_NUMBER, prescriptionNumber)
+        putString(KEY_PRESCRIPTION_NUMBER, prescriptionNumber ?: "")
         putLong(KEY_CORRECTABLE_SETTLEMENT_DATE, correctableSettlementDate.time)
         putString(KEY_AMOUNT_PAID, amountPaid.toString())
         putString(KEY_PAYMENT_TYPE, paymentType.name)
