@@ -12,6 +12,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.getMoney
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Receipt
@@ -68,7 +69,7 @@ abstract class PrintReceiptCommand(
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         bundle.putString(KEY_USER_UUID, userUuid)
-        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, receiptFromInternet ?: false)
+        receiptFromInternet?.let { bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, it) }
         return bundle
     }
 
@@ -125,8 +126,8 @@ abstract class PrintReceiptCommand(
             return bundle.getString(KEY_USER_UUID, null)
         }
 
-        internal fun getReceiptFromInternet(bundle: Bundle): Boolean {
-            return bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false)
+        internal fun getReceiptFromInternet(bundle: Bundle): Boolean? {
+            return bundle.optBoolean(KEY_RECEIPT_FROM_INTERNET)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

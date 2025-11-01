@@ -56,3 +56,10 @@ internal fun <T : Enum<*>> Bundle.optEnum(key: String, values: Array<T>): T? =
 internal inline fun <reified T> Bundle.optSerializable(key: String): T? =
         this.getSerializable(key)?.let { value -> if (value is T) value else null }
 
+internal fun Bundle.optBoolean(key: String): Boolean? {
+    return if (this.containsKey(key)) {
+        this.getBoolean(key)
+    } else {
+        null
+    }
+}
