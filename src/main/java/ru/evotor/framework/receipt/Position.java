@@ -1911,8 +1911,25 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(Mark mark) {
-            position.mark = mark;
+            if (isMarkValid(mark)) {
+                position.mark = mark;
+            } else {
+                position.mark = null;
+            }
+
             return this;
+        }
+
+        private boolean isMarkValid(Mark mark) {
+            if (mark instanceof Mark.RawMark) {
+                String value = ((Mark.RawMark) mark).getValue();
+                return value != null && !value.isEmpty();
+            } else if (mark instanceof Mark.MarkByFiscalTags) {
+                String fiscalTag = ((Mark.MarkByFiscalTags) mark).getProductCode();
+                return fiscalTag != null && !fiscalTag.isEmpty();
+            }
+
+            return true;
         }
 
         public Builder setExtraKeys(Set<ExtraKey> extraKeys) {
