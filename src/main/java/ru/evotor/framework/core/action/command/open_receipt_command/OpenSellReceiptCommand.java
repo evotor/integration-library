@@ -33,6 +33,7 @@ public class OpenSellReceiptCommand implements IBundlable {
     private static final String KEY_CHANGES = "changes";
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
+    private static final String KEY_USE_PAYMENT_INTENT_MODE = "usePaymentIntentMode";
 
     @Nullable
     public static OpenSellReceiptCommand create(@Nullable Bundle bundle) {
@@ -40,13 +41,17 @@ public class OpenSellReceiptCommand implements IBundlable {
             return null;
         }
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
+        Boolean usePaymentIntentMode = bundle.containsKey(KEY_USE_PAYMENT_INTENT_MODE)
+                ? bundle.getBoolean(KEY_USE_PAYMENT_INTENT_MODE)
+                : null;
         return new OpenSellReceiptCommand(
                 Utils.filterByClass(
                         ChangesMapper.INSTANCE.create(changesParcelable),
                         PositionAdd.class
                 ),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
-                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA))
+                SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
+                usePaymentIntentMode
         );
     }
 
@@ -56,6 +61,8 @@ public class OpenSellReceiptCommand implements IBundlable {
     private final SetExtra extra;
     @Nullable
     private final SetPurchaserContactData setPurchaserContactData;
+    @Nullable
+    private final Boolean usePaymentIntentMode;
 
     /**
      * Используйте конструктор с setPurchaserContactData
@@ -76,12 +83,22 @@ public class OpenSellReceiptCommand implements IBundlable {
             @Nullable SetExtra extra,
             @Nullable SetPurchaserContactData setPurchaserContactData
     ) {
+        this(changes, extra, setPurchaserContactData, null);
+    }
+
+    public OpenSellReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extra,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable Boolean usePaymentIntentMode
+    ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
         }
         this.extra = extra;
         this.setPurchaserContactData = setPurchaserContactData;
+        this.usePaymentIntentMode = usePaymentIntentMode;
     }
 
     public void process(@NonNull final Activity activity, IntegrationManagerCallback callback) {
@@ -117,6 +134,9 @@ public class OpenSellReceiptCommand implements IBundlable {
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
+        if (usePaymentIntentMode != null) {
+            bundle.putBoolean(KEY_USE_PAYMENT_INTENT_MODE, usePaymentIntentMode);
+        }
         return bundle;
     }
 
@@ -133,5 +153,10 @@ public class OpenSellReceiptCommand implements IBundlable {
     @Nullable
     public SetPurchaserContactData getSetPurchaserContactData() {
         return setPurchaserContactData;
+    }
+
+    @Nullable
+    public Boolean getUsePaymentIntentMode() {
+        return usePaymentIntentMode;
     }
 }

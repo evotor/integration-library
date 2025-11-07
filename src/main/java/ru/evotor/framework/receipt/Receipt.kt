@@ -90,7 +90,11 @@ data class Receipt
             /**
              * Номер аппаратной смены. Может быть null для еще незакрытого чека
              */
-            val sessionNumber: Long?
+            val sessionNumber: Long?,
+            /**
+             * Ожидается ли платежный документ
+             */
+            val isPaymentIntentMode: Boolean = false
     )
 
     /**

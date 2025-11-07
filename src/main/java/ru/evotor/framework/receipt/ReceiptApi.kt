@@ -12,6 +12,7 @@ import ru.evotor.framework.getMoney
 import ru.evotor.framework.getQuantity
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -607,7 +608,8 @@ object ReceiptApi {
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
-            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
+            isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false
         )
     }
 

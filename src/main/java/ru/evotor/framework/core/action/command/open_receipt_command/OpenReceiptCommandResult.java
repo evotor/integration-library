@@ -21,6 +21,8 @@ public class OpenReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_CORRECTION_RETURN_OUTCOME_RECEIPT_IS_ALREADY_OPEN = -8;
     public static final int ERROR_CODE_OPEN_PAYBACK_RECEIPT_INVALID_POSITIONS = -9;
     public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -10;
+    public static final int ERROR_CODE_NO_PERMISSION = -11;
+    public static final int ERROR_OPERATION_DENIED  = -12;
 
     @Nullable
     public static OpenReceiptCommandResult create(@Nullable Bundle bundle) {

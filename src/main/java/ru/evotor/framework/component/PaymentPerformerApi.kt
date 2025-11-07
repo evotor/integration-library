@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
+import ru.evotor.framework.core.action.command.payment.ProcessPaymentIntentCommand
+import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentIntentRequestedEvent
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
@@ -28,7 +30,20 @@ object PaymentPerformerApi {
      * @see PaymentPerformer
      */
     fun getAllPaymentPerformers(packageManager: PackageManager): List<PaymentPerformer> {
-        val eventName = PaymentSystemEvent.NAME_ACTION
+        return getPaymentPerformersByEventName(packageManager, PaymentSystemEvent.NAME_ACTION)
+    }
+
+    /**
+     * Возвращает список всех установленных на смарт-терминале приложений, способных выполнить оплату после печати чека.
+     * @param packageManager экземпляр класса PackageManager, необходимого, для получения информации об установленных приложениях.
+     * @return applicationsList список приложений, способных выполнить оплату.
+     * @see PaymentPerformer
+     */
+    fun getAllPaymentPerformersWithPaymentIntentMode(packageManager: PackageManager): List<PaymentPerformer> {
+        return getPaymentPerformersByEventName(packageManager, PaymentIntentRequestedEvent.NAME_ACTION)
+    }
+
+    private fun getPaymentPerformersByEventName(packageManager: PackageManager, eventName: String): List<PaymentPerformer> {
         val applicationsList = ArrayList<PaymentPerformer>()
         applicationsList.add(getDefaultCashPaymentPerformer())
         applicationsList.add(getDefaultCardPaymentPerformer())
