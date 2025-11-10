@@ -20,6 +20,7 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_CLIENT_PHONE = "clientPhone";
     private static final String KEY_EXTRA = "extra";
     private static final String KEY_SESSION_NUMBER = "sessionNumber";
+    private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -44,6 +45,8 @@ public final class ReceiptHeaderMapper {
             sessionNumber = bundle.getLong(KEY_SESSION_NUMBER);
         }
 
+        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
+
         return new Receipt.Header(
                 receiptUuid,
                 baseReceiptUuid,
@@ -53,7 +56,8 @@ public final class ReceiptHeaderMapper {
                 bundle.getString(KEY_CLIENT_EMAIL),
                 bundle.getString(KEY_CLIENT_PHONE),
                 bundle.getString(KEY_EXTRA),
-                sessionNumber
+                sessionNumber,
+                receiptFromInternet
         );
     }
 
@@ -80,6 +84,8 @@ public final class ReceiptHeaderMapper {
 
         if(header.getSessionNumber() != null)
             bundle.putLong(KEY_SESSION_NUMBER, header.getSessionNumber());
+
+        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, header.getReceiptFromInternet());
 
         return bundle;
     }

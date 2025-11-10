@@ -85,7 +85,11 @@ data class Receipt(
         /**
          * Номер аппаратной смены. Может быть null для еще незакрытого чека
          */
-        val sessionNumber: Long?
+        val sessionNumber: Long?,
+        /**
+         * Признак расчета в сети «Интернет»
+         */
+        val receiptFromInternet: Boolean
     )
 
     /**

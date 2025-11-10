@@ -21,6 +21,7 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 class PrintPaybackReceiptCommand(
     printReceipts: List<Receipt.PrintReceipt>,
@@ -31,7 +32,8 @@ class PrintPaybackReceiptCommand(
     val sellReceiptUuid: String? = null,
     paymentAddress: String? = null,
     paymentPlace: String? = null,
-    userUuid: String? = null
+    userUuid: String? = null,
+    receiptFromInternet: Boolean? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -40,8 +42,9 @@ class PrintPaybackReceiptCommand(
         receiptDiscount = receiptDiscount,
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
-        userUuid = userUuid
-    ) {
+        userUuid = userUuid,
+        receiptFromInternet = receiptFromInternet
+) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат
@@ -50,6 +53,8 @@ class PrintPaybackReceiptCommand(
      * @param sellReceiptUuid Идентифиатор чека продажи, на основании которого осуществляется возврат
      * @param paymentAddress Адрес места расчёта
      * @param paymentPlace Место расчёта
+     * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция
+     * @param receiptFromInternet Признак расчета в сети «Интернет»
      */
     constructor(
         positions: List<Position>,
@@ -59,8 +64,8 @@ class PrintPaybackReceiptCommand(
         sellReceiptUuid: String? = null,
         paymentAddress: String? = null,
         paymentPlace: String? = null,
-        userUuid: String? = null
-    ) : this(
+        userUuid: String? = null,
+        receiptFromInternet: Boolean? = null) : this(
         ArrayList<Receipt.PrintReceipt>().apply {
             add(
                 Receipt.PrintReceipt(
@@ -90,7 +95,8 @@ class PrintPaybackReceiptCommand(
         sellReceiptUuid,
         paymentAddress,
         paymentPlace,
-        userUuid
+        userUuid,
+        receiptFromInternet
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -119,7 +125,8 @@ class PrintPaybackReceiptCommand(
                 sellReceiptUuid = bundle.getString(KEY_SELL_RECEIPT_UUID),
                 paymentAddress = getPaymentAddress(bundle),
                 paymentPlace = getPaymentPlace(bundle),
-                userUuid = getUserUuid(bundle)
+                userUuid = getUserUuid(bundle),
+                receiptFromInternet = getReceiptFromInternet(bundle)
             )
         }
     }

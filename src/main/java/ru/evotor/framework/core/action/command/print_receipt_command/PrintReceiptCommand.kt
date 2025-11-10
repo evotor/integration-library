@@ -12,6 +12,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.getMoney
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Receipt
@@ -28,6 +29,7 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 abstract class PrintReceiptCommand(
     val printReceipts: List<Receipt.PrintReceipt>,
@@ -37,7 +39,8 @@ abstract class PrintReceiptCommand(
     val receiptDiscount: BigDecimal?,
     val paymentAddress: String?,
     val paymentPlace: String?,
-    val userUuid: String?
+    val userUuid: String?,
+    val receiptFromInternet: Boolean?
 ) : IBundlable {
     internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
@@ -69,6 +72,7 @@ abstract class PrintReceiptCommand(
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         bundle.putString(KEY_USER_UUID, userUuid)
+        receiptFromInternet?.let { bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, it) }
         return bundle
     }
 
@@ -88,6 +92,7 @@ abstract class PrintReceiptCommand(
         private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
         private const val KEY_PAYMENT_PLACE = "paymentPlace"
         private const val KEY_USER_UUID = "userUuid"
+        private const val KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
@@ -121,6 +126,10 @@ abstract class PrintReceiptCommand(
 
         internal fun getUserUuid(bundle: Bundle): String? {
             return bundle.getString(KEY_USER_UUID, null)
+        }
+
+        internal fun getReceiptFromInternet(bundle: Bundle): Boolean? {
+            return bundle.optBoolean(KEY_RECEIPT_FROM_INTERNET)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {
