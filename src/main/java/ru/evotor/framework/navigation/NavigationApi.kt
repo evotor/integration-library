@@ -1,5 +1,6 @@
 package ru.evotor.framework.navigation
 
+import android.content.Context
 import android.content.Intent
 
 /**
@@ -38,6 +39,7 @@ object NavigationApi {
     private const val ACTION_PRODUCT_LIST = "evotor.intent.action.commodity.SELECT"
 
     const val EXTRA_SHOULD_LOCK_SCREEN = "shouldLockScreen"
+    const val EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN = "appPackageSourceLockScreen"
 
     // extras for edit sell intent
     const val EXTRA_CLOSE_AFTER_OPERATION = "closeAfterOperation"
@@ -146,15 +148,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForSellReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context,
     ): Intent {
         return Intent(ACTION_PAYMENT_SELL).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -164,15 +169,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForPaybackReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_PAYBACK).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -182,15 +190,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForBuyReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_BUY).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -200,15 +211,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForBuybackReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_BUYBACK).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -218,15 +232,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForCorrectionIncomeReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_CORRECTION_INCOME).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -236,15 +253,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForCorrectionOutcomeReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_CORRECTION_OUTCOME).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -254,15 +274,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForCorrectionReturnIncomeReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_CORRECTION_RETURN_INCOME).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
@@ -272,15 +295,18 @@ object NavigationApi {
      * @param shouldLockScreen параметр запуска экрана оплаты, если 'true' то приложение вызвавшее этот Intent, будет запущено в lock-task
      * и нижняя навигационная панель будет недоступна (кроме кнопки Назад). Если передан 'false' навигационная нижняя панель будет доступна и lock-task не будет.
      * По-умолчанию 'false'
+     * @param context параметр для распознования приложением обработки оплаты источника LockTask Mode
      *
      * @return intent
      */
     @JvmStatic
     fun createIntentForCorrectionReturnOutcomeReceiptPayment(
-        shouldLockScreen: Boolean = false
+        shouldLockScreen: Boolean = false,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_CORRECTION_RETURN_OUTCOME).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
+            putExtra(EXTRA_APPLICATION_PACKAGE_SOURCE_LOCK_SCREEN, context.packageName ?: "")
         }
     }
 
