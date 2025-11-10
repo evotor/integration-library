@@ -613,7 +613,9 @@ object ReceiptApi {
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
             sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
-            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false
+            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false,
+            paymentAddress = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_ADDRESS),
+            paymentPlace = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_PLACE),
         )
     }
 
