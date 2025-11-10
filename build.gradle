@@ -6,6 +6,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
+    namespace = "ru.evotor.integrations"
     def version = 37
 
     compileSdk 30
