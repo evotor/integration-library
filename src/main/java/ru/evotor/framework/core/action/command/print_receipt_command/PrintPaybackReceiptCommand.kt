@@ -44,7 +44,7 @@ class PrintPaybackReceiptCommand(
         paymentPlace = paymentPlace,
         userUuid = userUuid,
         receiptFromInternet = receiptFromInternet
-) {
+    ) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат
@@ -65,7 +65,8 @@ class PrintPaybackReceiptCommand(
         paymentAddress: String? = null,
         paymentPlace: String? = null,
         userUuid: String? = null,
-        receiptFromInternet: Boolean? = null) : this(
+        receiptFromInternet: Boolean? = null
+    ) : this(
         ArrayList<Receipt.PrintReceipt>().apply {
             add(
                 Receipt.PrintReceipt(

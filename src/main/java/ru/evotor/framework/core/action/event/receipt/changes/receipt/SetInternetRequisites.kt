@@ -13,7 +13,6 @@ data class SetInternetRequisites(
     val receiptFromInternet: Boolean,
     val paymentPlace: String
 ) : IChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putBoolean(KEY_RECEIPT_FROM_INTERNET, receiptFromInternet)
@@ -47,4 +46,3 @@ data class SetInternetRequisites(
         }
     }
 }
-

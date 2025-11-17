@@ -94,7 +94,6 @@ data class Receipt(
          * Адрес места расчёта
          */
         var paymentAddress: String?,
-
         /**
          * Место расчёта
          */

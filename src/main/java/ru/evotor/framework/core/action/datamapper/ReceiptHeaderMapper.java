@@ -43,7 +43,7 @@ public final class ReceiptHeaderMapper {
         }
 
         Long sessionNumber = null;
-        if(bundle.containsKey(KEY_SESSION_NUMBER)) {
+        if (bundle.containsKey(KEY_SESSION_NUMBER)) {
             sessionNumber = bundle.getLong(KEY_SESSION_NUMBER);
         }
 
@@ -86,7 +86,7 @@ public final class ReceiptHeaderMapper {
         bundle.putString(KEY_CLIENT_EMAIL, header.getClientEmail());
         bundle.putString(KEY_EXTRA, header.getExtra());
 
-        if(header.getSessionNumber() != null)
+        if (header.getSessionNumber() != null)
             bundle.putLong(KEY_SESSION_NUMBER, header.getSessionNumber());
 
         bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, header.getReceiptFromInternet());

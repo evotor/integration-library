@@ -2,12 +2,12 @@ package ru.evotor.framework.core.action.event.receipt.payment.combined.result
 
 import android.os.Bundle
 import ru.evotor.framework.component.PaymentDelegator
-import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 class PaymentDelegatorForwardedEventResult(
-        val paymentDelegator: PaymentDelegator,
-        extra: SetExtra?
+    val paymentDelegator: PaymentDelegator,
+    extra: SetExtra?
 ) : PaymentDelegatorEventResult(ResultType.FORWARDED, extra) {
     override fun toBundle(): Bundle {
         val result = super.toBundle()
@@ -26,13 +26,11 @@ class PaymentDelegatorForwardedEventResult(
                 ?.let { PaymentDelegator.from(it) }
             if (paymentDelegator != null) {
                 return PaymentDelegatorForwardedEventResult(
-                        paymentDelegator,
-                        SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
+                    paymentDelegator,
+                    SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA))
                 )
             }
             return null
         }
     }
 }
-
-

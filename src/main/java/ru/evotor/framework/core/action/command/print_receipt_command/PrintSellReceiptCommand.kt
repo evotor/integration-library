@@ -43,7 +43,7 @@ class PrintSellReceiptCommand(
         paymentPlace = paymentPlace,
         userUuid = userUuid,
         receiptFromInternet = receiptFromInternet
-) {
+    ) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат

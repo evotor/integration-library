@@ -222,13 +222,13 @@ object ReceiptApi {
                 ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
             printDocuments.add(
                 Receipt.PrintReceipt(
-                    printGroup= printGroup,
-                    positions =getPositionResults
+                    printGroup = printGroup,
+                    positions = getPositionResults
                         .filter { it.printGroup == printGroup }
                         .map { it.position },
-                    payments =payments.mapValues { it.value.value },
-                    changes =payments.mapValues { it.value.change },
-                    discounts =receiptDiscount
+                    payments = payments.mapValues { it.value.value },
+                    changes = payments.mapValues { it.value.change },
+                    discounts = receiptDiscount
                 )
             )
         }

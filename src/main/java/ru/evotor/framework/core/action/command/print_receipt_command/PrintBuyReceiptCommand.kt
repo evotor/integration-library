@@ -32,7 +32,7 @@ class PrintBuyReceiptCommand(
     paymentAddress: String? = null,
     paymentPlace: String? = null,
     userUuid: String? = null,
-        receiptFromInternet: Boolean? = null
+    receiptFromInternet: Boolean? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -42,7 +42,8 @@ class PrintBuyReceiptCommand(
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
         userUuid = userUuid,
-        receiptFromInternet = receiptFromInternet) {
+        receiptFromInternet = receiptFromInternet
+    ) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат
@@ -61,7 +62,8 @@ class PrintBuyReceiptCommand(
         paymentAddress: String? = null,
         paymentPlace: String? = null,
         userUuid: String? = null,
-        receiptFromInternet: Boolean? = null) : this(
+        receiptFromInternet: Boolean? = null
+    ) : this(
         ArrayList<Receipt.PrintReceipt>().apply {
             add(
                 Receipt.PrintReceipt(

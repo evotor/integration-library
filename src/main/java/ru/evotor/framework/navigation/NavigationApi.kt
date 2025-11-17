@@ -155,7 +155,7 @@ object NavigationApi {
     @JvmStatic
     fun createIntentForSellReceiptPayment(
         shouldLockScreen: Boolean = false,
-        context: Context,
+        context: Context
     ): Intent {
         return Intent(ACTION_PAYMENT_SELL).apply {
             putExtra(EXTRA_SHOULD_LOCK_SCREEN, shouldLockScreen)
