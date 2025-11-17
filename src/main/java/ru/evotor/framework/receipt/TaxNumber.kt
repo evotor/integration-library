@@ -63,5 +63,15 @@ enum class TaxNumber(val value: BigDecimal) {
     /**
      * Расчётная ставка 7%.
      */
-    VAT_7_107(BigDecimal.valueOf(7))
+    VAT_7_107(BigDecimal.valueOf(7)),
+
+    /**
+     * Основная ставка 22%.
+     */
+    VAT_22(BigDecimal.valueOf(22)),
+
+    /**
+     * Расчётная ставка 22%.
+     */
+    VAT_22_122(BigDecimal.valueOf(22))
 }
