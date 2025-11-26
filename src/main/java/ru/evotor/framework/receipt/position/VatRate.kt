@@ -12,5 +12,7 @@ enum class VatRate {
     VAT_5,
     VAT_7,
     VAT_5_105,
-    VAT_7_107
+    VAT_7_107,
+    VAT_22,
+    VAT_22_122
 }
