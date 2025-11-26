@@ -51,7 +51,7 @@ object FeaturesContract {
     const val PATH_VETERINARY_MARK = "veterinary_mark"
     const val PATH_PET_FOOD_MARK = "pet_food_marked"
     const val PATH_VEGETABLE_OIL_MARK = "vegetable_oil_marked"
-    const val VAT22 = "vat22"
+    const val PATH_VAT22 = "vat22"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

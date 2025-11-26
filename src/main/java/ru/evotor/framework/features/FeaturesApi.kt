@@ -339,5 +339,5 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
-    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.VAT22)
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
 }
