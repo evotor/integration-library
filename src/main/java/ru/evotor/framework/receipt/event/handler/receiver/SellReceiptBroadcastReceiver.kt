@@ -15,15 +15,14 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
  * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
-        ACTION_RECEIPT_CREATED,
-        ACTION_POSITION_ADDED,
-        ACTION_POSITION_UPDATED,
-        ACTION_POSITION_REMOVED,
-        ACTION_APPLY_DISCOUNT_TO_RECEIPT,
-        ACTION_RECEIPT_DELETED,
-        ACTION_RECEIPT_COMPLETED
+    ACTION_RECEIPT_CREATED,
+    ACTION_POSITION_ADDED,
+    ACTION_POSITION_UPDATED,
+    ACTION_POSITION_REMOVED,
+    ACTION_APPLY_DISCOUNT_TO_RECEIPT,
+    ACTION_RECEIPT_DELETED,
+    ACTION_RECEIPT_COMPLETED
 ) {
-
     /**
      * Обработчик событий создания чека.
      */
@@ -67,7 +66,6 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
     companion object {
-
         const val ACTION_RECEIPT_CREATED = "evotor.intent.action.receipt.sell.OPENED"
 
         const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.sell.POSITION_ADDED"
@@ -81,7 +79,5 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
-
     }
-
 }

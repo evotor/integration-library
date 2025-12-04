@@ -16,7 +16,6 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 class PrintZReportCommand(
     val userUuid: String? = null
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(
             NAME,

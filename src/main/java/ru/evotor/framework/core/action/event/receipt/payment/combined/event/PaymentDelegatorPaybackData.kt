@@ -4,6 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.component.PaymentPerformer
+import ru.evotor.readAliased
+import ru.evotor.writeAliased
 import java.math.BigDecimal
 
 class PaymentDelegatorPaybackData(
@@ -14,7 +16,7 @@ class PaymentDelegatorPaybackData(
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
-            parcel.writeParcelable(performer, flags)
+            parcel.writeAliased(performer, flags)
             parcel.writeSerializable(sum)
         }
     }
@@ -41,7 +43,7 @@ class PaymentDelegatorPaybackData(
                 var sum: BigDecimal? = null
 
                 if (version >= 1) {
-                    performer = parcel.readParcelable(PaymentPerformer::class.java.classLoader)
+                    performer = parcel.readAliased(PaymentPerformer.CREATOR)
                     sum = parcel.readSerializable() as BigDecimal
                 }
 

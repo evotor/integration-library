@@ -15,20 +15,19 @@ import ru.evotor.framework.receipt.PrintGroup
  * @param positionUuids список позиций, входящих в печатную группу.
  */
 data class SetPrintGroup(val printGroup: PrintGroup?, val paymentPurposeIds: List<String>, val positionUuids: List<String>) : IChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putBundle(
-                    KEY_PRINT_GROUP,
-                    PrintGroupMapper.toBundle(printGroup)
+                KEY_PRINT_GROUP,
+                PrintGroupMapper.toBundle(printGroup)
             )
             putStringArrayList(
-                    KEY_PAYMENT_PURPOSE_ID,
-                    ArrayList(paymentPurposeIds)
+                KEY_PAYMENT_PURPOSE_ID,
+                ArrayList(paymentPurposeIds)
             )
             putStringArrayList(
-                    KEY_PAYMENT_POSITIONS_UUIDS,
-                    ArrayList(positionUuids)
+                KEY_PAYMENT_POSITIONS_UUIDS,
+                ArrayList(positionUuids)
             )
         }
     }

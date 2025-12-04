@@ -8,24 +8,22 @@ import ru.evotor.framework.ParcelableUtils
 import java.util.*
 
 data class MedicineAdditionalDetails(
-        /**
-         * Номер документа, не более 200 символов;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
-         */
-        val documentNumber: String,
-        /**
-         * Дата документа в формате ГГММДД;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
-         */
-        val documentDate: Date,
-        /**
-         * номер серии льготного рецепта;
-         * Составная часть дополнительного реквизита пользователя (тег 1086)
-         */
-        val serialNumber: String
-
+    /**
+     * Номер документа, не более 200 символов;
+     * Составная часть дополнительного реквизита пользователя (тег 1086)
+     */
+    val documentNumber: String,
+    /**
+     * Дата документа в формате ГГММДД;
+     * Составная часть дополнительного реквизита пользователя (тег 1086)
+     */
+    val documentDate: Date,
+    /**
+     * номер серии льготного рецепта;
+     * Составная часть дополнительного реквизита пользователя (тег 1086)
+     */
+    val serialNumber: String
 ) : Parcelable, IBundlable {
-
     override fun writeToParcel(dest: Parcel, flag: Int) {
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(documentNumber)
@@ -48,6 +46,7 @@ data class MedicineAdditionalDetails(
         @JvmField
         val CREATOR = object : Parcelable.Creator<MedicineAdditionalDetails?> {
             override fun createFromParcel(parcel: Parcel): MedicineAdditionalDetails? = create(parcel)
+
             override fun newArray(size: Int): Array<MedicineAdditionalDetails?> = arrayOfNulls(size)
         }
 
@@ -62,9 +61,9 @@ data class MedicineAdditionalDetails(
         fun fromBundle(bundle: Bundle?): MedicineAdditionalDetails? {
             return bundle?.let {
                 MedicineAdditionalDetails(
-                        documentNumber = it.getString(KEY_DOCUMENT_NUMBER) ?: return null,
-                        documentDate = Date(it.getLong(KEY_DOCUMENT_DATE)),
-                        serialNumber = it.getString(KEY_SERIAL_NUMBER) ?: return null
+                    documentNumber = it.getString(KEY_DOCUMENT_NUMBER) ?: return null,
+                    documentDate = Date(it.getLong(KEY_DOCUMENT_DATE)),
+                    serialNumber = it.getString(KEY_SERIAL_NUMBER) ?: return null
                 )
             }
         }
@@ -79,9 +78,9 @@ data class MedicineAdditionalDetails(
                     val serialNumber = parcel.readString()
                     if (documentNumber != null && serialNumber != null) {
                         medicineAdditionalDetails = MedicineAdditionalDetails(
-                                documentNumber = documentNumber,
-                                documentDate = documentDate,
-                                serialNumber = serialNumber
+                            documentNumber = documentNumber,
+                            documentDate = documentDate,
+                            serialNumber = serialNumber
                         )
                     }
                 }

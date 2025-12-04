@@ -11,20 +11,21 @@ import ru.evotor.framework.core.action.datamapper.IntegrationComponentMapper
  *
  * @property packageName Название пакета
  * @property componentName Название компонента (сервис, активити и т.п.)
- * @property appUuid Уникальный идентификатор приложения в Облаке Эвотор
+ * @property appUuid Уникальный идентификатор приложения в Облаке
  * @property appName Название приложения
  */
 open class IntegrationComponent(
-        val packageName: String?,
-        val componentName: String?,
-        val appUuid: String?,
-        val appName: String?
+    val packageName: String?,
+    val componentName: String?,
+    val appUuid: String?,
+    val appName: String?
 ) : Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString()) {
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

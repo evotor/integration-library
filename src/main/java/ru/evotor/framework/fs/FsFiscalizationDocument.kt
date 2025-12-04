@@ -5,7 +5,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.experimental.and
 
-
 /**
  * Сокращенный отчет о регистрации ФН
  */
@@ -112,7 +111,6 @@ data class FsFiscalizationDocument(
      * Режим работы: Применение при расчетах в Интернет
      */
     fun isInternetPays() = isBitSet(workModeFlags, 5)
-
 
     private fun isBitSet(value: Byte, bitNum: Int): Boolean {
         if ((bitNum < 0) && (bitNum > 7)) {

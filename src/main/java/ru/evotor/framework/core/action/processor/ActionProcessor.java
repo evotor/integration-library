@@ -7,6 +7,8 @@ import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import ru.evotor.BundlesKt;
 import ru.evotor.IBundlable;
 import ru.evotor.framework.core.IIntegrationManagerResponse;
 import ru.evotor.framework.core.IntegrationManager;
@@ -54,7 +56,7 @@ public abstract class ActionProcessor {
             data.putParcelable(IntegrationManager.KEY_INTENT, intent);
             data.putParcelable(IntegrationManager.KEY_OPTIONS, options);
 
-            response.onResult(data);
+            response.onResult(BundlesKt.sanitizeOutput(data));
         }
 
         /**
@@ -85,7 +87,7 @@ public abstract class ActionProcessor {
         public final void onResult(Bundle bundle) throws RemoteException {
             Bundle result = new Bundle();
             result.putBundle(IntegrationManager.KEY_DATA, bundle);
-            response.onResult(result);
+            response.onResult(BundlesKt.sanitizeOutput(result));
         }
 
         /**
@@ -117,7 +119,7 @@ public abstract class ActionProcessor {
          * @throws RemoteException
          */
         public final void onError(int errorCode, String errorMessage, Bundle data) throws RemoteException {
-            response.onError(errorCode, errorMessage, data);
+            response.onError(errorCode, errorMessage, BundlesKt.sanitizeOutput(data));
         }
 
         /**

@@ -10,23 +10,20 @@ import ru.evotor.framework.kkt.FiscalTags
  * Единица измерения.
  */
 data class Measure(
-
-        /**
-         * Наименование
-         */
-        val name: String,
-        /**
-         * Точность
-         */
-        val precision: Int,
-        /**
-         * Код
-         */
-        @FiscalRequisite(tag = FiscalTags.MEASURE_CODE)
-        val code: Int
-
+    /**
+     * Наименование
+     */
+    val name: String,
+    /**
+     * Точность
+     */
+    val precision: Int,
+    /**
+     * Код
+     */
+    @FiscalRequisite(tag = FiscalTags.MEASURE_CODE)
+    val code: Int
 ) : Parcelable {
-
     override fun writeToParcel(dest: Parcel, flags: Int) {
         ParcelableUtils.writeExpand(dest, VERSION) { parcel ->
             parcel.writeString(name)
@@ -38,7 +35,6 @@ data class Measure(
     override fun describeContents(): Int = 0
 
     companion object {
-
         private const val VERSION = 1
         internal const val UNKNOWN_MEASURE_CODE = 255
 
@@ -54,9 +50,9 @@ data class Measure(
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
                 if (version >= 1) {
                     measure = Measure(
-                            name = parcel.readString()!!,
-                            precision = parcel.readInt(),
-                            code = parcel.readInt()
+                        name = parcel.readString()!!,
+                        precision = parcel.readInt(),
+                        code = parcel.readInt()
                     )
                 }
             }

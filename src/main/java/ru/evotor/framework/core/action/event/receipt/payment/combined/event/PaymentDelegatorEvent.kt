@@ -21,6 +21,7 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
          * Значение константы: <code>evo.v2.receipt.sell.payment.COMBINED</code>.
          */
         const val NAME_ACTION = "evo.v2.receipt.sell.payment.COMBINED"
+
         /**
          * Разрешение, которое необходимо указать в манифесте приложения.
          */
@@ -38,6 +39,6 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
         }
 
         fun getReceiptUuid(bundle: Bundle?): String? =
-                bundle?.getString(KEY_RECEIPT_UUID)
+            bundle?.getString(KEY_RECEIPT_UUID)
     }
 }

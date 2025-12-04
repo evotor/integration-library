@@ -15,15 +15,14 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
  * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
-        ACTION_RECEIPT_CREATED,
-        ACTION_POSITION_ADDED,
-        ACTION_POSITION_UPDATED,
-        ACTION_POSITION_REMOVED,
-        ACTION_APPLY_DISCOUNT_TO_RECEIPT,
-        ACTION_RECEIPT_DELETED,
-        ACTION_RECEIPT_COMPLETED
+    ACTION_RECEIPT_CREATED,
+    ACTION_POSITION_ADDED,
+    ACTION_POSITION_UPDATED,
+    ACTION_POSITION_REMOVED,
+    ACTION_APPLY_DISCOUNT_TO_RECEIPT,
+    ACTION_RECEIPT_DELETED,
+    ACTION_RECEIPT_COMPLETED
 ) {
-
     /**
      * Обработчик событий создания чека.
      */
@@ -52,7 +51,10 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
      * Обработчик событий применения скидки к чеку.
      */
     @RequiresIntentAction(ACTION_APPLY_DISCOUNT_TO_RECEIPT)
-    override fun handleApplyDiscountToReceiptEvent(context: Context, eventApplyDiscountTo: ApplyDiscountToReceiptEvent) = Unit
+    override fun handleApplyDiscountToReceiptEvent(
+        context: Context,
+        eventApplyDiscountTo: ApplyDiscountToReceiptEvent
+    ) = Unit
 
     /**
      * Обработчик событий удаления чека.
@@ -67,7 +69,6 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
     companion object {
-
         const val ACTION_RECEIPT_CREATED = "evotor.intent.action.receipt.payback.OPENED"
 
         const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.payback.POSITION_ADDED"
@@ -76,12 +77,11 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_POSITION_REMOVED = "evotor.intent.action.receipt.payback.POSITION_REMOVED"
 
-        const val ACTION_APPLY_DISCOUNT_TO_RECEIPT = "evotor.intent.action.receipt.payback.APPLY_DISCOUNT_TO_RECEIPT"
+        const val ACTION_APPLY_DISCOUNT_TO_RECEIPT =
+            "evotor.intent.action.receipt.payback.APPLY_DISCOUNT_TO_RECEIPT"
 
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.payback.CLEARED"
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.payback.RECEIPT_CLOSED"
-
     }
-
 }

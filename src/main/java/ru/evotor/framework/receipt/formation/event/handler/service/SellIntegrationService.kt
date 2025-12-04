@@ -13,7 +13,6 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
  * Служба для работы с чеком продажи.
  */
 abstract class SellIntegrationService : IntegrationServiceV2() {
-
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_BARCODE_RECEIVED -> ReturnPositionsForBarcodeRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
@@ -73,7 +72,6 @@ abstract class SellIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnMedicineAttributeEvent): ReturnMedicineAttributeEvent.Result? = null
 
     companion object {
-
         /**
          * Действие, которое сообщает о получении данных от сканера штрихкодов.
          *

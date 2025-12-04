@@ -9,7 +9,6 @@ import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
  */
 
 class PositionsMergeEventResult(val extra: SetExtra?) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
@@ -20,10 +19,11 @@ class PositionsMergeEventResult(val extra: SetExtra?) : IBundlable {
         private val KEY_RECEIPT_EXTRA = "extra"
 
         fun create(bundle: Bundle?): PositionsMergeEventResult? {
-            return if (bundle == null)
+            return if (bundle == null) {
                 null
-            else
+            } else {
                 PositionsMergeEventResult(SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)))
+            }
         }
     }
 }

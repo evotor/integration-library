@@ -16,40 +16,42 @@ internal object FiscalReceiptMapper {
 
     fun read(bundle: Bundle?): FiscalReceipt? = bundle?.let {
         FiscalReceipt(
-                documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
-                creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
-                settlementType = it.optEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
-                        ?: return null,
-                kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
-                    ?: return null,
-                sessionNumber = FiscalDocumentMapper.readSessionNumber(it) ?: return null,
-                fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(it)
-                        ?: return null,
-                fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(it) ?: return null,
-                wasPrinted = it.getBoolean(KEY_WAS_PRINTED)
+            documentNumber = FiscalDocumentMapper.readDocumentNumber(it) ?: return null,
+            creationDate = FiscalDocumentMapper.readCreationDate(it) ?: return null,
+            settlementType = it.optEnum(KEY_SETTLEMENT_TYPE, SettlementType.values())
+                ?: return null,
+            kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(it)
+                ?: return null,
+            sessionNumber = FiscalDocumentMapper.readSessionNumber(it) ?: return null,
+            fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(it)
+                ?: return null,
+            fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(it) ?: return null,
+            wasPrinted = it.getBoolean(KEY_WAS_PRINTED)
         )
     }
 
     fun read(cursor: Cursor) = FiscalReceipt(
-            documentNumber = FiscalDocumentMapper.readDocumentNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
-            creationDate = FiscalDocumentMapper.readCreationDate(cursor)
-                    ?: throwOutdatedLibraryException(),
-            settlementType = cursor.optEnum(
-                    FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE, SettlementType.values()
-            ) ?: throwOutdatedLibraryException(),
-            kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor) ?: throwOutdatedLibraryException(),
-            sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
-            fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)
-                    ?: throwOutdatedLibraryException(),
-            fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
-                    ?: throwOutdatedLibraryException(),
-            wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
+        documentNumber = FiscalDocumentMapper.readDocumentNumber(cursor)
+            ?: throwOutdatedLibraryException(),
+        creationDate = FiscalDocumentMapper.readCreationDate(cursor)
+            ?: throwOutdatedLibraryException(),
+        settlementType = cursor.optEnum(
+            FiscalReceiptContract.COLUMN_SETTLEMENT_TYPE,
+            SettlementType.values()
+        ) ?: throwOutdatedLibraryException(),
+        kktRegistrationNumber = FiscalDocumentMapper.readKktRegistrationNumber(cursor)
+            ?: throwOutdatedLibraryException(),
+        sessionNumber = FiscalDocumentMapper.readSessionNumber(cursor)
+            ?: throwOutdatedLibraryException(),
+        fiscalStorageNumber = FiscalDocumentMapper.readFiscalStorageNumber(cursor)
+            ?: throwOutdatedLibraryException(),
+        fiscalIdentifier = FiscalDocumentMapper.readFiscalIdentifier(cursor)
+            ?: throwOutdatedLibraryException(),
+        wasPrinted = cursor.optBoolean(KEY_WAS_PRINTED) ?: throwOutdatedLibraryException()
     )
 
     private fun throwOutdatedLibraryException(): Nothing =
-            throw IntegrationLibraryMappingException("${FiscalReceipt::class.java.name} field")
+        throw IntegrationLibraryMappingException("${FiscalReceipt::class.java.name} field")
 
     fun write(fiscalReceipt: FiscalReceipt) = FiscalDocumentMapper.write(fiscalReceipt).apply {
         this.putInt(KEY_SETTLEMENT_TYPE, fiscalReceipt.settlementType.ordinal)

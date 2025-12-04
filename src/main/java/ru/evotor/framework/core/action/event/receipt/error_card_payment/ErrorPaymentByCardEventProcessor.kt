@@ -5,7 +5,6 @@ import android.os.RemoteException
 import ru.evotor.framework.core.action.processor.ActionProcessor
 
 abstract class ErrorPaymentByCardEventProcessor : ActionProcessor() {
-
     @Throws(RemoteException::class)
     override fun process(action: String, bundle: Bundle?, callback: ActionProcessor.Callback) {
         val event = ErrorPaymentByCardEvent.create(bundle)

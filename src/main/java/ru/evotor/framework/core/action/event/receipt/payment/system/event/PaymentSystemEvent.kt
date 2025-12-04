@@ -12,11 +12,14 @@ import ru.evotor.framework.Utils
  * Чтобы приложение получало событие, значение константы <code>NAME_ACTION</code> необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
  */
 abstract class PaymentSystemEvent(
-        val operationType: OperationType
+    val operationType: OperationType
 ) : IBundlable {
-
     public enum class OperationType {
-        UNKNOWN, SELL, SELL_CANCEL, PAYBACK, PAYBACK_CANCEL
+        UNKNOWN,
+        SELL,
+        SELL_CANCEL,
+        PAYBACK,
+        PAYBACK_CANCEL
     }
 
     override fun toBundle(): Bundle {

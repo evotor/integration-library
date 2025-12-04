@@ -6,19 +6,21 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
+    namespace = "ru.evotor.integrations"
     def version = 37
 
-    compileSdk 29
+    compileSdk 30
 
     defaultConfig {
         minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode version
-        versionName "0.6.08"
+        versionName "v0.6.27.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,8 +31,11 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
+    }
+    buildFeatures {
+        aidl = true
     }
 }
 
@@ -41,7 +46,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     api 'com.github.evotor:push-notifications:v0.2.1'
-    api 'com.github.evotor:query-api:1.0.0'
+    api 'com.github.evotor:query-api:1.2.0'
 
     implementation 'com.google.code.gson:gson:2.8.9'
 
@@ -54,13 +59,13 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.22'
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.3'
+        classpath 'com.android.tools.build:gradle:8.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
     }
@@ -97,7 +102,7 @@ dokkaHtml.configure {
 }
 
 task sourceJar(type: Jar) {
-    classifier "sources"
+    archiveClassifier = "sources"
     from android.sourceSets.main.java.srcDirs
 }
 
@@ -105,6 +110,12 @@ task sourceJar(type: Jar) {
 task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     archiveClassifier = 'javadoc'
     from dokkaJavadoc.outputDirectory
+}
+
+tasks.configureEach {
+    if (it.name.startsWith("publish")) {
+        dependsOn(tasks.named("bundleReleaseAar"))
+    }
 }
 
 publishing {

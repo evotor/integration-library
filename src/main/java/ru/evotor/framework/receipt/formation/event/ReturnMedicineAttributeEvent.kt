@@ -13,10 +13,9 @@ import ru.evotor.framework.receipt.PrintGroup
  * @see <a href="https://developer.evotor.ru/docs/doc_java_medicine_attribute_event_processing.html">Добавление реквизитов покупателя в чек</a>
  */
 class ReturnMedicineAttributeEvent(
-        val receiptUuid: String,
-        val printGroups: List<PrintGroup?>
+    val receiptUuid: String,
+    val printGroups: List<PrintGroup?>
 ) : IntegrationEvent() {
-
     override fun toBundle(): Bundle = Bundle().apply {
         putString(KEY_RECEIPT_UUID, receiptUuid)
         putParcelableArrayList(KEY_PRINT_GROUPS, ArrayList(printGroups))
@@ -30,10 +29,11 @@ class ReturnMedicineAttributeEvent(
         fun from(bundle: Bundle?) = bundle?.let {
             it.classLoader = PrintGroup::class.java.classLoader
             ReturnMedicineAttributeEvent(
-                    receiptUuid = it.getString(KEY_RECEIPT_UUID)
-                            ?: return null,
-                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
-                            ?: return null)
+                receiptUuid = it.getString(KEY_RECEIPT_UUID)
+                    ?: return null,
+                printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
+                    ?: return null
+            )
         }
     }
 
@@ -43,7 +43,7 @@ class ReturnMedicineAttributeEvent(
      * @property attributes Массив печатных групп и соответствующих им объектов с медицинскими атрибутами.
      */
     data class Result(
-            val attributes: Map<PrintGroup?, MedicineAttribute?>?
+        val attributes: Map<PrintGroup?, MedicineAttribute?>?
     ) : IntegrationEvent.Result() {
         override fun toBundle() = Bundle().apply {
             classLoader = PrintGroup::class.java.classLoader

@@ -1,12 +1,14 @@
 package ru.evotor.framework.core.action.event.cash_operations;
 
-import android.os.Bundle;
 
-import java.math.BigDecimal;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import ru.evotor.framework.BundleUtils;
+
+import java.math.BigDecimal;
 
 /**
  * @deprecated Используйте {@link ru.evotor.framework.kkt.event.CashWithdrawnEvent}

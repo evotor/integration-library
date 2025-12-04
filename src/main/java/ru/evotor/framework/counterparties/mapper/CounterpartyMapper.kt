@@ -6,7 +6,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 internal object CounterpartyMapper {
-
     private const val KEY_UUID = "UUID"
     private const val KEY_COUNTERPARTY_TYPE = "COUNTERPARTY_TYPE"
     private const val KEY_FULL_NAME = "FULL_NAME"
@@ -19,10 +18,11 @@ internal object CounterpartyMapper {
     fun readUuid(bundle: Bundle?) = bundle?.let { it.getString(KEY_UUID)?.let { uuid -> UUID.fromString(uuid) } }
 
     fun readCounterpartyType(bundle: Bundle?) = bundle?.let {
-        if (it.containsKey(KEY_COUNTERPARTY_TYPE))
+        if (it.containsKey(KEY_COUNTERPARTY_TYPE)) {
             Counterparty.Type.values()[it.getInt(KEY_COUNTERPARTY_TYPE)]
-        else
+        } else {
             null
+        }
     }
 
     fun readFullName(bundle: Bundle?) = bundle?.getString(KEY_FULL_NAME)
@@ -49,16 +49,17 @@ internal object CounterpartyMapper {
     }
 
     fun <C : Counterparty> convertToNull(counterparty: C): C? =
-            if (counterparty.uuid == null &&
-                    counterparty.counterpartyType == null &&
-                    counterparty.fullName == null &&
-                    counterparty.shortName == null &&
-                    counterparty.inn == null &&
-                    counterparty.kpp == null &&
-                    counterparty.phones == null &&
-                    counterparty.addresses == null)
-                null
-            else
-                counterparty
-
+        if (counterparty.uuid == null &&
+            counterparty.counterpartyType == null &&
+            counterparty.fullName == null &&
+            counterparty.shortName == null &&
+            counterparty.inn == null &&
+            counterparty.kpp == null &&
+            counterparty.phones == null &&
+            counterparty.addresses == null
+        ) {
+            null
+        } else {
+            counterparty
+        }
 }

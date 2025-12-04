@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
  * Служба для работы с чеком коррекции.
  */
 abstract class CorrectionIncomeIntegrationService : IntegrationServiceV2() {
-
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
@@ -43,7 +42,7 @@ abstract class CorrectionIncomeIntegrationService : IntegrationServiceV2() {
      *
      * @see <a href="https://developer.evotor.ru/docs/doc_java_itinerant_trade.html">"Добавление в чек адреса и места расчёта"</a>
      */
-    @RequiresIntentAction(BuyIntegrationService.ACTION_DELIVERY_REQUISITES)
+    @RequiresIntentAction(ACTION_DELIVERY_REQUISITES)
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
     companion object {
