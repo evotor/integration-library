@@ -12,6 +12,7 @@ import ru.evotor.framework.core.IntegrationManagerImpl
 import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.getMoney
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.Payment
 import ru.evotor.framework.receipt.Receipt
@@ -28,31 +29,33 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 abstract class PrintReceiptCommand(
-        val printReceipts: List<Receipt.PrintReceipt>,
-        val extra: SetExtra?,
-        val clientPhone: String?,
-        val clientEmail: String?,
-        val receiptDiscount: BigDecimal?,
-        val paymentAddress: String?,
-        val paymentPlace: String?,
-        val userUuid: String?
+    val printReceipts: List<Receipt.PrintReceipt>,
+    val extra: SetExtra?,
+    val clientPhone: String?,
+    val clientEmail: String?,
+    val receiptDiscount: BigDecimal?,
+    val paymentAddress: String?,
+    val paymentPlace: String?,
+    val userUuid: String?,
+    val receiptFromInternet: Boolean?
 ) : IBundlable {
-
     internal fun process(context: Context, callback: IntegrationManagerCallback, action: String) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(action, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
         IntegrationManagerImpl(context.applicationContext)
-                .call(action,
-                        componentNameList[0],
-                        this,
-                        ActivityStarter(context),
-                        callback,
-                        Handler(Looper.getMainLooper())
-                )
+            .call(
+                action,
+                componentNameList[0],
+                this,
+                ActivityStarter(context),
+                callback,
+                Handler(Looper.getMainLooper())
+            )
     }
 
     override fun toBundle(): Bundle {
@@ -61,16 +64,19 @@ abstract class PrintReceiptCommand(
         bundle.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
         bundle.putString(KEY_CLIENT_EMAIL, clientEmail)
         bundle.putString(KEY_CLIENT_PHONE, clientPhone)
-        bundle.putString(KEY_RECEIPT_DISCOUNT, receiptDiscount?.toPlainString()
-                ?: BigDecimal.ZERO.toPlainString())
+        bundle.putString(
+            KEY_RECEIPT_DISCOUNT,
+            receiptDiscount?.toPlainString()
+                ?: BigDecimal.ZERO.toPlainString()
+        )
         bundle.putString(KEY_PAYMENT_ADDRESS, paymentAddress)
         bundle.putString(KEY_PAYMENT_PLACE, paymentPlace)
         bundle.putString(KEY_USER_UUID, userUuid)
+        receiptFromInternet?.let { bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, it) }
         return bundle
     }
 
     companion object {
-
         /**
          * Разрешение для отправки чеков по СМС или электронной почте.
          *
@@ -86,11 +92,12 @@ abstract class PrintReceiptCommand(
         private const val KEY_PAYMENT_ADDRESS = "paymentAddress"
         private const val KEY_PAYMENT_PLACE = "paymentPlace"
         private const val KEY_USER_UUID = "userUuid"
+        private const val KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet"
 
         internal fun getPrintReceipts(bundle: Bundle): List<Receipt.PrintReceipt> {
             return bundle.getParcelableArrayList<Bundle>(KEY_PRINT_RECEIPTS)
-                    ?.mapNotNull { PrintReceiptMapper.from(it) }
-                    ?: emptyList()
+                ?.mapNotNull { PrintReceiptMapper.from(it) }
+                ?: emptyList()
         }
 
         internal fun getSetExtra(bundle: Bundle): SetExtra? {
@@ -119,6 +126,10 @@ abstract class PrintReceiptCommand(
 
         internal fun getUserUuid(bundle: Bundle): String? {
             return bundle.getString(KEY_USER_UUID, null)
+        }
+
+        internal fun getReceiptFromInternet(bundle: Bundle): Boolean? {
+            return bundle.optBoolean(KEY_RECEIPT_FROM_INTERNET)
         }
 
         internal fun calculateChanges(sum: BigDecimal, payments: List<Payment>): Map<Payment, BigDecimal> {

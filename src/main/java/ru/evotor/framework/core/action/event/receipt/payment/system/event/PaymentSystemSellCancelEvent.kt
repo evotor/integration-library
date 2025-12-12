@@ -8,13 +8,12 @@ import java.math.BigDecimal
  * Событие, которое возникает при отмене оплаты чека продажи сторонней платёжной системой.
  */
 class PaymentSystemSellCancelEvent(
-        val receiptUuid: String,
-        val accountId: String?,
-        val sum: BigDecimal,
-        val rrn: String?,
-        val description: String?
+    val receiptUuid: String,
+    val accountId: String?,
+    val sum: BigDecimal,
+    val rrn: String?,
+    val description: String?
 ) : PaymentSystemEvent(OperationType.SELL_CANCEL) {
-
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RECEIPT_UUID, receiptUuid)

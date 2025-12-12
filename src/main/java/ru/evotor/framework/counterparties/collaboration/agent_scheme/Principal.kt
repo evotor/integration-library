@@ -11,48 +11,41 @@ import java.util.*
  * Принципал (поставщик)
  */
 data class Principal(
-        /**
-         * Uuid контрагента
-         */
-        override val uuid: UUID? = null,
-
-        /**
-         * Тип контрагента
-         */
-        override val counterpartyType: Counterparty.Type? = null,
-
-        /**
-         * Наименование полное
-         */
-        override val fullName: String? = null,
-
-        /**
-         * Наименование краткое
-         */
-        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-        override val shortName: String,
-
-        /**
-         * ИНН
-         */
-        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
-        override val inn: String,
-
-        /**
-         * КПП
-         */
-        override val kpp: String? = null,
-
-        /**
-         * Телефоны
-         */
-        @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-        override val phones: List<String>,
-
-        /**
-         * Адреса
-         */
-        override val addresses: List<String>? = null
+    /**
+     * Uuid контрагента
+     */
+    override val uuid: UUID? = null,
+    /**
+     * Тип контрагента
+     */
+    override val counterpartyType: Counterparty.Type? = null,
+    /**
+     * Наименование полное
+     */
+    override val fullName: String? = null,
+    /**
+     * Наименование краткое
+     */
+    @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
+    override val shortName: String,
+    /**
+     * ИНН
+     */
+    @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
+    override val inn: String,
+    /**
+     * КПП
+     */
+    override val kpp: String? = null,
+    /**
+     * Телефоны
+     */
+    @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+    override val phones: List<String>,
+    /**
+     * Адреса
+     */
+    override val addresses: List<String>? = null
 ) : Counterparty() {
     companion object {
         fun from(bundle: Bundle?): Principal? = PrincipalMapper.read(bundle)

@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ru.evotor.ParcelablesKt;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.core.IntegrationLibraryParsingException;
@@ -855,11 +856,11 @@ public class Position implements Parcelable {
         if (this.attributes != null) {
             for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
                 dest.writeString(entry.getKey());
-                dest.writeParcelable(entry.getValue(), flags);
+                ParcelablesKt.writeAliased(dest, entry.getValue(), flags);
             }
         }
         // Payment features
-        dest.writeParcelable(this.settlementMethod, flags);
+        ParcelablesKt.writeAliased(dest, this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
         //ImportationData
@@ -869,7 +870,7 @@ public class Position implements Parcelable {
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         // Mark
-        dest.writeParcelable(this.mark, flags);
+        ParcelablesKt.writeAliased(dest, this.mark, flags);
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
@@ -999,14 +1000,14 @@ public class Position implements Parcelable {
             this.attributes = new HashMap<>(attributesSize);
             for (int i = 0; i < attributesSize; i++) {
                 String key = in.readString();
-                AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                AttributeValue value = ParcelablesKt.readAliased(in, AttributeValue.CREATOR);
                 this.attributes.put(key, value);
             }
         }
     }
 
     private void readSettlementMethodField(Parcel in) {
-        SettlementMethod settlementMethod = in.readParcelable(SettlementMethod.class.getClassLoader());
+        SettlementMethod settlementMethod = ParcelablesKt.readParcelable(in, SettlementMethod.class);
         if (settlementMethod == null) {
             this.settlementMethod = new SettlementMethod.FullSettlement();
         } else {
@@ -1031,7 +1032,7 @@ public class Position implements Parcelable {
     }
 
     private void readMark(Parcel in) {
-        this.mark = in.readParcelable(Mark.class.getClassLoader());
+        this.mark = ParcelablesKt.readParcelable(in, Mark.class);
     }
 
     private void readPartialRealization(Parcel in) {
@@ -1725,6 +1726,7 @@ public class Position implements Parcelable {
             setCaviarParams(mark);
             return this;
         }
+
 
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:

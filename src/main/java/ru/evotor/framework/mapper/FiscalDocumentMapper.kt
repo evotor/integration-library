@@ -30,9 +30,9 @@ internal object FiscalDocumentMapper {
     fun readCreationDate(bundle: Bundle?): Date? = bundle?.optSerializable(KEY_CREATION_DATE)
 
     fun readCreationDate(cursor: Cursor): Date? = cursor.optString(FiscalDocumentContract.COLUMN_CREATION_DATE)
-            ?.let { dateString ->
-                SimpleDateFormat(FISCAL_DATE_PATTERN, Locale.getDefault()).parse(dateString)
-            }
+        ?.let { dateString ->
+            SimpleDateFormat(FISCAL_DATE_PATTERN, Locale.getDefault()).parse(dateString)
+        }
 
     fun readKktRegistrationNumber(bundle: Bundle?): String? = bundle?.getString(KEY_KKT_REGISTRATION_NUMBER_STRING) ?: bundle?.optLong(KEY_KKT_REGISTRATION_NUMBER)?.toString()
 

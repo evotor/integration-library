@@ -18,8 +18,8 @@ class CashInsertedEvent(documentUuid: String, total: BigDecimal) : CashOperation
     companion object {
         fun from(bundle: Bundle?): CashInsertedEvent? = bundle?.let {
             CashInsertedEvent(
-                    getDocumentUuid(it) ?: return null,
-                    getTotal(it) ?: return null
+                getDocumentUuid(it) ?: return null,
+                getTotal(it) ?: return null
             )
         }
     }

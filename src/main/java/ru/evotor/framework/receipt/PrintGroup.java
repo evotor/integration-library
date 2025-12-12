@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
+
+import ru.evotor.ParcelablesKt;
 import ru.evotor.framework.ParcelableUtils;
 import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
@@ -70,7 +72,9 @@ public class PrintGroup implements Parcelable {
 
     /**
      * Признак расчета в «Интернет».
+     * @deprecated Используйте {@link ru.evotor.framework.receipt.Receipt.Header#receiptFromInternet}
      */
+    @Deprecated
     private boolean receiptFromInternet;
 
     @Deprecated
@@ -83,7 +87,7 @@ public class PrintGroup implements Parcelable {
             TaxationSystem taxationSystem,
             boolean shouldPrintReceipt
     ) {
-        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null, false);
+        this(identifier, type, orgName, orgInn, orgAddress, taxationSystem, shouldPrintReceipt, null, null);
     }
 
     public PrintGroup(
@@ -201,9 +205,9 @@ public class PrintGroup implements Parcelable {
             @Override
             public Unit invoke(Parcel parcel) {
                 /* version = 1*/
-                parcel.writeParcelable(PrintGroup.this.purchaser, flags);
+                ParcelablesKt.writeAliased(parcel, PrintGroup.this.purchaser, flags);
                 /* version = 2*/
-                parcel.writeParcelable(PrintGroup.this.medicineAttribute, flags);
+                ParcelablesKt.writeAliased(parcel, PrintGroup.this.medicineAttribute, flags);
                 /* version = 3*/
                 parcel.writeInt(PrintGroup.this.receiptFromInternet ? 1 : 0);
                 return Unit.INSTANCE;
@@ -230,11 +234,11 @@ public class PrintGroup implements Parcelable {
             @Override
             public Unit invoke(Parcel parcel, Integer version) {
                 if (version >= 1) {
-                    PrintGroup.this.purchaser = parcel.readParcelable(Purchaser.class.getClassLoader());
+                    PrintGroup.this.purchaser = ParcelablesKt.readAliased(parcel, Purchaser.CREATOR);
                 }
 
                 if (version >= 2) {
-                    PrintGroup.this.medicineAttribute = parcel.readParcelable(MedicineAttribute.class.getClassLoader());
+                    PrintGroup.this.medicineAttribute = ParcelablesKt.readAliased(parcel, MedicineAttribute.CREATOR);
                 }
 
                 if (version >= 3) {

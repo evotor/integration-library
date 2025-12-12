@@ -44,4 +44,8 @@ object KktContract {
 
     const val PATH_KKT_COUNTERS = ".Counters"
     const val COLUMN_CURRENT_CASH_SUM = "CURRENT_CASH_SUM"
+
+    const val PATH_KKT_PAYMENT_LOCATION = ".Location"
+    const val COLUMN_PAYMENT_ADDRESS = "PAYMENT_ADDRESS"
+    const val COLUMN_PAYMENT_PLACE = "PAYMENT_PLACE"
 }

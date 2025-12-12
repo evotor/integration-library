@@ -6,10 +6,9 @@ import ru.evotor.framework.Utils
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 
 abstract class PaymentDelegatorEventResult(
-        val resultType: ResultType,
-        val extra: SetExtra?
+    val resultType: ResultType,
+    val extra: SetExtra?
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putBundle(KEY_RECEIPT_EXTRA, extra?.toBundle())
@@ -18,7 +17,11 @@ abstract class PaymentDelegatorEventResult(
     }
 
     public enum class ResultType {
-        UNKNOWN, SELECTED, CANCEL, CANCEL_ALL
+        UNKNOWN,
+        SELECTED,
+        CANCEL,
+        CANCEL_ALL,
+        FORWARDED
     }
 
     companion object {
@@ -34,6 +37,7 @@ abstract class PaymentDelegatorEventResult(
                 ResultType.SELECTED -> PaymentDelegatorSelectedEventResult.create(bundle)
                 ResultType.CANCEL -> PaymentDelegatorCanceledEventResult.create(bundle)
                 ResultType.CANCEL_ALL -> PaymentDelegatorCanceledAllEventResult.create(bundle)
+                ResultType.FORWARDED -> PaymentDelegatorForwardedEventResult.create(bundle)
                 else -> null
             }
         }

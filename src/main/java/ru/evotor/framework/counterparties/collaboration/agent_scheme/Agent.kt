@@ -11,53 +11,45 @@ import java.util.*
  * Агент
  */
 data class Agent(
-        /**
-         * Uuid контрагента
-         */
-        override val uuid: UUID? = null,
-
-        /**
-         * Тип (признак) агента
-         */
-        @FiscalRequisite(tag = FiscalTags.SETTLEMENT_SUBJECT_AGENT_TYPE)
-        val type: Type? = null,
-
-        /**
-         * Тип контрагента
-         */
-        override val counterpartyType: Counterparty.Type? = null,
-
-        /**
-         * Наименование полное
-         */
-        override val fullName: String? = null,
-
-        /**
-         * Наименование краткое
-         */
-        override val shortName: String? = null,
-
-        /**
-         * ИНН
-         */
-        override val inn: String? = null,
-
-        /**
-         * КПП
-         */
-        override val kpp: String? = null,
-
-        /**
-         * Телефоны
-         */
-        @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-        @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-        override val phones: List<String>? = null,
-
-        /**
-         * Адреса
-         */
-        override val addresses: List<String>? = null
+    /**
+     * Uuid контрагента
+     */
+    override val uuid: UUID? = null,
+    /**
+     * Тип (признак) агента
+     */
+    @FiscalRequisite(tag = FiscalTags.SETTLEMENT_SUBJECT_AGENT_TYPE)
+    val type: Type? = null,
+    /**
+     * Тип контрагента
+     */
+    override val counterpartyType: Counterparty.Type? = null,
+    /**
+     * Наименование полное
+     */
+    override val fullName: String? = null,
+    /**
+     * Наименование краткое
+     */
+    override val shortName: String? = null,
+    /**
+     * ИНН
+     */
+    override val inn: String? = null,
+    /**
+     * КПП
+     */
+    override val kpp: String? = null,
+    /**
+     * Телефоны
+     */
+    @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+    @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+    override val phones: List<String>? = null,
+    /**
+     * Адреса
+     */
+    override val addresses: List<String>? = null
 ) : Counterparty() {
     /**
      * Тип агента
@@ -86,7 +78,7 @@ data class Agent(
         /**
          * Банковский платёжный агент
          */
-        BANK_PAYMENT_AGENT,
+        BANK_PAYMENT_AGENT
     }
 
     companion object {

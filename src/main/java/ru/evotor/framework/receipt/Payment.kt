@@ -9,53 +9,52 @@ import java.math.BigDecimal
  * Оплата
  */
 data class Payment(
-        /**
-         * Uuid
-         */
-        val uuid: String,
-        /**
-         * Сумма денег принятых от клиента
-         */
-        val value: BigDecimal,
-        /**
-         * Платежная система
-         */
-        @Deprecated("To define payment system use paymentPerformer instead")
-        val paymentSystem: PaymentSystem?,
-        /**
-         * Интеграционное приложение, осуществляющее оплату определенной платежной системой
-         */
-        val paymentPerformer: PaymentPerformer,
-        /**
-         * Идентификатор цели платежа
-         */
-        val purposeIdentifier: String?,
-        /**
-         * Идентификатор аккаунта
-         */
-        val accountId: String?,
-        /**
-         * Описание аккаунта
-         */
-        val accountUserDescription: String?,
-        /**
-         * Идентификатор платежа в платежной системе (RRN для оплаты картой)
-         */
-        val identifier: String?,
-        /**
-         * Дополнительная информация о способе безналичной оплаты
-         */
-        val cashlessInfo: CashlessInfo? = null
+    /**
+     * Uuid
+     */
+    val uuid: String,
+    /**
+     * Сумма денег принятых от клиента
+     */
+    val value: BigDecimal,
+    /**
+     * Платежная система
+     */
+    @Deprecated("To define payment system use paymentPerformer instead")
+    val paymentSystem: PaymentSystem?,
+    /**
+     * Интеграционное приложение, осуществляющее оплату определенной платежной системой
+     */
+    val paymentPerformer: PaymentPerformer,
+    /**
+     * Идентификатор цели платежа
+     */
+    val purposeIdentifier: String?,
+    /**
+     * Идентификатор аккаунта
+     */
+    val accountId: String?,
+    /**
+     * Описание аккаунта
+     */
+    val accountUserDescription: String?,
+    /**
+     * Идентификатор платежа в платежной системе (RRN для оплаты картой)
+     */
+    val identifier: String?,
+    /**
+     * Дополнительная информация о способе безналичной оплаты
+     */
+    val cashlessInfo: CashlessInfo? = null
 ) {
-
     constructor(
-            uuid: String,
-            value: BigDecimal,
-            paymentSystem: PaymentSystem?,
-            paymentPerformer: PaymentPerformer,
-            purposeIdentifier: String?,
-            accountId: String?,
-            accountUserDescription: String?
+        uuid: String,
+        value: BigDecimal,
+        paymentSystem: PaymentSystem?,
+        paymentPerformer: PaymentPerformer,
+        purposeIdentifier: String?,
+        accountId: String?,
+        accountUserDescription: String?
     ) : this(uuid, value, paymentSystem, paymentPerformer, purposeIdentifier, accountId, accountUserDescription, null)
 
     override fun toString(): String {

@@ -39,7 +39,6 @@ import java.util.Date
 
 @WorkerThread
 object ReceiptApi {
-
     @Deprecated(message = "Используйте методы API")
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
@@ -72,7 +71,6 @@ object ReceiptApi {
     private val CURRENT_CORRECTION_RETURN_INCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_CORRECTION_RETURN_INCOME_PATH)
     private val CURRENT_CORRECTION_RETURN_OUTCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_CORRECTION_RETURN_OUTCOME_PATH)
 
-
     @JvmStatic
     @Deprecated(
         message = "Use getProductsByBarcode from InventoryApi",
@@ -83,7 +81,10 @@ object ReceiptApi {
 
         context.contentResolver.query(
             Uri.withAppendedPath(PositionTable.URI, barcode),
-            null, null, null, null
+            null,
+            null,
+            null,
+            null
         )
             ?.use { cursor ->
                 while (cursor.moveToNext()) {
@@ -135,9 +136,9 @@ object ReceiptApi {
             null,
             null,
             null
-        )?.use {
-            if (it.moveToNext()) {
-                return@use createReceiptHeader(it)
+        )?.use { cursor ->
+            if (cursor.moveToNext()) {
+                return@use createReceiptHeader(cursor)
             } else {
                 return null
             }
@@ -209,7 +210,7 @@ object ReceiptApi {
 
             discountMap
         } catch (error: IllegalArgumentException) {
-            //old version of evopos, does not support discounts
+            // old version of evopos, does not support discounts
             error.printStackTrace()
             null
         }
@@ -220,15 +221,16 @@ object ReceiptApi {
         for (printGroup in printGroups) {
             val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment }
                 ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
-            printDocuments.add(Receipt.PrintReceipt(
-                printGroup,
-                getPositionResults
-                    .filter { it.printGroup == printGroup }
-                    .map { it.position },
-                payments.mapValues { it.value.value },
-                payments.mapValues { it.value.change },
-                receiptDiscount
-            )
+            printDocuments.add(
+                Receipt.PrintReceipt(
+                    printGroup = printGroup,
+                    positions = getPositionResults
+                        .filter { it.printGroup == printGroup }
+                        .map { it.position },
+                    payments = payments.mapValues { it.value.value },
+                    changes = payments.mapValues { it.value.change },
+                    discounts = receiptDiscount
+                )
             )
         }
 
@@ -237,7 +239,6 @@ object ReceiptApi {
             printDocuments
         )
     }
-
 
     /**
      * Получить заголовок текущего открытого чека.
@@ -308,26 +309,27 @@ object ReceiptApi {
                 }
             }
 
-
     private fun createGetPositionResult(cursor: Cursor): GetPositionResult? {
-        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null)
+        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null) {
             GetPositionResult(
                 createPosition(cursor) ?: return null,
                 createPrintGroup(cursor)
             )
-        else
+        } else {
             null
+        }
     }
 
     private fun createGetSubpositionResult(cursor: Cursor): GetSubpositionResult? {
         val parentUuid = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
-        return if (parentUuid != null)
+        return if (parentUuid != null) {
             GetSubpositionResult(
                 createPosition(cursor) ?: return null,
                 parentUuid
             )
-        else
+        } else {
             null
+        }
     }
 
     private fun createGetPaymentResult(cursor: Cursor): GetPaymentsResult? {
@@ -353,7 +355,7 @@ object ReceiptApi {
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
             medicineAttribute,
-            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1,
+            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1
         )
     }
 
@@ -371,7 +373,9 @@ object ReceiptApi {
                 cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
             val purchaserDocumentType = if (purchaserDocumentTypeCode != null) {
                 DocumentType.values().first { it.documentCode == purchaserDocumentTypeCode }
-            } else null
+            } else {
+                null
+            }
             Purchaser(
                 name = purchaserName,
                 innNumber = purchaserInnNumber,
@@ -399,9 +403,11 @@ object ReceiptApi {
         val serialNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
 
         val medicineAdditionalDetails: MedicineAdditionalDetails? =
-            if (documentDate != null && documentNumber != null && serialNumber != null)
+            if (documentDate != null && documentNumber != null && serialNumber != null) {
                 MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
-            else null
+            } else {
+                null
+            }
 
         return MedicineAttribute(
             subjectId = subjectId,
@@ -497,7 +503,6 @@ object ReceiptApi {
             )
         }
     }
-
 
     private fun createAttributesFromDBFormat(value: String?): Map<String, AttributeValue> {
         if (value == null) return emptyMap()
@@ -609,17 +614,21 @@ object ReceiptApi {
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
             sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
+            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false,
+            paymentAddress = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_ADDRESS),
+            paymentPlace = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_PLACE),
             isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false
         )
     }
 
     private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
+
     private data class GetSubpositionResult(val position: Position, val parentUuid: String?)
+
     private data class GetPaymentsResult(val payment: Payment, val printGroup: PrintGroup?, val value: BigDecimal, val change: BigDecimal)
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Description {
-
         const val PATH_RECEIPT_DESCRIPTION = "information"
 
         @JvmField
@@ -628,12 +637,10 @@ object ReceiptApi {
         const val ROW_ID = "_id"
         const val ROW_UUID = "uuid"
         const val ROW_DISCOUNT = "discount"
-
     }
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Positions {
-
         const val PATH_RECEIPT_POSITIONS = "positions"
 
         @JvmField
@@ -653,7 +660,6 @@ object ReceiptApi {
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Payments {
-
         const val PATH_RECEIPT_PAYMENTS = "payments"
 
         @JvmField
@@ -670,6 +676,5 @@ object ReceiptApi {
             const val TYPE_CASH = 0
             const val TYPE_CARD = 1
         }
-
     }
 }

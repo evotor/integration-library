@@ -13,7 +13,6 @@ import ru.evotor.framework.settings.SettingsProviderContracts.NEGATIVE_BALANCE_P
  * Настройки EvotorPos (раздел "Правила торговли").
  */
 object SettingsApi {
-
     /**
      * Количество печати слип-чеков.
      */

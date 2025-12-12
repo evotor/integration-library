@@ -11,7 +11,6 @@ import ru.evotor.IBundlable
  * Чтобы приложение получало событие, значение константы необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы.
  */
 class PrintExtraRequiredEvent() : IBundlable {
-
     override fun toBundle(): Bundle {
         return Bundle()
     }
@@ -21,48 +20,56 @@ class PrintExtraRequiredEvent() : IBundlable {
          * Разрешение, которое необходимо указать в манифесте приложения.
          */
         const val NAME_PERMISSION = "ru.evotor.permission.receipt.printExtra.SET"
+
         /**
          * Данные будут напечатанны в чеке продажи.
          *
          * Значение константы: <code>evo.v2.receipt.sell.printExtra.REQUIRED</code>.
          */
         const val NAME_SELL_RECEIPT = "evo.v2.receipt.sell.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке возврата.
          *
          * Значение константы: <code>evo.v2.receipt.payback.printExtra.REQUIRED</code>.
          */
         const val NAME_PAYBACK_RECEIPT = "evo.v2.receipt.payback.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке покупки.
          *
          * Значение константы: <code>evo.v2.receipt.buy.printExtra.REQUIRED</code>.
          */
         const val NAME_BUY_RECEIPT = "evo.v2.receipt.buy.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке возврата покупки.
          *
          * Значение константы: <code>evo.v2.receipt.buyback.printExtra.REQUIRED</code>.
          */
         const val NAME_BUYBACK_RECEIPT = "evo.v2.receipt.buyback.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке коррекции прихода.
          *
          * Значение константы: <code>evo.v2.receipt.correction.income.printExtra.REQUIRED</code>.
          */
         const val NAME_CORRECTION_INCOME_RECEIPT = "evo.v2.receipt.correction.income.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке коррекции расхода.
          *
          * Значение константы: <code>evo.v2.receipt.correction.outcome.printExtra.REQUIRED</code>.
          */
         const val NAME_CORRECTION_OUTCOME_RECEIPT = "evo.v2.receipt.correction.outcome.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке коррекции возврата прихода.
          *
          * Значение константы: <code>evo.v2.receipt.correction.return.income.printExtra.REQUIRED</code>.
          */
         const val NAME_CORRECTION_RETURN_INCOME_RECEIPT = "evo.v2.receipt.correction.return.income.printExtra.REQUIRED"
+
         /**
          * Данные будут напечатанны в чеке коррекции возврата расхода.
          *

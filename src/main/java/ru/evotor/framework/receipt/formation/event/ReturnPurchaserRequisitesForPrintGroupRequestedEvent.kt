@@ -13,10 +13,9 @@ import ru.evotor.framework.receipt.Purchaser
  * @see <a href="https://developer.evotor.ru/docs/doc_java_purchase_requisites_event_processing.html">Добавление реквизитов покупателя в чек</a>
  */
 data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
-        val receiptUuid: String,
-        val printGroups: List<PrintGroup?>
+    val receiptUuid: String,
+    val printGroups: List<PrintGroup?>
 ) : IntegrationEvent() {
-
     override fun toBundle() = Bundle().apply {
         putString(KEY_RECEIPT_UUID, receiptUuid)
         putParcelableArrayList(KEY_PRINT_GROUPS, ArrayList(printGroups))
@@ -30,12 +29,12 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
         fun from(bundle: Bundle?) = bundle?.let {
             it.classLoader = PrintGroup::class.java.classLoader
             ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
-                    receiptUuid = it.getString(KEY_RECEIPT_UUID)
-                            ?: return null,
-                    printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
-                            ?: return null)
+                receiptUuid = it.getString(KEY_RECEIPT_UUID)
+                    ?: return null,
+                printGroups = it.getParcelableArrayList(KEY_PRINT_GROUPS)
+                    ?: return null
+            )
         }
-
     }
 
     /**
@@ -44,9 +43,8 @@ data class ReturnPurchaserRequisitesForPrintGroupRequestedEvent(
      * @property printGroupsWithPurchaserRequisites Массив печатных групп и соответствующих им объектов с реквизитами покупателя.
      */
     data class Result(
-            val printGroupsWithPurchaserRequisites: Map<PrintGroup?, Purchaser?>?
+        val printGroupsWithPurchaserRequisites: Map<PrintGroup?, Purchaser?>?
     ) : IntegrationEvent.Result() {
-
         override fun toBundle() = Bundle().apply {
             classLoader = PrintGroup::class.java.classLoader
             putInt(KEY_MAP_ENTRIES_COUNT, printGroupsWithPurchaserRequisites?.size ?: -1)

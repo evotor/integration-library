@@ -8,7 +8,6 @@ class PrintCashIncomeCommandResult : IBundlable {
         Bundle()
 
     companion object {
-
         /**
          * Поле "получатель" не может быть пустым
          */

@@ -10,7 +10,6 @@ import android.content.IntentFilter
  */
 
 abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context?, intent: Intent?) {
         intent?.extras?.getString(EXTRA_SCANNED_CODE)?.let { code ->
             if (code.isNotEmpty()) {
@@ -21,9 +20,7 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
 
     public abstract fun onBarcodeReceived(barcode: String, context: Context?)
 
-
     companion object {
-
         @JvmField
         public val ACTION_SCANNED = "ru.evotor.devices.ScannedCode"
 
@@ -38,7 +35,5 @@ abstract class BarcodeBroadcastReceiver : BroadcastReceiver() {
 
         @JvmField
         public val BARCODE_INTENT_FILTER = IntentFilter(ACTION_SCANNED)
-
     }
-
 }

@@ -27,6 +27,7 @@ class PaybackPaymentDelegatorEvent(
          * Значение константы: <code>evo.v2.receipt.payback.payment.COMBINED</code>.
          */
         const val NAME_ACTION = "evo.v2.receipt.payback.payment.COMBINED"
+
         /**
          * Разрешение, которое необходимо указать в манифесте приложения.
          */
@@ -43,7 +44,6 @@ class PaybackPaymentDelegatorEvent(
             val receiptUuid = getReceiptUuid(bundle) ?: return null
             val remains = getAvailablePaybackSum(bundle)
             return PaybackPaymentDelegatorEvent(receiptUuid, remains)
-
         }
 
         fun getReceiptUuid(bundle: Bundle?): String? =

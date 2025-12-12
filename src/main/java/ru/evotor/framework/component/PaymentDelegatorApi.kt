@@ -10,7 +10,6 @@ import ru.evotor.framework.core.action.event.receipt.payment.combined.event.Paym
  * Класс для получения делегаторов платежей, установленных на смарт-терминале.
  */
 object PaymentDelegatorApi {
-
     private const val METADATA_NAME_APP_UUID = "app_uuid"
 
     /**
@@ -47,17 +46,19 @@ object PaymentDelegatorApi {
         appUuid ?: return null
 
         return PaymentDelegator(
-                resolveInfo.serviceInfo.packageName,
-                resolveInfo.serviceInfo.name,
-                appUuid,
-                resolveInfo.loadLabel(packageManager).toString()
+            resolveInfo.serviceInfo.packageName,
+            resolveInfo.serviceInfo.name,
+            appUuid,
+            resolveInfo.loadLabel(packageManager).toString()
         )
     }
 
     private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentDelegatorEvent.NAME_PERMISSION)
 
     private fun getAppUuid(packageInfo: PackageInfo) =
-            if (packageInfo.applicationInfo.metaData != null)
-                packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
-            else null
+        if (packageInfo.applicationInfo.metaData != null) {
+            packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
+        } else {
+            null
+        }
 }

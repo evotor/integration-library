@@ -11,6 +11,7 @@ object SystemStateTable {
 
     @JvmField
     val IS_SESSION_OPENED_URI = Uri.withAppendedPath(SystemStateApi.BASE_URI, IS_SESSION_OPENED_PATH)
+
     @JvmField
     val LAST_SESSION_NUMBER_URI = Uri.withAppendedPath(SystemStateApi.BASE_URI, LAST_SESSION_NUMBER_PATH)
 }
