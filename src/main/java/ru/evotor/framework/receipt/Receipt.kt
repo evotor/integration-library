@@ -99,7 +99,7 @@ data class Receipt(
          */
         var paymentPlace: String?,
         /**
-         * Ожидается ли платежный документ
+         * Создан ли чек в режиме намерения оплаты
          */
         val isPaymentIntentMode: Boolean
     )
