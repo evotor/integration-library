@@ -335,6 +335,13 @@ object FeaturesApi {
     fun isVegetableOilMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VEGETABLE_OIL_MARK)
 
     /**
+     * Проверяет, активна ли функция "НДС 22%" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
+
+    /**
      * Проверяет, активна ли функция "Режим намерения оплаты" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
