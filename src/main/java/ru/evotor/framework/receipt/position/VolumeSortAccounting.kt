@@ -46,6 +46,13 @@ data class VolumeSortAccounting(
 
     companion object {
 
+        /**
+         * Разрешение для редактирования ОСУ.
+         *
+         * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
+         */
+        const val VOLUME_SORT_PERMISSION = "ru.evotor.permission.receipt.volumeSortAccounting.SET";
+
         private const val KEY_VOLUME_SORT_QUANTITY = "VolumeSortQuantity"
         private const val KEY_GTIN = "GTIN"
         private const val REALIZATION_TYPE = "REALIZATION_TYPE_KEY"

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -2018,9 +2019,9 @@ public class Position implements Parcelable {
          * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
          * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
          * не может использоваться совместно с setPartialRealization
-         *
          * @param volumeSortAccounting реализация по ОСУ
          */
+        @RequiresPermission(VolumeSortAccounting.VOLUME_SORT_PERMISSION)
         public Builder setVolumeSortAccounting(
                 @Nullable VolumeSortAccounting volumeSortAccounting
         ) {
