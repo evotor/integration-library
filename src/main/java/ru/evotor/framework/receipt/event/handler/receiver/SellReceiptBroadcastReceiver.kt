@@ -6,6 +6,7 @@ import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -65,6 +66,12 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     @RequiresIntentAction(ACTION_RECEIPT_COMPLETED)
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
+    /**
+     * Обработчик событий оплаты чека по намерению.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID)
+    override fun handleReceiptWithPaymentIntentPaid(context: Context, event: ReceiptWithPaymentIntentPaidEvent) = Unit
+
     companion object {
         const val ACTION_RECEIPT_CREATED = "evotor.intent.action.receipt.sell.OPENED"
 
@@ -79,5 +86,6 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
+        const val ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID = "evotor.intent.action.receipt.sell.paymentIntent.PAID"
     }
 }
