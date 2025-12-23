@@ -22,14 +22,13 @@ import java.util.*
  * @property type Тип покупателя, например, физическое лицо. Не сохраняется в фискальном документе.
  */
 data class Purchaser(
-        val name: String,
-        val innNumber: String?,
-        val birthDate: Date?,
-        val documentType: DocumentType?,
-        val documentNumber: String?,
-        val type: PurchaserType
+    val name: String,
+    val innNumber: String?,
+    val birthDate: Date?,
+    val documentType: DocumentType?,
+    val documentNumber: String?,
+    val type: PurchaserType
 ) : Parcelable, IBundlable {
-
     val version = 2
 
     override fun toBundle(): Bundle {
@@ -48,7 +47,7 @@ data class Purchaser(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(innNumber)
-        //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
+        // Для поддержки старой версии приложения ST_PurchaserRequisitesApp
         parcel.writeInt(version)
         parcel.writeInt(type.ordinal)
         if (version >= 2) {
@@ -62,10 +61,10 @@ data class Purchaser(
     override fun describeContents(): Int = 0
 
     companion object {
-
         @JvmField
         val CREATOR = object : Parcelable.Creator<Purchaser> {
             override fun createFromParcel(parcel: Parcel) = createPurchaserFromParcel(parcel)
+
             override fun newArray(size: Int) = arrayOfNulls<Purchaser>(size)
         }
 
@@ -83,13 +82,18 @@ data class Purchaser(
             return bundle?.let {
                 val bundleVersion = it.getInt(KEY_BUNDLE_VERSION, 1)
                 val name = it.getString(KEY_NAME) ?: return null
-                val innNumber = if (bundleVersion >= 2) it.getString(KEY_INN_NUMBER)
-                else it.getString(KEY_DOCUMENT_NUMBER)
+                val innNumber = if (bundleVersion >= 2) {
+                    it.getString(KEY_INN_NUMBER)
+                } else {
+                    it.getString(KEY_DOCUMENT_NUMBER)
+                }
                 val birthDate = it.getString(KEY_BIRTH_DATE)
                 val documentTypeCode = it.getInt(KEY_DOCUMENT_TYPE, -1)
                 val documentType = if (documentTypeCode != -1) {
                     DocumentType.values().first { documentType -> documentType.documentCode == documentTypeCode }
-                } else null
+                } else {
+                    null
+                }
                 val documentNumber = it.getString(KEY_DOCUMENT_NUMBER_V2)
                 val purchaserTypeOrdinal = it.getInt(KEY_TYPE)
                 val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
@@ -102,11 +106,11 @@ data class Purchaser(
             val name = parcel.readString()
                 ?: throw IntegrationLibraryParsingException(Purchaser::class.java)
             val inn = parcel.readString()
-            //Для поддержки старой версии приложения ST_PurchaserRequisitesApp
+            // Для поддержки старой версии приложения ST_PurchaserRequisitesApp
             val purchaserTypeVersion = parcel.readInt()
             val purchaserTypeOrdinal = parcel.readInt()
             if (purchaserTypeVersion < 2) {
-                val purchaserType = if(purchaserTypeVersion == 1) PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size] else PurchaserType.NATURAL_PERSON
+                val purchaserType = if (purchaserTypeVersion == 1) PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size] else PurchaserType.NATURAL_PERSON
                 purchaser = Purchaser(name, inn, null, null, null, purchaserType)
             }
 
@@ -114,9 +118,12 @@ data class Purchaser(
                 val birthDate = parcel.readString()?.let { stringToDate(it) }
                 val documentNumber = parcel.readString()
                 val isDocumentNotExists = parcel.readInt() != 1
-                val documentType = if(isDocumentNotExists) null else {
+                val documentType = if (isDocumentNotExists) {
+                    null
+                } else {
                     val documentCode = parcel.readInt()
-                    DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode } }
+                    DocumentType.values().firstOrNull { documentType -> documentType.documentCode == documentCode }
+                }
                 val purchaserType = PurchaserType.values()[purchaserTypeOrdinal % PurchaserType.values().size]
                 purchaser = Purchaser(name, inn, birthDate, documentType, documentNumber, purchaserType)
             }
@@ -141,7 +148,6 @@ data class Purchaser(
  * Тип покупателя. Не сохраняется в фискальном документе.
  */
 enum class PurchaserType {
-
     /**
      * Физическое лицо.
      */
@@ -162,7 +168,6 @@ enum class PurchaserType {
  * Значения реквизита "код вида документа, удостоверяющего личность". Данные сохраняются в теге 1245 фискального документа.
  */
 enum class DocumentType(val documentCode: Int) {
-
     /**
      * Паспорт гражданина РФ
      */
@@ -236,5 +241,5 @@ enum class DocumentType(val documentCode: Int) {
      * Документ, удостоверяющий личность лица, не имеющего действительного документа,
      * удостоверяющего личность, на период рассмотрения заявления о признании гражданином РФ или о приеме в гражданство РФ
      */
-    DOC_FOR_PERIOD_OF_CONSIDERATION_CITIZENSHIP_RF(40),
+    DOC_FOR_PERIOD_OF_CONSIDERATION_CITIZENSHIP_RF(40)
 }

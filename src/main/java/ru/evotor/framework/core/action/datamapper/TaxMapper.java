@@ -2,13 +2,14 @@ package ru.evotor.framework.core.action.datamapper;
 
 import android.os.Bundle;
 
-import java.math.BigDecimal;
-
 import androidx.annotation.Nullable;
+
 import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
 import ru.evotor.framework.receipt.Tax;
 import ru.evotor.framework.receipt.TaxNumber;
+
+import java.math.BigDecimal;
 
 public final class TaxMapper {
 

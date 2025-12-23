@@ -7,18 +7,17 @@ import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.kkt.provider.KktContract
 import ru.evotor.framework.optList
 
-class AsyncHandler(context: Context, private val callback: (serial: String, reg: String) -> Unit)
-    : AsyncQueryHandler(context.contentResolver) {
-
+class AsyncHandler(context: Context, private val callback: (serial: String, reg: String) -> Unit) :
+    AsyncQueryHandler(context.contentResolver) {
     override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor?) {
         cursor?.use {
             it.moveToFirst()
 
             val serialNumber = it.optList(KktContract.COLUMN_SERIAL_NUMBER)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_SERIAL_NUMBER)
+                ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_SERIAL_NUMBER)
 
             val regNumber = it.optList(KktContract.COLUMN_REGISTER_NUMBER)
-                    ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_REGISTER_NUMBER)
+                ?: throw IntegrationLibraryMappingException(KktContract.COLUMN_REGISTER_NUMBER)
 
             callback(serialNumber[0], regNumber[0])
         }

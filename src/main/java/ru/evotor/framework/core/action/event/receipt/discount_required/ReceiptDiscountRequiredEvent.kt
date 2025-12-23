@@ -9,8 +9,7 @@ import ru.evotor.IBundlable
  * Чтобы приложение получало событие, значение константы [NAME_SELL_RECEIPT], [NAME_PAYBACK_RECEIPT] или [NAME_BUY_RECEIPT]
  * необходимо указать в элементе <code><action></code> intent-фильтра соотвествующей службы
  */
-class ReceiptDiscountRequiredEvent: IBundlable {
-
+class ReceiptDiscountRequiredEvent : IBundlable {
     override fun toBundle(): Bundle {
         return Bundle()
     }

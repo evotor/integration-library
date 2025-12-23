@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.event.inventory;
 
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;

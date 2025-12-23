@@ -7,7 +7,6 @@ class BarcodeScanRequestedEvent : IntegrationEvent() {
     override fun toBundle() = Bundle()
 
     class Result(val barcode: String) : IntegrationEvent.Result() {
-
         override fun toBundle() = Bundle().apply {
             putString(KEY_BARCODE, barcode)
         }
@@ -23,7 +22,6 @@ class BarcodeScanRequestedEvent : IntegrationEvent() {
     }
 
     companion object {
-
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
             BarcodeScanRequestedEvent()

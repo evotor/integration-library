@@ -2,7 +2,6 @@ package ru.evotor.framework.users
 
 import android.content.ContentValues
 import android.content.Context
-import android.net.Uri
 import androidx.annotation.WorkerThread
 
 /**
@@ -10,7 +9,6 @@ import androidx.annotation.WorkerThread
  */
 @WorkerThread
 object UserApi {
-
     /**
      * Возвращает данные всех сотрудников, которые могут работать со смарт-терминалом.
      * @param context контекст приложения.
@@ -126,7 +124,6 @@ object UserApi {
         }
     }
 
-
     /**
      * Принудительно авторизует пользователя в системе, без ввода пин-кода.
      * Требует разрешения ru.evotor.permission.auth.FORCE_LOGIN
@@ -146,5 +143,4 @@ object UserApi {
             false
         }
     }
-
 }

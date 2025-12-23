@@ -6,7 +6,6 @@ import android.util.Log
 import ru.evotor.framework.Utils
 
 object ErrorPaymentByCardActionMapper {
-
     private const val KEY_ACTION_TYPE = "type"
     private const val KEY_ACTION = "action"
 
@@ -34,7 +33,6 @@ object ErrorPaymentByCardActionMapper {
                 } else {
                     null
                 }
-
             }
             .filterNotNull()
     }

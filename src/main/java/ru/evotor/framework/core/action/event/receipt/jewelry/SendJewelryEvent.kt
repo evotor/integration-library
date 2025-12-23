@@ -1,5 +1,4 @@
 package ru.evotor.framework.core.action.event.receipt.jewelry
-
 import android.os.Bundle
 import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
@@ -25,11 +24,14 @@ class SendJewelryEvent(
     val sessionNumber: Long,
     val documentNumber: Long,
     val paperWidth: Int,
-    val kktSerialNumber: String,
+    val kktSerialNumber: String
 ) : IBundlable {
-
     public enum class OperationType {
-        UNKNOWN, SELL, SELL_CANCEL, PAYBACK, PAYBACK_CANCEL
+        UNKNOWN,
+        SELL,
+        SELL_CANCEL,
+        PAYBACK,
+        PAYBACK_CANCEL
     }
 
     override fun toBundle(): Bundle {
@@ -45,7 +47,6 @@ class SendJewelryEvent(
     }
 
     companion object {
-
         /**
          * Отправка чека в УТМ ГИИС ДМДК через стороннее приложение.
          *
@@ -69,7 +70,7 @@ class SendJewelryEvent(
                 getSessionNumber(it) ?: return null,
                 getDocumentNumber(it) ?: return null,
                 getPaperWidth(it) ?: return null,
-                getKktSerialNumber(it) ?: return null,
+                getKktSerialNumber(it) ?: return null
             )
         }
 
@@ -128,5 +129,4 @@ class SendJewelryEvent(
             } ?: return null
         }
     }
-
 }

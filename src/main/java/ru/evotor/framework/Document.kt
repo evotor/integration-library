@@ -5,8 +5,8 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.mapper.DocumentMapper
 import java.util.*
 
-abstract class Document internal constructor(): IBundlable {
-    @FutureFeature("Uuid документа, зарегистрированного в системе Эвотор")
+abstract class Document internal constructor() : IBundlable {
+    @FutureFeature("Uuid документа, зарегистрированного в системе")
     protected open val uuid: UUID? = null
 
     override fun toBundle(): Bundle = DocumentMapper.write(this)

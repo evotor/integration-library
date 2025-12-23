@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ru.evotor.BundlesKt;
 import ru.evotor.framework.core.action.processor.ActionProcessor;
 
 /**
@@ -28,10 +29,11 @@ public abstract class IntegrationService extends Service {
     private final IIntegrationManager.Stub binder = new IIntegrationManager.Stub() {
         @Override
         public void call(IIntegrationManagerResponse response, String action, Bundle bundle) throws RemoteException {
+            Bundle sanitized = BundlesKt.sanitizeInput(bundle);
             ActionProcessor processor = processors.get(action);
             if (processor != null) {
                 try {
-                    processor.process(action, response, bundle);
+                    processor.process(action, response, sanitized);
                 } catch (Exception e) {
                     Log.e("IntegrationService", "Message: " + e.getMessage(), e);
                     if ((!(e instanceof BadParcelableException))

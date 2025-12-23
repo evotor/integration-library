@@ -13,7 +13,6 @@ import ru.evotor.framework.device.scanner.event.BarcodeReceivedEvent
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_barcode_scanner.html">Использование широковещательного приёмника</a>
  */
 abstract class ScannerBroadcastReceiver : BroadcastEventReceiver() {
-
     /**
      * Обработчик событий получения штрихкода.
      */
@@ -24,19 +23,19 @@ abstract class ScannerBroadcastReceiver : BroadcastEventReceiver() {
     @SuppressLint("MissingPermission")
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            ACTION_BARCODE_RECEIVED -> handleBarcodeReceivedEvent(context, BarcodeReceivedEvent.from(bundle)
-                    ?: return)
+            ACTION_BARCODE_RECEIVED -> handleBarcodeReceivedEvent(
+                context,
+                BarcodeReceivedEvent.from(bundle)
+                    ?: return
+            )
         }
     }
 
     companion object {
-
         const val ACTION_BARCODE_RECEIVED = "ru.evotor.devices.ScannedCode"
 
         const val SENDER_PERMISSION = "ru.evotor.devices.SCANNER_SENDER"
 
         const val RECEIVER_PERMISSION = "ru.evotor.devices.SCANNER_RECEIVER"
-
     }
-
 }

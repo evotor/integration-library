@@ -4,14 +4,13 @@ import android.os.Bundle
 import ru.evotor.framework.receipt.position.SettlementMethod
 
 object SettlementMethodMapper {
-
     private const val KEY_SETTLEMENT_METHOD = "settlementMethod"
 
     @JvmStatic
     fun toBundle(settlementMethod: SettlementMethod): Bundle =
-            Bundle().apply {
-                putParcelable(KEY_SETTLEMENT_METHOD, settlementMethod)
-            }
+        Bundle().apply {
+            putParcelable(KEY_SETTLEMENT_METHOD, settlementMethod)
+        }
 
     @JvmStatic
     fun fromBundle(bundle: Bundle?): SettlementMethod {

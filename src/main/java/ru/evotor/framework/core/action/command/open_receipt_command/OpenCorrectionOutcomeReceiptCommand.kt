@@ -12,6 +12,7 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper
 import ru.evotor.framework.core.action.datamapper.ChangesMapper.toBundle
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetInternetRequisites
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
@@ -27,6 +28,7 @@ import java.util.*
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  * @param fiscalSignOfIncorrectReceipt Фискальный признак ошибочного чека (ТЕГ 1192)
  * @param setPurchaserContactData Контактные данные покупателя, на которые будет отправлен чек
+ * @param setInternetRequisites Интернет-реквизиты чека
  */
 class OpenCorrectionOutcomeReceiptCommand(
     val changes: List<PositionAdd>,
@@ -39,9 +41,9 @@ class OpenCorrectionOutcomeReceiptCommand(
     val prescription: String? = null,
     @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
     val fiscalSignOfIncorrectReceipt: String? = null,
-    val setPurchaserContactData: SetPurchaserContactData? = null
+    val setPurchaserContactData: SetPurchaserContactData? = null,
+    val setInternetRequisites: SetInternetRequisites? = null
 ) : IBundlable {
-
     companion object {
         const val NAME = "evo.v2.receipt.correction.outcome.openReceipt"
         private const val KEY_CHANGES = "changes"
@@ -51,6 +53,7 @@ class OpenCorrectionOutcomeReceiptCommand(
         private const val KEY_PRESCRIPTION = "prescription"
         private const val KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT = "fiscalSignOfIncorrectReceipt"
         private const val KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData"
+        private const val KEY_RECEIPT_SET_INTERNET_REQUISITES: String = "setInternetRequisites"
 
         @JvmStatic
         fun create(bundle: Bundle?): OpenCorrectionOutcomeReceiptCommand? {
@@ -61,7 +64,8 @@ class OpenCorrectionOutcomeReceiptCommand(
                             it.getParcelableArray(
                                 KEY_CHANGES
                             )
-                        ), PositionAdd::class.java
+                        ),
+                        PositionAdd::class.java
                     ),
                     extra = SetExtra.from(it.getBundle(KEY_RECEIPT_EXTRA)),
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
@@ -72,6 +76,9 @@ class OpenCorrectionOutcomeReceiptCommand(
                         it.getBundle(
                             KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA
                         )
+                    ),
+                    setInternetRequisites = SetInternetRequisites.from(
+                        it.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES)
                     )
                 )
             }
@@ -105,6 +112,10 @@ class OpenCorrectionOutcomeReceiptCommand(
             putBundle(
                 KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA,
                 setPurchaserContactData?.toBundle()
+            )
+            putBundle(
+                KEY_RECEIPT_SET_INTERNET_REQUISITES,
+                setInternetRequisites?.toBundle()
             )
         }
     }

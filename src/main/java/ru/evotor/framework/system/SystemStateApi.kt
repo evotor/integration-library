@@ -7,14 +7,18 @@ import androidx.annotation.WorkerThread
 
 @WorkerThread
 object SystemStateApi {
-
     @JvmField
     val BASE_URI = Uri.parse("content://ru.evotor.evotorpos.system_state")
 
     @JvmStatic
     fun getLastSessionNumber(context: Context): Long? {
-        val cursor = context.contentResolver.query(SystemStateTable.LAST_SESSION_NUMBER_URI, null,
-                null, null, null)
+        val cursor = context.contentResolver.query(
+            SystemStateTable.LAST_SESSION_NUMBER_URI,
+            null,
+            null,
+            null,
+            null
+        )
 
         return cursor?.use {
             if (it.moveToFirst()) {
@@ -27,8 +31,13 @@ object SystemStateApi {
 
     @JvmStatic
     fun isSessionOpened(context: Context): Boolean? {
-        val cursor = context.contentResolver.query(SystemStateTable.IS_SESSION_OPENED_URI, null,
-                null, null, null)
+        val cursor = context.contentResolver.query(
+            SystemStateTable.IS_SESSION_OPENED_URI,
+            null,
+            null,
+            null,
+            null
+        )
 
         return cursor?.use {
             if (it.moveToFirst()) {

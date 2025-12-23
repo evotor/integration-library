@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.Receipt
 import java.math.BigDecimal
 import java.util.*
 
-
 /**
  * Команда печати чека продажи.
  * @param printReceipts Список чеков для печати.
@@ -22,16 +21,18 @@ import java.util.*
  * @param paymentAddress Адрес места расчёта
  * @param paymentPlace Место расчёта
  * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция. Если передано null, то будет выбран текущий авторизованный сотрудник. @see ru.evotor.framework.users.UserAPI
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 class PrintSellReceiptCommand(
-        printReceipts: List<Receipt.PrintReceipt>,
-        extra: SetExtra?,
-        clientPhone: String?,
-        clientEmail: String?,
-        receiptDiscount: BigDecimal?,
-        paymentAddress: String? = null,
-        paymentPlace: String? = null,
-        userUuid: String? = null
+    printReceipts: List<Receipt.PrintReceipt>,
+    extra: SetExtra?,
+    clientPhone: String?,
+    clientEmail: String?,
+    receiptDiscount: BigDecimal?,
+    paymentAddress: String? = null,
+    paymentPlace: String? = null,
+    userUuid: String? = null,
+    receiptFromInternet: Boolean? = null
 ) : PrintReceiptCommand(
         printReceipts = printReceipts,
         extra = extra,
@@ -40,9 +41,9 @@ class PrintSellReceiptCommand(
         receiptDiscount = receiptDiscount,
         paymentAddress = paymentAddress,
         paymentPlace = paymentPlace,
-        userUuid = userUuid
-) {
-
+        userUuid = userUuid,
+        receiptFromInternet = receiptFromInternet
+    ) {
     /**
      * @param positions Список позиций
      * @param payments Список оплат
@@ -50,43 +51,49 @@ class PrintSellReceiptCommand(
      * @param clientEmail Эл.почта клиента
      * @param paymentAddress Адрес места расчёта
      * @param paymentPlace Место расчёта
+     * @param userUuid Идентификатор сотрудника в формате `uuid4`, от лица которого будет произведена операция
+     * @param receiptFromInternet Признак расчета в сети «Интернет»
      */
     constructor(
-            positions: List<Position>,
-            payments: List<Payment>,
-            clientPhone: String?,
-            clientEmail: String?,
-            paymentAddress: String? = null,
-            paymentPlace: String? = null,
-            userUuid: String? = null
+        positions: List<Position>,
+        payments: List<Payment>,
+        clientPhone: String?,
+        clientEmail: String?,
+        paymentAddress: String? = null,
+        paymentPlace: String? = null,
+        userUuid: String? = null,
+        receiptFromInternet: Boolean? = null
     ) : this(
-            ArrayList<Receipt.PrintReceipt>().apply {
-                add(Receipt.PrintReceipt(
-                        PrintGroup(
-                                UUID.randomUUID().toString(),
-                                PrintGroup.Type.CASH_RECEIPT,
-                                null,
-                                null,
-                                null,
-                                null,
-                                clientEmail == null && clientPhone == null
-                        ),
-                        positions,
-                        payments.associate { it to it.value },
-                        calculateChanges(
-                                positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
-                                payments
-                        ),
-                        hashMapOf()
-                ))
-            },
-            null,
-            clientPhone,
-            clientEmail,
-            BigDecimal.ZERO,
-            paymentAddress,
-            paymentPlace,
-            userUuid
+        ArrayList<Receipt.PrintReceipt>().apply {
+            add(
+                Receipt.PrintReceipt(
+                    PrintGroup(
+                        UUID.randomUUID().toString(),
+                        PrintGroup.Type.CASH_RECEIPT,
+                        null,
+                        null,
+                        null,
+                        null,
+                        clientEmail == null && clientPhone == null
+                    ),
+                    positions,
+                    payments.associate { it to it.value },
+                    calculateChanges(
+                        positions.sumByBigDecimal { it.totalWithSubPositionsAndWithoutDocumentDiscount },
+                        payments
+                    ),
+                    hashMapOf()
+                )
+            )
+        },
+        null,
+        clientPhone,
+        clientEmail,
+        BigDecimal.ZERO,
+        paymentAddress,
+        paymentPlace,
+        userUuid,
+        receiptFromInternet
     )
 
     fun process(context: Context, callback: IntegrationManagerCallback) {
@@ -94,7 +101,6 @@ class PrintSellReceiptCommand(
     }
 
     companion object {
-
         const val NAME = "evo.v2.receipt.sell.printReceipt"
 
         fun create(bundle: Bundle?): PrintSellReceiptCommand? {
@@ -102,14 +108,15 @@ class PrintSellReceiptCommand(
                 return null
             }
             return PrintSellReceiptCommand(
-                    printReceipts = getPrintReceipts(bundle),
-                    extra = getSetExtra(bundle),
-                    clientPhone = getClientPhone(bundle),
-                    clientEmail = getClientEmail(bundle),
-                    receiptDiscount = getReceiptDiscount(bundle),
-                    paymentAddress = getPaymentAddress(bundle),
-                    paymentPlace = getPaymentPlace(bundle),
-                    userUuid = getUserUuid(bundle)
+                printReceipts = getPrintReceipts(bundle),
+                extra = getSetExtra(bundle),
+                clientPhone = getClientPhone(bundle),
+                clientEmail = getClientEmail(bundle),
+                receiptDiscount = getReceiptDiscount(bundle),
+                paymentAddress = getPaymentAddress(bundle),
+                paymentPlace = getPaymentPlace(bundle),
+                userUuid = getUserUuid(bundle),
+                receiptFromInternet = getReceiptFromInternet(bundle)
             )
         }
     }

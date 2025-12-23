@@ -3,6 +3,8 @@ package ru.evotor.devices.commons.printer.printable;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 
+import ru.evotor.ParcelablesKt;
+
 public class PrintableImage implements IPrintable {
 
     /**
@@ -15,7 +17,7 @@ public class PrintableImage implements IPrintable {
     }
 
     private PrintableImage(Parcel parcel) {
-        bitmap = parcel.readParcelable(Bitmap.class.getClassLoader());
+        bitmap = ParcelablesKt.readAliased(parcel, Bitmap.CREATOR);
     }
 
     public Bitmap getBitmap() {
@@ -29,7 +31,7 @@ public class PrintableImage implements IPrintable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelable(bitmap, 0);
+        ParcelablesKt.writeAliased(parcel, bitmap, 0);
     }
 
     public static final Creator<PrintableImage> CREATOR = new Creator<PrintableImage>() {

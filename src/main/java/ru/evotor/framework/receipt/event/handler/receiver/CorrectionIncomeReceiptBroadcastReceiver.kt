@@ -23,7 +23,6 @@ open class CorrectionIncomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     actionReceiptCreated = ACTION_RECEIPT_CREATED,
     actionReceiptDeleted = ACTION_RECEIPT_DELETED
 ) {
-
     /**
      * Обработчик событий создания чека.
      */
@@ -68,7 +67,6 @@ open class CorrectionIncomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
      */
     @RequiresIntentAction(ACTION_RECEIPT_COMPLETED)
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
-
 
     companion object {
         const val ACTION_RECEIPT_CREATED =

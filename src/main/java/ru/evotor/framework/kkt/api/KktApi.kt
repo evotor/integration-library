@@ -3,18 +3,20 @@ package ru.evotor.framework.kkt.api
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import ru.evotor.framework.*
 import ru.evotor.framework.core.IntegrationLibraryMappingException
 import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.startIntegrationService
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
 import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
+import ru.evotor.framework.getMoney
 import ru.evotor.framework.kkt.FfdVersion
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.kkt.event.CorrectionReceiptRegistrationRequestedEvent
 import ru.evotor.framework.kkt.event.handler.service.KktBacksideIntegrationService
 import ru.evotor.framework.kkt.provider.KktContract
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_PAYMENT_ADDRESS
+import ru.evotor.framework.kkt.provider.KktContract.COLUMN_PAYMENT_PLACE
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_CLOSE_DATE
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_IS_EXPIRED
 import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_IS_OPEN
@@ -23,6 +25,7 @@ import ru.evotor.framework.kkt.provider.KktContract.COLUMN_SESSION_STATUS_SESSIO
 import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optList
+import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.SettlementType
@@ -30,13 +33,12 @@ import ru.evotor.framework.receipt.TaxationSystem
 import ru.evotor.framework.receipt.correction.CorrectionType
 import ru.evotor.framework.receipt.position.VatRate
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 
 /**
  * Интерфейс для работы с кассой.
  */
 object KktApi {
-
     private val stringGetter: (Cursor, String) -> String? = { cursor, name -> cursor.optString(name) }
     private val booleanGetter: (Cursor, String) -> Boolean? = { cursor, name -> cursor.optBoolean(name) }
 
@@ -161,7 +163,7 @@ object KktApi {
      * Результатом является логическое "И" всех необходимых условий.
      *
      * @param context текущий контекст
-     * @return  true    - если все условия для работы в разъездной торговле выполнены,
+     * @return true    - если все условия для работы в разъездной торговле выполнены,
      *          false   - если хотя бы одно условие не выполнено
      * @throws IntegrationLibraryMappingException, если не удалось распознать полученное значение
      */
@@ -232,35 +234,24 @@ object KktApi {
     @JvmStatic
     fun registerCorrectionReceipt(
         context: Context,
-
         @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
         settlementType: SettlementType,
-
         @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
         taxationSystem: TaxationSystem,
-
         @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
         correctionType: CorrectionType,
-
         @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
         basisForCorrection: String,
-
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
         prescriptionNumber: String? = null,
-
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
-
         amountPaid: BigDecimal,
-
         paymentType: PaymentType,
-
         @FiscalRequisite(FiscalTags.VAT_RATE)
         vatRate: VatRate,
-
         @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
         correctionDescription: String,
-
         callback: DocumentRegistrationCallback
     ) {
         if (correctableSettlementDate >= Date()) {
@@ -328,41 +319,28 @@ object KktApi {
     @JvmStatic
     fun registerCorrectionReceipt(
         context: Context,
-
         @FiscalRequisite(FiscalTags.SETTLEMENT_TYPE)
         settlementType: SettlementType,
-
         @FiscalRequisite(FiscalTags.TAXATION_SYSTEM)
         taxationSystem: TaxationSystem,
-
         @FiscalRequisite(FiscalTags.CORRECTION_TYPE)
         correctionType: CorrectionType,
-
         @FiscalRequisite(FiscalTags.BASIS_FOR_CORRECTION)
         basisForCorrection: String,
-
         @FiscalRequisite(FiscalTags.PRESCRIPTION_NUMBER)
         prescriptionNumber: String? = null,
-
         @FiscalRequisite(FiscalTags.CORRECTABLE_SETTLEMENT_DATE)
         correctableSettlementDate: Date,
-
         amountPaid: BigDecimal,
-
         paymentType: PaymentType,
-
         @FiscalRequisite(FiscalTags.VAT_RATE)
         vatRate: VatRate,
-
         @FiscalRequisite(FiscalTags.CORRECTION_DESCRIPTION)
         correctionDescription: String,
-
         @FiscalRequisite(FiscalTags.PAYMENT_ADDRESS)
         paymentAddress: String,
-
         @FiscalRequisite(FiscalTags.PAYMENT_PLACE)
         paymentPlace: String,
-
         callback: DocumentRegistrationCallback
     ) {
         if (correctableSettlementDate >= Date()) {
@@ -408,9 +386,15 @@ object KktApi {
     }
 
     @JvmStatic
-    fun getKktSessionInfo(context: Context) : KktSessionInfo?{
+    fun getKktSessionInfo(context: Context): KktSessionInfo? {
         val uri = Uri.parse("${KktContract.BASE_URI}${KktContract.PATH_SESSION_STATUS}")
         return getKktSessionInfo(context, uri)
+    }
+
+    @JvmStatic
+    fun getPaymentLocation(context: Context): Location? {
+        val uri = Uri.parse("${KktContract.BASE_URI}/${KktContract.PATH_KKT_PAYMENT_LOCATION}")
+        return getLocationInfo(context, uri)
     }
 
     private fun <T> getValue(context: Context, valueName: String, parser: (Cursor, String) -> T?): T? {
@@ -488,11 +472,51 @@ object KktApi {
         )
     }
 
+    private fun getLocationInfo(
+        context: Context,
+        uri: Uri
+    ): Location? {
+        val cursor = context.contentResolver.query(
+            uri,
+            arrayOf(
+                COLUMN_PAYMENT_ADDRESS,
+                COLUMN_PAYMENT_PLACE
+            ),
+            null,
+            null,
+            null
+        )
+
+        cursor ?: return null
+
+        cursor.use {
+            return mapCursorToLocation(it)
+        }
+    }
+
+    private fun mapCursorToLocation(cursor: Cursor): Location? {
+        if (!cursor.moveToFirst()) {
+            return null
+        }
+        val paymentLocation: String? = cursor.optString(COLUMN_PAYMENT_ADDRESS)
+        val paymentPlace: String? = cursor.optString(COLUMN_PAYMENT_PLACE)
+
+        return Location(
+            paymentLocation,
+            paymentPlace
+        )
+    }
+
     data class KktSessionInfo(
         val isOpen: Boolean?,
         val isExpired: Boolean?,
         val openDate: Date?,
         val closeDate: Date?,
         val sessionNumber: Int?
+    )
+
+    data class Location(
+        val paymentAddress: String? = null,
+        val paymentPlace: String? = null
     )
 }

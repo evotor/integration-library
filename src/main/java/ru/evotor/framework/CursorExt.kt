@@ -91,7 +91,6 @@ internal fun Cursor.optList(columnIndex: Int): List<String>? {
     }
 
     return getString(columnIndex)?.let { Gson().fromJson(it, object : TypeToken<List<String>>() {}.type) }
-
 }
 
 internal fun <T : Enum<*>> Cursor.optEnum(columnName: String, values: Array<T>): T? {
@@ -115,7 +114,6 @@ internal fun <T : Enum<*>> Cursor.optEnum(columnIndex: Int, values: Array<T>): T
             null
         }
     }
-
 }
 
 internal fun Cursor.optString(columnName: String): String? {

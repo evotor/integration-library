@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.event.receipt.print_group;
 
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;

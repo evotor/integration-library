@@ -7,7 +7,6 @@ import android.os.Bundle
  */
 
 class UnknownChange(val typeName: String, val bundle: Bundle) : IChange {
-
     override fun getType(): IChange.Type {
         return IChange.Type.UNKNOWN
     }
@@ -23,11 +22,9 @@ class UnknownChange(val typeName: String, val bundle: Bundle) : IChange {
             bundle ?: return null
 
             return UnknownChange(
-                    typeName,
-                    bundle
+                typeName,
+                bundle
             )
         }
     }
-
-
 }

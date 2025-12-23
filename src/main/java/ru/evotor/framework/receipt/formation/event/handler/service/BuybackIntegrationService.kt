@@ -11,7 +11,6 @@ import ru.evotor.framework.receipt.formation.event.ReturnPurchaserRequisitesForP
  * Служба для работы с чеком возврата покупки.
  */
 abstract class BuybackIntegrationService : IntegrationServiceV2() {
-
     final override fun onEvent(action: String, bundle: Bundle) = when (action) {
         ACTION_PURCHASER_REQUISITES -> ReturnPurchaserRequisitesForPrintGroupRequestedEvent.from(bundle)?.let { handleEvent(it) }
         ACTION_DISCOUNT_SCREEN_ADDITIONAL_ITEMS -> DiscountScreenAdditionalItemsEvent.from(bundle)?.let { handleEvent(it) }
@@ -44,7 +43,6 @@ abstract class BuybackIntegrationService : IntegrationServiceV2() {
     open fun handleEvent(event: ReturnDeliveryRequisitesForReceiptRequestedEvent): ReturnDeliveryRequisitesForReceiptRequestedEvent.Result? = null
 
     companion object {
-
         /**
          * Запрос [реквизитов покупателя][ru.evotor.framework.receipt.Purchaser] для добавления в чек возврата покупки.
          *

@@ -4,32 +4,30 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.framework.core.IntegrationLibraryParsingException
 import ru.evotor.framework.receipt.Position
+import ru.evotor.readAliased
+import ru.evotor.writeAliased
 
 /**
  * Created by ivan on 26.06.17.
- */
-
-/**
+ *
  * Класс представляет собой результат склеивания 2-х и более позиций в чеке для оповещения интеграций
  * before - список позиций, которые будут склеены
  * after - результат склейки
  */
 
 class PositionsMerge(val before: List<Position>, val after: Position) : Parcelable {
-
     override fun writeToParcel(parcel: Parcel, i: Int) {
         parcel.writeList(before)
-        parcel.writeParcelable(after, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
+        parcel.writeAliased(after, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
     }
 
     companion object {
-
         @JvmField
         val CREATOR: Parcelable.Creator<PositionsMerge> = object : Parcelable.Creator<PositionsMerge> {
             override fun createFromParcel(parcel: Parcel): PositionsMerge {
                 val before = ArrayList<Position>()
                 parcel.readList(before as List<*>, Position::class.java.classLoader)
-                val after = parcel.readParcelable<Position>(Position::class.java.classLoader) ?: throw IntegrationLibraryParsingException(PositionsMerge::class.java)
+                val after = parcel.readAliased(Position.CREATOR) ?: throw IntegrationLibraryParsingException(PositionsMerge::class.java)
                 return PositionsMerge(before, after)
             }
 
