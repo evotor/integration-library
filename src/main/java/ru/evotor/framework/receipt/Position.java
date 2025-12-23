@@ -41,9 +41,15 @@ import ru.evotor.framework.receipt.position.SettlementMethod;
  */
 public class Position implements Parcelable {
     /**
+     * Разрешение для установки признака принудительного использования указанного НДС.
+     * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
+     */
+    public static final String FORCE_TAX_NUMBER_SET_PERMISSION = "ru.evotor.permission.position.forceTaxNumber.SET";
+
+    /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 15;
+    private static final int VERSION = 16;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -240,6 +246,12 @@ public class Position implements Parcelable {
     @Nullable
     private TimeRange saleBanTime;
 
+    /**
+     * Признак принудительного использования указанного НДС
+     */
+    @Nullable
+    private Boolean forceTaxNumber;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -314,6 +326,7 @@ public class Position implements Parcelable {
         this.isMarkSkipped = position.isMarkSkipped;
         this.saleBanTime = position.saleBanTime;
         this.veterinaryAttribute = position.veterinaryAttribute;
+        this.forceTaxNumber = position.forceTaxNumber;
     }
 
     /**
@@ -642,6 +655,11 @@ public class Position implements Parcelable {
         return marksCheckingInfo;
     }
 
+    @Nullable
+    public Boolean getForceTaxNumber() {
+        return forceTaxNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -715,6 +733,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(veterinaryAttribute, position.veterinaryAttribute))
             return false;
+        if (!Objects.equals(forceTaxNumber, position.forceTaxNumber))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -751,6 +771,7 @@ public class Position implements Parcelable {
         result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
         result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
+        result = 31 * result + (forceTaxNumber != null ? forceTaxNumber.hashCode() : 0);
         return result;
     }
 
@@ -787,6 +808,7 @@ public class Position implements Parcelable {
                 ", isAgeLimited=" + isAgeLimited +
                 ", isMarkSkipped=" + isMarkSkipped +
                 ", veterinaryAttribute=" + veterinaryAttribute +
+                ", forceTaxNumber=" + forceTaxNumber +
                 '}';
     }
 
@@ -880,6 +902,7 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.isMarkSkipped);
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
         dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
+        dest.writeSerializable(this.forceTaxNumber);
     }
 
     protected Position(Parcel in) {
@@ -988,6 +1011,9 @@ public class Position implements Parcelable {
         }
         if (version >= 15) {
             readVeterinaryAttribute(in);
+        }
+        if (version >= 16) {
+            this.forceTaxNumber = (Boolean) in.readSerializable();
         }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
@@ -2014,6 +2040,11 @@ public class Position implements Parcelable {
 
         public Builder setSaleBanTime(@Nullable TimeRange saleBanTime) {
             position.saleBanTime = saleBanTime;
+            return this;
+        }
+
+        public Builder setForceTaxNumber(@Nullable Boolean forceTaxNumber) {
+            position.forceTaxNumber = forceTaxNumber;
             return this;
         }
 
