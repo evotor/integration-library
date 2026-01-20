@@ -7,14 +7,13 @@ import ru.evotor.framework.payment.CashlessInfo
 import ru.evotor.framework.payment.PaymentType
 
 class PaymentSystemPaymentOkResult(
-        val rrn: String,
-        val slip: List<String>,
-        val paymentInfo: String?,
-        val paymentType: PaymentType = PaymentType.ELECTRON,
-        val cashlessInfo: CashlessInfo? = null,
-        val additionalTransactionData: AdditionalTransactionData? = null
+    val rrn: String,
+    val slip: List<String>,
+    val paymentInfo: String?,
+    val paymentType: PaymentType = PaymentType.ELECTRON,
+    val cashlessInfo: CashlessInfo? = null,
+    val additionalTransactionData: AdditionalTransactionData? = null
 ) : PaymentSystemPaymentResult(ResultType.OK) {
-
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RRN, rrn)
@@ -41,9 +40,19 @@ class PaymentSystemPaymentOkResult(
             val rrn = bundle.getString(KEY_RRN, null)
             val slip = bundle.getStringArrayList(KEY_SLIP) ?: emptyList<String>()
             val paymentInfo = bundle.getString(KEY_PAYMENT_INFO, null)
-            val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN)
+            val paymentType = Utils.safeValueOf(
+                PaymentType::class.java,
+                bundle.getString(
+                    KEY_PAYMENT_TYPE
+                ),
+                PaymentType.UNKNOWN
+            )
             val cashlessInfo = CashlessInfo.fromBundle(bundle.getBundle(KEY_CASHLESS_INFO))
-            val additionalTransactionData = AdditionalTransactionData.fromBundle(bundle.getBundle(KEY_ADDITIONAL_TRANSACTION_DATA))
+            val additionalTransactionData = AdditionalTransactionData.fromBundle(
+                bundle.getBundle(
+                    KEY_ADDITIONAL_TRANSACTION_DATA
+                )
+            )
             return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, additionalTransactionData)
         }
     }

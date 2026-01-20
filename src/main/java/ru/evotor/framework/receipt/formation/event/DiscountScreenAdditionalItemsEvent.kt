@@ -11,9 +11,8 @@ import ru.evotor.framework.common.event.IntegrationEvent
  * Обрабатывайте событие с помощью соответствующих методов служб [ru.evotor.framework.receipt.formation.event.handler.service.SellIntegrationService] и [ru.evotor.framework.receipt.formation.event.handler.service.PaybackIntegrationService].
  */
 data class DiscountScreenAdditionalItemsEvent(
-        val receiptUuid: String
+    val receiptUuid: String
 ) : IntegrationEvent() {
-
     override fun toBundle() = Bundle().apply {
         putString(KEY_RECEIPT_UUID, receiptUuid)
     }
@@ -24,10 +23,9 @@ data class DiscountScreenAdditionalItemsEvent(
         @JvmStatic
         fun from(bundle: Bundle?) = bundle?.let {
             DiscountScreenAdditionalItemsEvent(
-                    receiptUuid = it.getString(KEY_RECEIPT_UUID)
-                            ?: return null
+                receiptUuid = it.getString(KEY_RECEIPT_UUID)
+                    ?: return null
             )
         }
     }
-
 }

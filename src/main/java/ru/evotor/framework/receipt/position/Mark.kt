@@ -17,7 +17,6 @@ import ru.evotor.framework.receipt.position.Mark.RawMark
  * частичное представление по конкретным тэгам [MarkByFiscalTags]
  */
 sealed class Mark : Parcelable {
-
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -25,7 +24,7 @@ sealed class Mark : Parcelable {
         val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
         parcel.writeInt(0)
-        //Determine position of data start
+        // Determine position of data start
         val startDataPosition = parcel.dataPosition()
 
         writeFieldsToParcel(parcel, flags)
@@ -34,7 +33,7 @@ sealed class Mark : Parcelable {
         val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = parcel.dataPosition()
-        //Set position to start to write additional data size
+        // Set position to start to write additional data size
         parcel.setDataPosition(dataSizePosition)
         parcel.writeInt(dataSize)
         // Go back to the end of parcel
@@ -45,10 +44,9 @@ sealed class Mark : Parcelable {
      * Значение при полной марке
      */
     class RawMark(
-            @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
-            val value: String
+        @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
+        val value: String
     ) : Mark() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
             dest.writeString(value)
         }
@@ -106,10 +104,9 @@ sealed class Mark : Parcelable {
      */
     @Deprecated("Работает только для версий ФФД <= 1.1")
     class MarkByFiscalTags(
-            @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
-            val productCode: String?
+        @FiscalRequisite(tag = FiscalTags.PRODUCT_CODE)
+        val productCode: String?
     ) : Mark() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
             dest.writeString(productCode)
         }
@@ -159,5 +156,4 @@ sealed class Mark : Parcelable {
             }
         }
     }
-
 }

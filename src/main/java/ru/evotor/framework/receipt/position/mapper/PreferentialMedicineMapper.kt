@@ -10,14 +10,13 @@ import ru.evotor.framework.receipt.PositionTable
 import ru.evotor.framework.receipt.position.PreferentialMedicine
 
 internal object PreferentialMedicineMapper {
-
     private const val KEY_PREFERENTIAL_MEDICINE_TYPE = "PreferentialMedicineType"
     private const val KEY_PREFERENTIAL_MEDICINE_VALUE = "PreferentialMedicineValue"
 
     internal fun readFromCursor(cursor: Cursor): PreferentialMedicine? = cursor.optInt(PositionTable.COLUMN_PREFERENTIAL_MEDICINE)?.let {
         PreferentialMedicine(
-                type = PreferentialMedicine.PreferentialMedicineType.values()[it],
-                preferentialValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE_AMOUNT)?.toBigDecimalOrNull()
+            type = PreferentialMedicine.PreferentialMedicineType.values()[it],
+            preferentialValue = cursor.optString(PositionTable.COLUMN_PREFERENTIAL_MEDICINE_AMOUNT)?.toBigDecimalOrNull()
         )
     }
 
@@ -27,9 +26,12 @@ internal object PreferentialMedicineMapper {
             return@let null
         }
         PreferentialMedicine(
-                type = Utils.safeValueOf(PreferentialMedicine.PreferentialMedicineType::class.java,
-                        type, PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE),
-                preferentialValue = it.optBigDecimal(KEY_PREFERENTIAL_MEDICINE_VALUE)
+            type = Utils.safeValueOf(
+                PreferentialMedicine.PreferentialMedicineType::class.java,
+                type,
+                PreferentialMedicine.PreferentialMedicineType.NON_PREFERENTIAL_MEDICINE
+            ),
+            preferentialValue = it.optBigDecimal(KEY_PREFERENTIAL_MEDICINE_VALUE)
         )
     }
 

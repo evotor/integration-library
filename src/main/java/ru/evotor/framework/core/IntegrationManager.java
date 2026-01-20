@@ -5,9 +5,9 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.os.Handler;
 
-import java.util.Map;
-
 import ru.evotor.IBundlable;
+
+import java.util.Map;
 
 /**
  * Created by a.kuznetsov on 18/04/2017.

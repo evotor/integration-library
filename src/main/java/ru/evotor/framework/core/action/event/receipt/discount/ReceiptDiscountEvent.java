@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.event.receipt.discount;
 
+
 import android.os.Bundle;
 
 import java.math.BigDecimal;

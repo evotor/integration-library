@@ -6,8 +6,8 @@ import java.lang.Exception
  * Исключение, возникающее при попытке зарегистрировать документ в кассе
  */
 class DocumentRegistrationException(
-        val code: Int,
-        message: String
+    val code: Int,
+    message: String
 ) : Exception(message) {
     companion object {
         /**

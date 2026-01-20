@@ -11,52 +11,44 @@ import java.util.*
  * Cубагент
  */
 data class Subagent(
-        /**
-         * Uuid контрагента
-         */
-        override val uuid: UUID? = null,
-
-        /**
-         * Тип (признак) субагента
-         */
-        @FiscalRequisite(tag = FiscalTags.SETTLEMENT_SUBJECT_AGENT_TYPE)
-        val type: Type,
-
-        /**
-         * Тип контрагента
-         */
-        override val counterpartyType: Counterparty.Type? = null,
-
-        /**
-         * Наименование полное
-         */
-        override val fullName: String? = null,
-
-        /**
-         * Наименование краткое
-         */
-        override val shortName: String? = null,
-
-        /**
-         * ИНН
-         */
-        override val inn: String? = null,
-
-        /**
-         * КПП
-         */
-        override val kpp: String? = null,
-
-        /**
-         * Телефоны
-         */
-        @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
-        override val phones: List<String>? = null,
-
-        /**
-         * Адреса
-         */
-        override val addresses: List<String>? = null
+    /**
+     * Uuid контрагента
+     */
+    override val uuid: UUID? = null,
+    /**
+     * Тип (признак) субагента
+     */
+    @FiscalRequisite(tag = FiscalTags.SETTLEMENT_SUBJECT_AGENT_TYPE)
+    val type: Type,
+    /**
+     * Тип контрагента
+     */
+    override val counterpartyType: Counterparty.Type? = null,
+    /**
+     * Наименование полное
+     */
+    override val fullName: String? = null,
+    /**
+     * Наименование краткое
+     */
+    override val shortName: String? = null,
+    /**
+     * ИНН
+     */
+    override val inn: String? = null,
+    /**
+     * КПП
+     */
+    override val kpp: String? = null,
+    /**
+     * Телефоны
+     */
+    @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
+    override val phones: List<String>? = null,
+    /**
+     * Адреса
+     */
+    override val addresses: List<String>? = null
 ) : Counterparty() {
     /**
      * Тип субагента
@@ -70,7 +62,7 @@ data class Subagent(
         /**
          * Банковский платёжный субагент
          */
-        BANK_PAYMENT_SUBAGENT,
+        BANK_PAYMENT_SUBAGENT
     }
 
     companion object {

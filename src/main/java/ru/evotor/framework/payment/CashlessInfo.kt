@@ -13,7 +13,6 @@ data class CashlessInfo(
     val description: String,
     val method: Method
 ) : IBundlable, Parcelable {
-
     init {
         UuidValidationUtils.checkUuid(uuid)
     }
@@ -49,7 +48,6 @@ data class CashlessInfo(
     }
 
     companion object {
-
         private const val VERSION = 1
 
         private const val KEY_UUID = "uuid"
@@ -66,8 +64,7 @@ data class CashlessInfo(
             }
             val method = if (methodOrdinal >= Method.values().size) {
                 Method.UNKNOWN
-            }
-                else {
+            } else {
                 Method.values()[methodOrdinal]
             }
 
@@ -105,7 +102,6 @@ data class CashlessInfo(
             }
             checkNotNull(cashlessInfo)
             return cashlessInfo as CashlessInfo
-
         }
     }
 }

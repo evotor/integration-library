@@ -1,9 +1,9 @@
 package ru.evotor.framework.receipt.formation.api.move_receipt_to_payment_stage
 
 class MoveCurrentReceiptDraftToPaymentStageException(
-        val code: Int,
-        message: String
-): Exception(message) {
+    val code: Int,
+    message: String
+) : Exception(message) {
     companion object {
         /**
          * Некорректные входные данные

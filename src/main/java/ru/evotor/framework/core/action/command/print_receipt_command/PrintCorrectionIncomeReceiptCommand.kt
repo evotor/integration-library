@@ -12,6 +12,7 @@ import ru.evotor.framework.core.action.datamapper.PrintReceiptMapper
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
 import ru.evotor.framework.kkt.FiscalRequisite
 import ru.evotor.framework.kkt.FiscalTags
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.receipt.Receipt
 import ru.evotor.framework.receipt.correction.CorrectionType
 import java.math.BigDecimal
@@ -31,6 +32,7 @@ import java.util.*
  * @param correctionType Тип коррекции (ТЕГ 1173)
  * @param prescription Номер предписания налогового органа (ТЕГ 1179)
  * @param fiscalSignOfIncorrectReceipt Фискальный признак ошибочного чека (ТЕГ 1192)
+ * @param receiptFromInternet Признак расчета в сети «Интернет»
  */
 class PrintCorrectionIncomeReceiptCommand(
     val printReceipts: List<Receipt.PrintReceipt>,
@@ -49,8 +51,8 @@ class PrintCorrectionIncomeReceiptCommand(
     val prescription: String? = null,
     @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_1192)
     val fiscalSignOfIncorrectReceipt: String? = null,
+    val receiptFromInternet: Boolean? = null
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         IntegrationManagerImpl
             .convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
@@ -89,11 +91,11 @@ class PrintCorrectionIncomeReceiptCommand(
             putString(KEY_CORRECTION_TYPE, correctionType.name)
             putString(KEY_PRESCRIPTION, prescription)
             putString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT, fiscalSignOfIncorrectReceipt)
+            receiptFromInternet?.let { putBoolean(KEY_RECEIPT_FROM_INTERNET, it) }
         }
     }
 
     companion object {
-
         const val NAME = "evo.v2.receipt.correction.income.printReceipt"
 
         private const val KEY_PRINT_RECEIPTS = "printReceipts"
@@ -108,6 +110,7 @@ class PrintCorrectionIncomeReceiptCommand(
         private const val KEY_CORRECTION_TYPE = "correctionType"
         private const val KEY_PRESCRIPTION = "prescription"
         private const val KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT = "fiscalSignOfIncorrectReceipt"
+        private const val KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet"
 
         @JvmStatic
         fun create(bundle: Bundle?): PrintCorrectionIncomeReceiptCommand? {
@@ -124,7 +127,8 @@ class PrintCorrectionIncomeReceiptCommand(
                     correctionDate = Date(it.getLong(KEY_CORRECTION_DATE)),
                     correctionType = CorrectionType.valueOf(it.getString(KEY_CORRECTION_TYPE) as String),
                     prescription = it.getString(KEY_PRESCRIPTION),
-                    fiscalSignOfIncorrectReceipt = it.getString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT)
+                    fiscalSignOfIncorrectReceipt = it.getString(KEY_FISCAL_SIGN_OF_INCORRECT_RECEIPT),
+                    receiptFromInternet = it.optBoolean(KEY_RECEIPT_FROM_INTERNET)
                 )
             }
         }

@@ -5,15 +5,15 @@ import ru.evotor.framework.component.PaymentDelegator
 
 object PaymentDelegatorMapper {
     fun fromBundle(bundle: Bundle?) =
-            bundle?.let {
-                PaymentDelegator(
-                        IntegrationComponentMapper.readPackageName(bundle),
-                        IntegrationComponentMapper.readComponentName(bundle),
-                        IntegrationComponentMapper.readAppUuid(bundle),
-                        IntegrationComponentMapper.readAppName(bundle)
-                )
-            }
+        bundle?.let {
+            PaymentDelegator(
+                IntegrationComponentMapper.readPackageName(bundle),
+                IntegrationComponentMapper.readComponentName(bundle),
+                IntegrationComponentMapper.readAppUuid(bundle),
+                IntegrationComponentMapper.readAppName(bundle)
+            )
+        }
 
     fun toBundle(paymentDelegator: PaymentDelegator) =
-            IntegrationComponentMapper.toBundle(paymentDelegator)
+        IntegrationComponentMapper.toBundle(paymentDelegator)
 }

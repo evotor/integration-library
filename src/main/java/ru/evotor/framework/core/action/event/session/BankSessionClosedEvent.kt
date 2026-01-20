@@ -6,8 +6,6 @@ data class BankSessionClosedEvent(
     val paymentSystemAccountId: Int,
     val slipLines: Array<String>
 ) : SessionEvent() {
-
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             this.putInt(KEY_PAYMENT_SYSTEM_ACCOUNT_ID, paymentSystemAccountId)
@@ -48,5 +46,4 @@ data class BankSessionClosedEvent(
             }
         }
     }
-
 }

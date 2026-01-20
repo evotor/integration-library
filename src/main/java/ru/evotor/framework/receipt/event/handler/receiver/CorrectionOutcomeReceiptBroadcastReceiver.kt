@@ -23,7 +23,6 @@ open class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     actionReceiptCreated = ACTION_RECEIPT_CREATED,
     actionReceiptDeleted = ACTION_RECEIPT_DELETED
 ) {
-
     /**
      * Обработчик событий создания чека.
      */

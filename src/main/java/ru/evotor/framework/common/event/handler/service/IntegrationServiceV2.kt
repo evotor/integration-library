@@ -10,23 +10,33 @@ import ru.evotor.framework.core.IIntegrationManager
 import ru.evotor.framework.core.IIntegrationManagerResponse
 import ru.evotor.framework.core.IntegrationManager
 import ru.evotor.framework.core.IntegrationResponse
+import ru.evotor.sanitizeInput
+import ru.evotor.sanitizeOutput
 
 private fun IIntegrationManagerResponse.onEmptyResult() =
-        onResult(Bundle().apply { putBoolean(IntegrationManager.KEY_SKIP, true) })
+    onResult(Bundle().apply { putBoolean(IntegrationManager.KEY_SKIP, true) })
 
 private fun IIntegrationManagerResponse.onResultWithData(data: Bundle) =
-        onResult(Bundle().apply { putBundle(IntegrationManager.KEY_DATA, data) })
+    onResult(Bundle().apply { putBundle(IntegrationManager.KEY_DATA, data) }.sanitizeOutput())
 
 private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, intent: Intent, options: Bundle? = null) =
-        onResult(Bundle().apply {
-            putParcelable(IntegrationManager.KEY_INTENT, intent.apply {
-                putExtra(IntegrationManager.KEY_INTENT_DATA, Bundle().apply {
-                    putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, IntegrationResponse(this@onResultWithIntent))
-                    putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData)
-                })
-            })
+    onResult(
+        Bundle().apply {
+            putParcelable(
+                IntegrationManager.KEY_INTENT,
+                intent.apply {
+                    putExtra(
+                        IntegrationManager.KEY_INTENT_DATA,
+                        Bundle().apply {
+                            putParcelable(IntegrationManager.KEY_INTEGRATION_RESPONSE, IntegrationResponse(this@onResultWithIntent))
+                            putParcelable(IntegrationManager.KEY_SOURCE_DATA, sourceData)
+                        }
+                    )
+                }
+            )
             putParcelable(IntegrationManager.KEY_OPTIONS, options)
-        })
+        }.sanitizeOutput()
+    )
 
 /**
  * Обновлённая версия класса [ru.evotor.framework.core.IntegrationService].
@@ -34,24 +44,23 @@ private fun IIntegrationManagerResponse.onResultWithIntent(sourceData: Bundle?, 
  * Базовый класс, на основе которого реализованы интерфейсы взаимодействия служб со смарт-терминалом, например, [ru.evotor.framework.receipt.formation.event.handler.service.ReceiptFormationIntegrationService]
  */
 abstract class IntegrationServiceV2 internal constructor() : Service() {
-
     @Volatile
     private var intentToIntegrationActivity: Intent? = null
 
     private val binder = object : IIntegrationManager.Stub() {
         @Throws(RemoteException::class)
         override fun call(response: IIntegrationManagerResponse, action: String, bundle: Bundle?) {
-            bundle
-                    ?.let {
-                        onEvent(action, it)
-                    }
-                    ?.let {
-                        response.onResultWithData(it.toBundle())
-                    }
-                    ?: intentToIntegrationActivity?.let {
-                        response.onResultWithIntent(bundle, it)
-                    }
-                    ?: response.onEmptyResult()
+            bundle?.sanitizeInput()
+                ?.let {
+                    onEvent(action, it)
+                }
+                ?.let {
+                    response.onResultWithData(it.toBundle())
+                }
+                ?: intentToIntegrationActivity?.let {
+                    response.onResultWithIntent(bundle, it)
+                }
+                ?: response.onEmptyResult()
             intentToIntegrationActivity = null
         }
     }

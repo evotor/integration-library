@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 
 object DisplayApi {
-
     /**
      * Возвращает id дисплея покупателя
      * (или 0, если отсутствует подключенный дисплей покупателя)
@@ -26,7 +25,9 @@ object DisplayApi {
     fun getLaunchDisplayId(context: Context, display: Displays): Int {
         return if (display == Displays.CUSTOMER) {
             getCustomerDisplayId(context)
-        } else 0
+        } else {
+            0
+        }
     }
 
     /**
@@ -52,5 +53,4 @@ object DisplayApi {
     fun isActivityOnCustomerScreen(activity: Activity): Boolean {
         return activity.windowManager.defaultDisplay.displayId != 0
     }
-
 }

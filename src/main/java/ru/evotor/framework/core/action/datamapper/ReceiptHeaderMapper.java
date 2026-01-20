@@ -20,6 +20,9 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_CLIENT_PHONE = "clientPhone";
     private static final String KEY_EXTRA = "extra";
     private static final String KEY_SESSION_NUMBER = "sessionNumber";
+    private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
+    private static final String KEY_PAYMENT_ADDRESS = "paymentAddress";
+    private static final String KEY_PAYMENT_PLACE = "paymentPlace";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -40,9 +43,11 @@ public final class ReceiptHeaderMapper {
         }
 
         Long sessionNumber = null;
-        if(bundle.containsKey(KEY_SESSION_NUMBER)) {
+        if (bundle.containsKey(KEY_SESSION_NUMBER)) {
             sessionNumber = bundle.getLong(KEY_SESSION_NUMBER);
         }
+
+        boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
 
         return new Receipt.Header(
                 receiptUuid,
@@ -53,7 +58,10 @@ public final class ReceiptHeaderMapper {
                 bundle.getString(KEY_CLIENT_EMAIL),
                 bundle.getString(KEY_CLIENT_PHONE),
                 bundle.getString(KEY_EXTRA),
-                sessionNumber
+                sessionNumber,
+                receiptFromInternet,
+                bundle.getString(KEY_PAYMENT_ADDRESS),
+                bundle.getString(KEY_PAYMENT_PLACE)
         );
     }
 
@@ -78,8 +86,13 @@ public final class ReceiptHeaderMapper {
         bundle.putString(KEY_CLIENT_EMAIL, header.getClientEmail());
         bundle.putString(KEY_EXTRA, header.getExtra());
 
-        if(header.getSessionNumber() != null)
+        if (header.getSessionNumber() != null)
             bundle.putLong(KEY_SESSION_NUMBER, header.getSessionNumber());
+
+        bundle.putBoolean(KEY_RECEIPT_FROM_INTERNET, header.getReceiptFromInternet());
+
+        bundle.putString(KEY_PAYMENT_ADDRESS, header.getPaymentAddress());
+        bundle.putString(KEY_PAYMENT_PLACE, header.getPaymentPlace());
 
         return bundle;
     }

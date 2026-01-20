@@ -4,7 +4,9 @@ import android.net.Uri
 
 object UsersTable {
     @JvmField val URI: Uri = Uri.withAppendedPath(UsersContentProviderContract.BASE_URI, "users")
+
     @JvmField val URI_AUTHENTICATED: Uri = Uri.withAppendedPath(URI, "authenticated")
+
     @JvmField val URI_FORCE_AUTHENTICATED: Uri = Uri.withAppendedPath(URI, "force_authenticated")
 
     const val ROW_USER_UUID = "USER_UUID"

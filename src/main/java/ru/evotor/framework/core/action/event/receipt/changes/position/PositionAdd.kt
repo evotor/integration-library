@@ -10,12 +10,11 @@ import ru.evotor.framework.receipt.Position
  * @param position – позиция.
  */
 data class PositionAdd(val position: Position) : IPositionChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putBundle(
-                    PositionMapper.KEY_POSITION,
-                    PositionMapper.toBundle(position)
+                PositionMapper.KEY_POSITION,
+                PositionMapper.toBundle(position)
             )
         }
     }
@@ -34,9 +33,9 @@ data class PositionAdd(val position: Position) : IPositionChange {
             bundle ?: return null
 
             return PositionAdd(
-                    PositionMapper.from(
-                            bundle.getBundle(PositionMapper.KEY_POSITION)
-                    ) ?: return null
+                PositionMapper.from(
+                    bundle.getBundle(PositionMapper.KEY_POSITION)
+                ) ?: return null
             )
         }
     }

@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference
  */
 interface ICanStartActivity {
     fun startActivity(intent: Intent)
+
     fun startActivity(intent: Intent, options: Bundle?)
 }
 
@@ -17,8 +18,8 @@ open class ActivityStarter(
     context: Context,
     private val isNewTask: Boolean = true
 ) : ICanStartActivity {
-
     private val contextRef = WeakReference(context)
+
     override fun startActivity(intent: Intent) {
         startActivity(intent, null)
     }

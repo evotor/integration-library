@@ -30,12 +30,12 @@ object SellApi {
     @JvmStatic
     fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentPerformer: PaymentPerformer, callback: MoveCurrentReceiptDraftToPaymentStageCallback) {
         context.startIntegrationService(
-                SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
-                CurrentReceiptDraftMovementToPaymentStageRequestedEvent(null, paymentPerformer),
-                IntegrationManagerCallback {
-                    it?.result?.error?.let { error -> callback.onError(MoveCurrentReceiptDraftToPaymentStageException(error.code, error.message)) }
-                            ?: callback.onSuccess()
-                }
+            SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+            CurrentReceiptDraftMovementToPaymentStageRequestedEvent(null, paymentPerformer),
+            IntegrationManagerCallback {
+                it?.result?.error?.let { error -> callback.onError(MoveCurrentReceiptDraftToPaymentStageException(error.code, error.message)) }
+                    ?: callback.onSuccess()
+            }
         )
     }
 
@@ -49,12 +49,12 @@ object SellApi {
     @JvmStatic
     fun moveCurrentReceiptDraftToPaymentStage(context: Context, paymentDelegator: PaymentDelegator, callback: MoveCurrentReceiptDraftToPaymentStageCallback) {
         context.startIntegrationService(
-                SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
-                CurrentReceiptDraftMovementToPaymentStageRequestedEvent(paymentDelegator, null),
-                IntegrationManagerCallback {
-                    it?.result?.error?.let { error -> callback.onError(MoveCurrentReceiptDraftToPaymentStageException(error.code, error.message)) }
-                            ?: callback.onSuccess()
-                }
+            SellBacksideIntegrationService.ACTION_MOVE_CURRENT_RECEIPT_DRAFT_TO_PAYMENT_STAGE,
+            CurrentReceiptDraftMovementToPaymentStageRequestedEvent(paymentDelegator, null),
+            IntegrationManagerCallback {
+                it?.result?.error?.let { error -> callback.onError(MoveCurrentReceiptDraftToPaymentStageException(error.code, error.message)) }
+                    ?: callback.onSuccess()
+            }
         )
     }
 

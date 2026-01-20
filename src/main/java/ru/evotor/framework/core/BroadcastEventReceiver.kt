@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 
 abstract class BroadcastEventReceiver : BroadcastReceiver() {
-
     final override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         val extras = intent.extras
@@ -16,5 +15,4 @@ abstract class BroadcastEventReceiver : BroadcastReceiver() {
     }
 
     protected abstract fun onEvent(context: Context, action: String, bundle: Bundle)
-
 }

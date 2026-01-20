@@ -15,7 +15,6 @@ import ru.evotor.framework.features.provider.FeaturesContract
  * возможность добавлять в чек реквизиты покупателя.
  */
 object FeaturesApi {
-
     /**
      * Проверяет, активна ли на смарт-терминале функция "НДС 20%".
      *
@@ -310,16 +309,16 @@ object FeaturesApi {
     fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARK)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
-            context.contentResolver.query(
-                    Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
-                    null,
-                    null,
-                    null,
-                    null
-            )?.use {
-                it.moveToFirst()
-                it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
-            } ?: defaultValue
+        context.contentResolver.query(
+            Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
+            null,
+            null,
+            null,
+            null
+        )?.use {
+            it.moveToFirst()
+            it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
+        } ?: defaultValue
 
     /**
      * Проверяет, активна ли функция "Маркировка кормов для животных" на данном терминале
@@ -334,4 +333,11 @@ object FeaturesApi {
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isVegetableOilMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VEGETABLE_OIL_MARK)
+
+    /**
+     * Проверяет, активна ли функция "НДС 22%" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
 }

@@ -1,10 +1,10 @@
 package ru.evotor.framework.inventory.field
 
 abstract class Field(
-        val name: String?,
-        val fieldUUID: String,
-        val title: String?,
-        val type: Type
+    val name: String?,
+    val fieldUUID: String,
+    val title: String?,
+    val type: Type
 ) {
     enum class Type {
         TEXT_FIELD,
@@ -25,5 +25,4 @@ abstract class Field(
     override fun hashCode(): Int {
         return fieldUUID.hashCode()
     }
-
 }
