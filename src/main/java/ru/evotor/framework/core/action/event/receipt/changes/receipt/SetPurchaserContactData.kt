@@ -12,7 +12,6 @@ class SetPurchaserContactData private constructor(
     val email: String?,
     val phone: String?
 ) : IChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(KEY_EMAIL, email)

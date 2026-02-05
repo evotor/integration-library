@@ -6,7 +6,6 @@ import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.device.scanner.event.BarcodeScanRequestedEvent
 
 abstract class ScannerIntegrationService : IntegrationServiceV2() {
-
     @RequiresIntentAction(ACTION_BARCODE_SCAN_REQUEST)
     abstract fun handleBarcodeScanRequestedEvent(event: BarcodeScanRequestedEvent): BarcodeScanRequestedEvent.Result?
 
@@ -16,7 +15,6 @@ abstract class ScannerIntegrationService : IntegrationServiceV2() {
     }
 
     companion object {
-
         const val ACTION_BARCODE_SCAN_REQUEST = "evotor.intent.action.BARCODE_SCAN_REQUEST"
     }
 }

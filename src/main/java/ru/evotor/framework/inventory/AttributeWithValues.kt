@@ -10,21 +10,18 @@ private const val VERSION = 1
  * Атрибут
  */
 data class AttributeWithValues(
-        /**
-         * Уникальный идентификатор атрибута
-         */
-        val uuid: String,
-
-        /**
-         * Имя атрибута (ex. 'Цвет')
-         */
-        val name: String,
-
-        /**
-         * Список значений атрибутов
-         */
-        val attributeValues: List<AttributeValue>
-
+    /**
+     * Уникальный идентификатор атрибута
+     */
+    val uuid: String,
+    /**
+     * Имя атрибута (ex. 'Цвет')
+     */
+    val name: String,
+    /**
+     * Список значений атрибутов
+     */
+    val attributeValues: List<AttributeValue>
 ) : Parcelable {
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(VERSION)
@@ -32,7 +29,7 @@ data class AttributeWithValues(
         val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
         parcel.writeInt(0)
-        //Determine position of data start
+        // Determine position of data start
         val startDataPosition = parcel.dataPosition()
         parcel.writeString(uuid)
         parcel.writeString(name)
@@ -41,7 +38,7 @@ data class AttributeWithValues(
         val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = parcel.dataPosition()
-        //Set position to start to write data size
+        // Set position to start to write data size
         parcel.setDataPosition(dataSizePosition)
         parcel.writeInt(dataSize)
         // Go back to the end of parcel
@@ -51,9 +48,8 @@ data class AttributeWithValues(
     override fun describeContents(): Int = 0
 
     companion object {
-            
         @JvmStatic
-        fun readFromParcel(parcel: Parcel) : AttributeWithValues {
+        fun readFromParcel(parcel: Parcel): AttributeWithValues {
             val version = parcel.readInt()
             val dataSize = parcel.readInt()
             val dataStartPosition = parcel.dataPosition()
@@ -61,7 +57,7 @@ data class AttributeWithValues(
             val name = parcel.readString() ?: throw IntegrationLibraryParsingException(AttributeWithValues::class.java)
             val attributeValues = parcel.createTypedArrayList(AttributeValue.CREATOR) ?: throw IntegrationLibraryParsingException(AttributeWithValues::class.java)
             parcel.setDataPosition(dataStartPosition + dataSize)
-            return AttributeWithValues(uuid, name, attributeValues)
+            return AttributeWithValues(uuid, name, attributeValues.filterNotNull())
         }
 
         @JvmField

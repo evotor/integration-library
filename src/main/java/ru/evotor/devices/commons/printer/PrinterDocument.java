@@ -3,6 +3,7 @@ package ru.evotor.devices.commons.printer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.ParcelablesKt;
 import ru.evotor.devices.commons.printer.printable.IPrintable;
 
 /**
@@ -17,7 +18,7 @@ public class PrinterDocument implements Parcelable {
     }
 
     private PrinterDocument(Parcel parcel) {
-        Parcelable[] parcelables = (Parcelable[]) parcel.readParcelableArray(IPrintable.class.getClassLoader());
+        Parcelable[] parcelables = (Parcelable[]) ParcelablesKt.readParcelableArray(parcel, IPrintable.class);
         if (parcelables != null) {
             printables = new IPrintable[parcelables.length];
             for (int i = 0; i < printables.length; i++) {
@@ -39,7 +40,7 @@ public class PrinterDocument implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeParcelableArray(printables, 0);
+        ParcelablesKt.writeAliasedArray(parcel, printables, 0);
     }
 
     public static final Creator<PrinterDocument> CREATOR = new Creator<PrinterDocument>() {

@@ -10,35 +10,30 @@ private const val VERSION = 1
  * Значение атрибута
  */
 data class AttributeValue(
-        /**
-         * Уникальный идентификатор атрибута
-         */
-        val attributeUuid: String,
-
-        /**
-         * Имя атрибута (ex. 'Цвет')
-         */
-        val attributeName: String,
-
-        /**
-         * Уникальный идентификатор значения атрибута
-         */
-        val uuid: String,
-
-        /**
-         * Имя значения атрибута (ex. 'Черный')
-         */
-        val name: String
-
+    /**
+     * Уникальный идентификатор атрибута
+     */
+    val attributeUuid: String,
+    /**
+     * Имя атрибута (ex. 'Цвет')
+     */
+    val attributeName: String,
+    /**
+     * Уникальный идентификатор значения атрибута
+     */
+    val uuid: String,
+    /**
+     * Имя значения атрибута (ex. 'Черный')
+     */
+    val name: String
 ) : Parcelable {
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(VERSION)
         // Determine position in parcel for writing data size
         val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
         parcel.writeInt(0)
-        //Determine position of data start
+        // Determine position of data start
         val startDataPosition = parcel.dataPosition()
 
         parcel.writeString(attributeUuid)
@@ -49,7 +44,7 @@ data class AttributeValue(
         val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = parcel.dataPosition()
-        //Set position to start to write additional data size
+        // Set position to start to write additional data size
         parcel.setDataPosition(dataSizePosition)
         parcel.writeInt(dataSize)
         // Go back to the end of parcel
@@ -57,9 +52,10 @@ data class AttributeValue(
     }
 
     override fun describeContents(): Int = 0
+
     companion object {
         @JvmStatic
-        fun readFromParcel(parcel : Parcel) : AttributeValue {
+        fun readFromParcel(parcel: Parcel): AttributeValue {
             val version = parcel.readInt()
             val dataSize = parcel.readInt()
             val dataStartPosition = parcel.dataPosition()
@@ -74,7 +70,7 @@ data class AttributeValue(
         @JvmField
         val CREATOR: Parcelable.Creator<AttributeValue> = object : Parcelable.Creator<AttributeValue> {
             override fun createFromParcel(parcel: Parcel): AttributeValue =
-                    readFromParcel(parcel)
+                readFromParcel(parcel)
 
             override fun newArray(size: Int): Array<AttributeValue?> = arrayOfNulls(size)
         }

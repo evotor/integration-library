@@ -6,7 +6,6 @@ import ru.evotor.IBundlable
 class CloseBankSessionCommandResult(
     val slipLines: Array<String>
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putStringArray(KEY_SLIP_LINES, slipLines)
@@ -14,7 +13,6 @@ class CloseBankSessionCommandResult(
     }
 
     companion object {
-
         /**
          * ККМ в данный момент выполняет другую операцию
          */

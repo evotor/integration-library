@@ -8,14 +8,13 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange
  * @param positionUuid – идентификатор позиции, которую требуется удалить.
  */
 data class PositionRemove(
-        private val positionUuid: String
+    private val positionUuid: String
 ) : IPositionChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(
-                    KEY_POSITION_UUID,
-                    positionUuid
+                KEY_POSITION_UUID,
+                positionUuid
             )
         }
     }
@@ -36,7 +35,7 @@ data class PositionRemove(
             bundle ?: return null
 
             return PositionRemove(
-                    bundle.getString(KEY_POSITION_UUID) ?: return null
+                bundle.getString(KEY_POSITION_UUID) ?: return null
             )
         }
     }

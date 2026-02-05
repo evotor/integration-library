@@ -19,7 +19,6 @@ data class TimeRange(
     val endHours: Int,
     val endMinutes: Int
 ) : IBundlable {
-
     init {
         if (!validateHours(startHours) || !validateMinutes(startMinutes)) {
             throw IllegalArgumentException("Incorrect time ${String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinutes)}")
@@ -43,7 +42,6 @@ data class TimeRange(
     }
 
     companion object {
-
         @JvmStatic
         fun from(bundle: Bundle?): TimeRange? {
             return bundle?.let {

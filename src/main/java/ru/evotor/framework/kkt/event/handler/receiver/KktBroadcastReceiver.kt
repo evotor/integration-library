@@ -12,7 +12,6 @@ import ru.evotor.framework.kkt.event.CashWithdrawnEvent
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class KktBroadcastReceiver : BroadcastEventReceiver() {
-
     /**
      * Обработчик событий внесения наличности в кассу.
      */
@@ -33,11 +32,8 @@ open class KktBroadcastReceiver : BroadcastEventReceiver() {
     }
 
     companion object {
-
         const val ACTION_CASH_INSERTED = "evotor.intent.action.cashOperation.CASH_IN"
 
         const val ACTION_CASH_WITHDRAWN = "evotor.intent.action.cashOperation.CASH_OUT"
-
     }
-
 }

@@ -3,7 +3,6 @@ package ru.evotor.framework.system.mode
 import android.content.Context
 
 object DeviceModeApi {
-
     /**
      * Режим работы терминала - смарт-терминал
      */
@@ -23,7 +22,9 @@ object DeviceModeApi {
             context.contentResolver.query(
                 DeviceModeContract.QUERY_URI,
                 arrayOf(DeviceModeContract.COLUMN_MODE),
-                null, null, null
+                null,
+                null,
+                null
             )?.use { c ->
                 if (c.moveToNext()) {
                     c.getString(c.getColumnIndex(DeviceModeContract.COLUMN_MODE))
@@ -35,5 +36,4 @@ object DeviceModeApi {
             null
         }
     }
-
 }

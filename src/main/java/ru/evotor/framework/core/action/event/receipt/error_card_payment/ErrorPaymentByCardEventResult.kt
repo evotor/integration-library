@@ -9,8 +9,6 @@ import ru.evotor.framework.core.action.event.receipt.error_card_payment.actions.
 class ErrorPaymentByCardEventResult(
     val actions: List<IHandleEventResultAction>
 ) : IBundlable {
-
-
     override fun toBundle(): Bundle {
         val bundle = Bundle()
         val actionsParcelable = arrayOfNulls<Parcelable>(actions.size)

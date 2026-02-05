@@ -8,8 +8,8 @@ import ru.evotor.framework.core.action.datamapper.PaymentDelegatorMapper
 import ru.evotor.framework.core.action.datamapper.PaymentPerformerMapper
 
 class CurrentReceiptDraftMovementToPaymentStageRequestedEvent internal constructor(
-        val paymentDelegator: PaymentDelegator?,
-        val paymentPerformer: PaymentPerformer?
+    val paymentDelegator: PaymentDelegator?,
+    val paymentPerformer: PaymentPerformer?
 ) : IBundlable {
     override fun toBundle(): Bundle = Bundle().apply {
         paymentDelegator?.let { putBundle(KEY_PAYMENT_DELEGATOR, PaymentDelegatorMapper.toBundle(it)) }
@@ -19,12 +19,12 @@ class CurrentReceiptDraftMovementToPaymentStageRequestedEvent internal construct
     companion object {
         fun from(bundle: Bundle?): CurrentReceiptDraftMovementToPaymentStageRequestedEvent? = bundle?.let { b ->
             CurrentReceiptDraftMovementToPaymentStageRequestedEvent(
-                    b.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
-                        PaymentDelegatorMapper.fromBundle(it)
-                    },
-                    b.getBundle(KEY_PAYMENT_PERFORMER)?.let {
-                        PaymentPerformerMapper.fromBundle(it)
-                    }
+                b.getBundle(KEY_PAYMENT_DELEGATOR)?.let {
+                    PaymentDelegatorMapper.fromBundle(it)
+                },
+                b.getBundle(KEY_PAYMENT_PERFORMER)?.let {
+                    PaymentPerformerMapper.fromBundle(it)
+                }
             )
         }
 

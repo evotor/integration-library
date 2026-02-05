@@ -15,7 +15,6 @@ import ru.evotor.framework.features.provider.FeaturesContract
  * возможность добавлять в чек реквизиты покупателя.
  */
 object FeaturesApi {
-
     /**
      * Проверяет, активна ли на смарт-терминале функция "НДС 20%".
      *
@@ -336,6 +335,13 @@ object FeaturesApi {
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isChemicalsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CHEMICALS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "НДС 22%" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(

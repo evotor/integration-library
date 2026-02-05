@@ -1,5 +1,6 @@
 package ru.evotor.framework.core.action.command.open_receipt_command;
 
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper;
 import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionAdd;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetInternetRequisites;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
 
 /**
@@ -34,6 +36,7 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
     private static final String KEY_SELL_RECEIPT_UUID = "sellReceiptUuid";
+    private static final String KEY_RECEIPT_SET_INTERNET_REQUISITES = "setInternetRequisites";
 
     @Nullable
     public static OpenPaybackReceiptCommand create(@Nullable Bundle bundle) {
@@ -49,7 +52,8 @@ public class OpenPaybackReceiptCommand implements IBundlable {
                 ),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
                 SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
-                bundle.getString(KEY_SELL_RECEIPT_UUID, null)
+                bundle.getString(KEY_SELL_RECEIPT_UUID, null),
+                SetInternetRequisites.from(bundle.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES))
         );
     }
 
@@ -61,9 +65,11 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     private final SetPurchaserContactData setPurchaserContactData;
     @Nullable
     private final String sellReceiptUuid;
+    @Nullable
+    private final SetInternetRequisites setInternetRequisites;
 
     /**
-     * Используйте конструктор с setPurchaserContactData
+     * Используйте конструктор с setPurchaserContactData и setInternetRequisites
      *
      * @param changes
      * @param extraChange
@@ -90,6 +96,16 @@ public class OpenPaybackReceiptCommand implements IBundlable {
             @Nullable SetPurchaserContactData setPurchaserContactData,
             @Nullable String sellReceiptUuid
     ) {
+        this(changes, extraChange, setPurchaserContactData, sellReceiptUuid, null);
+    }
+
+    public OpenPaybackReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extraChange,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable String sellReceiptUuid,
+            @Nullable SetInternetRequisites setInternetRequisites
+    ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
@@ -97,6 +113,7 @@ public class OpenPaybackReceiptCommand implements IBundlable {
         this.extra = extraChange;
         this.setPurchaserContactData = setPurchaserContactData;
         this.sellReceiptUuid = sellReceiptUuid;
+        this.setInternetRequisites = setInternetRequisites;
     }
 
     public void process(@NonNull final Activity activity, IntegrationManagerCallback callback) {
@@ -133,6 +150,10 @@ public class OpenPaybackReceiptCommand implements IBundlable {
                 setPurchaserContactData == null ? null : setPurchaserContactData.toBundle()
         );
         bundle.putString(KEY_SELL_RECEIPT_UUID, sellReceiptUuid);
+        bundle.putBundle(
+                KEY_RECEIPT_SET_INTERNET_REQUISITES,
+                setInternetRequisites == null ? null : setInternetRequisites.toBundle()
+        );
 
         return bundle;
     }
@@ -155,5 +176,10 @@ public class OpenPaybackReceiptCommand implements IBundlable {
     @Nullable
     public String getSellReceiptUuid() {
         return sellReceiptUuid;
+    }
+
+    @Nullable
+    public SetInternetRequisites getSetInternetRequisites() {
+        return setInternetRequisites;
     }
 }

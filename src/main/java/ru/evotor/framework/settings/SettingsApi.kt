@@ -8,12 +8,12 @@ import ru.evotor.framework.settings.SettingsProviderContracts.Companion.BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.Companion.DEPRECATED_BASE_URI
 import ru.evotor.framework.settings.SettingsProviderContracts.SLIPS_AMOUNT_PROVIDER
 import ru.evotor.framework.settings.SettingsProviderContracts.NEGATIVE_BALANCE_PROVIDER
+import ru.evotor.framework.settings.SettingsProviderContracts.VAT_20_PROVIDER
 
 /**
  * Настройки EvotorPos (раздел "Правила торговли").
  */
 object SettingsApi {
-
     /**
      * Количество печати слип-чеков.
      */
@@ -33,6 +33,14 @@ object SettingsApi {
      */
     fun isNegativeBalanceEnabled(context: Context): Boolean? =
         NEGATIVE_BALANCE_PROVIDER.runCursor(context) { columnIndex ->
+            getInt(columnIndex) != 0
+        }
+
+    /**
+     * Включена ли опция "Разрешить НДС 20% в 2026 году".
+     */
+    fun isVat20Enabled(context: Context): Boolean? =
+        VAT_20_PROVIDER.runCursor(context) { columnIndex ->
             getInt(columnIndex) != 0
         }
 

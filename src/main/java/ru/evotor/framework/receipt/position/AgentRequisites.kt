@@ -24,22 +24,18 @@ data class AgentRequisites(
      * Агент
      */
     val agent: Agent? = null,
-
     /**
      * Субагент
      */
     val subagent: Subagent? = null,
-
     /**
      * Принципал (поставщик)
      */
     val principal: Principal,
-
     /**
      * Оператор перевода
      */
     val transactionOperator: TransactionOperator? = null,
-
     /**
      * Описание операции
      */
@@ -57,10 +53,8 @@ data class AgentRequisites(
         fun createForAgent(
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
         ) = AgentRequisitesMapper.create(
@@ -88,10 +82,8 @@ data class AgentRequisites(
         fun createForCommissioner(
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
         ) = AgentRequisitesMapper.create(
@@ -119,10 +111,8 @@ data class AgentRequisites(
         fun createForAttorneyInFact(
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
         ) = AgentRequisitesMapper.create(
@@ -152,15 +142,12 @@ data class AgentRequisites(
         fun createForPaymentAgent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             agentPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-            principalName: String,
+            principalName: String
         ) = AgentRequisitesMapper.create(
             agentType = Agent.Type.PAYMENT_AGENT,
             agentPhones = agentPhones,
@@ -189,18 +176,14 @@ data class AgentRequisites(
         fun createForPaymentSubagent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             agentPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             subagentPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
-            principalName: String,
+            principalName: String
         ) = AgentRequisitesMapper.create(
             agentType = null,
             agentPhones = agentPhones,
@@ -232,28 +215,20 @@ data class AgentRequisites(
         fun createForBankPaymentAgent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             agentPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
             transactionOperatorName: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_INN)
             transactionOperatorInn: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             transactionOperatorPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_ADDRESS)
             transactionOperatorAddress: String,
-
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
             operationDescription: String
         ) = AgentRequisitesMapper.create(
@@ -288,28 +263,20 @@ data class AgentRequisites(
         fun createForBankPaymentSubagent(
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             subagentPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_INN)
             principalInn: String,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             principalPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_NAME)
             transactionOperatorName: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_INN)
             transactionOperatorInn: String,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_PHONE, flags = FiscalRequisite.FLAG_MULTIPLE_VALUES)
             transactionOperatorPhones: List<String>,
-
             @FiscalRequisite(tag = FiscalTags.TRANSACTION_OPERATOR_ADDRESS)
             transactionOperatorAddress: String,
-
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
             operationDescription: String
         ) = AgentRequisitesMapper.create(

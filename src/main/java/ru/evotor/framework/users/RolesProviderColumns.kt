@@ -1,3 +1,4 @@
+@file:Suppress("PropertyName")
 package ru.evotor.framework.users
 
 import android.provider.BaseColumns

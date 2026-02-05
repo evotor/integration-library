@@ -8,9 +8,9 @@ import android.os.Bundle
  * Если был передан cancelTimeout, то по истечении будет нажата кнопка "ОТМЕНА".
  */
 class PaymentByCardErrorAction(
-    val cancelTimeout: UInt? = null // таймаут нажатия на кнопку "ОТМЕНА" в секундах
+    // таймаут нажатия на кнопку "ОТМЕНА" в секундах
+    val cancelTimeout: UInt? = null
 ) : IHandleEventResultAction {
-
     override fun getType(): IHandleEventResultAction.Type {
         return IHandleEventResultAction.Type.SHOW_ERROR_SCREEN_ACTION
     }
@@ -24,7 +24,6 @@ class PaymentByCardErrorAction(
     }
 
     companion object {
-
         private const val KEY_TIMEOUT = "timeout"
 
         fun from(bundle: Bundle): PaymentByCardErrorAction {

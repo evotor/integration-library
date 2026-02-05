@@ -8,12 +8,11 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange
  * Добавляет в чек дополнительные поля в виде валидного JSON-объекта.
  */
 data class SetExtra(val extra: JSONObject?) : IChange {
-
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putString(
-                    KEY_EXTRA,
-                    extra?.toString()
+                KEY_EXTRA,
+                extra?.toString()
             )
         }
     }
@@ -30,7 +29,7 @@ data class SetExtra(val extra: JSONObject?) : IChange {
             bundle ?: return null
 
             return SetExtra(
-                    bundle.getString(KEY_EXTRA)?.let { JSONObject(it) }
+                bundle.getString(KEY_EXTRA)?.let { JSONObject(it) }
             )
         }
     }

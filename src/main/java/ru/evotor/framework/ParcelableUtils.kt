@@ -3,7 +3,6 @@ package ru.evotor.framework
 import android.os.Parcel
 
 object ParcelableUtils {
-
     /**
      * Magic number для идентификации использования версионирования объекта
      */
@@ -17,27 +16,25 @@ object ParcelableUtils {
         val dataSizePosition = dataPosition()
         // Use integer placeholder for additional data size
         writeInt(0)
-        //Determine position of data start
+        // Determine position of data start
         val startDataPosition = dataPosition()
 
-        //Write additional data
+        // Write additional data
         writer(this)
 
         // Calculate additional data size
         val dataSize = dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = dataPosition()
-        //Set position to start to write additional data size
+        // Set position to start to write additional data size
         setDataPosition(dataSizePosition)
         writeInt(dataSize)
         // Go back to the end of parcel
         setDataPosition(endOfDataPosition)
     }
 
-
     @JvmStatic
     fun readExpand(parcel: Parcel, version: Int, reader: (Parcel, Int) -> Unit) = with(parcel) {
-
         val startReadingPosition = dataPosition()
 
         // Check if available data size is more than integer size and versioning is supported
@@ -46,7 +43,7 @@ object ParcelableUtils {
             setDataPosition(startReadingPosition)
             return
         }
-        //Read object version
+        // Read object version
         val currentVersion = readInt()
         val dataSize = readInt()
         val startDataPosition = dataPosition()
@@ -55,8 +52,5 @@ object ParcelableUtils {
         if (currentVersion > version) {
             setDataPosition(startDataPosition + dataSize)
         }
-
     }
-
-
 }

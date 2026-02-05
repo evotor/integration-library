@@ -10,20 +10,19 @@ import ru.evotor.framework.kkt.FiscalTags
  * Применяются к позиции чека.
  */
 data class ImportationData(
-        /**
-         * Код страны происхождения товара
-         * Тег 1230
-         */
-        @FiscalRequisite(tag = FiscalTags.COUNTRY_ORIGIN_CODE)
-        val countryOriginCode: String,
-        /**
-         * Номер таможенной декларации
-         * Тег 1231
-         */
-        @FiscalRequisite(tag = FiscalTags.CUSTOM_DECLARATION_NUMBER)
-        val customsDeclarationNumber: String
+    /**
+     * Код страны происхождения товара
+     * Тег 1230
+     */
+    @FiscalRequisite(tag = FiscalTags.COUNTRY_ORIGIN_CODE)
+    val countryOriginCode: String,
+    /**
+     * Номер таможенной декларации
+     * Тег 1231
+     */
+    @FiscalRequisite(tag = FiscalTags.CUSTOM_DECLARATION_NUMBER)
+    val customsDeclarationNumber: String
 ) : IBundlable {
-
     override fun toBundle(): Bundle = Bundle().apply {
         putString(KEY_COUNTRY_ORIGIN_CODE, countryOriginCode)
         putString(KEY_CUSTOM_DECLARATION_NUMBER, customsDeclarationNumber)
@@ -43,5 +42,4 @@ data class ImportationData(
             }
         }
     }
-
 }

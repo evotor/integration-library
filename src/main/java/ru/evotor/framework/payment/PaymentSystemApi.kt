@@ -11,7 +11,6 @@ import ru.evotor.framework.Utils
  */
 @WorkerThread
 object PaymentSystemApi {
-
     const val AUTHORITY = "ru.evotor.evotorpos.paymentSystem"
 
     @JvmField
@@ -32,14 +31,14 @@ object PaymentSystemApi {
         cursor?.use {
             while (cursor.moveToNext()) {
                 val paymentSystem = PaymentSystem(
-                        Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), PaymentType.UNKNOWN),
-                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
+                    Utils.safeValueOf(PaymentType::class.java, cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_TYPE)), PaymentType.UNKNOWN),
+                    cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_USER_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_PAYMENT_SYSTEM_ID))
                 )
 
                 val paymentAccount = PaymentAccount(
-                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_ID))
+                    cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_USER_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(PaymentSystemTable.COLUMN_ACCOUNT_ID))
                 )
 
                 var inList = false
@@ -57,5 +56,4 @@ object PaymentSystemApi {
 
         return paymentSystemList
     }
-
 }

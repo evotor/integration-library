@@ -9,15 +9,14 @@ package ru.evotor.framework.kkt
 @Repeatable
 @Retention(AnnotationRetention.SOURCE)
 internal annotation class FiscalRequisite(
-        /**
-         * Фискальный тег
-         */
-        val tag: Int,
-
-        /**
-         * Флаги
-         */
-        val flags: Int = NO_FLAGS
+    /**
+     * Фискальный тег
+     */
+    val tag: Int,
+    /**
+     * Флаги
+     */
+    val flags: Int = NO_FLAGS
 ) {
     companion object {
         private const val NO_FLAGS = 0
