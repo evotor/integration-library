@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 
 /**
  * Позиция чека.
@@ -49,7 +51,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 16;
+    private static final int VERSION = 17;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -252,6 +254,18 @@ public class Position implements Parcelable {
     @Nullable
     private Boolean forceTaxNumber;
 
+    /**
+     * Выбытие по объемно-сортовому учету(ОСУ) 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - молочная продукция {@link ProductType#DAIRY_MARKED}
+     * - вода {@link ProductType#WATER_MARKED}
+     * <p>
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    private VolumeSortAccounting volumeSortAccounting;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -327,6 +341,7 @@ public class Position implements Parcelable {
         this.saleBanTime = position.saleBanTime;
         this.veterinaryAttribute = position.veterinaryAttribute;
         this.forceTaxNumber = position.forceTaxNumber;
+        this.volumeSortAccounting = position.getVolumeSortAccounting();
     }
 
     /**
@@ -660,6 +675,15 @@ public class Position implements Parcelable {
         return forceTaxNumber;
     }
 
+    /**
+     * @return Выбытие по объемно-сортовому учету(ОСУ) 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    public VolumeSortAccounting getVolumeSortAccounting() {
+        return volumeSortAccounting;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -735,6 +759,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(forceTaxNumber, position.forceTaxNumber))
             return false;
+        if (!Objects.equals(volumeSortAccounting, position.volumeSortAccounting))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -772,6 +798,7 @@ public class Position implements Parcelable {
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
         result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
         result = 31 * result + (forceTaxNumber != null ? forceTaxNumber.hashCode() : 0);
+        result = 31 * result + (volumeSortAccounting != null ? volumeSortAccounting.hashCode() : 0);
         return result;
     }
 
@@ -809,6 +836,7 @@ public class Position implements Parcelable {
                 ", isMarkSkipped=" + isMarkSkipped +
                 ", veterinaryAttribute=" + veterinaryAttribute +
                 ", forceTaxNumber=" + forceTaxNumber +
+                ", volumeSortAccounting=" + volumeSortAccounting +
                 '}';
     }
 
@@ -903,6 +931,8 @@ public class Position implements Parcelable {
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
         dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
         dest.writeSerializable(this.forceTaxNumber);
+        // Volume Sort Accounting Realization
+        dest.writeBundle(this.volumeSortAccounting != null ? this.volumeSortAccounting.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -1015,6 +1045,9 @@ public class Position implements Parcelable {
         if (version >= 16) {
             this.forceTaxNumber = (Boolean) in.readSerializable();
         }
+        if (version >= 17) {
+            readVolumeSortAccounting(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -1067,6 +1100,12 @@ public class Position implements Parcelable {
 
     private void readMarksCheckingInfo(Parcel in) {
         this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
+    }
+
+    private void readVolumeSortAccounting(Parcel in) {
+        this.volumeSortAccounting = VolumeSortAccounting.from(
+                in.readBundle(VolumeSortAccounting.class.getClassLoader())
+        );
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -2045,6 +2084,27 @@ public class Position implements Parcelable {
 
         public Builder setForceTaxNumber(@Nullable Boolean forceTaxNumber) {
             position.forceTaxNumber = forceTaxNumber;
+            return this;
+        }
+
+        /**
+         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
+         * <p>
+         * вода {@link ProductType#WATER_MARKED}
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * маркированное безалкогольное пиво {@link ProductType#NOT_ALCOHOL_BEER_MARKED}
+         * маркированное пиво в бутылках {@link ProductType#BEER_MARKED}
+         * маркированное пиво (Кеги) {@link ProductType#BEER_MARKED_KEG}
+         * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
+         * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
+         * не может использоваться совместно с setPartialRealization
+         * @param volumeSortAccounting реализация по ОСУ
+         */
+        @RequiresPermission(VolumeSortAccounting.VOLUME_SORT_PERMISSION)
+        public Builder setVolumeSortAccounting(
+                @Nullable VolumeSortAccounting volumeSortAccounting
+        ) {
+            position.volumeSortAccounting = volumeSortAccounting;
             return this;
         }
 
