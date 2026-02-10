@@ -22,7 +22,8 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     ACTION_POSITION_REMOVED,
     ACTION_APPLY_DISCOUNT_TO_RECEIPT,
     ACTION_RECEIPT_DELETED,
-    ACTION_RECEIPT_COMPLETED
+    ACTION_RECEIPT_COMPLETED,
+    ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID
 ) {
     /**
      * Обработчик событий создания чека.
@@ -86,6 +87,7 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
+
         const val ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID = "evotor.intent.action.receipt.sell.paymentIntent.PAID"
     }
 }

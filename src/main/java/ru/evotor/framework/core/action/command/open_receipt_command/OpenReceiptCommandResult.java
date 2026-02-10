@@ -22,8 +22,8 @@ public class OpenReceiptCommandResult implements IBundlable {
     public static final int ERROR_CODE_OPEN_PAYBACK_RECEIPT_INVALID_POSITIONS = -9;
     public static final int ERROR_CODE_PRINT_DOCUMENT_CREATION_FAILED = -10;
     public static final int ERROR_CODE_NO_PERMISSION = -11;
-    public static final int ERROR_OPERATION_DENIED  = -12;
-    public static final int ERROR_CODE_PAYMENT_BY_INTENT_DOCUMENT_IS_NOT_CLOSED   = -13;
+    public static final int ERROR_OPERATION_DENIED = -12;
+    public static final int ERROR_CODE_PAYMENT_BY_INTENT_DOCUMENT_IS_NOT_CLOSED = -13;
     public static final int ERROR_CODE_RECEIPT_NOT_PAID = -14;
 
     @Nullable
