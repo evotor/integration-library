@@ -159,5 +159,10 @@ public enum ProductType {
     /**
      * Растительные масла
      */
-    VEGETABLE_OIL_MARKED
+    VEGETABLE_OIL_MARKED,
+
+    /**
+     * Меховые изделия (КМ)
+     */
+    FURSLP_MARKED
 }
