@@ -12,6 +12,7 @@ import ru.evotor.framework.getMoney
 import ru.evotor.framework.getQuantity
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -616,6 +617,7 @@ object ReceiptApi {
             receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false,
             paymentAddress = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_ADDRESS),
             paymentPlace = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_PLACE),
+            isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false
         )
     }
 

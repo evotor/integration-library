@@ -328,7 +328,7 @@ object FeaturesApi {
     fun isPetFoodMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PET_FOOD_MARK)
 
     /**
-     * Проверяет, активна ли функция "Маркировка растительных масел]" на данном терминале
+     * Проверяет, активна ли функция "Маркировка растительных масел" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
@@ -340,4 +340,11 @@ object FeaturesApi {
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
+
+    /**
+     * Проверяет, активна ли функция "Режим намерения оплаты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isUsePaymentIntentModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_USE_PAYMENT_INTENT_MODE)
 }

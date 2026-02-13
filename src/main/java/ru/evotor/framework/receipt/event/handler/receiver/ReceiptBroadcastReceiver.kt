@@ -7,6 +7,7 @@ import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -18,7 +19,8 @@ abstract class ReceiptBroadcastReceiver(
     private val actionPositionRemoved: String,
     private val actionApplyDiscountToReceipt: String,
     private val actionReceiptDeleted: String,
-    private val actionReceiptCompleted: String
+    private val actionReceiptCompleted: String,
+    private val actionReceiptWithPaymentIntentPaid: String? = null
 ) : BroadcastEventReceiver() {
     protected abstract fun handleReceiptCreatedEvent(context: Context, event: ReceiptCreatedEvent)
 
@@ -33,6 +35,8 @@ abstract class ReceiptBroadcastReceiver(
     protected abstract fun handleReceiptDeletedEvent(context: Context, event: ReceiptDeletedEvent)
 
     protected abstract fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent)
+
+    protected open fun handleReceiptWithPaymentIntentPaid(context: Context, event: ReceiptWithPaymentIntentPaidEvent) = Unit
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
@@ -69,6 +73,11 @@ abstract class ReceiptBroadcastReceiver(
             actionReceiptCompleted -> handleReceiptCompletedEvent(
                 context,
                 ReceiptCompletedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptWithPaymentIntentPaid -> handleReceiptWithPaymentIntentPaid(
+                context,
+                ReceiptWithPaymentIntentPaidEvent.from(bundle)
                     ?: return
             )
         }

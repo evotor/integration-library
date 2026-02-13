@@ -52,6 +52,7 @@ object FeaturesContract {
     const val PATH_PET_FOOD_MARK = "pet_food_marked"
     const val PATH_VEGETABLE_OIL_MARK = "vegetable_oil_marked"
     const val PATH_VAT22 = "vat22"
+    const val PATH_USE_PAYMENT_INTENT_MODE = "payment_intent_mode"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }
