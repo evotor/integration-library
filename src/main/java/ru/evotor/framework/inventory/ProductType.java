@@ -162,6 +162,16 @@ public enum ProductType {
     VEGETABLE_OIL_MARKED,
 
     /**
+     * Автомобильные жидкости
+     */
+    AUTO_FLUIDS_MARKED,
+
+    /**
+     * Бытовая химия и косметика
+     */
+    CHEMICALS_MARKED,
+
+    /**
      * Меховые изделия (КМ)
      */
     FURSLP_MARKED
