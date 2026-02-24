@@ -2,7 +2,7 @@ package ru.evotor.framework.inventory;
 
 /**
  * Тип товара.
- * <p>
+ *
  * Новые значения добавлять только в конец
  */
 public enum ProductType {
@@ -169,5 +169,10 @@ public enum ProductType {
     /**
      * Бытовая химия и косметика
      */
-    CHEMICALS_MARKED
+    CHEMICALS_MARKED,
+
+    /**
+     * Меховые изделия (КМ)
+     */
+    FURSLP_MARKED
 }

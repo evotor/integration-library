@@ -54,6 +54,7 @@ object FeaturesContract {
     const val PATH_AUTO_FLUIDS_MARK = "auto_fluids_marked"
     const val PATH_CHEMICALS_MARK = "chemicals_marked"
     const val PATH_VAT22 = "vat22"
+    const val PATH_FURSLP_MARK = "furslp_marked"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

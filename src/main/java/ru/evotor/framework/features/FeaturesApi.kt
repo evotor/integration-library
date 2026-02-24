@@ -343,6 +343,13 @@ object FeaturesApi {
      */
     fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка меховых изделий (КМ)" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFursLpMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FURSLP_MARK)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(
             Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
