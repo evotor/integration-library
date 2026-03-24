@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 android {
     namespace = "ru.evotor.integrations"
-    def version = 39
+    def version = 40
 
     compileSdk 30
 

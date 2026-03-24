@@ -1753,6 +1753,47 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toFursLpMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.FURSLP_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setFursLpParams(mark);
+            return this;
+        }
+
+        public Builder toAutoFluidsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.AUTO_FLUIDS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setAutoFluidsParams(mark);
+            return this;
+        }
+
+        public Builder toChemicalsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.CHEMICALS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setChemicalsParams(mark);
+            return this;
+        }
 
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
@@ -1900,6 +1941,10 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
+        public void setAutoFluidsParams(Mark mark) { position.mark = mark; }
+
+        public void setChemicalsParams(Mark mark) { position.mark = mark; }
+
         public void setVeterinaryParams(Mark mark) {
             position.mark = mark;
         }
@@ -1907,6 +1952,8 @@ public class Position implements Parcelable {
         private void setBeerParams(Mark mark) {
             position.mark = mark;
         }
+
+        private void setFursLpParams(Mark mark) {position.mark = mark; }
 
         public Builder setUuid(String uuid) {
             position.uuid = uuid;
@@ -1939,8 +1986,25 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(Mark mark) {
-            position.mark = mark;
+            if (isMarkValid(mark)) {
+                position.mark = mark;
+            } else {
+                position.mark = null;
+            }
+
             return this;
+        }
+
+        private boolean isMarkValid(Mark mark) {
+            if (mark instanceof Mark.RawMark) {
+                String value = ((Mark.RawMark) mark).getValue();
+                return value != null && !value.isEmpty();
+            } else if (mark instanceof Mark.MarkByFiscalTags) {
+                String fiscalTag = ((Mark.MarkByFiscalTags) mark).getProductCode();
+                return fiscalTag != null && !fiscalTag.isEmpty();
+            }
+
+            return true;
         }
 
         public Builder setExtraKeys(Set<ExtraKey> extraKeys) {
