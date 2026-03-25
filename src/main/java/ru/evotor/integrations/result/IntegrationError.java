@@ -40,7 +40,7 @@ public class IntegrationError implements Parcelable {
 
         @Override
         public IntegrationError[] newArray(int i) {
-            return new IntegrationError[0];
+            return new IntegrationError[i];
         }
     };
 }

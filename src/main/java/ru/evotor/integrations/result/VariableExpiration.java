@@ -40,7 +40,7 @@ public class VariableExpiration implements Parcelable {
 
         @Override
         public VariableExpiration[] newArray(int i) {
-            return new VariableExpiration[0];
+            return new VariableExpiration[i];
         }
     };
 }

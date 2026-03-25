@@ -36,7 +36,7 @@ public class CodesCheck implements Parcelable {
         this.codes = parcel.createTypedArrayList(CodeCheck.CREATOR);
         this.reqId = parcel.readString();
         this.reqTimestamp = parcel.readLong();
-        this.isCheckedOffline = parcel.readBoolean();
+        this.isCheckedOffline = parcel.readInt() == 1;
         this.version = parcel.readString();
         this.inst = parcel.readString();
     }
@@ -90,7 +90,7 @@ public class CodesCheck implements Parcelable {
         parcel.writeTypedList(codes);
         parcel.writeString(reqId);
         parcel.writeLong(reqTimestamp);
-        parcel.writeBoolean(isCheckedOffline);
+        parcel.writeInt(isCheckedOffline ? 1 : 0);
         parcel.writeString(version);
         parcel.writeString(inst);
     }

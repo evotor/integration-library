@@ -3,26 +3,28 @@ package ru.evotor.integrations.result;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class CodesCheckResult implements Parcelable {
 
-    private final CodesCheck[] codesChecks;
+    private final List<CodesCheck> codesChecks;
 
     private CodesCheckResult(Parcel parcel) {
-        this.codesChecks = parcel.createTypedArray(CodesCheck.CREATOR);
+        this.codesChecks = parcel.createTypedArrayList(CodesCheck.CREATOR);
     }
 
-    public CodesCheckResult(CodesCheck[] codesChecks) {
+    public CodesCheckResult(List<CodesCheck> codesChecks) {
         this.codesChecks = codesChecks;
     }
 
-    public CodesCheck[] getCodesChecks() { return codesChecks; }
+    public List<CodesCheck> getCodesChecks() { return codesChecks; }
 
     @Override
     public int describeContents() { return 0; }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeTypedArray(codesChecks, flags);
+        parcel.writeTypedList(codesChecks);
     }
 
     public static Creator<CodesCheckResult> CREATOR = new Creator<>() {
@@ -33,7 +35,7 @@ public class CodesCheckResult implements Parcelable {
 
         @Override
         public CodesCheckResult[] newArray(int i) {
-            return new CodesCheckResult[0];
+            return new CodesCheckResult[i];
         }
     };
 }

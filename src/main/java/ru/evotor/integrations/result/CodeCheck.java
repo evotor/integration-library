@@ -132,14 +132,14 @@ public class CodeCheck implements Parcelable {
 
     private CodeCheck(Parcel parcel) {
         this.cis = parcel.readString();
-        this.found = parcel.readBoolean();
-        this.valid = parcel.readBoolean();
+        this.found = parcel.readInt() == 1;
+        this.valid = parcel.readInt() == 1;
         this.printView = parcel.readString();
         this.gtin = parcel.readString();
         this.groupIds = parcel.createIntArray();
-        this.verified = parcel.readBoolean();
-        this.realizable = parcel.readBoolean();
-        this.utilized = parcel.readBoolean();
+        this.verified = parcel.readInt() == 1;
+        this.realizable = parcel.readInt() == 1;
+        this.utilized = parcel.readInt() == 1;
         this.expireDate = parcel.readString();
         this.variableExpirations = parcel.readTypedObject(VariableExpirations.CREATOR);
         this.productionDate = parcel.readString();
@@ -150,8 +150,8 @@ public class CodeCheck implements Parcelable {
         this.ogvs = parcel.createTypedArray(OGVS.CREATOR);
         this.message = parcel.readString();
         this.errorCode = readInteger(parcel);
-        this.isTracking = parcel.readBoolean();
-        this.sold = parcel.readBoolean();
+        this.isTracking = parcel.readInt() == 1;
+        this.sold = parcel.readInt() == 1;
         String eliminationStateName = parcel.readString();
         this.eliminationState = eliminationStateName != null ? EliminationState.valueOf(eliminationStateName) : null;
         this.mrp = readInteger(parcel);
@@ -336,14 +336,14 @@ public class CodeCheck implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(cis);
-        parcel.writeBoolean(found);
-        parcel.writeBoolean(valid);
+        parcel.writeInt(found ? 1 : 0);
+        parcel.writeInt(valid ? 1 : 0);
         parcel.writeString(printView);
         parcel.writeString(gtin);
         parcel.writeIntArray(groupIds);
-        parcel.writeBoolean(verified);
-        parcel.writeBoolean(realizable);
-        parcel.writeBoolean(utilized);
+        parcel.writeInt(verified ? 1 : 0);
+        parcel.writeInt(realizable ? 1 : 0);
+        parcel.writeInt(utilized ? 1 : 0);
         parcel.writeString(expireDate);
         parcel.writeTypedObject(this.variableExpirations, flags);
         parcel.writeString(productionDate);
@@ -354,8 +354,8 @@ public class CodeCheck implements Parcelable {
         parcel.writeTypedArray(ogvs, flags);
         parcel.writeString(message);
         parcel.writeValue(errorCode);
-        parcel.writeBoolean(isTracking);
-        parcel.writeBoolean(sold);
+        parcel.writeInt(isTracking ? 1 : 0);
+        parcel.writeInt(sold ? 1 : 0);
         parcel.writeString(eliminationState != null ? eliminationState.name() : null);
         parcel.writeValue(mrp);
         parcel.writeValue(smp);

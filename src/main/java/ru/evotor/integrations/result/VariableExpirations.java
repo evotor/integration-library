@@ -34,7 +34,7 @@ public class VariableExpirations implements Parcelable {
 
         @Override
         public VariableExpirations[] newArray(int i) {
-            return new VariableExpirations[0];
+            return new VariableExpirations[i];
         }
     };
 }

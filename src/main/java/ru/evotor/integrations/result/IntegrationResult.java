@@ -60,7 +60,7 @@ public class IntegrationResult<T extends Parcelable> implements Parcelable {
 
         @Override
         public IntegrationResult<?>[] newArray(int i) {
-            return new IntegrationResult[0];
+            return new IntegrationResult[i];
         }
     };
 }
