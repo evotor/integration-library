@@ -1,0 +1,83 @@
+package ru.evotor.integrations.result;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class KktInfo implements Parcelable {
+
+    /** Идентификатор ТС ПИоТ */
+    private final String tspiotId;
+
+    /** ЗН ККТ */
+    private final String kktSerial;
+
+    /** ЗН ФН */
+    private final String fnSerial;
+
+    /** ИНН ККТ */
+    private final String kktInn;
+
+    /** Время проверки кода в ТС ПИоТ */
+    private final String codesCheckTimeOut;
+
+    public KktInfo(String tspiotId, String kktSerial, String fnSerial, String kktInn, String codesCheckTimeOut) {
+        this.tspiotId = tspiotId;
+        this.kktSerial = kktSerial;
+        this.fnSerial = fnSerial;
+        this.kktInn = kktInn;
+        this.codesCheckTimeOut = codesCheckTimeOut;
+    }
+
+    private KktInfo(Parcel parcel) {
+        this.tspiotId = parcel.readString();
+        this.kktSerial = parcel.readString();
+        this.fnSerial = parcel.readString();
+        this.kktInn = parcel.readString();
+        this.codesCheckTimeOut = parcel.readString();
+    }
+
+    public String getTspiotId() { return tspiotId; }
+
+    public String getKktSerial() {return kktSerial; }
+
+    public String getFnSerial() { return fnSerial; }
+
+    public String getKktInn() { return kktInn; }
+
+    public String getCodesCheckTimeOut() { return codesCheckTimeOut; }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(tspiotId);
+        parcel.writeString(kktSerial);
+        parcel.writeString(fnSerial);
+        parcel.writeString(kktInn);
+        parcel.writeString(codesCheckTimeOut);
+    }
+
+    public static final Creator<KktInfo> CREATOR = new Creator<>() {
+
+        public KktInfo createFromParcel(Parcel in) {
+            return new KktInfo(in);
+        }
+
+        public KktInfo[] newArray(int size) {
+            return new KktInfo[size];
+        }
+    };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "TsPioTId: " + tspiotId + "\n" +
+                "KktSerial: " + kktSerial + "\n" +
+                "FnSerial: " + fnSerial + "\n" +
+                "KktInn: " + kktInn + "\n" +
+                "CodesCheckTimeout: " + codesCheckTimeOut + "\n";
+    }
+}
