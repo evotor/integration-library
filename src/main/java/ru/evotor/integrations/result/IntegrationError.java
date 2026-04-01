@@ -5,11 +5,15 @@ import android.os.Parcelable;
 
 public class IntegrationError implements Parcelable {
 
+    /** Версия IntegrationError */
+    private final static int VERSION = 1;
+
     private final int code;
 
     private final String message;
 
     private IntegrationError(Parcel parcel) {
+        int version = parcel.readInt();
         this.code = parcel.readInt();
         this.message = parcel.readString();
     }
@@ -28,6 +32,7 @@ public class IntegrationError implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeInt(code);
         parcel.writeString(message);
     }

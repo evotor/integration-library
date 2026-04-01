@@ -6,9 +6,13 @@ import android.os.Parcelable;
 /** Вариативный срок годности */
 public class VariableExpirations implements Parcelable {
 
+    /** Версия VariableExpirations */
+    private final static int VERSION = 1;
+
     private VariableExpiration[] expirations;
 
     private VariableExpirations(Parcel parcel) {
+        int version = parcel.readInt();
         parcel.readTypedArray(expirations, VariableExpiration.CREATOR);
     }
 
@@ -23,6 +27,7 @@ public class VariableExpirations implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeTypedArray(expirations, flags);
     }
 

@@ -8,6 +8,9 @@ import java.util.List;
 
 public class CodesCheck implements Parcelable {
 
+    /** Версия CodesCheck */
+    private final static int VERSION = 1;
+
     private final int code;
 
     /** Текстовое описание результата выполнения метода */
@@ -31,6 +34,7 @@ public class CodesCheck implements Parcelable {
     @Nullable private final String inst;
 
     private CodesCheck(Parcel parcel) {
+        int version = parcel.readInt();
         this.code = parcel.readInt();
         this.description = parcel.readString();
         this.codes = parcel.createTypedArrayList(CodeCheck.CREATOR);
@@ -85,6 +89,7 @@ public class CodesCheck implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(VERSION);
         parcel.writeInt(code);
         parcel.writeString(description);
         parcel.writeTypedList(codes);

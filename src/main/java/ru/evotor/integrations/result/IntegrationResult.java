@@ -7,11 +7,15 @@ import java.io.Serializable;
 
 public class IntegrationResult<T extends Parcelable> implements Parcelable {
 
+    /** Версия IntegrationResult */
+    private final static int VERSION = 1;
+
     private final Class<T> classType;
 
     private final T data;
 
     private IntegrationResult(Parcel parcel) {
+        int version = parcel.readInt();
         this.classType = upcastClassType(parcel.readSerializable());
         this.data = parseData(classType, parcel);
     }
@@ -48,6 +52,7 @@ public class IntegrationResult<T extends Parcelable> implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeSerializable(classType);
         parcel.writeParcelable(data, flags);
     }

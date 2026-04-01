@@ -5,11 +5,15 @@ import android.os.Parcelable;
 
 public class VariableExpiration implements Parcelable {
 
+    /** Версия VariableExpiration */
+    private final static int VERSION = 1;
+
     private final int degrees;
 
     private final String date;
 
     private VariableExpiration(Parcel parcel) {
+        int version = parcel.readInt();
         this.degrees = parcel.readInt();
         this.date = parcel.readString();
     }
@@ -28,6 +32,7 @@ public class VariableExpiration implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(VERSION);
         parcel.writeInt(degrees);
         parcel.writeString(date);
     }

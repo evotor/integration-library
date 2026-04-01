@@ -2,14 +2,17 @@ package ru.evotor.integrations.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.List;
 
 public class CodesCheckResult implements Parcelable {
 
+    /** Версия CodesCheckResult */
+    private final static int VERSION = 1;
+
     private final List<CodesCheck> codesChecks;
 
     private CodesCheckResult(Parcel parcel) {
+        int version = parcel.readInt();
         this.codesChecks = parcel.createTypedArrayList(CodesCheck.CREATOR);
     }
 
@@ -24,6 +27,7 @@ public class CodesCheckResult implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeTypedList(codesChecks);
     }
 

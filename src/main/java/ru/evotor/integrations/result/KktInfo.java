@@ -2,10 +2,12 @@ package ru.evotor.integrations.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 
 public class KktInfo implements Parcelable {
+
+    /** Версия KktInfo */
+    private final static int VERSION = 1;
 
     /** Идентификатор ТС ПИоТ */
     private final String tspiotId;
@@ -31,6 +33,7 @@ public class KktInfo implements Parcelable {
     }
 
     private KktInfo(Parcel parcel) {
+        int version = parcel.readInt();
         this.tspiotId = parcel.readString();
         this.kktSerial = parcel.readString();
         this.fnSerial = parcel.readString();
@@ -53,6 +56,7 @@ public class KktInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(VERSION);
         parcel.writeString(tspiotId);
         parcel.writeString(kktSerial);
         parcel.writeString(fnSerial);

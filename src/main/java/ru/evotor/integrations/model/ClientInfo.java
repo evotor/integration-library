@@ -8,6 +8,9 @@ import android.os.Parcelable;
  */
 public class ClientInfo implements Parcelable {
 
+    /** Версия ClientInfo */
+    private final static int VERSION = 1;
+
     /** Наименование приложения */
     public final String name;
 
@@ -18,6 +21,7 @@ public class ClientInfo implements Parcelable {
     public final String token;
 
     private ClientInfo(Parcel parcel) {
+        int version = parcel.readInt();
         this.name = parcel.readString();
         this.version = parcel.readString();
         this.token = parcel.readString();
@@ -34,6 +38,7 @@ public class ClientInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeString(name);
         parcel.writeString(version);
         parcel.writeString(token);
@@ -47,7 +52,7 @@ public class ClientInfo implements Parcelable {
 
         @Override
         public ClientInfo[] newArray(int i) {
-            return new ClientInfo[0];
+            return new ClientInfo[i];
         }
     };
 }

@@ -7,6 +7,9 @@ import androidx.annotation.Nullable;
 
 public class CodeCheck implements Parcelable {
 
+    /** Версия CodeCheck */
+    private final static int VERSION = 1;
+
     /** КИ / КиЗ из запроса */
     private final String cis;
 
@@ -131,6 +134,7 @@ public class CodeCheck implements Parcelable {
     @Nullable private final Integer packageQuantity;
 
     private CodeCheck(Parcel parcel) {
+        int version = parcel.readInt();
         this.cis = parcel.readString();
         this.found = parcel.readInt() == 1;
         this.valid = parcel.readInt() == 1;
@@ -335,6 +339,7 @@ public class CodeCheck implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(VERSION);
         parcel.writeString(cis);
         parcel.writeInt(found ? 1 : 0);
         parcel.writeInt(valid ? 1 : 0);
@@ -392,32 +397,48 @@ public class CodeCheck implements Parcelable {
      *     <li>RPN — Роспотребнадзор;</li>
      *     <li>MVD — МВД России;</li>
      *     <li>RZN — Росздравнадзор</li>
+     *     <li>UNKNOWN — Неизвестное значение поля, связаное с различием версий</li>
      * </ul>
      */
     public enum OGVS implements Parcelable {
-        RAR, FTS, FNS, RSHN, RPN, MVD, RZN;
+        RAR, FTS, FNS, RSHN, RPN, MVD, RZN, UNKNOWN;
+
+        /** Версия OGVS */
+        public final static int VERSION = 1;
 
         @Override
         public int describeContents() { return 0; }
 
         @Override
         public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(VERSION);
             parcel.writeString(this.name());
+        }
+
+        @Nullable
+        public static OGVS restoreFormParcel(Parcel parcel) {
+            int version = parcel.readInt();
+
+            try {
+                return OGVS.valueOf(parcel.readString());
+            } catch (Exception exception) {
+                if (version != VERSION) {
+                    return OGVS.UNKNOWN;
+                } else {
+                    return null;
+                }
+            }
         }
 
         public static Creator<OGVS> CREATOR = new Creator<>() {
             @Override
             public OGVS createFromParcel(Parcel parcel) {
-                try {
-                    return OGVS.valueOf(parcel.readString());
-                } catch (Exception ex) {
-                    return null;
-                }
+                return restoreFormParcel(parcel);
             }
 
             @Override
             public OGVS[] newArray(int i) {
-                return new OGVS[0];
+                return new OGVS[i];
             }
         };
     }
@@ -428,10 +449,50 @@ public class CodeCheck implements Parcelable {
      *     <li>«DISTANCE» («Дистанционная продажа»)</li>
      *     <li>«OWN_USE» («Использование для собственных нужд»)</li>
      *     <li>«PRODUCTION_USE» («Использование для производственных целей»)</li>
+     *     <li>UNKNOWN — Неизвестное значение поля, связаное с различием версий</li>
      * </ul>
      */
-    public enum EliminationState {
-        BY_SAMPLES, DISTANCE, OWN_USE, PRODUCTION_USE
+    public enum EliminationState implements Parcelable {
+        BY_SAMPLES, DISTANCE, OWN_USE, PRODUCTION_USE, UNKNOWN;
+
+        /** Версия EliminationState */
+        public final static int VERSION = 1;
+
+        @Override
+        public int describeContents() { return 0; }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(VERSION);
+            parcel.writeString(this.name());
+        }
+
+        @Nullable
+        public static EliminationState restoreFormParcel(Parcel parcel) {
+            int version = parcel.readInt();
+
+            try {
+                return EliminationState.valueOf(parcel.readString());
+            } catch (Exception exception) {
+                if (version != VERSION) {
+                    return EliminationState.UNKNOWN;
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        public static Creator<EliminationState> CREATOR = new Creator<>() {
+            @Override
+            public EliminationState createFromParcel(Parcel parcel) {
+                return restoreFormParcel(parcel);
+            }
+
+            @Override
+            public EliminationState[] newArray(int i) {
+                return new EliminationState[i];
+            }
+        };
     }
 
     @Nullable
@@ -462,8 +523,10 @@ public class CodeCheck implements Parcelable {
         builder.append("PrintView").append(printView).append("\n");
         builder.append("Gtin: ").append(gtin).append("\n");
         builder.append("GroupIds: ");
-        if (groupIds == null || groupIds.length == 0) {
+        if (groupIds == null) {
             builder.append("null\n");
+        } else if (groupIds.length == 0) {
+            builder.append("[]\n");
         } else {
             for (int i = 0; i < groupIds.length; i++) {
                 builder.append(groupIds[i]);
@@ -479,8 +542,10 @@ public class CodeCheck implements Parcelable {
         builder.append("IsUtilized: ").append(utilized).append("\n");
         builder.append("ExpireDate: ").append(expireDate).append("\n");
         builder.append("VariableExpirations: ");
-        if (variableExpirations == null || variableExpirations.getExpirations().length == 0) {
+        if (variableExpirations == null) {
             builder.append("null\n");
+        } else if (variableExpirations.getExpirations().length == 0) {
+            builder.append("[]\n");
         } else {
             VariableExpiration[] expirations = variableExpirations.getExpirations();
             for (int i = 0; i < expirations.length; i++) {
