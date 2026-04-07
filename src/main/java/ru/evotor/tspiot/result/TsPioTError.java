@@ -1,29 +1,29 @@
-package ru.evotor.integrations.result;
+package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class IntegrationError implements Parcelable {
+public class TsPioTError implements Parcelable {
 
     /** Версия IntegrationError */
     private final static int VERSION = 1;
 
-    private final int code;
+    private final Errors code;
 
     private final String message;
 
-    private IntegrationError(Parcel parcel) {
+    private TsPioTError(Parcel parcel) {
         int version = parcel.readInt();
-        this.code = parcel.readInt();
+        this.code = parcel.readParcelable(Errors.class.getClassLoader());
         this.message = parcel.readString();
     }
 
-    public IntegrationError(int code, String message) {
+    public TsPioTError(Errors code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public int getCode() { return code; }
+    public Errors getCode() { return code; }
 
     public String getMessage() { return message; }
 
@@ -33,19 +33,19 @@ public class IntegrationError implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeInt(code);
+        parcel.writeParcelable(code, flags);
         parcel.writeString(message);
     }
 
-    public static final Creator<IntegrationError> CREATOR = new Creator<>() {
+    public static final Creator<TsPioTError> CREATOR = new Creator<>() {
         @Override
-        public IntegrationError createFromParcel(Parcel parcel) {
-            return new IntegrationError(parcel);
+        public TsPioTError createFromParcel(Parcel parcel) {
+            return new TsPioTError(parcel);
         }
 
         @Override
-        public IntegrationError[] newArray(int i) {
-            return new IntegrationError[i];
+        public TsPioTError[] newArray(int size) {
+            return new TsPioTError[size];
         }
     };
 }

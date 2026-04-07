@@ -1,9 +1,11 @@
-package ru.evotor.integrations.result;
+package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.util.Date;
+import ru.evotor.tspiot.Utils;
 
 public class CodeCheck implements Parcelable {
 
@@ -38,13 +40,13 @@ public class CodeCheck implements Parcelable {
     private final boolean utilized;
 
     /** Дата и время истечения срока годности */
-    @Nullable private final String expireDate;
+    @Nullable private final Date expireDate;
 
     /** Информация о вариативном сроке годности */
     @Nullable private final VariableExpirations variableExpirations;
 
     /** Дата производства продукции */
-    @Nullable private final String productionDate;
+    @Nullable private final Date productionDate;
 
     /** Переменный вес продукции (в граммах) */
     @Nullable private final Integer productWeight;
@@ -59,7 +61,7 @@ public class CodeCheck implements Parcelable {
     @Nullable private final Boolean isBlocked;
 
     /** Органы государственной власти, установившие блокировку на КИ */
-    private final OGVS[] ogvs;
+    private final String[] ogvs;
 
     /** Сообщение об ошибке */
     @Nullable private final String message;
@@ -93,7 +95,7 @@ public class CodeCheck implements Parcelable {
     private final boolean sold;
 
     /** Признак использования причин выбытия, разрешающих продажу КМ */
-    @Nullable private final EliminationState eliminationState;
+    @Nullable private final Integer eliminationState;
 
     /** Максимальная розничная цена */
     @Nullable private final Integer mrp;
@@ -144,32 +146,31 @@ public class CodeCheck implements Parcelable {
         this.verified = parcel.readInt() == 1;
         this.realizable = parcel.readInt() == 1;
         this.utilized = parcel.readInt() == 1;
-        this.expireDate = parcel.readString();
+        this.expireDate = (Date) parcel.readSerializable();
         this.variableExpirations = parcel.readTypedObject(VariableExpirations.CREATOR);
-        this.productionDate = parcel.readString();
-        this.productWeight = readInteger(parcel);
+        this.productionDate = (Date) parcel.readSerializable();
+        this.productWeight = Utils.readInteger(parcel);
         this.prVetDocument = parcel.readString();
-        this.isOwner = readBoolean(parcel);
-        this.isBlocked = readBoolean(parcel);
-        this.ogvs = parcel.createTypedArray(OGVS.CREATOR);
+        this.isOwner = Utils.readBoolean(parcel);
+        this.isBlocked = Utils.readBoolean(parcel);
+        this.ogvs = parcel.createStringArray();
         this.message = parcel.readString();
-        this.errorCode = readInteger(parcel);
+        this.errorCode = Utils.readInteger(parcel);
         this.isTracking = parcel.readInt() == 1;
         this.sold = parcel.readInt() == 1;
-        String eliminationStateName = parcel.readString();
-        this.eliminationState = eliminationStateName != null ? EliminationState.valueOf(eliminationStateName) : null;
-        this.mrp = readInteger(parcel);
-        this.smp = readInteger(parcel);
-        this.grayZone = readBoolean(parcel);
-        this.innerUnitCount = readInteger(parcel);
-        this.soldUnitCount = readInteger(parcel);
+        this.eliminationState = Utils.readInteger(parcel);
+        this.mrp = Utils.readInteger(parcel);
+        this.smp = Utils.readInteger(parcel);
+        this.grayZone = Utils.readBoolean(parcel);
+        this.innerUnitCount = Utils.readInteger(parcel);
+        this.soldUnitCount = Utils.readInteger(parcel);
         this.packageType = parcel.readString();
         this.parent = parcel.readString();
         this.producerInn = parcel.readString();
         this.productionSerialNumber = parcel.readString();
         this.productionBatchNumber = parcel.readString();
         this.factorySerialNumber = parcel.readString();
-        this.packageQuantity = readInteger(parcel);
+        this.packageQuantity = Utils.readInteger(parcel);
     }
 
     public CodeCheck(
@@ -182,19 +183,19 @@ public class CodeCheck implements Parcelable {
             Boolean verified,
             Boolean realizable,
             Boolean utilized,
-            @Nullable String expireDate,
+            @Nullable Date expireDate,
             @Nullable VariableExpirations variableExpirations,
-            @Nullable String productionDate,
+            @Nullable Date productionDate,
             @Nullable Integer productWeight,
             @Nullable String prVetDocument,
             @Nullable Boolean isOwner,
             @Nullable Boolean isBlocked,
-            @Nullable OGVS[] ogvs,
+            @Nullable String[] ogvs,
             @Nullable String message,
             @Nullable Integer errorCode,
             Boolean isTracking,
             Boolean sold,
-            @Nullable EliminationState eliminationState,
+            @Nullable Integer eliminationState,
             @Nullable Integer mrp,
             @Nullable Integer smp,
             @Nullable Boolean grayZone,
@@ -224,7 +225,7 @@ public class CodeCheck implements Parcelable {
         this.prVetDocument = prVetDocument;
         this.isOwner = isOwner;
         this.isBlocked = isBlocked;
-        this.ogvs = ogvs == null ? new OGVS[0] : ogvs;
+        this.ogvs = ogvs == null ? new String[0] : ogvs;
         this.message = message;
         this.errorCode = errorCode;
         this.isTracking = isTracking;
@@ -267,7 +268,7 @@ public class CodeCheck implements Parcelable {
     public boolean isVerified() { return verified; }
 
     @Nullable
-    public EliminationState getEliminationState() { return eliminationState; }
+    public Integer getEliminationState() { return eliminationState; }
 
     public int[] getGroupIds() { return groupIds; }
 
@@ -296,10 +297,10 @@ public class CodeCheck implements Parcelable {
     public VariableExpirations getVariableExpirations() { return variableExpirations; }
 
     @Nullable
-    public OGVS[] getOgvs() { return ogvs; }
+    public String[] getOgvs() { return ogvs; }
 
     @Nullable
-    public String getExpireDate() { return expireDate; }
+    public Date getExpireDate() { return expireDate; }
 
     @Nullable
     public String getFactorySerialNumber() { return factorySerialNumber; }
@@ -323,7 +324,7 @@ public class CodeCheck implements Parcelable {
     public String getProductionBatchNumber() { return productionBatchNumber; }
 
     @Nullable
-    public String getProductionDate() { return productionDate; }
+    public Date getProductionDate() { return productionDate; }
 
     @Nullable
     public String getProductionSerialNumber() { return productionSerialNumber; }
@@ -349,19 +350,19 @@ public class CodeCheck implements Parcelable {
         parcel.writeInt(verified ? 1 : 0);
         parcel.writeInt(realizable ? 1 : 0);
         parcel.writeInt(utilized ? 1 : 0);
-        parcel.writeString(expireDate);
+        parcel.writeSerializable(expireDate);
         parcel.writeTypedObject(this.variableExpirations, flags);
-        parcel.writeString(productionDate);
+        parcel.writeSerializable(productionDate);
         parcel.writeValue(productWeight);
         parcel.writeString(prVetDocument);
         parcel.writeValue(isOwner);
         parcel.writeValue(isBlocked);
-        parcel.writeTypedArray(ogvs, flags);
+        parcel.writeStringArray(ogvs);
         parcel.writeString(message);
         parcel.writeValue(errorCode);
         parcel.writeInt(isTracking ? 1 : 0);
         parcel.writeInt(sold ? 1 : 0);
-        parcel.writeString(eliminationState != null ? eliminationState.name() : null);
+        parcel.writeValue(eliminationState);
         parcel.writeValue(mrp);
         parcel.writeValue(smp);
         parcel.writeValue(grayZone);
@@ -493,24 +494,6 @@ public class CodeCheck implements Parcelable {
                 return new EliminationState[i];
             }
         };
-    }
-
-    @Nullable
-    private Integer readInteger(Parcel parcel) {
-        try {
-            return (Integer) parcel.readValue(Integer.class.getClassLoader());
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    @Nullable
-    private Boolean readBoolean(Parcel parcel) {
-        try {
-            return (Boolean) parcel.readValue(Boolean.class.getClassLoader());
-        } catch (Exception ex) {
-            return null;
-        }
     }
 
     @NonNull

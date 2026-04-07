@@ -1,4 +1,4 @@
-package ru.evotor.integrations.result;
+package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;

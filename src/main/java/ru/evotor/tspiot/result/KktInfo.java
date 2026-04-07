@@ -1,4 +1,4 @@
-package ru.evotor.integrations.result;
+package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,10 +21,10 @@ public class KktInfo implements Parcelable {
     /** ИНН ККТ */
     private final String kktInn;
 
-    /** Время проверки кода в ТС ПИоТ */
-    private final String codesCheckTimeOut;
+    /** Время проверки кода в ТС ПИоТ (В миллисекундах) */
+    private final int codesCheckTimeOut;
 
-    public KktInfo(String tspiotId, String kktSerial, String fnSerial, String kktInn, String codesCheckTimeOut) {
+    public KktInfo(String tspiotId, String kktSerial, String fnSerial, String kktInn, int codesCheckTimeOut) {
         this.tspiotId = tspiotId;
         this.kktSerial = kktSerial;
         this.fnSerial = fnSerial;
@@ -38,7 +38,7 @@ public class KktInfo implements Parcelable {
         this.kktSerial = parcel.readString();
         this.fnSerial = parcel.readString();
         this.kktInn = parcel.readString();
-        this.codesCheckTimeOut = parcel.readString();
+        this.codesCheckTimeOut = parcel.readInt();
     }
 
     public String getTspiotId() { return tspiotId; }
@@ -49,7 +49,7 @@ public class KktInfo implements Parcelable {
 
     public String getKktInn() { return kktInn; }
 
-    public String getCodesCheckTimeOut() { return codesCheckTimeOut; }
+    public int getCodesCheckTimeOut() { return codesCheckTimeOut; }
 
     @Override
     public int describeContents() { return 0; }
@@ -61,7 +61,7 @@ public class KktInfo implements Parcelable {
         parcel.writeString(kktSerial);
         parcel.writeString(fnSerial);
         parcel.writeString(kktInn);
-        parcel.writeString(codesCheckTimeOut);
+        parcel.writeInt(codesCheckTimeOut);
     }
 
     public static final Creator<KktInfo> CREATOR = new Creator<>() {
