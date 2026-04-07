@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
-    /** Версия IntegrationResult */
+    /** Версия TsPioTResult */
     private final static int VERSION = 1;
 
     @Nullable

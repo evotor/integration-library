@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class TsPioTError implements Parcelable {
 
-    /** Версия IntegrationError */
+    /** Версия TsPioTError */
     private final static int VERSION = 1;
 
     private final Errors code;
