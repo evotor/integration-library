@@ -11,12 +11,12 @@ import android.os.RemoteException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.ITsPioTService;
 import ru.evotor.tspiot.TsPioTServiceConnector;
 import ru.evotor.tspiot.exceptions.NullContextException;
 import ru.evotor.tspiot.exceptions.ServiceAlreadyConnectedException;
 import ru.evotor.tspiot.exceptions.TsPioTErrorHolderException;
+import ru.evotor.tspiot.exceptions.TsPioTServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 import ru.evotor.tspiot.exceptions.UnknownException;
 import ru.evotor.tspiot.model.MarkingCode;
@@ -117,8 +117,8 @@ public class TsPioTService implements ITsPioTServiceWrapper {
     /** Метод для получения информации о драйвере ТС ПИоТ */
     @SuppressWarnings("rawtypes")
     @Override
-    public KktInfo getKktInfo() throws TsPioTServiceException, TsPioTErrorHolderException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+    public KktInfo getKktInfo() throws TsPioTServiceException {
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
             TsPioTResult result = service.getKktInfo();
@@ -144,8 +144,8 @@ public class TsPioTService implements ITsPioTServiceWrapper {
     /** Метод проверки марок */
     @SuppressWarnings("rawtypes")
     @Override
-    public CodesCheckResult getMarkedProductsInfo(List<MarkingCode> codes) throws TsPioTServiceException, TsPioTErrorHolderException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+    public CodesCheckResult getMarkedProductsInfo(List<MarkingCode> codes) throws TsPioTServiceException {
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
             TsPioTResult result = service.getMarkedProductsInfo(codes);

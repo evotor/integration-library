@@ -3,8 +3,8 @@ package ru.evotor.tspiot;
 import android.content.Context;
 import android.os.DeadObjectException;
 import java.util.concurrent.CopyOnWriteArrayList;
-import ru.evotor.devices.commons.exception.DeviceServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.exceptions.ServiceNotConnectedException;
+import ru.evotor.tspiot.exceptions.TsPioTServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 import ru.evotor.tspiot.exceptions.TsPioTServiceRuntimeException;
 import ru.evotor.tspiot.service.ITsPioTConnectionWrapper;
@@ -40,14 +40,14 @@ public class TsPioTServiceConnector {
     }
 
     public static ITsPioTServiceWrapper connectTsPioTService(Context context) throws TsPioTServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         tsPioTService.connectService(context, false);
         return tsPioTService;
     }
 
     public static void disconnectTsPioTService() throws TsPioTServiceException {
-        DeviceServiceOperationOnMainThreadException.throwIfMainThread();
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         tsPioTService.disconnectService();
     }
