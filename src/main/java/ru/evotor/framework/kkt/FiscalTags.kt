@@ -202,4 +202,9 @@ object FiscalTags {
      * Структурный тег 1260, который содержит информацию о рецепте
      */
     const val VETERINARY_ATTRIBUTE = 1260
+
+    /**
+     * дополнительный реквизит предмета расчета
+     */
+    const val ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION = 1191
 }
