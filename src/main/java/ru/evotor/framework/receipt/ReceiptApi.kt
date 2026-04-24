@@ -588,9 +588,9 @@ object ReceiptApi {
             jsonExtraKeys.getJSONObject(i).let {
                 result.add(
                     ExtraKey(
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
                     )
                 )
             }
