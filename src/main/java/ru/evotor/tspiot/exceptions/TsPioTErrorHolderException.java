@@ -1,18 +1,16 @@
 package ru.evotor.tspiot.exceptions;
 
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
-import ru.evotor.tspiot.result.Errors;
+import ru.evotor.tspiot.result.model.base.ErrorDescription;
+import ru.evotor.tspiot.result.model.errors.TsPioTErrorsDescription;
 
 /** Исключение обёртка для передачи ошибок от драйвера ТС ПИоТ */
 public class TsPioTErrorHolderException extends TsPioTServiceException {
 
-    public final Errors code;
+    public final TsPioTErrorsDescription<? extends ErrorDescription> errorDescription;
 
-    public final String message;
-
-    public TsPioTErrorHolderException(Errors code, String message) {
+    public TsPioTErrorHolderException(TsPioTErrorsDescription<? extends ErrorDescription> errorDescription) {
         super();
-        this.code = code;
-        this.message = message;
+        this.errorDescription = errorDescription;
     }
 }

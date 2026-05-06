@@ -8,6 +8,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,8 +24,8 @@ import ru.evotor.tspiot.exceptions.TsPioTServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 import ru.evotor.tspiot.exceptions.UnknownException;
 import ru.evotor.tspiot.model.MarkingCode;
-import ru.evotor.tspiot.result.CodesCheckResult;
-import ru.evotor.tspiot.result.KktInfo;
+import ru.evotor.tspiot.result.model.CodesCheckResult;
+import ru.evotor.tspiot.result.model.KktInfo;
 import ru.evotor.tspiot.result.TsPioTError;
 import ru.evotor.tspiot.result.TsPioTResult;
 
@@ -130,7 +134,7 @@ public class TsPioTService implements ITsPioTServiceWrapper {
                 TsPioTError error = result.getError();
 
                 if (error != null) {
-                    throw new TsPioTErrorHolderException(error.getCode(), error.getMessage());
+                    throw new TsPioTErrorHolderException(error.getError());
                 } else {
                     throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
                 }
@@ -144,11 +148,14 @@ public class TsPioTService implements ITsPioTServiceWrapper {
     /** Метод проверки марок */
     @SuppressWarnings("rawtypes")
     @Override
-    public CodesCheckResult getMarkedProductsInfo(List<MarkingCode> codes) throws TsPioTServiceException {
+    public CodesCheckResult getMarkedProductsInfo(
+            @NonNull List<MarkingCode> codes,
+            @Nullable String userUuid
+    ) throws TsPioTServiceException {
         TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
-            TsPioTResult result = service.getMarkedProductsInfo(codes);
+            TsPioTResult result = service.getMarkedProductsInfo(codes, userUuid);
             Parcelable data = result.getData();
 
             if (data != null) {
@@ -157,7 +164,7 @@ public class TsPioTService implements ITsPioTServiceWrapper {
                 TsPioTError error = result.getError();
 
                 if (error != null) {
-                    throw new TsPioTErrorHolderException(error.getCode(), error.getMessage());
+                    throw new TsPioTErrorHolderException(error.getError());
                 } else {
                     throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
                 }

@@ -1,7 +1,11 @@
-package ru.evotor.tspiot.result;
+package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import ru.evotor.tspiot.Utils;
 
 public class VariableExpiration implements Parcelable {
 
@@ -48,4 +52,11 @@ public class VariableExpiration implements Parcelable {
             return new VariableExpiration[i];
         }
     };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Degrees: " + Utils.toString(degrees) + "\n" +
+                "Date: " + Utils.toString(date);
+    }
 }

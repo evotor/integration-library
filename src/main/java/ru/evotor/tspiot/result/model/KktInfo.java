@@ -1,8 +1,11 @@
-package ru.evotor.tspiot.result;
+package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import ru.evotor.tspiot.Utils;
 
 public class KktInfo implements Parcelable {
 
@@ -24,12 +27,22 @@ public class KktInfo implements Parcelable {
     /** Время проверки кода в ТС ПИоТ (В миллисекундах) */
     private final int codesCheckTimeOut;
 
-    public KktInfo(String tspiotId, String kktSerial, String fnSerial, String kktInn, int codesCheckTimeOut) {
+    @Nullable private final LmChzInfo lmChzInfo;
+
+    public KktInfo(
+            String tspiotId,
+            String kktSerial,
+            String fnSerial,
+            String kktInn,
+            int codesCheckTimeOut,
+            @Nullable LmChzInfo lmChzInfo
+    ) {
         this.tspiotId = tspiotId;
         this.kktSerial = kktSerial;
         this.fnSerial = fnSerial;
         this.kktInn = kktInn;
         this.codesCheckTimeOut = codesCheckTimeOut;
+        this.lmChzInfo = lmChzInfo;
     }
 
     private KktInfo(Parcel parcel) {
@@ -39,6 +52,7 @@ public class KktInfo implements Parcelable {
         this.fnSerial = parcel.readString();
         this.kktInn = parcel.readString();
         this.codesCheckTimeOut = parcel.readInt();
+        this.lmChzInfo = parcel.readTypedObject(LmChzInfo.CREATOR);
     }
 
     public String getTspiotId() { return tspiotId; }
@@ -51,17 +65,21 @@ public class KktInfo implements Parcelable {
 
     public int getCodesCheckTimeOut() { return codesCheckTimeOut; }
 
+    @Nullable
+    public LmChzInfo getLmChzInfo() { return lmChzInfo; }
+
     @Override
     public int describeContents() { return 0; }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
         parcel.writeString(tspiotId);
         parcel.writeString(kktSerial);
         parcel.writeString(fnSerial);
         parcel.writeString(kktInn);
         parcel.writeInt(codesCheckTimeOut);
+        parcel.writeTypedObject(lmChzInfo, flags);
     }
 
     public static final Creator<KktInfo> CREATOR = new Creator<>() {
@@ -78,10 +96,11 @@ public class KktInfo implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "TsPioTId: " + tspiotId + "\n" +
-                "KktSerial: " + kktSerial + "\n" +
-                "FnSerial: " + fnSerial + "\n" +
-                "KktInn: " + kktInn + "\n" +
-                "CodesCheckTimeout: " + codesCheckTimeOut + "\n";
+        return "TsPioTId: " + Utils.toString(tspiotId) + "\n" +
+                "KktSerial: " + Utils.toString(kktSerial) + "\n" +
+                "FnSerial: " + Utils.toString(fnSerial) + "\n" +
+                "KktInn: " + Utils.toString(kktInn) + "\n" +
+                "CodesCheckTimeout: " + Utils.toString(codesCheckTimeOut) + "\n" +
+                "LmChzInfo: " + Utils.toString(lmChzInfo);
     }
 }

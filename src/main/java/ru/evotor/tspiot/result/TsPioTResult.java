@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.io.Serializable;
+import ru.evotor.tspiot.Utils;
 
 public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
@@ -20,36 +20,9 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
     private TsPioTResult(Parcel parcel) {
         int version = parcel.readInt();
-        this.classType = upcastClassType(parcel.readSerializable());
-        this.data = parseData(classType, parcel);
+        this.classType = Utils.readClass(parcel);
+        this.data = Utils.readData(classType, parcel);
         this.error = parcel.readParcelable(TsPioTError.class.getClassLoader());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Nullable
-    private Class<T> upcastClassType(Serializable serializable) {
-        if (serializable == null) {
-            return null;
-        }
-
-        try {
-            return (Class<T>) serializable;
-        } catch (Exception exception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    private T parseData(Class<T> classType, Parcel parcel) {
-        try {
-            if (classType == null) {
-                return parcel.readParcelable(null);
-            }
-
-            return parcel.readParcelable(classType.getClassLoader());
-        } catch (Exception exception) {
-            return null;
-        }
     }
 
     @SuppressWarnings("unchecked")

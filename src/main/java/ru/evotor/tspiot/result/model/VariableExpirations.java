@@ -1,7 +1,11 @@
-package ru.evotor.tspiot.result;
+package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import ru.evotor.tspiot.Utils;
 
 /** Вариативный срок годности */
 public class VariableExpirations implements Parcelable {
@@ -42,4 +46,10 @@ public class VariableExpirations implements Parcelable {
             return new VariableExpirations[i];
         }
     };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "VariableExpirations: " + Utils.toString(expirations);
+    }
 }
