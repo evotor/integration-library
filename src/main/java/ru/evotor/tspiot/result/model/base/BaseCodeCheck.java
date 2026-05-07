@@ -21,13 +21,13 @@ public abstract class BaseCodeCheck {
     protected final boolean valid;
 
     /** КИ без крипто-подписи / КиЗ */
-    protected final String printView;
+    @Nullable protected final String printView;
 
     /** Код товара */
     protected final String gtin;
 
     /** Массив идентификаторов товарных групп */
-    protected final int[] groupIds;
+    @Nullable protected final int[] groupIds;
 
     /** Результат проверки крипто-подписи КМ */
     protected final boolean verified;
@@ -46,7 +46,7 @@ public abstract class BaseCodeCheck {
     @Nullable protected final Boolean isBlocked;
 
     /** Органы государственной власти, установившие блокировку на КИ */
-    protected final String[] ogvs;
+    @Nullable protected final String[] ogvs;
 
     /** Признак продажи товара */
     protected final boolean sold;
@@ -80,15 +80,15 @@ public abstract class BaseCodeCheck {
             String cis,
             boolean found,
             boolean valid,
-            String printView,
+            @Nullable String printView,
             String gtin,
-            int[] groupIds,
+            @Nullable int[] groupIds,
             boolean verified,
             boolean realizable,
             boolean utilized,
             @Nullable VariableExpirations variableExpirations,
             @Nullable Boolean isBlocked,
-            String[] ogvs,
+            @Nullable String[] ogvs,
             boolean sold,
             @Nullable Integer mrp,
             @Nullable Integer smp
@@ -144,6 +144,7 @@ public abstract class BaseCodeCheck {
 
     public boolean isVerified() { return verified; }
 
+    @Nullable
     public int[] getGroupIds() { return groupIds; }
 
     @Nullable
@@ -156,8 +157,10 @@ public abstract class BaseCodeCheck {
 
     public String getGtin() { return gtin; }
 
+    @Nullable
     public String getPrintView() { return printView; }
 
+    @Nullable
     public String[] getOgvs() { return ogvs; }
 
     @Nullable

@@ -15,11 +15,11 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
     /** Версия OfflineCodesCheck */
     private final static int VERSION = 1;
 
-    /** Версия ЛМ ЧЗ */
-    @Nullable
+    /** Версия базы "чёрного списка", на которой выполнялась проверка КИ */
     private final String version;
 
-    @Nullable private final String inst;
+    /** Идентификатор экземпляра ПО ЛМ ЧЗ */
+    private final String inst;
 
     /** Результат проверки марок*/
     private final List<OfflineCodeCheck> codes;
@@ -37,8 +37,8 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
             int code,
             String reqId,
             long reqTimestamp,
-            @Nullable String version,
-            @Nullable String inst,
+            String version,
+            String inst,
             List<OfflineCodeCheck> codes
     ) {
         super(code, reqId, reqTimestamp);
@@ -48,10 +48,8 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
         this.codes = codes;
     }
 
-    @Nullable
     public String getInst() { return inst; }
 
-    @Nullable
     public String getVersion() { return version; }
 
     public List<OfflineCodeCheck> getCodes() { return codes; }
