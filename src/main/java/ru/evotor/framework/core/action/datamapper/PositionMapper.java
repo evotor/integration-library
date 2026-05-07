@@ -30,6 +30,7 @@ import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 
 public final class PositionMapper {
 
@@ -99,6 +100,7 @@ public final class PositionMapper {
     private static final String KEY_SALE_BAN_TIME = "sale_ban_time";
     private static final String KEY_VETERINARY_ATTRIBUTE = "veterinary_attribute";
     private static final String KEY_FORCE_TAX_NUMBER = "force_tax_number";
+    private static final String KEY_VOLUME_SORT_ACCOUNTING = "volumeSortAccounting";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -180,6 +182,8 @@ public final class PositionMapper {
         );
         VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(bundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
         Boolean forceTaxNumber = (Boolean) bundle.getSerializable(KEY_FORCE_TAX_NUMBER);
+        VolumeSortAccounting volumeSortAccounting =
+                VolumeSortAccounting.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
@@ -215,6 +219,7 @@ public final class PositionMapper {
         builder.setSaleBanTime(saleBanTime);
         builder.setVeterinaryAttribute(veterinaryAttribute);
         builder.setForceTaxNumber(forceTaxNumber);
+        builder.setVolumeSortAccounting(volumeSortAccounting);
         return builder.build();
     }
 
@@ -304,6 +309,13 @@ public final class PositionMapper {
         bundle.putBundle(KEY_SALE_BAN_TIME, position.getSaleBanTime() != null ? position.getSaleBanTime().toBundle() : null);
         bundle.putBundle(KEY_VETERINARY_ATTRIBUTE, position.getVeterinaryAttribute() != null ? position.getVeterinaryAttribute().toBundle() : null);
         bundle.putSerializable(KEY_FORCE_TAX_NUMBER, position.getForceTaxNumber());
+
+        final VolumeSortAccounting volumeSortAccounting = position.getVolumeSortAccounting();
+        bundle.putBundle(
+                KEY_VOLUME_SORT_ACCOUNTING,
+                volumeSortAccounting != null ? volumeSortAccounting.toBundle() : null
+        );
+
         return bundle;
     }
 
