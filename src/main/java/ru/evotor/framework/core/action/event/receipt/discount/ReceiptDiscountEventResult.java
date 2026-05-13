@@ -6,12 +6,6 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import ru.evotor.IBundlable;
 import ru.evotor.framework.BundleUtils;
 import ru.evotor.framework.Utils;
@@ -20,6 +14,13 @@ import ru.evotor.framework.core.action.event.receipt.changes.IChange;
 import ru.evotor.framework.core.action.event.receipt.changes.position.IPositionChange;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra;
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData;
+import ru.evotor.framework.receipt.AppliedLoyaltyData;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ReceiptDiscountEventResult implements IBundlable {
 
@@ -29,6 +30,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
 
     private static final String KEY_POSITION_UUID_TO_DISCOUNT_MAP = "positionUuidToDiscountMap";
+
+    private static final String KEY_RECEIPT_LOYALTY_APP_DATA = "appliedLoyaltyData";
 
     @Nullable
     public static ReceiptDiscountEventResult create(@Nullable Bundle bundle) {
@@ -51,7 +54,8 @@ public class ReceiptDiscountEventResult implements IBundlable {
                         IPositionChange.class
                 ),
                 SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
-                positionUuidToDiscountMap
+                positionUuidToDiscountMap,
+                AppliedLoyaltyData.from(bundle.getBundle(KEY_RECEIPT_LOYALTY_APP_DATA))
         );
     }
 
@@ -67,19 +71,16 @@ public class ReceiptDiscountEventResult implements IBundlable {
     @Nullable
     private final Map<String, BigDecimal> positionUuidToDiscountMap;
 
+    @Nullable
+    private final AppliedLoyaltyData appliedLoyaltyData;
+
     public ReceiptDiscountEventResult(
             @NonNull BigDecimal discount,
             @Nullable SetExtra extra,
             @NonNull List<IPositionChange> changes,
             @Nullable SetPurchaserContactData setPurchaserContactData
     ) {
-        Objects.requireNonNull(discount);
-
-        this.discount = discount;
-        this.extra = extra;
-        this.changes = changes;
-        this.setPurchaserContactData = setPurchaserContactData;
-        this.positionUuidToDiscountMap = null;
+        this(discount,extra,changes,setPurchaserContactData,null,null);
     }
 
     public ReceiptDiscountEventResult(
@@ -89,6 +90,17 @@ public class ReceiptDiscountEventResult implements IBundlable {
             @Nullable SetPurchaserContactData setPurchaserContactData,
             @Nullable Map<String, BigDecimal> positionUuidToDiscountMap
     ) {
+        this(discount,extra,changes,setPurchaserContactData,positionUuidToDiscountMap,null);
+    }
+
+    public ReceiptDiscountEventResult(
+            @NonNull BigDecimal discount,
+            @Nullable SetExtra extra,
+            @NonNull List<IPositionChange> changes,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable Map<String, BigDecimal> positionUuidToDiscountMap,
+            @Nullable AppliedLoyaltyData appliedLoyaltyData
+    ) {
         Objects.requireNonNull(discount);
 
         this.discount = discount;
@@ -96,6 +108,7 @@ public class ReceiptDiscountEventResult implements IBundlable {
         this.changes = changes;
         this.setPurchaserContactData = setPurchaserContactData;
         this.positionUuidToDiscountMap = positionUuidToDiscountMap;
+        this.appliedLoyaltyData = appliedLoyaltyData;
     }
 
     @NonNull
@@ -116,6 +129,10 @@ public class ReceiptDiscountEventResult implements IBundlable {
         if (positionUuidToDiscountMap != null) {
             bundle.putSerializable(KEY_POSITION_UUID_TO_DISCOUNT_MAP, (Serializable) positionUuidToDiscountMap);
         }
+        bundle.putBundle(
+                KEY_RECEIPT_LOYALTY_APP_DATA,
+                appliedLoyaltyData == null ? null : appliedLoyaltyData.toBundle()
+        );
         return bundle;
     }
 
@@ -142,5 +159,10 @@ public class ReceiptDiscountEventResult implements IBundlable {
     @Nullable
     public Map<String, BigDecimal> getPositionUuidToDiscountMap() {
         return positionUuidToDiscountMap;
+    }
+
+    @Nullable
+    public AppliedLoyaltyData getAppliedLoyaltyData(){
+        return appliedLoyaltyData;
     }
 }

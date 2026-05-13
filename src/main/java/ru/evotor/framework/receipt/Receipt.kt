@@ -97,7 +97,15 @@ data class Receipt(
         /**
          * Место расчёта
          */
-        var paymentPlace: String?
+        var paymentPlace: String?,
+        /**
+         * Номер платежной сессии. Может быть null, если платежная система не поддерживает номера сессий
+         */
+        var paymentSessionId: String?,
+        /**
+         * Информация использованного приложения лояльности
+         */
+        var loyaltyAppData: AppliedLoyaltyData?
     )
 
     /**

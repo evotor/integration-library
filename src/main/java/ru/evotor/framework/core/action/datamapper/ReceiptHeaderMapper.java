@@ -6,6 +6,7 @@ import java.util.Date;
 
 import androidx.annotation.Nullable;
 import ru.evotor.framework.Utils;
+import ru.evotor.framework.receipt.AppliedLoyaltyData;
 import ru.evotor.framework.receipt.Receipt;
 
 
@@ -23,6 +24,8 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
     private static final String KEY_PAYMENT_ADDRESS = "paymentAddress";
     private static final String KEY_PAYMENT_PLACE = "paymentPlace";
+    private static final String KEY_PAYMENT_SESSION_ID = "paymentSessionId";
+    private static final String KEY_LOYALTY_APP_DATA = "loyaltyAppData";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -49,6 +52,11 @@ public final class ReceiptHeaderMapper {
 
         boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
 
+        AppliedLoyaltyData loyaltyAppData = null;
+        if (bundle.containsKey(KEY_LOYALTY_APP_DATA)){
+            loyaltyAppData = AppliedLoyaltyData.from(bundle.getBundle(KEY_LOYALTY_APP_DATA));
+        }
+
         return new Receipt.Header(
                 receiptUuid,
                 baseReceiptUuid,
@@ -61,7 +69,9 @@ public final class ReceiptHeaderMapper {
                 sessionNumber,
                 receiptFromInternet,
                 bundle.getString(KEY_PAYMENT_ADDRESS),
-                bundle.getString(KEY_PAYMENT_PLACE)
+                bundle.getString(KEY_PAYMENT_PLACE),
+                bundle.getString(KEY_PAYMENT_SESSION_ID),
+                loyaltyAppData
         );
     }
 
@@ -93,7 +103,10 @@ public final class ReceiptHeaderMapper {
 
         bundle.putString(KEY_PAYMENT_ADDRESS, header.getPaymentAddress());
         bundle.putString(KEY_PAYMENT_PLACE, header.getPaymentPlace());
-
+        if (header.getPaymentSessionId() != null)
+            bundle.putString(KEY_PAYMENT_SESSION_ID, header.getPaymentSessionId());
+        if (header.getLoyaltyAppData() != null)
+            bundle.putBundle(KEY_LOYALTY_APP_DATA, header.getLoyaltyAppData().toBundle());
         return bundle;
     }
 

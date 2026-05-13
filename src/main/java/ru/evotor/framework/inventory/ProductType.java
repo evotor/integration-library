@@ -2,7 +2,7 @@ package ru.evotor.framework.inventory;
 
 /**
  * Тип товара.
- *
+ * <p>
  * Новые значения добавлять только в конец
  */
 public enum ProductType {
