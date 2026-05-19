@@ -26,6 +26,7 @@ import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
+import ru.evotor.framework.receipt.position.VolumeSortAccounting
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.MarksCheckingInfoMapper
 import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
@@ -482,6 +483,7 @@ object ReceiptApi {
             .setIsMarkSkipped(isMarkSkipped)
             .setIsAgeLimited(isAgeLimited)
             .setVeterinaryAttribute(veterinaryAttribute)
+            .setVolumeSortAccounting(VolumeSortAccounting.from(cursor))
         return builder.build()
     }
 
