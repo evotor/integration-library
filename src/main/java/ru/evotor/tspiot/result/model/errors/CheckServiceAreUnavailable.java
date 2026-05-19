@@ -6,7 +6,7 @@ import android.os.Parcel;
  * ТС ПИоТ не смог получить ответ ни от ГИС МТ, ни от ЛМ ЧЗ.
  * Сервисы ЧЗ недоступны, имеет смысл повторить запрос позже.
  */
-public final class CheckServiceAreUnavailable extends TsPioTErrorsDescription<CodesCheckErrorDescription> {
+public final class CheckServiceAreUnavailable extends TsPioTErrorsDescriptionWrapper<CodesCheckErrorDescription> {
     private final CodesCheckErrorDescription errorDescription;
 
     public CheckServiceAreUnavailable(CodesCheckErrorDescription errorDescription) {

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
-import ru.evotor.tspiot.result.model.errors.TsPioTErrorsDescription;
+import ru.evotor.tspiot.result.model.errors.TsPioTErrorsDescriptionWrapper;
 
 public class TsPioTError implements Parcelable {
 
@@ -12,9 +12,9 @@ public class TsPioTError implements Parcelable {
     private final static int VERSION = 1;
 
     /** Описание ошибки */
-    private final TsPioTErrorsDescription<? extends ErrorDescription> error;
+    private final TsPioTErrorsDescriptionWrapper<? extends ErrorDescription> error;
 
-    private final Class<? extends TsPioTErrorsDescription<? extends ErrorDescription>> errorType;
+    private final Class<? extends TsPioTErrorsDescriptionWrapper<? extends ErrorDescription>> errorType;
 
     private TsPioTError(Parcel parcel) {
         int version = parcel.readInt();
@@ -23,12 +23,12 @@ public class TsPioTError implements Parcelable {
     }
 
     @SuppressWarnings("unchecked")
-    public TsPioTError(TsPioTErrorsDescription<? extends ErrorDescription> error) {
+    public TsPioTError(TsPioTErrorsDescriptionWrapper<? extends ErrorDescription> error) {
         this.error = error;
-        this.errorType = (Class<? extends TsPioTErrorsDescription<? extends ErrorDescription>>) error.getClass();
+        this.errorType = (Class<? extends TsPioTErrorsDescriptionWrapper<? extends ErrorDescription>>) error.getClass();
     }
 
-    public TsPioTErrorsDescription<? extends ErrorDescription> getError() { return error; }
+    public TsPioTErrorsDescriptionWrapper<? extends ErrorDescription> getError() { return error; }
 
     @Override
     public int describeContents() { return 0; }

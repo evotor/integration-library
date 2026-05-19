@@ -3,7 +3,7 @@ package ru.evotor.tspiot.result.model.errors;
 import android.os.Parcel;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
 
-public class CommonErrorDescription implements ErrorDescription {
+public class CodeMessageErrorDescription implements ErrorDescription {
 
     /** Версия CommonErrorDescription */
     private final static int VERSION = 1;
@@ -14,13 +14,13 @@ public class CommonErrorDescription implements ErrorDescription {
     /** Описание ошибки */
     private final String message;
 
-    private CommonErrorDescription(Parcel parcel) {
+    private CodeMessageErrorDescription(Parcel parcel) {
         int version = parcel.readInt();
         this.errorCode = parcel.readInt();
         this.message = parcel.readString();
     }
 
-    public CommonErrorDescription(int errorCode, String message) {
+    public CodeMessageErrorDescription(int errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }
@@ -39,15 +39,15 @@ public class CommonErrorDescription implements ErrorDescription {
         parcel.writeString(message);
     }
 
-    public static final Creator<CommonErrorDescription> CREATOR = new Creator<>() {
+    public static final Creator<CodeMessageErrorDescription> CREATOR = new Creator<>() {
         @Override
-        public CommonErrorDescription createFromParcel(Parcel parcel) {
-            return new CommonErrorDescription(parcel);
+        public CodeMessageErrorDescription createFromParcel(Parcel parcel) {
+            return new CodeMessageErrorDescription(parcel);
         }
 
         @Override
-        public CommonErrorDescription[] newArray(int size) {
-            return new CommonErrorDescription[size];
+        public CodeMessageErrorDescription[] newArray(int size) {
+            return new CodeMessageErrorDescription[size];
         }
     };
 }

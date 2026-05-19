@@ -2,15 +2,15 @@ package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
 
-public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDescription<MessageErrorDescription> {
+public sealed abstract class MessageErrorDescriptionWrapper extends TsPioTErrorsDescriptionWrapper<MessageErrorDescription> {
     final protected MessageErrorDescription errorDescription;
 
-    protected MessageErrorDescriptionError(Parcel parcel) {
+    protected MessageErrorDescriptionWrapper(Parcel parcel) {
         super(parcel);
         this.errorDescription = parcel.readParcelable(MessageErrorDescription.class.getClassLoader());
     }
 
-    public MessageErrorDescriptionError(MessageErrorDescription errorDescription) {
+    public MessageErrorDescriptionWrapper(MessageErrorDescription errorDescription) {
         this.errorDescription = errorDescription;
     }
 
@@ -26,7 +26,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Нет доступных CDN для онлайн проверки */
-    public static final class CdnNotFoundError extends MessageErrorDescriptionError {
+    public static final class CdnNotFoundError extends MessageErrorDescriptionWrapper {
         private CdnNotFoundError(Parcel parcel) { super(parcel); }
 
         public CdnNotFoundError(MessageErrorDescription errorDescription) {
@@ -37,7 +37,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** ТСПиОТ не зарегистрирован */
-    public static final class NotRegistered extends MessageErrorDescriptionError {
+    public static final class NotRegistered extends MessageErrorDescriptionWrapper {
         private NotRegistered(Parcel parcel) { super(parcel); }
 
         public NotRegistered(MessageErrorDescription errorDescription) {
@@ -48,7 +48,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Не получена конфигурация ТСПиОТ */
-    public static final class NotConfigured extends MessageErrorDescriptionError {
+    public static final class NotConfigured extends MessageErrorDescriptionWrapper {
         private NotConfigured(Parcel parcel) { super(parcel); }
 
         public NotConfigured(MessageErrorDescription errorDescription) {
@@ -59,7 +59,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Отсутствует пермишн PMSR в манифесте приложения */
-    public static final class NotFoundPermission extends MessageErrorDescriptionError {
+    public static final class NotFoundPermission extends MessageErrorDescriptionWrapper {
         private NotFoundPermission(Parcel parcel) { super(parcel); }
 
         public NotFoundPermission(MessageErrorDescription errorDescription) {
@@ -70,7 +70,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Отсутствует PMSR_ID в манифесте приложения */
-    public static final class NotFoundPmsrId extends MessageErrorDescriptionError {
+    public static final class NotFoundPmsrId extends MessageErrorDescriptionWrapper {
         private NotFoundPmsrId(Parcel parcel) { super(parcel); }
 
         public NotFoundPmsrId(MessageErrorDescription errorDescription) {
@@ -81,7 +81,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Отсутствует PMSR_TOKEN в манифесте приложения */
-    public static final class NotFoundPmsrToken extends MessageErrorDescriptionError {
+    public static final class NotFoundPmsrToken extends MessageErrorDescriptionWrapper {
         private NotFoundPmsrToken(Parcel parcel) { super(parcel); }
 
         public NotFoundPmsrToken(MessageErrorDescription errorDescription) {
@@ -92,7 +92,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Не удалось получить appName вызывающего приложения */
-    public static final class FailedGetAppName extends MessageErrorDescriptionError {
+    public static final class FailedGetAppName extends MessageErrorDescriptionWrapper {
         private FailedGetAppName(Parcel parcel) { super(parcel); }
 
         public FailedGetAppName(MessageErrorDescription errorDescription) {
@@ -103,7 +103,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Не удалось получить версию вызывающего приложения */
-    public static final class FailedGetAppVersion extends MessageErrorDescriptionError {
+    public static final class FailedGetAppVersion extends MessageErrorDescriptionWrapper {
         private FailedGetAppVersion(Parcel parcel) { super(parcel); }
 
         public FailedGetAppVersion(MessageErrorDescription errorDescription) {
@@ -114,7 +114,7 @@ public sealed abstract class MessageErrorDescriptionError extends TsPioTErrorsDe
     }
 
     /** Неизвестная ошибка */
-    public static final class UnknownError extends MessageErrorDescriptionError {
+    public static final class UnknownError extends MessageErrorDescriptionWrapper {
         private UnknownError(Parcel parcel) { super(parcel); }
 
         public UnknownError(MessageErrorDescription errorDescription) {

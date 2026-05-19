@@ -2,20 +2,20 @@ package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
 
-public sealed abstract class CommonErrorDescriptionError extends TsPioTErrorsDescription<CommonErrorDescription> {
-    protected final CommonErrorDescription errorDescription;
+public sealed abstract class CodeMessageErrorDescriptionWrapper extends TsPioTErrorsDescriptionWrapper<CodeMessageErrorDescription> {
+    protected final CodeMessageErrorDescription errorDescription;
 
-    protected CommonErrorDescriptionError(Parcel parcel) {
+    protected CodeMessageErrorDescriptionWrapper(Parcel parcel) {
         super(parcel);
-        this.errorDescription = parcel.readParcelable(CommonErrorDescription.class.getClassLoader());
+        this.errorDescription = parcel.readParcelable(CodeMessageErrorDescription.class.getClassLoader());
     }
 
-    public CommonErrorDescriptionError(CommonErrorDescription errorDescription) {
+    public CodeMessageErrorDescriptionWrapper(CodeMessageErrorDescription errorDescription) {
         this.errorDescription = errorDescription;
     }
 
     @Override
-    public CommonErrorDescription getErrorDescription() { return errorDescription; }
+    public CodeMessageErrorDescription getErrorDescription() { return errorDescription; }
 
     @Override
     public int describeContents() { return 0; }
@@ -26,10 +26,10 @@ public sealed abstract class CommonErrorDescriptionError extends TsPioTErrorsDes
     }
 
     /** Ошибка на стороне ККМ */
-    public static final class KkmError extends CommonErrorDescriptionError {
+    public static final class KkmError extends CodeMessageErrorDescriptionWrapper {
         private KkmError(Parcel parcel) { super(parcel); }
 
-        public KkmError(CommonErrorDescription errorDescription) {
+        public KkmError(CodeMessageErrorDescription errorDescription) {
             super(errorDescription);
         }
 
@@ -37,10 +37,10 @@ public sealed abstract class CommonErrorDescriptionError extends TsPioTErrorsDes
     }
 
     /** Ошибка на стороне локального модуля */
-    public static final class LocalModuleError extends CommonErrorDescriptionError {
+    public static final class LocalModuleError extends CodeMessageErrorDescriptionWrapper {
         private LocalModuleError(Parcel parcel) { super(parcel); }
 
-        public LocalModuleError(CommonErrorDescription errorDescription) {
+        public LocalModuleError(CodeMessageErrorDescription errorDescription) {
             super(errorDescription);
         }
 
@@ -48,10 +48,10 @@ public sealed abstract class CommonErrorDescriptionError extends TsPioTErrorsDes
     }
 
     /** Не удалось получить fnSid (Не удалось установить доверенный канал) */
-    public static final class FnSidError extends CommonErrorDescriptionError {
+    public static final class FnSidError extends CodeMessageErrorDescriptionWrapper {
         private FnSidError(Parcel parcel) { super(parcel); }
 
-        public FnSidError(CommonErrorDescription errorDescription) {
+        public FnSidError(CodeMessageErrorDescription errorDescription) {
             super(errorDescription);
         }
 
@@ -62,10 +62,10 @@ public sealed abstract class CommonErrorDescriptionError extends TsPioTErrorsDes
      * Аварийный режим. Продажа товара разрешена без проверки,
      *  действуют ограничения аварийного режима
      */
-    public static final class EmergencyMode extends CommonErrorDescriptionError {
+    public static final class EmergencyMode extends CodeMessageErrorDescriptionWrapper {
         private EmergencyMode(Parcel parcel) { super(parcel); }
 
-        public EmergencyMode(CommonErrorDescription errorDescription) {
+        public EmergencyMode(CodeMessageErrorDescription errorDescription) {
             super(errorDescription);
         }
 
