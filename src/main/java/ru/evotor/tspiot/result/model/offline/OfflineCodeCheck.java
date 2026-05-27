@@ -14,16 +14,16 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
 
     public OfflineCodeCheck(
             String cis,
-            boolean found,
-            boolean valid,
-            String printView,
-            String gtin,
-            boolean verified,
-            boolean realizable,
-            boolean utilized,
+            @Nullable Boolean found,
+            @Nullable Boolean valid,
+            @Nullable String printView,
+            @Nullable String gtin,
+            @Nullable Boolean verified,
+            @Nullable Boolean realizable,
+            @Nullable Boolean utilized,
             @Nullable VariableExpirations variableExpirations,
             @Nullable Boolean isBlocked,
-            boolean sold,
+            @Nullable Boolean sold,
             @Nullable Integer mrp,
             @Nullable Integer smp
     ) {

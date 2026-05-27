@@ -14,26 +14,46 @@ import ru.evotor.tspiot.result.model.base.BaseCodeCheck;
 
 public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
 
-    /** Версия OnlineCodeCheck */
+    /**
+     * Версия OnlineCodeCheck
+     */
     private final static int VERSION = 1;
 
-    /** Дата и время истечения срока годности */
-    @Nullable private final Date expireDate;
+    /**
+     * Дата и время истечения срока годности
+     */
+    @Nullable
+    private final Date expireDate;
 
-    /** Дата производства продукции */
-    @Nullable private final Date productionDate;
+    /**
+     * Дата производства продукции
+     */
+    @Nullable
+    private final Date productionDate;
 
-    /** Переменный вес продукции (в граммах) */
-    @Nullable private final Integer productWeight;
+    /**
+     * Переменный вес продукции (в граммах)
+     */
+    @Nullable
+    private final Integer productWeight;
 
-    /** Производственный ветеринарный сопроводительный документ */
-    @Nullable private final String prVetDocument;
+    /**
+     * Производственный ветеринарный сопроводительный документ
+     */
+    @Nullable
+    private final String prVetDocument;
 
-    /** Признак, определяющий, что запрос направлен владельцем кода (определяется по аутентификационному токену) */
-    @Nullable private final Boolean isOwner;
+    /**
+     * Признак, определяющий, что запрос направлен владельцем кода (определяется по аутентификационному токену)
+     */
+    @Nullable
+    private final Boolean isOwner;
 
-    /** Сообщение об ошибке */
-    @Nullable private final String message;
+    /**
+     * Сообщение об ошибке
+     */
+    @Nullable
+    private final String message;
 
     /**
      * Код ошибки
@@ -55,45 +75,80 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
      *     </ul>
      * </ul>
      */
-    @Nullable private final Integer errorCode;
+    @Nullable
+    private final Integer errorCode;
 
-    /** Признак контроля прослеживаемости в товарной группе */
-    private final boolean isTracking;
+    /**
+     * Признак контроля прослеживаемости в товарной группе
+     */
+    @Nullable
+    private final Boolean isTracking;
 
-    /** Признак использования причин выбытия, разрешающих продажу КМ */
-    @Nullable private final Integer eliminationState;
+    /**
+     * Признак использования причин выбытия, разрешающих продажу КМ
+     */
+    @Nullable
+    private final Integer eliminationState;
 
-    /** Признак принадлежности табачной продукции к «серой зоне» */
-    @Nullable private final Boolean grayZone;
+    /**
+     * Признак принадлежности табачной продукции к «серой зоне»
+     */
+    @Nullable
+    private final Boolean grayZone;
 
     /**
      * Количество единиц товара в потребительской упаковке / Фактический объём / Фактический вес
      */
-    @Nullable private final Integer innerUnitCount;
+    @Nullable
+    private final Integer innerUnitCount;
 
-    /** Счётчик проданного и возвращённого товара */
-    @Nullable private final Integer soldUnitCount;
+    /**
+     * Счётчик проданного и возвращённого товара
+     */
+    @Nullable
+    private final Integer soldUnitCount;
 
-    /** Тип упаковки */
+    /**
+     * Тип упаковки
+     */
+    @Nullable
     private final String packageType;
 
-    /** КИ агрегата */
-    @Nullable private final String parent;
+    /**
+     * КИ агрегата
+     */
+    @Nullable
+    private final String parent;
 
-    /** ИНН производителя */
-    @Nullable private final String producerInn;
+    /**
+     * ИНН производителя
+     */
+    @Nullable
+    private final String producerInn;
 
-    /** Номер производственной серии */
-    @Nullable private final String productionSerialNumber;
+    /**
+     * Номер производственной серии
+     */
+    @Nullable
+    private final String productionSerialNumber;
 
-    /** Номер производственной партии */
-    @Nullable private final String productionBatchNumber;
+    /**
+     * Номер производственной партии
+     */
+    @Nullable
+    private final String productionBatchNumber;
 
-    /** Заводской серийный номер */
-    @Nullable private final String factorySerialNumber;
+    /**
+     * Заводской серийный номер
+     */
+    @Nullable
+    private final String factorySerialNumber;
 
-    /** Ёмкость КИГУ */
-    @Nullable private final Integer packageQuantity;
+    /**
+     * Ёмкость КИГУ
+     */
+    @Nullable
+    private final Integer packageQuantity;
 
     private OnlineCodeCheck(Parcel parcel) {
         super(parcel);
@@ -122,14 +177,14 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
 
     public OnlineCodeCheck(
             String cis,
-            Boolean found,
-            Boolean valid,
-            String printView,
+            @Nullable Boolean found,
+            @Nullable Boolean valid,
+            @Nullable String printView,
             String gtin,
-            int[] groupIds,
-            Boolean verified,
-            Boolean realizable,
-            Boolean utilized,
+            @Nullable int[] groupIds,
+            @Nullable Boolean verified,
+            @Nullable Boolean realizable,
+            @Nullable Boolean utilized,
             @Nullable Date expireDate,
             @Nullable VariableExpirations variableExpirations,
             @Nullable Date productionDate,
@@ -140,15 +195,15 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
             @Nullable String[] ogvs,
             @Nullable String message,
             @Nullable Integer errorCode,
-            Boolean isTracking,
-            Boolean sold,
+            @Nullable Boolean isTracking,
+            @Nullable Boolean sold,
             @Nullable Integer eliminationState,
             @Nullable Integer mrp,
             @Nullable Integer smp,
             @Nullable Boolean grayZone,
             @Nullable Integer innerUnitCount,
             @Nullable Integer soldUnitCount,
-            String packageType,
+            @Nullable String packageType,
             @Nullable String parent,
             @Nullable String producerInn,
             @Nullable String productionSerialNumber,
@@ -196,62 +251,104 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
     }
 
     @Nullable
-    public Boolean getGrayZone() { return grayZone; }
+    public Boolean getGrayZone() {
+        return grayZone;
+    }
 
     @Nullable
-    public Boolean getOwner() { return isOwner; }
-
-    public boolean isTracking() { return isTracking; }
-
-    @Nullable
-    public Date getExpireDate() { return expireDate; }
+    public Boolean getOwner() {
+        return isOwner;
+    }
 
     @Nullable
-    public Date getProductionDate() { return productionDate; }
+    public Boolean isTracking() {
+        return isTracking;
+    }
 
     @Nullable
-    public Integer getEliminationState() { return eliminationState; }
+    public Date getExpireDate() {
+        return expireDate;
+    }
 
     @Nullable
-    public Integer getErrorCode() { return errorCode; }
+    public Date getProductionDate() {
+        return productionDate;
+    }
 
     @Nullable
-    public Integer getInnerUnitCount() { return innerUnitCount; }
+    public Integer getEliminationState() {
+        return eliminationState;
+    }
 
     @Nullable
-    public Integer getPackageQuantity() { return packageQuantity; }
+    public Integer getErrorCode() {
+        return errorCode;
+    }
 
     @Nullable
-    public Integer getProductWeight() { return productWeight; }
+    public Integer getInnerUnitCount() {
+        return innerUnitCount;
+    }
 
     @Nullable
-    public Integer getSoldUnitCount() { return soldUnitCount; }
+    public Integer getPackageQuantity() {
+        return packageQuantity;
+    }
 
     @Nullable
-    public String getFactorySerialNumber() { return factorySerialNumber; }
+    public Integer getProductWeight() {
+        return productWeight;
+    }
 
     @Nullable
-    public String getMessage() { return message; }
-
-    public String getPackageType() { return packageType; }
-
-    @Nullable
-    public String getParent() { return parent; }
+    public Integer getSoldUnitCount() {
+        return soldUnitCount;
+    }
 
     @Nullable
-    public String getProducerInn() { return producerInn; }
+    public String getFactorySerialNumber() {
+        return factorySerialNumber;
+    }
 
     @Nullable
-    public String getProductionBatchNumber() { return productionBatchNumber; }
+    public String getMessage() {
+        return message;
+    }
 
     @Nullable
-    public String getProductionSerialNumber() { return productionSerialNumber; }
+    public String getPackageType() {
+        return packageType;
+    }
 
     @Nullable
-    public String getPrVetDocument() { return prVetDocument; }
+    public String getParent() {
+        return parent;
+    }
+
+    @Nullable
+    public String getProducerInn() {
+        return producerInn;
+    }
+
+    @Nullable
+    public String getProductionBatchNumber() {
+        return productionBatchNumber;
+    }
+
+    @Nullable
+    public String getProductionSerialNumber() {
+        return productionSerialNumber;
+    }
+
+    @Nullable
+    public String getPrVetDocument() {
+        return prVetDocument;
+    }
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
@@ -265,7 +362,7 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         parcel.writeValue(isOwner);
         parcel.writeString(message);
         parcel.writeValue(errorCode);
-        parcel.writeInt(isTracking ? 1 : 0);
+        parcel.writeValue(isTracking);
         parcel.writeValue(eliminationState);
         parcel.writeValue(grayZone);
         parcel.writeValue(innerUnitCount);

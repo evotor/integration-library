@@ -1,95 +1,142 @@
 package ru.evotor.tspiot.result.model.base;
 
 import android.os.Parcel;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 
 public abstract class BaseCodeCheck {
 
-    /** Версия BaseCodeCheck */
+    /**
+     * Версия BaseCodeCheck
+     */
     private final static int VERSION = 1;
 
-    /** КИ / КиЗ из запроса */
+    /**
+     * КИ / КиЗ из запроса
+     */
     protected final String cis;
 
-    /** Признак наличия кода в ГИС МТ */
-    protected final boolean found;
+    /**
+     * Признак наличия кода в ГИС МТ
+     */
+    @Nullable
+    protected final Boolean found;
 
-    /** Результат проверки валидности структуры КИ / КиЗ */
-    protected final boolean valid;
+    /**
+     * Результат проверки валидности структуры КИ / КиЗ
+     */
+    @Nullable
+    protected final Boolean valid;
 
-    /** КИ без крипто-подписи / КиЗ */
-    @Nullable protected final String printView;
+    /**
+     * КИ без крипто-подписи / КиЗ
+     */
+    @Nullable
+    protected final String printView;
 
-    /** Код товара */
+    /**
+     * Код товара
+     */
+    @Nullable
     protected final String gtin;
 
-    /** Массив идентификаторов товарных групп */
-    @Nullable protected final int[] groupIds;
+    /**
+     * Массив идентификаторов товарных групп
+     */
+    @Nullable
+    protected final int[] groupIds;
 
-    /** Результат проверки крипто-подписи КМ */
-    protected final boolean verified;
+    /**
+     * Результат проверки крипто-подписи КМ
+     */
+    @Nullable
+    protected final Boolean verified;
 
-    /** Признак возможности реализации КИ / КиЗ */
-    protected final boolean realizable;
+    /**
+     * Признак возможности реализации КИ / КиЗ
+     */
+    @Nullable
+    protected final Boolean realizable;
 
-    /** Признак нанесения КИ / КиЗ на упаковку */
-    protected final boolean utilized;
+    /**
+     * Признак нанесения КИ / КиЗ на упаковку
+     */
+    @Nullable
+    protected final Boolean utilized;
 
-    /** Информация о вариативном сроке годности */
+    /**
+     * Информация о вариативном сроке годности
+     */
     @Nullable
     protected final VariableExpirations variableExpirations;
 
-    /** Признак того, что розничная продажа продукции заблокирована по решению ОГВ */
-    @Nullable protected final Boolean isBlocked;
+    /**
+     * Признак того, что розничная продажа продукции заблокирована по решению ОГВ
+     */
+    @Nullable
+    protected final Boolean isBlocked;
 
-    /** Органы государственной власти, установившие блокировку на КИ */
-    @Nullable protected final String[] ogvs;
+    /**
+     * Органы государственной власти, установившие блокировку на КИ
+     */
+    @Nullable
+    protected final String[] ogvs;
 
-    /** Признак продажи товара */
-    protected final boolean sold;
+    /**
+     * Признак продажи товара
+     */
+    @Nullable
+    protected final Boolean sold;
 
-    /** Максимальная розничная цена */
-    @Nullable protected final Integer mrp;
+    /**
+     * Максимальная розничная цена
+     */
+    @Nullable
+    protected final Integer mrp;
 
-    /** Единая минимальная цена (ЕМЦ) */
-    @Nullable protected final Integer smp;
+    /**
+     * Единая минимальная цена (ЕМЦ)
+     */
+    @Nullable
+    protected final Integer smp;
 
     protected BaseCodeCheck(Parcel parcel) {
         int version = parcel.readInt();
         this.cis = parcel.readString();
-        this.found = parcel.readInt() == 1;
-        this.valid = parcel.readInt() == 1;
+        this.found = Utils.readBoolean(parcel);
+        this.valid = Utils.readBoolean(parcel);
         this.printView = parcel.readString();
         this.gtin = parcel.readString();
         this.groupIds = parcel.createIntArray();
-        this.verified = parcel.readInt() == 1;
-        this.realizable = parcel.readInt() == 1;
-        this.utilized = parcel.readInt() == 1;
+        this.verified = Utils.readBoolean(parcel);
+        this.realizable = Utils.readBoolean(parcel);
+        this.utilized = Utils.readBoolean(parcel);
         this.variableExpirations = parcel.readTypedObject(VariableExpirations.CREATOR);
         this.isBlocked = Utils.readBoolean(parcel);
         this.ogvs = parcel.createStringArray();
-        this.sold = parcel.readInt() == 1;
+        this.sold = Utils.readBoolean(parcel);
         this.mrp = Utils.readInteger(parcel);
         this.smp = Utils.readInteger(parcel);
     }
 
     public BaseCodeCheck(
             String cis,
-            boolean found,
-            boolean valid,
+            @Nullable Boolean found,
+            @Nullable Boolean valid,
             @Nullable String printView,
-            String gtin,
+            @Nullable String gtin,
             @Nullable int[] groupIds,
-            boolean verified,
-            boolean realizable,
-            boolean utilized,
+            @Nullable Boolean verified,
+            @Nullable Boolean realizable,
+            @Nullable Boolean utilized,
             @Nullable VariableExpirations variableExpirations,
             @Nullable Boolean isBlocked,
             @Nullable String[] ogvs,
-            boolean sold,
+            @Nullable Boolean sold,
             @Nullable Integer mrp,
             @Nullable Integer smp
     ) {
@@ -113,58 +160,95 @@ public abstract class BaseCodeCheck {
     protected void write(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
         parcel.writeString(cis);
-        parcel.writeInt(found ? 1 : 0);
-        parcel.writeInt(valid ? 1 : 0);
+        parcel.writeValue(found);
+        parcel.writeValue(valid);
         parcel.writeString(printView);
         parcel.writeString(gtin);
         parcel.writeIntArray(groupIds);
-        parcel.writeInt(verified ? 1 : 0);
-        parcel.writeInt(realizable ? 1 : 0);
-        parcel.writeInt(utilized ? 1 : 0);
+        parcel.writeValue(verified);
+        parcel.writeValue(realizable);
+        parcel.writeValue(utilized);
         parcel.writeTypedObject(this.variableExpirations, flags);
         parcel.writeValue(isBlocked);
         parcel.writeStringArray(ogvs);
-        parcel.writeInt(sold ? 1 : 0);
+        parcel.writeValue(sold);
         parcel.writeValue(mrp);
         parcel.writeValue(smp);
     }
 
     @Nullable
-    public Boolean getBlocked() { return isBlocked; }
-
-    public boolean isFound() { return found; }
-
-    public boolean isRealizable() { return realizable; }
-
-    public boolean isSold() { return sold; }
-
-    public boolean isUtilized() { return utilized; }
-
-    public boolean isValid() { return valid; }
-
-    public boolean isVerified() { return verified; }
+    public Boolean getBlocked() {
+        return isBlocked;
+    }
 
     @Nullable
-    public int[] getGroupIds() { return groupIds; }
+    public Boolean isFound() {
+        return found;
+    }
 
     @Nullable
-    public Integer getMrp() { return mrp; }
+    public Boolean isRealizable() {
+        return realizable;
+    }
 
     @Nullable
-    public Integer getSmp() { return smp; }
-
-    public String getCis() { return cis; }
-
-    public String getGtin() { return gtin; }
+    public Boolean isSold() {
+        return sold;
+    }
 
     @Nullable
-    public String getPrintView() { return printView; }
+    public Boolean isUtilized() {
+        return utilized;
+    }
 
     @Nullable
-    public String[] getOgvs() { return ogvs; }
+    public Boolean isValid() {
+        return valid;
+    }
 
     @Nullable
-    public VariableExpirations getVariableExpirations() { return variableExpirations; }
+    public Boolean isVerified() {
+        return verified;
+    }
+
+    @Nullable
+    public int[] getGroupIds() {
+        return groupIds;
+    }
+
+    @Nullable
+    public Integer getMrp() {
+        return mrp;
+    }
+
+    @Nullable
+    public Integer getSmp() {
+        return smp;
+    }
+
+    public String getCis() {
+        return cis;
+    }
+
+    @Nullable
+    public String getGtin() {
+        return gtin;
+    }
+
+    @Nullable
+    public String getPrintView() {
+        return printView;
+    }
+
+    @Nullable
+    public String[] getOgvs() {
+        return ogvs;
+    }
+
+    @Nullable
+    public VariableExpirations getVariableExpirations() {
+        return variableExpirations;
+    }
 
     @NonNull
     @Override
