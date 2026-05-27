@@ -180,7 +180,7 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
             @Nullable Boolean found,
             @Nullable Boolean valid,
             @Nullable String printView,
-            String gtin,
+            @Nullable String gtin,
             @Nullable int[] groupIds,
             @Nullable Boolean verified,
             @Nullable Boolean realizable,
