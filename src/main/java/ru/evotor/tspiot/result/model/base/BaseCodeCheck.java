@@ -256,7 +256,7 @@ public abstract class BaseCodeCheck {
         return "Cis: " + Utils.toString(cis) + "\n" +
                 "IsFound: " + Utils.toString(found) + "\n" +
                 "IsValid: " + Utils.toString(valid) + "\n" +
-                "PrintView" + Utils.toString(printView) + "\n" +
+                "PrintView: " + Utils.toString(printView) + "\n" +
                 "Gtin: " + Utils.toString(gtin) + "\n" +
                 "GroupIds: " + Utils.toString(groupIds) + "\n" +
                 "IsVerified: " + Utils.toString(verified) + "\n" +

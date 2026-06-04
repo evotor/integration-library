@@ -58,6 +58,28 @@ public final class Utils {
         return object == null ? "null" : object.toString();
     }
 
+    public static String toString(@Nullable int[] ints) {
+        if (ints == null) {
+            return "null";
+        } else if (ints.length == 0) {
+            return "[]";
+        } else {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("[");
+            for (int i = 0; i < ints.length; i++) {
+                sb.append(ints[i]);
+
+                if (i != ints.length - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append("]");
+
+            return sb.toString();
+        }
+    }
+
     public static String toString(@Nullable Object[] objects) {
         if (objects == null) {
             return "null";
