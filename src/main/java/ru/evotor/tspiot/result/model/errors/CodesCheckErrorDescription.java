@@ -2,6 +2,9 @@ package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
 import androidx.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
 
@@ -51,6 +54,13 @@ public class CodesCheckErrorDescription implements ErrorDescription {
         parcel.writeSerializable(offlineErrorClass);
         parcel.writeParcelable(onlineError, flags);
         parcel.writeParcelable(offlineError, flags);
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return "OnlineError:\n" + Utils.toString(onlineError) + "\n" +
+                "OfflineError:\n" + Utils.toString(offlineError) + "\n";
     }
 
     public static final Creator<CodesCheckErrorDescription> CREATOR = new Creator<>() {
