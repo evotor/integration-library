@@ -33,8 +33,6 @@ public class CodesCheckResult implements Parcelable {
     @Nullable
     public List<OfflineCodesCheck> getOfflineCodesChecks() { return offlineCodesChecks; }
 
-    public boolean isOffline() { return offlineCodesChecks != null && !offlineCodesChecks.isEmpty(); }
-
     @Override
     public int describeContents() { return 0; }
 
