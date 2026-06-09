@@ -1,6 +1,10 @@
 package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
+
+import androidx.annotation.NonNull;
+
+import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
 
 public class CodeMessageErrorDescription implements ErrorDescription {
@@ -37,6 +41,13 @@ public class CodeMessageErrorDescription implements ErrorDescription {
         parcel.writeInt(VERSION);
         parcel.writeInt(errorCode);
         parcel.writeString(message);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ErrorCode: " + Utils.toString(errorCode) + "\n" +
+                "Message: " + Utils.toString(message) + "\n";
     }
 
     public static final Creator<CodeMessageErrorDescription> CREATOR = new Creator<>() {
