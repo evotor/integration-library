@@ -3,9 +3,11 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
@@ -23,6 +25,8 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     ACTION_APPLY_DISCOUNT_TO_RECEIPT,
     ACTION_RECEIPT_DELETED,
     ACTION_RECEIPT_COMPLETED,
+    ACTION_RECEIPT_EDIT_SCREEN_OPENED,
+    ACTION_RECEIPT_PAYMENT_SCREEN_OPENED,
     ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID
 ) {
     /**
@@ -68,6 +72,18 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
     /**
+     * Обработчик событий перехода в список позиций чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_EDIT_SCREEN_OPENED)
+    override fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent) = Unit
+
+    /**
+     * Обработчик событий перехода к оплате чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_SCREEN_OPENED)
+    override fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent) = Unit
+
+    /**
      * Обработчик событий оплаты чека по намерению.
      */
     @RequiresIntentAction(ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID)
@@ -87,6 +103,10 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_RECEIPT_DELETED = "evotor.intent.action.receipt.sell.CLEARED"
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
+
+        const val ACTION_RECEIPT_EDIT_SCREEN_OPENED = "evotor.intent.action.receipt.sell.EDIT_SCREEN_OPENED"
+
+        const val ACTION_RECEIPT_PAYMENT_SCREEN_OPENED = "evotor.intent.action.receipt.sell.PAYMENT_SCREEN_OPENED"
 
         const val ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID = "evotor.intent.action.receipt.sell.paymentIntent.PAID"
     }
