@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -18,7 +20,9 @@ abstract class ReceiptBroadcastReceiver(
     private val actionPositionRemoved: String,
     private val actionApplyDiscountToReceipt: String,
     private val actionReceiptDeleted: String,
-    private val actionReceiptCompleted: String
+    private val actionReceiptCompleted: String,
+    private val actionReceiptEditScreenOpened: String,
+    private val actionReceiptPaymentScreenOpened: String
 ) : BroadcastEventReceiver() {
     protected abstract fun handleReceiptCreatedEvent(context: Context, event: ReceiptCreatedEvent)
 
@@ -33,6 +37,10 @@ abstract class ReceiptBroadcastReceiver(
     protected abstract fun handleReceiptDeletedEvent(context: Context, event: ReceiptDeletedEvent)
 
     protected abstract fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent)
+
+    protected abstract fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent)
+
+    protected abstract fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent)
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
@@ -69,6 +77,16 @@ abstract class ReceiptBroadcastReceiver(
             actionReceiptCompleted -> handleReceiptCompletedEvent(
                 context,
                 ReceiptCompletedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptEditScreenOpened -> handleReceiptEditScreenOpenedEvent(
+                context,
+                ReceiptEditScreenOpenedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptPaymentScreenOpened -> handleReceiptPaymentScreenOpenedEvent(
+                context,
+                ReceiptPaymentScreenOpenedEvent.from(bundle)
                     ?: return
             )
         }
