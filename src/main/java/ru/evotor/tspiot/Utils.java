@@ -3,9 +3,20 @@ package ru.evotor.tspiot;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
+import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 
 public final class Utils {
+
+    @NotNull
+    public static <T> T notNull(@Nullable T source, TsPioTServiceException exception) throws TsPioTServiceException {
+        if (source != null) {
+            return source;
+        } else {
+            throw exception;
+        }
+    }
 
     @Nullable
     public static Integer readInteger(Parcel parcel) {
