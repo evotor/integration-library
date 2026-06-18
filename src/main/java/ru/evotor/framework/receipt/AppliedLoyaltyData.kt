@@ -70,19 +70,14 @@ data class AppliedLoyaltyData(
             var appliedLoyaltyData: AppliedLoyaltyData? = null
             ParcelableUtils.readExpand(dest, VERSION) { parcel, version ->
                 if (version >= 1) {
-                    val loyaltyAppId = parcel.readString()
-                    val packageName = parcel.readString()
-                    val className = parcel.readString()
-                    if (loyaltyAppId != null && packageName != null && className != null) {
-                        val loyaltyCardId = parcel.readString()
-                        val externalLoyaltyCardId = parcel.readString()
-                        val additionalData = parcel.readString()
-                        appliedLoyaltyData = AppliedLoyaltyData(
-                            loyaltyCardId = loyaltyCardId,
-                            externalLoyaltyCardId = externalLoyaltyCardId,
-                            additionalData = additionalData
-                        )
-                    }
+                    val loyaltyCardId = parcel.readString()
+                    val externalLoyaltyCardId = parcel.readString()
+                    val additionalData = parcel.readString()
+                    appliedLoyaltyData = AppliedLoyaltyData(
+                        loyaltyCardId = loyaltyCardId,
+                        externalLoyaltyCardId = externalLoyaltyCardId,
+                        additionalData = additionalData
+                    )
                 }
             }
             return appliedLoyaltyData
