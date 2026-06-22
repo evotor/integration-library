@@ -23,6 +23,7 @@ public final class ReceiptHeaderMapper {
     private static final String KEY_RECEIPT_FROM_INTERNET = "receiptFromInternet";
     private static final String KEY_PAYMENT_ADDRESS = "paymentAddress";
     private static final String KEY_PAYMENT_PLACE = "paymentPlace";
+    private static final String KEY_IS_PAYMENT_INTENT_MODE = "isPaymentIntentMode";
 
     @Nullable
     public static Receipt.Header from(@Nullable Bundle bundle) {
@@ -48,6 +49,7 @@ public final class ReceiptHeaderMapper {
         }
 
         boolean receiptFromInternet = bundle.getBoolean(KEY_RECEIPT_FROM_INTERNET, false);
+        boolean isPaymentIntentMode = bundle.getBoolean(KEY_IS_PAYMENT_INTENT_MODE, false);
 
         return new Receipt.Header(
                 receiptUuid,
@@ -61,7 +63,8 @@ public final class ReceiptHeaderMapper {
                 sessionNumber,
                 receiptFromInternet,
                 bundle.getString(KEY_PAYMENT_ADDRESS),
-                bundle.getString(KEY_PAYMENT_PLACE)
+                bundle.getString(KEY_PAYMENT_PLACE),
+                isPaymentIntentMode
         );
     }
 
@@ -93,6 +96,8 @@ public final class ReceiptHeaderMapper {
 
         bundle.putString(KEY_PAYMENT_ADDRESS, header.getPaymentAddress());
         bundle.putString(KEY_PAYMENT_PLACE, header.getPaymentPlace());
+
+        bundle.putBoolean(KEY_IS_PAYMENT_INTENT_MODE, header.isPaymentIntentMode());
 
         return bundle;
     }
