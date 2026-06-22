@@ -8,21 +8,21 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import ru.evotor.tspiot.ITsPioTService;
 import ru.evotor.tspiot.TsPioTServiceConnector;
+import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.exceptions.NullContextException;
 import ru.evotor.tspiot.exceptions.ServiceAlreadyConnectedException;
 import ru.evotor.tspiot.exceptions.TsPioTErrorHolderException;
 import ru.evotor.tspiot.exceptions.TsPioTServiceOperationOnMainThreadException;
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 import ru.evotor.tspiot.exceptions.UnknownException;
+import ru.evotor.tspiot.model.ClientInfo;
 import ru.evotor.tspiot.model.MarkingCode;
 import ru.evotor.tspiot.result.model.CodesCheckResult;
 import ru.evotor.tspiot.result.model.KktInfo;
@@ -32,6 +32,7 @@ import ru.evotor.tspiot.result.TsPioTResult;
 public class TsPioTService implements ITsPioTServiceWrapper {
 
     public static final String UNKNOWN_EXCEPTION_TEXT = "Request to TsPioTService failed";
+    public static final String UNKNOWN_SERVER_EXCEPTION_TEXT = "Unknown server side error";
 
     private Context context;
 
@@ -125,7 +126,10 @@ public class TsPioTService implements ITsPioTServiceWrapper {
         TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
-            TsPioTResult result = service.getKktInfo();
+            TsPioTResult result = Utils.notNull(
+                    service.getKktInfo(),
+                    new UnknownException(UNKNOWN_SERVER_EXCEPTION_TEXT)
+            );
             Parcelable data = result.getData();
 
             if (data != null) {
@@ -155,7 +159,43 @@ public class TsPioTService implements ITsPioTServiceWrapper {
         TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
 
         try {
-            TsPioTResult result = service.getMarkedProductsInfo(codes, userUuid);
+            TsPioTResult result = Utils.notNull(
+                    service.getMarkedProductsInfo(codes, userUuid),
+                    new UnknownException(UNKNOWN_SERVER_EXCEPTION_TEXT)
+            );
+            Parcelable data = result.getData();
+
+            if (data != null) {
+                return (CodesCheckResult) data;
+            } else {
+                TsPioTError error = result.getError();
+
+                if (error != null) {
+                    throw new TsPioTErrorHolderException(error.getError());
+                } else {
+                    throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+                }
+            }
+        } catch (RemoteException | RuntimeException ex) {
+            TsPioTServiceConnector.processException(ex);
+            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+        }
+    }
+
+    /** Метод проверки марок */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public CodesCheckResult getMarkedProductsInfo(
+            @NonNull List<MarkingCode> codes,
+            @NonNull ClientInfo clientInfo
+    ) throws TsPioTServiceException {
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
+
+        try {
+            TsPioTResult result = Utils.notNull(
+                    service.getMarkedProductsInfoInternal(codes, clientInfo),
+                    new UnknownException(UNKNOWN_SERVER_EXCEPTION_TEXT)
+            );
             Parcelable data = result.getData();
 
             if (data != null) {
