@@ -101,7 +101,7 @@ data class Receipt(
         /**
          * Создан ли чек в режиме намерения оплаты
          */
-        val isPaymentIntentMode: Boolean
+        val isPaymentIntentMode: Boolean,
         /**
          * Номер платежной сессии. Может быть null, если платежная система не поддерживает номера сессий
          */
