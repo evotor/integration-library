@@ -350,6 +350,13 @@ object FeaturesApi {
      */
     fun isFursLpMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FURSLP_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Режим намерения оплаты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isUsePaymentIntentModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_USE_PAYMENT_INTENT_MODE)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(
             Uri.withAppendedPath(FeaturesContract.BASE_URI, path),

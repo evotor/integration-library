@@ -36,6 +36,7 @@ public class OpenSellReceiptCommand implements IBundlable {
     private static final String KEY_RECEIPT_EXTRA = "extra";
     private static final String KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA = "setPurchaserContactData";
     private static final String KEY_RECEIPT_SET_INTERNET_REQUISITES = "setInternetRequisites";
+    private static final String KEY_USE_PAYMENT_INTENT_MODE = "usePaymentIntentMode";
 
     @Nullable
     public static OpenSellReceiptCommand create(@Nullable Bundle bundle) {
@@ -43,6 +44,9 @@ public class OpenSellReceiptCommand implements IBundlable {
             return null;
         }
         Parcelable[] changesParcelable = bundle.getParcelableArray(KEY_CHANGES);
+        Boolean usePaymentIntentMode = bundle.containsKey(KEY_USE_PAYMENT_INTENT_MODE)
+                ? bundle.getBoolean(KEY_USE_PAYMENT_INTENT_MODE)
+                : null;
         return new OpenSellReceiptCommand(
                 Utils.filterByClass(
                         ChangesMapper.INSTANCE.create(changesParcelable),
@@ -50,7 +54,8 @@ public class OpenSellReceiptCommand implements IBundlable {
                 ),
                 SetExtra.from(bundle.getBundle(KEY_RECEIPT_EXTRA)),
                 SetPurchaserContactData.from(bundle.getBundle(KEY_RECEIPT_SET_PURCHASER_CONTACT_DATA)),
-                SetInternetRequisites.from(bundle.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES))
+                SetInternetRequisites.from(bundle.getBundle(KEY_RECEIPT_SET_INTERNET_REQUISITES)),
+                usePaymentIntentMode
         );
     }
 
@@ -62,6 +67,8 @@ public class OpenSellReceiptCommand implements IBundlable {
     private final SetPurchaserContactData setPurchaserContactData;
     @Nullable
     private final SetInternetRequisites setInternetRequisites;
+    @Nullable
+    private final Boolean usePaymentIntentMode;
 
     /**
      * Используйте конструктор с setPurchaserContactData и setInternetRequisites
@@ -91,6 +98,16 @@ public class OpenSellReceiptCommand implements IBundlable {
             @Nullable SetPurchaserContactData setPurchaserContactData,
             @Nullable SetInternetRequisites setInternetRequisites
     ) {
+        this(changes, extra, setPurchaserContactData, setInternetRequisites, null);
+    }
+
+    public OpenSellReceiptCommand(
+            @Nullable List<PositionAdd> changes,
+            @Nullable SetExtra extra,
+            @Nullable SetPurchaserContactData setPurchaserContactData,
+            @Nullable SetInternetRequisites setInternetRequisites,
+            @Nullable Boolean usePaymentIntentMode
+    ) {
         this.changes = new ArrayList<>();
         if (changes != null) {
             this.changes.addAll(changes);
@@ -98,6 +115,7 @@ public class OpenSellReceiptCommand implements IBundlable {
         this.extra = extra;
         this.setPurchaserContactData = setPurchaserContactData;
         this.setInternetRequisites = setInternetRequisites;
+        this.usePaymentIntentMode = usePaymentIntentMode;
     }
 
     public void process(@NonNull final Activity activity, IntegrationManagerCallback callback) {
@@ -137,6 +155,9 @@ public class OpenSellReceiptCommand implements IBundlable {
                 KEY_RECEIPT_SET_INTERNET_REQUISITES,
                 setInternetRequisites == null ? null : setInternetRequisites.toBundle()
         );
+        if (usePaymentIntentMode != null) {
+            bundle.putBoolean(KEY_USE_PAYMENT_INTENT_MODE, usePaymentIntentMode);
+        }
         return bundle;
     }
 
@@ -158,5 +179,10 @@ public class OpenSellReceiptCommand implements IBundlable {
     @Nullable
     public SetInternetRequisites getSetInternetRequisites() {
         return setInternetRequisites;
+    }
+
+    @Nullable
+    public Boolean getUsePaymentIntentMode() {
+        return usePaymentIntentMode;
     }
 }

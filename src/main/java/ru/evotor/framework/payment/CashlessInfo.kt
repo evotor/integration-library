@@ -44,7 +44,8 @@ data class CashlessInfo(
         BIOMETRY,
         CARD,
         INTERNET_ACQUIRING,
-        BANK_TRANSFER
+        BANK_TRANSFER,
+        BLUETOOTH
     }
 
     companion object {
