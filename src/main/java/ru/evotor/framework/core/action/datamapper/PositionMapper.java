@@ -30,6 +30,7 @@ import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.BundlesKt;
 import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 
 public final class PositionMapper {
@@ -107,26 +108,27 @@ public final class PositionMapper {
         if (bundle == null) {
             return null;
         }
-        String uuid = bundle.getString(KEY_UUID);
-        String productUuid = bundle.getString(KEY_PRODUCT_UUID);
-        String productCode = bundle.getString(KEY_PRODUCT_CODE);
-        ProductType productType = Utils.safeValueOf(ProductType.class, bundle.getString(KEY_PRODUCT_TYPE), ProductType.NORMAL);
-        String name = bundle.getString(KEY_NAME);
-        String measureName = bundle.getString(KEY_MEASURE_NAME);
-        int measurePrecision = bundle.getInt(KEY_MEASURE_PRECISION, 0);
-        int measureCode = bundle.getInt(KEY_MEASURE_CODE, Measure.UNKNOWN_MEASURE_CODE);
-        TaxNumber taxNumber = TaxNumberMapper.from(bundle.getBundle(KEY_TAX_NUMBER));
-        BigDecimal price = BundleUtils.getMoney(bundle, KEY_PRICE);
-        BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(bundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
-        BigDecimal quantity = BundleUtils.getQuantity(bundle, KEY_QUANTITY);
-        String barcode = bundle.getString(KEY_BARCODE);
-        Mark mark = readMarkFromBundle(bundle);
-        String alcoholByVolume = bundle.getString(KEY_ALCOHOL_BY_VOLUME);
-        String alcoholProductKindCode = bundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
-        String tareVolume = bundle.getString(KEY_TARE_VOLUME);
-        String classificationCode = bundle.getString(KEY_CLASSIFICATION_CODE);
+        Bundle sanitizedBundle = BundlesKt.sanitizeInput(bundle);
+        String uuid = sanitizedBundle.getString(KEY_UUID);
+        String productUuid = sanitizedBundle.getString(KEY_PRODUCT_UUID);
+        String productCode = sanitizedBundle.getString(KEY_PRODUCT_CODE);
+        ProductType productType = Utils.safeValueOf(ProductType.class, sanitizedBundle.getString(KEY_PRODUCT_TYPE), ProductType.NORMAL);
+        String name = sanitizedBundle.getString(KEY_NAME);
+        String measureName = sanitizedBundle.getString(KEY_MEASURE_NAME);
+        int measurePrecision = sanitizedBundle.getInt(KEY_MEASURE_PRECISION, 0);
+        int measureCode = sanitizedBundle.getInt(KEY_MEASURE_CODE, Measure.UNKNOWN_MEASURE_CODE);
+        TaxNumber taxNumber = TaxNumberMapper.from(sanitizedBundle.getBundle(KEY_TAX_NUMBER));
+        BigDecimal price = BundleUtils.getMoney(sanitizedBundle, KEY_PRICE);
+        BigDecimal priceWithDiscountPosition = BundleUtils.getMoney(sanitizedBundle, KEY_PRICE_WITH_DISCOUNT_POSITION);
+        BigDecimal quantity = BundleUtils.getQuantity(sanitizedBundle, KEY_QUANTITY);
+        String barcode = sanitizedBundle.getString(KEY_BARCODE);
+        Mark mark = readMarkFromBundle(sanitizedBundle);
+        String alcoholByVolume = sanitizedBundle.getString(KEY_ALCOHOL_BY_VOLUME);
+        String alcoholProductKindCode = sanitizedBundle.getString(KEY_ALCOHOL_PRODUCT_KIND_CODE);
+        String tareVolume = sanitizedBundle.getString(KEY_TARE_VOLUME);
+        String classificationCode = sanitizedBundle.getString(KEY_CLASSIFICATION_CODE);
 
-        Parcelable[] extraKeysParcelable = bundle.getParcelableArray(KEY_EXTRA_KEYS);
+        Parcelable[] extraKeysParcelable = sanitizedBundle.getParcelableArray(KEY_EXTRA_KEYS);
         Set<ExtraKey> extraKeys = new HashSet<>();
         if (extraKeysParcelable != null) {
             for (Parcelable extraKey : extraKeysParcelable) {
@@ -135,7 +137,7 @@ public final class PositionMapper {
         }
 
         List<Position> subPositions = new ArrayList<>();
-        Parcelable[] parcelablesSubPositions = bundle.getParcelableArray(KEY_SUB_POSITION);
+        Parcelable[] parcelablesSubPositions = sanitizedBundle.getParcelableArray(KEY_SUB_POSITION);
         if (parcelablesSubPositions != null) {
             for (Parcelable parcelable : parcelablesSubPositions) {
                 if (parcelable instanceof Bundle) {
@@ -145,45 +147,44 @@ public final class PositionMapper {
         }
 
         Map<String, AttributeValue> attributes =
-                PositionAttributesMapper.fromBundle(bundle.getBundle(KEY_ATTRIBUTES));
+                PositionAttributesMapper.fromBundle(sanitizedBundle.getBundle(KEY_ATTRIBUTES));
 
         SettlementMethod settlementMethod =
-                SettlementMethodMapper.fromBundle(bundle.getBundle(KEY_SETTLEMENT_METHOD));
+                SettlementMethodMapper.fromBundle(sanitizedBundle.getBundle(KEY_SETTLEMENT_METHOD));
 
         AgentRequisites agentRequisites =
-                AgentRequisites.Companion.from(bundle.getBundle(KEY_AGENT_REQUISITES));
+                AgentRequisites.Companion.from(sanitizedBundle.getBundle(KEY_AGENT_REQUISITES));
 
         final ImportationData importationData =
-                ImportationData.from(bundle.getBundle(KEY_IMPORTATION_DATA));
+                ImportationData.from(sanitizedBundle.getBundle(KEY_IMPORTATION_DATA));
 
-        final BigDecimal excise = BundleUtils.getMoney(bundle, KEY_EXCISE);
+        final BigDecimal excise = BundleUtils.getMoney(sanitizedBundle, KEY_EXCISE);
 
         PreferentialMedicine preferentialMedicine =
-                PreferentialMedicine.from(bundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
+                PreferentialMedicine.from(sanitizedBundle.getBundle(KEY_PREFERENTIAL_MEDICINE));
 
-        PartialRealization partialRealization = PartialRealization.from(bundle.getBundle(KEY_PARTIAL_REALIZATION));
-        Boolean isExcisable = (Boolean) bundle.getSerializable(KEY_IS_EXCISABLE);
+        PartialRealization partialRealization = PartialRealization.from(sanitizedBundle.getBundle(KEY_PARTIAL_REALIZATION));
+        Boolean isExcisable = (Boolean) sanitizedBundle.getSerializable(KEY_IS_EXCISABLE);
 
-        MarksCheckingInfo marksCheckingInfo = MarksCheckingInfo.from(bundle.getBundle(KEY_MARKS_CHECK_INFO));
-        Boolean isAgeLimited = (Boolean) bundle.getSerializable(KEY_IS_AGE_LIMITED);
-        Boolean isMarkSkipped = (Boolean) bundle.getSerializable(KEY_IS_MARK_SKIPPED);
+        MarksCheckingInfo marksCheckingInfo = MarksCheckingInfo.from(sanitizedBundle.getBundle(KEY_MARKS_CHECK_INFO));
+        Boolean isAgeLimited = (Boolean) sanitizedBundle.getSerializable(KEY_IS_AGE_LIMITED);
+        Boolean isMarkSkipped = (Boolean) sanitizedBundle.getSerializable(KEY_IS_MARK_SKIPPED);
         if (quantity == null ||
                 price == null ||
                 priceWithDiscountPosition == null
         ) {
             return null;
         }
-        TimeRange saleBanTime = TimeRange.from(bundle.getBundle(KEY_SALE_BAN_TIME));
+        TimeRange saleBanTime = TimeRange.from(sanitizedBundle.getBundle(KEY_SALE_BAN_TIME));
 
         Measure measure = new Measure(
                 measureName,
                 measurePrecision,
                 measureCode
         );
-        VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(bundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
-        Boolean forceTaxNumber = (Boolean) bundle.getSerializable(KEY_FORCE_TAX_NUMBER);
-        VolumeSortAccounting volumeSortAccounting =
-                VolumeSortAccounting.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
+        VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(sanitizedBundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
+        Boolean forceTaxNumber = (Boolean) sanitizedBundle.getSerializable(KEY_FORCE_TAX_NUMBER);
+        VolumeSortAccounting volumeSortAccounting = VolumeSortAccounting.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
@@ -316,7 +317,7 @@ public final class PositionMapper {
                 volumeSortAccounting != null ? volumeSortAccounting.toBundle() : null
         );
 
-        return bundle;
+        return BundlesKt.sanitizeOutput(bundle);
     }
 
     private static void putMarkToBundle(Position position, Bundle bundle) {

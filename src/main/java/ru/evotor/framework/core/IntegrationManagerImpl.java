@@ -27,6 +27,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ru.evotor.BundlesKt;
 import ru.evotor.IBundlable;
 
 
@@ -208,7 +209,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                 return;
             }
 
-            service.call(response, mAction, mData);
+            service.call(response, mAction, BundlesKt.sanitizeOutput(mData));
         }
 
         private IIntegrationManager getService(
@@ -339,8 +340,9 @@ public class IntegrationManagerImpl implements IntegrationManager {
 
             @Override
             public void onResult(Bundle bundle) {
-                Intent intent = bundle.getParcelable(KEY_INTENT);
-                Bundle options = bundle.getParcelable(KEY_OPTIONS);
+                Bundle sanitizedBundle = BundlesKt.sanitizeInput(bundle);
+                Intent intent = sanitizedBundle.getParcelable(KEY_INTENT);
+                Bundle options = sanitizedBundle.getParcelable(KEY_OPTIONS);
                 if (intent != null) {
                     if (mActivityStarter != null) {
                         // since the user provided an Activity we will silently start intents
@@ -354,7 +356,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
                         skip();
                     }
                     // leave the Future running to wait for the real response to this request
-                } else if (bundle.getBoolean("retry")) {
+                } else if (sanitizedBundle.getBoolean("retry")) {
                     try {
                         doWork(this);
                     } catch (RemoteException e) {
@@ -362,10 +364,10 @@ public class IntegrationManagerImpl implements IntegrationManager {
                     } catch (Exception e) {
                         setException(e);
                     }
-                } else if (bundle.getBoolean(KEY_SKIP)) {
+                } else if (sanitizedBundle.getBoolean(KEY_SKIP)) {
                     skip();
                 } else {
-                    set(new Result(bundle.getBundle(KEY_DATA)));
+                    set(new Result(sanitizedBundle.getBundle(KEY_DATA)));
                 }
             }
 
@@ -373,7 +375,7 @@ public class IntegrationManagerImpl implements IntegrationManager {
             public void onError(int code, String message, Bundle data) {
                 Log.e(TAG, "onError(code = " + code + ", message = " + message + ")");
 
-                set(new Result(new Error(code, message, data)));
+                set(new Result(new Error(code, message, BundlesKt.sanitizeInput(data))));
             }
 
             void skip() {
