@@ -2,10 +2,10 @@ package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
 
-import org.jetbrains.annotations.NotNull;
-
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MessageErrorDescription implements ErrorDescription {
 

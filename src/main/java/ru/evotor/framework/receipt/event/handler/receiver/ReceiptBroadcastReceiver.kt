@@ -4,10 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
-import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
@@ -40,9 +40,9 @@ abstract class ReceiptBroadcastReceiver(
 
     protected abstract fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent)
 
-    protected abstract fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent)
-
     protected abstract fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent)
+
+    protected abstract fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent)
 
     protected open fun handleReceiptWithPaymentIntentPaid(context: Context, event: ReceiptWithPaymentIntentPaidEvent) = Unit
 
@@ -81,16 +81,6 @@ abstract class ReceiptBroadcastReceiver(
             actionReceiptCompleted -> handleReceiptCompletedEvent(
                 context,
                 ReceiptCompletedEvent.from(bundle)
-                    ?: return
-            )
-            actionReceiptEditScreenOpened -> handleReceiptEditScreenOpenedEvent(
-                context,
-                ReceiptEditScreenOpenedEvent.from(bundle)
-                    ?: return
-            )
-            actionReceiptPaymentScreenOpened -> handleReceiptPaymentScreenOpenedEvent(
-                context,
-                ReceiptPaymentScreenOpenedEvent.from(bundle)
                     ?: return
             )
             actionReceiptWithPaymentIntentPaid -> handleReceiptWithPaymentIntentPaid(

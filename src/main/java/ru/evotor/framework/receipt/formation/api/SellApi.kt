@@ -11,9 +11,9 @@ import ru.evotor.framework.receipt.formation.api.move_receipt_to_payment_stage.M
 import ru.evotor.framework.receipt.formation.api.move_receipt_to_payment_stage.MoveCurrentReceiptDraftToPaymentStageException
 import ru.evotor.framework.receipt.formation.api.trigger_receipt_discount_event.TriggerReceiptDiscountEventCallback
 import ru.evotor.framework.receipt.formation.api.trigger_receipt_discount_event.TriggerReceiptDiscountEventException
-import ru.evotor.framework.receipt.formation.event.handler.service.SellBacksideIntegrationService
 import ru.evotor.framework.receipt.formation.event.CurrentReceiptDraftMovementToPaymentStageRequestedEvent
 import ru.evotor.framework.receipt.formation.event.TriggerReceiptDiscountEventRequestedEvent
+import ru.evotor.framework.receipt.formation.event.handler.service.SellBacksideIntegrationService
 import ru.evotor.framework.receipt.formation.event.handler.service.TriggerReceiptDiscountEventIntegrationService
 
 /**
@@ -65,12 +65,13 @@ object SellApi {
      * @param context Контекст приложения
      * @param componentName - ComponentName сервиса-обработчика события ReceiptDiscountEvent
      * @param callback
+     * @param loyaltyCardId - Id карты лояльности
      */
     @JvmStatic
-    fun triggerReceiptDiscountEvent(context: Context, componentName: ComponentName, callback: TriggerReceiptDiscountEventCallback) {
+    fun triggerReceiptDiscountEvent(context: Context, componentName: ComponentName, callback: TriggerReceiptDiscountEventCallback, loyaltyCardId: String? = null) {
         context.startIntegrationService(
             TriggerReceiptDiscountEventIntegrationService.ACTION_TRIGGER_RECEIPT_DISCOUNT_EVENT,
-            TriggerReceiptDiscountEventRequestedEvent(componentName, Receipt.Type.SELL)
+            TriggerReceiptDiscountEventRequestedEvent(componentName, Receipt.Type.SELL, loyaltyCardId)
         ) {
             it?.result?.error?.let { error -> callback.onError(TriggerReceiptDiscountEventException(error.code, error.message)) }
                 ?: callback.onSuccess()

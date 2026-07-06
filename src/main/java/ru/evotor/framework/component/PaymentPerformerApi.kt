@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
-import ru.evotor.framework.core.action.command.payment.ProcessPaymentIntentCommand
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentIntentRequestedEvent
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem

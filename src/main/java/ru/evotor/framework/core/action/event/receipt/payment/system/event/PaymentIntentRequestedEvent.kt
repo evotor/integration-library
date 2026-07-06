@@ -5,15 +5,18 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
 import ru.evotor.framework.getMoney
 import java.math.BigDecimal
+import kotlin.apply
+import kotlin.jvm.java
 
 abstract class PaymentIntentRequestedEvent(
     val operationType: OperationType,
     open val receiptUuid: String,
     open val sum: BigDecimal
 ) : IBundlable {
-
     enum class OperationType {
-        UNKNOWN, SELL, SELL_CANCEL
+        UNKNOWN,
+        SELL,
+        SELL_CANCEL
     }
 
     override fun toBundle(): Bundle = Bundle().apply {

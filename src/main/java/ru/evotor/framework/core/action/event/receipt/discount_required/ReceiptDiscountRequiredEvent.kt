@@ -39,7 +39,6 @@ class ReceiptDiscountRequiredEvent : IBundlable {
 
         fun create(bundle: Bundle?): ReceiptDiscountRequiredEvent? {
             bundle ?: return null
-
             return ReceiptDiscountRequiredEvent()
         }
     }
