@@ -26,8 +26,8 @@ class PositionUpdatedEvent(receiptUuid: String, position: Position) : PositionEv
     companion object {
         fun from(bundle: Bundle?): PositionUpdatedEvent? = bundle?.let {
             PositionUpdatedEvent(
-                    PositionEvent.getReceiptUuid(it) ?: return null,
-                    PositionEvent.getPosition(it) ?: return null
+                PositionEvent.getReceiptUuid(it) ?: return null,
+                PositionEvent.getPosition(it) ?: return null
             )
         }
     }

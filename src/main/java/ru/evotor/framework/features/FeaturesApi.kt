@@ -15,7 +15,6 @@ import ru.evotor.framework.features.provider.FeaturesContract
  * возможность добавлять в чек реквизиты покупателя.
  */
 object FeaturesApi {
-
     /**
      * Проверяет, активна ли на смарт-терминале функция "НДС 20%".
      *
@@ -309,15 +308,64 @@ object FeaturesApi {
      */
     fun isVeterinaryMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VETERINARY_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка кормов для животных" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isPetFoodMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PET_FOOD_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка растительных масел]" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVegetableOilMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VEGETABLE_OIL_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка автомобильных жидкостей" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isAutoFluidsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_AUTO_FLUIDS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка бытовой химии и косметики" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isChemicalsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CHEMICALS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "НДС 22%" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка меховых изделий (КМ)" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isFursLpMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FURSLP_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Режим намерения оплаты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isUsePaymentIntentModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_USE_PAYMENT_INTENT_MODE)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
-            context.contentResolver.query(
-                    Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
-                    null,
-                    null,
-                    null,
-                    null
-            )?.use {
-                it.moveToFirst()
-                it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
-            } ?: defaultValue
+        context.contentResolver.query(
+            Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
+            null,
+            null,
+            null,
+            null
+        )?.use {
+            it.moveToFirst()
+            it.getInt(it.getColumnIndex(FeaturesContract.COLUMN_IS_ACTIVE)) == 1
+        } ?: defaultValue
 }

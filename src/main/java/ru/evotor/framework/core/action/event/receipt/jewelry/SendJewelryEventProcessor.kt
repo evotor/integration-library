@@ -7,7 +7,6 @@ import ru.evotor.framework.core.action.processor.ActionProcessor
  * Обработчик события [SendJewelryEvent].
  */
 abstract class SendJewelryEventProcessor : ActionProcessor() {
-
     override fun process(action: String, bundle: Bundle?, callback: ActionProcessor.Callback) {
         val event = SendJewelryEvent.from(bundle) ?: run {
             callback.skip()
@@ -24,5 +23,4 @@ abstract class SendJewelryEventProcessor : ActionProcessor() {
      *                запускать операции и обрабатывать ошибки.
      */
     abstract fun call(action: String, event: SendJewelryEvent, callback: ActionProcessor.Callback)
-
 }

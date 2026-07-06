@@ -9,6 +9,6 @@ private const val BASE_MESSAGE = "Found $CAUSE that is not supported in current 
  *
  * Причиной возникновения, скорее всего, является устаревшая версия integration-library в стороннем приложении.
  *
- * Если после обновления integration-library исключение не перестало возникать, свяжитесь с техподдержкой Эвотора.
+ * Если после обновления integration-library исключение не перестало возникать, свяжитесь с техподдержкой.
  */
 internal class IntegrationLibraryMappingException(cause: String) : IntegrationLibraryException(BASE_MESSAGE.replace(CAUSE, cause))

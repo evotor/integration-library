@@ -1,8 +1,6 @@
 package ru.evotor.framework.core.action.command.print_z_report_command
 
 import android.os.Bundle
-import ru.evotor.framework.core.Error
-
 
 object PrintZReportCommandErrorDataFactory {
     private const val KEY_EXT_TYPE = "EXT_TYPE"
@@ -28,8 +26,8 @@ object PrintZReportCommandErrorDataFactory {
 
         fun create(data: Bundle): PrintZReportCommandErrorData.KktError {
             return PrintZReportCommandErrorData.KktError(
-                    kktErrorCode = data.optInt(KEY_KKT_ERROR_CODE),
-                    kktErrorDescription = data.getString(KEY_KKT_ERROR_DESCRIPTION, null)
+                kktErrorCode = data.optInt(KEY_KKT_ERROR_CODE),
+                kktErrorDescription = data.getString(KEY_KKT_ERROR_DESCRIPTION, null)
             )
         }
 

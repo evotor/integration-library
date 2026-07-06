@@ -11,6 +11,7 @@ import ru.evotor.framework.core.action.event.receipt.changes.position.PositionEd
 import ru.evotor.framework.core.action.event.receipt.changes.position.PositionRemove
 import ru.evotor.framework.core.action.event.receipt.changes.position.SetPrintGroup
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetExtra
+import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetInternetRequisites
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.SetPurchaserContactData
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
 
@@ -69,7 +70,6 @@ object ChangesMapper {
     }
 
     private fun fromBundle(typeName: String, bundle: Bundle): IChange? {
-
         return when (Utils.safeValueOf(IChange.Type::class.java, typeName, null)) {
             IChange.Type.POSITION_REMOVE -> PositionRemove.from(bundle)
             IChange.Type.POSITION_ADD -> PositionAdd.from(bundle)
@@ -79,8 +79,8 @@ object ChangesMapper {
             IChange.Type.SET_PAYMENT_PURPOSE_PRINT_GROUP -> SetPrintGroup.from(bundle)
             IChange.Type.SET_PRINT_EXTRA -> SetPrintExtra.from(bundle)
             IChange.Type.SET_PURCHASER_CONTACT_DATA -> SetPurchaserContactData.from(bundle)
+            IChange.Type.SET_INTERNET_REQUISITES -> SetInternetRequisites.from(bundle)
             null, IChange.Type.UNKNOWN -> UnknownChange.from(typeName, bundle)
         }
     }
-
 }

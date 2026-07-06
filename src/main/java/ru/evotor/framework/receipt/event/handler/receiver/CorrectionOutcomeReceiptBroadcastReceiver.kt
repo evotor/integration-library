@@ -3,9 +3,11 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -21,9 +23,10 @@ open class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     actionPositionUpdated = ACTION_POSITION_UPDATED,
     actionReceiptCompleted = ACTION_RECEIPT_COMPLETED,
     actionReceiptCreated = ACTION_RECEIPT_CREATED,
-    actionReceiptDeleted = ACTION_RECEIPT_DELETED
+    actionReceiptDeleted = ACTION_RECEIPT_DELETED,
+    actionReceiptEditScreenOpened = ACTION_RECEIPT_EDIT_SCREEN_OPENED,
+    actionReceiptPaymentScreenOpened = ACTION_RECEIPT_PAYMENT_SCREEN_OPENED
 ) {
-
     /**
      * Обработчик событий создания чека.
      */
@@ -69,6 +72,18 @@ open class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     @RequiresIntentAction(ACTION_RECEIPT_COMPLETED)
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
+    /**
+     * Обработчик событий перехода в список позиций чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_EDIT_SCREEN_OPENED)
+    override fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent) = Unit
+
+    /**
+     * Обработчик событий перехода к оплате чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_SCREEN_OPENED)
+    override fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent) = Unit
+
     companion object {
         const val ACTION_RECEIPT_CREATED =
             "evotor.intent.action.receipt.correction.outcome.OPENED"
@@ -84,5 +99,9 @@ open class CorrectionOutcomeReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
             "evotor.intent.action.receipt.correction.outcome.CLEARED"
         const val ACTION_RECEIPT_COMPLETED =
             "evotor.intent.action.receipt.correction.outcome.RECEIPT_CLOSED"
+        const val ACTION_RECEIPT_EDIT_SCREEN_OPENED =
+            "evotor.intent.action.receipt.correction.outcome.EDIT_SCREEN_OPENED"
+        const val ACTION_RECEIPT_PAYMENT_SCREEN_OPENED =
+            "evotor.intent.action.receipt.correction.outcome.PAYMENT_SCREEN_OPENED"
     }
 }

@@ -22,8 +22,10 @@ abstract class PaymentSystemProcessor : ActionProcessor() {
     }
 
     abstract fun sell(action: String, event: PaymentSystemSellEvent, callback: ActionProcessor.Callback)
+
     abstract fun sellCancel(action: String, event: PaymentSystemSellCancelEvent, callback: ActionProcessor.Callback)
+
     abstract fun payback(action: String, event: PaymentSystemPaybackEvent, callback: ActionProcessor.Callback)
+
     abstract fun paybackCancel(action: String, event: PaymentSystemPaybackCancelEvent, callback: ActionProcessor.Callback)
 }
-

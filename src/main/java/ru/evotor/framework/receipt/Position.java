@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ru.evotor.ParcelablesKt;
 import ru.evotor.framework.calculator.MoneyCalculator;
 import ru.evotor.framework.calculator.PercentCalculator;
 import ru.evotor.framework.core.IntegrationLibraryParsingException;
@@ -25,22 +27,31 @@ import ru.evotor.framework.inventory.ProductItem;
 import ru.evotor.framework.inventory.ProductType;
 import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
+import ru.evotor.framework.receipt.attribute.VeterinaryAttribute;
 import ru.evotor.framework.receipt.position.AgentRequisites;
 import ru.evotor.framework.receipt.position.ImportationData;
+import ru.evotor.framework.receipt.position.LocalModuleInfo;
 import ru.evotor.framework.receipt.position.Mark;
 import ru.evotor.framework.receipt.position.MarksCheckingInfo;
 import ru.evotor.framework.receipt.position.PartialRealization;
 import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.position.SettlementMethod;
+import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 
 /**
  * Позиция чека.
  */
 public class Position implements Parcelable {
     /**
+     * Разрешение для установки признака принудительного использования указанного НДС.
+     * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
+     */
+    public static final String FORCE_TAX_NUMBER_SET_PERMISSION = "ru.evotor.permission.position.forceTaxNumber.SET";
+
+    /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 14;
+    private static final int VERSION = 17;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -182,12 +193,21 @@ public class Position implements Parcelable {
     private PreferentialMedicine preferentialMedicine;
 
     /**
+     * Информация о рецепте
+     * Значения будут записаны в тег 1260
+     */
+    @FiscalRequisite(tag = FiscalTags.VETERINARY_ATTRIBUTE)
+    @Nullable
+    private VeterinaryAttribute veterinaryAttribute;
+
+    /**
      * Частичное выбытие 1191
      * <p>
      * Доступно только для следующих типов товара:
      * - лекарства {@link ProductType#MEDICINE_MARKED}
      * - духи {@link ProductType#PERFUME_MARKED}
      * - альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+     * - ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
      * <p>
      * Также см. {@link #quantity}
      */
@@ -227,6 +247,24 @@ public class Position implements Parcelable {
      */
     @Nullable
     private TimeRange saleBanTime;
+
+    /**
+     * Признак принудительного использования указанного НДС
+     */
+    @Nullable
+    private Boolean forceTaxNumber;
+
+    /**
+     * Выбытие по объемно-сортовому учету(ОСУ) 1191
+     * <p>
+     * Доступно только для следующих типов товара:
+     * - молочная продукция {@link ProductType#DAIRY_MARKED}
+     * - вода {@link ProductType#WATER_MARKED}
+     * <p>
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    private VolumeSortAccounting volumeSortAccounting;
 
     public Position(
             String uuid,
@@ -301,6 +339,9 @@ public class Position implements Parcelable {
         this.isAgeLimited = position.isAgeLimited;
         this.isMarkSkipped = position.isMarkSkipped;
         this.saleBanTime = position.saleBanTime;
+        this.veterinaryAttribute = position.veterinaryAttribute;
+        this.forceTaxNumber = position.forceTaxNumber;
+        this.volumeSortAccounting = position.getVolumeSortAccounting();
     }
 
     /**
@@ -573,6 +614,15 @@ public class Position implements Parcelable {
     }
 
     /**
+     * @return Информация о рецепте для ветеринарных препаратов
+     */
+    @FiscalRequisite(tag = FiscalTags.VETERINARY_ATTRIBUTE)
+    @Nullable
+    public VeterinaryAttribute getVeterinaryAttribute() {
+        return veterinaryAttribute;
+    }
+
+    /**
      * @return Частичное выбытие 1191
      */
     @FiscalRequisite(tag = FiscalTags.PARTIAL_REALIZATION)
@@ -618,6 +668,20 @@ public class Position implements Parcelable {
     @Nullable
     public MarksCheckingInfo getMarksCheckingInfo() {
         return marksCheckingInfo;
+    }
+
+    @Nullable
+    public Boolean getForceTaxNumber() {
+        return forceTaxNumber;
+    }
+
+    /**
+     * @return Выбытие по объемно-сортовому учету(ОСУ) 1191
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    public VolumeSortAccounting getVolumeSortAccounting() {
+        return volumeSortAccounting;
     }
 
     @Override
@@ -691,6 +755,12 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(saleBanTime, position.saleBanTime))
             return false;
+        if (!Objects.equals(veterinaryAttribute, position.veterinaryAttribute))
+            return false;
+        if (!Objects.equals(forceTaxNumber, position.forceTaxNumber))
+            return false;
+        if (!Objects.equals(volumeSortAccounting, position.volumeSortAccounting))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -726,6 +796,9 @@ public class Position implements Parcelable {
         result = 31 * result + (isAgeLimited != null ? isAgeLimited.hashCode() : 0);
         result = 31 * result + (isMarkSkipped != null ? isMarkSkipped.hashCode() : 0);
         result = 31 * result + (saleBanTime != null ? saleBanTime.hashCode() : 0);
+        result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
+        result = 31 * result + (forceTaxNumber != null ? forceTaxNumber.hashCode() : 0);
+        result = 31 * result + (volumeSortAccounting != null ? volumeSortAccounting.hashCode() : 0);
         return result;
     }
 
@@ -761,6 +834,9 @@ public class Position implements Parcelable {
                 ", marksCheckingInfo=" + marksCheckingInfo +
                 ", isAgeLimited=" + isAgeLimited +
                 ", isMarkSkipped=" + isMarkSkipped +
+                ", veterinaryAttribute=" + veterinaryAttribute +
+                ", forceTaxNumber=" + forceTaxNumber +
+                ", volumeSortAccounting=" + volumeSortAccounting +
                 '}';
     }
 
@@ -830,11 +906,11 @@ public class Position implements Parcelable {
         if (this.attributes != null) {
             for (Map.Entry<String, AttributeValue> entry : this.attributes.entrySet()) {
                 dest.writeString(entry.getKey());
-                dest.writeParcelable(entry.getValue(), flags);
+                ParcelablesKt.writeAliased(dest, entry.getValue(), flags);
             }
         }
         // Payment features
-        dest.writeParcelable(this.settlementMethod, flags);
+        ParcelablesKt.writeAliased(dest, this.settlementMethod, flags);
         //AgentRequisites
         dest.writeBundle(this.agentRequisites != null ? this.agentRequisites.toBundle() : null);
         //ImportationData
@@ -844,7 +920,7 @@ public class Position implements Parcelable {
         //Preferential medicine
         dest.writeBundle(this.preferentialMedicine != null ? this.preferentialMedicine.toBundle() : null);
         // Mark
-        dest.writeParcelable(this.mark, flags);
+        ParcelablesKt.writeAliased(dest, this.mark, flags);
         // Partial realization
         dest.writeBundle(this.partialRealization != null ? this.partialRealization.toBundle() : null);
         dest.writeInt(this.measure.getCode());
@@ -853,6 +929,10 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.isAgeLimited);
         dest.writeSerializable(this.isMarkSkipped);
         dest.writeBundle(this.saleBanTime != null ? this.saleBanTime.toBundle() : null);
+        dest.writeBundle(this.veterinaryAttribute != null ? this.veterinaryAttribute.toBundle() : null);
+        dest.writeSerializable(this.forceTaxNumber);
+        // Volume Sort Accounting Realization
+        dest.writeBundle(this.volumeSortAccounting != null ? this.volumeSortAccounting.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -959,6 +1039,15 @@ public class Position implements Parcelable {
         if (version >= 14) {
             this.saleBanTime = TimeRange.from(in.readBundle(TimeRange.class.getClassLoader()));
         }
+        if (version >= 15) {
+            readVeterinaryAttribute(in);
+        }
+        if (version >= 16) {
+            this.forceTaxNumber = (Boolean) in.readSerializable();
+        }
+        if (version >= 17) {
+            readVolumeSortAccounting(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -970,14 +1059,14 @@ public class Position implements Parcelable {
             this.attributes = new HashMap<>(attributesSize);
             for (int i = 0; i < attributesSize; i++) {
                 String key = in.readString();
-                AttributeValue value = in.readParcelable(AttributeValue.class.getClassLoader());
+                AttributeValue value = ParcelablesKt.readAliased(in, AttributeValue.CREATOR);
                 this.attributes.put(key, value);
             }
         }
     }
 
     private void readSettlementMethodField(Parcel in) {
-        SettlementMethod settlementMethod = in.readParcelable(SettlementMethod.class.getClassLoader());
+        SettlementMethod settlementMethod = ParcelablesKt.readParcelable(in, SettlementMethod.class);
         if (settlementMethod == null) {
             this.settlementMethod = new SettlementMethod.FullSettlement();
         } else {
@@ -997,8 +1086,12 @@ public class Position implements Parcelable {
         this.preferentialMedicine = PreferentialMedicine.Companion.from(in.readBundle(PreferentialMedicine.class.getClassLoader()));
     }
 
+    private void readVeterinaryAttribute(Parcel in) {
+        this.veterinaryAttribute = VeterinaryAttribute.Companion.from(in.readBundle(VeterinaryAttribute.class.getClassLoader()));
+    }
+
     private void readMark(Parcel in) {
-        this.mark = in.readParcelable(Mark.class.getClassLoader());
+        this.mark = ParcelablesKt.readParcelable(in, Mark.class);
     }
 
     private void readPartialRealization(Parcel in) {
@@ -1007,6 +1100,12 @@ public class Position implements Parcelable {
 
     private void readMarksCheckingInfo(Parcel in) {
         this.marksCheckingInfo = MarksCheckingInfo.Companion.from(in.readBundle(MarksCheckingInfo.class.getClassLoader()));
+    }
+
+    private void readVolumeSortAccounting(Parcel in) {
+        this.volumeSortAccounting = VolumeSortAccounting.from(
+                in.readBundle(VolumeSortAccounting.class.getClassLoader())
+        );
     }
 
     public static final Creator<Position> CREATOR = new Creator<Position>() {
@@ -1169,15 +1268,13 @@ public class Position implements Parcelable {
 
         public Builder toNotAlcoholBeerMarked(
                 @NonNull Mark mark,
-                @NonNull BigDecimal alcoholByVolume,
-                @NonNull Long alcoholProductKindCode,
-                @NonNull BigDecimal tareVolume
+                @Nullable BigDecimal tareVolume
         ) {
             position.productType = ProductType.NOT_ALCOHOL_BEER_MARKED;
             setAlcoParams(
                     mark,
-                    alcoholByVolume,
-                    alcoholProductKindCode,
+                    null,
+                    null,
                     tareVolume
             );
             return this;
@@ -1640,30 +1737,100 @@ public class Position implements Parcelable {
         }
 
         public Builder toCaviarMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.CAVIAR_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
             return this;
         }
 
+        public Builder toPetFoodMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.PET_FOOD_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPetFoodParams(mark);
+            return this;
+        }
+
+        public Builder toVegetableOilMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.VEGETABLE_OIL_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setVegetableOilParams(mark);
+            return this;
+        }
+
         public Builder toVeterinaryMarked(
-            @NonNull Mark mark
+                @NonNull Mark mark
         ) {
             position.productType = ProductType.VETERINARY_MARKED;
             setAlcoParams(
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null
             );
             setCaviarParams(mark);
+            return this;
+        }
+
+        public Builder toFursLpMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.FURSLP_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setFursLpParams(mark);
+            return this;
+        }
+
+        public Builder toAutoFluidsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.AUTO_FLUIDS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setAutoFluidsParams(mark);
+            return this;
+        }
+
+        public Builder toChemicalsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.CHEMICALS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setChemicalsParams(mark);
             return this;
         }
 
@@ -1673,6 +1840,7 @@ public class Position implements Parcelable {
          * лекарства {@link ProductType#MEDICINE_MARKED}
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
          *
          * @param quantityInPackage количество товара в упаковке всего
          */
@@ -1687,11 +1855,13 @@ public class Position implements Parcelable {
 
         public Builder toMarksCheckingInfo(
                 @NonNull String checkId,
-                @NonNull Long timestamp
+                @NonNull Long timestamp,
+                LocalModuleInfo localModuleInfo
         ) {
             position.marksCheckingInfo = new MarksCheckingInfo(
                     checkId,
-                    timestamp
+                    timestamp,
+                    localModuleInfo
             );
             return this;
         }
@@ -1798,13 +1968,31 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        public void setCaviarParams(Mark mark) { position.mark = mark; }
+        public void setCaviarParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setVeterinaryParams(Mark mark) { position.mark = mark; }
+        public void setPetFoodParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        public void setVegetableOilParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        public void setAutoFluidsParams(Mark mark) { position.mark = mark; }
+
+        public void setChemicalsParams(Mark mark) { position.mark = mark; }
+
+        public void setVeterinaryParams(Mark mark) {
+            position.mark = mark;
+        }
 
         private void setBeerParams(Mark mark) {
             position.mark = mark;
         }
+
+        private void setFursLpParams(Mark mark) {position.mark = mark; }
 
         public Builder setUuid(String uuid) {
             position.uuid = uuid;
@@ -1837,8 +2025,25 @@ public class Position implements Parcelable {
         }
 
         public Builder setMark(Mark mark) {
-            position.mark = mark;
+            if (isMarkValid(mark)) {
+                position.mark = mark;
+            } else {
+                position.mark = null;
+            }
+
             return this;
+        }
+
+        private boolean isMarkValid(Mark mark) {
+            if (mark instanceof Mark.RawMark) {
+                String value = ((Mark.RawMark) mark).getValue();
+                return value != null && !value.isEmpty();
+            } else if (mark instanceof Mark.MarkByFiscalTags) {
+                String fiscalTag = ((Mark.MarkByFiscalTags) mark).getProductCode();
+                return fiscalTag != null && !fiscalTag.isEmpty();
+            }
+
+            return true;
         }
 
         public Builder setExtraKeys(Set<ExtraKey> extraKeys) {
@@ -1891,6 +2096,11 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder setVeterinaryAttribute(@Nullable VeterinaryAttribute veterinaryAttribute) {
+            position.veterinaryAttribute = veterinaryAttribute;
+            return this;
+        }
+
         public Builder setProductCode(@Nullable String productCode) {
             position.productCode = productCode;
             return this;
@@ -1907,6 +2117,7 @@ public class Position implements Parcelable {
          * лекарства {@link ProductType#MEDICINE_MARKED}
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
+         * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
          *
          * @param partialRealization частичная реализация
          */
@@ -1932,6 +2143,32 @@ public class Position implements Parcelable {
 
         public Builder setSaleBanTime(@Nullable TimeRange saleBanTime) {
             position.saleBanTime = saleBanTime;
+            return this;
+        }
+
+        public Builder setForceTaxNumber(@Nullable Boolean forceTaxNumber) {
+            position.forceTaxNumber = forceTaxNumber;
+            return this;
+        }
+
+        /**
+         * Реализация по ОСУ для позиции доступна только если тип товара является одним из:
+         * <p>
+         * вода {@link ProductType#WATER_MARKED}
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * маркированное безалкогольное пиво {@link ProductType#NOT_ALCOHOL_BEER_MARKED}
+         * маркированное пиво в бутылках {@link ProductType#BEER_MARKED}
+         * маркированное пиво (Кеги) {@link ProductType#BEER_MARKED_KEG}
+         * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
+         * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
+         * не может использоваться совместно с setPartialRealization
+         * @param volumeSortAccounting реализация по ОСУ
+         */
+        @RequiresPermission(VolumeSortAccounting.VOLUME_SORT_PERMISSION)
+        public Builder setVolumeSortAccounting(
+                @Nullable VolumeSortAccounting volumeSortAccounting
+        ) {
+            position.volumeSortAccounting = volumeSortAccounting;
             return this;
         }
 

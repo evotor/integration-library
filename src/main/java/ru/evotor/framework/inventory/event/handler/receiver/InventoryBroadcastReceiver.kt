@@ -11,7 +11,6 @@ import ru.evotor.framework.inventory.event.ProductCardOpenedEvent
  * @see <a href="https://developer.evotor.ru/docs/beta/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class InventoryBroadcastReceiver : BroadcastEventReceiver() {
-
     /**
      * Обработчик событий открытия карточки товара.
      */
@@ -20,13 +19,15 @@ open class InventoryBroadcastReceiver : BroadcastEventReceiver() {
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
-            ACTION_PRODUCT_CARD_OPENED -> handleProductCardOpenedEvent(context, ProductCardOpenedEvent.from(bundle)
-                    ?: return)
+            ACTION_PRODUCT_CARD_OPENED -> handleProductCardOpenedEvent(
+                context,
+                ProductCardOpenedEvent.from(bundle)
+                    ?: return
+            )
         }
     }
 
     companion object {
         const val ACTION_PRODUCT_CARD_OPENED = "evotor.intent.action.inventory.CARD_OPEN"
     }
-
 }

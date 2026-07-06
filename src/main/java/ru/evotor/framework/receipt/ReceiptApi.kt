@@ -12,6 +12,7 @@ import ru.evotor.framework.getMoney
 import ru.evotor.framework.getQuantity
 import ru.evotor.framework.inventory.AttributeValue
 import ru.evotor.framework.inventory.ProductType
+import ru.evotor.framework.optBoolean
 import ru.evotor.framework.optInt
 import ru.evotor.framework.optLong
 import ru.evotor.framework.optString
@@ -26,18 +27,19 @@ import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
+import ru.evotor.framework.receipt.position.VolumeSortAccounting
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 import ru.evotor.framework.receipt.position.mapper.MarksCheckingInfoMapper
 import ru.evotor.framework.receipt.position.mapper.PositionPartialRealizationMapper
 import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
+import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
 import java.math.BigDecimal
 import java.util.Date
 
 @WorkerThread
 object ReceiptApi {
-
     @Deprecated(message = "Используйте методы API")
     const val AUTHORITY = "ru.evotor.evotorpos.receipt"
 
@@ -70,19 +72,26 @@ object ReceiptApi {
     private val CURRENT_CORRECTION_RETURN_INCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_CORRECTION_RETURN_INCOME_PATH)
     private val CURRENT_CORRECTION_RETURN_OUTCOME_RECEIPT_URI = Uri.withAppendedPath(BASE_URI_V2, CURRENT_CORRECTION_RETURN_OUTCOME_PATH)
 
-
     @JvmStatic
+    @Deprecated(
+        message = "Use getProductsByBarcode from InventoryApi",
+        replaceWith = ReplaceWith(expression = "InventoryApi.getProductsByBarcode(context, barcode)", imports = ["ru.evotor.framework.inventory.InventoryApi"])
+    )
     fun getPositionsByBarcode(context: Context, barcode: String): List<Position> {
         val positionsList = ArrayList<Position>()
 
         context.contentResolver.query(
-                Uri.withAppendedPath(PositionTable.URI, barcode),
-                null, null, null, null)
-                ?.use { cursor ->
-                    while (cursor.moveToNext()) {
-                        createPosition(cursor)?.let { positionsList.add(it) }
-                    }
+            Uri.withAppendedPath(PositionTable.URI, barcode),
+            null,
+            null,
+            null,
+            null
+        )
+            ?.use { cursor ->
+                while (cursor.moveToNext()) {
+                    createPosition(cursor)?.let { positionsList.add(it) }
                 }
+            }
 
         return positionsList
     }
@@ -123,14 +132,14 @@ object ReceiptApi {
         }
 
         val header = context.contentResolver.query(
-                baseUri,
-                null,
-                null,
-                null,
-                null
-        )?.use {
-            if (it.moveToNext()) {
-                return@use createReceiptHeader(it)
+            baseUri,
+            null,
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToNext()) {
+                return@use createReceiptHeader(cursor)
             } else {
                 return null
             }
@@ -140,11 +149,11 @@ object ReceiptApi {
         val getPositionResults = ArrayList<GetPositionResult>()
         val getSubpositionResults = ArrayList<GetSubpositionResult>()
         context.contentResolver.query(
-                Uri.withAppendedPath(baseUri, POSITIONS_PATH),
-                null,
-                null,
-                null,
-                null
+            Uri.withAppendedPath(baseUri, POSITIONS_PATH),
+            null,
+            null,
+            null,
+            null
         )?.use { cursor ->
             while (cursor.moveToNext()) {
                 createGetPositionResult(cursor)?.let {
@@ -158,21 +167,21 @@ object ReceiptApi {
 
         for (getPositionResult in getPositionResults) {
             val subpositions = getSubpositionResults
-                    .filter { it.parentUuid == getPositionResult.position.uuid }
-                    .map { it.position }
+                .filter { it.parentUuid == getPositionResult.position.uuid }
+                .map { it.position }
             getPositionResult.position = Position.Builder
-                    .copyFrom(getPositionResult.position)
-                    .setSubPositions(subpositions)
-                    .build()
+                .copyFrom(getPositionResult.position)
+                .setSubPositions(subpositions)
+                .build()
         }
 
         val getPaymentsResults = ArrayList<GetPaymentsResult>()
         context.contentResolver.query(
-                Uri.withAppendedPath(baseUri, PAYMENTS_PATH),
-                null,
-                null,
-                null,
-                null
+            Uri.withAppendedPath(baseUri, PAYMENTS_PATH),
+            null,
+            null,
+            null,
+            null
         )?.use { cursor ->
             while (cursor.moveToNext()) {
                 createGetPaymentResult(cursor)?.let {
@@ -186,11 +195,11 @@ object ReceiptApi {
             val discountMap = HashMap<String, BigDecimal>()
 
             context.contentResolver.query(
-                    Uri.withAppendedPath(baseUri, DISCOUNTS_PATH),
-                    null,
-                    null,
-                    null,
-                    null
+                Uri.withAppendedPath(baseUri, DISCOUNTS_PATH),
+                null,
+                null,
+                null,
+                null
             )?.use { cursor ->
                 while (cursor.moveToNext()) {
                     val posDiscountUuid = cursor.getString(cursor.getColumnIndex(POSITION_DISCOUNT_UUID_COLUMN_NAME))
@@ -202,34 +211,35 @@ object ReceiptApi {
 
             discountMap
         } catch (error: IllegalArgumentException) {
-            //old version of evopos, does not support discounts
+            // old version of evopos, does not support discounts
             error.printStackTrace()
             null
         }
 
         val printDocuments = ArrayList<Receipt.PrintReceipt>()
         val groupByPrintGroupPaymentResults = getPaymentsResults
-                .groupBy { it.printGroup }
+            .groupBy { it.printGroup }
         for (printGroup in printGroups) {
             val payments = groupByPrintGroupPaymentResults[printGroup]?.associateBy { it.payment }
-                    ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
-            printDocuments.add(Receipt.PrintReceipt(
-                    printGroup,
-                    getPositionResults
-                            .filter { it.printGroup == printGroup }
-                            .map { it.position },
-                    payments.mapValues { it.value.value },
-                    payments.mapValues { it.value.change },
-                    receiptDiscount
-            ))
+                ?: HashMap<Payment, ReceiptApi.GetPaymentsResult>()
+            printDocuments.add(
+                Receipt.PrintReceipt(
+                    printGroup = printGroup,
+                    positions = getPositionResults
+                        .filter { it.printGroup == printGroup }
+                        .map { it.position },
+                    payments = payments.mapValues { it.value.value },
+                    changes = payments.mapValues { it.value.change },
+                    discounts = receiptDiscount
+                )
+            )
         }
 
         return Receipt(
-                header,
-                printDocuments
+            header,
+            printDocuments
         )
     }
-
 
     /**
      * Получить заголовок текущего открытого чека.
@@ -251,11 +261,11 @@ object ReceiptApi {
         }
 
         return context.contentResolver.query(
-                baseUri,
-                null,
-                null,
-                null,
-                null
+            baseUri,
+            null,
+            null,
+            null,
+            null
         )?.use {
             if (it.moveToNext()) {
                 createReceiptHeader(it)
@@ -274,11 +284,11 @@ object ReceiptApi {
     @JvmStatic
     fun getReceiptHeaders(context: Context, type: Receipt.Type? = null): ru.evotor.query.Cursor<Receipt.Header?>? {
         return context.contentResolver.query(
-                RECEIPTS_URI,
-                null,
-                type?.let { "${ReceiptHeaderTable.COLUMN_TYPE} = ?" },
-                type?.let { arrayOf(it.name) },
-                null
+            RECEIPTS_URI,
+            null,
+            type?.let { "${ReceiptHeaderTable.COLUMN_TYPE} = ?" },
+            type?.let { arrayOf(it.name) },
+            null
         )?.let {
             object : ru.evotor.query.Cursor<Receipt.Header?>(it) {
                 override fun getValue(): Receipt.Header? = createReceiptHeader(this)
@@ -293,33 +303,34 @@ object ReceiptApi {
      */
     @JvmStatic
     fun getFiscalReceipts(context: Context, receiptUuid: String): ru.evotor.query.Cursor<FiscalReceipt>? =
-            context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
-                    ?.let {
-                        object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
-                            override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
-                        }
-                    }
-
+        context.contentResolver.query(FiscalReceiptContract.URI, null, null, arrayOf(receiptUuid), null)
+            ?.let {
+                object : ru.evotor.query.Cursor<FiscalReceipt>(it) {
+                    override fun getValue(): FiscalReceipt = FiscalReceiptMapper.read(this)
+                }
+            }
 
     private fun createGetPositionResult(cursor: Cursor): GetPositionResult? {
-        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null)
+        return if (cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID)) == null) {
             GetPositionResult(
-                    createPosition(cursor) ?: return null,
-                    createPrintGroup(cursor)
+                createPosition(cursor) ?: return null,
+                createPrintGroup(cursor)
             )
-        else
+        } else {
             null
+        }
     }
 
     private fun createGetSubpositionResult(cursor: Cursor): GetSubpositionResult? {
         val parentUuid = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PARENT_POSITION_UUID))
-        return if (parentUuid != null)
+        return if (parentUuid != null) {
             GetSubpositionResult(
-                    createPosition(cursor) ?: return null,
-                    parentUuid
+                createPosition(cursor) ?: return null,
+                parentUuid
             )
-        else
+        } else {
             null
+        }
     }
 
     private fun createGetPaymentResult(cursor: Cursor): GetPaymentsResult? {
@@ -344,7 +355,8 @@ object ReceiptApi {
             Utils.safeValueOf(TaxationSystem::class.java, cursor.getString(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_TAXATION_SYSTEM)), null),
             cursor.getInt(cursor.getColumnIndex(PrintGroupSubTable.COLUMN_SHOULD_PRINT_RECEIPT)) == 1,
             purchaser,
-            medicineAttribute
+            medicineAttribute,
+            cursor.optInt(PrintGroupSubTable.COLUMN_RECEIPT_FROM_INTERNET) == 1
         )
     }
 
@@ -362,7 +374,9 @@ object ReceiptApi {
                 cursor.optInt(PrintGroupSubTable.COLUMN_PURCHASER_DOCUMENT_TYPE_CODE)
             val purchaserDocumentType = if (purchaserDocumentTypeCode != null) {
                 DocumentType.values().first { it.documentCode == purchaserDocumentTypeCode }
-            } else null
+            } else {
+                null
+            }
             Purchaser(
                 name = purchaserName,
                 innNumber = purchaserInnNumber,
@@ -381,23 +395,25 @@ object ReceiptApi {
             ?: return null
 
         val preferentialMedicineType: PreferentialMedicine.PreferentialMedicineType? =
-                cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
-                    PreferentialMedicine.PreferentialMedicineType.valueOf(it)
-                }
+            cursor.optString(MedicineAttributeSubTable.COLUMN_PREFERENTIAL_MEDICINE_TYPE)?.let {
+                PreferentialMedicine.PreferentialMedicineType.valueOf(it)
+            }
 
         val documentNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_NUMBER)
         val documentDate: Date? = cursor.optLong(MedicineAttributeSubTable.COLUMN_MEDICINE_DOCUMENT_DATE)?.let { Date(it) }
         val serialNumber: String? = cursor.optString(MedicineAttributeSubTable.COLUMN_MEDICINE_SERIAL_NUMBER)
 
         val medicineAdditionalDetails: MedicineAdditionalDetails? =
-                if (documentDate != null && documentNumber != null && serialNumber != null)
-                    MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
-                else null
+            if (documentDate != null && documentNumber != null && serialNumber != null) {
+                MedicineAdditionalDetails(documentNumber, documentDate, serialNumber)
+            } else {
+                null
+            }
 
         return MedicineAttribute(
-                subjectId = subjectId,
-                preferentialMedicineType = preferentialMedicineType,
-                medicineAdditionalDetails = medicineAdditionalDetails
+            subjectId = subjectId,
+            preferentialMedicineType = preferentialMedicineType,
+            medicineAdditionalDetails = medicineAdditionalDetails
         )
     }
 
@@ -421,37 +437,40 @@ object ReceiptApi {
         }
 
         val importationData = createImportationData(
-                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
-                cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
+            cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_COUNTRY_ORIGIN_CODE),
+            cursor.optString(PositionTable.COLUMN_IMPORTATION_DATA_CUSTOMS_DECLARATION_NUMBER)
         )
 
         val isExcisable = cursor.optString(PositionTable.COLUMN_IS_EXCISABLE)?.toBooleanStrictOrNull()
         val isMarkSkipped = cursor.optString(PositionTable.COLUMN_IS_MARK_SKIPPED)?.toBooleanStrictOrNull()
         val isAgeLimited = cursor.optString(PositionTable.COLUMN_IS_AGE_LIMITED)?.toBooleanStrictOrNull()
+        val veterinaryAttribute = VeterinaryAttributeMapper.readFromCursor(cursor)
 
         val builder = Position.Builder
-            .copyFrom(Position(
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
-                Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
-                cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
-                readFromPositionCursor(cursor),
-                cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(it) },
-                price,
-                priceWithDiscountPosition,
-                cursor.getQuantity(PositionTable.COLUMN_QUANTITY),
-                cursor.optString(PositionTable.COLUMN_BARCODE),
-                cursor.optString(PositionTable.COLUMN_MARK)?.let {
-                    val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
-                    Mark.RawMark(rawMark)
-                },
-                cursor.optVolume(PositionTable.COLUMN_ALCOHOL_BY_VOLUME),
-                cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
-                cursor.optVolume(PositionTable.COLUMN_TARE_VOLUME),
-                extraKeys,
-                emptyList()
-            ))
+            .copyFrom(
+                Position(
+                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_POSITION_UUID)),
+                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_UUID)),
+                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_CODE)),
+                    Utils.safeValueOf(ProductType::class.java, cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_PRODUCT_TYPE)), ProductType.NORMAL),
+                    cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_NAME)),
+                    readFromPositionCursor(cursor),
+                    cursor.optString(PositionTable.COLUMN_TAX_NUMBER)?.let { TaxNumber.valueOf(it) },
+                    price,
+                    priceWithDiscountPosition,
+                    cursor.getQuantity(PositionTable.COLUMN_QUANTITY),
+                    cursor.optString(PositionTable.COLUMN_BARCODE),
+                    cursor.optString(PositionTable.COLUMN_MARK)?.let {
+                        val rawMark = cursor.getString(cursor.getColumnIndex(PositionTable.COLUMN_MARK))
+                        Mark.RawMark(rawMark)
+                    },
+                    cursor.optVolume(PositionTable.COLUMN_ALCOHOL_BY_VOLUME),
+                    cursor.getLong(cursor.getColumnIndex(PositionTable.COLUMN_ALCOHOL_PRODUCT_KIND_CODE)),
+                    cursor.optVolume(PositionTable.COLUMN_TARE_VOLUME),
+                    extraKeys,
+                    emptyList()
+                )
+            )
             .setAttributes(attributes)
             .setAgentRequisites(AgentRequisitesMapper.read(cursor))
             .setSettlementMethod(SettlementMethodMapper.fromCursor(cursor))
@@ -464,6 +483,8 @@ object ReceiptApi {
             .setMarksCheckingInfo(MarksCheckingInfoMapper.fromCursor(cursor))
             .setIsMarkSkipped(isMarkSkipped)
             .setIsAgeLimited(isAgeLimited)
+            .setVeterinaryAttribute(veterinaryAttribute)
+            .setVolumeSortAccounting(VolumeSortAccounting.from(cursor))
         return builder.build()
     }
 
@@ -478,28 +499,27 @@ object ReceiptApi {
     private fun readFromPositionCursor(cursor: Cursor): Measure {
         return cursor.let {
             Measure(
-                    it.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
-                    it.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
-                    it.optInt(PositionTable.COLUMN_MEASURE_CODE) ?: Measure.UNKNOWN_MEASURE_CODE
+                it.getString(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_NAME)),
+                it.getInt(cursor.getColumnIndex(PositionTable.COLUMN_MEASURE_PRECISION)),
+                it.optInt(PositionTable.COLUMN_MEASURE_CODE) ?: Measure.UNKNOWN_MEASURE_CODE
             )
         }
     }
-
 
     private fun createAttributesFromDBFormat(value: String?): Map<String, AttributeValue> {
         if (value == null) return emptyMap()
         val array = JSONArray(value)
         return (0 until array.length()).toList()
-                .map { array.getJSONObject(it) }
-                .map {
-                    val attributeUuid = it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_UUID)
-                    attributeUuid to AttributeValue(
-                            attributeUuid,
-                            it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_NAME),
-                            it.optString(PositionTable.AttributeJSONKeys.UUID),
-                            it.optString(PositionTable.AttributeJSONKeys.NAME)
-                    )
-                }.toMap()
+            .map { array.getJSONObject(it) }
+            .map {
+                val attributeUuid = it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_UUID)
+                attributeUuid to AttributeValue(
+                    attributeUuid,
+                    it.optString(PositionTable.AttributeJSONKeys.DICTIONARY_NAME),
+                    it.optString(PositionTable.AttributeJSONKeys.UUID),
+                    it.optString(PositionTable.AttributeJSONKeys.NAME)
+                )
+            }.toMap()
     }
 
     private fun createPayment(cursor: Cursor): Payment? {
@@ -568,11 +588,13 @@ object ReceiptApi {
         val jsonExtraKeys = JSONArray(value)
         for (i in 0 until jsonExtraKeys.length()) {
             jsonExtraKeys.getJSONObject(i).let {
-                result.add(ExtraKey(
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
-                        it.optString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
-                ))
+                result.add(
+                    ExtraKey(
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_IDENTITY),
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_APP_ID),
+                        if (it.isNull(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)) null else it.getString(PositionTable.ExtraKeyJSONKeys.KEY_DESCRIPTION)
+                    )
+                )
             }
         }
 
@@ -593,17 +615,22 @@ object ReceiptApi {
             clientEmail = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_EMAIL),
             clientPhone = cursor.optString(ReceiptHeaderTable.COLUMN_CLIENT_PHONE),
             extra = extra,
-            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER)
+            sessionNumber = cursor.optLong(ReceiptHeaderTable.COLUMN_SESSION_NUMBER),
+            receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false,
+            paymentAddress = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_ADDRESS),
+            paymentPlace = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_PLACE),
+            isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false
         )
     }
 
     private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
+
     private data class GetSubpositionResult(val position: Position, val parentUuid: String?)
+
     private data class GetPaymentsResult(val payment: Payment, val printGroup: PrintGroup?, val value: BigDecimal, val change: BigDecimal)
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Description {
-
         const val PATH_RECEIPT_DESCRIPTION = "information"
 
         @JvmField
@@ -612,12 +639,10 @@ object ReceiptApi {
         const val ROW_ID = "_id"
         const val ROW_UUID = "uuid"
         const val ROW_DISCOUNT = "discount"
-
     }
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Positions {
-
         const val PATH_RECEIPT_POSITIONS = "positions"
 
         @JvmField
@@ -637,7 +662,6 @@ object ReceiptApi {
 
     @Deprecated(message = "Используйте метод getSellReceipt")
     object Payments {
-
         const val PATH_RECEIPT_PAYMENTS = "payments"
 
         @JvmField
@@ -654,6 +678,5 @@ object ReceiptApi {
             const val TYPE_CASH = 0
             const val TYPE_CARD = 1
         }
-
     }
 }

@@ -4,5 +4,6 @@ import java.util.*
 
 interface DocumentRegistrationCallback {
     fun onSuccess(documentUuid: UUID?)
+
     fun onError(error: DocumentRegistrationException)
 }

@@ -11,7 +11,6 @@ import java.math.BigDecimal
  */
 @Suppress("UNUSED_VARIABLE")
 sealed class SettlementMethod : Parcelable {
-
     protected abstract fun writeFieldsToParcel(dest: Parcel, flags: Int)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -19,7 +18,7 @@ sealed class SettlementMethod : Parcelable {
         val dataSizePosition = parcel.dataPosition()
         // Use integer placeholder for data size
         parcel.writeInt(0)
-        //Determine position of data start
+        // Determine position of data start
         val startDataPosition = parcel.dataPosition()
 
         writeFieldsToParcel(parcel, flags)
@@ -28,7 +27,7 @@ sealed class SettlementMethod : Parcelable {
         val dataSize = parcel.dataPosition() - startDataPosition
         // Save position at the end of data
         val endOfDataPosition = parcel.dataPosition()
-        //Set position to start to write additional data size
+        // Set position to start to write additional data size
         parcel.setDataPosition(dataSizePosition)
         parcel.writeInt(dataSize)
         // Go back to the end of parcel
@@ -39,7 +38,6 @@ sealed class SettlementMethod : Parcelable {
      * Предоплата 100% – полная предварительная оплата до момента передачи предмета расчёта.
      */
     class FullPrepayment : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
             // nothing to do
         }
@@ -87,9 +85,7 @@ sealed class SettlementMethod : Parcelable {
      * Предоплата – частичная предварительная оплата до момента передачи предмета расчёта.
      */
     class PartialPrepayment : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -135,9 +131,7 @@ sealed class SettlementMethod : Parcelable {
      * Аванс.
      */
     class AdvancePayment : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -183,9 +177,7 @@ sealed class SettlementMethod : Parcelable {
      * Полный расчёт – полная оплата, в том числе с учётом аванса (предварительной оплаты) в момент передачи предмета расчёта.
      */
     class FullSettlement : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -233,7 +225,6 @@ sealed class SettlementMethod : Parcelable {
      * @property amount Сумма первичного взноса.
      */
     class PartialSettlement(val amount: BigDecimal) : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
             dest.writeString(amount.toPlainString())
         }
@@ -285,9 +276,7 @@ sealed class SettlementMethod : Parcelable {
      * Передача в кредит – передача предмета расчёта без его оплаты в момент его передачи с последующей оплатой в кредит.
      */
     class Lend : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -333,9 +322,7 @@ sealed class SettlementMethod : Parcelable {
      * Оплата кредита – оплата предмета расчёта после его передачи с оплатой в кредит.
      */
     class LoanPayment : SettlementMethod() {
-
         override fun writeFieldsToParcel(dest: Parcel, flags: Int) {
-
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -376,5 +363,4 @@ sealed class SettlementMethod : Parcelable {
             }
         }
     }
-
 }

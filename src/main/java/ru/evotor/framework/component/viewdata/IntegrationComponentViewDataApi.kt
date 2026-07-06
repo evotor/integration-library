@@ -14,7 +14,6 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.integrations.R
 
 object IntegrationComponentViewDataApi {
-
     private const val METADATA_NAME_APP_UUID = "app_uuid"
     private const val BACKGROUND_COLOR_KEY = "ru.evotor.sales_screen.BACKGROUND_COLOR"
 
@@ -56,26 +55,27 @@ object IntegrationComponentViewDataApi {
             return null
         }
         val paymentSystem = PaymentSystem(
-                paymentType,
-                resolveInfo.loadLabel(packageManager).toString(),
-                paymentSystemId
+            paymentType,
+            resolveInfo.loadLabel(packageManager).toString(),
+            paymentSystemId
         )
         val paymentPerformer = PaymentPerformer(
-                paymentSystem,
-                resolveInfo.serviceInfo.packageName,
-                resolveInfo.serviceInfo.name,
-                appUuid,
-                resolveInfo.loadLabel(packageManager).toString()
+            paymentSystem,
+            resolveInfo.serviceInfo.packageName,
+            resolveInfo.serviceInfo.name,
+            appUuid,
+            resolveInfo.loadLabel(packageManager).toString()
         )
-        val backgroundColor =  if (metaData.containsKey(BACKGROUND_COLOR_KEY))
+        val backgroundColor = if (metaData.containsKey(BACKGROUND_COLOR_KEY)) {
             metaData.getInt(BACKGROUND_COLOR_KEY)
-        else
+        } else {
             context.getColor(R.color.white)
+        }
         return PaymentPerformerViewData(
-                paymentPerformer,
-                resolveInfo.loadIcon(packageManager),
-                backgroundColor,
-                ColorUtils.getContrastColor(backgroundColor)
+            paymentPerformer,
+            resolveInfo.loadIcon(packageManager),
+            backgroundColor,
+            ColorUtils.getContrastColor(backgroundColor)
         )
     }
 

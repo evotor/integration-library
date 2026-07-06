@@ -14,52 +14,45 @@ import ru.evotor.query.FilterBuilder
 import java.util.*
 
 data class FiscalReceipt internal constructor(
-        /**
-         * Номер фискального документа
-         */
-        @FiscalRequisite(tag = FiscalTags.DOCUMENT_NUMBER)
-        override val documentNumber: Long,
-
-        /**
-         * Дата и время создания фискального документа
-         */
-        @FiscalRequisite(tag = FiscalTags.CREATION_DATE)
-        override val creationDate: Date,
-
-        /**
-         * Признак (тип) расчёта
-         */
-        @FiscalRequisite(tag = FiscalTags.SETTLEMENT_TYPE)
-        val settlementType: SettlementType,
-
-        /**
-         * Регистрационный номер ККТ
-         */
-        @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
-        override val kktRegistrationNumber: Long,
-
-        /**
-         * Номер аппаратной смены
-         */
-        @FiscalRequisite(tag = FiscalTags.SESSION_NUMBER)
-        override val sessionNumber: Long,
-
-        /**
-         * Номер фискального накопителя
-         */
-        @FiscalRequisite(tag = FiscalTags.FISCAL_STORAGE_NUMBER)
-        override val fiscalStorageNumber: Long,
-
-        /**
-         * Фискальный признак (фискальный идентификатор) документа
-         */
-        @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
-        override val fiscalIdentifier: Long,
-
-        /**
-         * Был ли напечатан фискальный чек
-         */
-        val wasPrinted: Boolean
+    /**
+     * Номер фискального документа
+     */
+    @FiscalRequisite(tag = FiscalTags.DOCUMENT_NUMBER)
+    override val documentNumber: Long,
+    /**
+     * Дата и время создания фискального документа
+     */
+    @FiscalRequisite(tag = FiscalTags.CREATION_DATE)
+    override val creationDate: Date,
+    /**
+     * Признак (тип) расчёта
+     */
+    @FiscalRequisite(tag = FiscalTags.SETTLEMENT_TYPE)
+    val settlementType: SettlementType,
+    /**
+     * Регистрационный номер ККТ
+     */
+    @FiscalRequisite(tag = FiscalTags.KKT_REGISTRATION_NUMBER)
+    override val kktRegistrationNumber: String,
+    /**
+     * Номер аппаратной смены
+     */
+    @FiscalRequisite(tag = FiscalTags.SESSION_NUMBER)
+    override val sessionNumber: Long,
+    /**
+     * Номер фискального накопителя
+     */
+    @FiscalRequisite(tag = FiscalTags.FISCAL_STORAGE_NUMBER)
+    override val fiscalStorageNumber: String,
+    /**
+     * Фискальный признак (фискальный идентификатор) документа
+     */
+    @FiscalRequisite(tag = FiscalTags.FISCAL_IDENTIFIER)
+    override val fiscalIdentifier: String,
+    /**
+     * Был ли напечатан фискальный чек
+     */
+    val wasPrinted: Boolean
 ) : FiscalDocument(), IBundlable {
     companion object {
         fun from(bundle: Bundle?): FiscalReceipt? = FiscalReceiptMapper.read(bundle)
@@ -85,13 +78,7 @@ data class FiscalReceipt internal constructor(
             val sessionNumber = addFieldSorter(FiscalDocumentContract.COLUMN_SESSION_NUMBER)
             val fiscalStorageNumber = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_STORAGE_NUMBER)
             val fiscalIdentifier = addFieldSorter(FiscalDocumentContract.COLUMN_FISCAL_IDENTIFIER)
-
-            override val currentSortOrder: SortOrder
-                get() = this
         }
-
-        override val currentQuery: Query
-            get() = this
 
         override fun getValue(cursor: Cursor<FiscalReceipt>): FiscalReceipt = FiscalReceiptMapper.read(cursor)
     }

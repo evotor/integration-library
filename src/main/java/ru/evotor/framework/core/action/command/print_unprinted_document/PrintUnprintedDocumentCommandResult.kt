@@ -3,14 +3,12 @@ package ru.evotor.framework.core.action.command.print_unprinted_document
 import android.os.Bundle
 import ru.evotor.IBundlable
 
-class PrintUnprintedDocumentCommandResult: IBundlable {
-
+class PrintUnprintedDocumentCommandResult : IBundlable {
     override fun toBundle(): Bundle {
         return Bundle()
     }
 
     companion object {
-
         /**
          * ККМ в данный момент выполняет другую операцию
          */

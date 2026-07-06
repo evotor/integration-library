@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
+import ru.evotor.framework.core.action.command.payment.ProcessPaymentIntentCommand
+import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentIntentRequestedEvent
 import ru.evotor.framework.core.action.event.receipt.payment.system.event.PaymentSystemEvent
 import ru.evotor.framework.payment.PaymentSystem
 import ru.evotor.framework.payment.PaymentType
@@ -13,7 +15,6 @@ import ru.evotor.framework.payment.PaymentType
  * Класс для получения исполнителей платежей, установленных на смарт-терминале.
  */
 object PaymentPerformerApi {
-
     private const val METADATA_NAME_APP_UUID = "app_uuid"
 
     private const val CASH_PAYMENT_SYSTEM_ID = "ru.evotor.paymentSystem.cash.base"
@@ -28,7 +29,20 @@ object PaymentPerformerApi {
      * @see PaymentPerformer
      */
     fun getAllPaymentPerformers(packageManager: PackageManager): List<PaymentPerformer> {
-        val eventName = PaymentSystemEvent.NAME_ACTION
+        return getPaymentPerformersByEventName(packageManager, PaymentSystemEvent.NAME_ACTION)
+    }
+
+    /**
+     * Возвращает список всех установленных на смарт-терминале приложений, способных выполнить оплату после печати чека.
+     * @param packageManager экземпляр класса PackageManager, необходимого, для получения информации об установленных приложениях.
+     * @return applicationsList список приложений, способных выполнить оплату.
+     * @see PaymentPerformer
+     */
+    fun getAllPaymentPerformersWithPaymentIntentMode(packageManager: PackageManager): List<PaymentPerformer> {
+        return getPaymentPerformersByEventName(packageManager, PaymentIntentRequestedEvent.NAME_ACTION)
+    }
+
+    private fun getPaymentPerformersByEventName(packageManager: PackageManager, eventName: String): List<PaymentPerformer> {
         val applicationsList = ArrayList<PaymentPerformer>()
         applicationsList.add(getDefaultCashPaymentPerformer())
         applicationsList.add(getDefaultCardPaymentPerformer())
@@ -59,24 +73,26 @@ object PaymentPerformerApi {
         appUuid ?: return null
 
         return PaymentPerformer(
-                PaymentSystem(
-                        paymentType,
-                        resolveInfo.loadLabel(packageManager).toString(),
-                        paymentSystemId
-                ),
-                resolveInfo.serviceInfo.packageName,
-                resolveInfo.serviceInfo.name,
-                appUuid,
-                resolveInfo.loadLabel(packageManager).toString()
+            PaymentSystem(
+                paymentType,
+                resolveInfo.loadLabel(packageManager).toString(),
+                paymentSystemId
+            ),
+            resolveInfo.serviceInfo.packageName,
+            resolveInfo.serviceInfo.name,
+            appUuid,
+            resolveInfo.loadLabel(packageManager).toString()
         )
     }
 
     private fun hasPermission(packageInfo: PackageInfo) = packageInfo.requestedPermissions.contains(PaymentSystemEvent.NAME_PERMISSION)
 
     private fun getAppUuid(packageInfo: PackageInfo) =
-            if (packageInfo.applicationInfo.metaData != null)
-                packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
-            else null
+        if (packageInfo.applicationInfo.metaData != null) {
+            packageInfo.applicationInfo.metaData.getString(METADATA_NAME_APP_UUID, null)
+        } else {
+            null
+        }
 
     private fun getPaymentSystemId(metaData: Bundle) = metaData.getString(PaymentSystemEvent.META_NAME_PAYMENT_SYSTEM_ID, null)
 
@@ -87,26 +103,26 @@ object PaymentPerformerApi {
     }
 
     private fun getDefaultCashPaymentPerformer() = PaymentPerformer(
-            PaymentSystem(
-                    PaymentType.CASH,
-                    CASH_PAYMENT_DESCRIPTION,
-                    CASH_PAYMENT_SYSTEM_ID
-            ),
-            null,
-            null,
-            null,
-            CASH_PAYMENT_DESCRIPTION
+        PaymentSystem(
+            PaymentType.CASH,
+            CASH_PAYMENT_DESCRIPTION,
+            CASH_PAYMENT_SYSTEM_ID
+        ),
+        null,
+        null,
+        null,
+        CASH_PAYMENT_DESCRIPTION
     )
 
     private fun getDefaultCardPaymentPerformer() = PaymentPerformer(
-            PaymentSystem(
-                    PaymentType.ELECTRON,
-                    CARD_PAYMENT_DESCRIPTION,
-                    CARD_PAYMENT_SYSTEM_ID
-            ),
-            null,
-            null,
-            null,
-            CARD_PAYMENT_DESCRIPTION
+        PaymentSystem(
+            PaymentType.ELECTRON,
+            CARD_PAYMENT_DESCRIPTION,
+            CARD_PAYMENT_SYSTEM_ID
+        ),
+        null,
+        null,
+        null,
+        CARD_PAYMENT_DESCRIPTION
     )
 }

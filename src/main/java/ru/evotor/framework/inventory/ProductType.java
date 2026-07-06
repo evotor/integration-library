@@ -150,4 +150,29 @@ public enum ProductType {
      * Маркированное безалкогольное пиво
      */
     NOT_ALCOHOL_BEER_MARKED,
+
+    /**
+     * Корма для животных
+     */
+    PET_FOOD_MARKED,
+
+    /**
+     * Растительные масла
+     */
+    VEGETABLE_OIL_MARKED,
+
+    /**
+     * Автомобильные жидкости
+     */
+    AUTO_FLUIDS_MARKED,
+
+    /**
+     * Бытовая химия и косметика
+     */
+    CHEMICALS_MARKED,
+
+    /**
+     * Меховые изделия (КМ)
+     */
+    FURSLP_MARKED
 }

@@ -197,4 +197,14 @@ object FiscalTags {
      */
     const val ADDITIONAL_REQUISITE_1192 = 1192
 
+    /**
+     * Продажа ветеринарной продукции
+     * Структурный тег 1260, который содержит информацию о рецепте
+     */
+    const val VETERINARY_ATTRIBUTE = 1260
+
+    /**
+     * дополнительный реквизит предмета расчета
+     */
+    const val ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION = 1191
 }

@@ -3,9 +3,12 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
+import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -15,15 +18,17 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
  * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
-        ACTION_RECEIPT_CREATED,
-        ACTION_POSITION_ADDED,
-        ACTION_POSITION_UPDATED,
-        ACTION_POSITION_REMOVED,
-        ACTION_APPLY_DISCOUNT_TO_RECEIPT,
-        ACTION_RECEIPT_DELETED,
-        ACTION_RECEIPT_COMPLETED
+    ACTION_RECEIPT_CREATED,
+    ACTION_POSITION_ADDED,
+    ACTION_POSITION_UPDATED,
+    ACTION_POSITION_REMOVED,
+    ACTION_APPLY_DISCOUNT_TO_RECEIPT,
+    ACTION_RECEIPT_DELETED,
+    ACTION_RECEIPT_COMPLETED,
+    ACTION_RECEIPT_EDIT_SCREEN_OPENED,
+    ACTION_RECEIPT_PAYMENT_SCREEN_OPENED,
+    ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID
 ) {
-
     /**
      * Обработчик событий создания чека.
      */
@@ -66,8 +71,25 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     @RequiresIntentAction(ACTION_RECEIPT_COMPLETED)
     override fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent) = Unit
 
-    companion object {
+    /**
+     * Обработчик событий перехода в список позиций чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_EDIT_SCREEN_OPENED)
+    override fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent) = Unit
 
+    /**
+     * Обработчик событий перехода к оплате чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_SCREEN_OPENED)
+    override fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent) = Unit
+
+    /**
+     * Обработчик событий оплаты чека по намерению.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID)
+    override fun handleReceiptWithPaymentIntentPaid(context: Context, event: ReceiptWithPaymentIntentPaidEvent) = Unit
+
+    companion object {
         const val ACTION_RECEIPT_CREATED = "evotor.intent.action.receipt.sell.OPENED"
 
         const val ACTION_POSITION_ADDED = "evotor.intent.action.receipt.sell.POSITION_ADDED"
@@ -82,6 +104,10 @@ open class SellReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_COMPLETED = "evotor.intent.action.receipt.sell.RECEIPT_CLOSED"
 
-    }
+        const val ACTION_RECEIPT_EDIT_SCREEN_OPENED = "evotor.intent.action.receipt.sell.EDIT_SCREEN_OPENED"
 
+        const val ACTION_RECEIPT_PAYMENT_SCREEN_OPENED = "evotor.intent.action.receipt.sell.PAYMENT_SCREEN_OPENED"
+
+        const val ACTION_RECEIPT_WITH_PAYMENT_INTENT_PAID = "evotor.intent.action.receipt.sell.paymentIntent.PAID"
+    }
 }

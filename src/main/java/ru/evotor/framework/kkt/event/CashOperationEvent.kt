@@ -7,7 +7,6 @@ import ru.evotor.framework.getMoney
 import java.math.BigDecimal
 
 abstract class CashOperationEvent internal constructor(val documentUuid: String, val total: BigDecimal) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putString(KEY_DOCUMENT_UUID, documentUuid)
@@ -16,7 +15,6 @@ abstract class CashOperationEvent internal constructor(val documentUuid: String,
     }
 
     companion object {
-
         private const val KEY_DOCUMENT_UUID = "documentUuid"
 
         private const val KEY_TOTAL = "total"

@@ -3,9 +3,8 @@ package ru.evotor.framework.core.action.event.receipt.payment.system.result
 import android.os.Bundle
 
 class PaymentSystemPaymentErrorResult(
-        val errorDescription: String?
+    val errorDescription: String?
 ) : PaymentSystemPaymentResult(ResultType.ERROR) {
-
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_ERROR_DESCRIPTION, errorDescription)

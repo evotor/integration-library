@@ -8,23 +8,24 @@ import ru.evotor.framework.core.action.datamapper.ChangesMapper
 import ru.evotor.framework.core.action.event.receipt.changes.receipt.print_extra.SetPrintExtra
 
 class PrintExtraRequiredEventResult(
-        val printExtras: List<SetPrintExtra>?
+    val printExtras: List<SetPrintExtra>?
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         val bundle = Bundle()
-        bundle.putParcelableArray(KEY_PRINT_EXTRA,
-                if (printExtras != null) {
-                    val setPrintGroupsParcelableArray = mutableListOf<Parcelable>()
-                    printExtras.map {
-                        ChangesMapper.toBundle(it)
-                    }.forEach {
-                        setPrintGroupsParcelableArray.add(it)
-                    }
-                    setPrintGroupsParcelableArray.toTypedArray()
-                } else {
-                    null
-                })
+        bundle.putParcelableArray(
+            KEY_PRINT_EXTRA,
+            if (printExtras != null) {
+                val setPrintGroupsParcelableArray = mutableListOf<Parcelable>()
+                printExtras.map {
+                    ChangesMapper.toBundle(it)
+                }.forEach {
+                    setPrintGroupsParcelableArray.add(it)
+                }
+                setPrintGroupsParcelableArray.toTypedArray()
+            } else {
+                null
+            }
+        )
         return bundle
     }
 
@@ -36,10 +37,10 @@ class PrintExtraRequiredEventResult(
                 return null
             }
             return PrintExtraRequiredEventResult(
-                    Utils.filterByClass(
-                            ChangesMapper.create(bundle.getParcelableArray(KEY_PRINT_EXTRA)),
-                            SetPrintExtra::class.java
-                    )
+                Utils.filterByClass(
+                    ChangesMapper.create(bundle.getParcelableArray(KEY_PRINT_EXTRA)),
+                    SetPrintExtra::class.java
+                )
             )
         }
     }

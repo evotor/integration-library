@@ -7,7 +7,6 @@ import ru.evotor.IBundlable
 class PrintZReportCommandResult(
     val notPrinted: Boolean = false
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         return Bundle().also {
             it.putBoolean(KEY_NOT_PRINTED, notPrinted)
@@ -15,7 +14,6 @@ class PrintZReportCommandResult(
     }
 
     companion object {
-
         private const val KEY_NOT_PRINTED = "notPrinted"
 
         /**
@@ -52,7 +50,6 @@ class PrintZReportCommandResult(
          * Предыдущий фискальный документ не был допечатан
          */
         const val ERROR_CODE_PREVIOUS_DOCUMENT_NOT_PRINTED = -7
-
 
         @JvmStatic
         fun create(bundle: Bundle?): PrintZReportCommandResult? {

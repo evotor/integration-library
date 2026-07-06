@@ -12,7 +12,6 @@ import ru.evotor.IBundlable
  */
 
 class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<PositionsMerge>) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putString(KEY_RECEIPT_UUID, receiptUuid)
@@ -77,7 +76,6 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
          */
         const val NAME_CORRECTION_RETURN_OUTCOME_RECEIPT = "evo.v2.receipt.correction.return.outcome.mergingPositions"
 
-
         private val KEY_RECEIPT_UUID = "receiptUuid"
         private val KEY_MERGES = "merges"
 
@@ -85,7 +83,7 @@ class PositionsMergeEvent(val receiptUuid: String, val merges: ArrayList<Positio
             return bundle?.let {
                 val receiptUuid = bundle.getString("receiptUuid", "")
                 val merges = bundle.getParcelableArrayList<PositionsMerge>(KEY_MERGES)
-                        ?: ArrayList<PositionsMerge>()
+                    ?: ArrayList<PositionsMerge>()
                 PositionsMergeEvent(receiptUuid, merges)
             }
         }

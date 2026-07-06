@@ -11,7 +11,6 @@ import ru.evotor.framework.core.action.datamapper.PrintablesMapper
 class SendJewelryEventResult(
     val printableReport: Array<IPrintable>?
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         val bundle = Bundle()
         printableReport?.let {

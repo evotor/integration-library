@@ -2,18 +2,19 @@ package ru.evotor.framework.core.action.event.receipt.payment.system.result
 
 import android.os.Bundle
 import ru.evotor.framework.Utils
+import ru.evotor.framework.payment.AdditionalTransactionData
 import ru.evotor.framework.payment.CashlessInfo
 import ru.evotor.framework.payment.PaymentType
 
 class PaymentSystemPaymentOkResult(
-        val rrn: String,
-        val slip: List<String>,
-        val paymentInfo: String?,
-        val paymentType: PaymentType = PaymentType.ELECTRON,
-        val cashlessInfo: CashlessInfo? = null,
-        val extendedSLip: String? = null
+    val rrn: String,
+    val slip: List<String>,
+    val paymentInfo: String?,
+    val paymentType: PaymentType = PaymentType.ELECTRON,
+    val cashlessInfo: CashlessInfo? = null,
+    val additionalTransactionData: AdditionalTransactionData? = null,
+    val extendedSLip: String? = null
 ) : PaymentSystemPaymentResult(ResultType.OK) {
-
     override fun toBundle(): Bundle {
         val result = super.toBundle()
         result.putString(KEY_RRN, rrn)
@@ -21,6 +22,7 @@ class PaymentSystemPaymentOkResult(
         result.putString(KEY_PAYMENT_INFO, paymentInfo)
         result.putString(KEY_PAYMENT_TYPE, paymentType.name)
         result.putBundle(KEY_CASHLESS_INFO, cashlessInfo?.toBundle())
+        result.putBundle(KEY_ADDITIONAL_TRANSACTION_DATA, additionalTransactionData?.toBundle())
         result.putString(KEY_EXTENDED_SLIP, extendedSLip)
         return result
     }
@@ -31,6 +33,7 @@ class PaymentSystemPaymentOkResult(
         private val KEY_PAYMENT_INFO = "paymentInfo"
         private val KEY_PAYMENT_TYPE = "paymentType"
         private val KEY_CASHLESS_INFO = "cashlessInfo"
+        private val KEY_ADDITIONAL_TRANSACTION_DATA = "additionalTransactionData"
         private val KEY_EXTENDED_SLIP = "extendedSlip"
 
         fun create(bundle: Bundle?): PaymentSystemPaymentOkResult? {
@@ -40,10 +43,21 @@ class PaymentSystemPaymentOkResult(
             val rrn = bundle.getString(KEY_RRN, null)
             val slip = bundle.getStringArrayList(KEY_SLIP) ?: emptyList<String>()
             val paymentInfo = bundle.getString(KEY_PAYMENT_INFO, null)
-            val paymentType = Utils.safeValueOf(PaymentType::class.java, bundle.getString(KEY_PAYMENT_TYPE), PaymentType.UNKNOWN)
+            val paymentType = Utils.safeValueOf(
+                PaymentType::class.java,
+                bundle.getString(
+                    KEY_PAYMENT_TYPE
+                ),
+                PaymentType.UNKNOWN
+            )
             val cashlessInfo = CashlessInfo.fromBundle(bundle.getBundle(KEY_CASHLESS_INFO))
+            val additionalTransactionData = AdditionalTransactionData.fromBundle(
+                bundle.getBundle(
+                    KEY_ADDITIONAL_TRANSACTION_DATA
+                )
+            )
             val extendedSLip = bundle.getString(KEY_EXTENDED_SLIP, null)
-            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, extendedSLip)
+            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, additionalTransactionData, extendedSLip)
         }
     }
 }

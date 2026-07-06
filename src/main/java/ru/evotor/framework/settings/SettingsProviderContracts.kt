@@ -9,7 +9,6 @@ enum class SettingsProviderContracts(
     val path: String,
     val columnName: String
 ) {
-
     /**
      * Количество печати слип-чеков.
      */
@@ -24,6 +23,14 @@ enum class SettingsProviderContracts(
     NEGATIVE_BALANCE_PROVIDER(
         "NEGATIVE_BALANCE_PATH",
         "NEGATIVE_BALANCE_COLUMN"
+    ),
+
+    /**
+     * Опция "Разрешить НДС 20% в 2026 году".
+     */
+    VAT_20_PROVIDER(
+        "VAT_20_PATH",
+        "VAT_20_COLUMN"
     );
 
     @Suppress("MemberVisibilityCanBePrivate")
