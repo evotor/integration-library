@@ -83,6 +83,16 @@ abstract class ReceiptBroadcastReceiver(
                 ReceiptCompletedEvent.from(bundle)
                     ?: return
             )
+            actionReceiptEditScreenOpened -> handleReceiptEditScreenOpenedEvent(
+                context,
+                ReceiptEditScreenOpenedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptPaymentScreenOpened -> handleReceiptPaymentScreenOpenedEvent(
+                context,
+                ReceiptPaymentScreenOpenedEvent.from(bundle)
+                    ?: return
+            )
             actionReceiptWithPaymentIntentPaid -> handleReceiptWithPaymentIntentPaid(
                 context,
                 ReceiptWithPaymentIntentPaidEvent.from(bundle)
