@@ -22,7 +22,7 @@ import android.os.Bundle
 class ApplyDiscountToReceiptEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
     companion object {
         fun from(bundle: Bundle?): ApplyDiscountToReceiptEvent? = bundle?.let {
-            ApplyDiscountToReceiptEvent(ReceiptEvent.getReceiptUuid(it) ?: return null)
+            ApplyDiscountToReceiptEvent(getReceiptUuid(it) ?: return null)
         }
     }
 }

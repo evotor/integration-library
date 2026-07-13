@@ -5,9 +5,8 @@ import ru.evotor.IBundlable
 import ru.evotor.framework.Utils
 
 abstract class PaymentIntentRequestedResult(
-        val resultType: ResultType
+    val resultType: ResultType
 ) : IBundlable {
-
     override fun toBundle(): Bundle {
         val result = Bundle()
         result.putString(KEY_RESULT_TYPE, resultType.name)
@@ -15,7 +14,9 @@ abstract class PaymentIntentRequestedResult(
     }
 
     enum class ResultType {
-        UNKNOWN, OK, ERROR
+        UNKNOWN,
+        OK,
+        ERROR
     }
 
     companion object {

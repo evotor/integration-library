@@ -3,10 +3,10 @@ package ru.evotor.framework.receipt.event.handler.receiver
 import android.content.Context
 import ru.evotor.framework.core.RequiresIntentAction
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
-import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent

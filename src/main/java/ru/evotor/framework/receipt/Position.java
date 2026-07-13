@@ -1792,20 +1792,6 @@ public class Position implements Parcelable {
             return this;
         }
 
-        public Builder toFursLpMarked(
-                @NonNull Mark mark
-        ) {
-            position.productType = ProductType.FURSLP_MARKED;
-            setAlcoParams(
-                    null,
-                    null,
-                    null,
-                    null
-            );
-            setFursLpParams(mark);
-            return this;
-        }
-
         public Builder toAutoFluidsMarked(
                 @NonNull Mark mark
         ) {
@@ -1831,6 +1817,20 @@ public class Position implements Parcelable {
                     null
             );
             setChemicalsParams(mark);
+            return this;
+        }
+
+        public Builder toFursLpMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.FURSLP_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setFursLpParams(mark);
             return this;
         }
 
@@ -1980,9 +1980,13 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        public void setAutoFluidsParams(Mark mark) { position.mark = mark; }
+        public void setAutoFluidsParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        public void setChemicalsParams(Mark mark) { position.mark = mark; }
+        public void setChemicalsParams(Mark mark) {
+            position.mark = mark;
+        }
 
         public void setVeterinaryParams(Mark mark) {
             position.mark = mark;
@@ -1992,7 +1996,9 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setFursLpParams(Mark mark) {position.mark = mark; }
+        private void setFursLpParams(Mark mark) {
+            position.mark = mark;
+        }
 
         public Builder setUuid(String uuid) {
             position.uuid = uuid;

@@ -619,7 +619,17 @@ object ReceiptApi {
             receiptFromInternet = cursor.optInt(ReceiptHeaderTable.COLUMN_RECEIPT_FROM_INTERNET)?.let { it == 1 } ?: false,
             paymentAddress = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_ADDRESS),
             paymentPlace = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_PLACE),
-            isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false
+            isPaymentIntentMode = cursor.optBoolean(ReceiptHeaderTable.COLUMN_IS_PAYMENT_INTENT_MODE) ?: false,
+            paymentSessionId = cursor.optString(ReceiptHeaderTable.COLUMN_PAYMENT_SESSION_ID),
+            loyaltyAppData = createAppliedLoyaltyData(cursor)
+        )
+    }
+
+    private fun createAppliedLoyaltyData(cursor: Cursor): AppliedLoyaltyData? {
+        return AppliedLoyaltyData(
+            loyaltyCardId = cursor.optString(ReceiptHeaderTable.COLUMN_LOYALTY_CARD_ID),
+            externalLoyaltyCardId = cursor.optString(ReceiptHeaderTable.COLUMN_EXTERNAL_LOYALTY_CARD_ID),
+            additionalData = cursor.optString(ReceiptHeaderTable.COLUMN_ADDITIONAL_DATA)
         )
     }
 

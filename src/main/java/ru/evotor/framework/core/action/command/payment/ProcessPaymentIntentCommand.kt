@@ -10,23 +10,22 @@ import ru.evotor.framework.core.IntegrationManagerCallback
 import ru.evotor.framework.core.IntegrationManagerImpl
 
 class ProcessPaymentIntentCommand(
-        val receiptUuid: String
+    val receiptUuid: String
 ) : IBundlable {
-
     fun process(context: Context, callback: IntegrationManagerCallback) {
         val componentNameList = IntegrationManagerImpl.convertImplicitIntentToExplicitIntent(NAME, context.applicationContext)
         if (componentNameList == null || componentNameList.isEmpty()) {
             return
         }
         IntegrationManagerImpl(context.applicationContext)
-                .call(
-                        NAME,
-                        componentNameList[0],
-                        this,
-                        ActivityStarter(context),
-                        callback,
-                        Handler(Looper.getMainLooper())
-                )
+            .call(
+                NAME,
+                componentNameList[0],
+                this,
+                ActivityStarter(context),
+                callback,
+                Handler(Looper.getMainLooper())
+            )
     }
 
     override fun toBundle(): Bundle = Bundle().apply {
@@ -46,5 +45,3 @@ class ProcessPaymentIntentCommand(
         }
     }
 }
-
-

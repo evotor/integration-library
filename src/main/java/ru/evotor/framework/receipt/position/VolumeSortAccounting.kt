@@ -10,7 +10,6 @@ import ru.evotor.framework.optString
 import ru.evotor.framework.receipt.PositionTable
 import java.math.BigDecimal
 
-
 data class VolumeSortAccounting(
     /**
      * Идентификатор продукта GTIN
@@ -25,7 +24,6 @@ data class VolumeSortAccounting(
      */
     val type: RealizationType = RealizationType.HORECA
 ) : IBundlable {
-
     enum class RealizationType {
         /**
          * Общепит
@@ -45,13 +43,12 @@ data class VolumeSortAccounting(
     }
 
     companion object {
-
         /**
          * Разрешение для редактирования ОСУ.
          *
          * Указывайте разрешение в манифесте приложения, в элементе `<uses-permission android:name="" />` до элемента `<application>`.
          */
-        const val VOLUME_SORT_PERMISSION = "ru.evotor.permission.receipt.volumeSortAccounting.SET";
+        const val VOLUME_SORT_PERMISSION = "ru.evotor.permission.receipt.volumeSortAccounting.SET"
 
         private const val KEY_VOLUME_SORT_QUANTITY = "VolumeSortQuantity"
         private const val KEY_GTIN = "GTIN"

@@ -8,7 +8,6 @@ class ProcessPaymentIntentCommandResult : IBundlable {
         Bundle()
 
     companion object {
-
         const val ERROR_CODE_SELL_RECEIPT_IS_ALREADY_OPEN = -1
         const val ERROR_CODE_PAYBACK_RECEIPT_IS_ALREADY_OPEN = -2
         const val ERROR_CODE_BUY_RECEIPT_IS_ALREADY_OPEN = -3

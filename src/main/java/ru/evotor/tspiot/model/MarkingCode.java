@@ -3,9 +3,11 @@ package ru.evotor.tspiot.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
-import java.util.Objects;
 import ru.evotor.tspiot.Utils;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class MarkingCode implements Parcelable {
 
@@ -13,7 +15,8 @@ public class MarkingCode implements Parcelable {
     private static final int VERSION = 1;
 
     /** Код маркировки */
-    @NotNull private final String cis;
+    @NotNull
+    private final String cis;
 
     /** Опциональный параметр идентификатора товарной группы */
     @Nullable private final Integer productType;
