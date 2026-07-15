@@ -1841,6 +1841,7 @@ public class Position implements Parcelable {
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
          * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
+         * медицинские изделия {@link ProductType#MEDICAL_DEVICES_MARKED}
          *
          * @param quantityInPackage количество товара в упаковке всего
          */
