@@ -36,6 +36,27 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
         this.isGreyGtin = isGreyGtin;
     }
 
+    private OfflineCodeCheck(Builder builder) {
+        super(
+                builder.cis,
+                builder.found,
+                builder.valid,
+                builder.printView,
+                builder.gtin,
+                null,
+                builder.verified,
+                builder.realizable,
+                builder.utilized,
+                builder.variableExpirations,
+                builder.isBlocked,
+                null,
+                builder.sold,
+                builder.mrp,
+                builder.smp
+        );
+        this.isGreyGtin = builder.isGreyGtin;
+    }
+
     public OfflineCodeCheck(
             String cis,
             @Nullable Boolean found,
@@ -51,58 +72,27 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
             @Nullable Integer mrp,
             @Nullable Integer smp
     ) {
-        this(
-                cis,
-                found,
-                valid,
-                printView,
-                gtin,
-                verified,
-                realizable,
-                utilized,
-                variableExpirations,
-                isBlocked,
-                sold,
-                mrp,
-                smp,
-                null
-        );
+        this(new Builder(cis)
+                .found(found)
+                .valid(valid)
+                .printView(printView)
+                .gtin(gtin)
+                .verified(verified)
+                .realizable(realizable)
+                .utilized(utilized)
+                .variableExpirations(variableExpirations)
+                .isBlocked(isBlocked)
+                .sold(sold)
+                .mrp(mrp)
+                .smp(smp));
     }
 
-    public OfflineCodeCheck(
-            String cis,
-            @Nullable Boolean found,
-            @Nullable Boolean valid,
-            @Nullable String printView,
-            @Nullable String gtin,
-            @Nullable Boolean verified,
-            @Nullable Boolean realizable,
-            @Nullable Boolean utilized,
-            @Nullable VariableExpirations variableExpirations,
-            @Nullable Boolean isBlocked,
-            @Nullable Boolean sold,
-            @Nullable Integer mrp,
-            @Nullable Integer smp,
-            @Nullable Boolean isGreyGtin
-    ) {
-        super(
-                cis,
-                found,
-                valid,
-                printView,
-                gtin,
-                null,
-                verified,
-                realizable,
-                utilized,
-                variableExpirations,
-                isBlocked,
-                null,
-                sold,
-                mrp,
-                smp
-        );
-        this.isGreyGtin = isGreyGtin;
+    public static Builder builder(@NonNull String cis) {
+        return new Builder(cis);
+    }
+
+    public static Builder builder(@NonNull OfflineCodeCheck source) {
+        return new Builder(source);
     }
 
     @Nullable
@@ -111,13 +101,17 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
     }
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         super.write(parcel, flags);
-        parcel.writeInt(VERSION);
-        parcel.writeValue(isGreyGtin);
+        if (isGreyGtin != null) {
+            parcel.writeInt(VERSION);
+            parcel.writeValue(isGreyGtin);
+        }
     }
 
     @NonNull
@@ -137,4 +131,125 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
             return new OfflineCodeCheck[size];
         }
     };
+
+    public static final class Builder {
+
+        private final String cis;
+        @Nullable
+        private Boolean found;
+        @Nullable
+        private Boolean valid;
+        @Nullable
+        private String printView;
+        @Nullable
+        private String gtin;
+        @Nullable
+        private Boolean verified;
+        @Nullable
+        private Boolean realizable;
+        @Nullable
+        private Boolean utilized;
+        @Nullable
+        private VariableExpirations variableExpirations;
+        @Nullable
+        private Boolean isBlocked;
+        @Nullable
+        private Boolean sold;
+        @Nullable
+        private Integer mrp;
+        @Nullable
+        private Integer smp;
+        @Nullable
+        private Boolean isGreyGtin;
+
+        public Builder(@NonNull String cis) {
+            this.cis = cis;
+        }
+
+        private Builder(@NonNull OfflineCodeCheck source) {
+            this.cis = source.getCis();
+            this.found = source.isFound();
+            this.valid = source.isValid();
+            this.printView = source.getPrintView();
+            this.gtin = source.getGtin();
+            this.verified = source.isVerified();
+            this.realizable = source.isRealizable();
+            this.utilized = source.isUtilized();
+            this.variableExpirations = source.getVariableExpirations();
+            this.isBlocked = source.getBlocked();
+            this.sold = source.isSold();
+            this.mrp = source.getMrp();
+            this.smp = source.getSmp();
+            this.isGreyGtin = source.isGreyGtin();
+        }
+
+        public Builder found(@Nullable Boolean found) {
+            this.found = found;
+            return this;
+        }
+
+        public Builder valid(@Nullable Boolean valid) {
+            this.valid = valid;
+            return this;
+        }
+
+        public Builder printView(@Nullable String printView) {
+            this.printView = printView;
+            return this;
+        }
+
+        public Builder gtin(@Nullable String gtin) {
+            this.gtin = gtin;
+            return this;
+        }
+
+        public Builder verified(@Nullable Boolean verified) {
+            this.verified = verified;
+            return this;
+        }
+
+        public Builder realizable(@Nullable Boolean realizable) {
+            this.realizable = realizable;
+            return this;
+        }
+
+        public Builder utilized(@Nullable Boolean utilized) {
+            this.utilized = utilized;
+            return this;
+        }
+
+        public Builder variableExpirations(@Nullable VariableExpirations variableExpirations) {
+            this.variableExpirations = variableExpirations;
+            return this;
+        }
+
+        public Builder isBlocked(@Nullable Boolean isBlocked) {
+            this.isBlocked = isBlocked;
+            return this;
+        }
+
+        public Builder sold(@Nullable Boolean sold) {
+            this.sold = sold;
+            return this;
+        }
+
+        public Builder mrp(@Nullable Integer mrp) {
+            this.mrp = mrp;
+            return this;
+        }
+
+        public Builder smp(@Nullable Integer smp) {
+            this.smp = smp;
+            return this;
+        }
+
+        public Builder isGreyGtin(@Nullable Boolean isGreyGtin) {
+            this.isGreyGtin = isGreyGtin;
+            return this;
+        }
+
+        public OfflineCodeCheck build() {
+            return new OfflineCodeCheck(this);
+        }
+    }
 }
