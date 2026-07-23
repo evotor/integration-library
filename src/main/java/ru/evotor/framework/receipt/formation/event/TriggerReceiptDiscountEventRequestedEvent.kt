@@ -7,12 +7,14 @@ import ru.evotor.framework.receipt.Receipt
 
 class TriggerReceiptDiscountEventRequestedEvent(
     val componentName: ComponentName,
-    val receiptType: Receipt.Type
+    val receiptType: Receipt.Type,
+    val loyaltyCardId: String? = null
 ) : IBundlable {
     override fun toBundle(): Bundle {
         return Bundle().also {
             it.putParcelable(KEY_COMPONENT_NAME, componentName)
             it.putString(KEY_RECEIPT_TYPE, receiptType.name)
+            it.putString(KEY_LOYALTY_CARD_ID, loyaltyCardId)
         }
     }
 
@@ -26,6 +28,7 @@ class TriggerReceiptDiscountEventRequestedEvent(
 
         private const val KEY_COMPONENT_NAME = "KEY_COMPONENT_NAME"
         private const val KEY_RECEIPT_TYPE = "KEY_RECEIPT_TYPE"
+        private const val KEY_LOYALTY_CARD_ID = "KEY_LOYALTY_CARD_ID"
 
         fun create(bundle: Bundle?): TriggerReceiptDiscountEventRequestedEvent? {
             bundle ?: return null
@@ -34,8 +37,8 @@ class TriggerReceiptDiscountEventRequestedEvent(
                 ?: throw IllegalStateException("Bundle doesn't contain the necessary data to create TriggerReceiptDiscountEventCommand")
             val receiptType = bundle.getString(KEY_RECEIPT_TYPE)?.let { Receipt.Type.valueOf(it) }
                 ?: throw IllegalStateException("Bundle doesn't contain the necessary data to create TriggerReceiptDiscountEventCommand")
-
-            return TriggerReceiptDiscountEventRequestedEvent(componentName, receiptType)
+            val loyaltyCardId = bundle.getString(KEY_LOYALTY_CARD_ID)
+            return TriggerReceiptDiscountEventRequestedEvent(componentName, receiptType, loyaltyCardId)
         }
     }
 }

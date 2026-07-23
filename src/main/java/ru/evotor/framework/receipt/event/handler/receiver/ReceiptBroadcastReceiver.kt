@@ -4,11 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import ru.evotor.framework.core.BroadcastEventReceiver
 import ru.evotor.framework.receipt.event.ApplyDiscountToReceiptEvent
-import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
+import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -22,7 +23,8 @@ abstract class ReceiptBroadcastReceiver(
     private val actionReceiptDeleted: String,
     private val actionReceiptCompleted: String,
     private val actionReceiptEditScreenOpened: String,
-    private val actionReceiptPaymentScreenOpened: String
+    private val actionReceiptPaymentScreenOpened: String,
+    private val actionReceiptWithPaymentIntentPaid: String? = null
 ) : BroadcastEventReceiver() {
     protected abstract fun handleReceiptCreatedEvent(context: Context, event: ReceiptCreatedEvent)
 
@@ -38,9 +40,11 @@ abstract class ReceiptBroadcastReceiver(
 
     protected abstract fun handleReceiptCompletedEvent(context: Context, event: ReceiptCompletedEvent)
 
+    protected abstract fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent)
+
     protected abstract fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent)
 
-    protected abstract fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent)
+    protected open fun handleReceiptWithPaymentIntentPaid(context: Context, event: ReceiptWithPaymentIntentPaidEvent) = Unit
 
     final override fun onEvent(context: Context, action: String, bundle: Bundle) {
         when (action) {
@@ -87,6 +91,11 @@ abstract class ReceiptBroadcastReceiver(
             actionReceiptPaymentScreenOpened -> handleReceiptPaymentScreenOpenedEvent(
                 context,
                 ReceiptPaymentScreenOpenedEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptWithPaymentIntentPaid -> handleReceiptWithPaymentIntentPaid(
+                context,
+                ReceiptWithPaymentIntentPaidEvent.from(bundle)
                     ?: return
             )
         }

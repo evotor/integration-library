@@ -12,7 +12,8 @@ class PaymentSystemPaymentOkResult(
     val paymentInfo: String?,
     val paymentType: PaymentType = PaymentType.ELECTRON,
     val cashlessInfo: CashlessInfo? = null,
-    val additionalTransactionData: AdditionalTransactionData? = null
+    val additionalTransactionData: AdditionalTransactionData? = null,
+    val extendedSLip: String? = null
 ) : PaymentSystemPaymentResult(ResultType.OK) {
     override fun toBundle(): Bundle {
         val result = super.toBundle()
@@ -22,6 +23,7 @@ class PaymentSystemPaymentOkResult(
         result.putString(KEY_PAYMENT_TYPE, paymentType.name)
         result.putBundle(KEY_CASHLESS_INFO, cashlessInfo?.toBundle())
         result.putBundle(KEY_ADDITIONAL_TRANSACTION_DATA, additionalTransactionData?.toBundle())
+        result.putString(KEY_EXTENDED_SLIP, extendedSLip)
         return result
     }
 
@@ -32,6 +34,7 @@ class PaymentSystemPaymentOkResult(
         private val KEY_PAYMENT_TYPE = "paymentType"
         private val KEY_CASHLESS_INFO = "cashlessInfo"
         private val KEY_ADDITIONAL_TRANSACTION_DATA = "additionalTransactionData"
+        private val KEY_EXTENDED_SLIP = "extendedSlip"
 
         fun create(bundle: Bundle?): PaymentSystemPaymentOkResult? {
             if (bundle == null) {
@@ -53,7 +56,8 @@ class PaymentSystemPaymentOkResult(
                     KEY_ADDITIONAL_TRANSACTION_DATA
                 )
             )
-            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, additionalTransactionData)
+            val extendedSLip = bundle.getString(KEY_EXTENDED_SLIP, null)
+            return PaymentSystemPaymentOkResult(rrn, slip, paymentInfo, paymentType, cashlessInfo, additionalTransactionData, extendedSLip)
         }
     }
 }

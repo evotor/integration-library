@@ -323,6 +323,13 @@ object FeaturesApi {
     fun isVegetableOilMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VEGETABLE_OIL_MARK)
 
     /**
+     * Проверяет, активна ли функция "НДС 22%" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
+
+    /**
      * Проверяет, активна ли функция "Маркировка автомобильных жидкостей" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
@@ -337,18 +344,18 @@ object FeaturesApi {
     fun isChemicalsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CHEMICALS_MARK)
 
     /**
-     * Проверяет, активна ли функция "НДС 22%" на данном терминале
-     *
-     * @return `true` если функция активна; `false` если функция не активна.
-     */
-    fun isVat22Active(context: Context) = isFeatureActive(context, FeaturesContract.PATH_VAT22)
-
-    /**
      * Проверяет, активна ли функция "Маркировка меховых изделий (КМ)" на данном терминале
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isFursLpMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FURSLP_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Режим намерения оплаты" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isUsePaymentIntentModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_USE_PAYMENT_INTENT_MODE)
 
     /**
      * Проверяет, активна ли функция "Маркировка игр и игрушек для детей" на данном терминале
