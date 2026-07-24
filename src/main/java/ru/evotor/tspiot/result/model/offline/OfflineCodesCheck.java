@@ -2,11 +2,8 @@ package ru.evotor.tspiot.result.model.offline;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import java.util.List;
-
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 
@@ -70,15 +67,12 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        Utils.ListToString<OfflineCodeCheck> callback = code -> "OfflineCodeCheck: " + code + "\n";
 
-        builder.append("Version: ").append(Utils.toString(version)).append("\n");
-        builder.append("Inst: ").append(Utils.toString(inst)).append("\n");
-        codes.forEach(offlineCodeCheck -> {
-            builder.append("OfflineCodeCheck: ").append(offlineCodeCheck).append("\n");
-        });
-
-        return builder.toString();
+        return super.toString() +
+                "Version: " + Utils.toString(version) + "\n" +
+                "Inst: " + Utils.toString(inst) + "\n" +
+                "OfflineCodeChecks: " + Utils.toString(codes, callback) + "\n";
     }
 
     public final static Creator<OfflineCodesCheck> CREATOR = new Creator<>() {

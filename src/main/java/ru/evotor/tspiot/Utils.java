@@ -5,6 +5,9 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
+import java.util.List;
+import java.util.function.Function;
+
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 
 public final class Utils {
@@ -111,5 +114,32 @@ public final class Utils {
 
             return sb.toString();
         }
+    }
+
+    public static <T> String toString(@Nullable List<T> objects, ListToString<T> stringBuilder) {
+        if (objects == null) {
+            return "null";
+        } else if (objects.isEmpty()) {
+            return "[]";
+        } else {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("[");
+            for (int i = 0; i < objects.size(); i++) {
+                sb.append(stringBuilder.toString(objects.get(i)));
+
+                if (i != objects.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append("]");
+
+            return sb.toString();
+        }
+    }
+
+    @FunctionalInterface
+    public interface ListToString <T> {
+        String toString(T object);
     }
 }
