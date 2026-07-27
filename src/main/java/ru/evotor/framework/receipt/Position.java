@@ -2057,13 +2057,21 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
-        private void setToysParams(Mark mark) { position.mark = mark; }
+        private void setToysParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        private void setPreservesParams(Mark mark) { position.mark = mark; }
+        private void setPreservesParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        private void setGroceriesParams(Mark mark) { position.mark = mark; }
+        private void setGroceriesParams(Mark mark) {
+            position.mark = mark;
+        }
 
-        private void setBuildingMaterialsParams(Mark mark) { position.mark = mark; }
+        private void setBuildingMaterialsParams(Mark mark) {
+            position.mark = mark;
+        }
 
         public Builder setUuid(String uuid) {
             position.uuid = uuid;
