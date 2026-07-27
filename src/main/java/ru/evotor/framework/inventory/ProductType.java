@@ -174,5 +174,25 @@ public enum ProductType {
     /**
      * Меховые изделия (КМ)
      */
-    FURSLP_MARKED
+    FURSLP_MARKED,
+
+    /**
+     * Игры и игрушки для детей
+     */
+    TOYS_MARKED,
+
+    /**
+     * Консервированная продукция
+     */
+    PRESERVES_MARKED,
+
+    /**
+     * Бакалейная продукция
+     */
+    GROCERIES_MARKED,
+
+    /**
+     * Строительные материалы
+     */
+    BUILDING_MATERIALS_MARKED
 }
