@@ -14,6 +14,10 @@ public class VariableExpiration implements Parcelable {
 
     private final int degrees;
 
+    /** Информация о сроках годности в зависимости от условий хранения
+     * возвращается из карточки товара в НКМТ в формате: "индекс>": <дата>.
+     * Формат даты: yyyy-MMdd HH:mm:ss.SSSZ.
+     * Параметр возвращается только для товарной группы «Молочная продукция» */
     private final String date;
 
     private VariableExpiration(Parcel parcel) {

@@ -1834,6 +1834,62 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toToysMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.TOYS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setToysParams(mark);
+            return this;
+        }
+
+        public Builder toPreservesMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.PRESERVES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setPreservesParams(mark);
+            return this;
+        }
+
+        public Builder toGroceriesMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.GROCERIES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setGroceriesParams(mark);
+            return this;
+        }
+
+        public Builder toBuildingMaterialsMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.BUILDING_MATERIALS_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setBuildingMaterialsParams(mark);
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -1841,6 +1897,7 @@ public class Position implements Parcelable {
          * духи {@link ProductType#PERFUME_MARKED}
          * альтернативный табак {@link ProductType#TOBACCO_PRODUCTS_MARKED}
          * ветеринарные препараты {@link ProductType#VETERINARY_MARKED}
+         * медицинские изделия {@link ProductType#MEDICAL_DEVICES_MARKED}
          *
          * @param quantityInPackage количество товара в упаковке всего
          */
@@ -1997,6 +2054,22 @@ public class Position implements Parcelable {
         }
 
         private void setFursLpParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setToysParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setPreservesParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setGroceriesParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setBuildingMaterialsParams(Mark mark) {
             position.mark = mark;
         }
 

@@ -357,6 +357,34 @@ object FeaturesApi {
      */
     fun isUsePaymentIntentModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_USE_PAYMENT_INTENT_MODE)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка игр и игрушек для детей" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isToysMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_TOYS_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка консервированной продукции" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isPreservesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PRESERVES_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка бакалейной продукции" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isGroceriesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_GROCERIES_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка cтроительных материалов" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isBuildingMaterialsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BUILDING_MATERIALS_MARK)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(
             Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
