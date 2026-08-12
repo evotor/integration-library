@@ -1,23 +1,23 @@
-package ru.evotor.framework.receipt.position
+package com.careposd.framework.receipt.position
 
 import android.os.Bundle
-import ru.evotor.IBundlable
-import ru.evotor.framework.kkt.FiscalRequisite
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
-import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
-import ru.evotor.framework.kkt.FiscalTags
-import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
+import com.careposd.IBundlable
+import com.careposd.framework.kkt.FiscalRequisite
+import com.careposd.framework.counterparties.collaboration.agent_scheme.Agent
+import com.careposd.framework.counterparties.collaboration.agent_scheme.Subagent
+import com.careposd.framework.counterparties.collaboration.agent_scheme.TransactionOperator
+import com.careposd.framework.counterparties.collaboration.agent_scheme.Principal
+import com.careposd.framework.kkt.FiscalTags
+import com.careposd.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
- * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.evotor.ru/docs/doc_agency_agreement.html).
+ * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.careposd.com/docs/doc_agency_agreement.html).
  *
  * ВАЖНО! При создании реквизитов агента на устройстве агента или субагента,
  * используйте только те типы агента или субагента, которые были указаны при регистрации кассы.
  *
- * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredAgentTypes]
- * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
+ * @see [com.careposd.framework.kkt.api.KktApi.getRegisteredAgentTypes]
+ * @see [com.careposd.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
  */
 data class AgentRequisites(
     /**
@@ -57,20 +57,24 @@ data class AgentRequisites(
             principalPhones: List<String>,
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
-        ) = AgentRequisitesMapper.create(
-            agentType = Agent.Type.AGENT,
-            agentPhones = null,
-            subagentType = null,
-            subagentPhones = null,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = null,
-            transactionOperatorInn = null,
-            transactionOperatorPhones = null,
-            transactionOperatorAddress = null,
-            operationDescription = null
-        )
+        ) = if (principalPhones.isNotEmpty()) {
+            AgentRequisitesMapper.create(
+                agentType = Agent.Type.AGENT,
+                agentPhones = null,
+                subagentType = null,
+                subagentPhones = null,
+                principalInn = principalInn,
+                principalPhones = principalPhones,
+                principalName = principalName,
+                transactionOperatorName = null,
+                transactionOperatorInn = null,
+                transactionOperatorPhones = null,
+                transactionOperatorAddress = null,
+                operationDescription = null
+            )
+        } else {
+            emptyPhonesListError("principalPhones")
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "Комиссионер".
@@ -86,20 +90,24 @@ data class AgentRequisites(
             principalPhones: List<String>,
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
-        ) = AgentRequisitesMapper.create(
-            agentType = Agent.Type.COMMISSIONER,
-            agentPhones = null,
-            subagentType = null,
-            subagentPhones = null,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = null,
-            transactionOperatorInn = null,
-            transactionOperatorPhones = null,
-            transactionOperatorAddress = null,
-            operationDescription = null
-        )
+        ) = if (principalPhones.isNotEmpty()) {
+            AgentRequisitesMapper.create(
+                agentType = Agent.Type.COMMISSIONER,
+                agentPhones = null,
+                subagentType = null,
+                subagentPhones = null,
+                principalInn = principalInn,
+                principalPhones = principalPhones,
+                principalName = principalName,
+                transactionOperatorName = null,
+                transactionOperatorInn = null,
+                transactionOperatorPhones = null,
+                transactionOperatorAddress = null,
+                operationDescription = null
+            )
+        } else {
+            emptyPhonesListError("principalPhones")
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "Поверенный".
@@ -115,20 +123,24 @@ data class AgentRequisites(
             principalPhones: List<String>,
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
-        ) = AgentRequisitesMapper.create(
-            agentType = Agent.Type.ATTORNEY_IN_FACT,
-            agentPhones = null,
-            subagentType = null,
-            subagentPhones = null,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = null,
-            transactionOperatorInn = null,
-            transactionOperatorPhones = null,
-            transactionOperatorAddress = null,
-            operationDescription = null
-        )
+        ) = if (principalPhones.isNotEmpty()) {
+            AgentRequisitesMapper.create(
+                agentType = Agent.Type.ATTORNEY_IN_FACT,
+                agentPhones = null,
+                subagentType = null,
+                subagentPhones = null,
+                principalInn = principalInn,
+                principalPhones = principalPhones,
+                principalName = principalName,
+                transactionOperatorName = null,
+                transactionOperatorInn = null,
+                transactionOperatorPhones = null,
+                transactionOperatorAddress = null,
+                operationDescription = null
+            )
+        } else {
+            emptyPhonesListError("principalPhones")
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "платёжный агент".
@@ -148,20 +160,30 @@ data class AgentRequisites(
             principalPhones: List<String>,
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
-        ) = AgentRequisitesMapper.create(
-            agentType = Agent.Type.PAYMENT_AGENT,
-            agentPhones = agentPhones,
-            subagentType = null,
-            subagentPhones = null,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = null,
-            transactionOperatorInn = null,
-            transactionOperatorPhones = null,
-            transactionOperatorAddress = null,
-            operationDescription = null
-        )
+        ) = when {
+            agentPhones.isEmpty() -> {
+                emptyPhonesListError("agentPhones")
+            }
+            principalPhones.isEmpty() -> {
+                emptyPhonesListError("principalPhones")
+            }
+            else -> {
+                AgentRequisitesMapper.create(
+                    agentType = Agent.Type.PAYMENT_AGENT,
+                    agentPhones = agentPhones,
+                    subagentType = null,
+                    subagentPhones = null,
+                    principalInn = principalInn,
+                    principalPhones = principalPhones,
+                    principalName = principalName,
+                    transactionOperatorName = null,
+                    transactionOperatorInn = null,
+                    transactionOperatorPhones = null,
+                    transactionOperatorAddress = null,
+                    operationDescription = null
+                )
+            }
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "Платёжный субагент".
@@ -184,20 +206,33 @@ data class AgentRequisites(
             principalPhones: List<String>,
             @FiscalRequisite(tag = FiscalTags.PRINCIPAL_NAME)
             principalName: String
-        ) = AgentRequisitesMapper.create(
-            agentType = null,
-            agentPhones = agentPhones,
-            subagentType = Subagent.Type.PAYMENT_SUBAGENT,
-            subagentPhones = subagentPhones,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = null,
-            transactionOperatorInn = null,
-            transactionOperatorPhones = null,
-            transactionOperatorAddress = null,
-            operationDescription = null
-        )
+        ) = when {
+            agentPhones.isEmpty() -> {
+                emptyPhonesListError("agentPhones")
+            }
+            subagentPhones.isEmpty() -> {
+                emptyPhonesListError("subagentPhones")
+            }
+            principalPhones.isEmpty() -> {
+                emptyPhonesListError("principalPhones")
+            }
+            else -> {
+                AgentRequisitesMapper.create(
+                    agentType = null,
+                    agentPhones = agentPhones,
+                    subagentType = Subagent.Type.PAYMENT_SUBAGENT,
+                    subagentPhones = subagentPhones,
+                    principalInn = principalInn,
+                    principalPhones = principalPhones,
+                    principalName = principalName,
+                    transactionOperatorName = null,
+                    transactionOperatorInn = null,
+                    transactionOperatorPhones = null,
+                    transactionOperatorAddress = null,
+                    operationDescription = null
+                )
+            }
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный агент".
@@ -231,20 +266,33 @@ data class AgentRequisites(
             transactionOperatorAddress: String,
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
             operationDescription: String
-        ) = AgentRequisitesMapper.create(
-            agentType = Agent.Type.BANK_PAYMENT_AGENT,
-            agentPhones = agentPhones,
-            subagentType = null,
-            subagentPhones = null,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = transactionOperatorName,
-            transactionOperatorInn = transactionOperatorInn,
-            transactionOperatorPhones = transactionOperatorPhones,
-            transactionOperatorAddress = transactionOperatorAddress,
-            operationDescription = operationDescription
-        )
+        ) = when {
+            agentPhones.isEmpty() -> {
+                emptyPhonesListError("agentPhones")
+            }
+            principalPhones.isEmpty() -> {
+                emptyPhonesListError("principalPhones")
+            }
+            transactionOperatorPhones.isEmpty() -> {
+                emptyPhonesListError("transactionOperatorPhones")
+            }
+            else -> {
+                AgentRequisitesMapper.create(
+                    agentType = Agent.Type.BANK_PAYMENT_AGENT,
+                    agentPhones = agentPhones,
+                    subagentType = null,
+                    subagentPhones = null,
+                    principalInn = principalInn,
+                    principalPhones = principalPhones,
+                    principalName = principalName,
+                    transactionOperatorName = transactionOperatorName,
+                    transactionOperatorInn = transactionOperatorInn,
+                    transactionOperatorPhones = transactionOperatorPhones,
+                    transactionOperatorAddress = transactionOperatorAddress,
+                    operationDescription = operationDescription
+                )
+            }
+        }
 
         /**
          * Создает агентские реквизиты для агента типа "Банковский платёжный субагент".
@@ -279,22 +327,38 @@ data class AgentRequisites(
             transactionOperatorAddress: String,
             @FiscalRequisite(tag = FiscalTags.PAYMENT_AGENT_OPERATION)
             operationDescription: String
-        ) = AgentRequisitesMapper.create(
-            agentType = null,
-            agentPhones = null,
-            subagentType = Subagent.Type.BANK_PAYMENT_SUBAGENT,
-            subagentPhones = subagentPhones,
-            principalInn = principalInn,
-            principalPhones = principalPhones,
-            principalName = principalName,
-            transactionOperatorName = transactionOperatorName,
-            transactionOperatorInn = transactionOperatorInn,
-            transactionOperatorPhones = transactionOperatorPhones,
-            transactionOperatorAddress = transactionOperatorAddress,
-            operationDescription = operationDescription
-        )
+        ) = when {
+            subagentPhones.isEmpty() -> {
+                emptyPhonesListError("subagentPhones")
+            }
+            principalPhones.isEmpty() -> {
+                emptyPhonesListError("principalPhones")
+            }
+            transactionOperatorPhones.isEmpty() -> {
+                emptyPhonesListError("transactionOperatorPhones")
+            }
+            else -> {
+                AgentRequisitesMapper.create(
+                    agentType = null,
+                    agentPhones = null,
+                    subagentType = Subagent.Type.BANK_PAYMENT_SUBAGENT,
+                    subagentPhones = subagentPhones,
+                    principalInn = principalInn,
+                    principalPhones = principalPhones,
+                    principalName = principalName,
+                    transactionOperatorName = transactionOperatorName,
+                    transactionOperatorInn = transactionOperatorInn,
+                    transactionOperatorPhones = transactionOperatorPhones,
+                    transactionOperatorAddress = transactionOperatorAddress,
+                    operationDescription = operationDescription
+                )
+            }
+        }
 
         fun from(bundle: Bundle?): AgentRequisites? = AgentRequisitesMapper.read(bundle)
+
+        private fun emptyPhonesListError(parameterName: String): Nothing =
+            throw IllegalArgumentException("Phones list $parameterName must not be empty")
     }
 
     override fun toBundle(): Bundle = AgentRequisitesMapper.write(this)
