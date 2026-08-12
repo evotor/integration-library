@@ -1,14 +1,14 @@
-package com.careposd.framework.receipt.position
+package ru.evotor.framework.receipt.position
 
 import android.os.Bundle
-import com.careposd.IBundlable
-import com.careposd.framework.kkt.FiscalRequisite
-import com.careposd.framework.counterparties.collaboration.agent_scheme.Agent
-import com.careposd.framework.counterparties.collaboration.agent_scheme.Subagent
-import com.careposd.framework.counterparties.collaboration.agent_scheme.TransactionOperator
-import com.careposd.framework.counterparties.collaboration.agent_scheme.Principal
-import com.careposd.framework.kkt.FiscalTags
-import com.careposd.framework.receipt.position.mapper.AgentRequisitesMapper
+import ru.evotor.IBundlable
+import ru.evotor.framework.kkt.FiscalRequisite
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Agent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Subagent
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.TransactionOperator
+import ru.evotor.framework.counterparties.collaboration.agent_scheme.Principal
+import ru.evotor.framework.kkt.FiscalTags
+import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
  * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.careposd.com/docs/doc_agency_agreement.html).
@@ -16,8 +16,8 @@ import com.careposd.framework.receipt.position.mapper.AgentRequisitesMapper
  * ВАЖНО! При создании реквизитов агента на устройстве агента или субагента,
  * используйте только те типы агента или субагента, которые были указаны при регистрации кассы.
  *
- * @see [com.careposd.framework.kkt.api.KktApi.getRegisteredAgentTypes]
- * @see [com.careposd.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
+ * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredAgentTypes]
+ * @see [ru.evotor.framework.kkt.api.KktApi.getRegisteredSubagentTypes]
  */
 data class AgentRequisites(
     /**
