@@ -123,4 +123,13 @@ public sealed abstract class MessageErrorDescriptionWrapper extends TsPioTErrors
 
         public static final Creator<UnknownError> CREATOR = new BaseCreator<>(UnknownError.class);
     }
+
+    /** Закончился срок действия лицензии */
+    public static final class LicenseExpired extends MessageErrorDescriptionWrapper {
+        private LicenseExpired(Parcel parcel) { super(parcel); }
+
+        public LicenseExpired(MessageErrorDescription errorDescription) { super(errorDescription); }
+
+        public static final Creator<LicenseExpired> CREATOR = new BaseCreator<>(LicenseExpired.class);
+    }
 }
