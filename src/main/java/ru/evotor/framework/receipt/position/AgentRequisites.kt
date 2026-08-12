@@ -11,7 +11,7 @@ import ru.evotor.framework.kkt.FiscalTags
 import ru.evotor.framework.receipt.position.mapper.AgentRequisitesMapper
 
 /**
- * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.careposd.com/docs/doc_agency_agreement.html).
+ * Реквизиты агента, необходимые при работе по [агентскому договору](https://developer.evotor.ru/docs/doc_agency_agreement.html).
  *
  * ВАЖНО! При создании реквизитов агента на устройстве агента или субагента,
  * используйте только те типы агента или субагента, которые были указаны при регистрации кассы.
