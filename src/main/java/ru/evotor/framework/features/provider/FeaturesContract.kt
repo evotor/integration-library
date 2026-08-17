@@ -56,6 +56,10 @@ object FeaturesContract {
     const val PATH_FURSLP_MARK = "furslp_marked"
     const val PATH_VAT22 = "vat22"
     const val PATH_USE_PAYMENT_INTENT_MODE = "payment_intent_mode"
+    const val PATH_TOYS_MARK = "toys_marked"
+    const val PATH_PRESERVES_MARK = "preserves_marked"
+    const val PATH_GROCERIES_MARK = "groceries_marked"
+    const val PATH_BUILDING_MATERIALS_MARK = "building_materials_marked"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }
