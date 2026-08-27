@@ -27,7 +27,7 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
         super(parcel);
 
         Boolean isGreyGtin = null;
-        if (parcel.dataAvail() > 0) {
+        if (baseCodeCheckObjectVersion >= 2) {
             int version = parcel.readInt();
             if (version >= 1) {
                 isGreyGtin = Utils.readBoolean(parcel);
