@@ -1277,6 +1277,7 @@ public class Position implements Parcelable {
                     null,
                     tareVolume
             );
+            setNotAlcoBeerParams(mark);
             return this;
         }
 
@@ -1986,6 +1987,10 @@ public class Position implements Parcelable {
         }
 
         private void setDairyParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setNotAlcoBeerParams(Mark mark) {
             position.mark = mark;
         }
 
