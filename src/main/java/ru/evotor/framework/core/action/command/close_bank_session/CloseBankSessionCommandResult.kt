@@ -2,13 +2,31 @@ package ru.evotor.framework.core.action.command.close_bank_session
 
 import android.os.Bundle
 import ru.evotor.IBundlable
+import java.util.Date
 
+/** Результат операции закрытия банковской смены.
+ * @param slipLines Массив строк чека;
+ * @param resultCode Код результата операции, при "0" операция считается успешной;
+ * @param errorTitle Заголовок ошибки в случае, если она произошла ([resultCode] отличен от "0"). Может быть пустым;
+ * @param errorMessage Описание ошибки в случае, если она произошла ([resultCode] отличен от "0"). Может быть пустым;
+ * @param datetime Дата операции;
+ * @param terminalId ID терминала. Может быть пустым. */
 class CloseBankSessionCommandResult(
-    val slipLines: Array<String>
+    val slipLines: Array<String>,
+    val resultCode: String?,
+    val errorTitle: String?,
+    val errorMessage: String?,
+    val datetime: Date?,
+    val terminalId: String?
 ) : IBundlable {
     override fun toBundle(): Bundle {
         return Bundle().apply {
             putStringArray(KEY_SLIP_LINES, slipLines)
+            putString(KEY_RESULT_CODE, resultCode)
+            putString(KEY_ERROR_TITLE, errorTitle)
+            putString(KEY_ERROR_MESSAGE, errorMessage)
+            putSerializable(KEY_DATETIME, datetime)
+            putString(KEY_TERMINAL_ID, terminalId)
         }
     }
 
@@ -44,12 +62,22 @@ class CloseBankSessionCommandResult(
         const val ERROR_CODE_PINPAD_NOT_FOUND = -6
 
         private const val KEY_SLIP_LINES = "slipLines"
+        private const val KEY_RESULT_CODE = "resultCode"
+        private const val KEY_ERROR_TITLE = "errorTitle"
+        private const val KEY_ERROR_MESSAGE = "errorMessage"
+        private const val KEY_DATETIME = "datetime"
+        private const val KEY_TERMINAL_ID = "terminalId"
 
         @JvmStatic
         fun create(bundle: Bundle?): CloseBankSessionCommandResult? {
             return bundle?.let {
                 CloseBankSessionCommandResult(
-                    it.getStringArray(KEY_SLIP_LINES) ?: emptyArray()
+                    it.getStringArray(KEY_SLIP_LINES) ?: emptyArray(),
+                    it.getString(KEY_RESULT_CODE),
+                    it.getString(KEY_ERROR_TITLE),
+                    it.getString(KEY_ERROR_MESSAGE),
+                    it.getSerializable(KEY_DATETIME) as Date?,
+                    it.getString(KEY_TERMINAL_ID)
                 )
             }
         }
