@@ -27,6 +27,12 @@ class PaymentDelegatorEvent(val receiptUuid: String) : IBundlable {
          */
         const val NAME_PERMISSION = "ru.evotor.permission.COMBINED"
 
+        /**
+         * Разрешение на прием оплат с нулевой суммой
+         */
+        const val NAME_PERMISSION_ACCEPT_ZERO_PAYMENTS =
+            "ru.evotor.permission.receipt.payment.combined.ACCEPT_ZERO_PAYMENTS"
+
         private const val KEY_RECEIPT_UUID = "receiptUuid"
         private const val KEY_AVAILABLE_PAYBACK_SUM = "availablePaybackSum"
 

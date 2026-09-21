@@ -36,6 +36,13 @@ abstract class PaymentSystemEvent(
          */
         const val NAME_ACTION = "evo.v2.receipt.paymentSystem"
         const val NAME_PERMISSION = "ru.evotor.permission.PAYMENT_SYSTEM"
+
+        /**
+         * Разрешение на прием оплат с нулевой суммой
+         */
+        const val NAME_PERMISSION_ACCEPT_ZERO_PAYMENTS =
+            "ru.evotor.permission.receipt.paymentSystem.ACCEPT_ZERO_PAYMENTS"
+
         const val META_NAME_PAYMENT_SYSTEM_ID = "ru.evotor.paymentSystem.PAYMENT_SYSTEM_ID"
 
         const val META_NAME_PAYMENT_TYPE = "ru.evotor.paymentSystem.PAYMENT_TYPE"
