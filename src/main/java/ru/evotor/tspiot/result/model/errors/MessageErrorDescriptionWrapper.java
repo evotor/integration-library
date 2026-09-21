@@ -123,4 +123,15 @@ public sealed abstract class MessageErrorDescriptionWrapper extends TsPioTErrors
 
         public static final Creator<UnknownError> CREATOR = new BaseCreator<>(UnknownError.class);
     }
+
+    /** Ошибка доступа */
+    public static final class UsePrivateApi extends MessageErrorDescriptionWrapper {
+        private UsePrivateApi(Parcel parcel) { super(parcel); }
+
+        public UsePrivateApi(MessageErrorDescription errorDescription) {
+            super(errorDescription);
+        }
+
+        public static final Creator<UsePrivateApi> CREATOR = new BaseCreator<>(UsePrivateApi.class);
+    }
 }
