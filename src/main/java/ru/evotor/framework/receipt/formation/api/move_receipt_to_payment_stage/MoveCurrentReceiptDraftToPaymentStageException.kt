@@ -29,5 +29,15 @@ class MoveCurrentReceiptDraftToPaymentStageException(
          * Для текущего чека невозможно выполнить переход к оплате и печати
          */
         const val CODE_MOVE_TO_PAYMENT_UNAVAILABLE_FOR_RECEIPT = -5
+
+        /**
+         * Нельзя оплатить намерением чек с нулевой суммой
+         */
+        const val CODE_PAYMENT_INTENT_UNAVAILABLE_FOR_ZERO_SUM_CHECK = -6
+
+        /**
+         * Комбинированный платеж не может быть инициирован для чека с нулевой суммой
+         */
+        const val CODE_COMBO_PAYMENT_UNAVAILABLE_FOR_ZERO_SUM_CHECK = -7
     }
 }
