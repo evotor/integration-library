@@ -10,7 +10,7 @@ import ru.evotor.tspiot.Utils;
 public class KktInfo implements Parcelable {
 
     /** Версия KktInfo */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** Идентификатор ТС ПИоТ */
     private final String tspiotId;
@@ -29,13 +29,17 @@ public class KktInfo implements Parcelable {
 
     @Nullable private final LmChzInfo lmChzInfo;
 
+    /** Предельное время обработки запроса проверки GTIN/EAN на стороне ТС ПИоТ */
+    @Nullable private final Integer lmEANCheckTimeout;
+
     public KktInfo(
             String tspiotId,
             String kktSerial,
             String fnSerial,
             String kktInn,
             int codesCheckTimeOut,
-            @Nullable LmChzInfo lmChzInfo
+            @Nullable LmChzInfo lmChzInfo,
+            @Nullable Integer lmEANCheckTimeout
     ) {
         this.tspiotId = tspiotId;
         this.kktSerial = kktSerial;
@@ -43,6 +47,7 @@ public class KktInfo implements Parcelable {
         this.kktInn = kktInn;
         this.codesCheckTimeOut = codesCheckTimeOut;
         this.lmChzInfo = lmChzInfo;
+        this.lmEANCheckTimeout = lmEANCheckTimeout;
     }
 
     private KktInfo(Parcel parcel) {
@@ -53,6 +58,7 @@ public class KktInfo implements Parcelable {
         this.kktInn = parcel.readString();
         this.codesCheckTimeOut = parcel.readInt();
         this.lmChzInfo = parcel.readTypedObject(LmChzInfo.CREATOR);
+        this.lmEANCheckTimeout = version >= 2 ? Utils.readInteger(parcel) : null;
     }
 
     public String getTspiotId() { return tspiotId; }
@@ -68,6 +74,9 @@ public class KktInfo implements Parcelable {
     @Nullable
     public LmChzInfo getLmChzInfo() { return lmChzInfo; }
 
+    @Nullable
+    public Integer getLmEANCheckTimeout() { return lmEANCheckTimeout; }
+
     @Override
     public int describeContents() { return 0; }
 
@@ -80,6 +89,7 @@ public class KktInfo implements Parcelable {
         parcel.writeString(kktInn);
         parcel.writeInt(codesCheckTimeOut);
         parcel.writeTypedObject(lmChzInfo, flags);
+        parcel.writeValue(lmEANCheckTimeout);
     }
 
     public static final Creator<KktInfo> CREATOR = new Creator<>() {
@@ -101,6 +111,7 @@ public class KktInfo implements Parcelable {
                 "FnSerial: " + Utils.toString(fnSerial) + "\n" +
                 "KktInn: " + Utils.toString(kktInn) + "\n" +
                 "CodesCheckTimeout: " + Utils.toString(codesCheckTimeOut) + "\n" +
+                "LmEANCheckTimeout: " + Utils.toString(lmEANCheckTimeout) + "\n" +
                 "LmChzInfo: " + Utils.toString(lmChzInfo);
     }
 }
