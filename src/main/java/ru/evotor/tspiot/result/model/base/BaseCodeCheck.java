@@ -13,7 +13,9 @@ public abstract class BaseCodeCheck {
     /**
      * Версия BaseCodeCheck
      */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
+
+    protected int baseCodeCheckObjectVersion = 0;
 
     /**
      * КИ / КиЗ из запроса
@@ -105,7 +107,7 @@ public abstract class BaseCodeCheck {
     protected final Integer smp;
 
     protected BaseCodeCheck(Parcel parcel) {
-        int version = parcel.readInt();
+        baseCodeCheckObjectVersion = parcel.readInt();
         this.cis = parcel.readString();
         this.found = Utils.readBoolean(parcel);
         this.valid = Utils.readBoolean(parcel);
