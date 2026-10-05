@@ -2,11 +2,9 @@ package ru.evotor.tspiot.result.model.online;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
-
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 
@@ -63,14 +61,11 @@ public class OnlineCodesCheck extends BaseCodesCheck implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        Utils.ListToString<OnlineCodeCheck> callback = code -> "OnlineCodeCheck: " + code + "\n";
 
-        builder.append("Description: ").append(Utils.toString(description)).append("\n");
-        codes.forEach(onlineCodeCheck -> {
-            builder.append("OnlineCodeCheck: ").append(onlineCodeCheck).append("\n");
-        });
-
-        return builder.toString();
+        return super.toString() +
+                "Description: " + Utils.toString(description) + "\n" +
+                "OnlineCodeChecks: " + Utils.toString(codes, callback) + "\n";
     }
 
     public final static Creator<OnlineCodesCheck> CREATOR = new Creator<>() {

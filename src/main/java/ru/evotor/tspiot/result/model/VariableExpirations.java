@@ -13,11 +13,11 @@ public class VariableExpirations implements Parcelable {
     /** Версия VariableExpirations */
     private final static int VERSION = 1;
 
-    private VariableExpiration[] expirations;
+    private final VariableExpiration[] expirations;
 
     private VariableExpirations(Parcel parcel) {
         int version = parcel.readInt();
-        parcel.readTypedArray(expirations, VariableExpiration.CREATOR);
+        this.expirations = parcel.createTypedArray(VariableExpiration.CREATOR);
     }
 
     public VariableExpirations(VariableExpiration[] expirations) {
