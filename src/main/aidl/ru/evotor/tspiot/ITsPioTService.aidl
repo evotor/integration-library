@@ -10,4 +10,6 @@ interface ITsPioTService {
     TsPioTResult getMarkedProductsInfo(in List<MarkingCode> codes, in String userUuid);
 
     TsPioTResult getMarkedProductsInfoInternal(in List<MarkingCode> codes, in ClientInfo clientInfo);
+
+    TsPioTResult checkGtin(in List<String> gtins);
 }
