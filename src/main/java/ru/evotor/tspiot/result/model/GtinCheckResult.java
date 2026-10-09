@@ -24,7 +24,7 @@ public class GtinCheckResult implements Parcelable {
     private GtinCheckResult(Parcel parcel) {
         int version = parcel.readInt();
         this.gtin = Objects.requireNonNull(parcel.readString());
-        this.blocked = parcel.readBoolean();
+        this.blocked = parcel.readInt() == 1;
         this.message = parcel.readString();
     }
 
@@ -49,7 +49,7 @@ public class GtinCheckResult implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(VERSION);
         parcel.writeString(gtin);
-        parcel.writeBoolean(blocked);
+        parcel.writeInt(blocked ? 1 : 0);
         parcel.writeString(message);
     }
 
