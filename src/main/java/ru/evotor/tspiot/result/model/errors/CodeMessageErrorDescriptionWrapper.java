@@ -71,4 +71,17 @@ public sealed abstract class CodeMessageErrorDescriptionWrapper extends TsPioTEr
 
         public static final Creator<EmergencyMode> CREATOR = new BaseCreator<>(EmergencyMode.class);
     }
+
+    /**
+     * Отсутствующий или некорректный по формату gtin
+     */
+    public static final class InvalidGtin extends CodeMessageErrorDescriptionWrapper {
+        private InvalidGtin(Parcel parcel) { super(parcel); }
+
+        public InvalidGtin(CodeMessageErrorDescription errorDescription) {
+            super(errorDescription);
+        }
+
+        public static final Creator<InvalidGtin> CREATOR = new BaseCreator<>(InvalidGtin.class);
+    }
 }
