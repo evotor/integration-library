@@ -7,7 +7,9 @@ import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaidEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentsCanceledEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
 import ru.evotor.framework.receipt.position.event.PositionRemovedEvent
 import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
@@ -17,15 +19,17 @@ import ru.evotor.framework.receipt.position.event.PositionUpdatedEvent
  * @see <a href="https://developer.evotor.ru/docs/doc_java_broadcastreceiver.html">Использование широковещательного приёмника</a>
  */
 open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
-    ACTION_RECEIPT_CREATED,
-    ACTION_POSITION_ADDED,
-    ACTION_POSITION_UPDATED,
-    ACTION_POSITION_REMOVED,
-    ACTION_APPLY_DISCOUNT_TO_RECEIPT,
-    ACTION_RECEIPT_DELETED,
-    ACTION_RECEIPT_COMPLETED,
-    ACTION_RECEIPT_EDIT_SCREEN_OPENED,
-    ACTION_RECEIPT_PAYMENT_SCREEN_OPENED
+    actionReceiptCreated = ACTION_RECEIPT_CREATED,
+    actionPositionAdded = ACTION_POSITION_ADDED,
+    actionPositionUpdated = ACTION_POSITION_UPDATED,
+    actionPositionRemoved = ACTION_POSITION_REMOVED,
+    actionApplyDiscountToReceipt = ACTION_APPLY_DISCOUNT_TO_RECEIPT,
+    actionReceiptDeleted = ACTION_RECEIPT_DELETED,
+    actionReceiptCompleted = ACTION_RECEIPT_COMPLETED,
+    actionReceiptEditScreenOpened = ACTION_RECEIPT_EDIT_SCREEN_OPENED,
+    actionReceiptPaymentScreenOpened = ACTION_RECEIPT_PAYMENT_SCREEN_OPENED,
+    actionReceiptPaymentsCanceled = ACTION_RECEIPT_PAYMENTS_CANCELED,
+    actionReceiptPaid = ACTION_RECEIPT_PAID
 ) {
     /**
      * Обработчик событий создания чека.
@@ -79,6 +83,16 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent) = Unit
 
     /**
+     * Обработчик событий отмены оплат чека.
+     */
+    override fun handleReceiptPaymentsCanceledEvent(context: Context, event: ReceiptPaymentsCanceledEvent) = Unit
+
+    /**
+     * Обработчик событий полностью завершённой оплаты чека.
+     */
+    override fun handleReceiptPaidEvent(context: Context, event: ReceiptPaidEvent) = Unit
+
+    /**
      * Обработчик событий перехода к оплате чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_SCREEN_OPENED)
@@ -103,5 +117,9 @@ open class PaybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
         const val ACTION_RECEIPT_EDIT_SCREEN_OPENED = "evotor.intent.action.receipt.payback.EDIT_SCREEN_OPENED"
 
         const val ACTION_RECEIPT_PAYMENT_SCREEN_OPENED = "evotor.intent.action.receipt.payback.PAYMENT_SCREEN_OPENED"
+
+        const val ACTION_RECEIPT_PAYMENTS_CANCELED = "evotor.intent.action.receipt.payback.PAYMENTS_CANCELED"
+
+        const val ACTION_RECEIPT_PAID = "evotor.intent.action.receipt.payback.PAID"
     }
 }
