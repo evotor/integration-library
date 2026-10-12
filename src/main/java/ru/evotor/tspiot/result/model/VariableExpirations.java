@@ -2,22 +2,24 @@ package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-
 import ru.evotor.tspiot.Utils;
 
 /** Вариативный срок годности */
 public class VariableExpirations implements Parcelable {
 
     /** Версия VariableExpirations */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     private final VariableExpiration[] expirations;
 
     private VariableExpirations(Parcel parcel) {
         int version = parcel.readInt();
-        this.expirations = parcel.createTypedArray(VariableExpiration.CREATOR);
+        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+
+        this.expirations = local.createTypedArray(VariableExpiration.CREATOR);
+
+        if (version >= 2) Utils.endLocalParcelRead(local);
     }
 
     public VariableExpirations(VariableExpiration[] expirations) {
@@ -32,10 +34,10 @@ public class VariableExpirations implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeTypedArray(expirations, flags);
+        Utils.writeToParcel(parcel, local -> local.writeTypedArray(expirations, flags));
     }
 
-    public static Creator<VariableExpirations> CREATOR = new Creator<VariableExpirations>() {
+    public static Parcelable.Creator<VariableExpirations> CREATOR = new Parcelable.Creator<VariableExpirations>() {
         @Override
         public VariableExpirations createFromParcel(Parcel parcel) {
             return new VariableExpirations(parcel);

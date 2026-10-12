@@ -3,7 +3,6 @@ package ru.evotor.tspiot.result.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
-
 import ru.evotor.tspiot.Utils;
 
 public class LmChzInfo implements Parcelable {
@@ -17,7 +16,7 @@ public class LmChzInfo implements Parcelable {
     private final static String PASS_DEFAULT = "";
 
     /** Версия LmChzInfo */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** Версия СПО «Локальный модуль» «Честный ЗНАК» */
     @NonNull private final String version;
@@ -64,15 +63,19 @@ public class LmChzInfo implements Parcelable {
 
     private LmChzInfo(@NonNull Parcel parcel) {
         int classVersion = parcel.readInt();
-        version = readParcelString(parcel, VERSION_DEFAULT);
-        status = readParcelString(parcel, STATUS_DEFAULT);
-        lastSync = parcel.readLong();
-        token = readParcelString(parcel, TOKEN_DEFAULT);
-        expDate = readParcelString(parcel, EXP_DATE_DEFAULT);
-        ip = readParcelString(parcel, IP_DEFAULT);
-        port = parcel.readInt();
-        login = readParcelString(parcel, LOGIN_DEFAULT);
-        pass = readParcelString(parcel, PASS_DEFAULT);
+        Parcel local = classVersion >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+
+        version = readParcelString(local, VERSION_DEFAULT);
+        status = readParcelString(local, STATUS_DEFAULT);
+        lastSync = local.readLong();
+        token = readParcelString(local, TOKEN_DEFAULT);
+        expDate = readParcelString(local, EXP_DATE_DEFAULT);
+        ip = readParcelString(local, IP_DEFAULT);
+        port = local.readInt();
+        login = readParcelString(local, LOGIN_DEFAULT);
+        pass = readParcelString(local, PASS_DEFAULT);
+
+        if (classVersion >= 2) Utils.endLocalParcelRead(local);
     }
 
     private @NonNull String readParcelString(@NonNull Parcel parcel, @NonNull String defaultString) {
@@ -140,15 +143,17 @@ public class LmChzInfo implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        parcel.writeString(version);
-        parcel.writeString(status);
-        parcel.writeLong(lastSync);
-        parcel.writeString(token);
-        parcel.writeString(expDate);
-        parcel.writeString(ip);
-        parcel.writeInt(port);
-        parcel.writeString(login);
-        parcel.writeString(pass);
+        Utils.writeToParcel(parcel, local -> {
+            local.writeString(version);
+            local.writeString(status);
+            local.writeLong(lastSync);
+            local.writeString(token);
+            local.writeString(expDate);
+            local.writeString(ip);
+            local.writeInt(port);
+            local.writeString(login);
+            local.writeString(pass);
+        });
     }
 
     @NonNull
@@ -165,7 +170,7 @@ public class LmChzInfo implements Parcelable {
                 "Pass: " + Utils.toString(pass);
     }
 
-    public final static Creator<LmChzInfo> CREATOR = new Creator<>() {
+    public final static Parcelable.Creator<LmChzInfo> CREATOR = new Parcelable.Creator<>() {
         @Override
         public LmChzInfo createFromParcel(Parcel parcel) {
             return new LmChzInfo(parcel);

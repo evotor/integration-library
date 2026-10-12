@@ -10,7 +10,7 @@ import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
 
     /** Версия OfflineCodesCheck */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** Версия базы "чёрного списка", на которой выполнялась проверка КИ */
     private final String version;
@@ -25,9 +25,13 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
         super(parcel);
 
         int classVersion = parcel.readInt();
-        this.version = parcel.readString();
-        this.inst = parcel.readString();
-        this.codes = parcel.createTypedArrayList(OfflineCodeCheck.CREATOR);
+        Parcel local = classVersion >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+
+        this.version = local.readString();
+        this.inst = local.readString();
+        this.codes = local.createTypedArrayList(OfflineCodeCheck.CREATOR);
+
+        if (classVersion >= 2) Utils.endLocalParcelRead(local);
     }
 
     public OfflineCodesCheck(
@@ -59,20 +63,25 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
         super.write(parcel, flags);
 
         parcel.writeInt(VERSION);
-        parcel.writeString(version);
-        parcel.writeString(inst);
-        parcel.writeTypedList(codes);
+        Utils.writeToParcel(parcel, local -> {
+            local.writeString(version);
+            local.writeString(inst);
+            local.writeTypedList(codes);
+        });
     }
 
     @NonNull
     @Override
     public String toString() {
-        Utils.ListToString<OfflineCodeCheck> callback = code -> "OfflineCodeCheck: " + code + "\n";
+        StringBuilder builder = new StringBuilder(super.toString());
 
-        return super.toString() +
-                "Version: " + Utils.toString(version) + "\n" +
-                "Inst: " + Utils.toString(inst) + "\n" +
-                "OfflineCodeChecks: " + Utils.toString(codes, callback) + "\n";
+        builder.append("Version: ").append(Utils.toString(version)).append("\n");
+        builder.append("Inst: ").append(Utils.toString(inst)).append("\n");
+        for(OfflineCodeCheck offlineCodeCheck : codes) {
+            builder.append("OfflineCodeCheck: ").append(offlineCodeCheck).append("\n");
+        }
+
+        return builder.toString();
     }
 
     public final static Creator<OfflineCodesCheck> CREATOR = new Creator<>() {

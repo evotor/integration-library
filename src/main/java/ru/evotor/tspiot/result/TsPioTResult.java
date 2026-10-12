@@ -4,12 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import ru.evotor.ParcelablesKt;
 import ru.evotor.tspiot.Utils;
 
 public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
     /** Версия TsPioTResult */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     @Nullable
     private final Class<T> classType;
@@ -20,9 +21,13 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
     private TsPioTResult(Parcel parcel) {
         int version = parcel.readInt();
-        this.classType = Utils.readClass(parcel);
-        this.data = Utils.readData(classType, parcel);
-        this.error = parcel.readParcelable(TsPioTError.class.getClassLoader());
+        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+
+        this.classType = Utils.readClass(local);
+        this.data = Utils.readData(classType, local);
+        this.error = ParcelablesKt.readParcelable(local, TsPioTError.class);
+
+        if (version >= 2) Utils.endLocalParcelRead(local);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,12 +55,14 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeSerializable(classType);
-        parcel.writeParcelable(data, flags);
-        parcel.writeParcelable(error, flags);
+        Utils.writeToParcel(parcel, local -> {
+            local.writeSerializable(classType);
+            local.writeParcelable(data, flags);
+            local.writeParcelable(error, flags);
+        });
     }
 
-    public static final Creator<TsPioTResult<? extends Parcelable>> CREATOR = new Creator<>() {
+    public static final Parcelable.Creator<TsPioTResult<? extends Parcelable>> CREATOR = new Parcelable.Creator<>() {
         @Override
         public TsPioTResult<?> createFromParcel(Parcel parcel) {
             return new TsPioTResult<>(parcel);

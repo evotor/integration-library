@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Objects;
 
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 
@@ -67,6 +67,36 @@ public final class Utils {
             return null;
         }
     }
+
+    @FunctionalInterface
+    public interface WriteInterface {
+        void write(Parcel local);
+    }
+
+    public static void writeToParcel(Parcel parcel, WriteInterface writeInterface) {
+        Parcel tmp = Parcel.obtain();
+        try {
+            writeInterface.write(tmp);
+
+            byte[] bytes = tmp.marshall();
+            parcel.writeByteArray(bytes);
+        } finally {
+            tmp.recycle();
+        }
+    }
+
+    public static Parcel createLocalParcelToRead(Parcel parcel) {
+        Parcel tmp = Parcel.obtain();
+        byte[] bytes = parcel.createByteArray();
+        tmp.unmarshall(Objects.requireNonNull(bytes), 0, bytes.length);
+        tmp.setDataPosition(0);
+        return tmp;
+    }
+
+    public static void endLocalParcelRead(Parcel localParcel) {
+        localParcel.recycle();
+    }
+
 
     public static String toString(@Nullable Object object) {
         return object == null ? "null" : object.toString();

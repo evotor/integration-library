@@ -4,15 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import ru.evotor.tspiot.Utils;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 
 public class MarkingCode implements Parcelable {
 
     /** Версия MarkingCode */
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     /** Код маркировки */
     @NotNull
@@ -28,8 +26,12 @@ public class MarkingCode implements Parcelable {
 
     private MarkingCode(Parcel parcel) {
         int version = parcel.readInt();
-        this.cis = Objects.requireNonNull(parcel.readString());
-        this.productType = Utils.readInteger(parcel);
+        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+
+        this.cis = Objects.requireNonNull(local.readString());
+        this.productType = Utils.readInteger(local);
+
+        if (version >= 2) Utils.endLocalParcelRead(local);
     }
 
     @NotNull
@@ -44,11 +46,13 @@ public class MarkingCode implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        parcel.writeString(cis);
-        parcel.writeValue(productType);
+        Utils.writeToParcel(parcel, local -> {
+            local.writeString(cis);
+            local.writeValue(productType);
+        });
     }
 
-    public static Creator<MarkingCode> CREATOR = new Creator<>() {
+    public static Parcelable.Creator<MarkingCode> CREATOR = new Parcelable.Creator<>() {
         @Override
         public MarkingCode createFromParcel(Parcel parcel) {
             return new MarkingCode(parcel);
