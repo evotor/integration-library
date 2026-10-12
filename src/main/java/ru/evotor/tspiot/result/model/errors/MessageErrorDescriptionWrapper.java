@@ -143,4 +143,13 @@ public sealed abstract class MessageErrorDescriptionWrapper extends TsPioTErrors
 
         public static final Creator<LicenseExpired> CREATOR = new BaseCreator<>(LicenseExpired.class);
     }
+
+    /** Отсутствуют дополнения для работы с Маркировкой */
+    public static final class NotFoundMarkingActions extends MessageErrorDescriptionWrapper {
+        private NotFoundMarkingActions(Parcel parcel) { super(parcel); }
+
+        public NotFoundMarkingActions(MessageErrorDescription errorDescription) { super(errorDescription); }
+
+        public static final Creator<NotFoundMarkingActions> CREATOR = new BaseCreator<>(NotFoundMarkingActions.class);
+    }
 }
