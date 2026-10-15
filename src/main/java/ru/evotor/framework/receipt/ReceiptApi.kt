@@ -340,13 +340,13 @@ object ReceiptApi {
     /**
      * Возобновить процесс работы POS с чеком
      * @param context контекст приложения
-     * @param type фильтр по типу чека
+     * @param receiptUuid UUID чека
      */
     @JvmStatic
-    fun resumeLockedReceipt(context: Context, type: Receipt.Type, callback: ResumeLockedReceiptCallback) {
+    fun resumeLockedReceipt(context: Context, receiptUuid: String, callback: ResumeLockedReceiptCallback) {
         context.startIntegrationService(
             ResumeLockedReceiptIntegrationService.ACTION_RESUME_LOCKED_RECEIPT,
-            ResumeLockedReceiptRequestedEvent(type)
+            ResumeLockedReceiptRequestedEvent(receiptUuid)
         ) {
             it.result?.error?.let { error -> callback.onError(ResumeLockedReceiptException(error.code, error.message)) }
                 ?: callback.onSuccess()
