@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Objects;
 
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 

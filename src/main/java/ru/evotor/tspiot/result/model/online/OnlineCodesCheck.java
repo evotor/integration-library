@@ -1,17 +1,16 @@
 package ru.evotor.tspiot.result.model.online;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 
-public class OnlineCodesCheck extends BaseCodesCheck implements Parcelable {
+public class OnlineCodesCheck extends BaseCodesCheck {
 
     /** Версия OnlineCodesCheck */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** Текстовое описание результата выполнения метода */
     @Nullable
@@ -24,8 +23,12 @@ public class OnlineCodesCheck extends BaseCodesCheck implements Parcelable {
         super(parcel);
 
         int version = parcel.readInt();
-        this.description = parcel.readString();
-        this.codes = parcel.createTypedArrayList(OnlineCodeCheck.CREATOR);
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.description = local.readString();
+        this.codes = local.createTypedArrayList(OnlineCodeCheck.CREATOR);
+
+        endLocalParcelRead(local, version, 2);
     }
 
     public OnlineCodesCheck(
@@ -54,18 +57,23 @@ public class OnlineCodesCheck extends BaseCodesCheck implements Parcelable {
         super.write(parcel, flags);
 
         parcel.writeInt(VERSION);
-        parcel.writeString(description);
-        parcel.writeTypedList(codes);
+        writeToParcel(parcel, local -> {
+            local.writeString(description);
+            local.writeTypedList(codes);
+        });
     }
 
     @NonNull
     @Override
     public String toString() {
-        Utils.ListToString<OnlineCodeCheck> callback = code -> "OnlineCodeCheck: " + code + "\n";
+        StringBuilder builder = new StringBuilder(super.toString());
 
-        return super.toString() +
-                "Description: " + Utils.toString(description) + "\n" +
-                "OnlineCodeChecks: " + Utils.toString(codes, callback) + "\n";
+        builder.append("Description: ").append(Utils.toString(description)).append("\n");
+        for(OnlineCodeCheck onlineCodeCheck : codes) {
+            builder.append("OnlineCodeCheck: ").append(onlineCodeCheck).append("\n");
+        }
+
+        return builder.toString();
     }
 
     public final static Creator<OnlineCodesCheck> CREATOR = new Creator<>() {
