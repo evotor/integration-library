@@ -3,10 +3,7 @@ package ru.evotor.framework.receipt.event
 import android.os.Bundle
 
 /**
- * Событие отмены оплат чека.
- *
- * Происходит при создании нового чека в системе смарт-терминала,
- * например, при открытии приложения "Продажа".
+ * Событие отмены всех оплат чека.
  *
  * Обрабатывать это событие можно с помощью следующих широковещательных приёмников:
  * [ru.evotor.framework.receipt.event.handler.receiver.SellReceiptBroadcastReceiver]

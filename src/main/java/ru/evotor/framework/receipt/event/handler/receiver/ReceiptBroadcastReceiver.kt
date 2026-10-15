@@ -9,6 +9,8 @@ import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
 import ru.evotor.framework.receipt.event.ReceiptEditScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaidEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentCanceledEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentPerformedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentsCanceledEvent
 import ru.evotor.framework.receipt.event.ReceiptWithPaymentIntentPaidEvent
@@ -26,7 +28,9 @@ abstract class ReceiptBroadcastReceiver(
     private val actionReceiptCompleted: String,
     private val actionReceiptEditScreenOpened: String,
     private val actionReceiptPaymentScreenOpened: String,
+    private val actionReceiptPaymentCanceled: String,
     private val actionReceiptPaymentsCanceled: String,
+    private val actionReceiptPaymentPerformed: String,
     private val actionReceiptPaid: String,
     private val actionReceiptWithPaymentIntentPaid: String? = null
 ) : BroadcastEventReceiver() {
@@ -48,7 +52,11 @@ abstract class ReceiptBroadcastReceiver(
 
     protected abstract fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent)
 
+    protected abstract fun handleReceiptPaymentCanceledEvent(context: Context, event: ReceiptPaymentCanceledEvent)
+
     protected abstract fun handleReceiptPaymentsCanceledEvent(context: Context, event: ReceiptPaymentsCanceledEvent)
+
+    protected abstract fun handleReceiptPaymentPerformedEvent(context: Context, event: ReceiptPaymentPerformedEvent)
 
     protected abstract fun handleReceiptPaidEvent(context: Context, event: ReceiptPaidEvent)
 
@@ -101,9 +109,19 @@ abstract class ReceiptBroadcastReceiver(
                 ReceiptPaymentScreenOpenedEvent.from(bundle)
                     ?: return
             )
+            actionReceiptPaymentCanceled -> handleReceiptPaymentCanceledEvent(
+                context,
+                ReceiptPaymentCanceledEvent.from(bundle)
+                    ?: return
+            )
             actionReceiptPaymentsCanceled -> handleReceiptPaymentsCanceledEvent(
                 context,
                 ReceiptPaymentsCanceledEvent.from(bundle)
+                    ?: return
+            )
+            actionReceiptPaymentPerformed -> handleReceiptPaymentPerformedEvent(
+                context,
+                ReceiptPaymentPerformedEvent.from(bundle)
                     ?: return
             )
             actionReceiptPaid -> handleReceiptPaidEvent(

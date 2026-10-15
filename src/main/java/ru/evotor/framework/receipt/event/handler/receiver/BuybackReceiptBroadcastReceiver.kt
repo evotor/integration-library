@@ -8,6 +8,8 @@ import ru.evotor.framework.receipt.event.ReceiptCompletedEvent
 import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaidEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentCanceledEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentPerformedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentsCanceledEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
@@ -28,7 +30,9 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     actionReceiptCompleted = ACTION_RECEIPT_COMPLETED,
     actionReceiptEditScreenOpened = ACTION_RECEIPT_EDIT_SCREEN_OPENED,
     actionReceiptPaymentScreenOpened = ACTION_RECEIPT_PAYMENT_SCREEN_OPENED,
+    actionReceiptPaymentCanceled = ACTION_RECEIPT_PAYMENT_CANCELED,
     actionReceiptPaymentsCanceled = ACTION_RECEIPT_PAYMENTS_CANCELED,
+    actionReceiptPaymentPerformed = ACTION_RECEIPT_PAYMENT_PERFORMED,
     actionReceiptPaid = ACTION_RECEIPT_PAID
 ) {
     /**
@@ -80,20 +84,34 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
     override fun handleReceiptEditScreenOpenedEvent(context: Context, event: ReceiptEditScreenOpenedEvent) = Unit
 
     /**
-     * Обработчик событий отмены оплат чека.
-     */
-    override fun handleReceiptPaymentsCanceledEvent(context: Context, event: ReceiptPaymentsCanceledEvent) = Unit
-
-    /**
-     * Обработчик событий полностью завершённой оплаты чека.
-     */
-    override fun handleReceiptPaidEvent(context: Context, event: ReceiptPaidEvent) = Unit
-
-    /**
      * Обработчик событий перехода к оплате чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_SCREEN_OPENED)
     override fun handleReceiptPaymentScreenOpenedEvent(context: Context, event: ReceiptPaymentScreenOpenedEvent) = Unit
+
+    /**
+     * Обработчик событий отмены конкретной оплаты чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_CANCELED)
+    override fun handleReceiptPaymentCanceledEvent(context: Context, event: ReceiptPaymentCanceledEvent) = Unit
+
+    /**
+     * Обработчик событий отмены всех оплат чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENTS_CANCELED)
+    override fun handleReceiptPaymentsCanceledEvent(context: Context, event: ReceiptPaymentsCanceledEvent) = Unit
+
+    /**
+     * Обработчик событий завершённой конкретной оплаты чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_PERFORMED)
+    override fun handleReceiptPaymentPerformedEvent(context: Context, event: ReceiptPaymentPerformedEvent) = Unit
+
+    /**
+     * Обработчик событий полностью завершённой оплаты чека.
+     */
+    @RequiresIntentAction(ACTION_RECEIPT_PAID)
+    override fun handleReceiptPaidEvent(context: Context, event: ReceiptPaidEvent) = Unit
 
     companion object {
         const val ACTION_RECEIPT_CREATED = "evotor.intent.action.receipt.buyback.OPENED"
@@ -114,7 +132,11 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
 
         const val ACTION_RECEIPT_PAYMENT_SCREEN_OPENED = "evotor.intent.action.receipt.buyback.PAYMENT_SCREEN_OPENED"
 
+        const val ACTION_RECEIPT_PAYMENT_CANCELED = "evotor.intent.action.receipt.buyback.PAYMENT_CANCELED"
+
         const val ACTION_RECEIPT_PAYMENTS_CANCELED = "evotor.intent.action.receipt.buyback.PAYMENTS_CANCELED"
+
+        const val ACTION_RECEIPT_PAYMENT_PERFORMED = "evotor.intent.action.receipt.buyback.PAYMENT_PERFORMED"
 
         const val ACTION_RECEIPT_PAID = "evotor.intent.action.receipt.buyback.PAID"
     }
