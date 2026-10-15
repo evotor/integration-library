@@ -3,9 +3,10 @@ package ru.evotor.tspiot.result.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class LmChzInfo implements Parcelable {
+public class LmChzInfo extends BaseTsPioTObject {
 
     private final static String VERSION_DEFAULT = "";
     private final static String STATUS_DEFAULT = "";
@@ -63,7 +64,7 @@ public class LmChzInfo implements Parcelable {
 
     private LmChzInfo(@NonNull Parcel parcel) {
         int classVersion = parcel.readInt();
-        Parcel local = classVersion >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, classVersion, 2);
 
         version = readParcelString(local, VERSION_DEFAULT);
         status = readParcelString(local, STATUS_DEFAULT);
@@ -75,7 +76,7 @@ public class LmChzInfo implements Parcelable {
         login = readParcelString(local, LOGIN_DEFAULT);
         pass = readParcelString(local, PASS_DEFAULT);
 
-        if (classVersion >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, classVersion, 2);
     }
 
     private @NonNull String readParcelString(@NonNull Parcel parcel, @NonNull String defaultString) {
@@ -143,7 +144,7 @@ public class LmChzInfo implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeString(version);
             local.writeString(status);
             local.writeLong(lastSync);

@@ -1,7 +1,6 @@
 package ru.evotor.tspiot.result.model.online;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.Date;
@@ -9,7 +8,7 @@ import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 import ru.evotor.tspiot.result.model.base.BaseCodeCheck;
 
-public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
+public class OnlineCodeCheck extends BaseCodeCheck {
 
     /**
      * Версия OnlineCodeCheck
@@ -151,7 +150,7 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         super(parcel);
 
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
         this.expireDate = (Date) local.readSerializable();
         this.productionDate = (Date) local.readSerializable();
@@ -173,7 +172,7 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         this.factorySerialNumber = local.readString();
         this.packageQuantity = Utils.readInteger(local);
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     public OnlineCodeCheck(
@@ -356,7 +355,7 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         super.write(parcel, flags);
 
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeSerializable(expireDate);
             local.writeSerializable(productionDate);
             local.writeValue(productWeight);

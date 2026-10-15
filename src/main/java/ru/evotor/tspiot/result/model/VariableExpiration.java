@@ -3,9 +3,10 @@ package ru.evotor.tspiot.result.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class VariableExpiration implements Parcelable {
+public class VariableExpiration extends BaseTsPioTObject {
 
     /** Версия VariableExpiration */
     private final static int VERSION = 2;
@@ -20,12 +21,12 @@ public class VariableExpiration implements Parcelable {
 
     private VariableExpiration(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
         this.degrees = local.readInt();
         this.date = local.readString();
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     public VariableExpiration(int degrees, String date) {
@@ -43,7 +44,7 @@ public class VariableExpiration implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeInt(degrees);
             local.writeString(date);
         });

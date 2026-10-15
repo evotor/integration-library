@@ -3,10 +3,11 @@ package ru.evotor.tspiot.result.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
 /** Вариативный срок годности */
-public class VariableExpirations implements Parcelable {
+public class VariableExpirations extends BaseTsPioTObject {
 
     /** Версия VariableExpirations */
     private final static int VERSION = 2;
@@ -15,11 +16,11 @@ public class VariableExpirations implements Parcelable {
 
     private VariableExpirations(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
         this.expirations = local.createTypedArray(VariableExpiration.CREATOR);
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     public VariableExpirations(VariableExpiration[] expirations) {
@@ -34,7 +35,7 @@ public class VariableExpirations implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> local.writeTypedArray(expirations, flags));
+        writeToParcel(parcel, local -> local.writeTypedArray(expirations, flags));
     }
 
     public static Parcelable.Creator<VariableExpirations> CREATOR = new Parcelable.Creator<VariableExpirations>() {

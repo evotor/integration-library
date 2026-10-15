@@ -1,14 +1,13 @@
 package ru.evotor.tspiot.result.model.offline;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 import ru.evotor.tspiot.result.model.base.BaseCodeCheck;
 
-public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
+public class OfflineCodeCheck extends BaseCodeCheck {
 
     /**
      * Версия OfflineCodeCheck
@@ -27,9 +26,9 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
         if (baseCodeCheckObjectVersion >= 2) {
             int version = parcel.readInt();
 
-            Parcel local = Utils.createLocalParcelToRead(parcel);
+            Parcel local = createLocalParcelToRead(parcel, version, 1);
             this.isGreyGtin = Utils.readBoolean(local);
-            Utils.endLocalParcelRead(local);
+            endLocalParcelRead(local, version, 1);
         } else {
             this.isGreyGtin = null;
         }
@@ -108,8 +107,10 @@ public class OfflineCodeCheck extends BaseCodeCheck implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         super.write(parcel, flags);
 
-        parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> local.writeValue(isGreyGtin));
+        if (!isUseOldParcelling()) {
+            parcel.writeInt(VERSION);
+            writeToParcel(parcel, local -> local.writeValue(isGreyGtin));
+        }
     }
 
     @NonNull

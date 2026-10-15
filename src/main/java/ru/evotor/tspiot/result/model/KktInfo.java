@@ -4,9 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class KktInfo implements Parcelable {
+public class KktInfo extends BaseTsPioTObject {
 
     /** Версия KktInfo */
     private final static int VERSION = 3;
@@ -51,7 +52,7 @@ public class KktInfo implements Parcelable {
 
     private KktInfo(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 3 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 3);
 
         this.tspiotId = local.readString();
         this.kktSerial = local.readString();
@@ -61,7 +62,7 @@ public class KktInfo implements Parcelable {
         this.lmChzInfo = local.readTypedObject(LmChzInfo.CREATOR);
         this.lmEANCheckTimeout = version >= 2 ? Utils.readInteger(local) : null;
 
-        if (version >= 3) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 3);
     }
 
     public String getTspiotId() { return tspiotId; }
@@ -86,7 +87,7 @@ public class KktInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeString(tspiotId);
             local.writeString(kktSerial);
             local.writeString(fnSerial);

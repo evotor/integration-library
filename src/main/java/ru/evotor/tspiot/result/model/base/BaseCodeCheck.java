@@ -3,10 +3,12 @@ package ru.evotor.tspiot.result.model.base;
 import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 
-public abstract class BaseCodeCheck {
+public abstract class BaseCodeCheck extends BaseTsPioTObject {
 
     /**
      * Версия BaseCodeCheck
@@ -106,7 +108,7 @@ public abstract class BaseCodeCheck {
 
     protected BaseCodeCheck(Parcel parcel) {
         baseCodeCheckObjectVersion = parcel.readInt();
-        Parcel local = baseCodeCheckObjectVersion >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, baseCodeCheckObjectVersion, 2);
 
         this.cis = local.readString();
         this.found = Utils.readBoolean(local);
@@ -124,7 +126,7 @@ public abstract class BaseCodeCheck {
         this.mrp = Utils.readInteger(local);
         this.smp = Utils.readInteger(local);
 
-        if (baseCodeCheckObjectVersion >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, baseCodeCheckObjectVersion, 2);
     }
 
     public BaseCodeCheck(
@@ -163,7 +165,7 @@ public abstract class BaseCodeCheck {
 
     protected void write(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeString(cis);
             local.writeValue(found);
             local.writeValue(valid);

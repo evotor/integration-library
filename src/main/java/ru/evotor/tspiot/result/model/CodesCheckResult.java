@@ -4,11 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import java.util.List;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.offline.OfflineCodesCheck;
 import ru.evotor.tspiot.result.model.online.OnlineCodesCheck;
 
-public class CodesCheckResult implements Parcelable {
+public class CodesCheckResult extends BaseTsPioTObject {
 
     /** Версия CodesCheckResult */
     private final static int VERSION = 2;
@@ -19,12 +20,12 @@ public class CodesCheckResult implements Parcelable {
 
     private CodesCheckResult(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
         this.onlineCodesChecks = local.createTypedArrayList(OnlineCodesCheck.CREATOR);
         this.offlineCodesChecks = local.createTypedArrayList(OfflineCodesCheck.CREATOR);
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     public CodesCheckResult(@Nullable List<OnlineCodesCheck> onlineCodesChecks, @Nullable List<OfflineCodesCheck> offlineCodesChecks) {
@@ -44,7 +45,7 @@ public class CodesCheckResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeTypedList(onlineCodesChecks);
             local.writeTypedList(offlineCodesChecks);
         });

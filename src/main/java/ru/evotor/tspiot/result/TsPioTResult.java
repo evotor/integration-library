@@ -5,9 +5,10 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.evotor.ParcelablesKt;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class TsPioTResult<T extends Parcelable> implements Parcelable {
+public class TsPioTResult<T extends Parcelable> extends BaseTsPioTObject {
 
     /** Версия TsPioTResult */
     private final static int VERSION = 2;
@@ -21,13 +22,13 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
 
     private TsPioTResult(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
         this.classType = Utils.readClass(local);
         this.data = Utils.readData(classType, local);
         this.error = ParcelablesKt.readParcelable(local, TsPioTError.class);
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,7 +56,7 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeSerializable(classType);
             local.writeParcelable(data, flags);
             local.writeParcelable(error, flags);

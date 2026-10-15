@@ -1,13 +1,12 @@
 package ru.evotor.tspiot.result.model.offline;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import java.util.List;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 
-public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
+public class OfflineCodesCheck extends BaseCodesCheck {
 
     /** Версия OfflineCodesCheck */
     private final static int VERSION = 2;
@@ -25,13 +24,13 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
         super(parcel);
 
         int classVersion = parcel.readInt();
-        Parcel local = classVersion >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, classVersion, 2);
 
         this.version = local.readString();
         this.inst = local.readString();
         this.codes = local.createTypedArrayList(OfflineCodeCheck.CREATOR);
 
-        if (classVersion >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, classVersion, 2);
     }
 
     public OfflineCodesCheck(
@@ -63,7 +62,7 @@ public class OfflineCodesCheck extends BaseCodesCheck implements Parcelable {
         super.write(parcel, flags);
 
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
+        writeToParcel(parcel, local -> {
             local.writeString(version);
             local.writeString(inst);
             local.writeTypedList(codes);

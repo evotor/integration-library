@@ -6,9 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class ClientInfo implements Parcelable {
+public class ClientInfo extends BaseTsPioTObject {
 
     /**
      * Версия ClientInfo
@@ -59,9 +60,9 @@ public class ClientInfo implements Parcelable {
 
     private ClientInfo(Parcel parcel) {
         int version = parcel.readInt();
-        Parcel local = version >= 2 ? Utils.createLocalParcelToRead(parcel) : parcel;
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
 
-        this.apiVersion = ApiVersion.createFromParcel(local);
+        this.apiVersion = ApiVersion.createFromParcel(local, this);
         this.name = Objects.requireNonNull(local.readString());
         this.version = Objects.requireNonNull(local.readString());
         this.id = Objects.requireNonNull(local.readString());
@@ -69,7 +70,7 @@ public class ClientInfo implements Parcelable {
         this.token = Objects.requireNonNull(local.readString());
         this.userName = local.readString();
 
-        if (version >= 2) Utils.endLocalParcelRead(local);
+        endLocalParcelRead(local, version, 2);
     }
 
     public ClientInfo(
@@ -98,8 +99,8 @@ public class ClientInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        Utils.writeToParcel(parcel, local -> {
-            ApiVersion.writeToParcel(local, apiVersion);
+        writeToParcel(parcel, local -> {
+            ApiVersion.writeToParcel(local, apiVersion, this);
             local.writeString(name);
             local.writeString(version);
             local.writeString(id);
@@ -164,22 +165,16 @@ public class ClientInfo implements Parcelable {
          */
         public static final int VERSION = 2;
 
-        public static void writeToParcel(Parcel parcel, ApiVersion apiVersion) {
+        public static void writeToParcel(Parcel parcel, ApiVersion apiVersion, BaseTsPioTObject baseTsPioTObject) {
             parcel.writeInt(VERSION);
-            Utils.writeToParcel(parcel, local -> local.writeString(apiVersion.name()));
+            baseTsPioTObject.writeToParcel(parcel, local -> local.writeString(apiVersion.name()));
         }
 
-        static ApiVersion createFromParcel(Parcel parcel) throws IllegalArgumentException {
+        static ApiVersion createFromParcel(Parcel parcel, BaseTsPioTObject baseTsPioTObject) throws IllegalArgumentException {
             int version = parcel.readInt();
-
-            String name;
-            if (version >= 2) {
-                Parcel local = Utils.createLocalParcelToRead(parcel);
-                name = local.readString();
-                Utils.endLocalParcelRead(local);
-            } else {
-                name = parcel.readString();
-            }
+            Parcel local = baseTsPioTObject.createLocalParcelToRead(parcel, version, 2);
+            String name = local.readString();
+            baseTsPioTObject.endLocalParcelRead(local, version, 2);
 
             return ApiVersion.valueOf(name);
         }
