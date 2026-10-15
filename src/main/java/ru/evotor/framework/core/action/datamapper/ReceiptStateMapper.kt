@@ -25,6 +25,6 @@ object ReceiptStateMapper {
 
     fun toBundle(state: Receipt.State) = Bundle().apply {
         putInt(KEY_STATUS, state.status.ordinal)
-        putBoolean(KEY_IS_RECEIPT_LOCKED, state.isReceiptLocked)
+        state.isReceiptLocked?.let { putBoolean(KEY_IS_RECEIPT_LOCKED, it) }
     }
 }
