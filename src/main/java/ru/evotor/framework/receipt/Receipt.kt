@@ -211,11 +211,11 @@ data class Receipt(
         val status: Status,
         /**
          * Заблокирован ли чек для изменений.
-         * Если isReceiptLocked = true, то он находиться в обработке внутри EvotorPos
+         * Если [isProcessing] == true, то он находиться в обработке внутри EvotorPos
          * и изменить его можно только подписавшись на события, которые отправляются в процессе его обработки.
          * Всегда null, если поле [status] == [Status.CLOSED]
          */
-        val isReceiptLocked: Boolean?
+        val isProcessing: Boolean?
     )
 
     /**

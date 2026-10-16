@@ -2,7 +2,9 @@ package ru.evotor.framework.receipt.event
 
 import android.os.Bundle
 import ru.evotor.framework.core.action.datamapper.PaymentMapper
+import ru.evotor.framework.getMoney
 import ru.evotor.framework.receipt.Payment
+import java.math.BigDecimal
 
 /**
  * Событие завершённой конкретной оплаты чека (картой, наличными и т.д.).
@@ -20,20 +22,23 @@ import ru.evotor.framework.receipt.Payment
  * @param receiptUuid uuid чека
  * @param payment оплата
  */
-class ReceiptPaymentPerformedEvent(receiptUuid: String, val payment: Payment) : ReceiptEvent(receiptUuid) {
+class ReceiptPaymentPaidEvent(receiptUuid: String, val payment: Payment, val amount: BigDecimal) : ReceiptEvent(receiptUuid) {
     override fun toBundle(): Bundle {
         return super.toBundle().apply {
             putBundle(KEY_PAYMENT, PaymentMapper.toBundle(payment))
+            putString(KEY_PAYMENT, amount.toPlainString())
         }
     }
 
     companion object {
         private const val KEY_PAYMENT = "PAYMENT"
+        private const val KEY_AMOUNT = "AMOUNT"
 
-        fun from(bundle: Bundle?): ReceiptPaymentPerformedEvent? = bundle?.let {
+        fun from(bundle: Bundle?): ReceiptPaymentPaidEvent? = bundle?.let {
             val uuid = getReceiptUuid(it) ?: return null
             val payment = bundle.getBundle(KEY_PAYMENT)?.let(PaymentMapper::from) ?: return null
-            ReceiptPaymentPerformedEvent(uuid, payment)
+            val amount = bundle.getMoney(KEY_AMOUNT) ?: return null
+            ReceiptPaymentPaidEvent(uuid, payment, amount)
         }
     }
 }

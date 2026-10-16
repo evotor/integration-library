@@ -5,7 +5,7 @@ import ru.evotor.framework.receipt.Receipt
 
 object ReceiptStateMapper {
     private const val KEY_STATUS = "STATUS"
-    private const val KEY_IS_RECEIPT_LOCKED = "IS_RECEIPT_LOCKED"
+    private const val KEY_IS_PROCESSING = "IS_PROCESSING"
 
     fun from(bundle: Bundle): Receipt.State? {
         val status = if (bundle.containsKey(KEY_STATUS)) {
@@ -15,16 +15,16 @@ object ReceiptStateMapper {
         } else {
             return null
         }
-        val isReceiptLocked = if (bundle.containsKey(KEY_IS_RECEIPT_LOCKED)) {
-            bundle.getBoolean(KEY_IS_RECEIPT_LOCKED)
+        val isProcessing = if (bundle.containsKey(KEY_IS_PROCESSING)) {
+            bundle.getBoolean(KEY_IS_PROCESSING)
         } else {
-            return null
+            null
         }
-        return Receipt.State(status, isReceiptLocked)
+        return Receipt.State(status, isProcessing)
     }
 
     fun toBundle(state: Receipt.State) = Bundle().apply {
         putInt(KEY_STATUS, state.status.ordinal)
-        state.isReceiptLocked?.let { putBoolean(KEY_IS_RECEIPT_LOCKED, it) }
+        state.isProcessing?.let { putBoolean(KEY_IS_PROCESSING, it) }
     }
 }

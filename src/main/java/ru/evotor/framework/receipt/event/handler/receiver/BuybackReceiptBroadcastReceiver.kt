@@ -9,7 +9,7 @@ import ru.evotor.framework.receipt.event.ReceiptCreatedEvent
 import ru.evotor.framework.receipt.event.ReceiptDeletedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaidEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentCanceledEvent
-import ru.evotor.framework.receipt.event.ReceiptPaymentPerformedEvent
+import ru.evotor.framework.receipt.event.ReceiptPaymentPaidEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentScreenOpenedEvent
 import ru.evotor.framework.receipt.event.ReceiptPaymentsCanceledEvent
 import ru.evotor.framework.receipt.position.event.PositionAddedEvent
@@ -105,7 +105,7 @@ open class BuybackReceiptBroadcastReceiver : ReceiptBroadcastReceiver(
      * Обработчик событий завершённой конкретной оплаты чека.
      */
     @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_PERFORMED)
-    override fun handleReceiptPaymentPerformedEvent(context: Context, event: ReceiptPaymentPerformedEvent) = Unit
+    override fun handleReceiptPaymentPerformedEvent(context: Context, event: ReceiptPaymentPaidEvent) = Unit
 
     /**
      * Обработчик событий полностью завершённой оплаты чека.

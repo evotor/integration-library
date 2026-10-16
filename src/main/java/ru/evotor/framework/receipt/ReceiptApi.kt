@@ -24,8 +24,8 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
-import ru.evotor.framework.receipt.status.event.handler.service.ResumeLockedReceiptIntegrationService
-import ru.evotor.framework.receipt.status.event.ResumeLockedReceiptRequestedEvent
+import ru.evotor.framework.receipt.status.event.handler.service.ResumeReceiptProcessingIntegrationService
+import ru.evotor.framework.receipt.status.event.ResumeReceiptProcessingRequestedEvent
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
@@ -38,8 +38,8 @@ import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.receipt.status.api.resume_locked_receipt.ResumeLockedReceiptCallback
-import ru.evotor.framework.receipt.status.api.resume_locked_receipt.ResumeLockedReceiptException
+import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingCallback
+import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingException
 import java.math.BigDecimal
 import java.util.Date
 
@@ -343,12 +343,12 @@ object ReceiptApi {
      * @param receiptUuid UUID чека
      */
     @JvmStatic
-    fun resumeLockedReceipt(context: Context, receiptUuid: String, callback: ResumeLockedReceiptCallback) {
+    fun resumeReceiptProcessing(context: Context, receiptUuid: String, callback: ResumeReceiptProcessingCallback) {
         context.startIntegrationService(
-            ResumeLockedReceiptIntegrationService.ACTION_RESUME_LOCKED_RECEIPT,
-            ResumeLockedReceiptRequestedEvent(receiptUuid)
+            ResumeReceiptProcessingIntegrationService.ACTION_RESUME_RECEIPT_PROCESSING,
+            ResumeReceiptProcessingRequestedEvent(receiptUuid)
         ) {
-            it.result?.error?.let { error -> callback.onError(ResumeLockedReceiptException(error.code, error.message)) }
+            it.result?.error?.let { error -> callback.onError(ResumeReceiptProcessingException(error.code, error.message)) }
                 ?: callback.onSuccess()
         }
     }
@@ -678,11 +678,15 @@ object ReceiptApi {
 
     private fun createReceiptState(cursor: Cursor): Receipt.State? {
         val status = cursor.optInt(ReceiptStateTable.STATUS)?.let(Receipt.Status.values()::getOrNull)
-        val isReceiptLocked = cursor.optInt(ReceiptStateTable.IS_RECEIPT_LOCKED)
-        return if (status != null && isReceiptLocked != null) {
+        val isProcessing = cursor.optInt(ReceiptStateTable.IS_PROCESSING)
+        return if (status != null) {
             Receipt.State(
                 status = status,
-                isReceiptLocked = isReceiptLocked == 1
+                isProcessing = if (isProcessing == null) {
+                    null
+                } else {
+                    isProcessing == 1
+                }
             )
         } else {
             null
