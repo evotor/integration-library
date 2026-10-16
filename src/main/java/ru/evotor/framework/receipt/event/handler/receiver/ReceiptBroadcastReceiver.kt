@@ -30,7 +30,7 @@ abstract class ReceiptBroadcastReceiver(
     private val actionReceiptPaymentScreenOpened: String,
     private val actionReceiptPaymentCanceled: String,
     private val actionReceiptPaymentsCanceled: String,
-    private val actionReceiptPaymentPerformed: String,
+    private val actionReceiptPaymentPaid: String,
     private val actionReceiptPaid: String,
     private val actionReceiptWithPaymentIntentPaid: String? = null
 ) : BroadcastEventReceiver() {
@@ -56,7 +56,7 @@ abstract class ReceiptBroadcastReceiver(
 
     protected abstract fun handleReceiptPaymentsCanceledEvent(context: Context, event: ReceiptPaymentsCanceledEvent)
 
-    protected abstract fun handleReceiptPaymentPerformedEvent(context: Context, event: ReceiptPaymentPaidEvent)
+    protected abstract fun handleReceiptPaymentPaidEvent(context: Context, event: ReceiptPaymentPaidEvent)
 
     protected abstract fun handleReceiptPaidEvent(context: Context, event: ReceiptPaidEvent)
 
@@ -119,7 +119,7 @@ abstract class ReceiptBroadcastReceiver(
                 ReceiptPaymentsCanceledEvent.from(bundle)
                     ?: return
             )
-            actionReceiptPaymentPerformed -> handleReceiptPaymentPerformedEvent(
+            actionReceiptPaymentPaid -> handleReceiptPaymentPaidEvent(
                 context,
                 ReceiptPaymentPaidEvent.from(bundle)
                     ?: return
