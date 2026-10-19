@@ -17,10 +17,23 @@ import android.os.Bundle
  *
  * @param receiptUuid uuid чека
  */
-class ReceiptPaymentsCanceledEvent(receiptUuid: String) : ReceiptEvent(receiptUuid) {
+class ReceiptPaymentsCanceledEvent(receiptUuid: String, val isPaymentIntent: Boolean) : ReceiptEvent(receiptUuid) {
+    override fun toBundle(): Bundle {
+        return super.toBundle().apply {
+            putBoolean(KEY_IS_PAYMENT_INTENT, isPaymentIntent)
+        }
+    }
+
     companion object {
+        private const val KEY_IS_PAYMENT_INTENT = "IS_PAYMENT_INTENT"
+
         fun from(bundle: Bundle?): ReceiptPaymentsCanceledEvent? = bundle?.let {
-            ReceiptPaymentsCanceledEvent(getReceiptUuid(it) ?: return null)
+            val isPaymentIntent = if (it.containsKey(KEY_IS_PAYMENT_INTENT)) {
+                it.getBoolean(KEY_IS_PAYMENT_INTENT)
+            } else {
+                return null
+            }
+            ReceiptPaymentsCanceledEvent(getReceiptUuid(it) ?: return null, isPaymentIntent)
         }
     }
 }

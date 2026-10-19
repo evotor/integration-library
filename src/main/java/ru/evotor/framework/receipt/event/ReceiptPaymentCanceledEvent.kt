@@ -22,20 +22,28 @@ import java.math.BigDecimal
  * @param receiptUuid uuid чека
  * @param payment оплата
  */
-class ReceiptPaymentCanceledEvent(receiptUuid: String, val payment: Payment) : ReceiptEvent(receiptUuid) {
+class ReceiptPaymentCanceledEvent(receiptUuid: String, val payment: Payment, val isPaymentIntent: Boolean) : ReceiptEvent(receiptUuid) {
     override fun toBundle(): Bundle {
         return super.toBundle().apply {
             putBundle(KEY_PAYMENT, PaymentMapper.toBundle(payment))
+            putBoolean(KEY_IS_PAYMENT_INTENT, isPaymentIntent)
         }
     }
 
     companion object {
         private const val KEY_PAYMENT = "PAYMENT"
 
+        private const val KEY_IS_PAYMENT_INTENT = "IS_PAYMENT_INTENT"
+
         fun from(bundle: Bundle?): ReceiptPaymentCanceledEvent? = bundle?.let {
             val uuid = getReceiptUuid(it) ?: return null
-            val payment = bundle.getBundle(KEY_PAYMENT)?.let(PaymentMapper::from) ?: return null
-            ReceiptPaymentCanceledEvent(uuid, payment)
+            val payment = it.getBundle(KEY_PAYMENT)?.let(PaymentMapper::from) ?: return null
+            val isPaymentIntent = if (it.containsKey(KEY_IS_PAYMENT_INTENT)) {
+                it.getBoolean(KEY_IS_PAYMENT_INTENT)
+            } else {
+                return null
+            }
+            ReceiptPaymentCanceledEvent(uuid, payment, isPaymentIntent)
         }
     }
 }

@@ -24,7 +24,7 @@ import java.math.BigDecimal
  * @param receiptUuid uuid чека
  * @param payments оплаты
  */
-class ReceiptPaidEvent(receiptUuid: String, val payments: Map<Payment, BigDecimal>) : ReceiptEvent(receiptUuid) {
+class ReceiptPaidEvent(receiptUuid: String, val payments: Map<Payment, BigDecimal>, val isPaymentIntent: Boolean) : ReceiptEvent(receiptUuid) {
     override fun toBundle() = super.toBundle().apply {
         val paymentsArray = ArrayList<Bundle>()
         for (paymentEntry in payments) {
@@ -37,6 +37,7 @@ class ReceiptPaidEvent(receiptUuid: String, val payments: Map<Payment, BigDecima
             )
         }
         putParcelableArrayList(KEY_PAYMENTS, paymentsArray)
+        putBoolean(KEY_IS_PAYMENT_INTENT, isPaymentIntent)
     }
 
     companion object {
@@ -45,6 +46,8 @@ class ReceiptPaidEvent(receiptUuid: String, val payments: Map<Payment, BigDecima
         private const val KEY_PAYMENT = "PAYMENT"
 
         private const val KEY_PAYMENT_VALUE = "PAYMENT_VALUE"
+
+        private const val KEY_IS_PAYMENT_INTENT = "IS_PAYMENT_INTENT"
 
         fun from(bundle: Bundle?): ReceiptPaidEvent? = bundle?.let {
             val uuid = getReceiptUuid(it) ?: return null
@@ -59,7 +62,13 @@ class ReceiptPaidEvent(receiptUuid: String, val payments: Map<Payment, BigDecima
                 }
             }
 
-            ReceiptPaidEvent(uuid, payments)
+            val isPaymentIntent = if (it.containsKey(KEY_IS_PAYMENT_INTENT)) {
+                it.getBoolean(KEY_IS_PAYMENT_INTENT)
+            } else {
+                return null
+            }
+
+            ReceiptPaidEvent(uuid, payments, isPaymentIntent)
         }
     }
 }
