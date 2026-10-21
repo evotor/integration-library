@@ -1,8 +1,8 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.NonNull;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
@@ -171,7 +171,7 @@ public class LmChzInfo extends BaseTsPioTObject {
                 "Pass: " + Utils.toString(pass);
     }
 
-    public final static Parcelable.Creator<LmChzInfo> CREATOR = new Parcelable.Creator<>() {
+    public final static Creator<LmChzInfo> CREATOR = new Creator<>() {
         @Override
         public LmChzInfo createFromParcel(Parcel parcel) {
             return new LmChzInfo(parcel);

@@ -1,7 +1,7 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
@@ -35,10 +35,12 @@ public class VariableExpirations extends BaseTsPioTObject {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        writeToParcel(parcel, local -> local.writeTypedArray(expirations, flags));
+        writeToParcel(parcel, local -> {
+            local.writeTypedArray(expirations, flags);
+        });
     }
 
-    public static Parcelable.Creator<VariableExpirations> CREATOR = new Parcelable.Creator<VariableExpirations>() {
+    public static Creator<VariableExpirations> CREATOR = new Creator<VariableExpirations>() {
         @Override
         public VariableExpirations createFromParcel(Parcel parcel) {
             return new VariableExpirations(parcel);
