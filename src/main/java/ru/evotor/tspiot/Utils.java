@@ -21,6 +21,15 @@ public final class Utils {
         }
     }
 
+    @NotNull
+    public static <T> T firstOrThrow(@NotNull List<T> list, TsPioTServiceException exception) throws TsPioTServiceException {
+        if (list.isEmpty()) {
+            throw exception;
+        } else {
+            return list.get(0);
+        }
+    }
+
     @Nullable
     public static Integer readInteger(Parcel parcel) {
         try {
