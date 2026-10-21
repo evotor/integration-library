@@ -32,7 +32,7 @@ open class CorrectionReturnOutcomeReceiptBroadcastReceiver : ReceiptBroadcastRec
     actionReceiptPaymentScreenOpened = ACTION_RECEIPT_PAYMENT_SCREEN_OPENED,
     actionReceiptPaymentCanceled = ACTION_RECEIPT_PAYMENT_CANCELED,
     actionReceiptPaymentsCanceled = ACTION_RECEIPT_PAYMENTS_CANCELED,
-    actionReceiptPaymentPaid = ACTION_RECEIPT_PAYMENT_PERFORMED,
+    actionReceiptPaymentPaid = ACTION_RECEIPT_PAYMENT_PAID,
     actionReceiptPaid = ACTION_RECEIPT_PAID
 ) {
     /**
@@ -107,7 +107,7 @@ open class CorrectionReturnOutcomeReceiptBroadcastReceiver : ReceiptBroadcastRec
     /**
      * Обработчик событий завершённой конкретной оплаты чека.
      */
-    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_PERFORMED)
+    @RequiresIntentAction(ACTION_RECEIPT_PAYMENT_PAID)
     override fun handleReceiptPaymentPaidEvent(context: Context, event: ReceiptPaymentPaidEvent) = Unit
 
     /**
@@ -142,8 +142,8 @@ open class CorrectionReturnOutcomeReceiptBroadcastReceiver : ReceiptBroadcastRec
         const val ACTION_RECEIPT_PAYMENTS_CANCELED =
             "evotor.intent.action.receipt.correction.return.outcome.PAYMENTS_CANCELED"
 
-        const val ACTION_RECEIPT_PAYMENT_PERFORMED =
-            "evotor.intent.action.receipt.correction.return.outcome.PAYMENT_PERFORMED"
+        const val ACTION_RECEIPT_PAYMENT_PAID =
+            "evotor.intent.action.receipt.correction.return.outcome.PAYMENT_PAID"
 
         const val ACTION_RECEIPT_PAID =
             "evotor.intent.action.receipt.correction.return.outcome.PAID"
