@@ -16,6 +16,7 @@ import android.os.Bundle
  * [ru.evotor.framework.receipt.event.handler.receiver.CorrectionReturnOutcomeReceiptBroadcastReceiver]
  *
  * @param receiptUuid uuid чека
+ * @param isPaymentIntent является ли оплата оплатой намерением: true - оплата намерением, false - реальная оплата
  */
 class ReceiptPaymentsCanceledEvent(receiptUuid: String, val isPaymentIntent: Boolean) : ReceiptEvent(receiptUuid) {
     override fun toBundle(): Bundle {

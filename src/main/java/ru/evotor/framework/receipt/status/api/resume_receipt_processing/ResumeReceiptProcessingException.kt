@@ -6,7 +6,7 @@ class ResumeReceiptProcessingException(
 ) : Throwable(message) {
     companion object {
         /**
-         * Неопознанная ошибка (receiptUuid не присутствует в переданном [ru.evotor.framework.receipt.status.event.ResumeReceiptProcessingRequestedEvent])
+         * Неопознанная ошибка
          */
         const val CODE_UNIDENTIFIED_ERROR = -1
 

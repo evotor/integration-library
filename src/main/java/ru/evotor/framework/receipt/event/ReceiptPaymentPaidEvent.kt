@@ -21,6 +21,7 @@ import java.math.BigDecimal
  *
  * @param receiptUuid uuid чека
  * @param payment оплата
+ * @param isPaymentIntent является ли оплата оплатой намерением: true - оплата намерением, false - реальная оплата
  */
 class ReceiptPaymentPaidEvent(receiptUuid: String, val payment: Payment, val isPaymentIntent: Boolean) : ReceiptEvent(receiptUuid) {
     override fun toBundle(): Bundle {
