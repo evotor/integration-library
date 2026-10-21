@@ -1,8 +1,12 @@
 package ru.evotor.tspiot.result.model.offline;
 
 import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
+
 import java.util.List;
+
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.BaseCodesCheck;
 

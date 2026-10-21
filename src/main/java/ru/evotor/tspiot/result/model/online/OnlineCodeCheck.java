@@ -1,9 +1,13 @@
 package ru.evotor.tspiot.result.model.online;
 
 import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import java.util.Date;
+
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 import ru.evotor.tspiot.result.model.base.BaseCodeCheck;

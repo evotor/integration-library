@@ -1,7 +1,7 @@
 package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
@@ -47,7 +47,7 @@ public class TsPioTError extends BaseTsPioTObject {
         });
     }
 
-    public static final Parcelable.Creator<TsPioTError> CREATOR = new Parcelable.Creator<>() {
+    public static final Creator<TsPioTError> CREATOR = new Creator<>() {
         @Override
         public TsPioTError createFromParcel(Parcel parcel) {
             return new TsPioTError(parcel);

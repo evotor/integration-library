@@ -1,62 +1,40 @@
 package ru.evotor.tspiot.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
 public class ClientInfo extends BaseTsPioTObject {
 
-    /**
-     * Версия ClientInfo
-     */
+    /** Версия ClientInfo */
     private static final int VERSION = 2;
 
-    /**
-     * Версия протокола
-     */
-    @NotNull
-    private final ApiVersion apiVersion;
+    /** Версия протокола */
+    @NotNull private final ApiVersion apiVersion;
 
-    /**
-     * Наименование ПМСР (кассового ПО)
-     */
-    @NotNull
-    private final String name;
+    /** Наименование ПМСР (кассового ПО) */
+    @NotNull private final String name;
 
-    /**
-     * Версия ПМСР (кассового ПО)
-     */
-    @NotNull
-    private final String version;
+    /** Версия ПМСР (кассового ПО) */
+    @NotNull private final String version;
 
-    /**
-     * Идентификатор ПМСР (кассового ПО) в реестре ГИС МТ
-     */
-    @NotNull
-    private final String id;
+    /** Идентификатор ПМСР (кассового ПО) в реестре ГИС МТ */
+    @NotNull private final String id;
 
-    /**
-     * Идентификатор версии библиотеки
-     */
-    @Nullable
-    private final String lastKey;
+    /** Идентификатор версии библиотеки */
+    @Nullable private final String lastKey;
 
-    /**
-     * Контрольная сумма/ЭЦП исполняемого файла ПМСР (кассового ПО)
-     */
-    @NotNull
-    private final String token;
+    /** Контрольная сумма/ЭЦП исполняемого файла ПМСР (кассового ПО) */
+    @NotNull private final String token;
 
-    /**
-     * ФИО пользователя ТС ПИоТ
-     */
-    @Nullable
-    private final String userName;
+    /** ФИО пользователя ТС ПИоТ */
+    @Nullable private final String userName;
 
     private ClientInfo(Parcel parcel) {
         int version = parcel.readInt();
@@ -92,9 +70,7 @@ public class ClientInfo extends BaseTsPioTObject {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
+    public int describeContents() { return 0; }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
@@ -111,41 +87,27 @@ public class ClientInfo extends BaseTsPioTObject {
     }
 
     @NotNull
-    public ApiVersion getApiVersion() {
-        return apiVersion;
-    }
+    public ApiVersion getApiVersion() { return apiVersion; }
 
     @NotNull
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     @NotNull
-    public String getVersion() {
-        return version;
-    }
+    public String getVersion() { return version; }
 
     @NotNull
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Nullable
-    public String getLastKey() {
-        return lastKey;
-    }
+    public String getLastKey() { return lastKey; }
 
     @NotNull
-    public String getToken() {
-        return token;
-    }
+    public String getToken() { return token; }
 
     @Nullable
-    public String getUserName() {
-        return userName;
-    }
+    public String getUserName() { return userName; }
 
-    public static Parcelable.Creator<ClientInfo> CREATOR = new Parcelable.Creator<ClientInfo>() {
+    public static Creator<ClientInfo> CREATOR = new Creator<ClientInfo>() {
         @Override
         public ClientInfo createFromParcel(Parcel parcel) {
             return new ClientInfo(parcel);
@@ -160,9 +122,7 @@ public class ClientInfo extends BaseTsPioTObject {
     public enum ApiVersion {
         V1, V2, V3;
 
-        /**
-         * Версия ApiVersion
-         */
+        /** Версия ApiVersion */
         public static final int VERSION = 2;
 
         public static void writeToParcel(Parcel parcel, ApiVersion apiVersion, BaseTsPioTObject baseTsPioTObject) {

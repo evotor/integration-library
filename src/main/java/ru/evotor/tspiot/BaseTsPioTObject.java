@@ -2,15 +2,26 @@ package ru.evotor.tspiot;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.Objects;
 
 public abstract class BaseTsPioTObject implements Parcelable {
+    private boolean useOldParcelling = false;
 
-    public void setUseOldParcelling(boolean useOldParcelling) { }
+    public void setUseOldParcelling(boolean useOldParcelling) {
+        this.useOldParcelling = useOldParcelling;
+    }
 
-    public boolean isUseOldParcelling() { return false; }
+    public boolean isUseOldParcelling() {
+        return useOldParcelling;
+    }
 
     public void writeToParcel(Parcel parcel, WriteInterface writeInterface) {
+        if (useOldParcelling) {
+            writeInterface.write(parcel);
+            return;
+        }
+
         Parcel tmp = Parcel.obtain();
         try {
             writeInterface.write(tmp);
