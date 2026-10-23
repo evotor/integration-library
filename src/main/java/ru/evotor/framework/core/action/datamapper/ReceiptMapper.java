@@ -14,28 +14,34 @@ public final class ReceiptMapper {
 
     private static final String KEY_HEADER = "header";
     private static final String KEY_PRINT_DOCUMENTS = "printDocuments";
+    private static final String KEY_STATE = "state";
 
     @Nullable
     public static Receipt from(@Nullable Bundle bundle) {
         if (bundle == null) {
             return null;
         }
-        Bundle headerBundle = bundle.getBundle(KEY_HEADER);
-        Receipt.Header header = ReceiptHeaderMapper.from(headerBundle);
+        Receipt.Header header = ReceiptHeaderMapper.from(bundle.getBundle(KEY_HEADER));
+        if (header == null) {
+            return null;
+        }
 
         List<Receipt.PrintReceipt> printDocuments = new ArrayList<>();
         Parcelable[] printReceiptParcelable = bundle.getParcelableArray(KEY_PRINT_DOCUMENTS);
         if (printReceiptParcelable == null) {
             return null;
         }
-        for (int i = 0; i < printReceiptParcelable.length; i++) {
-            Receipt.PrintReceipt position = PrintReceiptMapper.from((Bundle) printReceiptParcelable[i]);
+        for (Parcelable parcelable : printReceiptParcelable) {
+            Receipt.PrintReceipt position = PrintReceiptMapper.from((Bundle) parcelable);
             printDocuments.add(position);
         }
 
+        Receipt.State state = ReceiptStateMapper.from(bundle.getBundle(KEY_STATE));
+
         return new Receipt(
                 header,
-                printDocuments
+                printDocuments,
+                state
         );
     }
 
@@ -54,6 +60,10 @@ public final class ReceiptMapper {
             printDocumentsParcelable[i] = PrintReceiptMapper.toBundle(printReceipt);
         }
         bundle.putParcelableArray(KEY_PRINT_DOCUMENTS, printDocumentsParcelable);
+
+        if (receipt.getState() != null) {
+            bundle.putBundle(KEY_STATE, ReceiptStateMapper.toBundle(receipt.getState()));
+        }
 
         return bundle;
     }
