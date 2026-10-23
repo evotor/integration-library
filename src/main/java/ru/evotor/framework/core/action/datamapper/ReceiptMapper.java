@@ -21,13 +21,7 @@ public final class ReceiptMapper {
         if (bundle == null) {
             return null;
         }
-        Bundle headerBundle = bundle.getBundle(KEY_HEADER);
-        Receipt.Header header;
-        if (headerBundle != null) {
-            header = ReceiptHeaderMapper.from(headerBundle);
-        } else {
-            return null;
-        }
+        Receipt.Header header = ReceiptHeaderMapper.from(bundle.getBundle(KEY_HEADER));
         if (header == null) {
             return null;
         }
@@ -42,13 +36,7 @@ public final class ReceiptMapper {
             printDocuments.add(position);
         }
 
-        Receipt.State state;
-        Bundle stateBundle = bundle.getBundle(KEY_STATE);
-        if (stateBundle != null) {
-            state = ReceiptStateMapper.INSTANCE.from(bundle);
-        } else {
-            state = null;
-        }
+        Receipt.State state = ReceiptStateMapper.from(bundle.getBundle(KEY_STATE));
 
         return new Receipt(
                 header,
@@ -74,7 +62,7 @@ public final class ReceiptMapper {
         bundle.putParcelableArray(KEY_PRINT_DOCUMENTS, printDocumentsParcelable);
 
         if (receipt.getState() != null) {
-            bundle.putBundle(KEY_STATE, ReceiptStateMapper.INSTANCE.toBundle(receipt.getState()));
+            bundle.putBundle(KEY_STATE, ReceiptStateMapper.toBundle(receipt.getState()));
         }
 
         return bundle;
