@@ -15,7 +15,11 @@ data class Receipt(
     /**
      * Печатные формы чека
      */
-    val printDocuments: List<PrintReceipt>
+    val printDocuments: List<PrintReceipt>,
+    /**
+     * Состояние чека
+     */
+    val state: State?
 ) {
     /**
      * Список всех позиций чека
@@ -195,5 +199,37 @@ data class Receipt(
                     MoneyCalculator.add(acc, discounts?.get(position.uuid) ?: BigDecimal.ZERO)
                 })
         }
+    }
+
+    /**
+     * Состояние чека
+     */
+    data class State(
+        /**
+         * Статус чека
+         */
+        val status: Status,
+        /**
+         * Находится ли чек в активной обработке Evotor POS.
+         * Если [isProcessing] == true, то он находиться в обработке внутри Evotor POS
+         * и изменить его можно только подписавшись на события, которые отправляются в процессе его обработки.
+         * Всегда null, если поле [status] == [Status.CLOSED]
+         */
+        val isProcessing: Boolean?
+    )
+
+    /**
+     * Статус чека
+     */
+    enum class Status {
+        /**
+         * Чек открыт и не завершен
+         */
+        OPENED,
+
+        /**
+         * Финальный статус. Чек фискализирован, распечатан и сохранен в БД
+         */
+        CLOSED
     }
 }
