@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.List;
-import java.util.function.Function;
 
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 
@@ -18,6 +17,15 @@ public final class Utils {
             return source;
         } else {
             throw exception;
+        }
+    }
+
+    @NotNull
+    public static <T> T firstOrThrow(@NotNull List<T> list, TsPioTServiceException exception) throws TsPioTServiceException {
+        if (list.isEmpty()) {
+            throw exception;
+        } else {
+            return list.get(0);
         }
     }
 
