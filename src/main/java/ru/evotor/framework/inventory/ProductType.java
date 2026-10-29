@@ -194,5 +194,15 @@ public enum ProductType {
     /**
      * Строительные материалы
      */
-    BUILDING_MATERIALS_MARKED
+    BUILDING_MATERIALS_MARKED,
+
+    /**
+     * Депозит
+     */
+    DEPOSIT,
+
+    /**
+     * Работа
+     */
+    JOB
 }
