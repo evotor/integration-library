@@ -1,22 +1,30 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
+import ru.evotor.tspiot.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class GtinsCheckResult implements Parcelable {
+public class GtinsCheckResult extends BaseTsPioTObject {
 
     /** Версия GtinsCheckResult */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     @NonNull private final List<GtinCheckResult> gtinsCheckList;
 
     private GtinsCheckResult(Parcel parcel) {
         int version = parcel.readInt();
-        List<GtinCheckResult> gtinsCheckList = parcel.createTypedArrayList(GtinCheckResult.CREATOR);
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        List<GtinCheckResult> gtinsCheckList = local.createTypedArrayList(GtinCheckResult.CREATOR);
         this.gtinsCheckList = gtinsCheckList == null ? new ArrayList<>() : gtinsCheckList;
+
+        endLocalParcelRead(local,version, 2);
     }
 
     public GtinsCheckResult(@NonNull List<GtinCheckResult> gtinsCheckList) {
@@ -32,7 +40,9 @@ public class GtinsCheckResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeTypedList(gtinsCheckList);
+        writeToParcel(parcel, local -> {
+            local.writeTypedList(gtinsCheckList);
+        });
     }
 
     public static Creator<GtinsCheckResult> CREATOR = new Creator<>() {
@@ -46,4 +56,5 @@ public class GtinsCheckResult implements Parcelable {
             return new GtinsCheckResult[size];
         }
     };
+
 }

@@ -1,9 +1,10 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 import java.util.List;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.offline.OfflineCodesCheck;
@@ -51,7 +52,7 @@ public class CodesCheckResult extends BaseTsPioTObject {
         });
     }
 
-    public static Parcelable.Creator<CodesCheckResult> CREATOR = new Parcelable.Creator<>() {
+    public static Creator<CodesCheckResult> CREATOR = new Creator<>() {
         @Override
         public CodesCheckResult createFromParcel(Parcel parcel) {
             return new CodesCheckResult(parcel);

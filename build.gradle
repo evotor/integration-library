@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 android {
     namespace = "ru.evotor.integrations"
-    def version = 44
+    def version = 43
 
     compileSdk 30
 
@@ -16,7 +16,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
         versionCode version
-        versionName "v0.6.39"
+        versionName "v0.6.43"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }

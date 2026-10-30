@@ -1,16 +1,18 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import java.util.Objects;
 
-public class GtinCheckResult implements Parcelable {
+public class GtinCheckResult extends BaseTsPioTObject {
 
     /** Версия GtinCheckResult */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** GTIN/EAN, считанный из линейного штрихкода. */
     @NonNull private final String gtin;
@@ -23,9 +25,13 @@ public class GtinCheckResult implements Parcelable {
 
     private GtinCheckResult(Parcel parcel) {
         int version = parcel.readInt();
-        this.gtin = Objects.requireNonNull(parcel.readString());
-        this.blocked = parcel.readInt() == 1;
-        this.message = parcel.readString();
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.gtin = Objects.requireNonNull(local.readString());
+        this.blocked = local.readInt() == 1;
+        this.message = local.readString();
+
+        endLocalParcelRead(local, version, 2);
     }
 
     public GtinCheckResult(@NonNull String gtin, boolean blocked, @Nullable String message) {
@@ -48,9 +54,11 @@ public class GtinCheckResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        parcel.writeString(gtin);
-        parcel.writeInt(blocked ? 1 : 0);
-        parcel.writeString(message);
+        writeToParcel(parcel, local -> {
+            local.writeString(gtin);
+            local.writeInt(blocked ? 1 : 0);
+            local.writeString(message);
+        });
     }
 
     public static Creator<GtinCheckResult> CREATOR = new Creator<>() {
