@@ -1,8 +1,9 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
@@ -50,7 +51,7 @@ public class VariableExpiration extends BaseTsPioTObject {
         });
     }
 
-    public static final Parcelable.Creator<VariableExpiration> CREATOR = new Parcelable.Creator<VariableExpiration>() {
+    public static final Creator<VariableExpiration> CREATOR = new Creator<VariableExpiration>() {
         @Override
         public VariableExpiration createFromParcel(Parcel parcel) {
             return new VariableExpiration(parcel);

@@ -1,9 +1,10 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
@@ -98,7 +99,7 @@ public class KktInfo extends BaseTsPioTObject {
         });
     }
 
-    public static final Parcelable.Creator<KktInfo> CREATOR = new Parcelable.Creator<>() {
+    public static final Creator<KktInfo> CREATOR = new Creator<>() {
 
         public KktInfo createFromParcel(Parcel in) {
             return new KktInfo(in);

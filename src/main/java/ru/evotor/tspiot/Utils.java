@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
+import ru.evotor.ParcelablesKt;
+import ru.evotor.SerializablesKt;
 import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 
 public final class Utils {
@@ -51,7 +52,7 @@ public final class Utils {
     @SuppressWarnings("unchecked")
     @Nullable
     public static <T> Class<T> readClass(Parcel parcel) {
-        Serializable serializable = parcel.readSerializable();
+        Serializable serializable = SerializablesKt.readSerializable(parcel);
 
         if (serializable == null) {
             return null;
@@ -71,7 +72,7 @@ public final class Utils {
                 return parcel.readParcelable(null);
             }
 
-            return parcel.readParcelable(classType.getClassLoader());
+            return ParcelablesKt.readParcelable(parcel, classType);
         } catch (Exception exception) {
             return null;
         }
@@ -123,32 +124,5 @@ public final class Utils {
 
             return sb.toString();
         }
-    }
-
-    public static <T> String toString(@Nullable List<T> objects, ListToString<T> stringBuilder) {
-        if (objects == null) {
-            return "null";
-        } else if (objects.isEmpty()) {
-            return "[]";
-        } else {
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("[");
-            for (int i = 0; i < objects.size(); i++) {
-                sb.append(stringBuilder.toString(objects.get(i)));
-
-                if (i != objects.size() - 1) {
-                    sb.append(", ");
-                }
-            }
-            sb.append("]");
-
-            return sb.toString();
-        }
-    }
-
-    @FunctionalInterface
-    public interface ListToString <T> {
-        String toString(T object);
     }
 }

@@ -63,7 +63,7 @@ public class TsPioTResult<T extends Parcelable> extends BaseTsPioTObject {
         });
     }
 
-    public static final Parcelable.Creator<TsPioTResult<? extends Parcelable>> CREATOR = new Parcelable.Creator<>() {
+    public static final Creator<TsPioTResult<? extends Parcelable>> CREATOR = new Creator<>() {
         @Override
         public TsPioTResult<?> createFromParcel(Parcel parcel) {
             return new TsPioTResult<>(parcel);

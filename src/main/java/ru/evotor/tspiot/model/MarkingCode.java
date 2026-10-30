@@ -1,11 +1,14 @@
 package ru.evotor.tspiot.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
+
 import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class MarkingCode extends BaseTsPioTObject {
@@ -53,7 +56,7 @@ public class MarkingCode extends BaseTsPioTObject {
         });
     }
 
-    public static Parcelable.Creator<MarkingCode> CREATOR = new Parcelable.Creator<>() {
+    public static Creator<MarkingCode> CREATOR = new Creator<>() {
         @Override
         public MarkingCode createFromParcel(Parcel parcel) {
             return new MarkingCode(parcel);

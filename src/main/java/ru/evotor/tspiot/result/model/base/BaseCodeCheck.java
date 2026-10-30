@@ -1,6 +1,7 @@
 package ru.evotor.tspiot.result.model.base;
 
 import android.os.Parcel;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
