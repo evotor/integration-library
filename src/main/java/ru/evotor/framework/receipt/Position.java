@@ -29,6 +29,7 @@ import ru.evotor.framework.kkt.FiscalRequisite;
 import ru.evotor.framework.kkt.FiscalTags;
 import ru.evotor.framework.receipt.attribute.VeterinaryAttribute;
 import ru.evotor.framework.receipt.position.AgentRequisites;
+import ru.evotor.framework.receipt.position.BatchAccounting;
 import ru.evotor.framework.receipt.position.ImportationData;
 import ru.evotor.framework.receipt.position.LocalModuleInfo;
 import ru.evotor.framework.receipt.position.Mark;
@@ -51,7 +52,7 @@ public class Position implements Parcelable {
     /**
      * Текущая версия объекта Position
      */
-    private static final int VERSION = 17;
+    private static final int VERSION = 18;
     /**
      * Магическое число для идентификации использования версионирования объекта.
      */
@@ -266,6 +267,16 @@ public class Position implements Parcelable {
     @Nullable
     private VolumeSortAccounting volumeSortAccounting;
 
+    /**
+     * Данные партионного учёта маркированной продукции
+     * <p>
+     * Доступно только для молочной продукции {@link ProductType#DAIRY_MARKED}
+     * <p>
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    private BatchAccounting batchAccounting;
+
     public Position(
             String uuid,
             @Nullable String productUuid,
@@ -342,6 +353,7 @@ public class Position implements Parcelable {
         this.veterinaryAttribute = position.veterinaryAttribute;
         this.forceTaxNumber = position.forceTaxNumber;
         this.volumeSortAccounting = position.getVolumeSortAccounting();
+        this.batchAccounting = position.getBatchAccounting();
     }
 
     /**
@@ -684,6 +696,15 @@ public class Position implements Parcelable {
         return volumeSortAccounting;
     }
 
+    /**
+     * @return Данные партионного учёта маркированной продукции
+     */
+    @FiscalRequisite(tag = FiscalTags.ADDITIONAL_REQUISITE_OF_SUBJECT_OF_CALCULATION)
+    @Nullable
+    public BatchAccounting getBatchAccounting() {
+        return batchAccounting;
+    }
+
     @Override
     public boolean equals(Object o) {
         return equals(o, false);
@@ -761,6 +782,8 @@ public class Position implements Parcelable {
             return false;
         if (!Objects.equals(volumeSortAccounting, position.volumeSortAccounting))
             return false;
+        if (!Objects.equals(batchAccounting, position.batchAccounting))
+            return false;
         return Objects.equals(subPositions, position.subPositions);
     }
 
@@ -799,6 +822,7 @@ public class Position implements Parcelable {
         result = 31 * result + (veterinaryAttribute != null ? veterinaryAttribute.hashCode() : 0);
         result = 31 * result + (forceTaxNumber != null ? forceTaxNumber.hashCode() : 0);
         result = 31 * result + (volumeSortAccounting != null ? volumeSortAccounting.hashCode() : 0);
+        result = 31 * result + (batchAccounting != null ? batchAccounting.hashCode() : 0);
         return result;
     }
 
@@ -837,6 +861,7 @@ public class Position implements Parcelable {
                 ", veterinaryAttribute=" + veterinaryAttribute +
                 ", forceTaxNumber=" + forceTaxNumber +
                 ", volumeSortAccounting=" + volumeSortAccounting +
+                ", batchAccounting=" + batchAccounting +
                 '}';
     }
 
@@ -933,6 +958,8 @@ public class Position implements Parcelable {
         dest.writeSerializable(this.forceTaxNumber);
         // Volume Sort Accounting Realization
         dest.writeBundle(this.volumeSortAccounting != null ? this.volumeSortAccounting.toBundle() : null);
+        // Batch Accounting
+        dest.writeBundle(this.batchAccounting != null ? this.batchAccounting.toBundle() : null);
     }
 
     protected Position(Parcel in) {
@@ -1048,6 +1075,9 @@ public class Position implements Parcelable {
         if (version >= 17) {
             readVolumeSortAccounting(in);
         }
+        if (version >= 18) {
+            readBatchAccounting(in);
+        }
         if (isVersionGreaterThanCurrent) {
             in.setDataPosition(startDataPosition + dataSize);
         }
@@ -1105,6 +1135,12 @@ public class Position implements Parcelable {
     private void readVolumeSortAccounting(Parcel in) {
         this.volumeSortAccounting = VolumeSortAccounting.from(
                 in.readBundle(VolumeSortAccounting.class.getClassLoader())
+        );
+    }
+
+    private void readBatchAccounting(Parcel in) {
+        this.batchAccounting = BatchAccounting.from(
+                in.readBundle(BatchAccounting.class.getClassLoader())
         );
     }
 
@@ -2248,6 +2284,21 @@ public class Position implements Parcelable {
                 @Nullable VolumeSortAccounting volumeSortAccounting
         ) {
             position.volumeSortAccounting = volumeSortAccounting;
+            return this;
+        }
+
+        /**
+         * Партионный учёт для позиции доступен только если тип товара является:
+         * <p>
+         * молочная продукция {@link ProductType#DAIRY_MARKED}
+         * не может использоваться совместно с setPartialRealization и setVolumeSortAccounting
+         * @param batchAccounting данные партионного учёта
+         */
+        @RequiresPermission(BatchAccounting.BATCH_ACCOUNTING_PERMISSION)
+        public Builder setBatchAccounting(
+                @Nullable BatchAccounting batchAccounting
+        ) {
+            position.batchAccounting = batchAccounting;
             return this;
         }
 
