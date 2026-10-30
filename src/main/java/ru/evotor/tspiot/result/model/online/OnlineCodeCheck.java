@@ -12,12 +12,12 @@ import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 import ru.evotor.tspiot.result.model.base.BaseCodeCheck;
 
-public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
+public class OnlineCodeCheck extends BaseCodeCheck {
 
     /**
      * Версия OnlineCodeCheck
      */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /**
      * Дата и время истечения срока годности
@@ -154,25 +154,29 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         super(parcel);
 
         int version = parcel.readInt();
-        this.expireDate = (Date) parcel.readSerializable();
-        this.productionDate = (Date) parcel.readSerializable();
-        this.productWeight = Utils.readInteger(parcel);
-        this.prVetDocument = parcel.readString();
-        this.isOwner = Utils.readBoolean(parcel);
-        this.message = parcel.readString();
-        this.errorCode = Utils.readInteger(parcel);
-        this.isTracking = parcel.readInt() == 1;
-        this.eliminationState = Utils.readInteger(parcel);
-        this.grayZone = Utils.readBoolean(parcel);
-        this.innerUnitCount = Utils.readInteger(parcel);
-        this.soldUnitCount = Utils.readInteger(parcel);
-        this.packageType = parcel.readString();
-        this.parent = parcel.readString();
-        this.producerInn = parcel.readString();
-        this.productionSerialNumber = parcel.readString();
-        this.productionBatchNumber = parcel.readString();
-        this.factorySerialNumber = parcel.readString();
-        this.packageQuantity = Utils.readInteger(parcel);
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.expireDate = (Date) local.readSerializable();
+        this.productionDate = (Date) local.readSerializable();
+        this.productWeight = Utils.readInteger(local);
+        this.prVetDocument = local.readString();
+        this.isOwner = Utils.readBoolean(local);
+        this.message = local.readString();
+        this.errorCode = Utils.readInteger(local);
+        this.isTracking = local.readInt() == 1;
+        this.eliminationState = Utils.readInteger(local);
+        this.grayZone = Utils.readBoolean(local);
+        this.innerUnitCount = Utils.readInteger(local);
+        this.soldUnitCount = Utils.readInteger(local);
+        this.packageType = local.readString();
+        this.parent = local.readString();
+        this.producerInn = local.readString();
+        this.productionSerialNumber = local.readString();
+        this.productionBatchNumber = local.readString();
+        this.factorySerialNumber = local.readString();
+        this.packageQuantity = Utils.readInteger(local);
+
+        endLocalParcelRead(local, version, 2);
     }
 
     public OnlineCodeCheck(
@@ -355,25 +359,27 @@ public class OnlineCodeCheck extends BaseCodeCheck implements Parcelable {
         super.write(parcel, flags);
 
         parcel.writeInt(VERSION);
-        parcel.writeSerializable(expireDate);
-        parcel.writeSerializable(productionDate);
-        parcel.writeValue(productWeight);
-        parcel.writeString(prVetDocument);
-        parcel.writeValue(isOwner);
-        parcel.writeString(message);
-        parcel.writeValue(errorCode);
-        parcel.writeValue(isTracking);
-        parcel.writeValue(eliminationState);
-        parcel.writeValue(grayZone);
-        parcel.writeValue(innerUnitCount);
-        parcel.writeValue(soldUnitCount);
-        parcel.writeString(packageType);
-        parcel.writeString(parent);
-        parcel.writeString(producerInn);
-        parcel.writeString(productionSerialNumber);
-        parcel.writeString(productionBatchNumber);
-        parcel.writeString(factorySerialNumber);
-        parcel.writeValue(packageQuantity);
+        writeToParcel(parcel, local -> {
+            local.writeSerializable(expireDate);
+            local.writeSerializable(productionDate);
+            local.writeValue(productWeight);
+            local.writeString(prVetDocument);
+            local.writeValue(isOwner);
+            local.writeString(message);
+            local.writeValue(errorCode);
+            local.writeValue(isTracking);
+            local.writeValue(eliminationState);
+            local.writeValue(grayZone);
+            local.writeValue(innerUnitCount);
+            local.writeValue(soldUnitCount);
+            local.writeString(packageType);
+            local.writeString(parent);
+            local.writeString(producerInn);
+            local.writeString(productionSerialNumber);
+            local.writeString(productionBatchNumber);
+            local.writeString(factorySerialNumber);
+            local.writeValue(packageQuantity);
+        });
     }
 
     @NonNull

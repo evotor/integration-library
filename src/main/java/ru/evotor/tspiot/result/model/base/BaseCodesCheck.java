@@ -4,12 +4,13 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public abstract class BaseCodesCheck {
+public abstract class BaseCodesCheck extends BaseTsPioTObject {
 
     /** Версия BaseCodesCheck */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     protected final int code;
 
@@ -21,9 +22,13 @@ public abstract class BaseCodesCheck {
 
     protected BaseCodesCheck(Parcel parcel) {
         int version = parcel.readInt();
-        this.code = parcel.readInt();
-        this.reqId = parcel.readString();
-        this.reqTimestamp = parcel.readLong();
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.code = local.readInt();
+        this.reqId = local.readString();
+        this.reqTimestamp = local.readLong();
+
+        endLocalParcelRead(local, version, 2);
     }
 
     public BaseCodesCheck(
@@ -38,9 +43,11 @@ public abstract class BaseCodesCheck {
 
     protected final void write(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeInt(code);
-        parcel.writeString(reqId);
-        parcel.writeLong(reqTimestamp);
+        writeToParcel(parcel, local -> {
+            local.writeInt(code);
+            local.writeString(reqId);
+            local.writeLong(reqTimestamp);
+        });
     }
 
     public int getCode() { return code; }

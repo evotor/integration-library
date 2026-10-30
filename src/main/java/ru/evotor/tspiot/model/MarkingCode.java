@@ -1,18 +1,20 @@
 package ru.evotor.tspiot.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class MarkingCode implements Parcelable {
+public class MarkingCode extends BaseTsPioTObject {
 
     /** Версия MarkingCode */
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     /** Код маркировки */
     @NotNull
@@ -28,8 +30,12 @@ public class MarkingCode implements Parcelable {
 
     private MarkingCode(Parcel parcel) {
         int version = parcel.readInt();
-        this.cis = Objects.requireNonNull(parcel.readString());
-        this.productType = Utils.readInteger(parcel);
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.cis = Objects.requireNonNull(local.readString());
+        this.productType = Utils.readInteger(local);
+
+        endLocalParcelRead(local, version, 2);
     }
 
     @NotNull
@@ -44,8 +50,10 @@ public class MarkingCode implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(VERSION);
-        parcel.writeString(cis);
-        parcel.writeValue(productType);
+        writeToParcel(parcel, local -> {
+            local.writeString(cis);
+            local.writeValue(productType);
+        });
     }
 
     public static Creator<MarkingCode> CREATOR = new Creator<>() {

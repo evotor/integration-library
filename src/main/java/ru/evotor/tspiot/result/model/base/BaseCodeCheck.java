@@ -5,15 +5,18 @@ import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.VariableExpirations;
 
-public abstract class BaseCodeCheck {
+public abstract class BaseCodeCheck extends BaseTsPioTObject {
 
     /**
      * Версия BaseCodeCheck
      */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
+
+    protected int baseCodeCheckObjectVersion = 0;
 
     /**
      * КИ / КиЗ из запроса
@@ -105,22 +108,26 @@ public abstract class BaseCodeCheck {
     protected final Integer smp;
 
     protected BaseCodeCheck(Parcel parcel) {
-        int version = parcel.readInt();
-        this.cis = parcel.readString();
-        this.found = Utils.readBoolean(parcel);
-        this.valid = Utils.readBoolean(parcel);
-        this.printView = parcel.readString();
-        this.gtin = parcel.readString();
-        this.groupIds = parcel.createIntArray();
-        this.verified = Utils.readBoolean(parcel);
-        this.realizable = Utils.readBoolean(parcel);
-        this.utilized = Utils.readBoolean(parcel);
-        this.variableExpirations = parcel.readTypedObject(VariableExpirations.CREATOR);
-        this.isBlocked = Utils.readBoolean(parcel);
-        this.ogvs = parcel.createStringArray();
-        this.sold = Utils.readBoolean(parcel);
-        this.mrp = Utils.readInteger(parcel);
-        this.smp = Utils.readInteger(parcel);
+        baseCodeCheckObjectVersion = parcel.readInt();
+        Parcel local = createLocalParcelToRead(parcel, baseCodeCheckObjectVersion, 2);
+
+        this.cis = local.readString();
+        this.found = Utils.readBoolean(local);
+        this.valid = Utils.readBoolean(local);
+        this.printView = local.readString();
+        this.gtin = local.readString();
+        this.groupIds = local.createIntArray();
+        this.verified = Utils.readBoolean(local);
+        this.realizable = Utils.readBoolean(local);
+        this.utilized = Utils.readBoolean(local);
+        this.variableExpirations = local.readTypedObject(VariableExpirations.CREATOR);
+        this.isBlocked = Utils.readBoolean(local);
+        this.ogvs = local.createStringArray();
+        this.sold = Utils.readBoolean(local);
+        this.mrp = Utils.readInteger(local);
+        this.smp = Utils.readInteger(local);
+
+        endLocalParcelRead(local, baseCodeCheckObjectVersion, 2);
     }
 
     public BaseCodeCheck(
@@ -159,21 +166,23 @@ public abstract class BaseCodeCheck {
 
     protected void write(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeString(cis);
-        parcel.writeValue(found);
-        parcel.writeValue(valid);
-        parcel.writeString(printView);
-        parcel.writeString(gtin);
-        parcel.writeIntArray(groupIds);
-        parcel.writeValue(verified);
-        parcel.writeValue(realizable);
-        parcel.writeValue(utilized);
-        parcel.writeTypedObject(this.variableExpirations, flags);
-        parcel.writeValue(isBlocked);
-        parcel.writeStringArray(ogvs);
-        parcel.writeValue(sold);
-        parcel.writeValue(mrp);
-        parcel.writeValue(smp);
+        writeToParcel(parcel, local -> {
+            local.writeString(cis);
+            local.writeValue(found);
+            local.writeValue(valid);
+            local.writeString(printView);
+            local.writeString(gtin);
+            local.writeIntArray(groupIds);
+            local.writeValue(verified);
+            local.writeValue(realizable);
+            local.writeValue(utilized);
+            local.writeTypedObject(this.variableExpirations, flags);
+            local.writeValue(isBlocked);
+            local.writeStringArray(ogvs);
+            local.writeValue(sold);
+            local.writeValue(mrp);
+            local.writeValue(smp);
+        });
     }
 
     @Nullable

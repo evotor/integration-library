@@ -1,16 +1,17 @@
 package ru.evotor.tspiot.result.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class KktInfo implements Parcelable {
+public class KktInfo extends BaseTsPioTObject {
 
     /** Версия KktInfo */
-    private final static int VERSION = 2;
+    private final static int VERSION = 3;
 
     /** Идентификатор ТС ПИоТ */
     private final String tspiotId;
@@ -52,13 +53,17 @@ public class KktInfo implements Parcelable {
 
     private KktInfo(Parcel parcel) {
         int version = parcel.readInt();
-        this.tspiotId = parcel.readString();
-        this.kktSerial = parcel.readString();
-        this.fnSerial = parcel.readString();
-        this.kktInn = parcel.readString();
-        this.codesCheckTimeOut = parcel.readInt();
-        this.lmChzInfo = parcel.readTypedObject(LmChzInfo.CREATOR);
-        this.lmEANCheckTimeout = version >= 2 ? Utils.readInteger(parcel) : null;
+        Parcel local = createLocalParcelToRead(parcel, version, 3);
+
+        this.tspiotId = local.readString();
+        this.kktSerial = local.readString();
+        this.fnSerial = local.readString();
+        this.kktInn = local.readString();
+        this.codesCheckTimeOut = local.readInt();
+        this.lmChzInfo = local.readTypedObject(LmChzInfo.CREATOR);
+        this.lmEANCheckTimeout = version >= 2 ? Utils.readInteger(local) : null;
+
+        endLocalParcelRead(local, version, 3);
     }
 
     public String getTspiotId() { return tspiotId; }
@@ -83,13 +88,15 @@ public class KktInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeString(tspiotId);
-        parcel.writeString(kktSerial);
-        parcel.writeString(fnSerial);
-        parcel.writeString(kktInn);
-        parcel.writeInt(codesCheckTimeOut);
-        parcel.writeTypedObject(lmChzInfo, flags);
-        parcel.writeValue(lmEANCheckTimeout);
+        writeToParcel(parcel, local -> {
+            local.writeString(tspiotId);
+            local.writeString(kktSerial);
+            local.writeString(fnSerial);
+            local.writeString(kktInn);
+            local.writeInt(codesCheckTimeOut);
+            local.writeTypedObject(lmChzInfo, flags);
+            local.writeValue(lmEANCheckTimeout);
+        });
     }
 
     public static final Creator<KktInfo> CREATOR = new Creator<>() {

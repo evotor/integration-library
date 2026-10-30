@@ -1,17 +1,19 @@
 package ru.evotor.tspiot.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 
-public class ClientInfo implements Parcelable {
+public class ClientInfo extends BaseTsPioTObject {
 
     /** Версия ClientInfo */
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     /** Версия протокола */
     @NotNull private final ApiVersion apiVersion;
@@ -36,13 +38,17 @@ public class ClientInfo implements Parcelable {
 
     private ClientInfo(Parcel parcel) {
         int version = parcel.readInt();
-        this.apiVersion = ApiVersion.createFromParcel(parcel);
-        this.name = Objects.requireNonNull(parcel.readString());
-        this.version = Objects.requireNonNull(parcel.readString());
-        this.id = Objects.requireNonNull(parcel.readString());
-        this.lastKey = parcel.readString();
-        this.token = Objects.requireNonNull(parcel.readString());
-        this.userName = parcel.readString();
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        this.apiVersion = ApiVersion.createFromParcel(local, this);
+        this.name = Objects.requireNonNull(local.readString());
+        this.version = Objects.requireNonNull(local.readString());
+        this.id = Objects.requireNonNull(local.readString());
+        this.lastKey = local.readString();
+        this.token = Objects.requireNonNull(local.readString());
+        this.userName = local.readString();
+
+        endLocalParcelRead(local, version, 2);
     }
 
     public ClientInfo(
@@ -69,13 +75,15 @@ public class ClientInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        ApiVersion.writeToParcel(parcel, apiVersion);
-        parcel.writeString(name);
-        parcel.writeString(version);
-        parcel.writeString(id);
-        parcel.writeString(lastKey);
-        parcel.writeString(token);
-        parcel.writeString(userName);
+        writeToParcel(parcel, local -> {
+            ApiVersion.writeToParcel(local, apiVersion, this);
+            local.writeString(name);
+            local.writeString(version);
+            local.writeString(id);
+            local.writeString(lastKey);
+            local.writeString(token);
+            local.writeString(userName);
+        });
     }
 
     @NotNull
@@ -115,16 +123,18 @@ public class ClientInfo implements Parcelable {
         V1, V2, V3;
 
         /** Версия ApiVersion */
-        public static final int VERSION = 1;
+        public static final int VERSION = 2;
 
-        public static void writeToParcel(Parcel parcel, ApiVersion apiVersion) {
+        public static void writeToParcel(Parcel parcel, ApiVersion apiVersion, BaseTsPioTObject baseTsPioTObject) {
             parcel.writeInt(VERSION);
-            parcel.writeString(apiVersion.name());
+            baseTsPioTObject.writeToParcel(parcel, local -> local.writeString(apiVersion.name()));
         }
 
-        static ApiVersion createFromParcel(Parcel parcel) throws IllegalArgumentException {
+        static ApiVersion createFromParcel(Parcel parcel, BaseTsPioTObject baseTsPioTObject) throws IllegalArgumentException {
             int version = parcel.readInt();
-            String name = parcel.readString();
+            Parcel local = baseTsPioTObject.createLocalParcelToRead(parcel, version, 2);
+            String name = local.readString();
+            baseTsPioTObject.endLocalParcelRead(local, version, 2);
 
             return ApiVersion.valueOf(name);
         }

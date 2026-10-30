@@ -1,15 +1,16 @@
 package ru.evotor.tspiot.result;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+
+import ru.evotor.tspiot.BaseTsPioTObject;
 import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.result.model.base.ErrorDescription;
 import ru.evotor.tspiot.result.model.errors.TsPioTErrorsDescriptionWrapper;
 
-public class TsPioTError implements Parcelable {
+public class TsPioTError extends BaseTsPioTObject {
 
     /** Версия TsPioTError */
-    private final static int VERSION = 1;
+    private final static int VERSION = 2;
 
     /** Описание ошибки */
     private final TsPioTErrorsDescriptionWrapper<? extends ErrorDescription> error;
@@ -18,8 +19,12 @@ public class TsPioTError implements Parcelable {
 
     private TsPioTError(Parcel parcel) {
         int version = parcel.readInt();
-        errorType = Utils.readClass(parcel);
-        error = Utils.readData(errorType, parcel);
+        Parcel local = createLocalParcelToRead(parcel, version, 2);
+
+        errorType = Utils.readClass(local);
+        error = Utils.readData(errorType, local);
+
+        endLocalParcelRead(local, version, 2);
     }
 
     @SuppressWarnings("unchecked")
@@ -36,8 +41,10 @@ public class TsPioTError implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(VERSION);
-        parcel.writeSerializable(errorType);
-        parcel.writeParcelable(error, flags);
+        writeToParcel(parcel, local -> {
+            local.writeSerializable(errorType);
+            local.writeParcelable(error, flags);
+        });
     }
 
     public static final Creator<TsPioTError> CREATOR = new Creator<>() {
