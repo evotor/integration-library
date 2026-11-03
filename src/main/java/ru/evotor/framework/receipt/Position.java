@@ -1890,6 +1890,28 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toDeposit() {
+            position.productType = ProductType.DEPOSIT;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toJob() {
+            position.productType = ProductType.JOB;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
