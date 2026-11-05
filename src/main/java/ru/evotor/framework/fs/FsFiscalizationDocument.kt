@@ -79,6 +79,14 @@ data class FsFiscalizationDocument(
             resultList.add(TaxationSystem.PATENT)
         }
 
+        if (isBitSet(taxationSystems, 6)) {
+            resultList.add(TaxationSystem.AUTOMATED_SIMPLIFIED_INCOME)
+        }
+
+        if (isBitSet(taxationSystems, 7)) {
+            resultList.add(TaxationSystem.AUTOMATED_SIMPLIFIED_INCOME_OUTCOME)
+        }
+
         return resultList
     }
 
