@@ -60,6 +60,8 @@ object FeaturesContract {
     const val PATH_PRESERVES_MARK = "preserves_marked"
     const val PATH_GROCERIES_MARK = "groceries_marked"
     const val PATH_BUILDING_MATERIALS_MARK = "building_materials_marked"
-
+    const val PATH_MEAT_MARK = "meat_marked"
+    const val PATH_CANDIES_MARK = "candies_marked"
+    const val PATH_RADIO_MARK = "radio_marked"
     const val COLUMN_IS_ACTIVE = "is_active"
 }

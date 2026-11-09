@@ -194,5 +194,20 @@ public enum ProductType {
     /**
      * Строительные материалы
      */
-    BUILDING_MATERIALS_MARKED
+    BUILDING_MATERIALS_MARKED,
+
+    /**
+     * Мясные изделия
+     */
+    MEAT_MARKED,
+
+    /**
+     * Сладости и кондитерские изделия
+     */
+    CANDIES_MARKED,
+
+    /**
+     * Радиоэлектронная продукция
+     */
+    RADIO_MARKED
 }

@@ -385,6 +385,27 @@ object FeaturesApi {
      */
     fun isBuildingMaterialsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BUILDING_MATERIALS_MARK)
 
+    /**
+     * Проверяет, активна ли функция "Маркировка мясных изделий" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isMeatMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_MEAT_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка сладостей и кондитерских изделий" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isCandiesMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_CANDIES_MARK)
+
+    /**
+     * Проверяет, активна ли функция "Маркировка радиоэлектронной продукции" на данном терминале
+     *
+     * @return `true` если функция активна; `false` если функция не активна.
+     */
+    fun isRadioMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_RADIO_MARK)
+
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(
             Uri.withAppendedPath(FeaturesContract.BASE_URI, path),
