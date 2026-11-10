@@ -46,4 +46,5 @@ public class GtinsCheckResult implements Parcelable {
             return new GtinsCheckResult[size];
         }
     };
+
 }
