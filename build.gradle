@@ -7,7 +7,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 android {
     namespace = "ru.evotor.integrations"
-    def version = 42
+    def version = 43
 
     compileSdk 30
 
@@ -16,7 +16,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
         versionCode version
-        versionName "v0.6.39"
+        versionName "v0.6.43"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         resValue "integer", "versionCodeIntegrationLibrary", "$version"
     }
@@ -51,6 +51,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
 
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    androidTestImplementation("androidx.test.ext:junit:1.1.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
 repositories {

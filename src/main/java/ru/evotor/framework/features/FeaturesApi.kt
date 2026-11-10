@@ -224,6 +224,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
+    @Deprecated("Устарело с 01.11.2026")
     fun isFiscBlockActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_BLOCK)
 
     /**
@@ -231,6 +232,7 @@ object FeaturesApi {
      *
      * @return `true` если функция активна; `false` если функция не активна.
      */
+    @Deprecated("Устарело с 01.11.2026")
     fun isFiscPaidActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_PAID)
 
     /**
@@ -384,6 +386,20 @@ object FeaturesApi {
      * @return `true` если функция активна; `false` если функция не активна.
      */
     fun isBuildingMaterialsMarkActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_BUILDING_MATERIALS_MARK)
+
+    /**
+     * Проверяет, активен ли на смарт-терминале режим «автономный пин-пад».
+     *
+     * @return `true` если режим задан и включён; `false` если выключен или не задан.
+     */
+    fun isPinpadModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_PINPAD_MODE)
+
+    /**
+     * Проверяет, активен ли на смарт-терминале режим «касса 2-в-1».
+     *
+     * @return `true` если режим задан и включён; `false` если выключен или не задан.
+     */
+    fun isFiscModeActive(context: Context) = isFeatureActive(context, FeaturesContract.PATH_FISC_MODE)
 
     private fun isFeatureActive(context: Context, path: String, defaultValue: Boolean = false): Boolean =
         context.contentResolver.query(
