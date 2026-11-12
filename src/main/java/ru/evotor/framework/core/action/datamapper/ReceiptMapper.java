@@ -14,7 +14,6 @@ public final class ReceiptMapper {
 
     private static final String KEY_HEADER = "header";
     private static final String KEY_PRINT_DOCUMENTS = "printDocuments";
-    private static final String KEY_STATE = "state";
 
     @Nullable
     public static Receipt from(@Nullable Bundle bundle) {
@@ -36,12 +35,10 @@ public final class ReceiptMapper {
             printDocuments.add(position);
         }
 
-        Receipt.State state = ReceiptStateMapper.from(bundle.getBundle(KEY_STATE));
-
         return new Receipt(
                 header,
                 printDocuments,
-                state
+                ReceiptStatusMapper.from(bundle)
         );
     }
 
@@ -61,8 +58,8 @@ public final class ReceiptMapper {
         }
         bundle.putParcelableArray(KEY_PRINT_DOCUMENTS, printDocumentsParcelable);
 
-        if (receipt.getState() != null) {
-            bundle.putBundle(KEY_STATE, ReceiptStateMapper.toBundle(receipt.getState()));
+        if (receipt.getStatus() != null) {
+            ReceiptStatusMapper.addStatus(bundle, receipt.getStatus());
         }
 
         return bundle;

@@ -65,7 +65,7 @@ object ReceiptApi {
     private const val CURRENT_CORRECTION_OUTCOME_PATH = "correctionOutcome"
     private const val CURRENT_CORRECTION_RETURN_INCOME_PATH = "correctionReturnIncome"
     private const val CURRENT_CORRECTION_RETURN_OUTCOME_PATH = "correctionReturnOutcome"
-    private const val STATE_PATH = "state"
+    private const val STATUS_PATH = "status"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
@@ -241,22 +241,22 @@ object ReceiptApi {
             )
         }
 
-        val state = try {
+        val status = try {
             context.contentResolver.query(
-                Uri.withAppendedPath(baseUri, STATE_PATH),
+                Uri.withAppendedPath(baseUri, STATUS_PATH),
                 null,
                 null,
                 null,
                 null
             )?.use { cursor ->
                 if (cursor.moveToNext()) {
-                    return@use createReceiptState(cursor)
+                    cursor.optInt(ReceiptStatusTable.STATUS)?.let(Receipt.Status.values()::getOrNull)
                 } else {
                     null
                 }
             }
         } catch (error: IllegalArgumentException) {
-            // old version of evopos, does not support receipt state
+            // old version of evopos, does not support receipt status
             error.printStackTrace()
             null
         }
@@ -264,7 +264,7 @@ object ReceiptApi {
         return Receipt(
             header,
             printDocuments,
-            state
+            status
         )
     }
 
@@ -674,23 +674,6 @@ object ReceiptApi {
             externalLoyaltyCardId = cursor.optString(ReceiptHeaderTable.COLUMN_EXTERNAL_LOYALTY_CARD_ID),
             additionalData = cursor.optString(ReceiptHeaderTable.COLUMN_ADDITIONAL_DATA)
         )
-    }
-
-    private fun createReceiptState(cursor: Cursor): Receipt.State? {
-        val status = cursor.optInt(ReceiptStateTable.STATUS)?.let(Receipt.Status.values()::getOrNull)
-        val isProcessing = cursor.optInt(ReceiptStateTable.IS_PROCESSING)
-        return if (status != null) {
-            Receipt.State(
-                status = status,
-                isProcessing = if (isProcessing == null) {
-                    null
-                } else {
-                    isProcessing == 1
-                }
-            )
-        } else {
-            null
-        }
     }
 
     private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
