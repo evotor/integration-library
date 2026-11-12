@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
 import ru.evotor.framework.receipt.Receipt
+import kotlin.collections.get
 
 /**
  * Информация о состоянии чека.
@@ -18,7 +19,7 @@ data class ReceiptProcessingInfo(
 ) : Parcelable, IBundlable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
-        parcel.readSerializable() as Receipt.Status
+        Receipt.Status.values()[parcel.readInt()]
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -35,7 +36,7 @@ data class ReceiptProcessingInfo(
 
         // version 1
         parcel.writeString(receiptUuid)
-        parcel.writeSerializable(status)
+        parcel.writeInt(status.ordinal)
 
         // Go back and write the size
         val parcelableSize = parcel.dataPosition() - startPosition
@@ -48,7 +49,7 @@ data class ReceiptProcessingInfo(
         return 0
     }
 
-    override fun toBundle() = Bundle().apply { putParcelable(KEY_RECEIPT_PROCESSING_INFO, this) }
+    override fun toBundle() = Bundle().apply { putParcelable(KEY_RECEIPT_PROCESSING_INFO, this@ReceiptProcessingInfo) }
 
     companion object {
         private const val PARCELABLE_VERSION = 1
@@ -75,6 +76,9 @@ data class ReceiptProcessingInfo(
             }
         }
 
-        fun from(bundle: Bundle) = bundle.getParcelable<ReceiptProcessingInfo>(KEY_RECEIPT_PROCESSING_INFO)
+        fun from(bundle: Bundle): ReceiptProcessingInfo? {
+            bundle.classLoader = ReceiptProcessingInfo::class.java.classLoader
+            return bundle.getParcelable(KEY_RECEIPT_PROCESSING_INFO)
+        }
     }
 }
