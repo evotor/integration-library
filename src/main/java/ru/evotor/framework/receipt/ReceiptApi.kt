@@ -24,8 +24,8 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
-import ru.evotor.framework.receipt.status.event.handler.service.ResumeReceiptProcessingIntegrationService
-import ru.evotor.framework.receipt.status.event.ResumeReceiptProcessingRequestedEvent
+import ru.evotor.framework.receipt.status.event.handler.service.EnsureReceiptProcessingIntegrationService
+import ru.evotor.framework.receipt.status.event.EnsureReceiptProcessingRequestedEvent
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
@@ -38,8 +38,9 @@ import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingCallback
-import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingException
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.EnsureReceiptProcessingCallback
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.ReceiptProcessingInfo
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.EnsureReceiptProcessingException
 import java.math.BigDecimal
 import java.util.Date
 
@@ -338,18 +339,18 @@ object ReceiptApi {
             }
 
     /**
-     * Возобновить процесс работы POS с чеком
+     * Отдаёт актуальное состояние чека и возвращает чек в обработку, если она остановилась
      * @param context контекст приложения
      * @param receiptUuid UUID чека
      */
     @JvmStatic
-    fun resumeReceiptProcessing(context: Context, receiptUuid: String, callback: ResumeReceiptProcessingCallback) {
+    fun ensureReceiptProcessing(context: Context, receiptUuid: String, callback: EnsureReceiptProcessingCallback) {
         context.startIntegrationService(
-            ResumeReceiptProcessingIntegrationService.ACTION_RESUME_RECEIPT_PROCESSING,
-            ResumeReceiptProcessingRequestedEvent(receiptUuid)
+            EnsureReceiptProcessingIntegrationService.ACTION_ENSURE_RECEIPT_PROCESSING,
+            EnsureReceiptProcessingRequestedEvent(receiptUuid)
         ) {
-            it.result?.error?.let { error -> callback.onError(ResumeReceiptProcessingException(error.code, error.message)) }
-                ?: callback.onSuccess()
+            it.result?.error?.let { error -> callback.onError(EnsureReceiptProcessingException(error.code, error.message)) }
+                ?: it.result?.data?.let(ReceiptProcessingInfo::from)?.let(callback::onSuccess)
         }
     }
 
