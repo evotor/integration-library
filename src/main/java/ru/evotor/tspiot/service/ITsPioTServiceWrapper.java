@@ -7,6 +7,8 @@ import ru.evotor.tspiot.exceptions.base.TsPioTServiceException;
 import ru.evotor.tspiot.model.ClientInfo;
 import ru.evotor.tspiot.model.MarkingCode;
 import ru.evotor.tspiot.result.model.CodesCheckResult;
+import ru.evotor.tspiot.result.model.GtinCheckResult;
+import ru.evotor.tspiot.result.model.GtinsCheckResult;
 import ru.evotor.tspiot.result.model.KktInfo;
 
 public interface ITsPioTServiceWrapper {
@@ -15,4 +17,8 @@ public interface ITsPioTServiceWrapper {
     CodesCheckResult getMarkedProductsInfo(@NonNull List<MarkingCode> codes, @Nullable String userUuid) throws TsPioTServiceException;
 
     CodesCheckResult getMarkedProductsInfo(@NonNull List<MarkingCode> codes, @NonNull ClientInfo clientInfo) throws TsPioTServiceException;
+
+    GtinCheckResult checkGtin(@NonNull String gtin) throws TsPioTServiceException;
+
+    GtinsCheckResult checkGtins(@NonNull List<String> gtins) throws TsPioTServiceException;
 }
