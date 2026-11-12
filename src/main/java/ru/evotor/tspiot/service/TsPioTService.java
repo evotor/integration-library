@@ -10,6 +10,8 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,6 +28,8 @@ import ru.evotor.tspiot.exceptions.UnknownException;
 import ru.evotor.tspiot.model.ClientInfo;
 import ru.evotor.tspiot.model.MarkingCode;
 import ru.evotor.tspiot.result.model.CodesCheckResult;
+import ru.evotor.tspiot.result.model.GtinCheckResult;
+import ru.evotor.tspiot.result.model.GtinsCheckResult;
 import ru.evotor.tspiot.result.model.KktInfo;
 import ru.evotor.tspiot.result.TsPioTError;
 import ru.evotor.tspiot.result.TsPioTResult;
@@ -201,6 +205,72 @@ public class TsPioTService implements ITsPioTServiceWrapper {
 
             if (data != null) {
                 return (CodesCheckResult) data;
+            } else {
+                TsPioTError error = result.getError();
+
+                if (error != null) {
+                    throw new TsPioTErrorHolderException(error.getError());
+                } else {
+                    throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+                }
+            }
+        } catch (RemoteException | RuntimeException ex) {
+            TsPioTServiceConnector.processException(ex);
+            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+        }
+    }
+
+    /** Метод проверки штрихкода */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public GtinCheckResult checkGtin(@NonNull String gtin) throws TsPioTServiceException {
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
+
+        try {
+            ArrayList<String> gtins = new ArrayList<>();
+            gtins.add(gtin);
+
+            TsPioTResult result = Utils.notNull(
+                    service.checkGtin(gtins),
+                    new UnknownException(UNKNOWN_SERVER_EXCEPTION_TEXT)
+            );
+            Parcelable data = result.getData();
+
+            if (data != null) {
+                return Utils.firstOrThrow(
+                        ((GtinsCheckResult) data).getGtinsCheckList(),
+                        new UnknownException(UNKNOWN_EXCEPTION_TEXT)
+                );
+            } else {
+                TsPioTError error = result.getError();
+
+                if (error != null) {
+                    throw new TsPioTErrorHolderException(error.getError());
+                } else {
+                    throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+                }
+            }
+        } catch (RemoteException | RuntimeException ex) {
+            TsPioTServiceConnector.processException(ex);
+            throw new UnknownException(UNKNOWN_EXCEPTION_TEXT);
+        }
+    }
+
+    /** Метод проверки штрихкода */
+    @SuppressWarnings("rawtypes")
+    @Override
+    public GtinsCheckResult checkGtins(@NonNull List<String> gtins) throws TsPioTServiceException {
+        TsPioTServiceOperationOnMainThreadException.throwIfMainThread();
+
+        try {
+            TsPioTResult result = Utils.notNull(
+                    service.checkGtin(gtins),
+                    new UnknownException(UNKNOWN_SERVER_EXCEPTION_TEXT)
+            );
+            Parcelable data = result.getData();
+
+            if (data != null) {
+                return (GtinsCheckResult) data;
             } else {
                 TsPioTError error = result.getError();
 
