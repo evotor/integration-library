@@ -1,13 +1,14 @@
 package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
+import ru.evotor.ParcelablesKt;
 
 public sealed abstract class MessageErrorDescriptionWrapper extends TsPioTErrorsDescriptionWrapper<MessageErrorDescription> {
     final protected MessageErrorDescription errorDescription;
 
     protected MessageErrorDescriptionWrapper(Parcel parcel) {
         super(parcel);
-        this.errorDescription = parcel.readParcelable(MessageErrorDescription.class.getClassLoader());
+        this.errorDescription = ParcelablesKt.readParcelable(parcel, MessageErrorDescription.class);
     }
 
     public MessageErrorDescriptionWrapper(MessageErrorDescription errorDescription) {

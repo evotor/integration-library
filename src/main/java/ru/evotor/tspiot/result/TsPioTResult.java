@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import ru.evotor.ParcelablesKt;
 import ru.evotor.tspiot.Utils;
 
 public class TsPioTResult<T extends Parcelable> implements Parcelable {
@@ -22,7 +23,7 @@ public class TsPioTResult<T extends Parcelable> implements Parcelable {
         int version = parcel.readInt();
         this.classType = Utils.readClass(parcel);
         this.data = Utils.readData(classType, parcel);
-        this.error = parcel.readParcelable(TsPioTError.class.getClassLoader());
+        this.error = ParcelablesKt.readParcelable(parcel, TsPioTError.class);
     }
 
     @SuppressWarnings("unchecked")

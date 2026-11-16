@@ -31,7 +31,11 @@ object FeaturesContract {
     const val PATH_FFD12 = "ffd12"
     const val PATH_UPDATE_MANAGEMENT = "update_management"
     const val PATH_BIKE_MARK = "bike_mark"
+
+    @Deprecated("Устарело с 01.11.2026")
     const val PATH_FISC_BLOCK = "fisc_block"
+
+    @Deprecated("Устарело с 01.11.2026")
     const val PATH_FISC_PAID = "fisc_paid"
     const val PATH_JEWELRY_MARK = "jewelry_mark"
     const val PATH_FUR_MARK = "fur_mark"
@@ -60,6 +64,8 @@ object FeaturesContract {
     const val PATH_PRESERVES_MARK = "preserves_marked"
     const val PATH_GROCERIES_MARK = "groceries_marked"
     const val PATH_BUILDING_MATERIALS_MARK = "building_materials_marked"
+    const val PATH_PINPAD_MODE = "pinpad_mode"
+    const val PATH_FISC_MODE = "fisc_mode"
 
     const val COLUMN_IS_ACTIVE = "is_active"
 }

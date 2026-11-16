@@ -31,6 +31,7 @@ import ru.evotor.framework.receipt.position.PreferentialMedicine;
 import ru.evotor.framework.receipt.TimeRange;
 import ru.evotor.framework.receipt.position.SettlementMethod;
 import ru.evotor.BundlesKt;
+import ru.evotor.framework.receipt.position.BatchAccounting;
 import ru.evotor.framework.receipt.position.VolumeSortAccounting;
 
 public final class PositionMapper {
@@ -102,6 +103,7 @@ public final class PositionMapper {
     private static final String KEY_VETERINARY_ATTRIBUTE = "veterinary_attribute";
     private static final String KEY_FORCE_TAX_NUMBER = "force_tax_number";
     private static final String KEY_VOLUME_SORT_ACCOUNTING = "volumeSortAccounting";
+    private static final String KEY_BATCH_ACCOUNTING = "batchAccounting";
 
     @Nullable
     public static Position from(@Nullable Bundle bundle) {
@@ -184,7 +186,8 @@ public final class PositionMapper {
         );
         VeterinaryAttribute veterinaryAttribute = VeterinaryAttribute.from(sanitizedBundle.getBundle(KEY_VETERINARY_ATTRIBUTE));
         Boolean forceTaxNumber = (Boolean) sanitizedBundle.getSerializable(KEY_FORCE_TAX_NUMBER);
-        VolumeSortAccounting volumeSortAccounting = VolumeSortAccounting.from(bundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
+        VolumeSortAccounting volumeSortAccounting = VolumeSortAccounting.from(sanitizedBundle.getBundle(KEY_VOLUME_SORT_ACCOUNTING));
+        BatchAccounting batchAccounting = BatchAccounting.from(sanitizedBundle.getBundle(KEY_BATCH_ACCOUNTING));
 
         Position.Builder builder = Position.Builder.copyFrom(new Position(
                 uuid,
@@ -221,6 +224,7 @@ public final class PositionMapper {
         builder.setVeterinaryAttribute(veterinaryAttribute);
         builder.setForceTaxNumber(forceTaxNumber);
         builder.setVolumeSortAccounting(volumeSortAccounting);
+        builder.setBatchAccounting(batchAccounting);
         return builder.build();
     }
 
@@ -315,6 +319,12 @@ public final class PositionMapper {
         bundle.putBundle(
                 KEY_VOLUME_SORT_ACCOUNTING,
                 volumeSortAccounting != null ? volumeSortAccounting.toBundle() : null
+        );
+
+        final BatchAccounting batchAccounting = position.getBatchAccounting();
+        bundle.putBundle(
+                KEY_BATCH_ACCOUNTING,
+                batchAccounting != null ? batchAccounting.toBundle() : null
         );
 
         return BundlesKt.sanitizeOutput(bundle);

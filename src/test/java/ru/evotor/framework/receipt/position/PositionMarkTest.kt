@@ -8,9 +8,7 @@ import ru.evotor.framework.receipt.Measure
 import ru.evotor.framework.receipt.Position
 import java.math.BigDecimal
 
-
 class PositionMarkTest {
-
     lateinit var testPositionBuilder: Position.Builder
 
     @Before
