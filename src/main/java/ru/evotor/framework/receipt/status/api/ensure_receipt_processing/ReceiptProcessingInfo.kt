@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import ru.evotor.IBundlable
+import ru.evotor.framework.ParcelableUtils
 import ru.evotor.framework.receipt.Receipt
-import kotlin.collections.get
 
 /**
  * Информация о состоянии чека.
@@ -17,32 +17,12 @@ data class ReceiptProcessingInfo(
     val receiptUuid: String,
     val status: Receipt.Status
 ) : Parcelable, IBundlable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        Receipt.Status.values()[parcel.readInt()]
-    )
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        /**
-         * NOTE: When adding fields in the process of updating this API, make sure to bump
-         * {@link #PARCELABLE_VERSION}.
-         */
-        parcel.writeInt(PARCELABLE_VERSION)
-        // Inject a placeholder that will store the parcel size from this point on
-        // (not including the size itself).
-        val sizePosition = parcel.dataPosition()
-        parcel.writeInt(0)
-        val startPosition = parcel.dataPosition()
-
-        // version 1
-        parcel.writeString(receiptUuid)
-        parcel.writeInt(status.ordinal)
-
-        // Go back and write the size
-        val parcelableSize = parcel.dataPosition() - startPosition
-        parcel.setDataPosition(sizePosition)
-        parcel.writeInt(parcelableSize)
-        parcel.setDataPosition(startPosition + parcelableSize)
+        ParcelableUtils.writeExpand(parcel, PARCELABLE_VERSION) {
+            // version 1
+            parcel.writeString(receiptUuid)
+            parcel.writeInt(status.ordinal)
+        }
     }
 
     override fun describeContents(): Int {
@@ -59,16 +39,17 @@ data class ReceiptProcessingInfo(
         @JvmField
         val CREATOR = object : Parcelable.Creator<ReceiptProcessingInfo?> {
             override fun createFromParcel(parcel: Parcel): ReceiptProcessingInfo {
-                val parcelableVersion = parcel.readInt()
-                val parcelableSize = parcel.readInt()
-                val startPosition = parcel.dataPosition()
-
-                val info = ReceiptProcessingInfo(parcel)
-
-                // skip over all fields added in future versions of this parcel
-                parcel.setDataPosition(startPosition + parcelableSize)
-
-                return info
+                var info: ReceiptProcessingInfo? = null
+                ParcelableUtils.readExpand(parcel, PARCELABLE_VERSION) { parcel, version ->
+                    if (version >= 1) {
+                        info = ReceiptProcessingInfo(
+                            parcel.readString()!!,
+                            Receipt.Status.values()[parcel.readInt()]
+                        )
+                    }
+                }
+                checkNotNull(info)
+                return info as ReceiptProcessingInfo
             }
 
             override fun newArray(size: Int): Array<ReceiptProcessingInfo?> {
