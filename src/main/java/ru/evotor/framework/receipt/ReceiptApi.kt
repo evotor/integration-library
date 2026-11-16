@@ -24,6 +24,7 @@ import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
+import ru.evotor.framework.receipt.position.BatchAccounting
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
 import ru.evotor.framework.receipt.position.PreferentialMedicine
@@ -485,6 +486,7 @@ object ReceiptApi {
             .setIsAgeLimited(isAgeLimited)
             .setVeterinaryAttribute(veterinaryAttribute)
             .setVolumeSortAccounting(VolumeSortAccounting.from(cursor))
+            .setBatchAccounting(BatchAccounting.from(cursor))
         return builder.build()
     }
 

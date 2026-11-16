@@ -10,15 +10,13 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.ITsPioTService;
 import ru.evotor.tspiot.TsPioTServiceConnector;
-import ru.evotor.tspiot.Utils;
 import ru.evotor.tspiot.exceptions.NullContextException;
 import ru.evotor.tspiot.exceptions.ServiceAlreadyConnectedException;
 import ru.evotor.tspiot.exceptions.TsPioTErrorHolderException;

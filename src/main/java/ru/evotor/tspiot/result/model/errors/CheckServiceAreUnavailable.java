@@ -1,6 +1,7 @@
 package ru.evotor.tspiot.result.model.errors;
 
 import android.os.Parcel;
+import ru.evotor.ParcelablesKt;
 
 /**
  * ТС ПИоТ не смог получить ответ ни от ГИС МТ, ни от ЛМ ЧЗ.
@@ -15,7 +16,7 @@ public final class CheckServiceAreUnavailable extends TsPioTErrorsDescriptionWra
 
     private CheckServiceAreUnavailable(Parcel parcel) {
         super(parcel);
-        this.errorDescription = parcel.readParcelable(CodesCheckErrorDescription.class.getClassLoader());
+        this.errorDescription = ParcelablesKt.readParcelable(parcel, CodesCheckErrorDescription.class);
     }
 
     @Override
