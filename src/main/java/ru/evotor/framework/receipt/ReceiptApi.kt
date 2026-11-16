@@ -24,8 +24,8 @@ import ru.evotor.framework.payment.PaymentSystemTable
 import ru.evotor.framework.payment.PaymentType
 import ru.evotor.framework.receipt.ReceiptDiscountTable.DISCOUNT_COLUMN_NAME
 import ru.evotor.framework.receipt.ReceiptDiscountTable.POSITION_DISCOUNT_UUID_COLUMN_NAME
-import ru.evotor.framework.receipt.status.event.handler.service.ResumeReceiptProcessingIntegrationService
-import ru.evotor.framework.receipt.status.event.ResumeReceiptProcessingRequestedEvent
+import ru.evotor.framework.receipt.status.event.handler.service.EnsureReceiptProcessingIntegrationService
+import ru.evotor.framework.receipt.status.event.EnsureReceiptProcessingRequestedEvent
 import ru.evotor.framework.receipt.mapper.FiscalReceiptMapper
 import ru.evotor.framework.receipt.position.ImportationData
 import ru.evotor.framework.receipt.position.Mark
@@ -38,8 +38,9 @@ import ru.evotor.framework.receipt.position.mapper.PreferentialMedicineMapper
 import ru.evotor.framework.receipt.position.mapper.SettlementMethodMapper
 import ru.evotor.framework.receipt.position.mapper.VeterinaryAttributeMapper
 import ru.evotor.framework.receipt.provider.FiscalReceiptContract
-import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingCallback
-import ru.evotor.framework.receipt.status.api.resume_receipt_processing.ResumeReceiptProcessingException
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.EnsureReceiptProcessingCallback
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.ReceiptProcessingInfo
+import ru.evotor.framework.receipt.status.api.ensure_receipt_processing.EnsureReceiptProcessingException
 import java.math.BigDecimal
 import java.util.Date
 
@@ -65,7 +66,7 @@ object ReceiptApi {
     private const val CURRENT_CORRECTION_OUTCOME_PATH = "correctionOutcome"
     private const val CURRENT_CORRECTION_RETURN_INCOME_PATH = "correctionReturnIncome"
     private const val CURRENT_CORRECTION_RETURN_OUTCOME_PATH = "correctionReturnOutcome"
-    private const val STATE_PATH = "state"
+    private const val STATUS_PATH = "status"
 
     private val BASE_URI_V2 = Uri.parse("content://$AUTHORITY_V2")
     private val RECEIPTS_URI = Uri.withAppendedPath(BASE_URI_V2, RECEIPTS_PATH)
@@ -241,22 +242,22 @@ object ReceiptApi {
             )
         }
 
-        val state = try {
+        val status = try {
             context.contentResolver.query(
-                Uri.withAppendedPath(baseUri, STATE_PATH),
+                Uri.withAppendedPath(baseUri, STATUS_PATH),
                 null,
                 null,
                 null,
                 null
             )?.use { cursor ->
                 if (cursor.moveToNext()) {
-                    return@use createReceiptState(cursor)
+                    cursor.optInt(ReceiptStatusTable.STATUS)?.let(Receipt.Status.values()::getOrNull)
                 } else {
                     null
                 }
             }
         } catch (error: IllegalArgumentException) {
-            // old version of evopos, does not support receipt state
+            // old version of evopos, does not support receipt status
             error.printStackTrace()
             null
         }
@@ -264,7 +265,7 @@ object ReceiptApi {
         return Receipt(
             header,
             printDocuments,
-            state
+            status
         )
     }
 
@@ -338,18 +339,18 @@ object ReceiptApi {
             }
 
     /**
-     * Возобновить процесс работы POS с чеком
+     * Отдаёт актуальное состояние чека и возвращает чек в обработку, если она остановилась
      * @param context контекст приложения
      * @param receiptUuid UUID чека
      */
     @JvmStatic
-    fun resumeReceiptProcessing(context: Context, receiptUuid: String, callback: ResumeReceiptProcessingCallback) {
+    fun ensureReceiptProcessing(context: Context, receiptUuid: String, callback: EnsureReceiptProcessingCallback) {
         context.startIntegrationService(
-            ResumeReceiptProcessingIntegrationService.ACTION_RESUME_RECEIPT_PROCESSING,
-            ResumeReceiptProcessingRequestedEvent(receiptUuid)
+            EnsureReceiptProcessingIntegrationService.ACTION_ENSURE_RECEIPT_PROCESSING,
+            EnsureReceiptProcessingRequestedEvent(receiptUuid)
         ) {
-            it.result?.error?.let { error -> callback.onError(ResumeReceiptProcessingException(error.code, error.message)) }
-                ?: callback.onSuccess()
+            it.result?.error?.let { error -> callback.onError(EnsureReceiptProcessingException(error.code, error.message)) }
+                ?: it.result?.data?.let(ReceiptProcessingInfo::from)?.let(callback::onSuccess)
         }
     }
 
@@ -674,23 +675,6 @@ object ReceiptApi {
             externalLoyaltyCardId = cursor.optString(ReceiptHeaderTable.COLUMN_EXTERNAL_LOYALTY_CARD_ID),
             additionalData = cursor.optString(ReceiptHeaderTable.COLUMN_ADDITIONAL_DATA)
         )
-    }
-
-    private fun createReceiptState(cursor: Cursor): Receipt.State? {
-        val status = cursor.optInt(ReceiptStateTable.STATUS)?.let(Receipt.Status.values()::getOrNull)
-        val isProcessing = cursor.optInt(ReceiptStateTable.IS_PROCESSING)
-        return if (status != null) {
-            Receipt.State(
-                status = status,
-                isProcessing = if (isProcessing == null) {
-                    null
-                } else {
-                    isProcessing == 1
-                }
-            )
-        } else {
-            null
-        }
     }
 
     private data class GetPositionResult(var position: Position, val printGroup: PrintGroup?)
