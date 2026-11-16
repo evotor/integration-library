@@ -66,9 +66,9 @@ object FeaturesContract {
     const val PATH_BUILDING_MATERIALS_MARK = "building_materials_marked"
     const val PATH_PINPAD_MODE = "pinpad_mode"
     const val PATH_FISC_MODE = "fisc_mode"
-
     const val PATH_MEAT_MARK = "meat_marked"
     const val PATH_CANDIES_MARK = "candies_marked"
     const val PATH_RADIO_MARK = "radio_marked"
+
     const val COLUMN_IS_ACTIVE = "is_active"
 }
