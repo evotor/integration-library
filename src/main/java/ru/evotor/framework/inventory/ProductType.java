@@ -209,5 +209,15 @@ public enum ProductType {
     /**
      * Радиоэлектронная продукция
      */
-    RADIO_MARKED
+    RADIO_MARKED,
+
+    /**
+     * Депозит
+     */
+    DEPOSIT,
+
+    /**
+     * Работа
+     */
+    JOB
 }
