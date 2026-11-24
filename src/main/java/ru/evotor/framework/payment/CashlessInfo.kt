@@ -45,7 +45,9 @@ data class CashlessInfo(
         CARD,
         INTERNET_ACQUIRING,
         BANK_TRANSFER,
-        BLUETOOTH
+        BLUETOOTH,
+        SBP_QR,
+        DIGITAL_RUB
     }
 
     companion object {

@@ -1926,6 +1926,70 @@ public class Position implements Parcelable {
             return this;
         }
 
+        public Builder toMeatMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.MEAT_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setMeatParams(mark);
+            return this;
+        }
+
+        public Builder toCandiesMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.CANDIES_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setCandiesParams(mark);
+            return this;
+        }
+
+        public Builder toRadioMarked(
+                @NonNull Mark mark
+        ) {
+            position.productType = ProductType.RADIO_MARKED;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            setRadioParams(mark);
+            return this;
+        }
+
+        public Builder toDeposit() {
+            position.productType = ProductType.DEPOSIT;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
+        public Builder toJob() {
+            position.productType = ProductType.JOB;
+            setAlcoParams(
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            return this;
+        }
+
         /**
          * Частичная реализация для позиции доступна только если тип товара является одним из:
          * <p>
@@ -2109,6 +2173,18 @@ public class Position implements Parcelable {
             position.mark = mark;
         }
 
+        private void setMeatParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setCandiesParams(Mark mark) {
+            position.mark = mark;
+        }
+
+        private void setRadioParams(Mark mark) {
+            position.mark = mark;
+        }
+
         public Builder setUuid(String uuid) {
             position.uuid = uuid;
             return this;
@@ -2277,6 +2353,7 @@ public class Position implements Parcelable {
          * маркированная соковая продукция и безалкогольные напитки {@link ProductType#JUICE_MARKED}
          * морепродукты (икра осетровых и лососевых) {@link ProductType#CAVIAR_MARKED}
          * не может использоваться совместно с setPartialRealization
+         *
          * @param volumeSortAccounting реализация по ОСУ
          */
         @RequiresPermission(VolumeSortAccounting.VOLUME_SORT_PERMISSION)
